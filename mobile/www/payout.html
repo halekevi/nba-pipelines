@@ -343,25 +343,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px;transition:color .15s;}
 .del-btn:hover{color:var(--red);}
 .empty-log{text-align:center;padding:40px;font-size:11px;color:var(--muted);}
-.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
-.stat-mini{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:14px;}
-.stat-mini-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;}
-.stat-mini-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);}
-.stat-mini-sub{font-size:10px;color:var(--muted);margin-top:3px;}
-.chart-wrap{background:rgba(255,255,255,0.03);backdrop-filter:blur(14px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:16px;}
-.chart-title{font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:12px;}
-canvas{width:100%!important;max-height:220px;}
-.insight-row{display:flex;flex-direction:column;gap:8px;}
-.insight-item{background:rgba(255,255,255,0.03);backdrop-filter:blur(10px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 16px;font-size:11px;line-height:1.7;color:var(--muted);}
-.insight-item strong{color:var(--text);}
-.insight-item.good{border-color:rgba(125,255,203,.22);background:rgba(125,255,203,0.05)!important;}.insight-item.warn{border-color:rgba(255,192,107,.22);background:rgba(255,192,107,0.05)!important;}.insight-item.bad{border-color:rgba(255,127,159,.22);background:rgba(255,127,159,0.05)!important;}
-.bucket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px;}
-.bucket-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:14px;}
-.bucket-card-lbl{font-size:9px;letter-spacing:1.5px;margin-bottom:10px;font-weight:700;}
-.bucket-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.bucket-stat{background:rgba(255,255,255,0.04);backdrop-filter:blur(6px) saturate(180%);border-radius:8px;padding:8px 10px;text-align:center;}
-.bucket-stat-l{font-size:8px;color:var(--muted);letter-spacing:1.5px;margin-bottom:3px;}
-.bucket-stat-v{font-family:'Bebas Neue',sans-serif;font-size:20px;}
 .badge-count{background:rgba(255,255,255,0.05);border-radius:10px;padding:1px 7px;font-size:9px;color:var(--muted);border:1px solid rgba(255,255,255,0.09);}
 .hint{font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,0.03);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:10px;}
 .sub-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;}
@@ -387,7 +368,6 @@ canvas{width:100%!important;max-height:220px;}
   .result-grid{grid-template-columns:repeat(2,1fr);}
   .form-grid,.form-grid-3,.form-grid-5{grid-template-columns:1fr;}
   .pp-table{grid-template-columns:repeat(3,1fr);}
-  .pattern-grid{grid-template-columns:1fr;}
   .line-compare{grid-template-columns:1fr 1fr;}
   .calc-leg-grid{grid-template-columns:1fr;}
   .pp-table{gap:6px;margin-bottom:12px;}
@@ -571,10 +551,6 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .result-item,
 [data-theme="light"] .pp-cell,
 [data-theme="light"] .log-table-wrap,
-[data-theme="light"] .stat-mini,
-[data-theme="light"] .chart-wrap,
-[data-theme="light"] .insight-item,
-[data-theme="light"] .bucket-card,
 [data-theme="light"] .import-panel,
 [data-theme="light"] .modal-card,
 [data-theme="light"] .expand-stat,
@@ -986,7 +962,7 @@ body::before{
 <!-- ── HERO ── -->
 <div class="hero">
   <h1>💰 Payout <span>Calculator</span></h1>
-  <div class="hero-sub">EV ANALYSIS &nbsp;·&nbsp; LINE LOGGER &nbsp;·&nbsp; PATTERN DISCOVERY</div>
+  <div class="hero-sub">EV ANALYSIS &nbsp;·&nbsp; LINE LOGGER &nbsp;·&nbsp; RATE CARDS</div>
 </div>
 
 <!-- ── TABS ── -->
@@ -994,7 +970,6 @@ body::before{
   <button class="tab-btn active" onclick="switchTab('calc',this)">⚡ Calculator</button>
   <button class="tab-btn" onclick="switchTab('composer',this)">🧩 Ticket Composer</button>
   <button class="tab-btn" onclick="switchTab('log',this)">📋 Log Lines <span class="badge-count" id="log-count">0</span></button>
-  <button class="tab-btn" onclick="switchTab('patterns',this)">📈 Patterns</button>
   <button class="tab-btn" onclick="switchTab('cards',this)">🃏 Rate cards</button>
 </div>
 
@@ -1176,48 +1151,7 @@ body::before{
   </div>
 </div>
 
-<!-- ═══════════ TAB 3: PATTERNS ═══════════ -->
-<div id="tab-patterns" class="tab-panel">
-  <div id="patterns-empty" class="card">
-    <div class="empty-log" style="padding:60px">
-      <div style="font-size:32px;margin-bottom:12px">📈</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:8px">Need at least 3 payout observations to see patterns</div>
-      <div style="font-size:11px;color:var(--muted)">Use Log Lines in this browser and/or server rows in <code style="font-size:10px">data/payout_observations.csv</code> (when you enable CSV append). Patterns merge both sources.</div>
-    </div>
-  </div>
-  <div id="patterns-content" style="display:none">
-    <div id="patterns-source-banner" class="card cyan" style="display:none;margin-bottom:20px;padding:14px 18px;border-color:rgba(127,199,217,.28)">
-      <div class="card-title" style="margin-bottom:8px;font-size:12px;color:var(--cyan)">📎 Merged data</div>
-      <div id="patterns-source-text" style="font-size:11px;color:var(--muted);line-height:1.85"></div>
-    </div>
-    <div class="pattern-grid">
-      <div class="card goblin" style="margin-bottom:0"><div class="card-title" style="color:var(--goblin)">🎃 Goblin Pattern</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="goblin-stats"></div></div>
-      <div class="card demon"  style="margin-bottom:0"><div class="card-title" style="color:var(--demon)">😈 Demon Pattern</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="demon-stats"></div></div>
-    </div>
-    <div class="card amber" style="margin-top:20px">
-      <div class="card-title" style="color:var(--amber)">📐 Line Distance Bucket Analysis</div>
-      <p class="hint">Groups legs by how far the played line is from standard (delta%). A Goblin at 81% of standard prices differently than one at 63%. More samples = more reliable data.</p>
-      <div class="bucket-grid" id="bucket-breakdown"></div>
-    </div>
-    <div class="card cyan">
-      <div class="card-title" style="color:var(--cyan)">📐 Multiplier Shift vs Line Distance</div>
-      <div class="chart-wrap"><div class="chart-title">PAYOUT CHANGE % vs UNITS MOVED FROM STANDARD</div><canvas id="pattern-chart"></canvas></div>
-      <div class="insight-row" id="pattern-insights"></div>
-    </div>
-    <div class="card purple">
-      <div class="card-title" style="color:var(--purple)">🔬 Combo Signature Analysis</div>
-      <p class="hint">Groups tickets by their full bucket combo. Avg actual payout vs base reveals how PP prices each combo type.</p>
-      <div id="combo-table-wrap" style="overflow-x:auto"></div>
-    </div>
-    <div class="card" style="border-color:rgba(212,175,55,.15)">
-      <div class="card-title" style="color:var(--accent)">⚗️ Estimated Per-Leg Formula</div>
-      <p class="hint">Derived from browser log plus server CSV rows (same shape). Use to predict payouts before locking in.</p>
-      <div id="formula-output" style="font-size:12px;line-height:2;color:var(--muted);"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ TAB 4: RATE CARDS (JSON dictionary) ═══════════ -->
+<!-- ═══════════ TAB 3: RATE CARDS (JSON dictionary) ═══════════ -->
 <div id="tab-cards" class="tab-panel">
   <div class="card accent">
     <div class="card-title">🃏 Payout rate cards</div>
@@ -1272,12 +1206,11 @@ function switchTab(id,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='patterns'){ensureServerObservationsLoaded().then(()=>renderPatterns()).catch(()=>renderPatterns());}
   if(id==='log'){renderLogTable();updateLogCount();}
   if(id==='cards')renderRateCards(false);
 }
 function goTab(id){
-  const order=['calc','composer','log','patterns','cards'],i=order.indexOf(id);
+  const order=['calc','composer','log','cards'],i=order.indexOf(id);
   const btns=document.querySelectorAll('.tab-bar .tab-btn');
   if(i>=0&&btns[i])switchTab(id,btns[i]);
 }
@@ -2106,7 +2039,6 @@ async function logTicket(){
         }
         if(obsJ.warning_large_delta)showMsg(`✓ Logged! CSV row(s) added (large Δ vs model — check). ${logEntries.length} total.`,'good');
         else showMsg(`✓ Logged + server row (${obsJ.total_obs||'?'} obs). ${logEntries.length} total.`,'good');
-        _payoutServerObsFetchTs=0;
       }
     }catch(e){setLogCsvRow('');showMsg('⚠ Saved locally; server CSV error.','warn');}
   }else showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
@@ -2149,147 +2081,6 @@ function renderLogTable(){
     return `<tr><td style="font-size:11px;color:var(--muted)">${e.ts}</td><td style="font-size:10px;color:var(--muted)">${e.platform}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px">${mx.join('')}</div><div style="font-size:10px;color:var(--muted)">${e.nLegs}-leg${String(e.slipType||'').toLowerCase().includes('flex')?' flex':''}</div></td><td>${ld}</td><td class="mono" style="font-size:12px">${e.baseMult!=null&&e.baseMult!==''?e.baseMult+'x':'—'}</td><td class="mono" style="font-size:14px;color:${sc};font-weight:700">${e.actualMult}x</td><td style="text-align:center">${mg}</td><td>${cs}</td><td><button class="del-btn" onclick="deleteEntry(${e.id})">✕</button></td></tr>`;
   }).join('');
   w.innerHTML=`<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>DATE</th><th>PLATFORM</th><th>MIX</th><th>LEGS</th><th>BASE</th><th>ACTUAL</th><th>FLEX n−1</th><th>SHIFT</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-/* ─── PATTERNS (browser log + server CSV) ─── */
-let _payoutServerObsFetchTs=0;
-const PAYOUT_SERVER_OBS_TTL_MS=45000;
-window.__payoutServerObs=window.__payoutServerObs||[];
-function getPatternLogEntries(){return [...logEntries,...(window.__payoutServerObs||[])];}
-function parseLegDetailsJson(s){
-  if(s==null||s==='')return null;
-  if(typeof s==='object')return s;
-  try{return JSON.parse(String(s));}catch{return null;}
-}
-function observationRowToLogEntry(row,ix){
-  const am=parseFloat(row.actual_mult),bm=parseFloat(row.base_mult);
-  if(isNaN(am)||am<=0)return null;
-  const mc=(bm>0&&!isNaN(bm))?Math.round(((am/bm)-1)*1000)/10:null;
-  const meta=parseLegDetailsJson(row.leg_details_json);
-  const legsIn=(meta&&Array.isArray(meta.legs))?meta.legs:[];
-  const legs=legsIn.map((l)=>{
-    const typ=String(l.type||'standard').toLowerCase();
-    const kind=typ==='goblin'?'goblin':typ==='demon'?'demon':'standard';
-    const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);
-    const dp=l.deltaPct!=null&&!isNaN(parseFloat(l.deltaPct))?parseFloat(l.deltaPct):getDeltaPct(s,p);
-    let dist=l.distance;
-    if((dist==null||dist==='')&&kind!=='standard'&&!isNaN(s)&&!isNaN(p))dist=Math.round(Math.abs(p-s)*100)/100;
-    const bkt=l.bucket||(dp!=null?getBucket(dp,kind):null);
-    return{type:kind,player:l.player||'Unknown',sport:l.sport||'NBA',prop:l.prop||'Other',stdLine:isNaN(s)?null:s,playedLine:isNaN(p)?null:p,distance:dist!=null&&!isNaN(parseFloat(dist))?parseFloat(dist):null,deltaPct:dp,bucket:bkt};
-  });
-  const nL=parseInt(row.n_legs,10)||legs.length||0;
-  const nStd=legs.filter(l=>l.type==='standard').length,nGob=legs.filter(l=>l.type==='goblin').length,nDem=legs.filter(l=>l.type==='demon').length;
-  const slipRaw=String(row.slip_type||'').toLowerCase();
-  return{
-    id:'csv-'+ix+'-'+(String(row.date||'').slice(0,10)||ix),
-    ts:String(row.date||'').slice(0,10)||'—',
-    platform:(meta&&meta.platform)||'Server CSV',
-    slipType:slipRaw.includes('flex')?'Flex Play':'Power Play',
-    nLegs:nL||Math.max(legs.length,1),nStd:nStd||Math.max(0,legs.length-nGob-nDem),nGob,nDem,
-    baseMult:!isNaN(bm)&&bm>0?bm:null,actualMult:am,multChange:mc,
-    bucketSig:(meta&&meta.bucketSig)||String(row.combo_label||''),
-    comboSig:(meta&&meta.comboSig)||'',
-    legs,
-    _source:'server',
-  };
-}
-function ensureServerObservationsLoaded(){
-  const now=Date.now();
-  if(_payoutServerObsFetchTs&&(now-_payoutServerObsFetchTs<PAYOUT_SERVER_OBS_TTL_MS))
-    return Promise.resolve();
-  return fetch('/api/payout/observations').then(r=>r.json().then(j=>{
-    if(!r.ok){window.__payoutServerObs=[];return;}
-    const arr=j.observations||[];
-    window.__payoutServerObs=arr.map((row,i)=>observationRowToLogEntry(row,i)).filter(Boolean);
-    _payoutServerObsFetchTs=Date.now();
-  })).catch(()=>{window.__payoutServerObs=[];});
-}
-function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
-
-function renderPatterns(){
-  const merged=getPatternLogEntries();
-  const wa=merged.filter(e=>e.multChange!==null);
-  const ban=document.getElementById('patterns-source-banner'),btxt=document.getElementById('patterns-source-text');
-  if(ban&&btxt){
-    const nB=logEntries.length,nS=(window.__payoutServerObs||[]).length;
-    if(nB||nS){
-      ban.style.display='block';
-      let t=`Browser log: <strong style="color:var(--text)">${nB}</strong> ticket(s). Server CSV: <strong style="color:var(--text)">${nS}</strong> row(s) loaded for patterns.`;
-      if(nS===0)t+=' Append rows from Log Lines (checkbox) or add to <code style="font-size:10px">data/payout_observations.csv</code> to grow this pool.';
-      btxt.innerHTML=t;
-    }else{ban.style.display='none';}
-  }
-  if(merged.length<3){document.getElementById('patterns-empty').style.display='block';document.getElementById('patterns-content').style.display='none';return;}
-  document.getElementById('patterns-empty').style.display='none';document.getElementById('patterns-content').style.display='block';
-  const go=[],de=[],bm={};
-  wa.forEach(e=>{(e.legs||[]).forEach(l=>{
-    if(l.type==='goblin'&&l.distance!==null)go.push({distance:l.distance,deltaPct:l.deltaPct,multChange:e.multChange,bucket:l.bucket});
-    if(l.type==='demon'&&l.distance!==null)de.push({distance:l.distance,deltaPct:l.deltaPct,multChange:e.multChange,bucket:l.bucket});
-    if(l.bucket){if(!bm[l.bucket])bm[l.bucket]={count:0,deltaPcts:[],kind:l.type};bm[l.bucket].count++;if(l.deltaPct)bm[l.bucket].deltaPcts.push(l.deltaPct);}
-  });});
-  renderTS('goblin-stats',go,'goblin');renderTS('demon-stats',de,'demon');
-  renderBuckets(bm);renderChart(go,de);renderInsights(go,de);renderCombo(wa);renderFormula(go,de);
-}
-
-function renderTS(id,entries,type){
-  const el=document.getElementById(id);
-  if(!entries.length){el.innerHTML=`<div style="grid-column:span 2;font-size:11px;color:var(--muted);text-align:center;padding:16px">No ${type} data yet.</div>`;return;}
-  const ch=entries.map(e=>e.multChange),di=entries.map(e=>e.distance),aC=avg(ch),aD=avg(di),pU=aD>0?aC/aD:0,col=type==='goblin'?'var(--goblin)':'var(--demon)';
-  el.innerHTML=`<div class="stat-mini"><div class="stat-mini-lbl">OBSERVATIONS</div><div class="stat-mini-val">${entries.length}</div></div><div class="stat-mini"><div class="stat-mini-lbl">AVG MULT CHANGE</div><div class="stat-mini-val" style="color:${col}">${aC>=0?'+':''}${aC.toFixed(1)}%</div></div><div class="stat-mini"><div class="stat-mini-lbl">AVG LINE DISTANCE</div><div class="stat-mini-val">${aD.toFixed(1)} units</div></div><div class="stat-mini"><div class="stat-mini-lbl">CHANGE / UNIT</div><div class="stat-mini-val" style="color:${col}">${pU>=0?'+':''}${pU.toFixed(1)}%</div><div class="stat-mini-sub">per 1-unit move</div></div>`;
-}
-
-function renderBuckets(bm){
-  const el=document.getElementById('bucket-breakdown');
-  const en=Object.entries(bm).sort((a,b)=>b[1].count-a[1].count);
-  if(!en.length){el.innerHTML='<div style="color:var(--muted);font-size:11px">No leg-level data yet.</div>';return;}
-  el.innerHTML=en.map(([b,d])=>{const col=bCol(b),ap=d.deltaPcts.length?Math.round(avg(d.deltaPcts)*1000)/1000:null,mn=d.deltaPcts.length?Math.min(...d.deltaPcts):null,mx=d.deltaPcts.length?Math.max(...d.deltaPcts):null;return `<div class="bucket-card" style="border-color:${col}28"><div class="bucket-card-lbl" style="color:${col}">${b}</div><div class="bucket-stat-row"><div class="bucket-stat"><div class="bucket-stat-l">SAMPLES</div><div class="bucket-stat-v" style="color:${col}">${d.count}</div></div><div class="bucket-stat"><div class="bucket-stat-l">AVG Δ%</div><div class="bucket-stat-v" style="color:${col}">${ap??'—'}</div></div></div>${mn!==null?`<div style="font-size:9px;color:var(--muted);margin-top:8px">Range: ${mn} – ${mx}</div>`:''}</div>`;}).join('');
-}
-
-function renderCombo(wa){
-  const wrap=document.getElementById('combo-table-wrap');
-  if(!wa.length){wrap.innerHTML='<div style="font-size:11px;color:var(--muted)">No tickets yet.</div>';return;}
-  const co={};wa.forEach(t=>{const k=t.bucketSig||t.comboSig||'Unknown';if(!co[k])co[k]={actuals:[],shifts:[],count:0};co[k].actuals.push(t.actualMult);co[k].count++;if(t.multChange!==null)co[k].shifts.push(t.multChange);});
-  const rows=Object.entries(co).sort((a,b)=>b[1].count-a[1].count).map(([sig,c])=>{const aA=avg(c.actuals),aS=c.shifts.length?avg(c.shifts):null;return `<tr><td style="font-size:10px;color:var(--text)">${sig}</td><td style="text-align:center"><span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:2px 8px;font-size:11px">${c.count}</span></td><td style="text-align:center;font-family:'Bebas Neue';font-size:16px;color:var(--amber)">${aA.toFixed(2)}x</td><td style="text-align:center;font-size:11px;color:var(--muted)">${Math.min(...c.actuals).toFixed(2)}x</td><td style="text-align:center;font-size:11px;color:var(--muted)">${Math.max(...c.actuals).toFixed(2)}x</td><td style="text-align:center;font-family:'Bebas Neue';font-size:15px;color:${sCol(aS)}">${aS!==null?`${aS>=0?'+':''}${aS.toFixed(1)}%`:'—'}</td></tr>`;}).join('');
-  wrap.innerHTML=`<table class="log-table" style="font-size:11px"><thead><tr><th>COMBO SIGNATURE</th><th style="text-align:center">SAMPLES</th><th style="text-align:center">AVG ACTUAL</th><th style="text-align:center">MIN</th><th style="text-align:center">MAX</th><th style="text-align:center">AVG SHIFT</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-
-function renderChart(go,de){
-  const canvas=document.getElementById('pattern-chart'),ctx=canvas.getContext('2d');
-  canvas.width=(canvas.offsetWidth||600)*window.devicePixelRatio;canvas.height=220*window.devicePixelRatio;ctx.scale(window.devicePixelRatio,window.devicePixelRatio);
-  const W=canvas.offsetWidth||600,H=220;ctx.clearRect(0,0,W,H);
-  const all=[...go.map(e=>({x:-e.distance,y:e.multChange,type:'goblin'})),...de.map(e=>({x:e.distance,y:e.multChange,type:'demon'}))];
-  if(!all.length)return;
-  const xs=all.map(p=>p.x),ys=all.map(p=>p.y);
-  const mnX=Math.min(...xs)-1,mxX=Math.max(...xs)+1,mnY=Math.min(...ys,-20)-5,mxY=Math.max(...ys,20)+5;
-  const px=x=>40+((x-mnX)/(mxX-mnX))*(W-60),py=y=>H-30-((y-mnY)/(mxY-mnY))*(H-50);
-  ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;
-  for(let i=0;i<=5;i++){const y=20+i*(H-50)/5;ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-20,y);ctx.stroke();}
-  ctx.strokeStyle='rgba(255,255,255,.2)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(40,py(0));ctx.lineTo(W-20,py(0));ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(px(0),10);ctx.lineTo(px(0),H-30);ctx.stroke();
-  ctx.fillStyle='rgba(153,153,153,.7)';ctx.font='9px monospace';ctx.fillText('← GOBLIN',44,14);ctx.fillText('DEMON →',W-80,14);ctx.fillText('0%',14,py(0)+4);
-  function trend(pts,col){if(pts.length<2)return;const n=pts.length,sX=pts.reduce((a,p)=>a+p.x,0),sY=pts.reduce((a,p)=>a+p.y,0),sXY=pts.reduce((a,p)=>a+p.x*p.y,0),sX2=pts.reduce((a,p)=>a+p.x*p.x,0),sl=(n*sXY-sX*sY)/(n*sX2-sX*sX),it=(sY-sl*sX)/n;ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.globalAlpha=.4;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(px(mnX),py(sl*mnX+it));ctx.lineTo(px(mxX),py(sl*mxX+it));ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;}
-  trend(go.map(e=>({x:-e.distance,y:e.multChange})),'#39ff6e');trend(de.map(e=>({x:e.distance,y:e.multChange})),'#ff4d4d');
-  all.forEach(p=>{ctx.beginPath();ctx.arc(px(p.x),py(p.y),5,0,Math.PI*2);ctx.fillStyle=p.type==='goblin'?'rgba(125,255,203,.9)':'rgba(255,127,159,.9)';ctx.fill();ctx.strokeStyle=p.type==='goblin'?'#39ff6e':'#ff4d4d';ctx.lineWidth=1;ctx.stroke();});
-}
-
-function renderFormula(go,de){
-  const el=document.getElementById('formula-output');let h='';
-  function gf(obs){if(!obs.length)return null;const aD=avg(obs.map(e=>e.distance)),aC=avg(obs.map(e=>e.multChange));return{aD,aC,pU:aD>0?aC/aD:0,factor:1+aC/100};}
-  const gF=gf(go),dF=gf(de);
-  if(gF)h+=`<div style="margin-bottom:12px;padding:14px;background:rgba(125,255,203,.04);border:1px solid rgba(125,255,203,.15);border-radius:8px;"><div style="color:var(--goblin);font-size:11px;letter-spacing:1px;margin-bottom:8px">🎃 GOBLIN (${go.length} obs)</div><div>Shifts mult ~<strong style="color:var(--goblin)">${gF.aC.toFixed(1)}%</strong> · Avg dist: ${gF.aD.toFixed(1)} units · Factor: <strong style="color:var(--goblin)">${gF.factor.toFixed(3)}x</strong></div></div>`;
-  else h+=`<div style="color:var(--muted);font-size:11px;margin-bottom:12px">No Goblin data yet.</div>`;
-  if(dF)h+=`<div style="margin-bottom:12px;padding:14px;background:rgba(255,127,159,.04);border:1px solid rgba(255,127,159,.15);border-radius:8px;"><div style="color:var(--demon);font-size:11px;letter-spacing:1px;margin-bottom:8px">😈 DEMON (${de.length} obs)</div><div>Shifts mult ~<strong style="color:var(--demon)">+${dF.aC.toFixed(1)}%</strong> · Avg dist: ${dF.aD.toFixed(1)} units · Factor: <strong style="color:var(--demon)">${dF.factor.toFixed(3)}x</strong></div></div>`;
-  else h+=`<div style="color:var(--muted);font-size:11px">No Demon data yet.</div>`;
-  if(gF&&dF)h+=`<div style="padding:14px;background:rgba(127,199,217,.04);border:1px solid rgba(127,199,217,.15);border-radius:8px;"><div style="color:var(--cyan);font-size:11px;letter-spacing:1px;margin-bottom:8px">📐 COMBINED FORMULA</div><div style="font-size:12px;line-height:2">Predicted ≈ BaseMult × (${gF.factor.toFixed(3)})<sup>nGoblin</sup> × (${dF.factor.toFixed(3)})<sup>nDemon</sup><br><span style="color:var(--muted)">BaseMult: 2L=3x, 3L=6x, 4L=10x, 5L=20x, 6L=37.5x</span></div></div>`;
-  el.innerHTML=h;
-}
-
-function renderInsights(go,de){
-  const el=document.getElementById('pattern-insights');const ins=[];
-  if(go.length>=3){const aC=avg(go.map(e=>e.multChange)),aD=avg(go.map(e=>e.distance));const cls=aC>-25?'good':aC>-40?'warn':'bad';ins.push(`<div class="insight-item ${cls}">🎃 <strong>Goblin Value:</strong> Your Goblins reduce payout by <strong>${Math.abs(aC).toFixed(1)}%</strong> avg for a ${aD.toFixed(1)}-unit move. ${aC>-20?'Penalty is small — may be worth it.':'Substantial cut — only use if hit rate meaningfully improves.'}</div>`);}
-  if(de.length>=3){const aC=avg(de.map(e=>e.multChange)),aD=avg(de.map(e=>e.distance));const cls=aC>40?'good':aC>20?'warn':'bad';ins.push(`<div class="insight-item ${cls}">😈 <strong>Demon Value:</strong> Your Demons boost payout by <strong>+${aC.toFixed(1)}%</strong> avg for a ${aD.toFixed(1)}-unit move. ${aC>50?'Strong boost — real edge if model says line is beatable.':'Modest boost — check if extra difficulty is worth it.'}</div>`);}
-  if(go.length>=2&&de.length>=2){const gF=1+avg(go.map(e=>e.multChange))/100,dF=1+avg(de.map(e=>e.multChange))/100;ins.push(`<div class="insight-item warn">🔀 <strong>Mixed:</strong> 1 Goblin + 1 Demon → ${gF.toFixed(3)}x × ${dF.toFixed(3)}x = <strong>${(gF*dF).toFixed(3)}x</strong> base. ${gF*dF>1?'Demon boost outweighs Goblin penalty.':'Goblin penalty outweighs Demon boost.'}</div>`);}
-  if(!ins.length)ins.push(`<div class="insight-item"><strong>Keep logging!</strong> Need at least 3 observations per type.</div>`);
-  el.innerHTML=ins.join('');
 }
 
 /* ─── SCREENSHOT IMPORT (Gemini vision via same-origin /api/vision/screenshot) ─── */
@@ -2627,7 +2418,7 @@ loadSlateTicketOptions();
     const SELECTORS = [
       '.ticket', '.card', '.group', '.edge-card',
       '.scard', '.qcard', '.hero-stat', '.streak-card',
-      '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
+      '.result-item', '.pp-cell', '.leg-card',
       '.grades-stat', '.grades-hero'
     ];
     function attachGlow(el) {
