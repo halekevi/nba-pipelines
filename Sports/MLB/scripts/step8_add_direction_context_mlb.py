@@ -198,7 +198,15 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "same_series_hit_rate",
         "void_reason",
     ]
-    keep  = [c for c in keep if c in df2.columns]
+    keep = [c for c in keep if c in df2.columns]
+    # Rolling game values (step4): required so combined slate / UI L5 Over|Under match game logs.
+    stat_g_cols = sorted(
+        (c for c in df2.columns if c.startswith("stat_g") and c[6:].isdigit()),
+        key=lambda c: int(c[6:]),
+    )
+    for c in stat_g_cols:
+        if c not in keep:
+            keep.append(c)
     clean = df2[keep].copy()
 
     for col in [

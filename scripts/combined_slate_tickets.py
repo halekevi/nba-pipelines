@@ -5573,7 +5573,9 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
     print(f"[OK] Payout ladder examples -> {out_path}")
 
 
-def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:
+def _apply_l5_truth_from_stat_games(
+    df: pd.DataFrame, sport_label: str, *, min_stat_games: int = 3
+) -> pd.DataFrame:
     """
     Source-of-truth guardrail:
     when stat_g1..stat_g5 are present, derive L5 Over/Under, L5 Avg, and HIT%
@@ -5589,7 +5591,7 @@ def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.Da
     vals = df[stat_cols].apply(pd.to_numeric, errors="coerce")
     line = pd.to_numeric(df["line"], errors="coerce")
     valid_n = vals.notna().sum(axis=1)
-    use_mask = valid_n >= 3
+    use_mask = valid_n >= int(min_stat_games)
     if not bool(use_mask.any()):
         return df
 
@@ -6760,13 +6762,6 @@ def load_mlb(path: str) -> pd.DataFrame:
         df["ml_prob"] = np.nan
     df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
 
-    # Derive L5 game sample size from over+under counts when available.
-    if "l5_games" not in df.columns:
-        l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
-        l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
-        derived = l5o.add(l5u, fill_value=0)
-        df["l5_games"] = derived.where(derived > 0, np.nan)
-
     def _norm_pick(x):
         t = str(x).strip().lower() if x else ""
         if "gob" in t: return "Goblin"
@@ -6811,6 +6806,10 @@ def load_mlb(path: str) -> pd.DataFrame:
             hr = hr / 100.0
         df["hit_rate"] = hr
 
+    # Reconcile L5 Over/Under (and directional hit%) with stat_g* vs line when step8 carries
+    # rolling games — avoids published slates disagreeing with game-log charts.
+    df = _apply_l5_truth_from_stat_games(df, "MLB", min_stat_games=3)
+
     # NBA split boards can show extreme 5/5 streaks; shrink tiny-window rates so UI/tickets
     # do not overstate confidence (e.g., 100% from only 5 samples).
     l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
@@ -6843,6 +6842,12 @@ def load_mlb(path: str) -> pd.DataFrame:
             "  [load_mlb] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
             "Fix Soccer step5 line-hit output when possible."
         )
+
+    # Sample size for L5 (after stat_g reconciliation and shrink).
+    l5o_g = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u_g = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    _l5sum = l5o_g.add(l5u_g, fill_value=0)
+    df["l5_games"] = _l5sum.where(_l5sum > 0, np.nan)
 
     if "edge" not in df.columns:
         df["edge"] = np.nan
