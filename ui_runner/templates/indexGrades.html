@@ -57,17 +57,19 @@ html.page-grades-root body.page-grades{
 }
 html.page-grades-root body.page-grades .grades-page,
 html.page-grades-root body.page-grades .grades-body,
-html.page-grades-root body.page-grades .iframe-shell,
-html.page-grades-root body.page-grades .iframe-shell-stage{
+html.page-grades-root body.page-grades .iframe-shell{
   display:block!important;
   height:auto!important;
   overflow:visible!important;
   flex:none!important;
 }
-/* Stage was height:auto while #grade-frame is position:absolute;height:100% — % of auto collapses; give the stage a real height. */
+/* Stage: do NOT use height:auto!important — syncGradeFrameHeight / syncTicketFrameHeight / syncPropsEvalHeight set inline height in px. */
 html.page-grades-root body.page-grades .iframe-shell-stage{
-  min-height:min(75vh,920px)!important;
+  display:block!important;
+  overflow:visible!important;
+  flex:none!important;
   position:relative!important;
+  min-height:min(45vh,520px);
 }
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
@@ -2268,8 +2270,14 @@ function switchTab(tab) {
     try {
       const st = document.querySelector('.iframe-shell-stage');
       const sh = document.getElementById('grades-iframe-shell');
-      if (st) st.style.removeProperty('height');
-      if (sh) sh.style.removeProperty('height');
+      if (st) {
+        st.style.removeProperty('height');
+        st.style.removeProperty('min-height');
+      }
+      if (sh) {
+        sh.style.removeProperty('height');
+        sh.style.removeProperty('min-height');
+      }
     } catch (_e) {}
   }
   const shell = document.getElementById('grades-iframe-shell');
@@ -2720,12 +2728,13 @@ function syncPropsEvalHeight() {
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
     const stage = document.querySelector('.iframe-shell-stage');
-    const shell = document.getElementById('grades-iframe-shell');
     const gp = document.querySelector('.grades-page');
     const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
-    if (stage) stage.style.height = hPx;
-    if (shell) shell.style.height = hPx;
+    if (stage) {
+      stage.style.height = hPx;
+      stage.style.minHeight = hPx;
+    }
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -2754,14 +2763,24 @@ function syncGradeFrameHeight(frame) {
       const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
       if (bottom > maxBottom) maxBottom = bottom;
     });
+    const scrollH = Math.max(
+      doc.body ? doc.body.scrollHeight : 0,
+      doc.documentElement.scrollHeight || 0,
+      doc.documentElement.offsetHeight || 0
+    );
     const h = Math.max(
       Math.ceil(maxBottom + 24),
-      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      scrollH,
       300
     );
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
+    const stage = document.querySelector('.iframe-shell-stage');
     const gradesPage = document.querySelector('.grades-page');
+    if (stage) {
+      stage.style.height = hPx;
+      stage.style.minHeight = hPx;
+    }
     if (gradesPage) gradesPage.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -2799,18 +2818,24 @@ function syncTicketFrameHeight(frame) {
       const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
       if (bottom > maxBottom) maxBottom = bottom;
     });
+    const scrollH = Math.max(
+      doc.body ? doc.body.scrollHeight : 0,
+      doc.documentElement.scrollHeight || 0,
+      doc.documentElement.offsetHeight || 0
+    );
     const h = Math.max(
       Math.ceil(maxBottom + 24),
-      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      scrollH,
       300
     );
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
     const stage = document.querySelector('.iframe-shell-stage');
-    const shell = document.getElementById('grades-iframe-shell');
     const gp = document.querySelector('.grades-page');
-    if (stage) stage.style.height = hPx;
-    if (shell) shell.style.height = hPx;
+    if (stage) {
+      stage.style.height = hPx;
+      stage.style.minHeight = hPx;
+    }
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
