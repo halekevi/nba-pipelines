@@ -952,7 +952,6 @@ body::before{
   <button class="tab-btn" onclick="switchTab('composer',this)">🧩 Ticket Composer</button>
   <button class="tab-btn" onclick="switchTab('log',this)">📋 Log Lines <span class="badge-count" id="log-count">0</span></button>
   <button class="tab-btn" onclick="switchTab('patterns',this)">📈 Patterns</button>
-  <button class="tab-btn" onclick="switchTab('ref',this)">📊 Reference</button>
   <button class="tab-btn" onclick="switchTab('cards',this)">🃏 Rate cards</button>
 </div>
 
@@ -1175,57 +1174,7 @@ body::before{
   </div>
 </div>
 
-<!-- ═══════════ TAB 4: REFERENCE ═══════════ -->
-<div id="tab-ref" class="tab-panel">
-  <div class="card accent">
-    <div class="card-title">📊 PrizePicks Standard Payouts</div>
-    <div class="pp-table">
-      <div class="pp-cell"><div class="pp-lbl">LEGS</div><div class="pp-legs">2</div><div class="pp-lbl" style="margin-top:8px">POWER</div><div class="pp-power">3x</div></div>
-      <div class="pp-cell"><div class="pp-lbl">LEGS</div><div class="pp-legs">3</div><div class="pp-lbl" style="margin-top:8px">POWER</div><div class="pp-power">6x</div></div>
-      <div class="pp-cell"><div class="pp-lbl">LEGS</div><div class="pp-legs">4</div><div class="pp-lbl" style="margin-top:8px">POWER</div><div class="pp-power">10x</div></div>
-      <div class="pp-cell"><div class="pp-lbl">LEGS</div><div class="pp-legs">5</div><div class="pp-lbl" style="margin-top:8px">POWER</div><div class="pp-power">20x</div></div>
-      <div class="pp-cell"><div class="pp-lbl">LEGS</div><div class="pp-legs">6</div><div class="pp-lbl" style="margin-top:8px">POWER</div><div class="pp-power">37.5x</div></div>
-    </div>
-    <div class="section-divider">FLEX PLAY PAYOUTS</div>
-    <div class="pp-table">
-      <div class="pp-cell"><div class="pp-legs">3</div><div class="pp-flex">3/3 → 3x<br>2/3 → 1x</div></div>
-      <div class="pp-cell"><div class="pp-legs">4</div><div class="pp-flex">4/4 → 6x<br>3/4 → 1.5x</div></div>
-      <div class="pp-cell"><div class="pp-legs">5</div><div class="pp-flex">5/5 → 10x<br>4/5 → 2x<br>3/5 → 0.4x</div></div>
-      <div class="pp-cell" style="grid-column:span 2"><div class="pp-legs">6</div><div class="pp-flex">6/6 → 25x &nbsp;·&nbsp; 5/6 → 2x &nbsp;·&nbsp; 4/6 → 0.4x</div></div>
-    </div>
-  </div>
-  <div class="card goblin">
-    <div class="card-title" style="color:var(--goblin)">🎃 How Goblin Lines Work</div>
-    <p class="hint">Goblins move the line <strong>in your favor</strong> — easier to hit, lower multiplier. Key metric: <strong style="color:var(--goblin)">played ÷ standard = delta%</strong>. A goblin at 90% prices very differently than one at 60%.</p>
-    <div style="font-size:11px;color:var(--muted);line-height:1.9">
-      <strong style="color:var(--goblin)">Example:</strong> Standard = 20.5. Goblin at 16.5 → delta% = 80.5%. Goblin at 12.0 → delta% = 58.5%.<br>
-      Same 3-leg base of 6x, but PP prices the 58.5% goblin much lower.<br><br>
-      <strong style="color:var(--text)">Key insight:</strong> Log both lines every time — the label "Goblin" tells you nothing without knowing <em>how far</em> the line moved.
-    </div>
-  </div>
-  <div class="card demon">
-    <div class="card-title" style="color:var(--demon)">😈 How Demon Lines Work</div>
-    <p class="hint">Demons move the line <strong>against you</strong> — harder to hit, higher multiplier. Delta% will be above 1.0. A demon at 110% is shallow; one at 140%+ is extreme.</p>
-    <div style="font-size:11px;color:var(--muted);line-height:1.9">
-      <strong style="color:var(--demon)">Example:</strong> Standard = 24.5. Demon at 26.5 → delta% = 108%. Demon at 34.5 → delta% = 141%.<br>
-      PP captures extra margin on Demon lines — log observations to see if the boost is actually worth it.<br><br>
-      <strong style="color:var(--text)">Key insight:</strong> Demon boosts are often <em>not</em> proportional to actual difficulty.
-    </div>
-  </div>
-  <div class="card cyan">
-    <div class="card-title" style="color:var(--cyan)">🧮 Mixed Slip Payout Logic</div>
-    <div style="font-size:11px;color:var(--muted);line-height:2;">
-      PrizePicks does not publish the formula. Based on observations:<br><br>
-      <strong style="color:var(--text)">1.</strong> Base multiplier = standard payout for leg count (e.g. 6x for 3 legs)<br>
-      <strong style="color:var(--text)">2.</strong> Each Goblin/Demon applies a factor based on its <em>delta%</em>, not just its label<br>
-      <strong style="color:var(--text)">3.</strong> Goblin factor reduces payout; Demon factor increases it<br>
-      <strong style="color:var(--text)">4.</strong> Factors multiply together — Goblin + Demon partially offset each other<br><br>
-      <em style="color:var(--muted)">The exact per-leg factor is dynamic and undisclosed. Logging real observations is the only way to reverse-engineer the actual curve.</em>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ TAB 5: RATE CARDS (JSON dictionary) ═══════════ -->
+<!-- ═══════════ TAB 4: RATE CARDS (JSON dictionary) ═══════════ -->
 <div id="tab-cards" class="tab-panel">
   <div class="card accent">
     <div class="card-title">🃏 Payout rate cards</div>
@@ -1285,7 +1234,7 @@ function switchTab(id,btn){
   if(id==='cards')renderRateCards(false);
 }
 function goTab(id){
-  const order=['calc','composer','log','patterns','ref','cards'],i=order.indexOf(id);
+  const order=['calc','composer','log','patterns','cards'],i=order.indexOf(id);
   const btns=document.querySelectorAll('.tab-bar .tab-btn');
   if(i>=0&&btns[i])switchTab(id,btns[i]);
 }
