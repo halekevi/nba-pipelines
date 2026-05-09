@@ -1718,8 +1718,8 @@ function ensureFrameCollapseCss(doc) {
         gap:18px!important;
       }
     }
-    /* ticket_eval: `.ticket-eval-main > details:not(.ticket-bucket)` hides stray rows but must not hide
-       hub-injected `details.grades-sport-bucket` (older baked HTML until rebuild). */
+    /* ticket_eval: '.ticket-eval-main > details:not(.ticket-bucket)' hides stray rows but must not hide
+       hub-injected 'details.grades-sport-bucket' (older baked HTML until rebuild). */
     .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
