@@ -145,8 +145,8 @@ $SoccerDir = Join-Path $SportsRoot "Soccer"
 $TennisDir = Join-Path $SportsRoot "Tennis"
 $WNBADir   = Join-Path $SportsRoot "WNBA"
 $NFLDir    = Join-Path $SportsRoot "NFL"
-# WNBA regular season: include in full parallel runs on/after this date (ISO yyyy-MM-dd).
-# 2026 opener starts May 1, so keep WNBA active for same-day fresh slates.
+# WNBA: include in full parallel runs on/after this date (ISO yyyy-MM-dd). Preseason/same-day
+# slates from 2026-05-01; keep the literal in sync with $WNBA_SEASON_START in scripts/run_daily.ps1.
 $WNBA_SEASON_START = "2026-05-01"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $NBARunOutDir = Join-Path $OutDir "nba"

@@ -47,6 +47,8 @@ param(
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
 $SportsRoot = Join-Path $Root "Sports"
+# WNBA: must match $WNBA_SEASON_START in repo-root run_pipeline.ps1 (parallel job + dated step8 gate).
+$WNBA_SEASON_START = "2026-05-01"
 
 # Ensure local cache folder exists
 # (excluded from OneDrive, must be created locally)
@@ -148,7 +150,7 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     )
     # WNBA: run_wnba_pipeline.ps1 publishes outputs/<date>/step8_wnba_direction_clean_<date>.xlsx
     # (same basename pattern as other sports' step8_*_direction_clean_<date>.xlsx).
-    if ($RunDate -ge "2026-05-01") {
+    if ($RunDate -ge $WNBA_SEASON_START) {
         $required = @($required) + @("step8_wnba_direction_clean_$RunDate.xlsx")
     }
     # 2026 NCAA: WCBB title Sun Apr 5; men's title Mon Apr 6. Expect no WCBB slate from Apr 6+;
