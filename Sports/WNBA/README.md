@@ -24,6 +24,7 @@ Default step 1 uses the same PrizePicks HTTP path as NBA (`Sports/NBA/scripts/st
 
 - **Per-step artifacts (canonical run):** `outputs/<date>/wnba/` — e.g. `step1_wnba_props.csv` through step 9 outputs.
 - **Published clean sheet:** after step 8, `scripts/run_wnba_pipeline.ps1` mirrors the direction-clean workbook to `outputs/<date>/` (e.g. `step8_wnba_direction_clean_<date>.xlsx`) for dated consumers and mobile sync patterns.
+- **Slate Explorer / mobile:** after step 9, the same runner calls `scripts/publish_wnba_slate_to_ui.py`, which **merges** WNBA rows into `ui_runner/templates/slate_latest.json` and `mobile/www/slate_latest.json` (and writes `slate_sport_wnba.json`) without wiping other sports. Run that script manually with `--date` if you need to refresh only the web JSON.
 
 ## Combined slate / web tickets
 

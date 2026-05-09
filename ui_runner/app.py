@@ -2746,6 +2746,8 @@ def api_pipeline_status():
     wnba_slate_p = _resolve_outputs_artifact(
         days,
         [
+            "wnba/step8_wnba_direction_clean.xlsx",
+            "wnba/step8_wnba_direction.xlsx",
             "step8_wnba_direction_clean_{d}.xlsx",
             "step8_wnba_direction_{d}.xlsx",
         ],

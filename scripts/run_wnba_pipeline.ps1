@@ -236,6 +236,22 @@ if ($ok) { Publish-WnbaStep8CleanArtifacts }
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
     "--input `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --output `"$WnbaRunOutDir\wnba_best_tickets.xlsx`" --min_hit_rate 0.8 --legs 2,3,4" }
 
+# Web: merge WNBA rows into slate_latest.json + slate_sport_wnba.json (templates + mobile/www)
+if ($ok) {
+    Write-Host "  --> WNBA — Publish slate to UI JSON" -ForegroundColor Yellow
+    Push-Location $Root
+    try {
+        & py -3.14 (Join-Path $Root "scripts\publish_wnba_slate_to_ui.py") --date $Date
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "      WARN: publish_wnba_slate_to_ui exit $LASTEXITCODE (Slate Explorer may lack WNBA until combined run)" -ForegroundColor Yellow
+        } else {
+            Write-Host "      OK" -ForegroundColor Green
+        }
+    } finally {
+        Pop-Location
+    }
+}
+
 # =============================================================================
 #  SUMMARY
 # =============================================================================

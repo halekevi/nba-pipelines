@@ -797,6 +797,8 @@ async function fetch_smart(localPath) {
             ),
             "wnba": _first_existing_path(
                 [
+                    R / "outputs" / slate_date / "wnba" / "step8_wnba_direction_clean.xlsx",
+                    R / "outputs" / slate_date / "step8_wnba_direction_clean_{}.xlsx".format(slate_date),
                     R / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx",
                     R / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
                     R / "Sports" / "WNBA" / "step8_wnba_direction.xlsx",

@@ -4405,14 +4405,12 @@ def ticket_groups_to_payload(
     return payload
 
 
-def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None):
-    """Write full per-sport ranked slate to slate_latest.json for the web UI.
-
-    Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
-    home Slate Explorer stay aligned with templates/index.html (SPORTS + _slate_counts).
-    """
+def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
+    """Convert a step7/step8 direction dataframe to Slate Explorer row dicts (see _SLATE_SPORT_UI_KEYS)."""
     import math
+
+    if df is None or len(df) == 0:
+        return []
 
     def safe(v):
         if v is None:
@@ -4427,65 +4425,161 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 return None
         except Exception:
             pass
-        if hasattr(v, 'item'):  # numpy scalar
+        if hasattr(v, "item"):
             return v.item()
         return v
 
-    def df_to_rows(df, sport_key):
-        if df is None or len(df) == 0:
-            return []
-        col = lambda c: df[c] if c in df.columns else None
-        rows = []
-        for _, r in df.iterrows():
-            def g(c):
-                return safe(r[c]) if c in df.columns else None
-            # Home Slate Explorer + /api/slate-sport only read these keys (see ui_runner/app.py
-            # _SLATE_SPORT_UI_KEYS). Omitting cross-book and extra L5 columns shrinks slate_latest.json
-            # and speeds mobile fetch + parse.
-            row = {
-                "tier":       g("tier"),
-                "rank_score": g("rank_score"),
-                "player":     g("player") or "",
-                "team":       g("team") or "",
-                "opp":        str(g("opp") or g("opp_team") or "").strip(),
-                "prop":       g("prop_type") or g("prop") or "",
-                "pick_type":  g("pick_type") or "",
-                "line":       g("line"),
-                "dir":        g("direction") or g("dir") or "",
-                "edge":       g("edge"),
-                "abs_edge":   g("abs_edge"),
-                "hit_rate":   g("hit_rate"),
-                "l5_over":    g("l5_over"),
-                "l5_under":   g("l5_under"),
-                "game_time":  str(g("game_time") or "") or None,
-            }
-            # Include last-10 game values for accurate UI charts.
-            for _i in range(1, 11):
-                _v = g(f"G{_i}")
-                if _v is None:
-                    _v = g(f"g{_i}")
-                _vf = safe(_v)
-                if _vf is not None:
-                    row[f"g{_i}"] = _vf
-                    row[f"stat_g{_i}"] = _vf
-            rows.append({k: v for k, v in row.items() if v is not None})
-        return rows
+    rows: List[dict] = []
+    for _, r in df.iterrows():
+        def g(c):
+            return safe(r[c]) if c in df.columns else None
 
+        row = {
+            "tier":       g("tier"),
+            "rank_score": g("rank_score"),
+            "player":     g("player") or "",
+            "team":       g("team") or "",
+            "opp":        str(g("opp") or g("opp_team") or "").strip(),
+            "prop":       g("prop_type") or g("prop") or "",
+            "pick_type":  g("pick_type") or "",
+            "line":       g("line"),
+            "dir":        g("direction") or g("dir") or "",
+            "edge":       g("edge"),
+            "abs_edge":   g("abs_edge"),
+            "hit_rate":   g("hit_rate"),
+            "l5_over":    g("l5_over"),
+            "l5_under":   g("l5_under"),
+            "game_time":  str(g("game_time") or "") or None,
+        }
+        for _i in range(1, 11):
+            _v = g(f"G{_i}")
+            if _v is None:
+                _v = g(f"g{_i}")
+            _vf = safe(_v)
+            if _vf is not None:
+                row[f"g{_i}"] = _vf
+                row[f"stat_g{_i}"] = _vf
+        rows.append({k: v for k, v in row.items() if v is not None})
+    return rows
+
+
+def resolve_default_wnba_step8_path(date_str: str) -> str:
+    """Same resolution order as apply_default_sport_inputs --wnba (standalone canonical tree)."""
+    d = str(date_str).strip()[:10]
+    if len(d) != 10:
+        return ""
+    out = _outputs_dir_for_date(d)
+    return _first_existing_path(
+        os.path.join(out, "wnba", "step8_wnba_direction_clean.xlsx"),
+        os.path.join(out, "wnba", "step8_wnba_direction.xlsx"),
+        os.path.join(out, f"step8_wnba_direction_clean_{d}.xlsx"),
+        os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
+        os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction_clean.xlsx"),
+        os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction.xlsx"),
+        os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction_clean.xlsx"),
+        os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx"),
+        os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx"),
+        os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx"),
+    )
+
+
+def publish_wnba_slate_merge_into_web(
+    date_str: str,
+    web_outdirs: Optional[str | List[str]] = None,
+) -> bool:
+    """
+    Merge WNBA step8 rows into existing slate_latest.json (standalone WNBA pipeline → UI).
+
+    Preserves other sports already in the file; replaces only sports[\"wnba\"].
+    Writes slate_sport_wnba.json alongside (static /api/slate-sport/wnba shape).
+    """
+    d = str(date_str).strip()[:10]
+    if len(d) != 10:
+        print("[wnba-slate-web] invalid date")
+        return False
+
+    wnba_path = resolve_default_wnba_step8_path(d)
+    if not wnba_path:
+        print("[wnba-slate-web] no WNBA step8 workbook found; skip web slate merge")
+        return False
+    try:
+        wnba_df = load_wnba(wnba_path)
+    except Exception as exc:
+        print(f"[wnba-slate-web] load_wnba failed: {exc}")
+        return False
+    if wnba_df is None or len(wnba_df) == 0:
+        print("[wnba-slate-web] WNBA board empty; skip web slate merge")
+        return False
+
+    rows = dataframe_to_slate_sport_rows(wnba_df)
+    if web_outdirs is None:
+        web_outdirs = [os.path.join(REPO_ROOT, "ui_runner", "templates")]
+        _mob = os.path.join(REPO_ROOT, "mobile", "www")
+        if os.path.isdir(_mob):
+            web_outdirs.append(_mob)
+    elif isinstance(web_outdirs, str):
+        web_outdirs = [web_outdirs]
+
+    gen_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    for outdir in web_outdirs:
+        if not str(outdir).strip():
+            continue
+        os.makedirs(outdir, exist_ok=True)
+        slate_path = os.path.join(outdir, "slate_latest.json")
+        payload = None
+        if os.path.isfile(slate_path):
+            try:
+                with open(slate_path, encoding="utf-8") as sf:
+                    payload = json.load(sf)
+            except Exception as exc:
+                print(f"[wnba-slate-web] WARN resetting {slate_path}: {exc}")
+                payload = None
+        if not isinstance(payload, dict):
+            payload = {"date": d, "generated_at": gen_at, "sports": {}}
+        sports = payload.get("sports")
+        if not isinstance(sports, dict):
+            sports = {}
+        else:
+            sports = dict(sports)
+        sports["wnba"] = rows
+        payload["sports"] = sports
+        if not str(payload.get("date") or "").strip():
+            payload["date"] = d
+        payload["generated_at"] = gen_at
+        payload = _sanitize_for_json(payload)
+        with open(slate_path, "w", encoding="utf-8") as wf:
+            json.dump(payload, wf, ensure_ascii=False, default=str, allow_nan=False)
+        sport_path = os.path.join(outdir, "slate_sport_wnba.json")
+        with open(sport_path, "w", encoding="utf-8") as wf:
+            json.dump({"ok": True, "sport": "wnba", "rows": rows}, wf, ensure_ascii=False, default=str, allow_nan=False)
+        n_tot = sum(len(v or []) for v in (payload.get("sports") or {}).values() if isinstance(v, list))
+        print(f"  [wnba-slate-web] {slate_path}  (wnba={len(rows)} rows, all_sports={n_tot} props)")
+        print(f"  [wnba-slate-web] {sport_path}")
+    return True
+
+
+def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None):
+    """Write full per-sport ranked slate to slate_latest.json for the web UI.
+
+    Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
+    home Slate Explorer stay aligned with templates/index.html (SPORTS + _slate_counts).
+    """
     payload = {
         "date": date_str,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "sports": {
-            "nba":    df_to_rows(nba,    "nba"),
-            "cbb":    df_to_rows(cbb,    "cbb"),
-            "nhl":    df_to_rows(nhl,    "nhl"),
-            "soccer": df_to_rows(soccer, "soccer"),
-            "tennis": df_to_rows(tennis, "tennis"),
-            "wcbb":   df_to_rows(wcbb,   "wcbb"),
-            "mlb":    df_to_rows(mlb,    "mlb"),
-            "nba1q":  df_to_rows(nba1q,  "nba1q"),
-            "nba1h":  df_to_rows(nba1h,  "nba1h"),
-            "nfl":    df_to_rows(nfl,    "nfl"),
-            "wnba":   df_to_rows(wnba,   "wnba"),
+            "nba":    dataframe_to_slate_sport_rows(nba),
+            "cbb":    dataframe_to_slate_sport_rows(cbb),
+            "nhl":    dataframe_to_slate_sport_rows(nhl),
+            "soccer": dataframe_to_slate_sport_rows(soccer),
+            "tennis": dataframe_to_slate_sport_rows(tennis),
+            "wcbb":   dataframe_to_slate_sport_rows(wcbb),
+            "mlb":    dataframe_to_slate_sport_rows(mlb),
+            "nba1q":  dataframe_to_slate_sport_rows(nba1q),
+            "nba1h":  dataframe_to_slate_sport_rows(nba1h),
+            "nfl":    dataframe_to_slate_sport_rows(nfl),
+            "wnba":   dataframe_to_slate_sport_rows(wnba),
         }
     }
 
