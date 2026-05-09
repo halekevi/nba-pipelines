@@ -11,6 +11,12 @@
   --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
 }
 
+/* Payouts nav glyph: path reads as a reversed “p” until flipped vertically. */
+.ni-pay svg {
+  transform: scaleY(-1);
+  transform-origin: 50% 50%;
+}
+
 @media (max-width: 900px), (pointer: coarse) {
   /*
    * Full-viewport decorative layers (body::after dot grid + mix-blend, mesh, SVG grain,
@@ -1227,15 +1233,6 @@ nav.snav .mobile-menu a {
   ul#nav-links.snav-links .ni svg {
     display: block !important;
     margin: 0 !important;
-  }
-
-  /* Payout tab icon fix on Android WebView: ensure expected vertical orientation. */
-  nav.snav ul#nav-links li a[href="/payout"] .ni svg,
-  ul#nav-links.snav-links li a[href="/payout"] .ni svg,
-  nav.snav ul#nav-links li a[href="payout.html"] .ni svg,
-  ul#nav-links.snav-links li a[href="payout.html"] .ni svg {
-    transform: scaleY(-1) !important;
-    transform-origin: center center !important;
   }
 
   body {
