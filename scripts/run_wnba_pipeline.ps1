@@ -6,7 +6,9 @@
 #    .\run_wnba_pipeline.ps1 -Date 2026-07-15   # Specify date
 #    .\run_wnba_pipeline.ps1 -RefreshCache      # Wipe ESPN cache + rebuild
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
-#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Chrome CDP after DataDome solve
+#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Chrome CDP after DataDome solve (uses Playwright attach)
+#    .\run_wnba_pipeline.ps1 -UsePlaywright             # Force in-browser fetch (needs PrizePicks Chrome profile)
+#  Default step1 uses the PrizePicks HTTP API (curl_cffi), same as NBA step1 API — no Playwright unless -UsePlaywright or -Cdp.
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 #
 #  Combined / game_date contract (2026-05): step1 anchors full-board game_date to --date;
@@ -18,7 +20,8 @@ param(
     [string]$Date         = "",
     [switch]$RefreshCache,
     [switch]$SkipFetch,
-    [string]$Cdp          = ""
+    [string]$Cdp          = "",
+    [switch]$UsePlaywright
 )
 
 $ErrorActionPreference = "Continue"
@@ -42,6 +45,9 @@ if (-not $Cdp) { $Cdp = [string]$env:PRIZEPICKS_CDP }
 $Cdp = $Cdp.Trim()
 if ($Cdp) {
     Write-Host "  [WNBA step1] CDP attach: $Cdp" -ForegroundColor DarkGray
+}
+if ($UsePlaywright -and -not $Cdp) {
+    Write-Host "  [WNBA step1] UsePlaywright: in-browser PrizePicks fetch (HTTP API disabled)" -ForegroundColor DarkGray
 }
 $StartTime = Get-Date
 $script:ProgressDone = 0
@@ -137,9 +143,12 @@ Write-Host ""
 
 $ok = $true
 
-# Step 1 — Fetch PrizePicks (league_id=3, WNBA)
+# Step 1 — Fetch PrizePicks (league_id=3, WNBA); HTTP API by default (curl_cffi). Use -UsePlaywright for local Chrome profile; -Cdp attaches to solved Chrome (step1 adds CDP only — Python enables Playwright path).
 if (-not $SkipFetch) {
-    $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+    $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+    if ($UsePlaywright) {
+        $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+    }
     if ($Cdp) { $step1Args += " --cdp $Cdp" }
     if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
 } else {

@@ -11,6 +11,9 @@ only the default league_id differs.
 Run:
   py -3.14 step1_fetch_prizepicks.py
   py -3.14 step1_fetch_prizepicks.py --output step1_wnba_props.csv
+
+scripts/run_wnba_pipeline.ps1 defaults to HTTP (curl_cffi) fetch — no --playwright.
+Use --playwright or --cdp for browser/DataDome bypass when API returns 403.
 """
 
 from __future__ import annotations
