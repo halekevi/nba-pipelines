@@ -539,6 +539,17 @@ def _resolve_void_pending_if_injury_dnp(
         and (not vn or vn in _VOID_PENDING_VOID_NOTES)
     ):
         return "VOID"
+    # MLB provider feeds frequently leave some props with NO_ACTUAL after game close
+    # (especially pitcher markets when a listed starter never appears). Resolve these
+    # as VOID so ticket payout can settle instead of lingering in pending state.
+    if (
+        sport_u == "MLB"
+        and prop_u in {"pitcherstrikeouts", "pitchingouts", "pitchesthrown", "hitsallowed", "walksallowed"}
+        and g in ("NO_ACTUAL", "VOID", "PUSH", "N/A", "NA", "")
+        and not _finite_line_actual(actual, line_f)
+        and (not vn or vn in _VOID_PENDING_VOID_NOTES)
+    ):
+        return "VOID"
     dnp_keys = injury_dnp_by_sport.get(sport_u)
     if not dnp_keys:
         return grade

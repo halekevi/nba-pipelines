@@ -1814,6 +1814,22 @@ def main():
             soccer_team_players[tm] = players
             soccer_players_all |= players
     soccer_teams_seen: Set[str] = set(soccer_team_players.keys())
+    # MLB DNP heuristic:
+    # If a team's game is present in actuals but the ticketed player is absent from all
+    # parsed rows for that team, treat NO_ACTUAL as VOID instead of leaving tickets ungraded.
+    mlb_team_players: Dict[str, Set[str]] = {}
+    mlb_players_all: Set[str] = set()
+    if not mlb_act.empty:
+        for _tm, _grp in mlb_act.groupby("team_norm", dropna=False):
+            tm = strip_norm(_tm)
+            if not tm:
+                continue
+            players = {str(v or "").strip() for v in _grp["player_norm"].tolist() if str(v or "").strip()}
+            if not players:
+                continue
+            mlb_team_players[tm] = players
+            mlb_players_all |= players
+    mlb_teams_seen: Set[str] = set(mlb_team_players.keys())
     tennis_void: Set[Tuple[str, str]] = set()
 
     # ticket sheets (workbook) or JSON snapshot (same legs as --write-web output)
@@ -1888,6 +1904,12 @@ def main():
         elif sp == "TENNIS":
             tm = _inj_canon_team("TENNIS", row["team"])
             if pl and tm and (pl, tm) in tennis_void:
+                return "VOID"
+        elif sp == "MLB":
+            tm = strip_norm(row["team"])
+            if pl and tm and (tm in mlb_teams_seen) and (pl not in mlb_team_players.get(tm, set())):
+                return "VOID"
+            if pl and mlb_players_all and (pl not in mlb_players_all):
                 return "VOID"
         return row["leg_result"]
 
