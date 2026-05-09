@@ -2151,11 +2151,12 @@ function empiricalHitPctForPick(p, n = 5) {
   const lineVal = Number(p?.line);
   if (!Number.isFinite(lineVal)) return null;
   let hits = 0;
+  // Match MLB/NHL pipeline: strict > / < vs line; pushes (== line) are not over or under hits.
   for (const v of hist.actual) {
     if (dir === "OVER") {
-      if (v >= lineVal) hits += 1;
+      if (v > lineVal) hits += 1;
     } else {
-      if (v <= lineVal) hits += 1;
+      if (v < lineVal) hits += 1;
     }
   }
   return Math.round((hits / hist.actual.length) * 100);
@@ -2793,7 +2794,8 @@ function makeSparkSVG(data, line, isOver, W=150, H=48, projRef=null) {
   s+=`<path d="${pathD}" fill="none" stroke="${hc}55" stroke-width="2.5" stroke-linecap="round"/>`;
   s+=`<path d="${pathD}" fill="none" stroke="${hc}" stroke-width="1.5" stroke-linecap="round"/>`;
   data.forEach((v,i)=>{
-    const hit=isOver?v>=bookLine:v<=bookLine, dc=hit?hc:mc;
+    const hit = isOver ? v > bookLine : v < bookLine;
+    const dc = hit ? hc : mc;
     const cx=px(v,i), cy=py(v);
     s+=`<circle cx="${cx}" cy="${cy}" r="4.5" fill="${hc}18" stroke="none"/>`;
     s+=`<circle cx="${cx}" cy="${cy}" r="2.5" fill="${dc}" stroke="rgba(0,0,0,.6)" stroke-width="0.8"/>`;
