@@ -71,6 +71,15 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   position:relative!important;
   min-height:min(45vh,520px);
 }
+/* Slate/ticket iframes: normal flow so stage height follows iframe (absolute+height:100% often leaves empty bands). */
+html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  height:auto;
+  min-height:min(50dvh,680px);
+}
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
 html.page-grades-root #props-eval-panel{
@@ -263,7 +272,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-toolbar-parent-slot{flex-shrink:0}
 .grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
 .iframe-shell-stage{flex:1;min-height:0;min-width:0;width:100%;max-width:100%;position:relative;overflow:hidden;}
-.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:var(--bg-main);min-width:0;box-sizing:border-box;}
+/* Slate/ticket iframes follow #empty-state in DOM — without z-index, the iframe paints on top and hides
+   “No report” / errors on desktop (mobile media query used to fix this only for small screens). */
+.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:var(--bg-main);min-width:0;box-sizing:border-box;z-index:1;}
 /* Ticket tab: pull iframe flush under toolbar (ticket_eval has its own KPI bar) */
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
@@ -324,7 +335,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.02vw,17px);}
 .insights-table-host th,.insights-table-host td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);}
 .insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(13px,0.92vw,15px);text-transform:uppercase;letter-spacing:0.06em;}
-.grade-frame.loading{opacity:0;}
+/* Do not hide iframe during load — if .loading is not cleared, opacity:0 reads as a blank page. Overlay covers load. */
+.grade-frame.loading{opacity:1;}
 
 /* loading */
 .load-overlay{position:absolute;inset:0;background:rgba(6,8,18,0.82);backdrop-filter:blur(20px) saturate(180%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:50;pointer-events:none;transition:opacity .3s;}
@@ -355,8 +367,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .load-text{font-family:'Inter',sans-serif;font-size:17px;letter-spacing:2px;color:var(--muted2);}
 .load-date{font-family:'Inter',sans-serif;font-size:19px;letter-spacing:1.5px;color:var(--cyan);margin-top:4px;}
 
-/* empty state */
-.empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:rgba(6,8,20,0.72);backdrop-filter:blur(16px) saturate(180%);}
+/* empty state — must stack above .grade-frame (see note on iframe z-index) */
+.empty-state{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:rgba(6,8,20,0.72);backdrop-filter:blur(16px) saturate(180%);}
 .empty-state[hidden],
 #empty-state[hidden],
 #ticket-empty-state[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;z-index:-1 !important;}
@@ -1271,8 +1283,8 @@ select option,
           </label>
           <label>Pick Type
             <select id="props-filter-picktype" aria-label="Filter by pick type">
-              <option value="NO_DEMON">No Demon (default)</option>
-              <option value="">All pick types</option>
+              <option value="">All pick types (default)</option>
+              <option value="NO_DEMON">No Demon</option>
               <option value="GOBLIN">Goblin only</option>
               <option value="STANDARD">Standard only</option>
               <option value="DEMON">Demon only</option>
@@ -2102,7 +2114,7 @@ function renderPropsEvalCards(rows) {
 function applyPropsEvalFilters() {
   const sport = (document.getElementById('props-filter-sport') || {}).value || '';
   const resF = (document.getElementById('props-filter-result') || {}).value || '';
-  const pickTypeF = (document.getElementById('props-filter-picktype') || {}).value || 'NO_DEMON';
+  const pickTypeF = (document.getElementById('props-filter-picktype') || {}).value || '';
   const q = (((document.getElementById('props-filter-q') || {}).value) || '').trim().toLowerCase();
   const rows = window._propsEvalCache || [];
   const filtered = rows.filter(function (r) {
@@ -2980,22 +2992,40 @@ function loadDate(dateStr){
 
   // Set iframe src
   frame.onload = function(){
-    // Check if it actually loaded content (not an error page)
-    try {
-      const doc = frame.contentDocument;
-      const hasSlate =
-        doc &&
-        doc.body &&
-        (doc.querySelector('.main,header,.sport-section') ||
-          doc.body.innerHTML.trim().length >= 40);
-      if (!hasSlate) {
-        throw new Error('empty');
+    function slateDocReady() {
+      try {
+        const doc = frame.contentDocument;
+        return (
+          doc &&
+          doc.body &&
+          (!!doc.querySelector('.main,header,.sport-section') ||
+            doc.body.innerHTML.trim().length >= 40)
+        );
+      } catch (_e) {
+        return false;
       }
-      completeSlateFrameLoad(frame);
-    } catch(e) {
-      // cross-origin or empty — just show it anyway if we can
-      finishGradesSlateLoadUI();
     }
+    function tryFinish() {
+      if (slateDocReady()) {
+        completeSlateFrameLoad(frame);
+        return;
+      }
+      // WebView sometimes fires onload before the slate body is parsed — retry briefly.
+      requestAnimationFrame(function () {
+        if (slateDocReady()) {
+          completeSlateFrameLoad(frame);
+          return;
+        }
+        setTimeout(function () {
+          if (slateDocReady()) {
+            completeSlateFrameLoad(frame);
+          } else {
+            finishGradesSlateLoadUI();
+          }
+        }, 120);
+      });
+    }
+    tryFinish();
   };
   frame.onerror = function(){
     finishGradesSlateLoadUI();
