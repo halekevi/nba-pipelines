@@ -40,7 +40,11 @@ def main() -> int:
     if best is None:
         print("[sync_grade_history] no grade_history.json found (run build_ticket_eval.py first)")
         return 1
-    shutil.copy2(best, dest)
+    try:
+        shutil.copy2(best, dest)
+    except OSError:
+        # Windows: destination may be locked (IDE preview); atomic write still updates content.
+        dest.write_text(best.read_text(encoding="utf-8"), encoding="utf-8")
     print(f"[sync_grade_history] {best} -> {dest}")
     return 0
 
