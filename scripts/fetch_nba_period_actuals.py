@@ -300,6 +300,27 @@ def _parse_game_period_stats(
         if not meta:
             continue
         player_name, team_abbr = meta
+        # ESPN PBP fallback only increments stats when events are seen.
+        # Ensure core counting stats exist at 0 so props like Assists 0.5 OVER
+        # can be graded as MISS instead of remaining ungraded when a player logs 0.
+        for k in (
+            "PTS",
+            "REB",
+            "AST",
+            "BLK",
+            "STL",
+            "TO",
+            "FGM",
+            "FGA",
+            "3PM",
+            "3PA",
+            "FTM",
+            "FTA",
+            "OREB",
+            "DREB",
+            "MIN",
+        ):
+            s.setdefault(k, 0.0)
         rows.extend(parse_stats(player_name, team_abbr, s))
     return rows
 
