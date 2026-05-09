@@ -28,8 +28,8 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_mlb_2026-05-07.xlsx",
       "status": "ok",
       "rows": 995,
-      "void_rows": 43,
-      "acceptable_void_rows": 43,
+      "void_rows": 19,
+      "acceptable_void_rows": 19,
       "unacceptable_void_rows": 0
     },
     {
@@ -44,16 +44,16 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nba1h_2026-05-07.xlsx",
       "status": "ok",
       "rows": 50,
-      "void_rows": 23,
-      "acceptable_void_rows": 23,
+      "void_rows": 1,
+      "acceptable_void_rows": 1,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nba1q_2026-05-07.xlsx",
       "status": "ok",
       "rows": 166,
-      "void_rows": 52,
-      "acceptable_void_rows": 52,
+      "void_rows": 8,
+      "acceptable_void_rows": 8,
       "unacceptable_void_rows": 0
     },
     {
