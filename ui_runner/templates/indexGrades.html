@@ -64,6 +64,11 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   overflow:visible!important;
   flex:none!important;
 }
+/* Stage was height:auto while #grade-frame is position:absolute;height:100% — % of auto collapses; give the stage a real height. */
+html.page-grades-root body.page-grades .iframe-shell-stage{
+  min-height:min(75vh,920px)!important;
+  position:relative!important;
+}
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
 html.page-grades-root #props-eval-panel{
@@ -212,7 +217,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .iframe-shell-toolbar{
-  position:sticky;top:0;z-index:30;
+  position:sticky;top:0;z-index:60;
   flex-shrink:0;padding:8px 12px 2px;border-bottom:1px solid var(--glass-panel-border);
   display:flex;flex-direction:column;gap:6px;
   background:rgba(255,255,255,0.02);
@@ -1194,28 +1199,28 @@ select option,
         <div class="grades-scroll-hide-inner">
           <div class="date-bar">
             <span class="date-bar-label">REPORT DATE</span>
-            <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="window.parent.stepDate(-1)">&#8249;</button>
+            <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
             <div class="date-pills" id="date-pills">
               <!-- Pills injected by JS -->
             </div>
-            <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="window.parent.stepDate(1)">&#8250;</button>
+            <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="stepDate(1)">&#8250;</button>
             <div class="date-sep"></div>
             <div class="date-bar-right">
               <div class="date-input-wrap">
                 <span class="date-input-label">JUMP TO</span>
                 <input type="date" class="date-input" id="date-jump" />
-                <button type="button" class="date-go-btn" onclick="window.parent.jumpToDate()">GO</button>
+                <button type="button" class="date-go-btn" onclick="jumpToDate()">GO</button>
               </div>
             </div>
           </div>
           <div class="tabs-bar">
-            <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
+            <button type="button" class="tab-btn active" id="tab-slate" onclick="switchTab('slate')">
               <span class="tab-icon">📋</span>SLATE EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-props" onclick="window.parent.switchTab('props')">
+            <button type="button" class="tab-btn" id="tab-props" onclick="switchTab('props')">
               <span class="tab-icon">🎯</span>PROP EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
+            <button type="button" class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
           </div>
@@ -2291,7 +2296,8 @@ function switchTab(tab) {
 
   if (tab === 'props') {
     hideGradesHubLoadOverlay();
-    document.getElementById('empty-state').hidden = true;
+    const es0 = document.getElementById('empty-state');
+    if (es0) es0.hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     scheduleSyncPropsEvalHeight();
     loadGradesProps(ds).finally(function () {
@@ -2304,7 +2310,8 @@ function switchTab(tab) {
     }, 0);
   } else if (tab === 'tickets') {
     hideGradesHubLoadOverlay();
-    document.getElementById('empty-state').hidden = true;
+    const es1 = document.getElementById('empty-state');
+    if (es1) es1.hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
     requestAnimationFrame(function () {
