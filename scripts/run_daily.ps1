@@ -237,8 +237,10 @@ if (-not $SkipFetch) {
     Push-Location $Root
     try {
         # Run in a child process so daily cannot hang forever in A1.
+        # Incremental: past seasons stay in SQLite; only current season is re-fetched per player.
+        # (Do not pass legacy --refresh-current — it forced a full multi-season re-download and was very slow.)
         $a1Proc = Start-Process -FilePath "py" `
-            -ArgumentList @("-3.14", "-u", $fetchScript, "--refresh-current") `
+            -ArgumentList @("-3.14", "-u", $fetchScript) `
             -NoNewWindow -PassThru
 
         $waitSec = [Math]::Max(60, $A1TimeoutMinutes * 60)
@@ -295,6 +297,19 @@ if (-not $SkipGrader) {
         (Join-Path $Root "outputs\$Yesterday\graded_soccer_$Yesterday.xlsx"),
         (Join-Path $Root "outputs\$Yesterday\graded_mlb_$Yesterday.xlsx")
     )
+    # WNBA: run_grader.ps1 fetches actuals + slate_grader, but STEP A must not skip while
+    # graded_wnba is still missing if we already have a WNBA step8 for yesterday.
+    $yesterdayOutForWnba = Join-Path $Root "outputs\$Yesterday"
+    if (Test-Path $yesterdayOutForWnba) {
+        $hasWnbaStep8 = @(
+            (Get-ChildItem -LiteralPath $yesterdayOutForWnba -Filter "step8_wnba*.xlsx" -File -ErrorAction SilentlyContinue)
+        ).Count -gt 0
+        if ($hasWnbaStep8) {
+            $gradedExpected = @($gradedExpected) + @(
+                (Join-Path $Root "outputs\$Yesterday\graded_wnba_$Yesterday.xlsx")
+            )
+        }
+    }
     $missingGraded = @($gradedExpected | Where-Object { -not (Test-Path $_) })
     # If we have a ticket slate but never ran combined_ticket_grader, do not skip — otherwise legs stay UNGRADED in ticket_eval HTML.
     $needCombinedTicketWorkbook = $yesterdayHasTickets -and -not (Test-Path $yesterdayTixGraded)
@@ -1406,7 +1421,7 @@ if ($PollHistoricalActuals -and -not $SkipFetch) {
                 Write-Host "[poll] Running actuals fetch pass $($pi + 1)/$PollPasses" -ForegroundColor Cyan
                 Write-Log "STEP F - Poll: fetch_historical_actuals pass $($pi + 1)/$PollPasses"
                 $pollProc = Start-Process -FilePath "py" `
-                    -ArgumentList @("-3.14", "-X", "utf8", "-u", $fetchScriptPoll, "--refresh-current") `
+                    -ArgumentList @("-3.14", "-X", "utf8", "-u", $fetchScriptPoll) `
                     -NoNewWindow -PassThru -WorkingDirectory $Root
                 $pollDone = $pollProc.WaitForExit($pollTimeoutSec * 1000)
                 if (-not $pollDone) {
