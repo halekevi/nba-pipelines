@@ -2,8 +2,8 @@
 """
 step1_fetch_prizepicks_tennis.py — PrizePicks Tennis projections (API, NBA-style fetch).
 
-Default: auto-detect league_id among candidates (14, 20, 7, 9, 12, 15) using
-tennis-like prop names vs NBA stat noise.
+Default: auto-detect league_id among candidates (5=TENNIS) using
+tennis-like prop names vs NBA/MMA stat noise.
 
 Run:
   py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py
@@ -165,6 +165,13 @@ def _tennis_league_score(df: pd.DataFrame) -> float:
     """Higher = more likely tennis board."""
     if df.empty or "prop_type" not in df.columns:
         return -1e9
+    MMA_PROP_TYPES = {
+        "fight time (mins)", "rd 1 significant strikes",
+        "significant strikes", "takedowns", "total rounds",
+    }
+    prop_types_lower = set(df["prop_type"].astype(str).str.lower().unique())
+    if prop_types_lower & MMA_PROP_TYPES:
+        return -999.0  # hard reject -- MMA board, not tennis ("fantasy score" excluded -- tennis has it too)
     props = df["prop_type"].astype(str).str.lower()
     tennis_hits = props.str.contains(
         r"ace|double\s*fault|doublefault|games?\s*won|sets?\s*won|break\s*point|match\s*total|tennis",
@@ -336,21 +343,46 @@ def main() -> None:
         old_rows = len(old)
         if old_rows < max(1, int(args.min_rows)):
             return False
+        try:
+            max_date = pd.to_datetime(old["start_time"], utc=True).dt.date.max()
+            today = pd.Timestamp.utcnow().date()
+            if (today - max_date).days > 1:
+                print(
+                    f"[Tennis step1] WARN: {reason}. Fallback CSV is stale "
+                    f"(latest game date {max_date}, today {today}) -- skipping.",
+                    flush=True,
+                )
+                return False
+        except Exception:
+            pass
+        age_hours = (time.time() - out_path.stat().st_mtime) / 3600
+        if age_hours > 36:
+            print(
+                f"[Tennis step1] WARN: {reason}. Fallback CSV too old "
+                f"({age_hours:.1f}h) -- skipping.",
+                flush=True,
+            )
+            return False
         print(
             f"[Tennis step1] WARN: {reason}. Using existing board at {out_path} "
-            f"(rows={old_rows})"
+            f"(rows={old_rows})",
+            flush=True,
         )
         return True
 
-    candidates = ["14", "20", "7", "9", "12", "15"]
+    candidates = ["5"]  # PrizePicks TENNIS league ID; was wrong (EPL/CBB/NBA/NFL/MMA/CFB)
     chosen = str(args.league_id).strip().lower()
     use_id: str
 
     if chosen == "auto":
         best_id = ""
         best_score = -1e10
-        print("[Tennis step1] Auto-detecting tennis league_id (first page each)...")
+        print("[Tennis step1] Auto-detecting tennis league_id (first page each)...", flush=True)
+        start = time.time()
         for lid in candidates:
+            if time.time() - start > 90:
+                print("[Tennis step1] Auto-detect timed out after 90s.", flush=True)
+                break
             try:
                 time.sleep(2.75)
                 data, inc = nba.fetch_projections(
@@ -362,18 +394,18 @@ def main() -> None:
                 rows = build_tennis_rows(data, inc, nba)
                 df_try = pd.DataFrame(rows)
                 sc = _tennis_league_score(df_try)
-                print(f"  league_id={lid}  rows={len(df_try)}  tennis_score={sc:.1f}")
+                print(f"  league_id={lid}  rows={len(df_try)}  tennis_score={sc:.1f}", flush=True)
                 if sc > best_score and len(df_try) > 0:
                     best_score = sc
                     best_id = lid
             except Exception as e:
-                print(f"  league_id={lid}  ERROR: {e}")
+                print(f"  league_id={lid}  ERROR: {e}", flush=True)
         if not best_id:
-            print("[Tennis step1] ERROR: Could not find a league_id with projections.")
+            print("[Tennis step1] ERROR: Could not find a league_id with projections.", flush=True)
             pd.DataFrame().to_csv(out_path, index=False)
             sys.exit(1)
         use_id = best_id
-        print(f"[Tennis step1] Using league_id={use_id} (best tennis_score={best_score:.1f})")
+        print(f"[Tennis step1] Using league_id={use_id} (best tennis_score={best_score:.1f})", flush=True)
     else:
         use_id = str(args.league_id).strip()
 
