@@ -79,6 +79,22 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
   max-width:100%!important;
   height:auto;
   min-height:min(50dvh,680px);
+  z-index:0!important;
+}
+/* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
+body.page-grades .iframe-shell-stage{
+  min-height:min(45vh,520px);
+  position:relative;
+  overflow:visible;
+}
+body.page-grades .iframe-shell-stage > iframe.grade-frame{
+  position:relative;
+  inset:auto;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  min-height:min(50dvh,680px);
+  z-index:0;
 }
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
@@ -1335,7 +1351,7 @@ function slateIframeDocLooksReady(doc) {
     if (
       doc.querySelector(
         '.main, header, .sport-section, .sport-collapsible, .slate-header-top, .logo-title, ' +
-          'table.matrix-body, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
+          'table, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
           'details.sport-collapsible, .sport-meta-count, .chip-goblin, .mesh-bg'
       )
     ) {
@@ -2796,7 +2812,6 @@ function syncPropsEvalHeight() {
   try {
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
-    const stage = document.querySelector('.iframe-shell-stage');
     const gp = document.querySelector('.grades-page');
     const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
