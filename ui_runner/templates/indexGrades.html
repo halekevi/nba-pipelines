@@ -1323,6 +1323,32 @@ function slateEvalUrl(dateStr) {
 }
 const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
+/** True when slate_eval HTML looks loaded (selectors evolve; avoid false “empty” from narrow checks). */
+function slateIframeDocLooksReady(doc) {
+  if (!doc || !doc.body) return false;
+  try {
+    const title = String(doc.title || '').toLowerCase();
+    if (title.includes('slate') && title.includes('eval')) {
+      const t = (doc.body.innerText || '').trim();
+      if (t.length >= 12) return true;
+    }
+    if (
+      doc.querySelector(
+        '.main, header, .sport-section, .sport-collapsible, .slate-header-top, .logo-title, ' +
+          'table.matrix-body, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
+          'details.sport-collapsible, .sport-meta-count, .chip-goblin, .mesh-bg'
+      )
+    ) {
+      return true;
+    }
+    const html = (doc.body.innerHTML || '').trim();
+    if (html.length >= 40) return true;
+    const text = (doc.body.innerText || '').trim();
+    if (text.length >= 24) return true;
+  } catch (_e) {}
+  return false;
+}
+
 /** Bounded fetch: avoids Grades hub stuck on “scanning…” if a proxy/Railway request never completes. */
 function gradesFetchSignal(ms) {
   try {
@@ -1886,7 +1912,9 @@ function collapseSportsInSlateFrame(frame) {
     sec => sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible')
   );
   if (nativeSportDetails.length === sections.length) {
-    nativeSportDetails.forEach((sec) => { sec.open = false; });
+    nativeSportDetails.forEach((sec, i) => {
+      sec.open = i === 0;
+    });
     return;
   }
 
@@ -1900,8 +1928,8 @@ function collapseSportsInSlateFrame(frame) {
 
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    // Default collapsed so the page loads compactly.
-    details.open = false;
+    // First section open so the iframe does not look empty behind collapsed buckets.
+    details.open = idx === 0;
 
     const summary = doc.createElement('summary');
     const title = doc.createElement('span');
@@ -2375,8 +2403,7 @@ function switchTab(tab) {
         sf &&
         slo &&
         d &&
-        (d.querySelector('.main,header,.sport-section') ||
-          (d.body && d.body.innerHTML.trim().length >= 40)) &&
+        slateIframeDocLooksReady(d) &&
         sf.getAttribute('src') &&
         !String(sf.getAttribute('src')).includes('about:blank')
       ) {
@@ -2992,40 +3019,37 @@ function loadDate(dateStr){
 
   // Set iframe src
   frame.onload = function(){
-    function slateDocReady() {
+    function runSlateReadyChecks(step) {
       try {
-        const doc = frame.contentDocument;
-        return (
-          doc &&
-          doc.body &&
-          (!!doc.querySelector('.main,header,.sport-section') ||
-            doc.body.innerHTML.trim().length >= 40)
-        );
-      } catch (_e) {
-        return false;
-      }
-    }
-    function tryFinish() {
-      if (slateDocReady()) {
-        completeSlateFrameLoad(frame);
-        return;
-      }
-      // WebView sometimes fires onload before the slate body is parsed — retry briefly.
-      requestAnimationFrame(function () {
-        if (slateDocReady()) {
+        if (slateIframeDocLooksReady(frame.contentDocument)) {
           completeSlateFrameLoad(frame);
           return;
         }
-        setTimeout(function () {
-          if (slateDocReady()) {
-            completeSlateFrameLoad(frame);
-          } else {
-            finishGradesSlateLoadUI();
-          }
-        }, 120);
-      });
+      } catch (_e0) {}
+      const nextMs = [30, 100, 250, 500, 1000, 2000, 3500][step];
+      if (nextMs === undefined) {
+        finishGradesSlateLoadUI();
+        return;
+      }
+      setTimeout(function () {
+        runSlateReadyChecks(step + 1);
+      }, nextMs);
     }
-    tryFinish();
+    try {
+      if (slateIframeDocLooksReady(frame.contentDocument)) {
+        completeSlateFrameLoad(frame);
+        return;
+      }
+    } catch (_e1) {}
+    requestAnimationFrame(function () {
+      try {
+        if (slateIframeDocLooksReady(frame.contentDocument)) {
+          completeSlateFrameLoad(frame);
+          return;
+        }
+      } catch (_e2) {}
+      runSlateReadyChecks(0);
+    });
   };
   frame.onerror = function(){
     finishGradesSlateLoadUI();
@@ -3051,10 +3075,7 @@ function loadDate(dateStr){
         const cur = String(frame.getAttribute('src') || frame.src || '');
         sameDoc =
           (cur === abs || cur.endsWith(url) || abs.endsWith(url.replace(/^\//, ''))) &&
-          frame.contentDocument &&
-          (frame.contentDocument.querySelector('.main,header,.sport-section') ||
-            (frame.contentDocument.body &&
-              frame.contentDocument.body.innerHTML.trim().length >= 40));
+          slateIframeDocLooksReady(frame.contentDocument);
       } catch (_e0) {
         sameDoc = false;
       }
@@ -3067,12 +3088,7 @@ function loadDate(dateStr){
           pollN++;
           var ok = false;
           try {
-            var d = frame.contentDocument;
-            ok =
-              !!d &&
-              !!d.body &&
-              (!!d.querySelector('.main,header,.sport-section') ||
-                (d.body.innerHTML && d.body.innerHTML.trim().length >= 40));
+            ok = slateIframeDocLooksReady(frame.contentDocument);
           } catch (_pe) {}
           if (ok || pollN >= 160) {
             if (__gradesSlatePoll != null) {
@@ -3146,12 +3162,7 @@ document.addEventListener('visibilitychange', function () {
     const f = document.getElementById('grade-frame');
     if (!o || !f || o.classList.contains('hidden') || activeTab !== 'slate') return;
     const d = f.contentDocument;
-    if (
-      d &&
-      d.body &&
-      (d.querySelector('.main,header,.sport-section') ||
-        (d.body.innerHTML && d.body.innerHTML.trim().length >= 40))
-    ) {
+    if (slateIframeDocLooksReady(d)) {
       finishGradesSlateLoadUI();
     }
   } catch (_e) {}
