@@ -1651,13 +1651,15 @@
         },
         {
           "id": "wnba_run_script",
-          "label": "WNBA Full Run (via run_wnba_pipeline.ps1)",
+          "label": "WNBA Full Run (via scripts/run_wnba_pipeline.ps1)",
           "cmd": [
             "powershell",
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "../run_wnba_pipeline.ps1"
+            "../../scripts/run_wnba_pipeline.ps1",
+            "-Date",
+            "{TODAY}"
           ]
         },
         {
@@ -1668,7 +1670,9 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "../run_wnba_pipeline.ps1",
+            "../../scripts/run_wnba_pipeline.ps1",
+            "-Date",
+            "{TODAY}",
             "-RefreshCache"
           ]
         }
