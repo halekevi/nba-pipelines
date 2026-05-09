@@ -35,4 +35,11 @@ healthcheckPath = "/ping"
 healthcheckTimeout = 180
 
 # cache-bust: 2026-05-04 13:29 — force Nixpacks rebuild (slate_eval templates)
+#
+# Income (/income): Daily P&L rows come from grade_history.json, appended by
+#   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
+# after run_grader / graded artifacts exist. Mount a Railway Volume (or set
+# PROPORACLE_PERSISTENT_DATA_DIR) so DATA_ROOT/grade_history.json persists across deploys.
+# Without that, the site shows the last committed ui_runner/templates/grade_history.json.
+# Optional: Railway Cron or GitHub Actions to run the grader + build_ticket_eval on a schedule.
 

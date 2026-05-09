@@ -50,6 +50,8 @@ if str(REPO_ROOT) not in sys.path:
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 from player_name_norm import fold_player_name as _fold_player_name  # noqa: E402
+from utils.proporacle_data_root import persistent_data_dir  # noqa: E402
+
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
 TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 
@@ -996,8 +998,8 @@ def _fmt_pct_cell(v: float | None) -> str:
 
 
 def _append_grade_history(record: dict[str, Any]) -> None:
-    """Append (or replace same-date) run summary to data/grade_history.json."""
-    path = REPO_ROOT / "data" / "grade_history.json"
+    """Append (or replace same-date) run summary to persistent data/grade_history.json (see utils.proporacle_data_root)."""
+    path = persistent_data_dir(REPO_ROOT) / "grade_history.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     runs: list[Any] = []
     if path.is_file():
@@ -4002,7 +4004,7 @@ def main() -> int:
     if hist:
         try:
             _append_grade_history(hist)
-            print(f"  Appended grade history -> data/grade_history.json ({hist.get('date')})")
+            print(f"  Appended grade history -> {persistent_data_dir(REPO_ROOT) / 'grade_history.json'} ({hist.get('date')})")
         except OSError as e:
             print(f"  WARN: could not append grade_history.json: {e}")
 

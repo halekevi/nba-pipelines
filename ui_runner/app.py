@@ -62,6 +62,7 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
+from utils.proporacle_data_root import persistent_data_dir
 from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
@@ -96,23 +97,7 @@ def resolve_repo_root(config: Optional[dict] = None) -> Path:
     return BASE_DIR.resolve()
 
 
-def _persistent_data_root() -> Path:
-    """
-    Writable data root for payout logs and similar artifacts.
-
-    Railway: add a Volume mounted at /app/data (or set PROPORACLE_PERSISTENT_DATA_DIR /
-    RAILWAY_VOLUME_MOUNT_PATH). Local dev: repo ``data/`` under BASE_DIR.
-    """
-    for key in ("PROPORACLE_PERSISTENT_DATA_DIR", "RAILWAY_VOLUME_MOUNT_PATH"):
-        raw = (os.environ.get(key) or "").strip()
-        if raw:
-            return Path(raw).expanduser().resolve()
-    if (os.environ.get("RAILWAY_ENVIRONMENT") or "").strip() and Path("/app/data").is_dir():
-        return Path("/app/data").resolve()
-    return (BASE_DIR / "data").resolve()
-
-
-DATA_ROOT = _persistent_data_root()
+DATA_ROOT = persistent_data_dir(BASE_DIR)
 
 
 def _sport_dir(sports_subdir: str) -> Path:
@@ -2742,7 +2727,7 @@ def api_grades_report_dates():
 def api_grade_history():
     """
     Daily ticket_eval summaries: predicted vs actual payout aggregates and recommendation buckets.
-    Populated when ``scripts/build_ticket_eval.py`` runs (appends ``data/grade_history.json``).
+    Populated when ``scripts/build_ticket_eval.py`` runs (appends ``DATA_ROOT/grade_history.json``).
     """
     out = _read_grade_history_runs()
     r = jsonify(out)
@@ -4366,7 +4351,8 @@ def api_vision_screenshot():
     )
 
 
-_SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
+# Order for Income page sport table (graded single-sport tickets / props only).
+_SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
 
 
 def _to_float(v: Any, default: float = 0.0) -> float:
@@ -4387,13 +4373,17 @@ def _to_int(v: Any, default: int = 0) -> int:
 def _grade_history_candidate_paths() -> list[Path]:
     """
     Ordered fallbacks for income history.
-    - data/grade_history.json (local pipeline output)
-    - ui_runner/templates/grade_history.json (deploy-safe committed fallback)
+    - DATA_ROOT/grade_history.json (Railway volume when PROPORACLE_PERSISTENT_DATA_DIR set)
+    - data/grade_history.json (repo pipeline output; same as DATA_ROOT locally)
+    - ui_runner/templates/grade_history.json (committed fallback for fresh deploys)
     """
-    return [
-        BASE_DIR / "data" / "grade_history.json",
-        TEMPLATES_DIR / "grade_history.json",
-    ]
+    primary = DATA_ROOT / "grade_history.json"
+    out: list[Path] = [primary]
+    legacy = BASE_DIR / "data" / "grade_history.json"
+    if legacy.resolve() != primary.resolve():
+        out.append(legacy)
+    out.append(TEMPLATES_DIR / "grade_history.json")
+    return out
 
 
 def _read_grade_history_runs() -> list[dict[str, Any]]:

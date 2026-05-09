@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,12 @@ _HIST_MIN_SEGMENT_N_EXT = 5
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
+
+
+_REPO = _repo_root()
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from utils.proporacle_data_root import persistent_data_dir  # noqa: E402
 
 
 def _norm(x: Any) -> str:
@@ -276,14 +283,14 @@ def _build_historical_stratification(repo_root: Path) -> dict[str, Any]:
 
 
 def _load_grade_history_row(repo_root: Path, date_str: str) -> dict[str, Any] | None:
-    p = repo_root / "data" / "grade_history.json"
-    if not p.exists():
-        return None
-    raw = _read_json(p)
-    rows = raw if isinstance(raw, list) else raw.get("runs", [])
-    for r in rows:
-        if isinstance(r, dict) and _norm(r.get("date")) == date_str:
-            return r
+    for p in (persistent_data_dir(repo_root) / "grade_history.json", repo_root / "data" / "grade_history.json"):
+        if not p.exists():
+            continue
+        raw = _read_json(p)
+        rows = raw if isinstance(raw, list) else raw.get("runs", [])
+        for r in rows:
+            if isinstance(r, dict) and _norm(r.get("date")) == date_str:
+                return r
     return None
 
 
@@ -416,7 +423,7 @@ def build_report(repo_root: Path, date_str: str) -> dict[str, Any]:
         "date": date_str,
         "source_files": {
             "graded_props_json": str(graded_props_path),
-            "grade_history_json": str(repo_root / "data" / "grade_history.json"),
+            "grade_history_json": str(persistent_data_dir(repo_root) / "grade_history.json"),
             "ml_eval_by_date_csv": str(repo_root / "data" / "ml" / "ticket_model_eval_by_date.csv"),
         },
         "prop_outcomes": {

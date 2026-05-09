@@ -133,7 +133,7 @@
   <main class="income-wrap">
     <section class="hero">
       <h1>P&L Log</h1>
-      <p>Flat stake model: $10 per ticket. Daily rows come from <code>data/grade_history.json</code>.</p>
+      <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
     </section>
 
     <section class="summary-grid">
