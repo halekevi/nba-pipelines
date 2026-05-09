@@ -902,8 +902,73 @@ def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
         except (TypeError, ValueError):
             return float("-inf")
 
+    had_wnba = isinstance(sports.get("wnba"), list) and len(sports["wnba"]) > 0
+    if not had_wnba:
+        out.extend(_wnba_slate_rows_from_step8_fallback())
     out.sort(key=_rank, reverse=True)
     return out
+
+
+def _wnba_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
+    """
+    slate_latest.json often omits WNBA after a standalone run (combined --write-web not re-run).
+    If step8 exists on disk, build the same row shape the explorer expects.
+    """
+    import importlib.util
+
+    cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
+    if not cst_path.is_file():
+        return []
+    scripts_dir = str(BASE_DIR / "scripts")
+    path_inserted = False
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+        path_inserted = True
+    try:
+        try:
+            spec = importlib.util.spec_from_file_location("combined_slate_tickets_wnba_fb", cst_path)
+            if spec is None or spec.loader is None:
+                return []
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+        except Exception:
+            return []
+        pref: str | None = None
+        try:
+            pld = _selected_slate_sport_payload()
+            t = str((pld or {}).get("date") or "").strip()[:10]
+            if len(t) == 10:
+                pref = t
+        except Exception:
+            pass
+        days = _slate_day_candidates(pref)
+        xlsx_path = _resolve_outputs_artifact(
+            days,
+            [
+                "wnba/step8_wnba_direction_clean.xlsx",
+                "wnba/step8_wnba_direction.xlsx",
+                "step8_wnba_direction_clean_{d}.xlsx",
+                "step8_wnba_direction_{d}.xlsx",
+            ],
+            WNBA_SLATE,
+            WNBA_DIR / "step8_wnba_direction_clean.xlsx",
+            WNBA_DIR / "step8_wnba_direction.xlsx",
+        )
+        if not xlsx_path.is_file():
+            return []
+        df = mod.load_wnba(str(xlsx_path))
+        raw_rows = mod.dataframe_to_slate_sport_rows(df)
+        out_fb: list[dict[str, Any]] = []
+        for r in raw_rows:
+            if not isinstance(r, dict):
+                continue
+            rr = dict(r)
+            rr["sport"] = "WNBA"
+            out_fb.append(_slim_slate_sport_row(rr))
+        return out_fb
+    finally:
+        if path_inserted and sys.path and sys.path[0] == scripts_dir:
+            sys.path.pop(0)
 
 
 def _slim_slate_sport_cell(key: str, v: Any) -> Any:
@@ -4018,6 +4083,8 @@ def api_slate_sport_single(sport: str):
         if not isinstance(rows, list):
             rows = []
         slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
+        if not slim_rows and sport_key == "wnba":
+            slim_rows = _wnba_slate_rows_from_step8_fallback()
         return {
             "date": payload.get("date"),
             "generated_at": payload.get("generated_at"),
