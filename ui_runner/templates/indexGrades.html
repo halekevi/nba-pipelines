@@ -1629,10 +1629,27 @@ function restoreGradesToolbarToParent() {
   } catch (_e1) {}
 }
 
+function bridgeGradesToolbarActionsToParent(frame) {
+  const win = frame?.contentWindow;
+  if (!win || win === window) return;
+  try {
+    win.switchTab = function (tab) {
+      try { window.switchTab(tab); } catch (_e) {}
+    };
+    win.stepDate = function (delta) {
+      try { window.stepDate(delta); } catch (_e2) {}
+    };
+    win.jumpToDate = function () {
+      try { window.jumpToDate(); } catch (_e3) {}
+    };
+  } catch (_e4) {}
+}
+
 function embedGradesToolbarInSlate(frame) {
   if (activeTab !== 'slate') return;
   const doc = frame?.contentDocument;
   if (!doc || !doc.body) return;
+  bridgeGradesToolbarActionsToParent(frame);
   const host = getOrCreateToolbarHost(doc);
   if (!host) {
     syncToolbarParentSlot();

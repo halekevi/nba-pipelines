@@ -1640,10 +1640,27 @@ function restoreGradesToolbarToParent() {
   } catch (_e1) {}
 }
 
+function bridgeGradesToolbarActionsToParent(frame) {
+  const win = frame?.contentWindow;
+  if (!win || win === window) return;
+  try {
+    win.switchTab = function (tab) {
+      try { window.switchTab(tab); } catch (_e) {}
+    };
+    win.stepDate = function (delta) {
+      try { window.stepDate(delta); } catch (_e2) {}
+    };
+    win.jumpToDate = function () {
+      try { window.jumpToDate(); } catch (_e3) {}
+    };
+  } catch (_e4) {}
+}
+
 function embedGradesToolbarInSlate(frame) {
   if (activeTab !== 'slate') return;
   const doc = frame?.contentDocument;
   if (!doc || !doc.body) return;
+  bridgeGradesToolbarActionsToParent(frame);
   const host = getOrCreateToolbarHost(doc);
   if (!host) {
     syncToolbarParentSlot();
@@ -2585,7 +2602,8 @@ async function loadTicketEval(dateStr) {
   if (!dateStr) return;
   const tf = document.getElementById('ticket-frame');
   const tEmpty = document.getElementById('ticket-empty-state');
-  const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
+  if (!tf || !tEmpty) return;
+  const url = ticketEvalUrl(dateStr);
   const ok = await probeTicketEval(dateStr);
   if (!ok) {
     tf.style.display = 'none';
@@ -2597,22 +2615,68 @@ async function loadTicketEval(dateStr) {
   tEmpty.hidden = true;
   tf.style.display = 'block';
   tf.onload = function(){
+    function completeTicketFrameLoad() {
+      try {
+        applyTicketEvalGradesEmbed(tf.contentDocument);
+      } catch (_e0) {}
+      try {
+        collapseSportsInTicketFrame(tf);
+      } catch (_e) {}
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e2) {}
+      try {
+        requestAnimationFrame(function () {
+          syncTicketFrameHeight(tf);
+          setupTicketFrameAutoHeight(tf);
+        });
+      } catch (_e3) {}
+    }
+    function runTicketReadyChecks(step) {
+      try {
+        if (ticketIframeDocLooksReady(tf.contentDocument)) {
+          completeTicketFrameLoad();
+          return;
+        }
+      } catch (_e4) {}
+      const nextMs = [30, 100, 250, 500, 1000, 2000, 3500][step];
+      if (nextMs === undefined) {
+        completeTicketFrameLoad();
+        return;
+      }
+      setTimeout(function () {
+        runTicketReadyChecks(step + 1);
+      }, nextMs);
+    }
+    try {
+      if (ticketIframeDocLooksReady(tf.contentDocument)) {
+        completeTicketFrameLoad();
+        return;
+      }
+    } catch (_e5) {}
+    requestAnimationFrame(function () {
+      runTicketReadyChecks(0);
+    });
+  };
+  let sameDoc = false;
+  try {
+    const abs = new URL(url, window.location.href).href;
+    const cur = String(tf.getAttribute('src') || tf.src || '');
+    sameDoc =
+      (cur === abs || cur.includes('ticket_eval_' + dateStr + '.html')) &&
+      ticketIframeDocLooksReady(tf.contentDocument);
+  } catch (_e6) {
+    sameDoc = false;
+  }
+  if (sameDoc) {
     try {
       applyTicketEvalGradesEmbed(tf.contentDocument);
-    } catch (_e0) {}
-    try {
       collapseSportsInTicketFrame(tf);
-    } catch (_e) {}
-    try {
-      window.setupGradesBarsScrollHide();
-    } catch (_e2) {}
-    try {
-      requestAnimationFrame(function () {
-        syncTicketFrameHeight(tf);
-        setupTicketFrameAutoHeight(tf);
-      });
-    } catch (_e3) {}
-  };
+      syncTicketFrameHeight(tf);
+      setupTicketFrameAutoHeight(tf);
+    } catch (_e7) {}
+    return;
+  }
   tf.src = url;
 }
 
