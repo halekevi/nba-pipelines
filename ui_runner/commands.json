@@ -1677,6 +1677,21 @@
           ]
         }
       ]
+    },
+    "deploy_helpers": {
+      "label": "Deploy / Income helpers",
+      "workdir": "",
+      "commands": [
+        {
+          "id": "sync_grade_history_templates",
+          "label": "Sync grade_history.json → ui_runner/templates (P&L /income fallback for deploy)",
+          "cmd": [
+            "py",
+            "-3.14",
+            "scripts/sync_grade_history_to_templates.py"
+          ]
+        }
+      ]
     }
   }
 }

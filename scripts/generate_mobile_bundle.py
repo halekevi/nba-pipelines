@@ -1,10 +1,16 @@
 import os
+import sys
 import shutil
 import re
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 import combined_slate_tickets
+
+_ROOT_FOR_UTILS = Path(__file__).resolve().parent.parent
+if str(_ROOT_FOR_UTILS) not in sys.path:
+    sys.path.insert(0, str(_ROOT_FOR_UTILS))
+from utils.proporacle_data_root import grade_history_read_paths  # noqa: E402
 
 
 def _first_existing_path(candidates):
@@ -19,12 +25,13 @@ def _mtime_utc_string(path: Path | None) -> str:
         return ""
     return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
+# Keep aligned with ui_runner/app.py page_income _SPORT_BREAKDOWN_ORDER.
+SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
 
 
 def _normalize_sport_label(raw):
     s = str(raw or "").strip().upper()
-    aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "NFL"}
+    aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "NFL", "NBA1Q": "NBA", "NBA1H": "NBA"}
     return aliases.get(s, s)
 
 
@@ -870,15 +877,13 @@ async function fetch_smart(localPath) {
         encoding="utf-8",
     )
 
-    # Copy local grade history data for offline/mobile P&L page.
-    src_grade_history = DATA_DIR / "grade_history.json"
-    if src_grade_history.exists():
-        mobile_data_dir = MOBILE_WWW_DIR / "data"
-        mobile_data_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src_grade_history, mobile_data_dir / "grade_history.json")
-    else:
-        mobile_data_dir = MOBILE_WWW_DIR / "data"
-        mobile_data_dir.mkdir(parents=True, exist_ok=True)
+    # Copy grade history for offline/mobile P&L (same resolution as Flask /income).
+    mobile_data_dir = MOBILE_WWW_DIR / "data"
+    mobile_data_dir.mkdir(parents=True, exist_ok=True)
+    _gh_candidates = grade_history_read_paths(ROOT_DIR, templates_dir=TEMPLATES_DIR)
+    _gh_src = _first_existing_path(_gh_candidates)
+    if _gh_src is not None:
+        shutil.copy2(_gh_src, mobile_data_dir / "grade_history.json")
 
     # WNBA step8 clean workbook for mobile/offline consumers.
     src_wnba_step8 = ROOT_DIR / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx"

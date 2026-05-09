@@ -47,4 +47,20 @@ function Run-PostPipelineGrader {
     } catch {
         Write-Host "  [ GRADES ] Run-GitPushGradeArtifacts failed: $_" -ForegroundColor Yellow
     }
+
+    # Income (/income): keep bundled template in sync for deploy hosts without a volume.
+    $syncGh = Join-Path $Root "scripts\sync_grade_history_to_templates.py"
+    if (Test-Path $syncGh) {
+        try {
+            Push-Location $Root
+            & py -3.14 $syncGh
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "  [ GRADES ] sync_grade_history_to_templates exit $LASTEXITCODE (optional)" -ForegroundColor DarkGray
+            }
+        } catch {
+            Write-Host "  [ GRADES ] sync_grade_history_to_templates: $_" -ForegroundColor DarkGray
+        } finally {
+            Pop-Location
+        }
+    }
 }

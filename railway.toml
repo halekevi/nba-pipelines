@@ -40,6 +40,8 @@ healthcheckTimeout = 180
 #   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
 # after run_grader / graded artifacts exist. Mount a Railway Volume (or set
 # PROPORACLE_PERSISTENT_DATA_DIR) so DATA_ROOT/grade_history.json persists across deploys.
-# Without that, the site shows the last committed ui_runner/templates/grade_history.json.
+# Without that, commit ui_runner/templates/grade_history.json — run_pipeline calls
+#   py -3.14 scripts/sync_grade_history_to_templates.py
+# after the post-pipeline grader so the bundled file stays current for deploys.
 # Optional: Railway Cron or GitHub Actions to run the grader + build_ticket_eval on a schedule.
 

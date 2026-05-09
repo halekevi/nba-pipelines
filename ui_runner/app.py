@@ -62,7 +62,7 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
-from utils.proporacle_data_root import persistent_data_dir
+from utils.proporacle_data_root import grade_history_read_paths, persistent_data_dir
 from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
@@ -4371,19 +4371,8 @@ def _to_int(v: Any, default: int = 0) -> int:
 
 
 def _grade_history_candidate_paths() -> list[Path]:
-    """
-    Ordered fallbacks for income history.
-    - DATA_ROOT/grade_history.json (Railway volume when PROPORACLE_PERSISTENT_DATA_DIR set)
-    - data/grade_history.json (repo pipeline output; same as DATA_ROOT locally)
-    - ui_runner/templates/grade_history.json (committed fallback for fresh deploys)
-    """
-    primary = DATA_ROOT / "grade_history.json"
-    out: list[Path] = [primary]
-    legacy = BASE_DIR / "data" / "grade_history.json"
-    if legacy.resolve() != primary.resolve():
-        out.append(legacy)
-    out.append(TEMPLATES_DIR / "grade_history.json")
-    return out
+    """Ordered fallbacks for income history (shared with utils.proporacle_data_root.grade_history_read_paths)."""
+    return grade_history_read_paths(BASE_DIR, templates_dir=TEMPLATES_DIR)
 
 
 def _read_grade_history_runs() -> list[dict[str, Any]]:
