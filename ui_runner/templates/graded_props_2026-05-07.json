@@ -7711,7 +7711,7 @@
       "line": "11.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "2.11",
       "ml_prob": "0.3428",
       "actual_value": "9.0",
@@ -9139,7 +9139,7 @@
       "line": "7.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "0.38",
       "ml_prob": "0.3473",
       "actual_value": "4.0",
@@ -9615,7 +9615,7 @@
       "line": "5.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "0.33",
       "ml_prob": "0.3421",
       "actual_value": "11.0",
@@ -10399,7 +10399,7 @@
       "line": "5.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "1.41",
       "ml_prob": "0.4515",
       "actual_value": "6.0",
@@ -11379,7 +11379,7 @@
       "line": "19.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "2.02",
       "ml_prob": "0.3465",
       "actual_value": "13.0",
@@ -11463,7 +11463,7 @@
       "line": "28.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "3.39",
       "ml_prob": "0.3423",
       "actual_value": "14.0",
@@ -11519,7 +11519,7 @@
       "line": "12.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "1.27",
       "ml_prob": "0.3548",
       "actual_value": "5.0",
@@ -13283,7 +13283,7 @@
       "line": "28.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "D",
+      "tier": "C",
       "edge": "4.08",
       "ml_prob": "0.3389",
       "actual_value": "28.0",
@@ -13787,7 +13787,7 @@
       "line": "29.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "D",
+      "tier": "C",
       "edge": "3.08",
       "ml_prob": "0.3386",
       "actual_value": "28.0",
@@ -13871,7 +13871,7 @@
       "line": "12.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "D",
+      "tier": "C",
       "edge": "1.11",
       "ml_prob": "0.3447",
       "actual_value": "9.0",
@@ -14095,7 +14095,7 @@
       "line": "34.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "D",
+      "tier": "C",
       "edge": "1.83",
       "ml_prob": "0.3407",
       "actual_value": "28.0",
@@ -15019,7 +15019,7 @@
       "line": "10.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "D",
+      "tier": "C",
       "edge": "2.66",
       "ml_prob": "0.3449",
       "actual_value": "7.0",
@@ -38262,8 +38262,8 @@
       "tier": "A",
       "edge": "0.85",
       "ml_prob": "0.9096",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38274,8 +38274,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38290,8 +38290,8 @@
       "tier": "A",
       "edge": "5.05",
       "ml_prob": "0.8996",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38302,8 +38302,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38346,8 +38346,8 @@
       "tier": "A",
       "edge": "1.85",
       "ml_prob": "0.8783",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38358,8 +38358,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38402,8 +38402,8 @@
       "tier": "A",
       "edge": "5.6",
       "ml_prob": "0.8972",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38414,8 +38414,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38458,8 +38458,8 @@
       "tier": "A",
       "edge": "2.83",
       "ml_prob": "0.8717",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38470,8 +38470,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38570,8 +38570,8 @@
       "tier": "A",
       "edge": "2.15",
       "ml_prob": "0.8774",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-3.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38582,8 +38582,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38598,8 +38598,8 @@
       "tier": "A",
       "edge": "3.35",
       "ml_prob": "0.9064",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38610,8 +38610,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -38822,8 +38822,8 @@
       "tier": "A",
       "edge": "1.1",
       "ml_prob": "0.72",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -38834,8 +38834,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39018,8 +39018,8 @@
       "tier": "A",
       "edge": "1.25",
       "ml_prob": "0.8894",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39030,8 +39030,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39130,8 +39130,8 @@
       "tier": "A",
       "edge": "0.71",
       "ml_prob": "0.8871",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39142,8 +39142,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39158,8 +39158,8 @@
       "tier": "A",
       "edge": "1.83",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-3.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39170,8 +39170,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39214,8 +39214,8 @@
       "tier": "A",
       "edge": "0.85",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-3.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39226,8 +39226,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39410,8 +39410,8 @@
       "tier": "A",
       "edge": "2.1",
       "ml_prob": "0.8234",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-4.0",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39422,8 +39422,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39578,8 +39578,8 @@
       "tier": "A",
       "edge": "1.5",
       "ml_prob": "0.8689",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -39590,8 +39590,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -39998,8 +39998,8 @@
       "tier": "B",
       "edge": "3.85",
       "ml_prob": "0.9076",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40010,8 +40010,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40054,8 +40054,8 @@
       "tier": "B",
       "edge": "5.15",
       "ml_prob": "0.9014",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40066,8 +40066,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40166,8 +40166,8 @@
       "tier": "B",
       "edge": "4.83",
       "ml_prob": "0.894",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40178,8 +40178,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40194,8 +40194,8 @@
       "tier": "B",
       "edge": "0.77",
       "ml_prob": "0.72",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40206,8 +40206,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40222,8 +40222,8 @@
       "tier": "B",
       "edge": "4.15",
       "ml_prob": "0.9033",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40234,8 +40234,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40334,8 +40334,8 @@
       "tier": "B",
       "edge": "4.6",
       "ml_prob": "0.9026",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40346,8 +40346,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40474,8 +40474,8 @@
       "tier": "B",
       "edge": "0.15",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-5.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40486,8 +40486,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40614,8 +40614,8 @@
       "tier": "B",
       "edge": "0.83",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-4.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40626,8 +40626,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40698,8 +40698,8 @@
       "tier": "B",
       "edge": "0.6",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-5.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40710,8 +40710,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40782,8 +40782,8 @@
       "tier": "C",
       "edge": "2.7",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40794,8 +40794,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40838,8 +40838,8 @@
       "tier": "C",
       "edge": "1.3",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40850,8 +40850,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40866,8 +40866,8 @@
       "tier": "C",
       "edge": "1.4",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40878,8 +40878,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40922,8 +40922,8 @@
       "tier": "C",
       "edge": "0.9",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40934,8 +40934,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -40950,8 +40950,8 @@
       "tier": "C",
       "edge": "1.96",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -40962,8 +40962,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41062,8 +41062,8 @@
       "tier": "C",
       "edge": "0.87",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41074,8 +41074,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41090,8 +41090,8 @@
       "tier": "C",
       "edge": "0.83",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41102,8 +41102,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41146,8 +41146,8 @@
       "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41158,8 +41158,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41286,8 +41286,8 @@
       "tier": "C",
       "edge": "3.83",
       "ml_prob": "0.9082",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41298,8 +41298,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41342,8 +41342,8 @@
       "tier": "C",
       "edge": "2.85",
       "ml_prob": "0.9115",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41354,8 +41354,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41370,8 +41370,8 @@
       "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41382,8 +41382,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41398,8 +41398,8 @@
       "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41410,8 +41410,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41454,8 +41454,8 @@
       "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41466,8 +41466,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41538,8 +41538,8 @@
       "tier": "C",
       "edge": "0.96",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41550,8 +41550,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41622,8 +41622,8 @@
       "tier": "C",
       "edge": "3.15",
       "ml_prob": "0.8663",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41634,8 +41634,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41650,8 +41650,8 @@
       "tier": "C",
       "edge": "0.89",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41662,8 +41662,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -41874,8 +41874,8 @@
       "tier": "C",
       "edge": "3.6",
       "ml_prob": "0.8719",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -41886,8 +41886,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42126,8 +42126,8 @@
       "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42138,8 +42138,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42294,8 +42294,8 @@
       "tier": "C",
       "edge": "0.25",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42306,8 +42306,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42434,8 +42434,8 @@
       "tier": "A",
       "edge": "0.05",
       "ml_prob": "0.8338",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42446,8 +42446,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42546,8 +42546,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.58",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42558,8 +42558,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42854,8 +42854,8 @@
       "tier": "A",
       "edge": "5.62",
       "ml_prob": "0.8849",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "8.0",
+      "margin": "-2.0",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42866,8 +42866,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42882,8 +42882,8 @@
       "tier": "A",
       "edge": "3.94",
       "ml_prob": "0.8917",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "9.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42894,8 +42894,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -42938,8 +42938,8 @@
       "tier": "A",
       "edge": "2.3",
       "ml_prob": "0.912",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "15.0",
+      "margin": "5.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -42950,8 +42950,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -42994,8 +42994,8 @@
       "tier": "A",
       "edge": "5.55",
       "ml_prob": "0.8923",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "10.0",
+      "margin": "-0.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43006,8 +43006,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43246,8 +43246,8 @@
       "tier": "A",
       "edge": "1.03",
       "ml_prob": "0.9091",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "12.0",
+      "margin": "-1.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43258,8 +43258,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43302,8 +43302,8 @@
       "tier": "A",
       "edge": "2.82",
       "ml_prob": "0.8895",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "8.0",
+      "margin": "-5.5",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43314,8 +43314,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43582,8 +43582,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9265",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "14.6",
+      "margin": "10.9",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43594,8 +43594,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43610,8 +43610,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9263",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "14.3",
+      "margin": "4.2",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43622,8 +43622,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43638,8 +43638,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9263",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "13.5",
+      "margin": "5.0",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43650,8 +43650,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43666,8 +43666,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9238",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "19.3",
+      "margin": "-1.3",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43678,8 +43678,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43694,8 +43694,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9239",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "11.7",
+      "margin": "6.3",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43706,8 +43706,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43722,8 +43722,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9239",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "17.6",
+      "margin": "-1.1",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43734,8 +43734,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43750,8 +43750,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9239",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "12.2",
+      "margin": "4.3",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43762,8 +43762,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43778,8 +43778,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9238",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "12.6",
+      "margin": "1.4",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43790,8 +43790,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43806,8 +43806,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9265",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "11.9",
+      "margin": "12.6",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43818,8 +43818,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43834,8 +43834,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9263",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "21.9",
+      "margin": "-0.9",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43846,8 +43846,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43862,8 +43862,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9265",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "15.1",
+      "margin": "3.4",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43874,8 +43874,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43890,8 +43890,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9238",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "16.7",
+      "margin": "0.3",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43902,8 +43902,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -43918,8 +43918,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9265",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "16.4",
+      "margin": "-1.9",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43930,8 +43930,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43946,8 +43946,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9239",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "16.0",
+      "margin": "-2.5",
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43958,8 +43958,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -43974,8 +43974,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9263",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "16.2",
+      "margin": "-3.7",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -43986,8 +43986,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -44002,8 +44002,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.9238",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "9.2",
+      "margin": "2.8",
       "def_tier": "Elite",
       "h2h_bucket": "",
       "minutes_tier": "UNKNOWN",
@@ -44014,8 +44014,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "UNDER",
-      "void_reason": "NO_PROJECTION_OR_LINE; NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "NO_PROJECTION_OR_LINE",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -52091,7 +52091,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "A",
+      "tier": "D",
       "edge": "0.5",
       "ml_prob": "0.5811",
       "actual_value": "0.0",
@@ -55062,8 +55062,8 @@
       "tier": "A",
       "edge": "-0.5",
       "ml_prob": "0.7636",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -55074,8 +55074,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -55146,8 +55146,8 @@
       "tier": "A",
       "edge": "-0.5",
       "ml_prob": "0.7636",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -55158,8 +55158,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -55202,8 +55202,8 @@
       "tier": "A",
       "edge": "-0.5",
       "ml_prob": "0.7636",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -55214,8 +55214,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -55258,8 +55258,8 @@
       "tier": "A",
       "edge": "-0.5",
       "ml_prob": "0.7636",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -55270,8 +55270,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -55510,8 +55510,8 @@
       "tier": "A",
       "edge": "0.1",
       "ml_prob": "0.6408",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -55522,8 +55522,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -55647,7 +55647,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "B",
+      "tier": "D",
       "edge": "1.5",
       "ml_prob": "0.554",
       "actual_value": "0.0",
@@ -55843,7 +55843,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "B",
+      "tier": "D",
       "edge": "0.7",
       "ml_prob": "0.5304",
       "actual_value": "0.0",
@@ -57411,7 +57411,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "-1.3",
       "ml_prob": "0.4797",
       "actual_value": "1.0",
@@ -57439,7 +57439,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "-1.5",
       "ml_prob": "0.4797",
       "actual_value": "1.0",
@@ -57887,7 +57887,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "B",
       "edge": "-0.7",
       "ml_prob": "0.4797",
       "actual_value": "0.0",
@@ -58198,8 +58198,8 @@
       "tier": "B",
       "edge": "0.1",
       "ml_prob": "0.539",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -58210,8 +58210,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -58727,7 +58727,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.9",
       "ml_prob": "0.5092",
       "actual_value": "3.0",
@@ -58839,7 +58839,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "1.3",
       "ml_prob": "0.4784",
       "actual_value": "2.0",
@@ -59231,7 +59231,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.3",
       "ml_prob": "0.4932",
       "actual_value": "2.0",
@@ -59259,7 +59259,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.3",
       "ml_prob": "0.4932",
       "actual_value": "0.0",
@@ -59343,7 +59343,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.1",
       "ml_prob": "0.5163",
       "actual_value": "2.0",
@@ -59399,7 +59399,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.3",
       "ml_prob": "0.5199",
       "actual_value": "1.0",
@@ -59455,7 +59455,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "D",
       "edge": "0.1",
       "ml_prob": "0.5033",
       "actual_value": "0.0",
@@ -59595,7 +59595,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "A",
+      "tier": "C",
       "edge": "0.3",
       "ml_prob": "0.6534",
       "actual_value": "1.0",
@@ -59623,7 +59623,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "A",
+      "tier": "C",
       "edge": "0.5",
       "ml_prob": "0.6336",
       "actual_value": "0.0",
@@ -59875,7 +59875,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "B",
+      "tier": "D",
       "edge": "0.5",
       "ml_prob": "0.552",
       "actual_value": "1.0",
@@ -73374,8 +73374,8 @@
       "tier": "D",
       "edge": "-3.5",
       "ml_prob": "0.3175",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-3.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -73386,8 +73386,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -73598,8 +73598,8 @@
       "tier": "D",
       "edge": "-2.5",
       "ml_prob": "0.4523",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -73610,8 +73610,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -73990,8 +73990,8 @@
       "tier": "D",
       "edge": "-1.9",
       "ml_prob": "0.4523",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -74002,8 +74002,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -74074,8 +74074,8 @@
       "tier": "D",
       "edge": "-2.5",
       "ml_prob": "0.4523",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-2.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -74086,8 +74086,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75026,8 +75026,8 @@
       "tier": "D",
       "edge": "-1.5",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75038,8 +75038,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75054,8 +75054,8 @@
       "tier": "D",
       "edge": "-1.5",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75066,8 +75066,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75334,8 +75334,8 @@
       "tier": "D",
       "edge": "-0.9",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75346,8 +75346,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75362,8 +75362,8 @@
       "tier": "D",
       "edge": "-0.9",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75374,8 +75374,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75474,8 +75474,8 @@
       "tier": "D",
       "edge": "-1.5",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75486,8 +75486,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75502,8 +75502,8 @@
       "tier": "D",
       "edge": "-1.5",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75514,8 +75514,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75670,8 +75670,8 @@
       "tier": "D",
       "edge": "-1.5",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75682,8 +75682,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -75698,8 +75698,8 @@
       "tier": "D",
       "edge": "-0.9",
       "ml_prob": "0.4797",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-1.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -75710,8 +75710,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77238,8 +77238,8 @@
       "tier": "D",
       "edge": "-0.5",
       "ml_prob": "0.5073",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77250,8 +77250,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77266,8 +77266,8 @@
       "tier": "D",
       "edge": "-0.3",
       "ml_prob": "0.5073",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77278,8 +77278,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77294,8 +77294,8 @@
       "tier": "D",
       "edge": "-0.5",
       "ml_prob": "0.5073",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77306,8 +77306,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77350,8 +77350,8 @@
       "tier": "D",
       "edge": "-0.5",
       "ml_prob": "0.5073",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77362,8 +77362,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77378,8 +77378,8 @@
       "tier": "D",
       "edge": "-0.5",
       "ml_prob": "0.5073",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77390,8 +77390,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -77515,7 +77515,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "A",
+      "tier": "D",
       "edge": "0.1",
       "ml_prob": "0.606",
       "actual_value": "0.0",
@@ -77854,8 +77854,8 @@
       "tier": "D",
       "edge": "0.1",
       "ml_prob": "0.4076",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0.0",
+      "margin": "-0.5",
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "Low",
@@ -77866,8 +77866,8 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "void_reason": "",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -79045,7 +79045,7 @@
       "pt": "Demon",
       "tier": "A",
       "def": "elite",
-      "decided": 5,
+      "decided": 6,
       "hits": 2
     },
     {
@@ -79053,7 +79053,7 @@
       "pt": "Demon",
       "tier": "A",
       "def": "avg",
-      "decided": 1,
+      "decided": 2,
       "hits": 1
     },
     {
@@ -79097,6 +79097,14 @@
       "hits": 0
     },
     {
+      "prop": "Hitter Strikeouts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "avg",
+      "decided": 3,
+      "hits": 0
+    },
+    {
       "prop": "Pitcher Strikeouts",
       "pt": "Demon",
       "tier": "B",
@@ -79109,7 +79117,7 @@
       "pt": "Demon",
       "tier": "B",
       "def": "avg",
-      "decided": 3,
+      "decided": 4,
       "hits": 2
     },
     {
@@ -79117,7 +79125,55 @@
       "pt": "Demon",
       "tier": "B",
       "def": "elite",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "elite",
       "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "B",
+      "def": "elite",
+      "decided": 2,
       "hits": 1
     },
     {
@@ -79133,7 +79189,7 @@
       "pt": "Demon",
       "tier": "C",
       "def": "avg",
-      "decided": 7,
+      "decided": 9,
       "hits": 6
     },
     {
@@ -79141,16 +79197,8 @@
       "pt": "Demon",
       "tier": "C",
       "def": "elite",
-      "decided": 3,
+      "decided": 11,
       "hits": 2
-    },
-    {
-      "prop": "Hitter Strikeouts",
-      "pt": "Demon",
-      "tier": "C",
-      "def": "avg",
-      "decided": 3,
-      "hits": 0
     },
     {
       "prop": "Pitches Thrown",
@@ -79165,11 +79213,11 @@
       "pt": "Demon",
       "tier": "C",
       "def": "avg",
-      "decided": 4,
+      "decided": 6,
       "hits": 4
     },
     {
-      "prop": "Pts+Asts",
+      "prop": "Points",
       "pt": "Demon",
       "tier": "C",
       "def": "elite",
@@ -79189,15 +79237,7 @@
       "pt": "Demon",
       "tier": "C",
       "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
+      "decided": 3,
       "hits": 0
     },
     {
@@ -79205,7 +79245,7 @@
       "pt": "Demon",
       "tier": "C",
       "def": "avg",
-      "decided": 3,
+      "decided": 4,
       "hits": 1
     },
     {
@@ -79213,7 +79253,7 @@
       "pt": "Demon",
       "tier": "C",
       "def": "elite",
-      "decided": 5,
+      "decided": 6,
       "hits": 3
     },
     {
@@ -79223,14 +79263,6 @@
       "def": "avg",
       "decided": 1,
       "hits": 0
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "C",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
     },
     {
       "prop": "3-PT Attempted",
@@ -79421,7 +79453,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 72,
+      "decided": 75,
       "hits": 13
     },
     {
@@ -79445,7 +79477,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 57,
+      "decided": 60,
       "hits": 7
     },
     {
@@ -79517,7 +79549,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 6,
+      "decided": 5,
       "hits": 1
     },
     {
@@ -79533,7 +79565,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 12,
+      "decided": 9,
       "hits": 5
     },
     {
@@ -79589,7 +79621,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "elite",
-      "decided": 10,
+      "decided": 11,
       "hits": 5
     },
     {
@@ -79597,7 +79629,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 7,
+      "decided": 6,
       "hits": 3
     },
     {
@@ -79613,7 +79645,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 87,
+      "decided": 92,
       "hits": 22
     },
     {
@@ -79645,7 +79677,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 213,
+      "decided": 220,
       "hits": 41
     },
     {
@@ -79725,7 +79757,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 7,
+      "decided": 8,
       "hits": 6
     },
     {
@@ -79733,7 +79765,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 8,
+      "decided": 9,
       "hits": 6
     },
     {
@@ -79805,7 +79837,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 42,
+      "decided": 44,
       "hits": 24
     },
     {
@@ -79853,7 +79885,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 38,
+      "decided": 39,
       "hits": 28
     },
     {
@@ -79861,7 +79893,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 34,
+      "decided": 36,
       "hits": 22
     },
     {
@@ -79917,7 +79949,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 19,
+      "decided": 20,
       "hits": 15
     },
     {
@@ -79925,7 +79957,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 16,
+      "decided": 17,
       "hits": 14
     },
     {
@@ -79973,7 +80005,7 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 37,
+      "decided": 40,
       "hits": 20
     },
     {
@@ -80045,7 +80077,7 @@
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
-      "decided": 20,
+      "decided": 21,
       "hits": 17
     },
     {
@@ -80069,7 +80101,7 @@
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
-      "decided": 31,
+      "decided": 34,
       "hits": 26
     },
     {
@@ -80077,7 +80109,7 @@
       "pt": "Goblin",
       "tier": "B",
       "def": "elite",
-      "decided": 24,
+      "decided": 26,
       "hits": 17
     },
     {
@@ -80341,7 +80373,7 @@
       "pt": "Goblin",
       "tier": "C",
       "def": "avg",
-      "decided": 16,
+      "decided": 18,
       "hits": 9
     },
     {
@@ -80349,7 +80381,7 @@
       "pt": "Goblin",
       "tier": "C",
       "def": "elite",
-      "decided": 14,
+      "decided": 16,
       "hits": 11
     },
     {
@@ -81057,27 +81089,19 @@
       "hits": 1
     },
     {
-      "prop": "Hits",
+      "prop": "Assists",
       "pt": "Standard Over",
       "tier": "A",
-      "def": "avg",
+      "def": "elite",
       "decided": 1,
       "hits": 0
-    },
-    {
-      "prop": "Hitter Strikeouts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
     },
     {
       "prop": "Points",
       "pt": "Standard Over",
       "tier": "A",
       "def": "elite",
-      "decided": 15,
+      "decided": 17,
       "hits": 9
     },
     {
@@ -81085,7 +81109,7 @@
       "pt": "Standard Over",
       "tier": "A",
       "def": "avg",
-      "decided": 13,
+      "decided": 15,
       "hits": 5
     },
     {
@@ -81093,15 +81117,15 @@
       "pt": "Standard Over",
       "tier": "A",
       "def": "avg",
-      "decided": 5,
-      "hits": 1
+      "decided": 8,
+      "hits": 2
     },
     {
       "prop": "Pts+Rebs+Asts",
       "pt": "Standard Over",
       "tier": "A",
       "def": "elite",
-      "decided": 6,
+      "decided": 9,
       "hits": 4
     },
     {
@@ -81113,44 +81137,28 @@
       "hits": 3
     },
     {
-      "prop": "Runs",
+      "prop": "Rebounds",
       "pt": "Standard Over",
       "tier": "A",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "B",
       "def": "avg",
-      "decided": 2,
+      "decided": 1,
       "hits": 0
     },
     {
       "prop": "Hitter Strikeouts",
       "pt": "Standard Over",
-      "tier": "B",
+      "tier": "C",
       "def": "avg",
       "decided": 1,
       "hits": 1
-    },
-    {
-      "prop": "Total Bases",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "Hits",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Hitter Strikeouts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
     },
     {
       "prop": "Runs",
@@ -81158,15 +81166,7 @@
       "tier": "C",
       "def": "avg",
       "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Total Bases",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 2
+      "hits": 0
     },
     {
       "prop": "3-PT Attempted",
@@ -81349,11 +81349,19 @@
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
-      "decided": 1,
-      "hits": 0
+      "decided": 5,
+      "hits": 2
     },
     {
       "prop": "Hits Allowed",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Hitter Strikeouts",
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
@@ -81521,6 +81529,14 @@
       "hits": 5
     },
     {
+      "prop": "Runs",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
       "prop": "Steals",
       "pt": "Standard Over",
       "tier": "D",
@@ -81533,8 +81549,8 @@
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
-      "decided": 1,
-      "hits": 0
+      "decided": 5,
+      "hits": 2
     },
     {
       "prop": "Turnovers",
@@ -81637,8 +81653,16 @@
       "pt": "Standard Under",
       "tier": "D",
       "def": "elite",
-      "decided": 1,
-      "hits": 1
+      "decided": 9,
+      "hits": 6
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 5
     },
     {
       "prop": "faceoffs_won",
