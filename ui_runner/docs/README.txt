@@ -18,3 +18,23 @@ Railway / deploy — Grades tab
   ui_runner/data/grades_props/YYYY-MM-DD.json for bundled props without SQLite.
 - The Grades page calls GET /api/grades/report_dates to list which slate_eval dates exist on
   disk (avoids relying on dozens of HEAD probes through a CDN).
+
+Canonical Grades + Prop setup (2026-05)
+----------------------------------------
+- Canonical entry page is /grades (indexGrades.html).
+- Canonical slate source is /grades/slate_eval_{date}.html (same-origin iframe).
+- Canonical date discovery is GET /api/grades/report_dates.
+- Canonical props source order:
+  1) GET /api/graded-props?date=YYYY-MM-DD when response contains props[]
+  2) GET /api/grades/page-rows?date=YYYY-MM-DD (paged fallback used on Railway summary payloads)
+  3) GET /api/grades/props?date=YYYY-MM-DD (archive DB / bundle fallback)
+- Canonical toolbar behavior:
+  - Toolbar may be moved into the slate iframe.
+  - iframe window actions (switchTab / stepDate / jumpToDate) must bridge to parent handlers,
+    otherwise Prop/Ticket tab buttons appear unclickable.
+- If slate looks blank:
+  - Check browser console for inline script SyntaxError first.
+  - Verify /api/grades/report_dates and /grades/slate_eval_{date}.html both return 200.
+- If Prop tab is empty but slate exists:
+  - Verify /api/graded-props payload shape (props[] vs summary-only count/breakdown).
+  - If summary-only, /api/grades/page-rows fallback should populate cards.
