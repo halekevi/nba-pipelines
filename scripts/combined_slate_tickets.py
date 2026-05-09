@@ -219,6 +219,8 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.wnba).strip():
         args.wnba = _first_existing_path(
+            os.path.join(out, "wnba", "step8_wnba_direction_clean.xlsx"),
+            os.path.join(out, "wnba", "step8_wnba_direction.xlsx"),
             os.path.join(out, f"step8_wnba_direction_clean_{d}.xlsx"),
             os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction_clean.xlsx"),
@@ -9904,8 +9906,9 @@ def main():
         "--wnba",
         default="",
         help=(
-            "WNBA step8. When omitted: outputs/<date>/step8_wnba_direction_clean_<date>.xlsx, "
-            f"then Sports/WNBA/outputs/step8_wnba_direction_clean.xlsx; legacy paths still tried. Default constant: {DEFAULT_WNBA_PATH}"
+            "WNBA step8. When omitted: outputs/<date>/wnba/step8_wnba_direction_clean.xlsx, "
+            "then outputs/<date>/step8_wnba_direction_clean_<date>.xlsx, "
+            f"then Sports/WNBA/outputs/...; legacy paths still tried. Default constant: {DEFAULT_WNBA_PATH}"
         ),
     )
     ap.add_argument("--wcbb", default="", help="WCBB step8 direction clean xlsx (optional)")
