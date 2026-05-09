@@ -2,8 +2,8 @@
 """
 step1_fetch_prizepicks_tennis.py — PrizePicks Tennis projections (API, NBA-style fetch).
 
-Default: auto-detect league_id among candidates (5=TENNIS) using
-tennis-like prop names vs NBA/MMA stat noise.
+Default: auto-detect league_id among candidates (14, 20, 7, 9, 12, 15) using
+tennis-like prop names vs NBA stat noise.
 
 Run:
   py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py
@@ -501,6 +501,16 @@ def main() -> None:
                 if c not in df.columns:
                     df[c] = ""
             old = old[df.columns]
+            # Drop any rows from prior file that aren't TENNIS league. This protects
+            # against stale MMA/UFC/etc. contamination from earlier mis-detected runs
+            # (the merge had been preserving any projection_id not in the fresh fetch).
+            if "league" in old.columns:
+                pre_drop = len(old)
+                lg_norm = old["league"].astype(str).str.strip().str.upper()
+                old = old[lg_norm.isin({"TENNIS", "ATP", "WTA"})]
+                dropped = pre_drop - len(old)
+                if dropped > 0:
+                    print(f"[Tennis step1] Dropped {dropped} non-tennis rows from prior file before merge")
             new_ids = set(df["projection_id"].astype(str).str.strip())
             kept = old[~old["projection_id"].astype(str).str.strip().isin(new_ids)]
             df = pd.concat([df, kept], ignore_index=True)
