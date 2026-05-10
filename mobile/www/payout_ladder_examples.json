@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-08T17:22:35.228822+00:00",
+  "generated_at": "2026-05-09T23:22:46.986351+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -32,20 +32,20 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -58,20 +58,20 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -84,20 +84,20 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -110,20 +110,20 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -136,20 +136,20 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -188,30 +188,30 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -224,30 +224,30 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -260,30 +260,30 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -296,30 +296,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -332,30 +332,30 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -368,30 +368,30 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -404,30 +404,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Ausar Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 10.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Rudy Gobert",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -512,40 +512,40 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -558,40 +558,40 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -604,40 +604,40 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -650,40 +650,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -696,40 +696,40 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -742,40 +742,40 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -788,40 +788,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Ausar Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 10.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Rudy Gobert",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -926,50 +926,50 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -982,50 +982,50 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1038,50 +1038,50 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1094,50 +1094,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1150,50 +1150,50 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1206,50 +1206,50 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1262,50 +1262,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Ausar Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 10.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1374,54 +1374,54 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Rudy Gobert",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1430,60 +1430,60 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1496,60 +1496,60 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1562,60 +1562,60 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1628,60 +1628,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1694,60 +1694,60 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1760,60 +1760,60 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "OG Anunoby",
+          "player": "Chet Holmgren",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
+          "line": 26.5,
+          "standard_line": 26.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
           "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Mike Conley",
-          "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1826,60 +1826,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Ausar Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 10.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1892,64 +1892,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Anthony Edwards",
-          "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Mike Conley",
+          "player": "Tobias Harris",
           "prop_type": "Pts+Rebs",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1958,64 +1958,64 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ayo Dosunmu",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Deandre Ayton",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 16.0,
-          "standard_line": 16.0,
+          "line": 18.5,
+          "standard_line": 18.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Anthony Edwards",
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Chet Holmgren",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 26.5,
+          "standard_line": 26.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Duncan Robinson",
+          "prop_type": "Pts+Rebs",
+          "line": 13.5,
+          "standard_line": 13.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 23.5,
-          "standard_line": 23.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Miles McBride",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.0,
-          "standard_line": 14.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Rudy Gobert",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": 19.5,
+          "line": 4.5,
+          "standard_line": 8.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     }

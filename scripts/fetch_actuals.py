@@ -1223,6 +1223,46 @@ def fetch_nhl(date_str: str, adjacent_days: int = 1):
     # exposes (notably Hits and Faceoffs Won).
     nhl_api_df = fetch_nhl_api_enrichment(date_str)
     if not nhl_api_df.empty:
+        # ── Canonicalize NHL API player names to ESPN's full-name form before merge.
+        # NHL API emits "A. Tuch" (initials) while ESPN emits "Alex Tuch" (full).
+        # Without this rewrite, drop_duplicates() leaves both rows in the CSV, and
+        # the grader matches the ESPN 0.0 row by full-name lookup before falling
+        # back to (team, last_name) — producing false 100% UNDER hits on every
+        # SOG / Hits / PPP slate that NHL API actually populates correctly.
+        if not df.empty:
+            espn_idx: dict[tuple[str, str], list[str]] = {}
+            for _, r in df.iterrows():
+                pl = str(r.get("player", "") or "").strip()
+                tm = str(r.get("team", "") or "").strip().upper()
+                if not pl or not tm:
+                    continue
+                last = pl.split()[-1].lower() if pl.split() else ""
+                if not last:
+                    continue
+                key = (tm, last)
+                # Track unique full names per (team, last_name); skip if ambiguous.
+                bucket = espn_idx.setdefault(key, [])
+                if pl not in bucket:
+                    bucket.append(pl)
+
+            def _canonical_name(row: pd.Series) -> str:
+                pl = str(row.get("player", "") or "").strip()
+                tm = str(row.get("team", "") or "").strip().upper()
+                if not pl or not tm:
+                    return pl
+                last = pl.split()[-1].lower() if pl.split() else ""
+                if not last:
+                    return pl
+                cands = espn_idx.get((tm, last), [])
+                # Only rewrite when ESPN side has a single full-name match — keeps
+                # the dedupe safe when two players share a surname on a roster.
+                if len(cands) == 1:
+                    return cands[0]
+                return pl
+
+            nhl_api_df = nhl_api_df.copy()
+            nhl_api_df["player"] = nhl_api_df.apply(_canonical_name, axis=1)
+
         merged_raw = pd.concat([df, nhl_api_df], ignore_index=True)
         merged_raw["actual"] = pd.to_numeric(merged_raw["actual"], errors="coerce")
         # Source conflict audit: same player/team/prop present in both sources with

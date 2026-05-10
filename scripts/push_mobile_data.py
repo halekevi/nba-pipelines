@@ -1,7 +1,10 @@
 import os
 import json
 import requests
+import time
 from pathlib import Path
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 def push_file(filename, payload, url, token):
     print(f"Pushing {filename} to {url}...")
@@ -13,8 +16,21 @@ def push_file(filename, payload, url, token):
         "filename": filename,
         "payload": payload
     }
+
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["POST"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=30)
+        # Increased timeout to 90s for large payloads (e.g. 14MB+)
+        response = session.post(url, headers=headers, json=data, timeout=90)
         if response.status_code == 200:
             print(f"Successfully pushed {filename}")
             return True

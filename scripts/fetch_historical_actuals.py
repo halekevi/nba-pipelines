@@ -26,6 +26,7 @@ _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
+from sport_league_map import assert_historical_sport, league_to_sport
 
 _cache_dir = Path(ensure_local_cache(str(Path(__file__).resolve().parents[1])))
 
@@ -174,23 +175,6 @@ def expand_combo_player_names(name: str) -> list[str]:
     return [p.strip() for p in s.split("+") if p.strip()]
 
 
-def league_to_sport(league: str) -> str | None:
-    u = league.upper().strip()
-    if not u:
-        return None
-    if "NBA" in u or u == "BASKETBALL":
-        return "NBA"
-    if "CBB" in u or "NCAAB" in u or "COLLEGE" in u or "NCAA" in u:
-        return "CBB"
-    if "NHL" in u or "HOCKEY" in u:
-        return "NHL"
-    if any(x in u for x in ("EPL", "MLS", "UCL", "LALIGA", "BUNDESLIGA", "SOCCER", "SERIE A")):
-        return "Soccer"
-    if u in ("SOC", "SOCcer"):
-        return "Soccer"
-    return None
-
-
 def load_players_from_graded_workbooks() -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     root = REPO_ROOT / "outputs"
@@ -248,7 +232,20 @@ def load_players_from_step8_slates() -> list[tuple[str, str]]:
         for path in out_dir.rglob("step8_*direction_clean*.xlsx"):
             if path.is_file():
                 low = str(path).lower()
-                sp = "NBA" if "nba" in low else "Soccer" if "soccer" in low else "NHL" if "nhl" in low else "CBB" if "cbb" in low else "NBA"
+                # Do not default to NBA: MLB/WNBA/tennis/etc. step8 files would pollute the NBA
+                # player list and spam "Could not find ESPN ID" (basketball search on baseball names).
+                if "mlb" in low or "wnba" in low or "tennis" in low:
+                    continue
+                if "soccer" in low:
+                    sp = "Soccer"
+                elif "nhl" in low:
+                    sp = "NHL"
+                elif "cbb" in low or "wcbb" in low:
+                    sp = "CBB"
+                elif "nba" in low:
+                    sp = "NBA"
+                else:
+                    continue
                 _append_players_from_slate(path, sp, out)
     return out
 
@@ -409,6 +406,9 @@ def create_db(conn: sqlite3.Connection) -> None:
     )
     conn.execute(
         "CREATE INDEX IF NOT EXISTS idx_pgl_season ON player_game_logs (sport, season)"
+    )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_pgl_sport_gamedate ON player_game_logs (sport, game_date)"
     )
 
 
@@ -1096,6 +1096,9 @@ def season_rows_exist(conn: sqlite3.Connection, player: str, sport: str, season_
 
 
 def upsert_game_log(conn: sqlite3.Connection, row: dict[str, Any]) -> None:
+    sp = row.get("sport")
+    if sp is not None:
+        assert_historical_sport(str(sp))
     cols = [
         "player_name",
         "player_id",
@@ -1146,10 +1149,16 @@ def fetch_player_sport(
     player: str,
     sport: str,
     seasons: tuple[int, ...],
-    refresh_current: bool,
+    full_history_refresh: bool,
     since_date: str | None,
 ) -> tuple[int, str]:
-    """Returns (games_stored, status_line)."""
+    """Returns (games_stored, status_line).
+
+    Past seasons: skipped when rows already exist in DB (one-time backfill), unless
+    ``full_history_refresh`` is True (slow: re-downloads all seasons for every player).
+
+    Current season: always fetched so new games are upserted.
+    """
     current = current_season_code()
     total = 0
     parts: list[str] = []
@@ -1161,8 +1170,11 @@ def fetch_player_sport(
         time.sleep(0.5)
         for sc in seasons:
             label = season_code_to_label(sc)
-            if not refresh_current and sc != current and season_rows_exist(conn, player, sport, label):
-                time.sleep(0.2)
+            if (
+                sc != current
+                and not full_history_refresh
+                and season_rows_exist(conn, player, sport, label)
+            ):
                 continue
             time.sleep(0.2)
             rows = fetch_basketball_season(eid, sport, sc, matched or player)
@@ -1182,8 +1194,11 @@ def fetch_player_sport(
         time.sleep(0.5)
         for sc in seasons:
             label = season_code_to_label(sc)
-            if not refresh_current and sc != current and season_rows_exist(conn, player, sport, label):
-                time.sleep(0.2)
+            if (
+                sc != current
+                and not full_history_refresh
+                and season_rows_exist(conn, player, sport, label)
+            ):
                 continue
             time.sleep(0.2)
             rows = fetch_nhl_season(pid, sc, matched or player)
@@ -1203,8 +1218,11 @@ def fetch_player_sport(
         time.sleep(0.5)
         for sc in seasons:
             label = season_code_to_label(sc)
-            if not refresh_current and sc != current and season_rows_exist(conn, player, sport, label):
-                time.sleep(0.2)
+            if (
+                sc != current
+                and not full_history_refresh
+                and season_rows_exist(conn, player, sport, label)
+            ):
                 continue
             time.sleep(0.2)
             rows = fetch_soccer_season(eid, sc, matched or player)
@@ -1282,7 +1300,16 @@ def main() -> None:
     ap.add_argument("--sport", choices=("NBA", "CBB", "NHL", "Soccer"), default=None)
     ap.add_argument("--players", default=None, help="Comma-separated player names (optional filter)")
     ap.add_argument("--since", default=None, help="Only store games on/after YYYY-MM-DD")
-    ap.add_argument("--refresh-current", action="store_true", help="Re-fetch current season even if cached")
+    ap.add_argument(
+        "--full-history-refresh",
+        action="store_true",
+        help="Re-fetch past seasons even when already in DB (very slow; for rare rebuilds only).",
+    )
+    ap.add_argument(
+        "--refresh-current",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
     ap.add_argument("--spreads", action="store_true", help="Backfill game_lines.db from ESPN for graded slate dates")
     ap.add_argument(
         "--refresh-spreads",
@@ -1296,6 +1323,17 @@ def main() -> None:
         help="Parallel fetch workers (default: 12; max: 20). Higher = faster but more ESPN load.",
     )
     args = ap.parse_args()
+
+    full_history_refresh = bool(
+        getattr(args, "full_history_refresh", False) or getattr(args, "refresh_current", False)
+    )
+    if getattr(args, "refresh_current", False):
+        print(
+            "NOTE: --refresh-current is deprecated; it used to re-download every season for every player "
+            "(very slow). Normal daily runs omit it: past seasons stay cached, current season updates. "
+            "Use --full-history-refresh only if you need to rebuild all history.",
+            file=sys.stderr,
+        )
 
     if args.spreads:
         fetch_historical_spreads(args.sport, refresh=args.refresh_spreads)
@@ -1348,7 +1386,7 @@ def main() -> None:
                 try:
                     n, line = fetch_player_sport(
                         wconn, player, sp, seasons,
-                        args.refresh_current, args.since
+                        full_history_refresh, args.since
                     )
                     return n, line
                 finally:
@@ -1361,8 +1399,11 @@ def main() -> None:
             plist = sorted(by_sport.get(sp, set()))
             if not plist:
                 continue
-            print(f"\nFetching {sp}: {len(plist)} players across {len(seasons)} seasons "
-                  f"(workers={workers})...")
+            mode = "full history re-download" if full_history_refresh else "incremental (past seasons cached)"
+            print(
+                f"\nFetching {sp}: {len(plist)} players — {len(seasons)} season slot(s), {mode}, "
+                f"workers={workers}…"
+            )
             total = len(plist)
             completed = 0
 

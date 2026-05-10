@@ -45,7 +45,8 @@ nav.snav .nav-accent {
   max-width: 44px !important;
   max-height: 44px !important;
   object-fit: contain !important;
-  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.45)) !important;
+  /* filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.45)) !important; */
+  background-color: transparent !important;
 }
 
 .snav-links a,

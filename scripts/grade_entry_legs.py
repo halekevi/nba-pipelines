@@ -19,6 +19,7 @@ _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
+from sport_league_map import league_to_sport
 
 _cache_dir = Path(ensure_local_cache(str(Path(__file__).resolve().parents[1])))
 
@@ -52,21 +53,6 @@ def find_myticket_db() -> Path | None:
     ):
         if p.is_file():
             return p
-    return None
-
-
-def league_to_sport(league: str | None) -> str | None:
-    if not league:
-        return None
-    u = str(league).upper().strip()
-    if "NBA" in u or u == "BASKETBALL":
-        return "NBA"
-    if "CBB" in u or "NCAAB" in u or "COLLEGE" in u or "NCAA" in u:
-        return "CBB"
-    if "NHL" in u or "HOCKEY" in u:
-        return "NHL"
-    if any(x in u for x in ("EPL", "MLS", "UCL", "LALIGA", "BUNDESLIGA", "SOCCER", "SERIE A")):
-        return "Soccer"
     return None
 
 
@@ -194,20 +180,27 @@ def load_logs_for_date(
 
 
 def resolve_player_row(
-    candidates: list[tuple[str, str, dict[str, Any]]], want_name: str, logf: list[str]
+    candidates: list[tuple[str, str, dict[str, Any]]],
+    want_name: str,
+    logf: list[str],
+    sport: str,
 ) -> tuple[dict[str, Any] | None, str | None]:
     nk = normalize_player_name(want_name)
     for nrm, full, rec in candidates:
+        if str(rec.get("sport") or "") != sport:
+            continue
         if nrm == nk:
             return rec, full
-    names = [full for _, full, _ in candidates]
+    names = [full for _, full, rec in candidates if str(rec.get("sport") or "") == sport]
     nrm_list = [normalize_player_name(x) for x in names]
     match = get_close_matches(nk, nrm_list, n=1, cutoff=0.85)
     if match:
         idx = nrm_list.index(match[0])
         full = names[idx]
         logf.append(f"Fuzzy matched: {want_name!r} -> {full!r}")
-        return candidates[idx][2], full
+        for nrm, fn, rec in candidates:
+            if fn == full and str(rec.get("sport") or "") == sport:
+                return rec, full
     return None, None
 
 
@@ -348,7 +341,7 @@ def main() -> None:
 
             candidates = load_logs_for_date(hconn, sport, game_date)
             fuzzy_log: list[str] = []
-            rec, _matched = resolve_player_row(candidates, str(player_name), fuzzy_log)
+            rec, _matched = resolve_player_row(candidates, str(player_name), fuzzy_log, sport)
             for msg in fuzzy_log:
                 print(msg)
 
