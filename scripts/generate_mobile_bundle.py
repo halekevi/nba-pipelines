@@ -200,15 +200,24 @@ def process_template(file_path, templates_dir):
 
     content = re.sub(r'\{%\s*include\s+(.*?)\s*%\}', replace_include, content)
 
-    # Replace absolute-style static paths with relative ones
-    content = content.replace('href="/static/', 'href="static/')
-    content = content.replace('src="/static/', 'src="static/')
-    content = content.replace("url('/static/", "url('static/")
-    content = content.replace('url("/static/', 'url("static/')
-    content = content.replace("url('/static/css/", "url('static/")
-    content = content.replace('url("/static/css/', 'url("static/')
-    content = content.replace("url('static/css/", "url('static/")
-    content = content.replace('url("static/css/', 'url("static/')
+    # Robust path relativization for mobile bundle (Capacitor file:// protocol)
+    # Fix src and href attributes (e.g. <img src="/static/logo.png"> -> <img src="static/logo.png">)
+    # Handles variations in quoting and whitespace around the '='.
+    content = re.sub(
+        r'(src|href)\s*=\s*(["\'])\s*/static/',
+        r'\1=\2static/',
+        content,
+        flags=re.IGNORECASE
+    )
+
+    # Fix CSS url() references and flatten /static/css/ -> static/ (assets are copied to flat static/ dir)
+    # Handles url("/static/..."), url('/static/...'), and url(/static/...) with optional leading slash.
+    content = re.sub(
+        r'url\(\s*(["\']?)\s*/?static/(?:css/)?',
+        r'url(\1static/',
+        content,
+        flags=re.IGNORECASE
+    )
 
     return content
 
@@ -275,15 +284,25 @@ def generate_bundle():
             # Process includes recursively
             content = process_template(src_path, TEMPLATES_DIR)
 
-            # Fix navigation links for static bundle
-            content = content.replace('href="/"', 'href="index.html"')
-            content = content.replace('href="/tickets"', 'href="tickets.html"')
-            content = content.replace('href="/grades"', 'href="grades.html"')
-            content = content.replace('href="/income"', 'href="income.html"')
-            content = content.replace('href="/payout"', 'href="payout.html"')
-            content = content.replace('href="/payout/log"', 'href="payout_log.html"')
-            content = content.replace('href="/payout/ladder"', 'href="payout_ladder.html"')
-            content = content.replace('href="/payout/examples"', 'href="payout_examples.html"')
+            # Fix navigation links for static bundle using robust regex
+            # (Matches href="/", href="/tickets", etc., with flexible quoting and whitespace)
+            NAV_MAP = {
+                "/": "index.html",
+                "/tickets": "tickets.html",
+                "/grades": "grades.html",
+                "/income": "income.html",
+                "/payout": "payout.html",
+                "/payout/log": "payout_log.html",
+                "/payout/ladder": "payout_ladder.html",
+                "/payout/examples": "payout_examples.html",
+            }
+            for route, target in NAV_MAP.items():
+                content = re.sub(
+                    rf'href\s*=\s*(["\'])\s*{re.escape(route)}\s*\1',
+                    f'href="{target}"',
+                    content,
+                    flags=re.IGNORECASE
+                )
 
             # Mobile bundle runs from local files (not Railway routes).
             # Rewrite grades page report/API paths to local assets.
@@ -666,6 +685,14 @@ async function fetch_smart(localPath) {
                     'fetch("/api/payout/rate-cards")',
                     "fetch('payout_rate_cards.json', { cache: 'no-store' })"
                 )
+
+            # Resolve Flask url_for('static', filename='…') before stripping {{ }} — otherwise
+            # <img src="{{ url_for(...) }}?v=…"> becomes src="?v=…" and the logo 404s in the APK.
+            content = re.sub(
+                r"\{\{\s*url_for\s*\(\s*['\"]static['\"]\s*,\s*filename\s*=\s*['\"]([^'\"]+)['\"]\s*\)\s*\}\}",
+                r"static/\1",
+                content,
+            )
 
             # Strip remaining Jinja2 placeholders, control blocks, and comments
             content = re.sub(r'\{\{.*?\}\}', '', content, flags=re.DOTALL)
