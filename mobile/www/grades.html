@@ -61,6 +61,27 @@ html.page-grades-root body.page-grades{
   -webkit-overflow-scrolling:touch!important;
   overscroll-behavior-y:contain;
 }
+/* Android WebView can stall scroll when html+body both have overflow-y:auto with height locks.
+   On mobile (≤900px) let the WINDOW scroll naturally: html/body grow to content height with
+   overflow-y:visible. Desktop keeps the body-level scroll surface above. */
+@media (max-width:900px){
+  html.page-grades-root{
+    height:auto!important;
+    min-height:100%!important;
+    overflow-x:hidden!important;
+    overflow-y:visible!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:auto!important;
+  }
+  html.page-grades-root body.page-grades{
+    height:auto!important;
+    min-height:100dvh!important;
+    max-height:none!important;
+    overflow-x:hidden!important;
+    overflow-y:visible!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+}
 html.page-grades-root body.page-grades .grades-page,
 html.page-grades-root body.page-grades .iframe-shell{
   display:block!important;
@@ -68,7 +89,8 @@ html.page-grades-root body.page-grades .iframe-shell{
   overflow:visible!important;
   flex:none!important;
 }
-/* Desktop: clip iframe stage (avoids double ALL SPORTS / dead space). Mobile WebView: visible for scroll. */
+/* Desktop: clip grades-body so the slate iframe doesn't double-render the ALL SPORTS section.
+   Mobile WebView (≤900px): allow visible overflow so the body-level scroll surface picks up touch. */
 html.page-grades-root body.page-grades .grades-body{
   display:block!important;
   height:auto!important;
@@ -86,7 +108,7 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   overflow:visible!important;
   flex:none!important;
   position:relative!important;
-  min-height: 45vh;
+  min-height:min(45vh,520px);
 }
 /* Slate/ticket iframes: normal flow so stage height follows iframe (absolute+height:100% often leaves empty bands). */
 html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
@@ -95,14 +117,14 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%!important;
   max-width:100%!important;
   height:auto;
-  min-height: 50dvh;
+  min-height:min(50dvh,680px);
   z-index:0!important;
   overflow-y:auto!important;
   -webkit-overflow-scrolling:touch!important;
 }
 /* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
 body.page-grades .iframe-shell-stage{
-  min-height: 45vh;
+  min-height:min(45vh,520px);
   position:relative;
   overflow:visible;
 }
@@ -112,7 +134,7 @@ body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%;
   max-width:100%;
   height:auto;
-  min-height: 50dvh;
+  min-height:min(50dvh,680px);
   z-index:0;
 }
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
