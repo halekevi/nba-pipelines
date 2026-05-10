@@ -1,6 +1,6 @@
 {
   "build_date": "2026-05-10",
-  "generated_at": "2026-05-10T18:43:15.848748+00:00",
+  "generated_at": "2026-05-10T19:37:40.599557+00:00",
   "discards": {
     "NHL": {
       "directional_l5_hr_fail": 160,
@@ -18,7 +18,7 @@
     },
     "MLB": {
       "directional_l5_hr_fail": 1404,
-      "final_pool_kept": 1096,
+      "final_pool_kept": 1188,
       "payout_below_3x": 547
     },
     "NBA1H": {
@@ -33,9 +33,9 @@
     },
     "WNBA": {
       "prop_banned": 56,
-      "prop_quality_below_floor": 772,
-      "final_pool_kept": 28,
-      "payout_below_3x": 7
+      "prop_quality_below_floor": 588,
+      "final_pool_kept": 120,
+      "payout_below_3x": 25
     },
     "NBA1Q": {
       "directional_l5_hr_fail": 142,
@@ -46,10 +46,10 @@
     "SOCCER": {
       "directional_l5_hr_fail": 1290,
       "final_pool_kept": 87,
-      "payout_below_3x": 141
+      "payout_below_3x": 144
     },
     "CROSS": {
-      "payout_below_3x": 365
+      "payout_below_3x": 415
     }
   },
   "funnel": {
@@ -155,13 +155,13 @@
         "NBA1H": 3
       },
       "after_prop_quality": {
-        "ALL": 784,
+        "ALL": 876,
         "NHL": 28,
         "NBA": 265,
         "MLB": 269,
         "SOCCER": 87,
         "TENNIS": 79,
-        "WNBA": 28,
+        "WNBA": 120,
         "NBA1Q": 25,
         "NBA1H": 3
       },
