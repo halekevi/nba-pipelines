@@ -4592,6 +4592,40 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
         _json.dump(payload, f, ensure_ascii=False, default=str, allow_nan=False)
     print(f"  slate_latest.json -> {out_path}  ({sum(len(v) for v in payload['sports'].values())} props)")
 
+    # Static replacements for /api/slate-sport/<sport> and /api/slate-sport/combined.
+    sports_payload = payload.get("sports") if isinstance(payload, dict) else {}
+    if not isinstance(sports_payload, dict):
+        sports_payload = {}
+
+    combined_rows: list[dict] = []
+    for sport_key, rows in sports_payload.items():
+        safe_rows = rows if isinstance(rows, list) else []
+        sport_path = os.path.join(outdir, f"slate_sport_{sport_key}.json")
+        with open(sport_path, "w", encoding="utf-8") as sf:
+            _json.dump(
+                {"ok": True, "sport": sport_key, "rows": safe_rows},
+                sf,
+                ensure_ascii=False,
+                default=str,
+                allow_nan=False,
+            )
+        for r in safe_rows:
+            rr = dict(r) if isinstance(r, dict) else {"value": r}
+            if isinstance(rr, dict) and not str(rr.get("sport") or "").strip():
+                rr["sport"] = str(sport_key).upper()
+            combined_rows.append(rr)
+
+    combined_path = os.path.join(outdir, "slate_sport_combined.json")
+    with open(combined_path, "w", encoding="utf-8") as cf:
+        _json.dump(
+            {"ok": True, "sport": "combined", "rows": combined_rows},
+            cf,
+            ensure_ascii=False,
+            default=str,
+            allow_nan=False,
+        )
+    print(f"  slate_sport_combined.json -> {combined_path}  ({len(combined_rows)} rows)")
+
 
 def render_tickets_html(payload: dict) -> str:
     """Build full tickets page HTML from the same structure as tickets_latest.json."""
