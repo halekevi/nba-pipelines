@@ -28,9 +28,9 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-09\\graded_mlb_2026-05-09.xlsx",
       "status": "ok",
       "rows": 3737,
-      "void_rows": 1020,
-      "acceptable_void_rows": 766,
-      "unacceptable_void_rows": 254
+      "void_rows": 710,
+      "acceptable_void_rows": 645,
+      "unacceptable_void_rows": 65
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-09\\graded_soccer_2026-05-09.xlsx",
@@ -73,5 +73,5 @@
       "unacceptable_void_rows": 0
     }
   ],
-  "unacceptable_count": 254
+  "unacceptable_count": 65
 }

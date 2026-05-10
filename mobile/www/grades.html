@@ -3760,6 +3760,35 @@ window.addEventListener('resize', () => {
 </script>
 <script src="static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
 
+<script>
+(function() {
+  // Always inline slate/ticket HTML (iframes + Capacitor timing: DOMContentLoaded can run before window.Capacitor exists).
+  function inlineFrame(frameId) {
+    var frame = document.getElementById(frameId);
+    if (!frame || !frame.src) return;
+    fetch(frame.src, {cache: 'no-store'})
+      .then(function(r) { return r.text(); })
+      .then(function(html) {
+        var div = document.createElement('div');
+        div.id = frameId + '-inline';
+        div.style.cssText = 'width:100%;display:block;';
+        var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+        div.innerHTML = m ? m[1] : html;
+        frame.parentNode.replaceChild(div, frame);
+      })
+      .catch(function() {
+        frame.style.height = (window.innerHeight * 4) + 'px';
+        frame.style.overflow = 'visible';
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    inlineFrame('grade-frame');
+    inlineFrame('ticket-frame');
+  });
+})();
+</script>
+
 
 <script>
 (function () {

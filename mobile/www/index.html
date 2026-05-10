@@ -2184,28 +2184,6 @@ function topEdgeL5HitPct(p, dirOverride = "") {
   return pctFromValue(p?.hit);
 }
 
-/** Compute directional hit count from embedded g1..g10 numeric game values. */
-function directionalHitsFromGameCols(p, n, dir) {
-  const lineVal = Number(p?.line);
-  if (!Number.isFinite(lineVal)) return null;
-  let seen = 0;
-  let hits = 0;
-  for (let i = 1; i <= n; i += 1) {
-    const raw = p?.[`g${i}`] ?? p?.[`stat_g${i}`];
-    const v = Number(raw);
-    if (!Number.isFinite(v)) continue;
-    seen += 1;
-    if (dir === "UNDER") {
-      if (v < lineVal) hits += 1;
-    } else {
-      if (v > lineVal) hits += 1;
-    }
-  }
-  // Keep strict L5/L10 semantics; require a full window.
-  if (seen < n) return null;
-  return Math.max(0, Math.min(n, hits));
-}
-
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
@@ -2407,6 +2385,7 @@ function picksFromSlateLatestJson(data) {
       const hitPct = hr <= 1 ? Math.round(hr * 100) : Math.round(hr);
       picks.push({
         sport: sportLabel,
+        tier: row.tier || row.rank_tier || "",
         initials: row.initials || "",
         player,
         prop,
@@ -2416,8 +2395,7 @@ function picksFromSlateLatestJson(data) {
         hit: hitPct,
         edge,
         projection: row.projection,
-        tier: row.tier,
-        rank_tier: row.rank_tier ?? row.tier,
+        rank_tier: row.rank_tier ?? row.tier ?? "",
         l5_over: row.l5_over,
         l5_under,
         l10_over: row.l10_over,
@@ -2507,6 +2485,8 @@ async function loadSlateData() {
           prop: p.prop, line: p.line, pick: p.pick,
           dir: p.dir, hit: p.hit, edge: p.edge,
           projection: p.projection,
+          tier: p.tier,
+          rank_tier: p.rank_tier ?? p.tier,
           l5_over: p.l5_over,
           l5_under: p.l5_under != null ? p.l5_under : resolvedUnderHits(p, 5),
           l10_over: p.l10_over,
@@ -2846,8 +2826,6 @@ function buildEdgeCard(p, idx) {
   const edgeDisp = fmtEdgePick(p);
   const hitDisplay = topEdgeL5HitPct(p);
   const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
-  const l5Hits = isOver ? resolvedOverHits(p, 5) : resolvedUnderHits(p, 5);
-  const miniStreak = Number.isFinite(l5Hits) ? `L5 ${l5Hits}/5` : `LINE ${p.line}`;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
   const div=document.createElement("div");
   div.className=`edge-card insight-card ${dc}`;
@@ -2859,7 +2837,7 @@ function buildEdgeCard(p, idx) {
         <div class="edge-avatar ${dc}">${p.initials}</div>
         <div class="edge-val">
           <div class="edge-num edge-badge ${dc}">${edgeDisp}</div>
-          <div class="edge-mini">${hitPct}% · ${miniStreak}</div>
+          <div class="edge-mini">${hitPct}% · L${p.line}</div>
         </div>
       </div>
       <div class="edge-row edge-row-main">
@@ -3146,18 +3124,8 @@ function renderStreaks() {
   // Use REAL pipeline hit counts from /api/slate
   function realHits(p, n) {
     const dir = String(p.dir || "").trim().toUpperCase();
-    if (n === 5) {
-      const raw = dir === "OVER" ? (p.l5_over ?? null) : (p.l5_under ?? null);
-      const h = streakHits(raw, 5);
-      if (h !== null) return h;
-      return directionalHitsFromGameCols(p, 5, dir);
-    }
-    if (n === 10) {
-      const raw = dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
-      const h = streakHits(raw, 10);
-      if (h !== null) return h;
-      return directionalHitsFromGameCols(p, 10, dir);
-    }
+    if (n === 5)  return dir === "OVER" ? (p.l5_over  ?? null) : (p.l5_under  ?? null);
+    if (n === 10) return dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
     return null;
   }
 
@@ -3413,6 +3381,8 @@ function syncCardsFromCombinedRows(rows) {
     l5_under: _v(r, ["l5_under", "L5 Under", "L5 U"]),
     l10_over: _v(r, ["l10_over", "L10 Over", "L10 O"]),
     l10_under: _v(r, ["l10_under", "L10 Under", "L10 U"]),
+    tier: _v(r, ["tier", "Tier"]),
+    rank_tier: _v(r, ["rank_tier", "Rank Tier"]) || _v(r, ["tier", "Tier"]),
     l5_avg: _v(r, ["l5_avg", "L5 Avg"]),
     season_avg: _v(r, ["season_avg", "Season Avg"]),
     actual_series: _v(r, ["actual_series", "Actual Series"]),
@@ -3447,6 +3417,8 @@ function syncCardsFromCombinedSheet(columns, rows) {
     l10_under: ci("L10 Under") >= 0 ? ci("L10 Under") : ci("L10 U"),
     l5_avg: ci("L5 Avg"),
     season_avg: ci("Season Avg"),
+    tier: ci("Tier"),
+    rank_tier: ci("Rank Tier") >= 0 ? ci("Rank Tier") : ci("Tier"),
     actual_series: ci("Actual Series"),
     line_series: ci("Line Series"),
   };
@@ -3468,6 +3440,8 @@ function syncCardsFromCombinedSheet(columns, rows) {
     l10_under: get(r, idx.l10_under),
     l5_avg: get(r, idx.l5_avg),
     season_avg: get(r, idx.season_avg),
+    tier: get(r, idx.tier),
+    rank_tier: get(r, idx.rank_tier),
     actual_series: get(r, idx.actual_series),
     line_series: get(r, idx.line_series),
   })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
