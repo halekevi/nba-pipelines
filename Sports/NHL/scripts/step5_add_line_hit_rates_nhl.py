@@ -103,14 +103,32 @@ def _get_game_log_values_one(nhl_id: str, stat_norm: str, role: str, season: str
             + int(g.get("blockedShots", 0) or 0) * 1.3
         ),
     }
-    GOALIE_MAP = {
-        "saves": "saves",
-        "goals_allowed": "goalsAgainst",
-        "fantasy_score": lambda g: (
-            int(g.get("saves", 0) or 0) * 0.6
+    # NHL API goalie game-log payload keys (verified 2026-05):
+    #   shotsAgainst, goalsAgainst, savePctg, decision (W/L), toi, gamesStarted
+    # There is NO "saves" field — it MUST be derived as shotsAgainst - goalsAgainst.
+    # Earlier code did int(g.get("saves", 0) or 0) which always evaluated to 0 and
+    # silently produced UNDER 5/5 / UNDER 10/10 hit rates at every line for every
+    # goalie in the slate (e.g. Carter Hart 26.5 reading 0/5 over instead of 2/5).
+    def _goalie_saves(g):
+        try:
+            return max(0, int(g.get("shotsAgainst", 0) or 0) - int(g.get("goalsAgainst", 0) or 0))
+        except Exception:
+            return 0
+    def _goalie_fantasy(g):
+        return (
+            _goalie_saves(g) * 0.6
             + int(g.get("goalsAgainst", 0) or 0) * -3.0
             + (6.0 if str(g.get("decision", "")).upper() == "W" else 0.0)
-        ),
+        )
+    # stat_norm arrives in both forms ("goalie_saves" from step3, plus "saves" /
+    # "fantasy_score" / "goals_allowed" forms used in some legacy paths). Map all
+    # of them to the correct extractor so we never silently fall through to 0.
+    GOALIE_MAP = {
+        "saves": _goalie_saves,
+        "goalie_saves": _goalie_saves,
+        "goals_allowed": "goalsAgainst",
+        "fantasy_score": _goalie_fantasy,
+        "goalie_fantasy_score": _goalie_fantasy,
     }
 
     field_map = GOALIE_MAP if role == "GOALIE" else SKATER_MAP

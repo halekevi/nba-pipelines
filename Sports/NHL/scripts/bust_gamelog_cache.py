@@ -1,9 +1,12 @@
 """
 Purge stale (all-zero) game log cache entries for stat types that were previously
-broken due to missing SKATER_MAP entries in step5.
+broken due to missing SKATER_MAP / GOALIE_MAP entries in step5.
 
-Run this ONCE before re-running step5 to force fresh fetches for:
-  time_on_ice, plus/minus, power_play_points, faceoffs_won, hits
+Run this ONCE before re-running step5 to force fresh fetches for any newly-fixed
+stats. Currently covers (skaters): time_on_ice, plus/minus, power_play_points,
+faceoffs_won, hits — and (goalies): goalie_saves, goalie_fantasy_score (the
+prefixed keys were never present in GOALIE_MAP, so every cached game read 0.0
+and forced UNDER 5/5 hit rates at every line).
 
 Usage:
     py bust_gamelog_cache.py --cache cache\nhl_gamelog_cache.json
@@ -11,7 +14,10 @@ Usage:
 import argparse
 import json
 
-STALE_STATS = {"time_on_ice", "plus/minus", "power_play_points", "faceoffs_won", "hits"}
+STALE_STATS = {
+    "time_on_ice", "plus/minus", "power_play_points", "faceoffs_won", "hits",
+    "goalie_saves", "goalie_fantasy_score",
+}
 
 def main():
     parser = argparse.ArgumentParser()

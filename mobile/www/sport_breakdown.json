@@ -3,10 +3,10 @@
   "rows": [
     {
       "sport": "NBA",
-      "decided": 122121,
-      "paid": 69605,
-      "win_rate": 0.5699674912586696,
-      "net_dollars": 170890.0
+      "decided": 122643,
+      "paid": 69932,
+      "win_rate": 0.5702078390124181,
+      "net_dollars": 172210.0
     },
     {
       "sport": "CBB",
