@@ -86,7 +86,7 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   overflow:visible!important;
   flex:none!important;
   position:relative!important;
-  min-height:min(45vh,520px);
+  min-height: 45vh;
 }
 /* Slate/ticket iframes: normal flow so stage height follows iframe (absolute+height:100% often leaves empty bands). */
 html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
@@ -95,14 +95,14 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%!important;
   max-width:100%!important;
   height:auto;
-  min-height:min(50dvh,680px);
+  min-height: 50dvh;
   z-index:0!important;
   overflow-y:auto!important;
   -webkit-overflow-scrolling:touch!important;
 }
 /* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
 body.page-grades .iframe-shell-stage{
-  min-height:min(45vh,520px);
+  min-height: 45vh;
   position:relative;
   overflow:visible;
 }
@@ -112,7 +112,7 @@ body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%;
   max-width:100%;
   height:auto;
-  min-height:min(50dvh,680px);
+  min-height: 50dvh;
   z-index:0;
 }
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
