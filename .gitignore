@@ -86,6 +86,8 @@ mobile/node_modules/
 mobile/android/**/build/
 mobile/android/.gradle/
 mobile/android/local.properties
+mobile/android/keystore.properties
+mobile/proporacle.keystore
 mobile/android/captures/
 mobile/android/*.iml
 mobile/android/.idea/
