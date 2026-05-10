@@ -38,10 +38,10 @@
     },
     {
       "sport": "TENNIS",
-      "decided": 132,
-      "paid": 48,
-      "win_rate": 0.36363636363636365,
-      "net_dollars": -360.0
+      "decided": 96,
+      "paid": 39,
+      "win_rate": 0.40625,
+      "net_dollars": -180.0
     },
     {
       "sport": "NHL",

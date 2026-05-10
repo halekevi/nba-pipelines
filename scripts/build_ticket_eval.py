@@ -2049,6 +2049,8 @@ def find_ticket_json(
 
     Prefer (when multiple exist under outputs/<date>/):
     - Never use ``*_to_grade_tomorrow*`` if any other candidate exists (that export omits many ticket tabs).
+    - Prefer the canonical workbook name first: ``combined_slate_tickets_{date}.xlsx``.
+    - Avoid control/debug variants (for example ``*_control_*``) unless no canonical/default file exists.
     - Otherwise pick the workbook with the **most worksheets** (full combined slate vs. trimmed run).
     """
     if override is not None:
@@ -2065,7 +2067,18 @@ def find_ticket_json(
         if "_to_grade_tomorrow" not in p.stem.lower()
     ]
     pool = non_tomorrow if non_tomorrow else candidates
-    return max(pool, key=_xlsx_sheet_count_fast)
+
+    canonical_name = f"combined_slate_tickets_{arg_date}.xlsx".lower()
+    canonical = [p for p in pool if p.name.lower() == canonical_name]
+    if canonical:
+        return max(canonical, key=_xlsx_sheet_count_fast)
+
+    non_control = [
+        p for p in pool
+        if "_control_" not in p.name.lower() and "control_" not in p.name.lower()
+    ]
+    pool2 = non_control if non_control else pool
+    return max(pool2, key=_xlsx_sheet_count_fast)
 
 
 def _player_initials(name: str) -> str:
