@@ -4,14 +4,18 @@
  * v=20260423gradeboxfit
  */
 
-/* slate_eval / ticket_eval in a fixed-height iframe: scroll on `html` (Android WebView
-   often fails when `html` is overflow:hidden and `body` is height-locked + max-height). */
+/* slate_eval / ticket_eval inside the Grades hub iframe.
+   Hub JS (syncGradeFrameHeight / syncTicketFrameHeight) sizes the iframe element to its
+   content height, so the OUTER page scrolls — the iframe document itself does NOT need
+   its own scroll. We must avoid setting overflow-y:auto on html here because Android
+   WebView claims the touch gesture for the iframe scroll container (even when there is
+   no overflow), preventing the parent from scrolling. Use overflow-y:visible so the
+   iframe is touch-transparent for vertical scroll. */
 html {
-  height: 100% !important;
+  height: auto !important;
+  min-height: 100% !important;
   overflow-x: hidden !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior-y: contain !important;
+  overflow-y: visible !important;
 }
 body {
   min-height: 100% !important;

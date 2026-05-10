@@ -2052,15 +2052,17 @@ function ensureFrameCollapseCss(doc) {
         line-height:1.2;
       }
     }
-    /* Hub iframe has a fixed height; slate_eval body used min-height:100vh without a bounded scroll root — narrow / touch only */
+    /* Hub iframe is sized to its content height by syncGradeFrameHeight / syncTicketFrameHeight,
+       so the OUTER (parent) page scrolls. The iframe document must NOT claim its own scroll
+       container on touch devices — Android WebView swallows the swipe gesture for an iframe
+       that has overflow-y:auto, even when there is nothing to overflow. Force overflow:visible
+       on html and body so touches bubble up to the parent page. */
     @media (max-width:900px),(pointer:coarse){
     html{
       min-height:100% !important;
       height:auto !important;
       overflow-x:hidden !important;
-      overflow-y:auto !important;
-      -webkit-overflow-scrolling:touch !important;
-      overscroll-behavior-y:contain !important;
+      overflow-y:visible !important;
     }
     body{
       min-height:100% !important;
