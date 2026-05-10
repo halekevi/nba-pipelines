@@ -369,6 +369,24 @@ def main():
     ap.add_argument("--cache",    default="wnba_espn_cache.csv")
     ap.add_argument("--db",       default="", help="Override DB path (default: data/cache/proporacle_ref.db)")
     ap.add_argument("--season",   default="2026")
+    ap.add_argument(
+        "--attach-stats-through",
+        default="",
+        help="YYYY-MM-DD: use ESPN cache rows through this date for stat_g*/last5 (e.g. end of 2025 finals). "
+        "When set, --attach-stats-season and --attach-stats-lookback-days control the window; "
+        "the scoreboard fetch loop still uses --date and --days.",
+    )
+    ap.add_argument(
+        "--attach-stats-season",
+        default="",
+        help="Season label on cache rows when using --attach-stats-through (defaults to --season).",
+    )
+    ap.add_argument(
+        "--attach-stats-lookback-days",
+        type=int,
+        default=240,
+        help="Days before --attach-stats-through to include in the rolling window (default 240).",
+    )
     ap.add_argument("--n",        type=int,   default=10)
     ap.add_argument("--sleep",    type=float, default=0.8)
     ap.add_argument("--retries",  type=int,   default=4)
@@ -378,6 +396,21 @@ def main():
 
     today = datetime.today()
     target_date = datetime.strptime(args.date, "%Y-%m-%d") if args.date else today
+
+    attach_through = str(args.attach_stats_through or "").strip()
+    if attach_through:
+        stat_target = datetime.strptime(attach_through, "%Y-%m-%d")
+        stat_season = str(args.attach_stats_season or "").strip() or str(args.season)
+        stat_days = int(args.attach_stats_lookback_days)
+        print(
+            f"→ Rolling stat window: SEASON={stat_season} "
+            f"through {stat_target.date()} (lookback {stat_days}d); "
+            f"fetch window still anchored to {target_date.date()}"
+        )
+    else:
+        stat_target = target_date
+        stat_season = str(args.season)
+        stat_days = int(args.days)
 
     print(f"→ Loading slate: {args.slate}")
     slate = pd.read_csv(args.slate, dtype=str, encoding="utf-8-sig").fillna("")
@@ -513,13 +546,22 @@ def main():
         )
         return
 
-    # Filter cache to season + date range
+    # Filter cache to season + date range (for props / stat_g*), independent of fetch window when attach-* is set
     cache_dates = pd.to_datetime(cache["game_date"], errors="coerce")
-    cutoff = target_date - timedelta(days=args.days)
+    cutoff_stat = stat_target - timedelta(days=stat_days)
+    if "SEASON" not in cache.columns:
+        if attach_through:
+            raise RuntimeError(
+                "wnba_espn_cache.csv has no SEASON column. Run scripts/backfill_wnba_espn_range.py "
+                "for 2025 (or re-fetch with step4) before using --attach-stats-through."
+            )
+        season_mask = pd.Series(True, index=cache.index)
+    else:
+        season_mask = cache["SEASON"].fillna("").astype(str) == str(stat_season)
     cache_filt = cache[
-        (cache.get("SEASON","") == args.season) &
-        (cache_dates >= pd.Timestamp(cutoff)) &
-        (cache_dates <= pd.Timestamp(target_date))
+        season_mask
+        & (cache_dates >= pd.Timestamp(cutoff_stat))
+        & (cache_dates <= pd.Timestamp(stat_target))
     ].copy()
     cache_filt = cache_filt.sort_values("game_date", ascending=False)
 

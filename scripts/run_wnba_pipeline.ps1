@@ -8,6 +8,7 @@
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
 #    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Fallback: WNBA step1 script (Playwright/CDP); NBA API has no CDP
 #    .\run_wnba_pipeline.ps1 -UsePlaywright             # Fallback: Sports\WNBA\step1_fetch_prizepicks.py (browser)
+#    .\run_wnba_pipeline.ps1 -StatsFrom2025End           # Step4 rolling stats = last games through 2025-10-20 (needs 2025 cache backfill)
 #  Default step1 calls Sports\NBA\scripts\step1_fetch_prizepicks_api.py --league_id 3 (same fetch as NBA), output still outputs\<date>\wnba\step1_wnba_props.csv.
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 #
@@ -21,7 +22,8 @@ param(
     [switch]$RefreshCache,
     [switch]$SkipFetch,
     [string]$Cdp          = "",
-    [switch]$UsePlaywright
+    [switch]$UsePlaywright,
+    [switch]$StatsFrom2025End
 )
 
 $ErrorActionPreference = "Continue"
@@ -196,8 +198,13 @@ if ($ok) { $ok = Run-Step "WNBA Step 2 - Attach Pick Types" $WNBADir ".\step2_at
 if ($ok) { $ok = Run-Step "WNBA Step 3 - Attach Defense" $WNBADir ".\step3_attach_defense.py" `
     "--input `"$WnbaRunOutDir\step2_wnba_picktypes.csv`" --defense wnba_defense_summary.csv --output `"$WnbaRunOutDir\step3_wnba_defense.csv`"" }
 
+$step4Attach = ""
+if ($StatsFrom2025End) {
+    $step4Attach = " --attach-stats-through 2025-10-20 --attach-stats-season 2025 --attach-stats-lookback-days 240"
+    Write-Host "  [WNBA step4] Rolling stats anchored to end of 2025 season (through 2025-10-20)." -ForegroundColor DarkCyan
+}
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv" }
+    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`"" }
