@@ -3,10 +3,10 @@
   "rows": [
     {
       "sport": "NBA",
-      "decided": 121413,
-      "paid": 69188,
-      "win_rate": 0.5698566051411299,
-      "net_dollars": 169630.0
+      "decided": 122121,
+      "paid": 69605,
+      "win_rate": 0.5699674912586696,
+      "net_dollars": 170890.0
     },
     {
       "sport": "CBB",
@@ -24,31 +24,31 @@
     },
     {
       "sport": "MLB",
-      "decided": 86259,
-      "paid": 25499,
-      "win_rate": 0.29560973347708647,
-      "net_dollars": -352610.0
+      "decided": 88962,
+      "paid": 26200,
+      "win_rate": 0.2945077673613453,
+      "net_dollars": -365620.0
     },
     {
       "sport": "SOCCER",
-      "decided": 40419,
-      "paid": 8836,
-      "win_rate": 0.21861005962542368,
-      "net_dollars": -227470.0
+      "decided": 43792,
+      "paid": 9304,
+      "win_rate": 0.2124588966021191,
+      "net_dollars": -251840.0
     },
     {
       "sport": "TENNIS",
-      "decided": 60,
-      "paid": 30,
-      "win_rate": 0.5,
-      "net_dollars": 0.0
+      "decided": 132,
+      "paid": 48,
+      "win_rate": 0.36363636363636365,
+      "net_dollars": -360.0
     },
     {
       "sport": "NHL",
-      "decided": 50998,
-      "paid": 14964,
-      "win_rate": 0.2934232715008432,
-      "net_dollars": -210700.0
+      "decided": 51223,
+      "paid": 15030,
+      "win_rate": 0.2934228764422232,
+      "net_dollars": -211630.0
     },
     {
       "sport": "NFL",
