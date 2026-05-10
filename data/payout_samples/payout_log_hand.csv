@@ -1,2 +1,3 @@
 date,group_name,n_legs,pick_types,lines,standard_lines,actual_payout_multiplier,slip_type,result
 2026-05-09,,6,"Goblin,Goblin,Goblin,Goblin,Goblin,Goblin","19.5,9.5,1.5,9.5,5.5,9.5",,3.75,power,PENDING
+2026-05-09,,6,"Goblin,Goblin,Goblin,Goblin,Goblin,Goblin","19.5,19.5,9.5,1.5,9.5,14.5",,3.25,power,PENDING
