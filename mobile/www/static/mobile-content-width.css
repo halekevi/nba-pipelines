@@ -916,23 +916,6 @@ nav.snav .mobile-menu a {
     min-width: 34px;
     padding: 6px 8px;
   }
-  body.page-grades .iframe-shell-toolbar .tabs-bar {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6px !important;
-    overflow-x: visible !important;
-  }
-
-  body.page-grades .iframe-shell-toolbar .tabs-bar .tab-btn {
-    min-width: 0 !important;
-    width: 100% !important;
-    text-align: center !important;
-    font-size: clamp(10px, 2.8vw, 12px) !important;
-    padding: 8px 4px !important;
-    white-space: normal !important;
-    line-height: 1.2 !important;
-    justify-content: center !important;
-  }
   .grades-pills a {
     min-height: 44px;
     display: inline-flex;

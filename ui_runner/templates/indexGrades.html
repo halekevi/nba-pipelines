@@ -54,12 +54,7 @@ html.page-grades-root,
 html.page-grades-root body.page-grades{
   display:block!important;
   height:auto!important;
-  min-height:100%!important;
-  max-height:none!important;
-  overflow-x:hidden!important;
   overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
-  overscroll-behavior-y:contain;
 }
 html.page-grades-root body.page-grades .grades-page,
 html.page-grades-root body.page-grades .grades-body,
@@ -86,8 +81,6 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
   height:auto;
   min-height:min(50dvh,680px);
   z-index:0!important;
-  overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
 }
 /* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
 body.page-grades .iframe-shell-stage{
@@ -107,18 +100,12 @@ body.page-grades .iframe-shell-stage > iframe.grade-frame{
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
 html.page-grades-root #props-eval-panel{
-  overflow-x:hidden!important;
-  overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
+  overflow:visible!important;
   height:auto!important;
   position:relative!important;
   inset:auto!important;
   width:100%!important;
   max-width:100%!important;
-}
-html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
-  overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
@@ -166,7 +153,7 @@ body::after{
   opacity:.55;
 }
 .grades-page{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
-.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:visible;}
 .gold-shimmer{background:linear-gradient(to bottom,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent;}
 
 /* nav — flush to viewport top (matches Tickets) */
@@ -464,54 +451,50 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar-right{display:none;}
   .tabs-bar{margin-left:12px;margin-right:12px;padding:6px 8px;min-height:38px;}
   .dpill{font-size:10px;padding:6px 9px;}
-  /* Narrow phones: single horizontal tab row (scroll) — saves vertical space vs 2×2 grid */
+  /* Narrow phones: 2×2 tab grid so all four tabs stay fully visible without horizontal scroll */
   .tabs-bar{
-    display:flex;
-    flex-direction:row;
-    flex-wrap:nowrap;
+    display:grid;
+    grid-template-columns:1fr 1fr;
     gap:6px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-x:contain;
+    overflow-x:visible;
     width:100%;
     max-width:100%;
     min-width:0;
     box-sizing:border-box;
     align-items:stretch;
-    justify-content:flex-start;
+    justify-items:stretch;
   }
   .tabs-bar .tab-btn{
-    display:inline-flex;
-    flex-direction:row;
-    flex:0 0 auto;
-    width:auto;
-    max-width:none;
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:100%;
     min-width:0;
-    min-height:38px;
+    min-height:0;
     box-sizing:border-box;
     justify-content:center;
     align-items:center;
     text-align:center;
-    font-size:clamp(9px,2.5vw,11px);
-    padding:7px 10px;
-    white-space:nowrap;
-    line-height:1.15;
+    font-size:clamp(10px,2.8vw,12px);
+    padding:8px 4px;
+    white-space:normal;
+    line-height:1.2;
     gap:5px;
     letter-spacing:0.04em;
     border-radius:12px;
     border:2px solid rgba(255,255,255,0.06);
     overflow:hidden;
-    text-overflow:ellipsis;
+    word-break:break-word;
+    hyphens:none;
   }
   .tabs-bar .tab-btn.active{
     border-color:rgba(212,160,23,0.65);
     box-shadow:0 0 20px rgba(212,160,23,0.2),inset 0 -2px 0 var(--accent-gold);
   }
   .tabs-bar .tab-icon{
-    width:16px;
-    height:16px;
-    font-size:13px;
+    width:18px;
+    height:18px;
+    font-size:14px;
     flex-shrink:0;
     line-height:1;
   }

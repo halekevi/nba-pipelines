@@ -400,8 +400,11 @@ body {
   }
 
   .tabs-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 6px 8px;
-    min-height: 38px;
+    gap: 6px;
+    overflow-x: visible;
   }
 
   .dpill {
@@ -411,8 +414,11 @@ body {
 
   .tabs-bar .tab-btn {
     font-size: clamp(9px, 2.5vw, 11px);
-    min-height: 52px;
-    padding: 7px 5px;
+    min-height: 56px;
+    padding: 8px 6px;
+    width: 100%;
+    text-align: center;
+    white-space: normal;
   }
 }
 
