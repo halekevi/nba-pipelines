@@ -1375,6 +1375,20 @@ select option,
 </div><!-- /.grades-page -->
 
 <script>
+// Force iframe scroll on Capacitor WebView.
+document.addEventListener('DOMContentLoaded', function () {
+  const frame = document.getElementById('grade-frame');
+  if (!frame) return;
+  frame.style.overflow = 'visible';
+  frame.style.height = 'auto';
+  frame.addEventListener('load', function () {
+    try {
+      const h = frame.contentDocument.body.scrollHeight;
+      frame.style.height = h + 'px';
+    } catch (_e) {}
+  });
+});
+
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 // The grader saves slate_eval_{date}.html to ui_runner/templates/
 // Your server must serve these at /grades/slate_eval_{date}.html  OR
@@ -3648,6 +3662,30 @@ window.addEventListener('resize', () => {
 })();
 </script>
 <script src="/static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
+<script>
+// Capacitor WebView: auto-expand grade/ticket iframe heights to content.
+(function () {
+  function resizeFrame(frame) {
+    if (!frame) return;
+    frame.style.height = "1px";
+    frame.addEventListener("load", function () {
+      try {
+        const doc = frame.contentDocument;
+        const h = (doc && doc.documentElement && doc.documentElement.scrollHeight)
+          || (doc && doc.body && doc.body.scrollHeight)
+          || 0;
+        if (h > 100) frame.style.height = h + "px";
+      } catch (e) {
+        frame.style.height = "100vh";
+      }
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    resizeFrame(document.getElementById("grade-frame"));
+    resizeFrame(document.getElementById("ticket-frame"));
+  });
+})();
+</script>
 
 </body>
 </html>
