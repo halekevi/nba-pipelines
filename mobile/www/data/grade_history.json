@@ -811,14 +811,14 @@
   },
   {
     "date": "2026-05-09",
-    "n_tickets": 253,
-    "wins": 48,
+    "n_tickets": 264,
+    "wins": 62,
     "guarantees": 0,
-    "losses": 205,
-    "win_rate": 0.1897,
+    "losses": 202,
+    "win_rate": 0.2348,
     "avg_ev_predicted": null,
-    "net_per_10": 1.55,
-    "roi_pct": 15.47,
+    "net_per_10": 3.37,
+    "roi_pct": 33.67,
     "strong_tickets": {
       "count": 0,
       "wins": 0
@@ -832,8 +832,8 @@
       "wins": 0
     },
     "skip_tickets": {
-      "count": 253,
-      "wins": 48
+      "count": 264,
+      "wins": 62
     }
   }
 ]

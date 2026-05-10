@@ -1,0 +1,7 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+DET,CLE,211.5,4.5,103.5,False,True,SLOW,live
+CLE/DET,DET,211.5,-4.5,108.0,False,True,SLOW,live
+CLE,DET,211.5,-4.5,108.0,False,True,SLOW,live
+OKC,LAL,211.5,-8.5,110.0,False,True,SLOW,live
+LAL,OKC,211.5,8.5,101.5,False,True,SLOW,live
+LAL/OKC,OKC,211.5,8.5,101.5,False,True,SLOW,live

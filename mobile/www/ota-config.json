@@ -1,5 +1,5 @@
 {
-  "enabled": true,
-  "baseUrl": "https://web-production-f280f.up.railway.app",
+  "enabled": false,
+  "baseUrl": "",
   "checkIntervalMs": 3600000
 }

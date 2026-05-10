@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-10T03:26:53.679243+00:00",
+  "generated_at": "2026-05-10T05:29:15.122693+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -172,12 +172,12 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -460,12 +460,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -496,12 +496,12 @@
           "hit_rate": 0.2
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -864,12 +864,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -910,12 +910,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1358,12 +1358,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1414,12 +1414,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1942,12 +1942,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -2008,12 +2008,12 @@
           "hit_rate": 0.0
         },
         {
-          "player": "Josh Hart",
-          "prop_type": "Points",
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Rebounds",
           "line": 7.5,
-          "standard_line": 12.0,
+          "standard_line": 11.0,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }
