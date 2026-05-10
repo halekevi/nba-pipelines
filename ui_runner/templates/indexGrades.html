@@ -3651,9 +3651,7 @@ window.addEventListener('resize', () => {
 
 <script>
 (function() {
-  var isMobile = (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform && Capacitor.isNativePlatform()) ||
-                 (window.innerWidth <= 900 && 'ontouchstart' in window);
-
+  // Always inline slate/ticket HTML (iframes + Capacitor timing: DOMContentLoaded can run before window.Capacitor exists).
   function inlineFrame(frameId) {
     var frame = document.getElementById(frameId);
     if (!frame || !frame.src) return;
@@ -3673,25 +3671,9 @@ window.addEventListener('resize', () => {
       });
   }
 
-  function autoHeight(frameId) {
-    var frame = document.getElementById(frameId);
-    if (!frame) return;
-    frame.addEventListener('load', function() {
-      try {
-        var h = frame.contentDocument.documentElement.scrollHeight || frame.contentDocument.body.scrollHeight;
-        if (h > 100) frame.style.height = h + 'px';
-      } catch(e) { frame.style.height = (window.innerHeight * 4) + 'px'; }
-    });
-  }
-
   document.addEventListener('DOMContentLoaded', function() {
-    if (isMobile) {
-      inlineFrame('grade-frame');
-      inlineFrame('ticket-frame');
-    } else {
-      autoHeight('grade-frame');
-      autoHeight('ticket-frame');
-    }
+    inlineFrame('grade-frame');
+    inlineFrame('ticket-frame');
   });
 })();
 </script>
