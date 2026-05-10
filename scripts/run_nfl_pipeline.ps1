@@ -106,6 +106,10 @@ if (-not $SkipFetch) {
 
 if ($ok) { $ok = Run-Step "NFL Step 2 - Clean Props" $NFLDir ".\scripts\step2_clean_props.py" "" }
 if ($ok) { $ok = Run-Step "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
+if ($ok) {
+    $last5Args = "--season $DefenseSeason --output data\nfl_team_last5.csv"
+    $ok = Run-Step "NFL Step 4b - Team last-5 games (ESPN)" $NFLDir ".\scripts\step4b_team_last5_games.py" $last5Args
+}
 if ($ok) { $ok = Run-Step "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "" }
 if ($ok) { $ok = Run-Step "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
 if ($ok) { $ok = Run-Step "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output outputs\step7_nfl_ranked.xlsx" }

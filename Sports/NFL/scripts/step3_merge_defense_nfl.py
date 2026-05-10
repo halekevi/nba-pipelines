@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-NFL step3 — merge ESPN defense ranks (step4) onto the cleaned PrizePicks slate (step2).
+NFL step3 — merge ESPN defense ranks (step4) + optional team last-N form (step4b) onto step2.
 
 Adds:
   - opp_pass_def_rank  (opponent pass defense rank; 1 = stingiest)
   - team_pass_def_rank (player's team pass defense rank)
   - points_allowed_pg_opp (optional context)
+  - team_last5_* / opp_last5_* when --team-form CSV is present (from step4b_team_last5_games.py)
 
 Run from NFL/ with NFL_PIPELINE_ACTIVE=1.
 """
@@ -29,12 +30,53 @@ def _abbr(x: object) -> str:
     return str(x or "").strip().upper()
 
 
+# Align slate abbreviations with ESPN scoreboard (step4b)
+_SLATE_ABBR = {
+    "LA": "LAR",
+    "WAS": "WSH",
+    "JAC": "JAX",
+}
+
+
+def _abbr_form(x: object) -> str:
+    a = _abbr(x)
+    return _SLATE_ABBR.get(a, a)
+
+
+def _merge_team_form(df: pd.DataFrame, form_path: Path, team_col: str, opp_col: str) -> pd.DataFrame:
+    form = pd.read_csv(form_path, encoding="utf-8-sig")
+    if "team" not in form.columns:
+        print("[NFL step3] team form CSV missing 'team' column; skipping")
+        return df
+    form = form.copy()
+    form["team"] = form["team"].map(_abbr_form)
+
+    def _pref(pfx: str) -> pd.DataFrame:
+        ren = {c: f"{pfx}_{c}" for c in form.columns if c != "team"}
+        ren["team"] = f"_{pfx}_join"
+        return form.rename(columns=ren)
+
+    tj = _pref("team")
+    out = df.merge(tj, left_on=df[team_col].map(_abbr_form), right_on="_team_join", how="left")
+    out = out.drop(columns=["_team_join"], errors="ignore")
+    oj = _pref("opp")
+    out = out.merge(oj, left_on=out[opp_col].map(_abbr_form), right_on="_opp_join", how="left")
+    out = out.drop(columns=["_opp_join"], errors="ignore")
+    print(f"[NFL step3] merged team form from {form_path} ({len(form)} teams)")
+    return out
+
+
 def main() -> None:
     require_nfl_pipeline_active_or_exit()
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", default="data/outputs/step2_clean_props.csv")
     ap.add_argument("--defense", default="data/defense_rankings.csv")
+    ap.add_argument(
+        "--team-form",
+        default="data/nfl_team_last5.csv",
+        help="CSV from step4b_team_last5_games.py; omit or set empty to skip.",
+    )
     ap.add_argument("--output", default="data/outputs/step3_nfl_with_defense.csv")
     args = ap.parse_args()
 
@@ -79,6 +121,16 @@ def main() -> None:
     df["opp_pass_def_rank"] = o.map(lambda x: dmap.get(x, pd.NA))
     if pts_map:
         df["points_allowed_pg_opp"] = o.map(lambda x: pts_map.get(x, pd.NA))
+
+    tf = str(args.team_form or "").strip()
+    if tf:
+        form_p = Path(tf)
+        if not form_p.is_file():
+            form_p = Path(__file__).resolve().parents[1] / tf
+        if form_p.is_file():
+            df = _merge_team_form(df, form_p, team_col, opp_col)
+        else:
+            print(f"[NFL step3] team form not found ({tf}); skip last-5 merge")
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)

@@ -86,6 +86,14 @@ def main() -> None:
     l5o = pd.to_numeric(col("l5_over", "last5_over"), errors="coerce")
     l5u = pd.to_numeric(col("l5_under", "last5_under"), errors="coerce")
     dtr = col("def_tier")
+    tm_l5_rec = col("team_last5_record")
+    tm_l5_pf = pd.to_numeric(col("team_last5_pf_pg"), errors="coerce")
+    tm_l5_pa = pd.to_numeric(col("team_last5_pa_pg"), errors="coerce")
+    tm_l5_pm = pd.to_numeric(col("team_last5_margin_avg"), errors="coerce")
+    op_l5_rec = col("opp_last5_record")
+    op_l5_pf = pd.to_numeric(col("opp_last5_pf_pg"), errors="coerce")
+    op_l5_pa = pd.to_numeric(col("opp_last5_pa_pg"), errors="coerce")
+    op_l5_pm = pd.to_numeric(col("opp_last5_margin_avg"), errors="coerce")
 
     clean = pd.DataFrame(
         {
@@ -105,6 +113,14 @@ def main() -> None:
             "Hit Rate (5g)": hr,
             "L5 Over": l5o,
             "L5 Under": l5u,
+            "Team L5": tm_l5_rec,
+            "Tm L5 PF/G": tm_l5_pf.round(1),
+            "Tm L5 PA/G": tm_l5_pa.round(1),
+            "Tm L5 +/-": tm_l5_pm.round(1),
+            "Opp L5": op_l5_rec,
+            "Opp L5 PF/G": op_l5_pf.round(1),
+            "Opp L5 PA/G": op_l5_pa.round(1),
+            "Opp L5 +/-": op_l5_pm.round(1),
             "Def Tier": dtr,
         }
     )
