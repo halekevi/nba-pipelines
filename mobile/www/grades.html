@@ -62,12 +62,23 @@ html.page-grades-root body.page-grades{
   overscroll-behavior-y:contain;
 }
 html.page-grades-root body.page-grades .grades-page,
-html.page-grades-root body.page-grades .grades-body,
 html.page-grades-root body.page-grades .iframe-shell{
   display:block!important;
   height:auto!important;
   overflow:visible!important;
   flex:none!important;
+}
+/* Desktop: clip iframe stage (avoids double ALL SPORTS / dead space). Mobile WebView: visible for scroll. */
+html.page-grades-root body.page-grades .grades-body{
+  display:block!important;
+  height:auto!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+@media (max-width:900px){
+  html.page-grades-root body.page-grades .grades-body{
+    overflow:visible!important;
+  }
 }
 /* Stage: do NOT use height:auto!important — syncGradeFrameHeight / syncTicketFrameHeight / syncPropsEvalHeight set inline height in px. */
 html.page-grades-root body.page-grades .iframe-shell-stage{
@@ -166,7 +177,7 @@ body::after{
   opacity:.55;
 }
 .grades-page{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
-.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:visible;}
+.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
 .gold-shimmer{background:linear-gradient(to bottom,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent;}
 
 /* nav — flush to viewport top (matches Tickets) */
