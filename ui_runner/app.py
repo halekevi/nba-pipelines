@@ -19,6 +19,7 @@ if sys.platform == "win32":
         pass
 
 import gzip
+import hashlib
 import io
 import json
 import logging
@@ -30,8 +31,10 @@ import time
 import uuid
 import threading
 import subprocess
+import tempfile
 import urllib.error
 import urllib.request
+import zipfile
 from urllib.parse import quote
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -219,6 +222,36 @@ def _deploy_git_sha_short() -> str:
     return (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "").strip()[:40]
 
 
+# Capacitor DIY OTA: zip of repo `mobile/www` (must exist on the deploy host).
+_MOBILE_WWW_DIR = BASE_DIR / "mobile" / "www"
+
+
+def _mobile_www_bundle_fingerprint() -> tuple[str, bool]:
+    """
+    Short content fingerprint for mobile/www (stable order, skips dotfiles).
+    Returns (hex_digest_prefix, dir_ok).
+    """
+    root = _MOBILE_WWW_DIR
+    if not root.is_dir():
+        return "", False
+    files = [p for p in root.rglob("*") if p.is_file()]
+    files.sort(key=lambda p: p.relative_to(root).as_posix())
+    h = hashlib.sha256()
+    for p in files:
+        rel = p.relative_to(root).as_posix()
+        if rel.split("/")[0].startswith("."):
+            continue
+        try:
+            st = p.stat()
+        except OSError:
+            continue
+        h.update(rel.encode("utf-8", errors="replace"))
+        h.update(str(st.st_size).encode("ascii", errors="ignore"))
+        h.update(str(int(st.st_mtime_ns)).encode("ascii", errors="ignore"))
+        h.update(b"\n")
+    return h.hexdigest()[:32], True
+
+
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
 _STATIC_EXTS  = (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".ico", ".woff", ".woff2")
@@ -226,6 +259,10 @@ _STATIC_EXTS  = (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"
 @app.after_request
 def post_process_response(response):
     response.headers.setdefault("X-PropOracle-Build", _UI_BUILD_ID)
+    if request.path.startswith("/api/mobile/bundle"):
+        response.headers.setdefault("Access-Control-Allow-Origin", "*")
+        response.headers.setdefault("Access-Control-Allow-Methods", "GET, OPTIONS")
+        response.headers.setdefault("Access-Control-Allow-Headers", "*")
     # Cache static CSS/JS for 1 hour (images/fonts keep same policy)
     if request.path.startswith("/static/") and any(request.path.endswith(e) for e in _STATIC_EXTS):
         if "Cache-Control" not in response.headers:
@@ -3129,6 +3166,70 @@ def api_mobile_upload_data():
         return jsonify({"ok": True, "saved": filename})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/mobile/bundle-version", methods=["OPTIONS"])
+@app.route("/api/mobile/bundle.zip", methods=["OPTIONS"])
+def api_mobile_bundle_options():
+    r = make_response("", 204)
+    r.headers["Access-Control-Allow-Origin"] = "*"
+    r.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    r.headers["Access-Control-Allow-Headers"] = "*"
+    return r
+
+
+@app.get("/api/mobile/bundle-version")
+def api_mobile_bundle_version():
+    """Fingerprint of deployed `mobile/www` for Capacitor OTA (DIY Live Update)."""
+    ver, ok = _mobile_www_bundle_fingerprint()
+    if not ok:
+        return jsonify({"ok": False, "error": "mobile_www_missing", "version": ""}), 404
+    return jsonify(
+        {
+            "ok": True,
+            "version": ver,
+            "deploy_sha": _deploy_git_sha_short(),
+        }
+    )
+
+
+@app.get("/api/mobile/bundle.zip")
+def api_mobile_bundle_zip():
+    """Zip of `mobile/www` for OTA install into Android app files dir (see OtaBundlePlugin)."""
+    root = _MOBILE_WWW_DIR
+    ver, ok = _mobile_www_bundle_fingerprint()
+    if not ok:
+        abort(404)
+    cache_root = Path(tempfile.gettempdir()) / "proporacle_mobile_bundles"
+    cache_root.mkdir(parents=True, exist_ok=True)
+    zip_path = cache_root / f"mobile-www-{ver}.zip"
+    if not zip_path.is_file():
+        partial = zip_path.with_suffix(".zip.partial")
+        try:
+            with zipfile.ZipFile(partial, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                files = [p for p in root.rglob("*") if p.is_file()]
+                files.sort(key=lambda p: p.relative_to(root).as_posix())
+                for p in files:
+                    rel = p.relative_to(root).as_posix()
+                    if rel.split("/")[0].startswith("."):
+                        continue
+                    zf.write(p, rel)
+            partial.replace(zip_path)
+        except Exception:
+            try:
+                if partial.exists():
+                    partial.unlink()
+            except OSError:
+                pass
+            raise
+    resp = send_file(
+        zip_path,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name="proporacle-mobile-www.zip",
+    )
+    resp.headers["Cache-Control"] = "public, max-age=300"
+    return resp
 
 
 # ──────────────────────────────────────────────────────────────────────────────

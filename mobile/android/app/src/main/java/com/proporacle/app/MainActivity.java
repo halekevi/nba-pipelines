@@ -13,6 +13,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(OtaBundlePlugin.class);
         super.onCreate(savedInstanceState);
 
         // Ensure fresh bundled assets are shown after sync/reinstall.

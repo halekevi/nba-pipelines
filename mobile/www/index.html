@@ -21,6 +21,7 @@ async function fetch_smart(localPath) {
 }
 </script>
 
+<script defer src="static/proporacle-ota.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
 <script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
@@ -978,23 +979,6 @@ body::before{
 <link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260430schemapage"/>
 <link rel="stylesheet" href="static/mobile-content-width.css?v=20260430schemapage"/>
 <link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
-<!-- Capacitor native feel -->
-<style>
-  * { -webkit-user-select: none; user-select: none; }
-  input, textarea, [contenteditable] { -webkit-user-select: text; user-select: text; }
-  body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
-</style>
-<script>
-  // Prevent context menu (long press)
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  // Prevent double-tap zoom
-  let lastTap = 0;
-  document.addEventListener('touchend', function(e) {
-    const now = Date.now();
-    if (now - lastTap < 300) e.preventDefault();
-    lastTap = now;
-  }, { passive: false });
-</script>
 </head>
 <body>
 

@@ -21,8 +21,9 @@
 #
 # Verify live revision: View Source on home → <meta name="proporacle-build" ...> or curl -I /ping → X-PropOracle-Build
 #
-# Mobile (Capacitor): the Android app loads this same deployment via server.url — no new APK
-# is required for template/CSS/Flask changes once this service redeploys from main.
+# Mobile (Capacitor): bundled APK + optional DIY OTA — GET /api/mobile/bundle-version and
+# /api/mobile/bundle.zip (zip of repo mobile/www). Enable in the app via ota-config.json from
+# generate_mobile_bundle (PROPORACLE_OTA_BASE_URL). No Play Store required for web asset updates.
 
 [build]
 builder = "NIXPACKS"

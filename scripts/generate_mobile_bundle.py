@@ -13,6 +13,23 @@ if str(_ROOT_FOR_UTILS) not in sys.path:
 from utils.proporacle_data_root import grade_history_read_paths  # noqa: E402
 
 
+def _write_ota_config(mobile_www: Path) -> None:
+    """Enable Capacitor DIY OTA when PROPORACLE_OTA_BASE_URL is set (Railway public URL, no trailing slash)."""
+    raw_base = (os.environ.get("PROPORACLE_OTA_BASE_URL") or "").strip().rstrip("/")
+    flag = (os.environ.get("PROPORACLE_OTA_ENABLED") or "").strip().lower()
+    if flag in ("0", "false", "no", "off"):
+        enabled = False
+    elif raw_base:
+        enabled = True
+    else:
+        enabled = flag in ("1", "true", "yes", "on")
+    payload = {"enabled": bool(enabled and raw_base), "baseUrl": raw_base}
+    (mobile_www / "ota-config.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def _first_existing_path(candidates):
     for p in candidates:
         if p is not None and Path(p).exists():
@@ -410,7 +427,8 @@ async function fetch_smart(localPath) {
 }
 </script>
 """
-                content = content.replace("<head>", f"<head>\n{smart_fetch_js}")
+                ota_js = '<script defer src="static/proporacle-ota.js"></script>'
+                content = content.replace("<head>", f"<head>\n{smart_fetch_js}\n{ota_js}")
             elif dest_name == "income.html":
                 # Jinja strips can leave invalid JS in static bundle.
                 content = re.sub(r"const\s+points\s*=\s*;", "const points = [];", content)
@@ -965,6 +983,8 @@ async function fetch_smart(localPath) {
         json.dumps(_build_mobile_sport_breakdown(TEMPLATES_DIR), ensure_ascii=True, indent=2),
         encoding="utf-8",
     )
+
+    _write_ota_config(MOBILE_WWW_DIR)
 
     print("Mobile bundle generation complete.")
 
