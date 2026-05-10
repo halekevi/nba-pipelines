@@ -3,6 +3,7 @@
 	"appName": "PropORACLE",
 	"webDir": "www",
 	"server": {
-		"androidScheme": "https"
+		"androidScheme": "https",
+		"url": "https://web-production-f280f.up.railway.app"
 	}
 }
