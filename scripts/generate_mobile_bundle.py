@@ -310,6 +310,21 @@ def generate_bundle():
     if (path.includes('/api/grades/report_dates')) {
       return _origFetch('grades_report_dates.json', init);
     }
+    if (path.includes('/api/uniform-tickets/dates')) {
+      return _origFetch('uniform_tickets_dates.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/backtest')) {
+      return _origFetch('uniform_tickets_backtest.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/latest')) {
+      return _origFetch('uniform_tickets_latest.json', init);
+    }
+    {
+      const m = path.match(/\\/api\\/uniform-tickets\\/(\\d{4}-\\d{2}-\\d{2})$/);
+      if (m) {
+        return _origFetch(`uniform_tickets_${m[1]}.json`, init);
+      }
+    }
     if (path.includes('/api/grades/insights')) {
       return _jsonResp({ calibration: [], clv_by_sport: [], edge_bucket_hit_rate: [], clv_by_prop_type: [], clv_by_tier: [] });
     }
@@ -418,7 +433,10 @@ async function fetch_smart(localPath) {
             const losses = Number(r.losses ?? 0);
             const decided = Math.max(0, wins + losses);
             const paid = Math.max(0, wins + guarantees);
-            const net = Number(r.net_dollars ?? r.net_per_10 ?? 0);
+            // net_per_10 is per-ticket avg ($-per-$10-stake). Multiply by tickets to get day total.
+            const net = (r.net_dollars != null)
+              ? Number(r.net_dollars)
+              : (r.net_per_10 != null ? tickets * Number(r.net_per_10) : 0);
             const roi = Number(r.roi_pct ?? ((tickets > 0) ? (net / (tickets * 10) * 100) : 0));
             return {
               date: String(r.date || ''),
@@ -584,6 +602,33 @@ async function fetch_smart(localPath) {
                     'href="tickets.html" class=""',
                     'href="tickets.html" class="active"'
                 )
+                # Offline/mobile: shim Uniform-tickets API to local JSON files.
+                tickets_mobile_bootstrap = """
+<script>
+(function () {
+  const _origFetch = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    const urlStr = (typeof input === 'string') ? input : (input && input.url ? input.url : String(input || ''));
+    const path = urlStr.replace(window.location.origin, '');
+    if (path.includes('/api/uniform-tickets/dates')) {
+      return _origFetch('uniform_tickets_dates.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/backtest')) {
+      return _origFetch('uniform_tickets_backtest.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/latest')) {
+      return _origFetch('uniform_tickets_latest.json', init);
+    }
+    const m = path.match(/\\/api\\/uniform-tickets\\/(\\d{4}-\\d{2}-\\d{2})$/);
+    if (m) {
+      return _origFetch(`uniform_tickets_${m[1]}.json`, init);
+    }
+    return _origFetch(input, init);
+  };
+})();
+</script>
+"""
+                content = content.replace("</body>", tickets_mobile_bootstrap + "\n</body>")
             elif dest_name == "payout.html":
                 # Offline/mobile: rate cards must load from bundled JSON (no /api route in file:// mode).
                 content = content.replace(
@@ -637,6 +682,23 @@ async function fetch_smart(localPath) {
             archive_row_counts[stem] = len(rows) if isinstance(rows, list) else 0
         except Exception:
             archive_row_counts[stem] = 0
+
+    # Copy uniform-bucket ticket artifacts (built by build_uniform_tickets_artifacts.py).
+    uniform_ticket_dates = []
+    for ut in sorted(TEMPLATES_DIR.glob("uniform_tickets_*.json")):
+        shutil.copy2(ut, MOBILE_WWW_DIR / ut.name)
+        m = re.fullmatch(r"uniform_tickets_(\d{4}-\d{2}-\d{2})\.json", ut.name)
+        if m:
+            uniform_ticket_dates.append(m.group(1))
+    if uniform_ticket_dates and not (MOBILE_WWW_DIR / "uniform_tickets_dates.json").exists():
+        (MOBILE_WWW_DIR / "uniform_tickets_dates.json").write_text(
+            json.dumps(
+                {"dates": sorted(set(uniform_ticket_dates), reverse=True)},
+                ensure_ascii=True,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
 
     # Lightweight local replacement for /api/grades/report_dates.
     report_dates_payload = {

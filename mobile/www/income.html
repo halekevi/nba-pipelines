@@ -176,7 +176,7 @@
   <main class="income-wrap">
     <section class="hero">
       <h1>P&L Log</h1>
-      <p>Flat stake model: $10 per ticket. Rows append when <code>build_ticket_eval.py</code> runs after grading; static bundle uses <code>data/grade_history.json</code>.</p>
+      <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
     </section>
 
     <section class="summary-grid">
@@ -237,7 +237,7 @@
         </tbody>
       </table>
       
-      <div class="empty-note">No rows found in <code>data/grade_history.json</code>.</div>
+      <div class="empty-note">No rows found in <code>grade_history.json</code> (check DATA_ROOT, <code>data/</code>, or bundled templates).</div>
       
     </section>
 
@@ -330,7 +330,10 @@
             const losses = Number(r.losses ?? 0);
             const decided = Math.max(0, wins + losses);
             const paid = Math.max(0, wins + guarantees);
-            const net = Number(r.net_dollars ?? r.net_per_10 ?? 0);
+            // net_per_10 is per-ticket avg ($-per-$10-stake). Multiply by tickets to get day total.
+            const net = (r.net_dollars != null)
+              ? Number(r.net_dollars)
+              : (r.net_per_10 != null ? tickets * Number(r.net_per_10) : 0);
             const roi = Number(r.roi_pct ?? ((tickets > 0) ? (net / (tickets * 10) * 100) : 0));
             return {
               date: String(r.date || ''),
