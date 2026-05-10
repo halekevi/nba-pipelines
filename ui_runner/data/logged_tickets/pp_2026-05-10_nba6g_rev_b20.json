@@ -1,0 +1,143 @@
+{
+  "ticket_id": "pp_2026-05-10_nba6g_rev_b20",
+  "date": "2026-05-10",
+  "logged_at": "2026-05-10T08:37:45",
+  "sport": "NBA",
+  "platform": "PrizePicks",
+  "product": "Reversion",
+  "n_legs": 6,
+  "stake": 20.0,
+  "to_win": 50.0,
+  "payout_multiplier": 2.5,
+  "slip_type": "reversion",
+  "result": "PENDING",
+  "all_goblins": true,
+  "legs": [
+    {
+      "slot": 1,
+      "player": "Paul George",
+      "team": "PHI",
+      "opp": "NYK",
+      "prop": "Points",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 11.5,
+      "standard_line": 15.5,
+      "delta_below_standard": 4.0,
+      "delta_pct": 25.81,
+      "context": {
+        "tier": "A",
+        "edge": 7.0,
+        "hit_rate_5g": 1.0,
+        "l5_over": 5,
+        "l5_under": 0,
+        "avg_l5": 17.6
+      }
+    },
+    {
+      "slot": 2,
+      "player": "VJ Edgecombe",
+      "team": "PHI",
+      "opp": "NYK",
+      "prop": "Pts+Asts",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 11.5,
+      "standard_line": 15.5,
+      "delta_below_standard": 4.0,
+      "delta_pct": 25.81,
+      "context": {
+        "tier": "A",
+        "edge": 7.74,
+        "hit_rate_5g": 1.0,
+        "l5_over": 5,
+        "l5_under": 0,
+        "avg_l5": 18.2
+      }
+    },
+    {
+      "slot": 3,
+      "player": "Keldon Johnson",
+      "team": "SAS",
+      "opp": "MIN",
+      "prop": "Points",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 4.5,
+      "standard_line": 9.5,
+      "delta_below_standard": 5.0,
+      "delta_pct": 52.63,
+      "context": {
+        "tier": "A",
+        "edge": 4.9,
+        "hit_rate_5g": 1.0,
+        "l5_over": 5,
+        "l5_under": 0,
+        "avg_l5": 8.2
+      }
+    },
+    {
+      "slot": 4,
+      "player": "Naz Reid",
+      "team": "MIN",
+      "opp": "SAS",
+      "prop": "Pts+Rebs",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 13.5,
+      "standard_line": 18.5,
+      "delta_below_standard": 5.0,
+      "delta_pct": 27.03,
+      "context": {
+        "tier": "A",
+        "edge": 6.45,
+        "hit_rate_5g": 1.0,
+        "l5_over": 5,
+        "l5_under": 0,
+        "avg_l5": 21.4
+      }
+    },
+    {
+      "slot": 5,
+      "player": "Julian Champagnie",
+      "team": "SAS",
+      "opp": "MIN",
+      "prop": "Pts+Rebs",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 9.5,
+      "standard_line": 14.5,
+      "delta_below_standard": 5.0,
+      "delta_pct": 34.48,
+      "context": {
+        "tier": "A",
+        "edge": 8.09,
+        "hit_rate_5g": 1.0,
+        "l5_over": 5,
+        "l5_under": 0,
+        "avg_l5": 18.2
+      }
+    },
+    {
+      "slot": 6,
+      "player": "Ayo Dosunmu",
+      "team": "MIN",
+      "opp": "SAS",
+      "prop": "Points",
+      "direction": "MORE",
+      "pick_type": "Goblin",
+      "played_line": 7.5,
+      "standard_line": 11.5,
+      "delta_below_standard": 4.0,
+      "delta_pct": 34.78,
+      "context": {
+        "tier": "A",
+        "edge": 10.95,
+        "hit_rate_5g": 0.8,
+        "l5_over": 4,
+        "l5_under": 1,
+        "avg_l5": 19.0
+      }
+    }
+  ]
+}
