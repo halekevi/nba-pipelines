@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="static/global-scrollbar.css?v=20260416"/>
 <link rel="stylesheet" href="static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="static/proporacle-mobile-schema.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="static/uniform-tickets-panel.css?v=20260509utp1"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -53,26 +54,71 @@ html.page-grades-root,
 html.page-grades-root body.page-grades{
   display:block!important;
   height:auto!important;
+  min-height:100%!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
   overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
 }
 html.page-grades-root body.page-grades .grades-page,
 html.page-grades-root body.page-grades .grades-body,
-html.page-grades-root body.page-grades .iframe-shell,
-html.page-grades-root body.page-grades .iframe-shell-stage{
+html.page-grades-root body.page-grades .iframe-shell{
   display:block!important;
   height:auto!important;
   overflow:visible!important;
   flex:none!important;
 }
+/* Stage: do NOT use height:auto!important — syncGradeFrameHeight / syncTicketFrameHeight / syncPropsEvalHeight set inline height in px. */
+html.page-grades-root body.page-grades .iframe-shell-stage{
+  display:block!important;
+  overflow:visible!important;
+  flex:none!important;
+  position:relative!important;
+  min-height:min(45vh,520px);
+}
+/* Slate/ticket iframes: normal flow so stage height follows iframe (absolute+height:100% often leaves empty bands). */
+html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  height:auto;
+  min-height:min(50dvh,680px);
+  z-index:0!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+/* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
+body.page-grades .iframe-shell-stage{
+  min-height:min(45vh,520px);
+  position:relative;
+  overflow:visible;
+}
+body.page-grades .iframe-shell-stage > iframe.grade-frame{
+  position:relative;
+  inset:auto;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  min-height:min(50dvh,680px);
+  z-index:0;
+}
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
 html.page-grades-root #props-eval-panel{
-  overflow:visible!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
   height:auto!important;
   position:relative!important;
   inset:auto!important;
   width:100%!important;
   max-width:100%!important;
+}
+html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
@@ -212,7 +258,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .iframe-shell-toolbar{
-  position:sticky;top:0;z-index:30;
+  position:sticky;top:0;z-index:60;
   flex-shrink:0;padding:8px 12px 2px;border-bottom:1px solid var(--glass-panel-border);
   display:flex;flex-direction:column;gap:6px;
   background:rgba(255,255,255,0.02);
@@ -319,7 +365,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.02vw,17px);}
 .insights-table-host th,.insights-table-host td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);}
 .insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(13px,0.92vw,15px);text-transform:uppercase;letter-spacing:0.06em;}
-/* Match server hub: do not zero iframe opacity during load — if .loading is not cleared, the slate looks blank. */
+/* Do not hide iframe during load — if .loading is not cleared, opacity:0 reads as a blank page. Overlay covers load. */
 .grade-frame.loading{opacity:1;}
 
 /* loading */
@@ -418,50 +464,54 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar-right{display:none;}
   .tabs-bar{margin-left:12px;margin-right:12px;padding:6px 8px;min-height:38px;}
   .dpill{font-size:10px;padding:6px 9px;}
-  /* Narrow phones: 2×2 tab grid so all four tabs stay fully visible without horizontal scroll */
+  /* Narrow phones: single horizontal tab row (scroll) — saves vertical space vs 2×2 grid */
   .tabs-bar{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
     gap:6px;
-    overflow-x:visible;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
     width:100%;
     max-width:100%;
     min-width:0;
     box-sizing:border-box;
     align-items:stretch;
-    justify-items:stretch;
+    justify-content:flex-start;
   }
   .tabs-bar .tab-btn{
-    display:flex;
-    flex-direction:column;
-    width:100%;
-    max-width:100%;
+    display:inline-flex;
+    flex-direction:row;
+    flex:0 0 auto;
+    width:auto;
+    max-width:none;
     min-width:0;
-    min-height:0;
+    min-height:38px;
     box-sizing:border-box;
     justify-content:center;
     align-items:center;
     text-align:center;
-    font-size:clamp(10px,2.8vw,12px);
-    padding:8px 4px;
-    white-space:normal;
-    line-height:1.2;
+    font-size:clamp(9px,2.5vw,11px);
+    padding:7px 10px;
+    white-space:nowrap;
+    line-height:1.15;
     gap:5px;
     letter-spacing:0.04em;
     border-radius:12px;
     border:2px solid rgba(255,255,255,0.06);
     overflow:hidden;
-    word-break:break-word;
-    hyphens:none;
+    text-overflow:ellipsis;
   }
   .tabs-bar .tab-btn.active{
     border-color:rgba(212,160,23,0.65);
     box-shadow:0 0 20px rgba(212,160,23,0.2),inset 0 -2px 0 var(--accent-gold);
   }
   .tabs-bar .tab-icon{
-    width:18px;
-    height:18px;
-    font-size:14px;
+    width:16px;
+    height:16px;
+    font-size:13px;
     flex-shrink:0;
     line-height:1;
   }
@@ -1240,29 +1290,32 @@ select option,
         <div class="grades-scroll-hide-inner">
           <div class="date-bar">
             <span class="date-bar-label">REPORT DATE</span>
-            <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="window.parent.stepDate(-1)">&#8249;</button>
+            <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
             <div class="date-pills" id="date-pills">
               <!-- Pills injected by JS -->
             </div>
-            <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="window.parent.stepDate(1)">&#8250;</button>
+            <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="stepDate(1)">&#8250;</button>
             <div class="date-sep"></div>
             <div class="date-bar-right">
               <div class="date-input-wrap">
                 <span class="date-input-label">JUMP TO</span>
                 <input type="date" class="date-input" id="date-jump" />
-                <button type="button" class="date-go-btn" onclick="window.parent.jumpToDate()">GO</button>
+                <button type="button" class="date-go-btn" onclick="jumpToDate()">GO</button>
               </div>
             </div>
           </div>
           <div class="tabs-bar">
-            <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
+            <button type="button" class="tab-btn active" id="tab-slate" onclick="switchTab('slate')">
               <span class="tab-icon">📋</span>SLATE EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-props" onclick="window.parent.switchTab('props')">
+            <button type="button" class="tab-btn" id="tab-props" onclick="switchTab('props')">
               <span class="tab-icon">🎯</span>PROP EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
+            <button type="button" class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
+            </button>
+            <button type="button" class="tab-btn" id="tab-uniform" onclick="switchTab('uniform')">
+              <span class="tab-icon">🎫</span>UNIFORM TICKETS
             </button>
           </div>
         </div>
@@ -1327,6 +1380,77 @@ select option,
       <p class="insights-card-sub" id="props-eval-foot" style="margin-top:8px;"></p>
     </div>
   </div>
+  <div id="uniform-tickets-panel" class="grades-analytics-wrap" hidden aria-label="Uniform-bucket tickets for the report date">
+    
+<div class="utp-root">
+  <button type="button" class="utp-toggle" data-utp="toggle" aria-expanded="false">
+    <span class="utp-toggle-icon">🎫</span>
+    <span>Uniform-Bucket Tickets</span>
+    <span class="utp-toggle-meta">Today's tickets grouped by realized hit-rate band</span>
+  </button>
+  <section class="utp-panel" hidden>
+    <div class="utp-panel-head">
+      <h3 class="utp-panel-title" data-utp="title">Uniform Tickets</h3>
+      <div class="utp-panel-sub">
+        Multi-leg slips assembled from <code>strict_mode</code> picks where every leg lives in
+        the same hit-rate band (Elite / Premium / Strong / Value). Backtest tab shows realized
+        joint hit rates and EV across all graded dates.
+      </div>
+      <div class="utp-tabs">
+        <button type="button" class="active" data-utp-tab="today">Today</button>
+        <button type="button" data-utp-tab="backtest">Backtest</button>
+      </div>
+    </div>
+
+    <div data-utp="today-wrap">
+      <div class="utp-controls">
+        <label>Date
+          <input type="date" data-utp="date-input"/>
+        </label>
+        <label>Showing
+          <span data-utp="date-label" style="color:var(--utp-text);font-weight:600;">—</span>
+        </label>
+        <label>Size
+          <select data-utp="size-filter">
+            <option value="">All sizes</option>
+            <option value="2">2-leg</option>
+            <option value="3">3-leg</option>
+            <option value="4">4-leg</option>
+            <option value="5">5-leg</option>
+            <option value="6">6-leg</option>
+          </select>
+        </label>
+        <label>Bucket
+          <select data-utp="bucket-filter">
+            <option value="all">All buckets</option>
+            <option value="elite">Elite</option>
+            <option value="premium">Premium</option>
+            <option value="strong">Strong</option>
+            <option value="value">Value</option>
+          </select>
+        </label>
+      </div>
+      <div data-utp="summary-host"></div>
+      <div data-utp="tickets-host"></div>
+      <div class="utp-foot" data-utp="foot"></div>
+    </div>
+
+    <div data-utp="backtest-wrap" hidden>
+      <p class="utp-panel-sub" style="margin-bottom:10px;">
+        Rolling per-(size, bucket) joint hit rate and EV on $1 stakes, computed from all
+        graded slates the assembler has touched. <strong>PrizePicks void rule:</strong>
+        when ≥1 leg voids (DNP / no action), the slip drops that leg and pays at the
+        next-smaller tier when remaining legs all hit (e.g., 5-leg with 1 void → 4-leg
+        all-hit payout). The <em>Eff Pay</em> column is the average realized multiplier
+        after that adjustment; <em>Wilson Low</em> is the 95% confidence floor on the
+        realized hit rate.
+      </p>
+      <div data-utp="backtest-host"></div>
+    </div>
+  </section>
+</div>
+
+  </div>
   </div><!-- /.iframe-shell-stage -->
 </div>
 </div><!-- /.grades-body -->
@@ -1366,7 +1490,7 @@ function slateIframeDocLooksReady(doc) {
     if (
       doc.querySelector(
         '.main, header, .sport-section, .sport-collapsible, .slate-header-top, .logo-title, ' +
-          'table.matrix-body, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
+          'table, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
           'details.sport-collapsible, .sport-meta-count, .chip-goblin, .mesh-bg'
       )
     ) {
@@ -2448,8 +2572,14 @@ function switchTab(tab) {
     try {
       const st = document.querySelector('.iframe-shell-stage');
       const sh = document.getElementById('grades-iframe-shell');
-      if (st) st.style.removeProperty('height');
-      if (sh) sh.style.removeProperty('height');
+      if (st) {
+        st.style.removeProperty('height');
+        st.style.removeProperty('min-height');
+      }
+      if (sh) {
+        sh.style.removeProperty('height');
+        sh.style.removeProperty('min-height');
+      }
     } catch (_e) {}
   }
   const shell = document.getElementById('grades-iframe-shell');
@@ -2460,13 +2590,17 @@ function switchTab(tab) {
   const ts = gradesEl('tab-slate');
   const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
+  const tu = gradesEl('tab-uniform');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
+  if (tu) tu.classList.toggle('active', tab === 'uniform');
   const pe = document.getElementById('props-eval-panel');
+  const utp = document.getElementById('uniform-tickets-panel');
   gradeFrame.style.display = tab === 'slate' ? 'block' : 'none';
   ticketFrame.style.display = tab === 'tickets' ? 'block' : 'none';
   if (pe) pe.hidden = tab !== 'props';
+  if (utp) utp.hidden = tab !== 'uniform';
   const tEmpty = document.getElementById('ticket-empty-state');
   if (tEmpty) tEmpty.hidden = true;
 
@@ -2474,9 +2608,16 @@ function switchTab(tab) {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
-  if (tab === 'props') {
+  if (tab === 'uniform') {
     hideGradesHubLoadOverlay();
-    document.getElementById('empty-state').hidden = true;
+    const es0u = document.getElementById('empty-state');
+    if (es0u) es0u.hidden = true;
+    const dsU = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
+    syncUniformTicketsDate(dsU);
+  } else if (tab === 'props') {
+    hideGradesHubLoadOverlay();
+    const es0 = document.getElementById('empty-state');
+    if (es0) es0.hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     scheduleSyncPropsEvalHeight();
     loadGradesProps(ds).finally(function () {
@@ -2489,7 +2630,8 @@ function switchTab(tab) {
     }, 0);
   } else if (tab === 'tickets') {
     hideGradesHubLoadOverlay();
-    document.getElementById('empty-state').hidden = true;
+    const es1 = document.getElementById('empty-state');
+    if (es1) es1.hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
     requestAnimationFrame(function () {
@@ -2663,7 +2805,7 @@ async function loadTicketEval(dateStr) {
     const abs = new URL(url, window.location.href).href;
     const cur = String(tf.getAttribute('src') || tf.src || '');
     sameDoc =
-      (cur === abs || cur.includes('ticket_eval_' + dateStr + '.html')) &&
+      (cur === abs || cur.includes('/grades/ticket_eval_' + dateStr + '.html')) &&
       ticketIframeDocLooksReady(tf.contentDocument);
   } catch (_e6) {
     sameDoc = false;
@@ -2943,13 +3085,9 @@ function syncPropsEvalHeight() {
   try {
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
-    const stage = document.querySelector('.iframe-shell-stage');
-    const shell = document.getElementById('grades-iframe-shell');
     const gp = document.querySelector('.grades-page');
     const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
-    if (stage) stage.style.height = hPx;
-    if (shell) shell.style.height = hPx;
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -2978,9 +3116,14 @@ function syncGradeFrameHeight(frame) {
       const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
       if (bottom > maxBottom) maxBottom = bottom;
     });
+    const scrollH = Math.max(
+      doc.body ? doc.body.scrollHeight : 0,
+      doc.documentElement.scrollHeight || 0,
+      doc.documentElement.offsetHeight || 0
+    );
     const h = Math.max(
       Math.ceil(maxBottom + 24),
-      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      scrollH,
       300
     );
     const hPx = Math.ceil(h) + 'px';
@@ -3023,18 +3166,19 @@ function syncTicketFrameHeight(frame) {
       const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
       if (bottom > maxBottom) maxBottom = bottom;
     });
+    const scrollH = Math.max(
+      doc.body ? doc.body.scrollHeight : 0,
+      doc.documentElement.scrollHeight || 0,
+      doc.documentElement.offsetHeight || 0
+    );
     const h = Math.max(
       Math.ceil(maxBottom + 24),
-      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      scrollH,
       300
     );
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
-    const stage = document.querySelector('.iframe-shell-stage');
-    const shell = document.getElementById('grades-iframe-shell');
     const gp = document.querySelector('.grades-page');
-    if (stage) stage.style.height = hPx;
-    if (shell) shell.style.height = hPx;
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -3280,7 +3424,34 @@ function loadDate(dateStr){
   if (activeTab === 'props') {
     loadGradesProps(dateStr);
   }
+  if (activeTab === 'uniform') {
+    syncUniformTicketsDate(dateStr);
+  }
   refreshControlsSummary();
+}
+
+// ─── UNIFORM TICKETS tab integration ──────────────────────────────────────────
+function syncUniformTicketsDate(dateStr) {
+  try {
+    const root = document.querySelector('#uniform-tickets-panel .utp-root');
+    if (!root) return;
+    // Auto-expand the inner panel the first time the tab is opened on Grades.
+    const toggle = root.querySelector('[data-utp="toggle"]');
+    const panel = root.querySelector('.utp-panel');
+    if (toggle && panel && panel.hasAttribute('hidden')) {
+      toggle.click();
+    }
+    if (!dateStr) return;
+    const tryApply = (attempts) => {
+      const ctrl = root.__utp;
+      if (ctrl && typeof ctrl.setDate === 'function') {
+        ctrl.setDate(dateStr);
+        return;
+      }
+      if (attempts > 0) setTimeout(() => tryApply(attempts - 1), 150);
+    };
+    tryApply(20);
+  } catch (_e) {}
 }
 
 // ─── DATE NAV ─────────────────────────────────────────────────────────────────
@@ -3556,6 +3727,7 @@ window.addEventListener('resize', () => {
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+<script src="static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
 
 
 <script>
@@ -3591,6 +3763,21 @@ window.addEventListener('resize', () => {
 
     if (path.includes('/api/grades/report_dates')) {
       return _origFetch('grades_report_dates.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/dates')) {
+      return _origFetch('uniform_tickets_dates.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/backtest')) {
+      return _origFetch('uniform_tickets_backtest.json', init);
+    }
+    if (path.includes('/api/uniform-tickets/latest')) {
+      return _origFetch('uniform_tickets_latest.json', init);
+    }
+    {
+      const m = path.match(/\/api\/uniform-tickets\/(\d{4}-\d{2}-\d{2})$/);
+      if (m) {
+        return _origFetch(`uniform_tickets_${m[1]}.json`, init);
+      }
     }
     if (path.includes('/api/grades/insights')) {
       return _jsonResp({ calibration: [], clv_by_sport: [], edge_bucket_hit_rate: [], clv_by_prop_type: [], clv_by_tier: [] });
