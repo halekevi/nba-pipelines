@@ -6354,7 +6354,12 @@ def _load_step8_board_like(
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
-    df = _apply_l5_truth_from_stat_games(df, "NBA1Q")
+    # Step8 boards expose per-game stats as G1..G10; reconcile L5 from stat_g* only with a full 5-game window.
+    for _gi in range(1, 11):
+        _g, _sg = f"G{_gi}", f"stat_g{_gi}"
+        if _g in df.columns and _sg not in df.columns:
+            df[_sg] = pd.to_numeric(df[_g], errors="coerce")
+    df = _apply_l5_truth_from_stat_games(df, sport, min_stat_games=5)
     df = df.astype(object).where(df.notna(), other=None)
     return df
 

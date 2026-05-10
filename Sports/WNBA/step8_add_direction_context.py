@@ -125,6 +125,9 @@ def write_sheet(wb, name, data):
         'L5 Over': 8, 'L5 Under': 8,
         'Def Rank': 9, 'Def Tier': 10,
         'Min Tier': 9, 'Shot Role': 10, 'Usage Role': 10,
+        'Last 10 Avg': 10,
+        'G1': 6, 'G2': 6, 'G3': 6, 'G4': 6, 'G5': 6,
+        'G6': 6, 'G7': 6, 'G8': 6, 'G9': 6, 'G10': 6,
         'Void Reason': 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -135,6 +138,29 @@ def write_sheet(wb, name, data):
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     df2 = df.copy()
+    # Align L5 Over/Under and 5g hit rate with stat_g1..5 vs line (matches NBA step8; fixes sparse early-season rows).
+    g5_cols = [c for c in ("stat_g1", "stat_g2", "stat_g3", "stat_g4", "stat_g5") if c in df2.columns]
+    if g5_cols and "line" in df2.columns:
+        for c in ("last5_over", "last5_under"):
+            if c in df2.columns:
+                df2[c] = pd.to_numeric(df2[c], errors="coerce")
+        g5 = df2[g5_cols].apply(pd.to_numeric, errors="coerce")
+        line = pd.to_numeric(df2["line"], errors="coerce")
+        valid_n = g5.notna().sum(axis=1)
+        over_n = g5.gt(line, axis=0).sum(axis=1)
+        under_n = g5.lt(line, axis=0).sum(axis=1)
+        has_hist = valid_n > 0
+        if "last5_over" not in df2.columns:
+            df2["last5_over"] = np.nan
+        if "last5_under" not in df2.columns:
+            df2["last5_under"] = np.nan
+        df2.loc[has_hist, "last5_over"] = over_n[has_hist]
+        df2.loc[has_hist, "last5_under"] = under_n[has_hist]
+        if "line_hit_rate_over_ou_5" in df2.columns:
+            df2["line_hit_rate_over_ou_5"] = pd.to_numeric(df2["line_hit_rate_over_ou_5"], errors="coerce")
+            hr = (over_n / valid_n.replace(0, np.nan)).where(valid_n > 0)
+            df2.loc[has_hist, "line_hit_rate_over_ou_5"] = hr[has_hist]
+
     if "start_time" in df2.columns:
         et = _start_times_et(df2["start_time"])
         parsed_gd = et.dt.strftime("%Y-%m-%d").where(et.notna(), "").astype(str).str.strip()
@@ -165,6 +191,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'blended_score',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
+        'stat_last10_avg',
+        'stat_g1', 'stat_g2', 'stat_g3', 'stat_g4', 'stat_g5',
+        'stat_g6', 'stat_g7', 'stat_g8', 'stat_g9', 'stat_g10',
         'last5_over', 'last5_under',
         'OVERALL_DEF_RANK', 'DEF_TIER',
         'minutes_tier', 'shot_role', 'usage_role',
@@ -178,7 +207,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         if col in clean.columns:
             rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
-    for col in ['stat_last5_avg', 'stat_season_avg']:
+    for col in ['stat_last5_avg', 'stat_season_avg', 'stat_last10_avg']:
+        if col in clean.columns:
+            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(1)
+    for col in [f'stat_g{i}' for i in range(1, 11)]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(1)
     for col in ['last5_over', 'last5_under']:
@@ -201,6 +233,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'blended_score':      'Blended Score',
         'line_hit_rate_over_ou_5': 'Hit Rate (5g)',
         'stat_last5_avg': 'Last 5 Avg', 'stat_season_avg': 'Season Avg',
+        'stat_last10_avg': 'Last 10 Avg',
+        'stat_g1': 'G1', 'stat_g2': 'G2', 'stat_g3': 'G3',
+        'stat_g4': 'G4', 'stat_g5': 'G5', 'stat_g6': 'G6',
+        'stat_g7': 'G7', 'stat_g8': 'G8', 'stat_g9': 'G9', 'stat_g10': 'G10',
         'last5_over': 'L5 Over', 'last5_under': 'L5 Under',
         'OVERALL_DEF_RANK': 'Def Rank', 'DEF_TIER': 'Def Tier',
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
