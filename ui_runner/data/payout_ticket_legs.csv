@@ -168,3 +168,9 @@ date,ticket_id,slip_type,stake,payout_to_win,power_payout_x,sport,leg_slot,playe
 2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,4,Tyrese Maxey,Pts+Rebs,23.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
 2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,5,VJ Edgecombe,Pts+Rebs,14.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
 2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,6,Victor Wembanyama,Pts+Rebs,38.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,1,Tobias Harris,PRA,19.5,MORE,Demon,screenshot_manual,PrizePicks 6-pick Power May 9 2026; DET vs CLE final
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,2,Rui Hachimura,Pts+Asts,9.5,MORE,Demon,screenshot_manual,LAL @ OKC
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,3,Isaiah Joe,Points,1.5,MORE,Demon,screenshot_manual,
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,4,Marcus Smart,PRA,9.5,MORE,Demon,screenshot_manual,
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,5,Isaiah Hartenstein,Points,5.5,MORE,Demon,screenshot_manual,
+2026-05-09,pp_2026-05-09_nba6d,power,200,750,3.75,NBA,6,Duncan Robinson,PRA,9.5,MORE,Demon,screenshot_manual,DET vs CLE final
