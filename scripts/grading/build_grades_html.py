@@ -150,8 +150,23 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
                 for shname in wb.sheetnames:
                     rows.extend(read_sheet(wb[shname]))
         else:
-            for shname in wb.sheetnames:
-                rows.extend(read_sheet(wb[shname]))
+            # Tennis (and similar) writes the same rows to **graded** and **Box Raw** with no margin column.
+            # Loading both doubles counts and breaks Slate Evaluation rollups.
+            if (
+                "graded" in wb.sheetnames
+                and "Box Raw" in wb.sheetnames
+                and not _sheet_header_has_margin(wb["Box Raw"])
+            ):
+                g_rows = read_sheet(wb["graded"])
+                br_rows = read_sheet(wb["Box Raw"])
+                if len(g_rows) == len(br_rows) and len(g_rows) > 0:
+                    rows = g_rows
+                else:
+                    for shname in wb.sheetnames:
+                        rows.extend(read_sheet(wb[shname]))
+            else:
+                for shname in wb.sheetnames:
+                    rows.extend(read_sheet(wb[shname]))
     finally:
         wb.close()
     # Normalize common column name variants
@@ -227,6 +242,10 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
             print(f"  WARN: prop tier adjustments skipped for {path.name} ({type(e).__name__}: {e})")
 
         ndf["Tier"] = tier_series.astype(str).values
+        # Pick Type was only used for tier recompute; matrix / breakdowns need it on each row.
+        ps = pick_series.astype(str).str.strip()
+        ps = ps.replace({"": "Standard", "nan": "Standard", "None": "Standard"})
+        ndf["Pick Type"] = ps.values
         normalized = ndf.to_dict(orient="records")
     return normalized
 
@@ -533,7 +552,8 @@ def _norm_def_label(v: Any) -> str:
 
 def _map_pt_label(pick_type: Any, direction: Any) -> str | None:
     pt = _cell_str(pick_type).lower()
-    d = _cell_str(direction).upper()
+    dcan = normalize_bet_direction(direction)
+    d = dcan or _cell_str(direction).upper()
     is_over = d == "OVER"
     is_under = d == "UNDER"
     if "goblin" in pt:
@@ -711,10 +731,10 @@ def rows_for_pick_type(sub_rows: list[dict], pick_type: str) -> list[dict]:
 def over_under_lines_html(sub_rows: list[dict]) -> str:
     """▲ OVER / ▼ UNDER hit rates for any row subset (pick type bucket, tier bucket, def tier slice, etc.)."""
     over = overall_stats(
-        [r for r in sub_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
+        [r for r in sub_rows if normalize_bet_direction(row_bet_direction(r)) == "OVER"]
     )
     under = overall_stats(
-        [r for r in sub_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
+        [r for r in sub_rows if normalize_bet_direction(row_bet_direction(r)) == "UNDER"]
     )
     inner = ""
     if over["decided"] > 0:
@@ -780,11 +800,16 @@ def normalize_bet_direction(raw: object) -> str | None:
     for ch in ("\u25b2", "\u25bc", "\u2191", "\u2193", "▲", "▼"):
         t = t.replace(ch, "")
     t = re.sub(r"\s+", " ", t).strip()
-    if "UNDER" in t:
+    if "UNDER" in t or t == "LESS":
         return "UNDER"
-    if "OVER" in t:
+    if "OVER" in t or t == "MORE":
         return "OVER"
     return None
+
+
+def row_bet_direction(r: dict) -> object:
+    """Graded workbooks use Dir/Direction (most sports) or direction (tennis)."""
+    return r.get("Dir") or r.get("Direction") or r.get("direction")
 
 
 def _rows_for_def_subgrid_cell(
@@ -803,7 +828,7 @@ def _rows_for_def_subgrid_cell(
         pt = _norm_pick_type_matrix(r.get("Pick Type"))
         if pt != pick:
             continue
-        bd = normalize_bet_direction(r.get("Dir") or r.get("Direction"))
+        bd = normalize_bet_direction(row_bet_direction(r))
         if bd != direction:
             continue
         rk = str(r.get("Tier", "") or "").strip().upper()
@@ -948,7 +973,7 @@ def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str]
         tier = str(r.get("Tier", "") or "").strip().upper()
         if tier not in ("A", "B", "C", "D"):
             continue
-        direction = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
+        direction = normalize_bet_direction(row_bet_direction(r))
         if direction not in ("OVER", "UNDER"):
             continue
         if pt in ("Goblin", "Demon") and direction != "OVER":
@@ -1138,12 +1163,11 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
     """Build top/worst player+prop+direction consistency table."""
     line_data: dict[tuple[str, str, str], dict] = {}
     for r in rows:
-        player = str(r.get("Player","") or "").strip()
-        team   = str(r.get("Team","") or r.get("Sport","") or "").strip()
-        prop   = str(r.get("Prop Type","") or r.get("Prop","") or "Unknown Prop").strip()
-        side   = str(r.get("Dir","") or r.get("Direction","") or "—").strip().upper()
-        if side not in ("OVER", "UNDER"):
-            side = "—"
+        player = str(r.get("Player") or r.get("player") or "").strip()
+        team   = str(r.get("Team") or r.get("team") or r.get("Sport") or "").strip()
+        prop   = str(r.get("Prop Type") or r.get("Prop") or "").strip() or "Unknown Prop"
+        side_raw = normalize_bet_direction(row_bet_direction(r))
+        side = side_raw if side_raw in ("OVER", "UNDER") else "—"
         if not player or player.lower() in ("none","nan",""):
             continue
         key = (player, prop, side)
@@ -1161,12 +1185,11 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
     if not any(v["decided"] > 0 for v in line_data.values()):
         line_data2: dict[tuple[str, str, str], dict] = {}
         for r in rows:
-            player = str(r.get("Player","") or "").strip()
-            team   = str(r.get("Team","") or "").strip()
-            prop   = str(r.get("Prop Type","") or r.get("Prop","") or "Unknown Prop").strip()
-            side   = str(r.get("Dir","") or r.get("Direction","") or "—").strip().upper()
-            if side not in ("OVER", "UNDER"):
-                side = "—"
+            player = str(r.get("Player") or r.get("player") or "").strip()
+            team   = str(r.get("Team") or r.get("team") or "").strip()
+            prop   = str(r.get("Prop Type") or r.get("Prop") or "").strip() or "Unknown Prop"
+            side_raw = normalize_bet_direction(row_bet_direction(r))
+            side = side_raw if side_raw in ("OVER", "UNDER") else "—"
             if not player or player.lower() in ("none","nan",""):
                 continue
             key = (player, prop, side)
@@ -1252,7 +1275,7 @@ def _build_prop_breakdown_rows_from_rows(rows: list[dict]) -> list[dict[str, Any
         else:
             continue
         prop = _cell_str(r.get("Prop Type") or r.get("Prop")) or "Unknown"
-        pt_label = _map_pt_label(r.get("Pick Type"), r.get("Dir") or r.get("Direction"))
+        pt_label = _map_pt_label(r.get("Pick Type"), row_bet_direction(r))
         if not pt_label:
             continue
         tier = _cell_str(r.get("Tier")).upper()
@@ -1470,10 +1493,10 @@ def build_takeaways(
 
     # Over vs Under — all sports (matches ALL SPORTS matrix scope)
     over_all = overall_stats(
-        [r for r in all_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
+        [r for r in all_rows if normalize_bet_direction(row_bet_direction(r)) == "OVER"]
     )
     under_all = overall_stats(
-        [r for r in all_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
+        [r for r in all_rows if normalize_bet_direction(row_bet_direction(r)) == "UNDER"]
     )
     if over_all["decided"] > 0 and under_all["decided"] > 0:
         add_insight(
