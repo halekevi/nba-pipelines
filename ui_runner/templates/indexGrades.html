@@ -1375,20 +1375,6 @@ select option,
 </div><!-- /.grades-page -->
 
 <script>
-// Force iframe scroll on Capacitor WebView.
-document.addEventListener('DOMContentLoaded', function () {
-  const frame = document.getElementById('grade-frame');
-  if (!frame) return;
-  frame.style.overflow = 'visible';
-  frame.style.height = 'auto';
-  frame.addEventListener('load', function () {
-    try {
-      const h = frame.contentDocument.body.scrollHeight;
-      frame.style.height = h + 'px';
-    } catch (_e) {}
-  });
-});
-
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 // The grader saves slate_eval_{date}.html to ui_runner/templates/
 // Your server must serve these at /grades/slate_eval_{date}.html  OR
@@ -3662,27 +3648,50 @@ window.addEventListener('resize', () => {
 })();
 </script>
 <script src="/static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
+
 <script>
-// Capacitor WebView: auto-expand grade/ticket iframe heights to content.
-(function () {
-  function resizeFrame(frame) {
+(function() {
+  var isMobile = (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform && Capacitor.isNativePlatform()) ||
+                 (window.innerWidth <= 900 && 'ontouchstart' in window);
+
+  function inlineFrame(frameId) {
+    var frame = document.getElementById(frameId);
+    if (!frame || !frame.src) return;
+    fetch(frame.src, {cache: 'no-store'})
+      .then(function(r) { return r.text(); })
+      .then(function(html) {
+        var div = document.createElement('div');
+        div.id = frameId + '-inline';
+        div.style.cssText = 'width:100%;display:block;';
+        var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+        div.innerHTML = m ? m[1] : html;
+        frame.parentNode.replaceChild(div, frame);
+      })
+      .catch(function() {
+        frame.style.height = (window.innerHeight * 4) + 'px';
+        frame.style.overflow = 'visible';
+      });
+  }
+
+  function autoHeight(frameId) {
+    var frame = document.getElementById(frameId);
     if (!frame) return;
-    frame.style.height = "1px";
-    frame.addEventListener("load", function () {
+    frame.addEventListener('load', function() {
       try {
-        const doc = frame.contentDocument;
-        const h = (doc && doc.documentElement && doc.documentElement.scrollHeight)
-          || (doc && doc.body && doc.body.scrollHeight)
-          || 0;
-        if (h > 100) frame.style.height = h + "px";
-      } catch (e) {
-        frame.style.height = "100vh";
-      }
+        var h = frame.contentDocument.documentElement.scrollHeight || frame.contentDocument.body.scrollHeight;
+        if (h > 100) frame.style.height = h + 'px';
+      } catch(e) { frame.style.height = (window.innerHeight * 4) + 'px'; }
     });
   }
-  document.addEventListener("DOMContentLoaded", function () {
-    resizeFrame(document.getElementById("grade-frame"));
-    resizeFrame(document.getElementById("ticket-frame"));
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (isMobile) {
+      inlineFrame('grade-frame');
+      inlineFrame('ticket-frame');
+    } else {
+      autoHeight('grade-frame');
+      autoHeight('ticket-frame');
+    }
   });
 })();
 </script>
