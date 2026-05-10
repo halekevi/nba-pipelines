@@ -2178,6 +2178,28 @@ function topEdgeL5HitPct(p, dirOverride = "") {
   return pctFromValue(p?.hit);
 }
 
+/** Compute directional hit count from embedded g1..g10 numeric game values. */
+function directionalHitsFromGameCols(p, n, dir) {
+  const lineVal = Number(p?.line);
+  if (!Number.isFinite(lineVal)) return null;
+  let seen = 0;
+  let hits = 0;
+  for (let i = 1; i <= n; i += 1) {
+    const raw = p?.[`g${i}`] ?? p?.[`stat_g${i}`];
+    const v = Number(raw);
+    if (!Number.isFinite(v)) continue;
+    seen += 1;
+    if (dir === "UNDER") {
+      if (v < lineVal) hits += 1;
+    } else {
+      if (v > lineVal) hits += 1;
+    }
+  }
+  // Keep strict L5/L10 semantics; require a full window.
+  if (seen < n) return null;
+  return Math.max(0, Math.min(n, hits));
+}
+
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
@@ -2816,6 +2838,8 @@ function buildEdgeCard(p, idx) {
   const edgeDisp = fmtEdgePick(p);
   const hitDisplay = topEdgeL5HitPct(p);
   const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
+  const l5Hits = isOver ? resolvedOverHits(p, 5) : resolvedUnderHits(p, 5);
+  const miniStreak = Number.isFinite(l5Hits) ? `L5 ${l5Hits}/5` : `LINE ${p.line}`;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
   const div=document.createElement("div");
   div.className=`edge-card insight-card ${dc}`;
@@ -2827,7 +2851,7 @@ function buildEdgeCard(p, idx) {
         <div class="edge-avatar ${dc}">${p.initials}</div>
         <div class="edge-val">
           <div class="edge-num edge-badge ${dc}">${edgeDisp}</div>
-          <div class="edge-mini">${hitPct}% · L${p.line}</div>
+          <div class="edge-mini">${hitPct}% · ${miniStreak}</div>
         </div>
       </div>
       <div class="edge-row edge-row-main">
@@ -3113,8 +3137,18 @@ function renderStreaks() {
   // Use REAL pipeline hit counts from /api/slate
   function realHits(p, n) {
     const dir = String(p.dir || "").trim().toUpperCase();
-    if (n === 5)  return dir === "OVER" ? (p.l5_over  ?? null) : (p.l5_under  ?? null);
-    if (n === 10) return dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
+    if (n === 5) {
+      const raw = dir === "OVER" ? (p.l5_over ?? null) : (p.l5_under ?? null);
+      const h = streakHits(raw, 5);
+      if (h !== null) return h;
+      return directionalHitsFromGameCols(p, 5, dir);
+    }
+    if (n === 10) {
+      const raw = dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
+      const h = streakHits(raw, 10);
+      if (h !== null) return h;
+      return directionalHitsFromGameCols(p, 10, dir);
+    }
     return null;
   }
 
