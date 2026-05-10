@@ -73,7 +73,13 @@ async function fetch_smart(localPath) {
   --nebula-overlay:linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100vh;padding-bottom:clamp(48px,12vw,80px);overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased;}
+html{
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100%;padding-bottom:clamp(48px,12vw,80px);overflow-x:hidden;overflow-y:visible;line-height:1.55;-webkit-font-smoothing:antialiased;}
 /* Deep space background */
 body::before{content:'';position:fixed;inset:0;
   background:
@@ -2410,6 +2416,8 @@ function picksFromSlateLatestJson(data) {
         hit: hitPct,
         edge,
         projection: row.projection,
+        tier: row.tier,
+        rank_tier: row.rank_tier ?? row.tier,
         l5_over: row.l5_over,
         l5_under,
         l10_over: row.l10_over,
@@ -2862,6 +2870,7 @@ function buildEdgeCard(p, idx) {
         <div class="edge-tags">
           <span class="edge-sport ${sc}">${sportLabel}</span>
           <span class="edge-pick ${pc}">${p.pick}</span>
+          ${p.tier ? `<span class="tier-badge tier-${p.tier}">${p.tier}</span>` : ''}
         </div>
         <div class="edge-line-badge">${hitPct}% hit</div>
       </div>

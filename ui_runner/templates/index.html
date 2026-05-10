@@ -52,7 +52,13 @@
   --nebula-overlay:linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100vh;padding-bottom:clamp(48px,12vw,80px);overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased;}
+html{
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100%;padding-bottom:clamp(48px,12vw,80px);overflow-x:hidden;overflow-y:visible;line-height:1.55;-webkit-font-smoothing:antialiased;}
 /* Deep space background */
 body::before{content:'';position:fixed;inset:0;
   background:
@@ -2415,6 +2421,8 @@ async function loadSlateData() {
           prop: p.prop, line: p.line, pick: p.pick,
           dir: p.dir, hit: p.hit, edge: p.edge,
           projection: p.projection,
+          tier: p.tier,
+          rank_tier: p.rank_tier ?? p.tier,
           l5_over: p.l5_over,
           l5_under: p.l5_under != null ? p.l5_under : resolvedUnderHits(p, 5),
           l10_over: p.l10_over,
@@ -2776,6 +2784,7 @@ function buildEdgeCard(p, idx) {
         <div class="edge-tags">
           <span class="edge-sport ${sc}">${sportLabel}</span>
           <span class="edge-pick ${pc}">${p.pick}</span>
+          ${p.tier ? `<span class="tier-badge tier-${p.tier}">${p.tier}</span>` : ''}
         </div>
         <div class="edge-line-badge">${hitPct}% hit</div>
       </div>
@@ -3308,6 +3317,8 @@ function syncCardsFromCombinedRows(rows) {
     l5_under: _v(r, ["l5_under", "L5 Under", "L5 U"]),
     l10_over: _v(r, ["l10_over", "L10 Over", "L10 O"]),
     l10_under: _v(r, ["l10_under", "L10 Under", "L10 U"]),
+    tier: _v(r, ["tier", "Tier"]),
+    rank_tier: _v(r, ["rank_tier", "Rank Tier"]) || _v(r, ["tier", "Tier"]),
     l5_avg: _v(r, ["l5_avg", "L5 Avg"]),
     season_avg: _v(r, ["season_avg", "Season Avg"]),
     actual_series: _v(r, ["actual_series", "Actual Series"]),
@@ -3342,6 +3353,8 @@ function syncCardsFromCombinedSheet(columns, rows) {
     l10_under: ci("L10 Under") >= 0 ? ci("L10 Under") : ci("L10 U"),
     l5_avg: ci("L5 Avg"),
     season_avg: ci("Season Avg"),
+    tier: ci("Tier"),
+    rank_tier: ci("Rank Tier") >= 0 ? ci("Rank Tier") : ci("Tier"),
     actual_series: ci("Actual Series"),
     line_series: ci("Line Series"),
   };
@@ -3363,6 +3376,8 @@ function syncCardsFromCombinedSheet(columns, rows) {
     l10_under: get(r, idx.l10_under),
     l5_avg: get(r, idx.l5_avg),
     season_avg: get(r, idx.season_avg),
+    tier: get(r, idx.tier),
+    rank_tier: get(r, idx.rank_tier),
     actual_series: get(r, idx.actual_series),
     line_series: get(r, idx.line_series),
   })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
