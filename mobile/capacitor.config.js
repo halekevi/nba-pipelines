@@ -19,10 +19,9 @@ const config = {
   appId: "com.proporacle.app",
   appName: "PropORACLE",
   webDir: "www",
-  // Force bundled APK assets only. Never load remote PROPORACLE_SERVER_URL.
-  // This prevents accidental "web form" rendering from stale env vars.
+  // Bundled www in the APK + DIY OTA (see ota-config.json). Do not set server.url here.
   server: {
-    androidScheme: "https"
+    androidScheme: "https",
   },
 };
 

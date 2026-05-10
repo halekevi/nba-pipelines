@@ -4,6 +4,7 @@
  */
 (function () {
   var LS_KEY = "proporacle_ota_bundle_version";
+  var LS_LAST_CHECK = "proporacle_ota_last_version_check_ms";
 
   function waitOtaPlugin(ms) {
     return new Promise(function (resolve, reject) {
@@ -44,12 +45,24 @@
       .then(function (cfg) {
         if (!cfg || !cfg.enabled || !cfg.baseUrl) return null;
         var base = String(cfg.baseUrl).replace(/\/$/, "");
+        var intervalMs =
+          typeof cfg.checkIntervalMs === "number" && cfg.checkIntervalMs >= 0 ? cfg.checkIntervalMs : 3600000;
         var Ota = window.Capacitor.Plugins.OtaBundle;
         return Ota.reapplyIfPresent()
           .then(function (rr) {
             if (rr && rr.reapplied) return { stop: true };
+            var now = Date.now();
+            if (intervalMs > 0) {
+              try {
+                var last = parseInt(localStorage.getItem(LS_LAST_CHECK) || "0", 10) || 0;
+                if (now - last < intervalMs) return { stop: true };
+              } catch (e) {}
+            }
             return fetch(base + "/api/mobile/bundle-version", { cache: "no-store" }).then(function (vres) {
               if (!vres.ok) return { stop: true };
+              try {
+                localStorage.setItem(LS_LAST_CHECK, String(Date.now()));
+              } catch (e) {}
               return vres.json().then(function (vj) {
                 var remote = String((vj && vj.version) || "").trim();
                 if (!remote) return { stop: true };

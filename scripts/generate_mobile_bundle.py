@@ -23,7 +23,16 @@ def _write_ota_config(mobile_www: Path) -> None:
         enabled = True
     else:
         enabled = flag in ("1", "true", "yes", "on")
-    payload = {"enabled": bool(enabled and raw_base), "baseUrl": raw_base}
+    raw_interval = (os.environ.get("PROPORACLE_OTA_CHECK_INTERVAL_MS") or "").strip()
+    try:
+        check_interval_ms = int(raw_interval) if raw_interval else 3_600_000
+    except ValueError:
+        check_interval_ms = 3_600_000
+    payload = {
+        "enabled": bool(enabled and raw_base),
+        "baseUrl": raw_base,
+        "checkIntervalMs": check_interval_ms,
+    }
     (mobile_www / "ota-config.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
