@@ -3505,6 +3505,20 @@ function renderSlateTable(sport) {
     const sortKeyForTh = state.sortKey === 'abs_edge' ? 'edge' : state.sortKey;
     const ci = keyMap.indexOf(sortKeyForTh);
     if (ci >= 0) ths[ci].classList.add(state.sortDir > 0 ? 'sort-asc' : 'sort-desc');
+    const edgeIdx = keyMap.indexOf('edge');
+    const thEdge = edgeIdx >= 0 ? ths[edgeIdx] : null;
+    if (thEdge) {
+      if (state.sortKey === 'abs_edge') {
+        thEdge.textContent = '|EDGE|';
+        thEdge.title = 'Sorted by absolute edge (OVER +11 and UNDER −11 rank together). Click for signed edge.';
+      } else if (state.sortKey === 'edge') {
+        thEdge.textContent = 'EDGE';
+        thEdge.title = 'Sorted by signed edge (positive favors OVER, negative favors UNDER). Click again to reverse.';
+      } else {
+        thEdge.textContent = 'EDGE';
+        thEdge.removeAttribute('title');
+      }
+    }
   }
 
   if (countEl) countEl.textContent = `${filtered.length} / ${rows.length} PROPS`;
