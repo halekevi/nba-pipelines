@@ -2078,7 +2078,12 @@ function normalizeSeries(vals) {
 }
 
 function historySeriesForPick(p, n) {
-  const actual = normalizeSeries(p.actual_series).slice(-n);
+  let actual = normalizeSeries(p.actual_series).slice(-n);
+  if (!actual.length) {
+    const gcols = ["g1","g2","g3","g4","g5","g6","g7","g8","g9","g10"].slice(0, n);
+    const vals = gcols.map(k => p[k]).filter(v => v !== null && v !== undefined && Number.isFinite(Number(v))).map(Number);
+    if (vals.length >= Math.min(3, n)) actual = vals;
+  }
   if (actual.length >= Math.min(3, n)) {
     const lineRaw = normalizeSeries(p.line_series);
     const lineSeries = lineRaw.length ? lineRaw.slice(-actual.length) : Array.from({length: actual.length}, () => Number(p.line));
