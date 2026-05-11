@@ -2322,7 +2322,7 @@ function picksFromSlateLatestJson(data) {
       picks.push({
         sport: sportLabel,
         tier: row.tier || row.rank_tier || "",
-        initials: row.initials || "",
+        initials: row.initials || (row.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase(),
         player,
         prop,
         line,
