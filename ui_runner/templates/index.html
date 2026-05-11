@@ -3119,7 +3119,7 @@ const L5_FILTER_MIN_HITS = 4;
 
 const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','nfl','tennis','wnba'];
 SPORTS.forEach(s => {
-  SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
+  SLATE_STATE[s] = { sortKey: 'abs_edge', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
 });
 SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
 
@@ -3147,6 +3147,17 @@ function _passesL5FilterForObjectRow(row, l5Mode) {
   if (l5Mode === 'OVER') return (_l5HitCount(row?.l5_over) ?? -1) >= L5_FILTER_MIN_HITS;
   if (l5Mode === 'UNDER') return (_l5HitCount(row?.l5_under) ?? -1) >= L5_FILTER_MIN_HITS;
   return true;
+}
+
+/** Magnitude of edge for default Slate Explorer sort (UNDER −2.6 ranks with OVER +2.6). */
+function _slateAbsEdge(row) {
+  const ae = row?.abs_edge;
+  const n = ae != null ? Number(ae) : NaN;
+  if (Number.isFinite(n)) return n;
+  const e = row?.edge;
+  const m = e != null ? Number(e) : NaN;
+  if (Number.isFinite(m)) return Math.abs(m);
+  return null;
 }
 
 function injectSlateL5Buttons() {
@@ -3472,6 +3483,12 @@ function renderSlateTable(sport) {
   });
 
   filtered.sort((a, b) => {
+    if (state.sortKey === 'abs_edge') {
+      let av = _slateAbsEdge(a), bv = _slateAbsEdge(b);
+      if (av == null) av = state.sortDir < 0 ? -Infinity : Infinity;
+      if (bv == null) bv = state.sortDir < 0 ? -Infinity : Infinity;
+      return state.sortDir * (av - bv);
+    }
     let av = a[state.sortKey], bv = b[state.sortKey];
     if (av == null) av = state.sortDir < 0 ? -Infinity : Infinity;
     if (bv == null) bv = state.sortDir < 0 ? -Infinity : Infinity;
@@ -3485,7 +3502,8 @@ function renderSlateTable(sport) {
   const ths = table?.querySelectorAll('th');
   const keyMap = ['tier','rank_score','player','team','opp','prop','pick_type','line','dir','edge','hit_rate','l5_over','l5_under','game_time'];
   if (ths) {
-    const ci = keyMap.indexOf(state.sortKey);
+    const sortKeyForTh = state.sortKey === 'abs_edge' ? 'edge' : state.sortKey;
+    const ci = keyMap.indexOf(sortKeyForTh);
     if (ci >= 0) ths[ci].classList.add(state.sortDir > 0 ? 'sort-asc' : 'sort-desc');
   }
 
