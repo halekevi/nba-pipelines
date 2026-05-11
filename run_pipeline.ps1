@@ -298,17 +298,25 @@ function Invoke-MLBStep1Fetch {
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output `"$OutputPath`" --api-retries 2 --api-session-waves 1 --api-wave-gap-min 8 --api-wave-gap-max 15 --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10"
-        Write-Host "        CMD: $cmd1" -ForegroundColor DarkGray
-        $output = Invoke-Expression $cmd1 2>&1
-        $exit   = $LASTEXITCODE
+        # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
+        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 2 ..."
+        Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
+        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            --date $PipelineDate --output $OutputPath `
+            --api-retries 2 --api-session-waves 1 `
+            --api-wave-gap-min 8 --api-wave-gap-max 15 `
+            --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
+            --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
+        $exit = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         if ($exit -ne 0) {
             Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
-            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 120 --retries 1 --retry_delay 5 --date `"$PipelineDate`" --output `"$OutputPath`""
-            Write-Host "        CMD: $cmd2" -ForegroundColor DarkGray
-            $output = Invoke-Expression $cmd2 2>&1
-            $exit   = $LASTEXITCODE
+            $cmd2Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
+            Write-Host "        CMD: $cmd2Display" -ForegroundColor DarkGray
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --playwright --timeout 120 --retries 1 --retry_delay 5 `
+                --date $PipelineDate --output $OutputPath 2>&1
+            $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
@@ -988,7 +996,7 @@ if ($TennisOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) {
-        if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --replace --output `"$TennisRunOutDir\step1_tennis_props.csv`"" }
+        if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output `"$TennisRunOutDir\step1_tennis_props.csv`"" }
     } else {
         Write-Host "  [Tennis] Skipping step1 fetch -- using existing $TennisRunOutDir\step1_tennis_props.csv" -ForegroundColor DarkGray
     }
@@ -1388,7 +1396,7 @@ $TennisJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --replace --output `"$TennisRunOutDir\step1_tennis_props.csv`"" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output `"$TennisRunOutDir\step1_tennis_props.csv`"" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input `"$TennisRunOutDir\step2_tennis_picktypes.csv`" --output `"$TennisRunOutDir\step3_tennis_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input `"$TennisRunOutDir\step3_tennis_with_defense.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`"" }
@@ -1424,15 +1432,22 @@ $MLBJob = Start-Job -ScriptBlock {
         Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
         Push-Location $Dir
         try {
-            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output `"$OutputPath`" --api-retries 2 --api-session-waves 1 --api-wave-gap-min 8 --api-wave-gap-max 15 --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10"
-            Write-Output "        CMD: $cmd1"
-            $output = Invoke-Expression $cmd1 2>&1; $exit = $LASTEXITCODE
+            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --date $PipelineDate --output $OutputPath `
+                --api-retries 2 --api-session-waves 1 `
+                --api-wave-gap-min 8 --api-wave-gap-max 15 `
+                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
+                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
+            $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
             if ($exit -ne 0) {
                 Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
-                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 120 --retries 1 --retry_delay 5 --date `"$PipelineDate`" --output `"$OutputPath`""
-                Write-Output "        CMD: $cmd2"
-                $output = Invoke-Expression $cmd2 2>&1; $exit = $LASTEXITCODE
+                Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
+                $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                    --playwright --timeout 120 --retries 1 --retry_delay 5 `
+                    --date $PipelineDate --output $OutputPath 2>&1
+                $exit = $LASTEXITCODE
                 foreach ($line in $output) { Write-Output "        $line" }
             }
             if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
