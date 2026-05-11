@@ -2417,7 +2417,7 @@ async function loadSlateData() {
       if (!SLATE_CARDS_POPULATED) {
         SLATE_DEBUG_META = ticketMeta;
         ALL_SLATE = (d.picks || []).map(p => ({
-          sport: p.sport, initials: p.initials, player: p.player,
+          sport: p.sport, initials: p.initials || (p.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase(), player: p.player,
           prop: p.prop, line: p.line, pick: p.pick,
           dir: p.dir, hit: p.hit, edge: p.edge,
           projection: p.projection,
