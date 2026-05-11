@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
 <head>
 <meta charset="UTF-8"/>
@@ -2770,7 +2770,7 @@ function buildEdgeCard(p, idx) {
   div.innerHTML=`
     <div class="edge-card-top">
       <div class="edge-row edge-row-top">
-        <div class="edge-avatar ${dc}">${p.initials}</div>
+        <div class="edge-avatar ${dc}">${p.initials || (p.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase()}</div>
         <div class="edge-val">
           <div class="edge-num edge-badge ${dc}">${edgeDisp}</div>
           <div class="edge-mini">${hitPct}% · L${p.line}</div>
