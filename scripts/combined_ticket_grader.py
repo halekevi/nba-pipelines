@@ -1738,6 +1738,8 @@ def main():
         tennis_lp, tennis_lpt = build_lookup(tennis_act)
 
     mlb_actuals_path = Path(str(args.mlb_actuals or "").strip())
+    mlb_act = pd.DataFrame()
+    mlb_lp, mlb_lpt = {}, {}
     if mlb_actuals_path.is_file():
         df_mlb = pd.read_csv(mlb_actuals_path, dtype=str).fillna("")
         if "prop" in df_mlb.columns and "prop_type" not in df_mlb.columns:
