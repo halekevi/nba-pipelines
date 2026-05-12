@@ -6339,16 +6339,27 @@ def _load_step8_board_like(
     df["l10_under"] = pd.to_numeric(df["l10_under"], errors="coerce").combine_first(l10_under_fill)
 
     proj = pd.to_numeric(df.get("projection", np.nan), errors="coerce")
+    if not isinstance(proj, pd.Series):
+        proj = pd.Series(np.nan, index=df.index, dtype="float64")
+    else:
+        proj = proj.reindex(df.index).astype("float64", copy=False)
+
     df["l5_avg"] = pd.to_numeric(df["l5_avg"], errors="coerce").combine_first(proj)
     df["season_avg"] = pd.to_numeric(df["season_avg"], errors="coerce").combine_first(df["l5_avg"]).combine_first(proj)
 
-    if "edge" not in df.columns:
-        df["edge"] = np.nan
-    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
-    if "abs_edge" not in df.columns:
-        df["abs_edge"] = np.nan
-    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
-    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
+    # Edge is only meaningful when projection exists (e.g. WNBA step8 often omits it; sheet edge
+    # can be 0 - line = -line with abs_edge = line, tripping distance/Demon heuristics). When
+    # projection is missing or non-finite, leave edge and abs_edge unset.
+    if "line" in df.columns:
+        line_sr = pd.to_numeric(df["line"], errors="coerce").reindex(df.index).astype("float64", copy=False)
+    else:
+        line_sr = pd.Series(np.nan, index=df.index, dtype="float64")
+    proj_arr = proj.to_numpy(dtype=np.float64, copy=False)
+    line_arr = line_sr.to_numpy(dtype=np.float64, copy=False)
+    proj_ok = pd.Series(np.isfinite(proj_arr) & np.isfinite(line_arr), index=df.index)
+    computed_edge = proj - line_sr
+    df["edge"] = computed_edge.where(proj_ok, np.nan)
+    df["abs_edge"] = computed_edge.abs().where(proj_ok, np.nan)
 
     # Demon is distance-sensitive in upstream step8; without a direction/edge gate, UNDER legs
     # (or rows with missing projection → edge <= 0) can be mislabeled. PP-style Demon here
