@@ -2888,11 +2888,18 @@ function underEdgeDisplayPick(basePick) {
   if (isGoblinPick(basePick)) return null;
 
   const dir = String(basePick.dir || "").trim().toUpperCase();
-  if (dir === "UNDER") return basePick;
+  if (dir === "UNDER") {
+    const eu = Number(basePick.edge);
+    if (!Number.isFinite(eu) || eu >= 0) return null; // native UNDER must have negative edge (real abs_edge > 0)
+    return basePick;
+  }
   if (dir !== "OVER") return null;
 
   const eo = Number(basePick.edge);
-  const edgeUnder = Number.isFinite(eo) ? -eo : 0;
+  // Tune UP for stricter parity with visible OVER cards (e.g. 0.5); 0.1 drops tiny projection noise (+0.06 synth).
+  const UNDER_SYNTH_EDGE_MIN = 0.1;
+  if (!Number.isFinite(eo) || Math.abs(eo) < UNDER_SYNTH_EDGE_MIN) return null;
+  const edgeUnder = -eo;
 
   const h5 = resolvedUnderHits(basePick, 5);
   if (h5 !== null) {
