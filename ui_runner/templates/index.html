@@ -2455,6 +2455,7 @@ async function loadSlateData() {
         mergePlayerDataFromTicketLegs(d.picks || []);
       }
     };
+    let slatePayload = null;
     try {
       const fetchOpts = { cache: 'no-store' };
       if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
@@ -2463,6 +2464,7 @@ async function loadSlateData() {
       const res = await fetch("/api/slate", fetchOpts);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
+      slatePayload = d;
       applySlatePayload(d);
     } catch (err) {
       console.warn("loadSlateData failed:", err);
@@ -2472,6 +2474,7 @@ async function loadSlateData() {
           if (fb.ok) {
             const raw = await fb.json();
             const d = Array.isArray(raw.picks) ? raw : picksFromSlateLatestJson(raw);
+            slatePayload = d;
             applySlatePayload(d);
           }
         } catch (fbErr) {
@@ -2483,6 +2486,23 @@ async function loadSlateData() {
       await window.applyHeroSlateDate();
     }
     renderTopEdgesDebugTag();
+    // Merge actual_series/line_series from /api/slate into ALL_SLATE entries
+    if (slatePayload && Array.isArray(slatePayload.picks)) {
+      const _sm = {};
+      slatePayload.picks.forEach(p => {
+        _sm[`${p.player}||${p.prop}||${p.dir}`] = p;
+      });
+      for (const row of ALL_SLATE) {
+        const _m = _sm[`${row.player}||${row.prop}||${row.dir}`];
+        if (_m) {
+          row.actual_series  = _m.actual_series  || [];
+          row.line_series    = _m.line_series    || [];
+          if (row.l5_avg     == null) row.l5_avg     = _m.l5_avg;
+          if (row.season_avg == null) row.season_avg = _m.season_avg;
+          if (row.projection == null) row.projection = _m.projection;
+        }
+      }
+    }
     renderEdges();
     renderStreaks();
     // Slate panel rows are fetched lazily per sport via /api/slate-sport/<sport>.
