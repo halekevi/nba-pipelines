@@ -928,7 +928,7 @@ def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
     if not had_wnba:
         out.extend(_wnba_slate_rows_from_step8_fallback())
     out.sort(key=_rank, reverse=True)
-    return out
+    return _filter_invalid_demon_slate_rows(out)
 
 
 def _wnba_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
@@ -1031,6 +1031,30 @@ def _slim_slate_sport_row(r: dict) -> dict:
     return slim
 
 
+def _filter_invalid_demon_slate_rows(rows: list[Any]) -> list[Any]:
+    """Drop Demon rows that cannot be valid PP-style Demons (OVER + positive edge)."""
+    if not isinstance(rows, list):
+        return rows
+    out: list[Any] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            out.append(r)
+            continue
+        pt = str(r.get("pick_type", "")).strip().lower()
+        if pt != "demon":
+            out.append(r)
+            continue
+        dr = str(r.get("dir") or r.get("direction") or "").strip().upper()
+        try:
+            ef = float(r.get("edge") or 0.0)
+        except (TypeError, ValueError):
+            ef = 0.0
+        if dr != "OVER" or ef <= 0:
+            continue
+        out.append(r)
+    return out
+
+
 def _api_slate_pick_abs_edge(record: dict[str, Any]) -> float:
     """|edge| for /api/slate picks; prefer pipeline abs_edge when present."""
     ae = record.get("abs_edge")
@@ -1070,7 +1094,7 @@ def _slim_slate_sport_payload(payload: dict) -> dict:
                 slim_rows.append(_slim_slate_sport_row(r))
             else:
                 slim_rows.append(r)
-        slim_sports[k] = slim_rows
+        slim_sports[k] = _filter_invalid_demon_slate_rows(slim_rows)
     return {
         "date": payload.get("date"),
         "generated_at": payload.get("generated_at"),
@@ -4254,6 +4278,7 @@ def api_slate_sport_single(sport: str):
         slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
         if not slim_rows and sport_key == "wnba":
             slim_rows = _wnba_slate_rows_from_step8_fallback()
+        slim_rows = _filter_invalid_demon_slate_rows(slim_rows)
         return {
             "date": payload.get("date"),
             "generated_at": payload.get("generated_at"),

@@ -6350,6 +6350,29 @@ def _load_step8_board_like(
     df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
     df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
+    # Demon is distance-sensitive in upstream step8; without a direction/edge gate, UNDER legs
+    # (or rows with missing projection → edge <= 0) can be mislabeled. PP-style Demon here
+    # is only retained on OVER with strictly positive model edge; others → Goblin if
+    # abs_edge suggests a softened line, else Standard.
+    _pt_low = df["pick_type"].astype(str).str.strip().str.lower()
+    _dmask = _pt_low.eq("demon")
+    if bool(_dmask.any()):
+        _dir_u = df["direction"].astype(str).str.strip().str.upper()
+        _edge = pd.to_numeric(df["edge"], errors="coerce")
+        _ae = pd.to_numeric(df["abs_edge"], errors="coerce")
+        _ae = _ae.where(_ae.notna(), _edge.abs())
+        _bad = _dmask & (~_dir_u.eq("OVER") | ~_edge.gt(0))
+        if bool(_bad.any()):
+            n_bad = int(_bad.sum())
+            _use_gob = _bad & _ae.ge(0.5)
+            _use_std = _bad & ~_use_gob
+            df.loc[_use_gob, "pick_type"] = "Goblin"
+            df.loc[_use_std, "pick_type"] = "Standard"
+            print(
+                f"  [{log_prefix}] demoted {n_bad} invalid Demon row(s) "
+                "(require OVER + positive edge; Goblin if abs_edge>=0.5 else Standard)."
+            )
+
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
