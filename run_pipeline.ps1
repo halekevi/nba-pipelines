@@ -25,6 +25,7 @@
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
 #    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis steps 2-8 + Combined (no step1 fetch)
+#    .\run_pipeline.ps1 -TennisOnly -TennisDate 2026-05-14   # Override slate date (default: tomorrow)
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
@@ -57,6 +58,7 @@ param(
     [switch]$MLBVerify,
     [switch]$SoccerOnly,
     [switch]$TennisOnly,
+    [string]$TennisDate = "",
     [switch]$WNBAOnly,
     [switch]$NFLOnly,
     # Run WNBA in the full parallel block even if pipeline date is before WNBA season start (default off).
@@ -113,6 +115,15 @@ if (-not $Date) {
         Write-Host "  [Date] ERROR: Invalid date format '$Date'. Use: 2026-03-12" -ForegroundColor Red
         exit 1
     }
+}
+
+# Tennis targets tomorrow's slate by default (early ET matches before a typical daily run).
+# Override with -TennisDate. Step 8 / dated mirrors use $TennisDate; output folder stays outputs\$Date.
+if (-not $TennisDate) {
+    $TennisDate = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
+    Write-Host "  [Tennis] No TennisDate specified, using tomorrow: $TennisDate" -ForegroundColor DarkGray
+} else {
+    Write-Host "  [Tennis] Using specified TennisDate: $TennisDate" -ForegroundColor Cyan
 }
 
 if ($MLBVerify -and -not $MLBOnly) {
@@ -1007,11 +1018,11 @@ if ($TennisOnly) {
     if ($ok) { $ok = Run-Step "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
     if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "Tennis" }
-    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $SportsRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $Date" }
+    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $SportsRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $TennisDate" }
     if ($ok) {
         Copy-DatedSlateOutput `
             -SourcePath (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx") `
-            -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
+            -DatedFileName "step8_tennis_direction_clean_$TennisDate.xlsx" `
             -Label "Tennis"
     }
     Write-Host ""
@@ -1361,7 +1372,7 @@ $SoccerJob = Start-Job -ScriptBlock {
 
 # -- Tennis Job ---------------------------------------------------------------
 $TennisJob = Start-Job -ScriptBlock {
-    param($TennisDir, $Date, $SkipFetch, $RepoRoot, $TennisRunOutDir)
+    param($TennisDir, $TennisDate, $SkipFetch, $RepoRoot, $TennisRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1404,9 +1415,9 @@ $TennisJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Sports\Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Sports\Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $TennisDate" }
     return $ok
-} -ArgumentList $TennisDir, $Date, $SkipFetch, $Root, $TennisRunOutDir
+} -ArgumentList $TennisDir, $TennisDate, $SkipFetch, $Root, $TennisRunOutDir
 
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
@@ -1706,7 +1717,7 @@ $NBASuccess = $NBASuccess -and $NBA1HSuccess -and $NBA1QSuccess
 if ($TennisSuccess) {
     Copy-DatedSlateOutput `
         -SourcePath (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx") `
-        -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
+        -DatedFileName "step8_tennis_direction_clean_$TennisDate.xlsx" `
         -Label "Tennis"
 }
 # WNBA dated step8 mirror: scripts/run_wnba_pipeline.ps1 Publish-WnbaStep8CleanArtifacts (clean only).
