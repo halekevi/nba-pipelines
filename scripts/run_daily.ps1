@@ -8,6 +8,7 @@
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
          → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (E1) optional payout hand CSV pull from Railway
          → (F) optional night poll of historical actuals.
+         Tennis: -TennisDate defaults to tomorrow (match-day for step8); forwarded to run_pipeline.ps1 with -Date (pipeline folder = today).
          Set env PROPORACLE_PAYOUT_EXPORT_URL (e.g. https://<app>.up.railway.app/api/payout/export-log-hand) to merge Railway volume logs into data\payout_samples\payout_log_hand.csv after STEP E.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
          Use -PollHistoricalActuals to re-run fetch_historical_actuals.py every 90 min (4 passes) after 21:00 ET (see -PollSkip9pmWait).
@@ -28,6 +29,7 @@ param(
     [switch]$MonthlyRetrain,
     [string]$Date = "",
     [string]$GradeDate = "",
+    [string]$TennisDate = "",
     [string]$OddsApiKey = "",
     [switch]$ForceAll,
     [switch]$AllowMissingSlates,
@@ -66,6 +68,9 @@ function Get-TimeStamp { return Get-Date -Format "HH:mm:ss" }
 
 $Today = if ($Date.Trim()) { $Date.Trim() } else { (Get-Date).ToString("yyyy-MM-dd") }
 $Yesterday = if ($GradeDate.Trim()) { $GradeDate.Trim() } else { (Get-Date).AddDays(-1).ToString("yyyy-MM-dd") }
+# Tennis targets tomorrow by default (early ET matches before a typical daily run).
+# Override with -TennisDate "yyyy-MM-dd". Must match run_pipeline.ps1 / run_daily pipeline args.
+$TennisDate = if ($TennisDate -and $TennisDate.Trim()) { $TennisDate.Trim() } else { (Get-Date).AddDays(1).ToString("yyyy-MM-dd") }
 $TicketModelModeEffective = if ($TicketModelMode.Trim()) { $TicketModelMode.Trim().ToLowerInvariant() } elseif ([string]$env:TICKET_MODEL_MODE) { ([string]$env:TICKET_MODEL_MODE).Trim().ToLowerInvariant() } else { "shadow" }
 if (@("off", "shadow", "on") -notcontains $TicketModelModeEffective) {
     Write-Warning "Invalid TicketModelMode '$TicketModelModeEffective' (expected off|shadow|on); defaulting to shadow"
@@ -137,8 +142,14 @@ function Get-CsvDataRowCount([string]$CsvPath) {
     }
 }
 
-function Get-MissingTodaySlateOutputs([string]$RunDate) {
+function Get-MissingTodaySlateOutputs {
+    param(
+        [string]$RunDate,
+        # Dated tennis step8 under outputs\<RunDate>\ uses match-day filename (see run_pipeline.ps1 $TennisDate).
+        [string]$TennisSlateDate = ""
+    )
     $outDir = Join-Path $Root "outputs\$RunDate"
+    $tennisDated = if ($TennisSlateDate -and $TennisSlateDate.Trim()) { $TennisSlateDate.Trim() } else { $RunDate }
     $required = @(
         "step8_nba_direction_clean_$RunDate.xlsx",
         "step8_nba1h_direction_clean_$RunDate.xlsx",
@@ -146,7 +157,7 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         "step8_nhl_direction_clean_$RunDate.xlsx",
         "step8_soccer_direction_clean_$RunDate.xlsx",
         "step8_mlb_direction_clean_$RunDate.xlsx",
-        "step8_tennis_direction_clean_$RunDate.xlsx"
+        "step8_tennis_direction_clean_$tennisDated.xlsx"
     )
     # WNBA: run_wnba_pipeline.ps1 publishes outputs/<date>/step8_wnba_direction_clean_<date>.xlsx
     # (same basename pattern as other sports' step8_*_direction_clean_<date>.xlsx).
@@ -188,7 +199,7 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
             (Join-Path $SportsRoot "MLB\outputs\step8_mlb_direction_clean.xlsx"),
             (Join-Path $SportsRoot "MLB\step8_mlb_direction_clean.xlsx")
         )
-        "step8_tennis_direction_clean_$RunDate.xlsx" = @(
+        "step8_tennis_direction_clean_$tennisDated.xlsx" = @(
             (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"),
             (Join-Path $SportsRoot "Tennis\step8_tennis_direction_clean.xlsx")
         )
@@ -222,6 +233,7 @@ $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) ========"
+Write-Log "  [Tennis] Using TennisDate: $TennisDate (Today=$Today)"
 Write-Log "Ticket model mode: $TicketModelModeEffective (weight=$TicketModelWeight, top_n=$TicketModelTopN)"
 Write-Log "PQS control slice: ${PqControlPercent}% (cap=$PqControlMaxTickets, pq=0.0, artifacts only)"
 if ($NoOverwrite) {
@@ -666,7 +678,7 @@ if (-not $SkipPipeline) {
     }
     Write-Log "STEP C - Pipeline ($Today): START"
     $pipeScript = Join-Path $Root "run_pipeline.ps1"
-    $pipeArgs = @("-File", $pipeScript, "-Date", $Today)
+    $pipeArgs = @("-File", $pipeScript, "-Date", $Today, "-TennisDate", $TennisDate)
     if ($EffectiveOddsKey) {
         $pipeArgs += @("-OddsApiKey", $EffectiveOddsKey)
     }
@@ -692,7 +704,7 @@ if (-not $SkipPipeline) {
         else {
             Write-Log "STEP C - Pipeline ($Today): OK"
             if (-not $AllowMissingSlates) {
-                $missingToday = Get-MissingTodaySlateOutputs -RunDate $Today
+                $missingToday = Get-MissingTodaySlateOutputs -RunDate $Today -TennisSlateDate $TennisDate
                 if ($missingToday.Count -gt 0) {
                     $script:PipelineFailed = $true
                     Write-Log "STEP C - Pipeline ($Today): FAILED (missing outputs: $($missingToday -join ', '))"
@@ -764,7 +776,7 @@ if ($script:PipelineFailed) {
     Push-Location $Root
     try {
         $pipeScript = Join-Path $Root "run_pipeline.ps1"
-        & pwsh -NoProfile -File $pipeScript -Date $Today -CombinedOnly -DQWarnOnly
+        & pwsh -NoProfile -File $pipeScript -Date $Today -TennisDate $TennisDate -CombinedOnly -DQWarnOnly
         $ce = $LASTEXITCODE
         # Success = combined Excel exists; exit code may be non-zero if only ticket_eval HTML failed (non-fatal)
         if (Test-Path $combinedOut) {
@@ -1069,7 +1081,7 @@ else {
                         nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"))
                         soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
                         mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $SportsRoot "MLB\outputs\step8_mlb_direction_clean.xlsx"))
-                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
+                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$TennisDate.xlsx"), (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
                         nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"))
                         nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"))
                         cbb = @((Join-Path $SportsRoot "CBB\step6_ranked_cbb.xlsx"))
@@ -1632,7 +1644,7 @@ if ($NowHour -ge 10) {
 
     $pipeScript = Join-Path $Root "run_pipeline.ps1"
     if (Test-Path $pipeScript) {
-        & pwsh -NoProfile -File $pipeScript -SkipFetch
+        & pwsh -NoProfile -File $pipeScript -Date $Today -TennisDate $TennisDate -SkipFetch
         if ($LASTEXITCODE -eq 0) {
             Write-Log "[NBA_LATE_FETCH] OK (full pipeline -SkipFetch)"
         }
