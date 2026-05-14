@@ -916,5 +916,32 @@
       "count": 366,
       "wins": 91
     }
+  },
+  {
+    "date": "2026-05-13",
+    "n_tickets": 52,
+    "wins": 13,
+    "guarantees": 0,
+    "losses": 39,
+    "win_rate": 0.25,
+    "avg_ev_predicted": null,
+    "net_per_10": 1.18,
+    "roi_pct": 11.82,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 52,
+      "wins": 13
+    }
   }
 ]
