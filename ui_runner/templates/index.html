@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>
 :root{
-  /* Hybrid liquid-glass palette */
+  /* Hybrid liquid-glass palette */h
   --bg-main:#050505;
   --glass-bg:rgba(20,20,20,0.6);
   --glass-border:rgba(212,175,55,0.15);
@@ -196,7 +196,7 @@ body::after{content:'';position:fixed;inset:0;
 .sec-header .sec-title{flex-shrink:0;}
 
 /* hero */
-.hero{display:flex;align-items:center;flex-direction:column;flex-wrap:nowrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
+.hero{display:flex;align-items:stretch;flex-direction:column;flex-wrap:nowrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
 .hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--purple));}
 .hero-eyebrow{font-size:11px;font-family:"Inter",sans-serif;font-weight:500;color:var(--muted);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;line-height:.95;color:var(--text);}
@@ -1907,7 +1907,6 @@ status-row
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-combined">
         <thead><tr><th style="color:var(--muted2);">Loading…</th></tr></thead>
-        <tbody id="stb-combined"></tbody>
       </table></div>
     </div>
 
@@ -1925,9 +1924,7 @@ status-row
       <div class="sec-line"></div>
       <a href="/tickets" class="edges-see-all">See All Picks ↗</a>
     </div>
-    <p class="edge-source-note">Pulled from the <strong>Full Slate</strong> (same source as Slate Explorer <strong>Combined</strong>: combined workbook when present, otherwise merged <code>slate_latest.json</code>). If those are unavailable, falls back to deduped legs from <code>tickets_latest.json</code>. Cards use pipeline <strong>L5/L10</strong> when present; <strong>hit %</strong> fills gaps. Ordered by <strong>edge</strong> (highest first).</p>
-    <div id="top-edges-debug-tag" class="edge-source-note" style="font-size:10px;opacity:.9;margin-top:-8px;margin-bottom:10px;">Build debug: loading...</div>
-
+    
     <div class="sub-header" style="color:var(--green);">
       ▲ OVER EDGES
       <span class="sh-line" style="background:rgba(125,255,203,.2);"></span>
@@ -1941,7 +1938,7 @@ status-row
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror <strong>Standard</strong> OVER legs only (Goblin is OVER-only in this product). <strong>Hit %</strong> is games under the line (L5 if present, else L10). For those, <strong>edge is −1× ticket edge</strong>. Real Standard UNDER legs keep ticket edge. Sorted by edge.</p>
+    
     <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
     <div id="under-edges-standard" class="edge-grid edge-grid--under" style="margin-bottom:0;"></div>
   </div>
@@ -3023,22 +3020,6 @@ function renderEdges() {
   appendAll(stdO, os);
   appendAll(gobO, og);
   if (us) appendUnderRows(underRows, us);
-}
-
-function renderTopEdgesDebugTag() {
-  const el = document.getElementById("top-edges-debug-tag");
-  if (!el) return;
-  const austin = ALL_SLATE.find((p) =>
-    String(p.player || "").trim().toLowerCase() === "austin reaves" &&
-    String(p.prop || "").trim().toLowerCase() === "pts+rebs+asts" &&
-    String(p.dir || "").trim().toUpperCase() === "OVER" &&
-    String(p.pick || "").trim().toLowerCase() === "standard"
-  );
-  const line = austin?.line ?? "n/a";
-  const seriesLen = Array.isArray(austin?.actual_series) ? austin.actual_series.length : 0;
-  const src = SLATE_DEBUG_META.source || "unknown";
-  const dt = SLATE_DEBUG_META.date || "n/a";
-  el.textContent = `Build debug: src=${src} date=${dt} n=${ALL_SLATE.length} AustinStdOverLine=${line} actual_series_len=${seriesLen}`;
 }
 
 // ── Streak card (shared for L5 and L10) ───────────────────

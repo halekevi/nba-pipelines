@@ -4736,51 +4736,49 @@ def render_tickets_html(payload: dict) -> str:
         except (TypeError, ValueError):
             return iso or "—"
 
-    def _calendar_date_from_game_time(gs: str) -> str | None:
-        """Calendar YYYY-MM-DD in the prop's local offset (or parsed instant)."""
-        s = (gs or "").strip()
-        if not s:
-            return None
-        candidates = [s]
-        if " " in s and "T" not in s.split(" ", 1)[0]:
-            candidates.append(s.replace(" ", "T", 1))
-        for cand in candidates:
-            try:
-                c2 = cand.replace("Z", "+00:00") if cand.endswith("Z") else cand
-                dt = datetime.fromisoformat(c2)
-                return dt.date().isoformat()
-            except ValueError:
-                continue
-        if len(s) >= 10 and s[4] == "-" and s[7] == "-":
-            head = s[:10]
-            if head[0:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit():
-                return head
-        return None
+def _calendar_date_from_game_time(gs: str) -> str | None:
+  """Calendar YYYY-MM-DD in the prop's local offset (or parsed instant)."""
+  s = (gs or "").strip()
+  if not s:
+      return None
+  candidates = [s]
+  if " " in s and "T" not in s.split(" ", 1)[0]:
+      candidates.append(s.replace(" ", "T", 1))
+  for cand in candidates:
+      try:
+          c2 = cand.replace("Z", "+00:00") if cand.endswith("Z") else cand
+          dt = datetime.fromisoformat(c2)
+          return dt.date().isoformat()
+      except ValueError:
+          continue
+  if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+      head = s[:10]
+      if head[0:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit():
+          return head
+  return None
 
-    def _modal_slate_date_from_legs(p: dict) -> str | None:
-        counts: dict[str, int] = {}
-        for g in p.get("groups") or []:
-            for t in g.get("tickets") or []:
-                for leg in t.get("legs") or []:
-                    cd = _calendar_date_from_game_time(str(leg.get("game_time") or ""))
-                    if cd:
-                        counts[cd] = counts.get(cd, 0) + 1
-        if not counts:
-            return None
-        return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
+def _modal_slate_date_from_legs(p: dict) -> str | None:
+  counts: dict[str, int] = {}
+  for g in p.get("groups") or []:
+      for t in g.get("tickets") or []:
+          for leg in t.get("legs") or []:
+              cd = _calendar_date_from_game_time(str(leg.get("game_time") or ""))
+              if cd:
+                  counts[cd] = counts.get(cd, 0) + 1
+  if not counts:
+      return None
+  return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
 
-    date_from_legs = _modal_slate_date_from_legs(payload)
-    date_eff = date_from_legs or date_declared or ""
-    if len(date_eff) > 10:
+      date_from_legs = _modal_slate_date_from_legs(payload)
+      date_eff = date_from_legs or date_declared or ""
+      if len(date_eff) > 10:
         date_eff = date_eff[:10]
-
-    date_mismatch_html = ""
-    if date_from_legs and date_declared and date_from_legs != date_declared:
+      date_mismatch_html = ""
+      if date_from_legs and date_declared and date_from_legs != date_declared:
         date_mismatch_html = (
-            f' <span style="opacity:.65;font-size:11px;">file date {fmt_slate_date_pretty(date_declared)}</span>'
+          f' <span style="opacity:.65;font-size:11px;">file date {fmt_slate_date_pretty(date_declared)}</span>'
         )
-
-    date_pretty = fmt_slate_date_pretty(date_eff)
+      date_pretty = fmt_slate_date_pretty(date_eff)
 
     CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap');
@@ -5086,21 +5084,9 @@ html[data-theme="light"] .ticket{
     <h1>🎟 Latest <span>Tickets</span></h1>
     <div class="meta">Generated: {gen_at} &nbsp;|&nbsp; Slate date: <strong>{date_pretty}</strong> <span style="opacity:.72">({date_eff})</span>{date_mismatch_html}</div>
   </div>
-</div>
+  """)
 
-<div class="filter-pill">
-  Filters &rarr;
-  <strong>tiers:</strong> {filters.get('tiers','ALL')} &nbsp;
-  <strong>min_hit_rate:</strong> {filters.get('min_hit_rate',0)} &nbsp;
-  <strong>min_edge:</strong> {filters.get('min_edge',0)} &nbsp;
-  <strong>min_rank:</strong> {filters.get('min_rank','None')} &nbsp;
-  <strong>pick_types:</strong> {filters.get('pick_types','ALL')}
-  &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
-</div>
-<div class="filter-pill" style="margin-top:-12px;">
-  Quick read: <strong>STRONG</strong> means direction aligns with context (defense + pace + sample), <strong>LEAN</strong> means partial alignment, <strong>RISKY</strong> means weak context support.
-</div>
-""")
+
 
     if not payload.get("groups"):
         html_parts.append("""
@@ -6870,7 +6856,7 @@ def load_mlb(path: str) -> pd.DataFrame:
     # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
     if "hit_rate" in df.columns and df["hit_rate"].notna().any():
         hr = df["hit_rate"]
-        if hr.dtype == object:
+        if hr.dtype == object:h
             hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
             hr = pd.to_numeric(hr, errors="coerce")
         else:
@@ -12861,24 +12847,7 @@ def _tickets_generator_filter_html(filters: dict) -> str:
             return "None"
         return v
 
-    return f'''<div class="filter-pill" style="margin-top:0;">
-  <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Ticket generator</div>
-  Filters &rarr;
-  <strong>tiers:</strong> {_h(_disp("tiers", "ALL"))} &nbsp;
-  <strong>min_hit_rate:</strong> {_h(_disp("min_hit_rate", 0))} &nbsp;
-  <strong>min_edge:</strong> {_h(_disp("min_edge", 0))} &nbsp;
-  <strong>min_rank:</strong> {_h(_disp("min_rank", "None"))} &nbsp;
-  <strong>pick_types:</strong> {_h(_disp("pick_types", "ALL"))} &nbsp;
-  <strong>high_conviction:</strong> {_h(_disp("high_conviction", False))} &nbsp;
-  <strong>ticket_gen_starts:</strong> {_h(_disp("ticket_gen_starts", "—"))} &nbsp;
-  <strong>structured_min_leg_hit:</strong> {_h(_disp("structured_min_leg_hit_rate", "—"))} &nbsp;
-  <strong>leg_min_hit_by_n:</strong> {_h(lm_s)}
-  &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
-</div>
-<div class="filter-pill" style="margin-top:-12px;">
-  Slip tags use empirical <strong>EV</strong> when payout data exists (fallback to modeled EV): <strong>STRONG</strong> &ge;1.50&times;, <strong>OK</strong> 1.15&ndash;1.50&times;, <strong>MARGINAL</strong> 0.80&ndash;1.15&times;.
-  Tap a player row to expand the L5 / L10 hit timeline when counts exist in JSON.
-</div>'''
+return ''
 
 
 def _group_max_ev_for_ui_cap(group: dict) -> float:
