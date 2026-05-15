@@ -4774,7 +4774,7 @@ def render_tickets_html(payload: dict) -> str:
     if len(date_eff) > 10:
         date_eff = date_eff[:10]
 
-    date_mismatch_html = ""
+     = ""
     if date_from_legs and date_declared and date_from_legs != date_declared:
         date_mismatch_html = (
             f' <span style="opacity:.65;font-size:11px;">file date {fmt_slate_date_pretty(date_declared)}</span>'
@@ -5086,7 +5086,7 @@ html[data-theme="light"] .ticket{
     <h1>🎟 Latest <span>Tickets</span></h1>
     <div class="meta">Generated: {gen_at} &nbsp;|&nbsp; Slate date: <strong>{date_pretty}</strong> <span style="opacity:.72">({date_eff})</span>{date_mismatch_html}</div>
   </div>
-</div>
+  """)
 
 
 
