@@ -35,7 +35,7 @@ startCommand = "sh scripts/railway_gunicorn.sh"
 healthcheckPath = "/ping"
 healthcheckTimeout = 180
 
-# cache-bust: 2026-05-15 21:00 — /tickets UNIFORM in filter bar + client fallback for stale deploys
+# cache-bust: 2026-05-15 22:00 — /grades mobile scroll (parent window, no iframe flex trap)
 #
 # Income (/income): Daily P&L rows come from grade_history.json, appended by
 #   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD

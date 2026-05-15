@@ -98,8 +98,23 @@ html.page-grades-root body.page-grades .grades-body{
   flex:none!important;
 }
 @media (max-width:900px){
+  html.page-grades-root body.page-grades .grades-page,
   html.page-grades-root body.page-grades .grades-body{
+    display:block!important;
+    flex:none!important;
+    min-height:auto!important;
+    height:auto!important;
     overflow:visible!important;
+  }
+  html.page-grades-root body.page-grades .iframe-shell{
+    display:block!important;
+    flex:none!important;
+    min-height:auto!important;
+    height:auto!important;
+  }
+  html.page-grades-root body.page-grades .iframe-shell-stage{
+    min-height:auto!important;
+    height:auto!important;
   }
 }
 /* Stage: do NOT use height:auto!important — syncGradeFrameHeight / syncTicketFrameHeight / syncPropsEvalHeight set inline height in px. */
@@ -117,10 +132,11 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%!important;
   max-width:100%!important;
   height:auto;
-  min-height:min(50dvh,680px);
+  min-height:0;
   z-index:0!important;
-  overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
+  overflow:visible!important;
+  -webkit-overflow-scrolling:auto!important;
+  touch-action:auto!important;
 }
 /* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
 body.page-grades .iframe-shell-stage{
@@ -134,8 +150,9 @@ body.page-grades .iframe-shell-stage > iframe.grade-frame{
   width:100%;
   max-width:100%;
   height:auto;
-  min-height:min(50dvh,680px);
+  min-height:0;
   z-index:0;
+  overflow:visible;
 }
 /* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
    which traps scroll inside a short box — let content define page/stage height instead. */
@@ -1239,7 +1256,7 @@ select option,
 
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260515grades-scroll"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1501,6 +1518,12 @@ function gradesFetchSignal(ms) {
     if (pe && !pe.hidden) {
       return { win: window, key: 'p' };
     }
+    /* Mobile: iframe is content-sized; parent window scrolls (nested iframe scroll steals touch). */
+    try {
+      if (window.matchMedia('(max-width: 900px), (pointer: coarse)').matches) {
+        return { win: window, key: 'w' };
+      }
+    } catch (_e) {}
     const tick = document.getElementById('ticket-frame');
     if (tick && tick.style.display !== 'none' && tick.contentWindow) {
       return { win: tick.contentWindow, key: 't' };
