@@ -1411,7 +1411,7 @@ select option,
   </div>
   <div id="uniform-tickets-panel" class="grades-analytics-wrap" hidden aria-label="Uniform-bucket tickets for the report date">
     
-<div class="utp-root">
+<div class="utp-root" data-mode="grades">
   <button type="button" class="utp-toggle" data-utp="toggle" aria-expanded="false">
     <span class="utp-toggle-icon">🎫</span>
     <span>Uniform-Bucket Tickets</span>
@@ -1477,6 +1477,7 @@ select option,
       <div data-utp="backtest-host"></div>
     </div>
   </section>
+
 </div>
 
   </div>
@@ -2152,6 +2153,15 @@ function gradesFrameMobileLayout() {
   }
 }
 
+function collapseAllSlateDetails(doc) {
+  if (!doc) return;
+  doc.querySelectorAll(
+    'details.sport-collapsible, details.matrix-collapsible, details.grades-sport-bucket'
+  ).forEach((el) => {
+    el.open = false;
+  });
+}
+
 function collapseSportsInSlateFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
@@ -2169,9 +2179,7 @@ function collapseSportsInSlateFrame(frame) {
     sec => sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible')
   );
   if (nativeSportDetails.length === sections.length) {
-    nativeSportDetails.forEach((sec, i) => {
-      sec.open = i === 0;
-    });
+    collapseAllSlateDetails(doc);
     return;
   }
 
@@ -2185,8 +2193,7 @@ function collapseSportsInSlateFrame(frame) {
 
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    // First section open so the iframe does not look empty behind collapsed buckets.
-    details.open = idx === 0;
+    details.open = false;
 
     const summary = doc.createElement('summary');
     const title = doc.createElement('span');
@@ -2205,6 +2212,7 @@ function collapseSportsInSlateFrame(frame) {
     sec.parentNode.insertBefore(details, sec);
     body.appendChild(sec);
   });
+  collapseAllSlateDetails(doc);
 }
 
 function collapseSportsInTicketFrame(frame) {

@@ -1304,7 +1304,7 @@ def _build_prop_breakdown_rows_from_rows(rows: list[dict]) -> list[dict[str, Any
 def prop_breakdown_widget(rows: list[dict]) -> str:
     payload = _build_prop_breakdown_rows_from_rows(rows)
     payload_json = h(json.dumps(payload, ensure_ascii=False))
-    return f"""<details class="matrix-collapsible prop-breakdown-widget" open>
+    return f"""<details class="matrix-collapsible prop-breakdown-widget">
       <summary>PROP TYPE BREAKDOWNS</summary>
       <div class="matrix-body">
         <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
