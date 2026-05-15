@@ -4736,38 +4736,38 @@ def render_tickets_html(payload: dict) -> str:
         except (TypeError, ValueError):
             return iso or "—"
 
-    def _calendar_date_from_game_time(gs: str) -> str | None:
-        """Calendar YYYY-MM-DD in the prop's local offset (or parsed instant)."""
-        s = (gs or "").strip()
-        if not s:
-            return None
-        candidates = [s]
-        if " " in s and "T" not in s.split(" ", 1)[0]:
-            candidates.append(s.replace(" ", "T", 1))
-        for cand in candidates:
-            try:
-                c2 = cand.replace("Z", "+00:00") if cand.endswith("Z") else cand
-                dt = datetime.fromisoformat(c2)
-                return dt.date().isoformat()
-            except ValueError:
-                continue
-        if len(s) >= 10 and s[4] == "-" and s[7] == "-":
-            head = s[:10]
-            if head[0:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit():
-                return head
-        return None
+  def _calendar_date_from_game_time(gs: str) -> str | None:
+      """Calendar YYYY-MM-DD in the prop's local offset (or parsed instant)."""
+      s = (gs or "").strip()
+      if not s:
+          return None
+      candidates = [s]
+      if " " in s and "T" not in s.split(" ", 1)[0]:
+          candidates.append(s.replace(" ", "T", 1))
+      for cand in candidates:
+          try:
+              c2 = cand.replace("Z", "+00:00") if cand.endswith("Z") else cand
+              dt = datetime.fromisoformat(c2)
+              return dt.date().isoformat()
+          except ValueError:
+              continue
+      if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+          head = s[:10]
+          if head[0:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit():
+              return head
+      return None
 
-    def _modal_slate_date_from_legs(p: dict) -> str | None:
-        counts: dict[str, int] = {}
-        for g in p.get("groups") or []:
-            for t in g.get("tickets") or []:
-                for leg in t.get("legs") or []:
-                    cd = _calendar_date_from_game_time(str(leg.get("game_time") or ""))
-                    if cd:
-                        counts[cd] = counts.get(cd, 0) + 1
-        if not counts:
-            return None
-        return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
+  def _modal_slate_date_from_legs(p: dict) -> str | None:
+      counts: dict[str, int] = {}
+      for g in p.get("groups") or []:
+          for t in g.get("tickets") or []:
+              for leg in t.get("legs") or []:
+                  cd = _calendar_date_from_game_time(str(leg.get("game_time") or ""))
+                  if cd:
+                      counts[cd] = counts.get(cd, 0) + 1
+      if not counts:
+          return None
+      return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
 
     date_from_legs = _modal_slate_date_from_legs(payload)
     date_eff = date_from_legs or date_declared or ""
