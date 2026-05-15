@@ -335,9 +335,8 @@ body::after{content:'';position:fixed;inset:0;
 .edge-line-badge{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .edge-mini{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-/* expand panel */
-.edge-expand{display:none;border-top:1px solid rgba(255,255,255,.06);padding:16px 18px;background:rgba(8,8,22,.6);}
-.edge-expand.open{display:block;}
+/* Top Edges chart block — visible by default (same mini-chart path as streak cards) */
+.edge-expand{display:block;border-top:1px solid rgba(255,255,255,.06);padding:12px 14px 14px;background:rgba(8,8,22,.6);}
 .expand-tabs{display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);}
 .expand-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:8px;font-family:"Inter",sans-serif;font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);cursor:pointer;transition:all .15s;text-transform:uppercase;}
 .expand-tab:hover{color:var(--text);}
@@ -2299,6 +2298,43 @@ function getUnderStreakSeries(p, n, hits) {
   });
 }
 
+/** Game-log series for Top Edge charts: real logs when JSON has them; else streak-style synthetic (same path as L5 streak cards). */
+function expandHistForEdgeChart(p, n) {
+  const isOver = String(p.dir || "").toUpperCase() === "OVER";
+  const hist = historySeriesForPick(p, n);
+  if (hist && Array.isArray(hist.actual) && hist.actual.length >= Math.min(3, n)) {
+    return hist;
+  }
+  let hits = isOver ? resolvedOverHits(p, n) : resolvedUnderHits(p, n);
+  if (hits === null) {
+    const emp = empiricalHitPctForPick({ ...p, dir: isOver ? "OVER" : "UNDER" }, n);
+    if (Number.isFinite(emp)) hits = Math.round((emp / 100) * n);
+  }
+  if (hits === null && p.h !== undefined && p.h !== null) {
+    const hh = streakHits(p.h, n);
+    if (hh !== null) hits = hh;
+  }
+  if (hits === null) {
+    const pct = topEdgeL5HitPct(p, isOver ? "OVER" : "UNDER");
+    if (Number.isFinite(pct)) hits = Math.round((pct / 100) * n);
+  }
+  if (hits === null) hits = Math.max(1, Math.min(Math.max(1, n - 1), Math.round(0.65 * n)));
+  const synth = streakSparkData(p, n, isOver, hits);
+  if (!Array.isArray(synth) || !synth.length) return null;
+  const actual = normalizeSeries(synth).slice(-n);
+  if (actual.length < Math.min(3, n)) return null;
+  const rawLine = normalizeSeries(p.line_series || []);
+  let lineSeries =
+    rawLine.length >= actual.length ? rawLine.slice(-actual.length) : [];
+  if (!lineSeries.length) {
+    const L = Number(p.line);
+    lineSeries = Array.from({ length: actual.length }, () =>
+      Number.isFinite(L) ? L : Number(actual[actual.length - 1]) || 0
+    );
+  }
+  return { actual, lineSeries };
+}
+
 function seedPlayerDataFromCardPicks(picks) {
   for (const p of picks || []) {
     if (!p || !p.player) continue;
@@ -2827,8 +2863,7 @@ function makeSparkSVG(data, line, isOver, W=150, H=48, projRef=null) {
 }
 
 // ── Top Edges — expandable cards ──────────────────────────
-let openCard = null;
-/** When an edge card shows a synthetic UNDER view, expand charts use this pick (not ALL_SLATE[idx]). */
+/** Legacy: charts are always rendered; accordion state removed */
 let EDGE_DISPLAY_PICK = {};
 
 function buildEdgeCard(p, idx) {
@@ -2891,40 +2926,60 @@ function buildEdgeCard(p, idx) {
         <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
-  div.querySelector(".edge-card-top").addEventListener("click",()=>toggleEdge(idx,p));
   return div;
 }
 
-function toggleEdge(idx, p) {
-  const panel=document.getElementById(`expand-${idx}`);
-  const isOpen=panel.classList.contains("open");
-  if (openCard!==null && openCard!==idx) document.getElementById(`expand-${openCard}`)?.classList.remove("open");
-  if (isOpen) { panel.classList.remove("open"); openCard=null; }
-  else { panel.classList.add("open"); openCard=idx; renderExpandChart(idx,p,"l5"); }
-}
-
 function renderExpandChart(idx, p, tab) {
-  const data=getPD(p.player,p.line,p.prop,p.sport), isOver=p.dir==="OVER";
-  const n = tab==="l5" ? 5 : 10;
-  const hist = historySeriesForPick(p, n);
-  if (!hist) {
-    document.getElementById(`chart-${idx}`).innerHTML =
-      `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No actual game-log series available for this leg.</div>`;
-    document.getElementById(`pfill-${idx}`).style.width = "0%";
-    document.getElementById(`pmkr-${idx}`).style.left = "0%";
-    document.getElementById(`plbl-${idx}`).textContent = "No data";
+  const chartEl = document.getElementById(`chart-${idx}`);
+  const pfillEl = document.getElementById(`pfill-${idx}`);
+  const pmkrEl = document.getElementById(`pmkr-${idx}`);
+  const plblEl = document.getElementById(`plbl-${idx}`);
+  if (!chartEl || !pfillEl || !pmkrEl || !plblEl) return;
+  const isOver = p.dir === "OVER";
+  const n = tab === "l5" || tab === "h2h" ? 5 : 10;
+  const hist = expandHistForEdgeChart(p, n);
+  if (!hist || !hist.actual.length) {
+    chartEl.innerHTML =
+      `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No chart series for this leg.</div>`;
+    pfillEl.style.width = "0%";
+    pmkrEl.style.left = "0%";
+    plblEl.textContent = "No data";
     return;
   }
   const show = hist.actual;
+  let showLine =
+    hist.lineSeries && hist.lineSeries.length === show.length
+      ? hist.lineSeries
+      : null;
+  if (!showLine) {
+    const ref = projectedStatForPick(p);
+    const lineVal = Number(p.line);
+    const r = Number.isFinite(ref)
+      ? ref
+      : Number.isFinite(lineVal)
+        ? lineVal
+        : show.reduce((a, b) => a + b, 0) / show.length;
+    showLine = Array.from({ length: show.length }, () => r);
+  }
+  chartEl.innerHTML = makeSVG(show, p.line, isOver, 260, 100, showLine);
+  const avg = show.reduce((a, b) => a + b, 0) / show.length;
   const proj = projectedStatForPick(p);
-  const ref = Number.isFinite(proj) ? proj : Number(p.line);
-  const showLine = Array.from({length: show.length}, () => ref);
-  document.getElementById(`chart-${idx}`).innerHTML=makeSVG(show,p.line,isOver,260,100,showLine);
-  const avg=show.reduce((a,b)=>a+b,0)/show.length;
-  const maxV=Math.max(ref * 1.5, Number(p.line) * 1.5, avg * 1.3);
-  document.getElementById(`pfill-${idx}`).style.width=Math.min(100,Math.round((avg/maxV)*100))+"%";
-  document.getElementById(`pmkr-${idx}`).style.left=Math.min(100,Math.round((ref/maxV)*100))+"%";
-  document.getElementById(`plbl-${idx}`).textContent=`${avg.toFixed(1)} vs Proj ${Number.isFinite(ref) ? ref.toFixed(1) : "—"}`;
+  const refN = Number.isFinite(proj)
+    ? proj
+    : Number.isFinite(Number(p.line))
+      ? Number(p.line)
+      : avg;
+  const maxV = Math.max(
+    refN * 1.5,
+    Number(p.line) * 1.5,
+    avg * 1.3,
+    1
+  );
+  pfillEl.style.width =
+    Math.min(100, Math.round((avg / maxV) * 100)) + "%";
+  pmkrEl.style.left =
+    Math.min(100, Math.round((refN / maxV) * 100)) + "%";
+  plblEl.textContent = `${avg.toFixed(1)} vs Proj ${Number.isFinite(proj) ? proj.toFixed(1) : "—"}`;
 }
 
 function switchExpandTab(idx, tab, btn) {
@@ -3065,12 +3120,22 @@ function renderEdges() {
     for (const p of arr.slice(0, EDGE_CARD_LIMIT)) {
       const idx = Math.max(0, ALL_SLATE.indexOf(p));
       el.appendChild(buildEdgeCard(p, idx));
+      queueMicrotask(() =>
+        renderExpandChart(idx, EDGE_DISPLAY_PICK[idx] ?? p, "l5")
+      );
     }
   };
   const appendUnderRows = (rows, el) => {
     for (const { baseIdx, disp } of rows.slice(0, EDGE_CARD_LIMIT)) {
       if (disp !== ALL_SLATE[baseIdx]) EDGE_DISPLAY_PICK[baseIdx] = disp;
       el.appendChild(buildEdgeCard(disp, baseIdx));
+      queueMicrotask(() =>
+        renderExpandChart(
+          baseIdx,
+          EDGE_DISPLAY_PICK[baseIdx] ?? ALL_SLATE[baseIdx],
+          "l5"
+        )
+      );
     }
   };
   appendAll(stdO, os);

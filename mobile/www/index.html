@@ -38,7 +38,7 @@ async function fetch_smart(localPath) {
 <link rel="stylesheet" href="static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>
 :root{
-  /* Hybrid liquid-glass palette */
+  /* Hybrid liquid-glass palette */h
   --bg-main:#050505;
   --glass-bg:rgba(20,20,20,0.6);
   --glass-border:rgba(212,175,55,0.15);
@@ -217,7 +217,7 @@ body::after{content:'';position:fixed;inset:0;
 .sec-header .sec-title{flex-shrink:0;}
 
 /* hero */
-.hero{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
+.hero{display:flex;align-items:stretch;flex-direction:column;flex-wrap:nowrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
 .hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--purple));}
 .hero-eyebrow{font-size:11px;font-family:"Inter",sans-serif;font-weight:500;color:var(--muted);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;line-height:.95;color:var(--text);}
@@ -247,7 +247,7 @@ body::after{content:'';position:fixed;inset:0;
 }
 
 /* status cards */
-.status-row{display:grid;gap:14px;margin-bottom:28px;}
+.status-row{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
 .scard{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,0.3),0 1px 0 rgba(255,255,255,0.05) inset;}
 .scard:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.07) inset;}
 .scard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;}
@@ -255,6 +255,7 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.nba1h{background:rgba(255,155,86,.1);border:1px solid rgba(255,155,86,.22);}
 .scard-icon.nba1q{background:rgba(255,214,102,.1);border:1px solid rgba(255,214,102,.25);}
 .scard-icon.cbb{background:rgba(127,199,217,.1);border:1px solid rgba(127,199,217,.2);}
+.scard-icon.cfb{background:rgba(139,69,19,.14);border:1px solid rgba(210,150,80,.28);}
 .scard-icon.nhl{background:rgba(183,168,255,.1);border:1px solid rgba(183,168,255,.2);}
 .scard-icon.soccer{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.2);}
 .scard-icon.mlb{background:rgba(255,121,121,.1);border:1px solid rgba(255,121,121,.22);}
@@ -264,7 +265,7 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
 .scard-title{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
-.scard-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:1px;}
+.scard-val{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);letter-spacing:1px;}
 .scard-sub{font-size:10px;color:var(--muted2);margin-top:3px;}
 .sbadge{font-size:9px;font-family:"Inter",sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px;}
 .sbadge.fresh{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
@@ -337,6 +338,7 @@ body::after{content:'';position:fixed;inset:0;
 .sp-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.28);}
 .sp-nba1q{background:rgba(255,214,102,.14);color:#ffd87a;border:1px solid rgba(255,214,102,.3);}
 .sp-cbb{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
+.sp-cfb{background:rgba(139,69,19,.16);color:#e8c88a;border:1px solid rgba(210,150,80,.32);}
 .sp-nhl{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .sp-soccer{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
 .sp-mlb{background:rgba(255,121,121,.12);color:#ff8c8c;border:1px solid rgba(255,121,121,.26);}
@@ -354,9 +356,8 @@ body::after{content:'';position:fixed;inset:0;
 .edge-line-badge{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .edge-mini{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-/* expand panel */
-.edge-expand{display:none;border-top:1px solid rgba(255,255,255,.06);padding:16px 18px;background:rgba(8,8,22,.6);}
-.edge-expand.open{display:block;}
+/* Top Edges chart block — visible by default (same mini-chart path as streak cards) */
+.edge-expand{display:block;border-top:1px solid rgba(255,255,255,.06);padding:12px 14px 14px;background:rgba(8,8,22,.6);}
 .expand-tabs{display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);}
 .expand-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:8px;font-family:"Inter",sans-serif;font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);cursor:pointer;transition:all .15s;text-transform:uppercase;}
 .expand-tab:hover{color:var(--text);}
@@ -996,7 +997,7 @@ body::before{
 .po-orb{position:fixed;z-index:0;pointer-events:none;contain:strict;transform:translateZ(0);}
 </style>
 <!-- Advanced optical layers -->
-<div class="mesh-bg" aria-hidden="true"></div>
+<div class="mesh-bg" aria-hidden="true"></div>h
 <div class="grain-layer" aria-hidden="true"></div>
 
 
@@ -1050,15 +1051,13 @@ body::before{
   <!-- HERO -->
   <div class="hero">
     <div class="hero-copy">
-      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · TENNIS · WNBA · Prop Intelligence</div>
+      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · CFB · WCBB · NHL · SOCCER · MLB · NFL · TENNIS · WNBA · Prop Intelligence</div>
       <h1 class="hero-title">
         <span class="ht1 prop-hero-prefix">Prop</span>
         <span class="ht2">Oracle</span>
       </h1>
     </div>
-    <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> (and Standard under edges) use <code>l5_under</code>/<code>l10_under</code> on <strong>Standard</strong> props only — Goblin is OVER-only. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
-  </div>
-
+    
   <!-- SLATE STATUS CARDS -->
   <details class="home-cat" open id="slate-explorer">
     <summary><span class="home-cat-title">Slate <span>Explorer</span></span></summary>
@@ -1112,7 +1111,7 @@ body::before{
     width:100%;
     margin:0;
     text-align:left;
-    font-size:clamp(17px,2.1vw,23px);
+    font-size:clamp(13px,1.4vw,16px);
     line-height:1.22;
     letter-spacing:.03em;
     white-space:pre-line;
@@ -1477,6 +1476,21 @@ body::before{
         <div class="scard-val" id="sc-cbb-val">Checking...</div>
       </div>
 
+      <div class="scard loading" id="sc-cfb" onclick="toggleSlatePanel('cfb')">
+        <div class="scard-head">
+          <div class="scard-icon cfb">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#e8c88a" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
+          <div class="scard-title">CFB SLATE</div>
+          <span class="sbadge loading" id="sc-cfb-badge">—</span>
+          <span class="scard-toggle">▾</span>
+        </div>
+        <div class="scard-val" id="sc-cfb-val">Checking...</div>
+      </div>
+
       <div class="scard loading" id="sc-nhl" onclick="toggleSlatePanel('nhl')">
         <div class="scard-head">
           <div class="scard-icon nhl">
@@ -1732,6 +1746,43 @@ body::before{
       </table></div>
     </div>
 
+    <div class="slate-expand" id="sp-cfb">
+      <div class="slate-toolbar">
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('cfb',this.value)" id="sf-cfb"/>
+        <button class="slate-filter-btn" id="sfb-cfb-over" onclick="toggleDirFilter('cfb','OVER',this)">▲ OVER</button>
+        <button class="slate-filter-btn" id="sfb-cfb-under" onclick="toggleDirFilter('cfb','UNDER',this)">▼ UNDER</button>
+        <button class="slate-filter-btn" id="sfb-cfb-goblin" onclick="togglePickFilter('cfb','Goblin',this)">Goblin</button>
+        <button class="slate-filter-btn" id="sfb-cfb-standard" onclick="togglePickFilter('cfb','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('cfb','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('cfb','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('cfb','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('cfb','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('cfb','D',this)">D</button>
+        </span>
+        <span class="slate-row-count" id="src-cfb"></span>
+      </div>
+      <div class="slate-table-wrap"><table class="slate-table" id="st-cfb">
+        <thead><tr>
+          <th onclick="sortSlate('cfb','tier')">TIER</th>
+          <th onclick="sortSlate('cfb','rank_score')">RANK</th>
+          <th onclick="sortSlate('cfb','player')">PLAYER</th>
+          <th onclick="sortSlate('cfb','team')">TEAM</th>
+          <th onclick="sortSlate('cfb','opp')">OPP</th>
+          <th onclick="sortSlate('cfb','prop')">PROP</th>
+          <th onclick="sortSlate('cfb','pick_type')">TYPE</th>
+          <th onclick="sortSlate('cfb','line')">LINE</th>
+          <th onclick="sortSlate('cfb','dir')">DIR</th>
+          <th onclick="sortSlate('cfb','edge')">EDGE</th>
+          <th onclick="sortSlate('cfb','hit_rate')">HIT%</th>
+          <th onclick="sortSlate('cfb','l5_over')">L5 O</th>
+          <th onclick="sortSlate('cfb','l5_under')">L5 U</th>
+          <th onclick="sortSlate('cfb','game_time')">TIME</th>
+        </tr></thead>
+        <tbody id="stb-cfb"></tbody>
+      </table></div>
+    </div>
+
     <div class="slate-expand" id="sp-nhl">
       <div class="slate-toolbar">
         <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('nhl',this.value)" id="sf-nhl"/>
@@ -1957,7 +2008,7 @@ body::before{
     <!-- COMBINED SLATE PANEL -->
     <div class="slate-expand" id="sp-combined">
       <div class="slate-toolbar">
-        <input class="slate-filter-input" type="text" placeholder="Filter player / prop / sport…" oninput="filterSlate('combined',this.value)" id="sf-combined"/>
+status-row
         <button class="slate-filter-btn" id="sfb-combined-over"     onclick="toggleDirFilter('combined','OVER',this)">▲ OVER</button>
         <button class="slate-filter-btn" id="sfb-combined-under"    onclick="toggleDirFilter('combined','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-combined-goblin"   onclick="togglePickFilter('combined','Goblin',this)">Goblin</button>
@@ -1973,7 +2024,6 @@ body::before{
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-combined">
         <thead><tr><th style="color:var(--muted2);">Loading…</th></tr></thead>
-        <tbody id="stb-combined"></tbody>
       </table></div>
     </div>
 
@@ -1991,9 +2041,7 @@ body::before{
       <div class="sec-line"></div>
       <a href="tickets.html" class="edges-see-all">See All Picks ↗</a>
     </div>
-    <p class="edge-source-note">Pulled from the <strong>Full Slate</strong> (same source as Slate Explorer <strong>Combined</strong>: combined workbook when present, otherwise merged <code>slate_latest.json</code>). If those are unavailable, falls back to deduped legs from <code>tickets_latest.json</code>. Cards use pipeline <strong>L5/L10</strong> when present; <strong>hit %</strong> fills gaps. Ordered by <strong>edge</strong> (highest first).</p>
-    <div id="top-edges-debug-tag" class="edge-source-note" style="font-size:10px;opacity:.9;margin-top:-8px;margin-bottom:10px;">Build debug: loading...</div>
-
+    
     <div class="sub-header" style="color:var(--green);">
       ▲ OVER EDGES
       <span class="sh-line" style="background:rgba(125,255,203,.2);"></span>
@@ -2007,7 +2055,7 @@ body::before{
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror <strong>Standard</strong> OVER legs only (Goblin is OVER-only in this product). <strong>Hit %</strong> is games under the line (L5 if present, else L10). For those, <strong>edge is −1× ticket edge</strong>. Real Standard UNDER legs keep ticket edge. Sorted by edge.</p>
+    
     <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
     <div id="under-edges-standard" class="edge-grid edge-grid--under" style="margin-bottom:0;"></div>
   </div>
@@ -2142,7 +2190,12 @@ function normalizeSeries(vals) {
 }
 
 function historySeriesForPick(p, n) {
-  const actual = normalizeSeries(p.actual_series).slice(-n);
+  let actual = normalizeSeries(p.actual_series).slice(-n);
+  if (!actual.length) {
+    const gcols = ["g1","g2","g3","g4","g5","g6","g7","g8","g9","g10"].slice(0, n);
+    const vals = gcols.map(k => p[k]).filter(v => v !== null && v !== undefined && Number.isFinite(Number(v))).map(Number);
+    if (vals.length >= Math.min(3, n)) actual = vals;
+  }
   if (actual.length >= Math.min(3, n)) {
     const lineRaw = normalizeSeries(p.line_series);
     const lineSeries = lineRaw.length ? lineRaw.slice(-actual.length) : Array.from({length: actual.length}, () => Number(p.line));
@@ -2307,6 +2360,43 @@ function getUnderStreakSeries(p, n, hits) {
     else v = Math.max(overLo, Math.min(overHi, v + (w - 0.5) * margin));
     return streakQuantize(v);
   });
+}
+
+/** Game-log series for Top Edge charts: real logs when JSON has them; else streak-style synthetic (same path as L5 streak cards). */
+function expandHistForEdgeChart(p, n) {
+  const isOver = String(p.dir || "").toUpperCase() === "OVER";
+  const hist = historySeriesForPick(p, n);
+  if (hist && Array.isArray(hist.actual) && hist.actual.length >= Math.min(3, n)) {
+    return hist;
+  }
+  let hits = isOver ? resolvedOverHits(p, n) : resolvedUnderHits(p, n);
+  if (hits === null) {
+    const emp = empiricalHitPctForPick({ ...p, dir: isOver ? "OVER" : "UNDER" }, n);
+    if (Number.isFinite(emp)) hits = Math.round((emp / 100) * n);
+  }
+  if (hits === null && p.h !== undefined && p.h !== null) {
+    const hh = streakHits(p.h, n);
+    if (hh !== null) hits = hh;
+  }
+  if (hits === null) {
+    const pct = topEdgeL5HitPct(p, isOver ? "OVER" : "UNDER");
+    if (Number.isFinite(pct)) hits = Math.round((pct / 100) * n);
+  }
+  if (hits === null) hits = Math.max(1, Math.min(Math.max(1, n - 1), Math.round(0.65 * n)));
+  const synth = streakSparkData(p, n, isOver, hits);
+  if (!Array.isArray(synth) || !synth.length) return null;
+  const actual = normalizeSeries(synth).slice(-n);
+  if (actual.length < Math.min(3, n)) return null;
+  const rawLine = normalizeSeries(p.line_series || []);
+  let lineSeries =
+    rawLine.length >= actual.length ? rawLine.slice(-actual.length) : [];
+  if (!lineSeries.length) {
+    const L = Number(p.line);
+    lineSeries = Array.from({ length: actual.length }, () =>
+      Number.isFinite(L) ? L : Number(actual[actual.length - 1]) || 0
+    );
+  }
+  return { actual, lineSeries };
 }
 
 function seedPlayerDataFromCardPicks(picks) {
@@ -2514,6 +2604,7 @@ async function loadSlateData() {
         mergePlayerDataFromTicketLegs(d.picks || []);
       }
     };
+    let slatePayload = null;
     try {
       const fetchOpts = { cache: 'no-store' };
       if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
@@ -2522,6 +2613,7 @@ async function loadSlateData() {
       const res = await fetch("/api/slate", fetchOpts);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
+      slatePayload = d;
       applySlatePayload(d);
     } catch (err) {
       console.warn("loadSlateData failed:", err);
@@ -2531,6 +2623,7 @@ async function loadSlateData() {
           if (fb.ok) {
             const raw = await fb.json();
             const d = Array.isArray(raw.picks) ? raw : picksFromSlateLatestJson(raw);
+            slatePayload = d;
             applySlatePayload(d);
           }
         } catch (fbErr) {
@@ -2542,6 +2635,23 @@ async function loadSlateData() {
       await window.applyHeroSlateDate();
     }
     renderTopEdgesDebugTag();
+    // Merge actual_series/line_series from /api/slate into ALL_SLATE entries
+    if (slatePayload && Array.isArray(slatePayload.picks)) {
+      const _sm = {};
+      slatePayload.picks.forEach(p => {
+        _sm[`${p.player}||${p.prop}||${p.dir}`] = p;
+      });
+      for (const row of ALL_SLATE) {
+        const _m = _sm[`${row.player}||${row.prop}||${row.dir}`];
+        if (_m) {
+          row.actual_series  = _m.actual_series  || [];
+          row.line_series    = _m.line_series    || [];
+          if (row.l5_avg     == null) row.l5_avg     = _m.l5_avg;
+          if (row.season_avg == null) row.season_avg = _m.season_avg;
+          if (row.projection == null) row.projection = _m.projection;
+        }
+      }
+    }
     renderEdges();
     renderStreaks();
     // Slate panel rows are fetched lazily per sport via /api/slate-sport/<sport>.
@@ -2652,6 +2762,7 @@ function sportDisplayLabel(rawSport) {
     NBA1H: 'NBA (1H)',
     NBA1Q: 'NBA (1Q)',
     CBB: 'CBB',
+    CFB: 'College Football',
     WCBB: 'WCBB',
     NHL: 'NHL',
     SOCCER: 'Soccer',
@@ -2676,7 +2787,7 @@ async function refreshStatus() {
       if (r2.ok) d = await r2.json();
     } catch (e2) {}
   }
-  const statusIds = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
+  const statusIds = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
   if (!d) {
     for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
     return;
@@ -2685,6 +2796,7 @@ async function refreshStatus() {
   applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
   applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
   applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
+  applyStatusCard("cfb",      d.cfb?.slate,      "CFB Slate");
   applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
   applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
@@ -2815,8 +2927,7 @@ function makeSparkSVG(data, line, isOver, W=150, H=48, projRef=null) {
 }
 
 // ── Top Edges — expandable cards ──────────────────────────
-let openCard = null;
-/** When an edge card shows a synthetic UNDER view, expand charts use this pick (not ALL_SLATE[idx]). */
+/** Legacy: charts are always rendered; accordion state removed */
 let EDGE_DISPLAY_PICK = {};
 
 function buildEdgeCard(p, idx) {
@@ -2879,40 +2990,60 @@ function buildEdgeCard(p, idx) {
         <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
-  div.querySelector(".edge-card-top").addEventListener("click",()=>toggleEdge(idx,p));
   return div;
 }
 
-function toggleEdge(idx, p) {
-  const panel=document.getElementById(`expand-${idx}`);
-  const isOpen=panel.classList.contains("open");
-  if (openCard!==null && openCard!==idx) document.getElementById(`expand-${openCard}`)?.classList.remove("open");
-  if (isOpen) { panel.classList.remove("open"); openCard=null; }
-  else { panel.classList.add("open"); openCard=idx; renderExpandChart(idx,p,"l5"); }
-}
-
 function renderExpandChart(idx, p, tab) {
-  const data=getPD(p.player,p.line,p.prop,p.sport), isOver=p.dir==="OVER";
-  const n = tab==="l5" ? 5 : 10;
-  const hist = historySeriesForPick(p, n);
-  if (!hist) {
-    document.getElementById(`chart-${idx}`).innerHTML =
-      `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No actual game-log series available for this leg.</div>`;
-    document.getElementById(`pfill-${idx}`).style.width = "0%";
-    document.getElementById(`pmkr-${idx}`).style.left = "0%";
-    document.getElementById(`plbl-${idx}`).textContent = "No data";
+  const chartEl = document.getElementById(`chart-${idx}`);
+  const pfillEl = document.getElementById(`pfill-${idx}`);
+  const pmkrEl = document.getElementById(`pmkr-${idx}`);
+  const plblEl = document.getElementById(`plbl-${idx}`);
+  if (!chartEl || !pfillEl || !pmkrEl || !plblEl) return;
+  const isOver = p.dir === "OVER";
+  const n = tab === "l5" || tab === "h2h" ? 5 : 10;
+  const hist = expandHistForEdgeChart(p, n);
+  if (!hist || !hist.actual.length) {
+    chartEl.innerHTML =
+      `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No chart series for this leg.</div>`;
+    pfillEl.style.width = "0%";
+    pmkrEl.style.left = "0%";
+    plblEl.textContent = "No data";
     return;
   }
   const show = hist.actual;
+  let showLine =
+    hist.lineSeries && hist.lineSeries.length === show.length
+      ? hist.lineSeries
+      : null;
+  if (!showLine) {
+    const ref = projectedStatForPick(p);
+    const lineVal = Number(p.line);
+    const r = Number.isFinite(ref)
+      ? ref
+      : Number.isFinite(lineVal)
+        ? lineVal
+        : show.reduce((a, b) => a + b, 0) / show.length;
+    showLine = Array.from({ length: show.length }, () => r);
+  }
+  chartEl.innerHTML = makeSVG(show, p.line, isOver, 260, 100, showLine);
+  const avg = show.reduce((a, b) => a + b, 0) / show.length;
   const proj = projectedStatForPick(p);
-  const ref = Number.isFinite(proj) ? proj : Number(p.line);
-  const showLine = Array.from({length: show.length}, () => ref);
-  document.getElementById(`chart-${idx}`).innerHTML=makeSVG(show,p.line,isOver,260,100,showLine);
-  const avg=show.reduce((a,b)=>a+b,0)/show.length;
-  const maxV=Math.max(ref * 1.5, Number(p.line) * 1.5, avg * 1.3);
-  document.getElementById(`pfill-${idx}`).style.width=Math.min(100,Math.round((avg/maxV)*100))+"%";
-  document.getElementById(`pmkr-${idx}`).style.left=Math.min(100,Math.round((ref/maxV)*100))+"%";
-  document.getElementById(`plbl-${idx}`).textContent=`${avg.toFixed(1)} vs Proj ${Number.isFinite(ref) ? ref.toFixed(1) : "—"}`;
+  const refN = Number.isFinite(proj)
+    ? proj
+    : Number.isFinite(Number(p.line))
+      ? Number(p.line)
+      : avg;
+  const maxV = Math.max(
+    refN * 1.5,
+    Number(p.line) * 1.5,
+    avg * 1.3,
+    1
+  );
+  pfillEl.style.width =
+    Math.min(100, Math.round((avg / maxV) * 100)) + "%";
+  pmkrEl.style.left =
+    Math.min(100, Math.round((refN / maxV) * 100)) + "%";
+  plblEl.textContent = `${avg.toFixed(1)} vs Proj ${Number.isFinite(proj) ? proj.toFixed(1) : "—"}`;
 }
 
 function switchExpandTab(idx, tab, btn) {
@@ -2927,11 +3058,18 @@ function underEdgeDisplayPick(basePick) {
   if (isGoblinPick(basePick)) return null;
 
   const dir = String(basePick.dir || "").trim().toUpperCase();
-  if (dir === "UNDER") return basePick;
+  if (dir === "UNDER") {
+    const eu = Number(basePick.edge);
+    if (!Number.isFinite(eu) || eu >= 0) return null; // native UNDER must have negative edge (real abs_edge > 0)
+    return basePick;
+  }
   if (dir !== "OVER") return null;
 
   const eo = Number(basePick.edge);
-  const edgeUnder = Number.isFinite(eo) ? -eo : 0;
+  // Tune UP for stricter parity with visible OVER cards (e.g. 0.5); 0.1 drops tiny projection noise (+0.06 synth).
+  const UNDER_SYNTH_EDGE_MIN = 0.1;
+  if (!Number.isFinite(eo) || Math.abs(eo) < UNDER_SYNTH_EDGE_MIN) return null;
+  const edgeUnder = -eo;
 
   const h5 = resolvedUnderHits(basePick, 5);
   if (h5 !== null) {
@@ -3046,33 +3184,27 @@ function renderEdges() {
     for (const p of arr.slice(0, EDGE_CARD_LIMIT)) {
       const idx = Math.max(0, ALL_SLATE.indexOf(p));
       el.appendChild(buildEdgeCard(p, idx));
+      queueMicrotask(() =>
+        renderExpandChart(idx, EDGE_DISPLAY_PICK[idx] ?? p, "l5")
+      );
     }
   };
   const appendUnderRows = (rows, el) => {
     for (const { baseIdx, disp } of rows.slice(0, EDGE_CARD_LIMIT)) {
       if (disp !== ALL_SLATE[baseIdx]) EDGE_DISPLAY_PICK[baseIdx] = disp;
       el.appendChild(buildEdgeCard(disp, baseIdx));
+      queueMicrotask(() =>
+        renderExpandChart(
+          baseIdx,
+          EDGE_DISPLAY_PICK[baseIdx] ?? ALL_SLATE[baseIdx],
+          "l5"
+        )
+      );
     }
   };
   appendAll(stdO, os);
   appendAll(gobO, og);
   if (us) appendUnderRows(underRows, us);
-}
-
-function renderTopEdgesDebugTag() {
-  const el = document.getElementById("top-edges-debug-tag");
-  if (!el) return;
-  const austin = ALL_SLATE.find((p) =>
-    String(p.player || "").trim().toLowerCase() === "austin reaves" &&
-    String(p.prop || "").trim().toLowerCase() === "pts+rebs+asts" &&
-    String(p.dir || "").trim().toUpperCase() === "OVER" &&
-    String(p.pick || "").trim().toLowerCase() === "standard"
-  );
-  const line = austin?.line ?? "n/a";
-  const seriesLen = Array.isArray(austin?.actual_series) ? austin.actual_series.length : 0;
-  const src = SLATE_DEBUG_META.source || "unknown";
-  const dt = SLATE_DEBUG_META.date || "n/a";
-  el.textContent = `Build debug: src=${src} date=${dt} n=${ALL_SLATE.length} AustinStdOverLine=${line} actual_series_len=${seriesLen}`;
 }
 
 // ── Streak card (shared for L5 and L10) ───────────────────
@@ -3181,7 +3313,7 @@ const RENDER_TOKEN = {};
 const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 const L5_FILTER_MIN_HITS = 4;
 
-const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','nfl','tennis','wnba'];
+const SPORTS = ['nba','nba1h','nba1q','cbb','cfb','nhl','soccer','mlb','nfl','tennis','wnba'];
 SPORTS.forEach(s => {
   SLATE_STATE[s] = { sortKey: 'abs_edge', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
 });
