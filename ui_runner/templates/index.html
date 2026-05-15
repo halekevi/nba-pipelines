@@ -3022,22 +3022,6 @@ function renderEdges() {
   if (us) appendUnderRows(underRows, us);
 }
 
-function renderTopEdgesDebugTag() {
-  const el = document.getElementById("top-edges-debug-tag");
-  if (!el) return;
-  const austin = ALL_SLATE.find((p) =>
-    String(p.player || "").trim().toLowerCase() === "austin reaves" &&
-    String(p.prop || "").trim().toLowerCase() === "pts+rebs+asts" &&
-    String(p.dir || "").trim().toUpperCase() === "OVER" &&
-    String(p.pick || "").trim().toLowerCase() === "standard"
-  );
-  const line = austin?.line ?? "n/a";
-  const seriesLen = Array.isArray(austin?.actual_series) ? austin.actual_series.length : 0;
-  const src = SLATE_DEBUG_META.source || "unknown";
-  const dt = SLATE_DEBUG_META.date || "n/a";
-  el.textContent = `Build debug: src=${src} date=${dt} n=${ALL_SLATE.length} AustinStdOverLine=${line} actual_series_len=${seriesLen}`;
-}
-
 // ── Streak card (shared for L5 and L10) ───────────────────
 function streakCard(p, n) {
   const isOver=p.dir==="OVER";
