@@ -4769,16 +4769,16 @@ def _modal_slate_date_from_legs(p: dict) -> str | None:
       return None
   return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
 
-  date_from_legs = _modal_slate_date_from_legs(payload)
-  date_eff = date_from_legs or date_declared or ""
-  if len(date_eff) > 10:
-    date_eff = date_eff[:10]
-  date_mismatch_html = ""
-  if date_from_legs and date_declared and date_from_legs != date_declared:
-    date_mismatch_html = (
-      f' <span style="opacity:.65;font-size:11px;">file date {fmt_slate_date_pretty(date_declared)}</span>'
-    )
-  date_pretty = fmt_slate_date_pretty(date_eff)
+      date_from_legs = _modal_slate_date_from_legs(payload)
+      date_eff = date_from_legs or date_declared or ""
+      if len(date_eff) > 10:
+        date_eff = date_eff[:10]
+      date_mismatch_html = ""
+      if date_from_legs and date_declared and date_from_legs != date_declared:
+        date_mismatch_html = (
+          f' <span style="opacity:.65;font-size:11px;">file date {fmt_slate_date_pretty(date_declared)}</span>'
+        )
+      date_pretty = fmt_slate_date_pretty(date_eff)
 
     CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap');
