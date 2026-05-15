@@ -7,6 +7,7 @@
 #    .\run_pipeline.ps1                        # All sports parallel + Combined
 #    .\run_pipeline.ps1 -NBAOnly               # NBA only + Combined
 #    .\run_pipeline.ps1 -CBBOnly               # CBB only + Combined
+#    .\run_pipeline.ps1 -CFBOnly               # College Football only + Combined
 #    .\run_pipeline.ps1 -NHLOnly               # NHL only + Combined
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
@@ -36,8 +37,8 @@
 #  No -Include flags needed -- just run any sport, combined picks it up.
 #
 #  Prefer .\run_pipeline.ps1 from repo root; this copy under scripts\ is equivalent.
-#  After combined + git push, runs scripts\run_grader.ps1 for (pipeline date - 1 day)
-#  and pushes slate_eval_*.html / ticket_eval_*.html for that slate date.
+#  After combined + git push, runs scripts\run_grader.ps1 for yesterday's slate, builds
+#  ticket_eval HTML for the pipeline date (today) so Grades matches live /tickets, then pushes grade artifacts.
 #
 # ENTRY POINTS
 #   Full daily run  : scripts\run_daily.ps1 [-Date YYYY-MM-DD]
@@ -52,6 +53,7 @@ param(
     [string]$OddsApiKey = "",
     [switch]$NBAOnly,
     [switch]$CBBOnly,
+    [switch]$CFBOnly,
     [switch]$NHLOnly,
     [switch]$MLBOnly,
     # Fast MLB verification mode: run MLB through Step 4 and exit.
@@ -134,8 +136,10 @@ if ($MLBVerify -and -not $MLBOnly) {
 # MLB step4 ESPN/cache season: use slate calendar year (2026 slates must not pass --season 2025).
 try {
     $MLBSeasonYear = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).Year
+    $CFBSeasonYear = $MLBSeasonYear
 } catch {
     $MLBSeasonYear = (Get-Date).Year
+    $CFBSeasonYear = $MLBSeasonYear
 }
 
 $StartTime = Get-Date
@@ -150,6 +154,7 @@ if ((Split-Path -Leaf $Root) -eq "scripts") {
 $SportsRoot = Join-Path $Root "Sports"
 $NBADir    = Join-Path $SportsRoot "NBA"
 $CBBDir    = Join-Path $SportsRoot "CBB"
+$CFBDir    = Join-Path $SportsRoot "CFB"
 $NHLDir    = Join-Path $SportsRoot "NHL"
 $MLBDir    = Join-Path $SportsRoot "MLB"
 $SoccerDir = Join-Path $SportsRoot "Soccer"
@@ -169,6 +174,7 @@ $TennisRunOutDir = Join-Path $OutDir "tennis"
 $MLBRunOutDir = Join-Path $OutDir "mlb"
 $NFLRunOutDir = Join-Path $OutDir "nfl"
 $CBBRunOutDir = Join-Path $OutDir "cbb"
+$CFBRunOutDir = Join-Path $OutDir "cfb"
 $CanonicalOutDir = Join-Path $OutDir "canonical"
 $CanonicalPlatformUiDir = Join-Path $CanonicalOutDir "platform_ui"
 $CanonicalMobileAppDir = Join-Path $CanonicalOutDir "mobile_app"
@@ -187,6 +193,7 @@ if (-not (Test-Path $TennisRunOutDir)) { New-Item -ItemType Directory -Force -Pa
 if (-not (Test-Path $MLBRunOutDir)) { New-Item -ItemType Directory -Force -Path $MLBRunOutDir | Out-Null }
 if (-not (Test-Path $NFLRunOutDir)) { New-Item -ItemType Directory -Force -Path $NFLRunOutDir | Out-Null }
 if (-not (Test-Path $CBBRunOutDir)) { New-Item -ItemType Directory -Force -Path $CBBRunOutDir | Out-Null }
+if (-not (Test-Path $CFBRunOutDir)) { New-Item -ItemType Directory -Force -Path $CFBRunOutDir | Out-Null }
 if (-not (Test-Path $CanonicalOutDir)) { New-Item -ItemType Directory -Force -Path $CanonicalOutDir | Out-Null }
 if (-not (Test-Path $CanonicalPlatformUiDir)) { New-Item -ItemType Directory -Force -Path $CanonicalPlatformUiDir | Out-Null }
 if (-not (Test-Path $UiDataDir)) { New-Item -ItemType Directory -Force -Path $UiDataDir | Out-Null }
@@ -539,7 +546,12 @@ function Run-GitPush {
 }
 
 function Run-GitPushGradeArtifacts {
-    param([string]$GradeDate)
+    param(
+        [string]$GradeDate,
+        # Pipeline "today" slate: stage ticket_eval_<this>.html alongside yesterday's graded bundle
+        # so Grades hub date pills match /tickets before the next morning's grader run.
+        [string]$AlsoTicketEvalDate = ""
+    )
 
     Write-Host ""
     Write-Host "[ GIT ] Pushing grade HTML for slate date $GradeDate ..." -ForegroundColor Cyan
@@ -548,6 +560,9 @@ function Run-GitPushGradeArtifacts {
         "ui_runner/templates/ticket_eval_$GradeDate.html",
         "ui_runner/templates/graded_props_$GradeDate.json"
     )
+    if ($AlsoTicketEvalDate -and ($AlsoTicketEvalDate -ne $GradeDate) -and ($AlsoTicketEvalDate -match '^\d{4}-\d{2}-\d{2}$')) {
+        $candidates += "ui_runner/templates/ticket_eval_$AlsoTicketEvalDate.html"
+    }
     $toStage = @()
     foreach ($rel in $candidates) {
         $full = Join-Path $Root ($rel -replace "/", "\")
@@ -1033,6 +1048,28 @@ if ($TennisOnly) {
 }
 
 # =============================================================================
+#  CFB ONLY  (College Football — CBB-style steps 1-6)
+# =============================================================================
+if ($CFBOnly) {
+    Write-Host "[ CFB PIPELINE ]" -ForegroundColor Magenta
+    Write-Host ""
+    $ok = $true
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CFB Step 1 - Fetch PrizePicks"      $CFBDir ".\scripts\pipeline\step1_pp_cfb_scraper.py"      "--out `"$CFBRunOutDir\step1_cfb.csv`"" } } else { Write-Host "  [CFB] Skipping step1 fetch -- using existing $CFBRunOutDir\step1_cfb.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "CFB Step 2 - Normalize"               $CFBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CFBRunOutDir\step1_cfb.csv`" --output `"$CFBRunOutDir\step2_cfb.csv`"" }
+    if ($ok) { $ok = Run-Step "CFB Step 3a - Build Unit Rankings"      $CFBDir ".\scripts\build_cfb_unit_rankings.py"                             "--season $CFBSeasonYear --out data\reference\cfb_team_unit_rankings.csv" }
+    if ($ok) { $ok = Run-Step "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
+    if ($ok) { $ok = Run-Step "CFB Step 4 - Attach ESPN IDs"         $CFBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`" --output `"$CFBRunOutDir\step3_cfb.csv`" --master data/reference/ncaa_football_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --cache data\cache\cfb_boxscore_cache.csv" }
+    if ($ok) { $ok = Run-Step "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
+    if ($ok) { Invoke-PropOracleStep7b "CFB" }
+    Write-Host ""
+    if ($ok) { Write-Host "  CFB complete." -ForegroundColor Green } else { Write-Host "  CFB FAILED." -ForegroundColor Red }
+    if ($ok) { Run-Combined "after CFB" }
+    Print-Done
+    exit
+}
+
+# =============================================================================
 #  CBB ONLY
 # =============================================================================
 if ($CBBOnly) {
@@ -1152,10 +1189,20 @@ if (-not $NFL_PARALLEL_ACTIVE) {
     Write-Host "  [NFL] Parallel job skipped (off-season for $Date; active months Aug–Feb)." -ForegroundColor DarkGray
 }
 
+# College Football (PrizePicks league_id=15): Aug–Jan regular + bowls.
+$CFB_PARALLEL_ACTIVE = $true
+try {
+    $dCfb = [datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)
+    $CFB_PARALLEL_ACTIVE = ($dCfb.Month -ge 8 -or $dCfb.Month -le 1)
+} catch { }
+if (-not $CFB_PARALLEL_ACTIVE) {
+    Write-Host "  [CFB] Parallel job skipped (off-season for $Date; active months Aug–Jan)." -ForegroundColor DarkGray
+}
+
 $parallelLabel = if ($wnbaParallel) {
-    "[ PARALLEL PIPELINE: NBA + CBB + NHL + Soccer + Tennis + MLB + NFL + WNBA ]"
+    "[ PARALLEL PIPELINE: NBA + CBB + CFB + NHL + Soccer + Tennis + MLB + NFL + WNBA ]"
 } else {
-    "[ PARALLEL PIPELINE: NBA + CBB + NHL + Soccer + Tennis + MLB + NFL ]"
+    "[ PARALLEL PIPELINE: NBA + CBB + CFB + NHL + Soccer + Tennis + MLB + NFL ]"
 }
 Write-Host $parallelLabel -ForegroundColor Magenta
 Write-Host ""
@@ -1263,6 +1310,61 @@ $CBBJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "CBB" $RepoRoot }
     return $ok
 } -ArgumentList $CBBDir, $Date, $SkipFetch, $Root, $CBBRunOutDir
+}
+
+# -- CFB Job ------------------------------------------------------------------
+$CFBJob = $null
+if ($CFB_PARALLEL_ACTIVE) {
+$CFBJob = Start-Job -ScriptBlock {
+    param($CFBDir, $Date, $SkipFetch, $RepoRoot, $CFBRunOutDir)
+    $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    try {
+        $cfbSeason = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).Year
+    } catch {
+        $cfbSeason = (Get-Date).Year
+    }
+    function Run-Step-Job {
+        param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
+        Write-Output "[CFB] --> $Label"
+        Push-Location $Dir
+        try {
+            $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[CFB] FAILED: $Label (exit $exit)"; return $false }
+            Write-Output "[CFB] OK: $Label"; return $true
+        } catch { Write-Output "[CFB] EXCEPTION: $_"; return $false
+        } finally { Pop-Location }
+    }
+    function Invoke-Step7b-Job {
+        param([string]$SportLabel, [string]$R)
+        Push-Location $R
+        try {
+            $p = Join-Path $R "scripts\step7b_edge_score.py"
+            if (-not (Test-Path $p)) {
+                Write-Output "  [$SportLabel] step7b: WARN (missing step7b_edge_score.py)"
+                return
+            }
+            $cmd = "py -3.14 `"$p`" --sport `"$SportLabel`""
+            Write-Output "  --> step7b ($SportLabel)"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "  [$SportLabel] step7b: WARN (exit $exit)" } else { Write-Output "  [$SportLabel] step7b: OK" }
+        } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
+        finally { Pop-Location }
+    }
+    $ok = $true
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CFB Step 1 - Fetch PrizePicks"      $CFBDir ".\scripts\pipeline\step1_pp_cfb_scraper.py"      "--out `"$CFBRunOutDir\step1_cfb.csv`"" } } else { Write-Output "[CFB] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 2 - Normalize"               $CFBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CFBRunOutDir\step1_cfb.csv`" --output `"$CFBRunOutDir\step2_cfb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 3a - Build Unit Rankings"      $CFBDir ".\scripts\build_cfb_unit_rankings.py"                             "--season $cfbSeason --out data\reference\cfb_team_unit_rankings.csv" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 4 - Attach ESPN IDs"         $CFBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`" --output `"$CFBRunOutDir\step3_cfb.csv`" --master data/reference/ncaa_football_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --cache data\cache\cfb_boxscore_cache.csv" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
+    if ($ok) { Invoke-Step7b-Job "CFB" $RepoRoot }
+    return $ok
+} -ArgumentList $CFBDir, $Date, $SkipFetch, $Root, $CFBRunOutDir
 }
 
 # -- NHL Job ------------------------------------------------------------------
@@ -1633,7 +1735,7 @@ $NFLJob = Start-Job -ScriptBlock {
 }
 
 # -- Wait + stream output -----------------------------------------------------
-$allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
+$allJobs = @($NBAJob, $CBBJob, $CFBJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
 
 Write-Host "  [Waiting for all pipelines to finish...]" -ForegroundColor DarkGray
 Write-Host ""
@@ -1679,6 +1781,7 @@ foreach ($job in $allJobs) {
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
 $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
+$CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx") }
 $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
@@ -1729,6 +1832,7 @@ Write-Host ""
 @(
     @{ Name="NBA";    Ok=$NBASuccess; Skip=$false },
     @{ Name="CBB";    Ok=$CBBSuccess; Skip=(-not $CBB_PARALLEL_ACTIVE) },
+    @{ Name="CFB";    Ok=$CFBSuccess; Skip=(-not $CFB_PARALLEL_ACTIVE) },
     @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false },
     @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false },
     @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },

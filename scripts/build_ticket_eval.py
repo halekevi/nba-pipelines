@@ -2153,6 +2153,33 @@ def find_ticket_json(
     return max(pool2, key=_xlsx_sheet_count_fast)
 
 
+def find_ticket_payload_path(
+    arg_date: str, override: Path | None = None
+) -> Path | None:
+    """Resolve combined slate: prefer workbook (.xlsx); else dated JSON or tickets_latest.json."""
+    wb = find_ticket_json(arg_date, override=override)
+    if wb is not None:
+        return wb
+    if override is not None:
+        return None
+    for jp in (
+        REPO_ROOT / "ui_runner" / "data" / f"combined_slate_tickets_{arg_date}.json",
+        REPO_ROOT / f"combined_slate_tickets_{arg_date}.json",
+    ):
+        if jp.is_file():
+            return jp
+    tl = TEMPLATES_DIR / "tickets_latest.json"
+    if tl.is_file():
+        try:
+            with tl.open(encoding="utf-8") as f:
+                hdr = json.load(f)
+            if str(hdr.get("date") or "")[:10] == arg_date:
+                return tl
+        except (OSError, json.JSONDecodeError, TypeError):
+            pass
+    return None
+
+
 def _player_initials(name: str) -> str:
     parts = str(name or "").strip().split()
     if not parts:
@@ -4224,13 +4251,14 @@ def main() -> int:
     override_raw = (args.tickets or args.slate or "").strip()
     override_path = Path(override_raw).resolve() if override_raw else None
 
-    tpath = find_ticket_json(arg_date, override=override_path)
+    tpath = find_ticket_payload_path(arg_date, override=override_path)
     if not tpath:
         if override_raw:
             print(f"ERROR: Ticket workbook not found: {override_raw}")
         else:
             print(
-                "ERROR: No ticket file found (combined_slate_tickets*{date}*.xlsx under outputs/<date>/)."
+                "ERROR: No ticket payload found (.xlsx under outputs/, or "
+                "ui_runner/data/combined_slate_tickets_{date}.json, or templates/tickets_latest.json when date matches)."
             )
         return 1
 
