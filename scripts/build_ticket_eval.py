@@ -3128,8 +3128,7 @@ def _build_html(
         nsec = len(grplist)
         if use_buckets:
             skin = _ticket_bucket_skin_class(bkey)
-            open_attr = " open" if bi == 0 else ""
-            parts.append(f'<details class="ticket-bucket {skin}"{open_attr}>')
+            parts.append(f'<details class="ticket-bucket {skin}">')
             parts.append(
                 f'<summary><span>{esc(bkey)}</span>'
                 f'<span class="ticket-bucket-meta">{nsec} sections · {ntix} tickets</span></summary>'

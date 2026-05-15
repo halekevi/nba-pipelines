@@ -2095,7 +2095,7 @@ function gradesFrameMobileLayout() {
 function collapseAllSlateDetails(doc) {
   if (!doc) return;
   doc.querySelectorAll(
-    'details.sport-collapsible, details.matrix-collapsible, details.grades-sport-bucket'
+    'details.sport-collapsible, details.matrix-collapsible, details.grades-sport-bucket, details.ticket-bucket'
   ).forEach((el) => {
     el.open = false;
   });
@@ -2223,8 +2223,7 @@ function collapseSportsInTicketFrame(frame) {
       tsWrap.remove();
     } catch (_r) {}
   }
-  const firstBucket = wrap.querySelector('details.grades-sport-bucket');
-  if (firstBucket) firstBucket.open = true;
+  collapseAllSlateDetails(doc);
 }
 
 // ─── PROP EVALUATION (archived props_history) ─────────────────────────────────
