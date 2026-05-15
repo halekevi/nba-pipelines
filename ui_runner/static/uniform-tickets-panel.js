@@ -345,6 +345,28 @@
     };
   }
 
+  function ensureTicketsUniformToolbar() {
+    if (!document.body.classList.contains('page-tickets')) return;
+    document.querySelectorAll('.page-tickets .utp-root').forEach((root) => {
+      if (!root.getAttribute('data-mode')) root.setAttribute('data-mode', 'tickets');
+      root.querySelectorAll('.utp-toggle').forEach((el) => el.remove());
+    });
+    const bar = document.querySelector('.tickets-built .ticket-filter-bar');
+    if (!bar || bar.querySelector('[data-utp="toggle"]')) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ticket-filter-bar-action utp-bar-toggle';
+    btn.id = 'uniform-buckets-toggle';
+    btn.setAttribute('data-utp', 'toggle');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('title', "Today's tickets grouped by realized hit-rate band");
+    btn.style.borderRadius = '999px';
+    btn.textContent = '🎫 UNIFORM';
+    const spacer = bar.querySelector('.ticket-filter-bar-spacer');
+    if (spacer) bar.insertBefore(btn, spacer);
+    else bar.appendChild(btn);
+  }
+
   function findTicketsToggle(root) {
     if (root.getAttribute('data-mode') !== 'tickets') return null;
     return document.querySelector('.tickets-built .ticket-filter-bar [data-utp="toggle"]');
@@ -359,6 +381,7 @@
   }
 
   function init() {
+    ensureTicketsUniformToolbar();
     document.querySelectorAll('.utp-root').forEach((root) => {
       if (root.__utpInit) return;
       root.__utpInit = true;

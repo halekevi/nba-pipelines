@@ -222,7 +222,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-tickets-ui")[:12] or "2026-05-15-tickets-ui"
+_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-utp-bar")[:12] or "2026-05-15-utp-bar"
 
 
 def _deploy_git_sha_short() -> str:

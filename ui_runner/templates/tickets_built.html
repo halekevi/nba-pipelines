@@ -14,9 +14,9 @@
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430webviewfix"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
-<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260422ticketscv"/>
+<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260515utp4"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260430webviewfix"/>
-<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260515utp3"/>
+<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260515utp4"/>
 </head>
 <body class="page-tickets">
 <div class="orb-1" style="position:fixed;top:-12%;left:-6%;width:560px;height:560px;background:radial-gradient(circle,rgba(127,199,217,0.18) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbP1 20s ease-in-out infinite alternate;"></div>
@@ -39,7 +39,31 @@
 {% include '_uniform_tickets_panel_tickets.html' %}
 </div>
 
-<script src="/static/uniform-tickets-panel.js?v=20260515utp3" defer></script>
+<script>
+(function () {
+  if (!document.body.classList.contains('page-tickets')) return;
+  document.querySelectorAll('.page-tickets .utp-root').forEach(function (root) {
+    if (!root.getAttribute('data-mode')) root.setAttribute('data-mode', 'tickets');
+    root.querySelectorAll('.utp-toggle').forEach(function (el) { el.remove(); });
+  });
+  var bar = document.querySelector('.tickets-built .ticket-filter-bar');
+  if (!bar || bar.querySelector('[data-utp="toggle"]')) return;
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'ticket-filter-bar-action utp-bar-toggle';
+  btn.id = 'uniform-buckets-toggle';
+  btn.setAttribute('data-utp', 'toggle');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('title', "Today's tickets grouped by realized hit-rate band");
+  btn.style.borderRadius = '999px';
+  btn.textContent = '\uD83C\uDFAB UNIFORM';
+  var spacer = bar.querySelector('.ticket-filter-bar-spacer');
+  if (spacer) bar.insertBefore(btn, spacer);
+  else bar.appendChild(btn);
+})();
+</script>
+
+<script src="/static/uniform-tickets-panel.js?v=20260515utp4" defer></script>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>

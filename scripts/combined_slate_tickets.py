@@ -12761,6 +12761,11 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
             title_attr=' title="Highest payout × win probability (top 3 groups)"',
         )
     )
+    chunks.append(
+        '<button type="button" class="ticket-filter-bar-action utp-bar-toggle" data-utp="toggle" '
+        'id="uniform-buckets-toggle" style="border-radius:999px;" aria-expanded="false" '
+        'title="Today&apos;s tickets grouped by realized hit-rate band">🎫 UNIFORM</button>'
+    )
     chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
     chunks.append(
         '<label class="ticket-filter-sort-wrap" for="ticket-sort-select">'
@@ -12779,11 +12784,6 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
     )
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all" style="border-radius:999px;">EXPAND ALL</button>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all" style="border-radius:999px;">COLLAPSE ALL</button>')
-    chunks.append(
-        '<button type="button" class="ticket-filter-bar-action utp-bar-toggle" data-utp="toggle" '
-        'id="uniform-buckets-toggle" style="border-radius:999px;" aria-expanded="false" '
-        'title="Today&apos;s tickets grouped by realized hit-rate band">🎫 UNIFORM</button>'
-    )
     chunks.append("</div>")
     return "".join(chunks)
 
