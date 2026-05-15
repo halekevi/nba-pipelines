@@ -12827,48 +12827,6 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
   </td>
 </tr>"""
 
-def _tickets_generator_filter_html(filters: dict) -> str:
-    """Human-readable ticket-builder settings (parity with legacy render_tickets_html)."""
-    if not filters:
-        return ""
-    lm = filters.get("leg_min_hit_by_n")
-    if isinstance(lm, dict) and lm:
-        try:
-            lm_s = ", ".join(
-                f"{k}:{v}" for k, v in sorted(lm.items(), key=lambda kv: int(str(kv[0])) if str(kv[0]).isdigit() else 0)
-            )
-        except Exception:
-            lm_s = str(lm)
-    else:
-        lm_s = "â€”"
-
-    def _disp(k: str, default: str = "â€”"):
-        v = filters.get(k, default)
-        if v is None:
-            return "None"
-        return v
-
-    return f'''<div class="filter-pill" style="margin-top:0;">
-  <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Ticket generator</div>
-  Filters &rarr;
-  <strong>tiers:</strong> {_h(_disp("tiers", "ALL"))} &nbsp;
-  <strong>min_hit_rate:</strong> {_h(_disp("min_hit_rate", 0))} &nbsp;
-  <strong>min_edge:</strong> {_h(_disp("min_edge", 0))} &nbsp;
-  <strong>min_rank:</strong> {_h(_disp("min_rank", "None"))} &nbsp;
-  <strong>pick_types:</strong> {_h(_disp("pick_types", "ALL"))} &nbsp;
-  <strong>high_conviction:</strong> {_h(_disp("high_conviction", False))} &nbsp;
-  <strong>ticket_gen_starts:</strong> {_h(_disp("ticket_gen_starts", "â€”"))} &nbsp;
-  <strong>structured_min_leg_hit:</strong> {_h(_disp("structured_min_leg_hit_rate", "â€”"))} &nbsp;
-  <strong>leg_min_hit_by_n:</strong> {_h(lm_s)}
-  &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">â¬‡ JSON</a>
-</div>
-<div class="filter-pill" style="margin-top:-12px;">
-  Slip tags use empirical <strong>EV</strong> when payout data exists (fallback to modeled EV): <strong>STRONG</strong> &ge;1.50&times;, <strong>OK</strong> 1.15&ndash;1.50&times;, <strong>MARGINAL</strong> 0.80&ndash;1.15&times;.
-  Tap a player row to expand the L5 / L10 hit timeline when counts exist in JSON.
-</div>'''
-
-
-
 def _group_max_ev_for_ui_cap(group: dict) -> float:
     best = float("-inf")
     for t in group.get("tickets") or []:
@@ -13086,10 +13044,6 @@ def render_tickets_body_html(
     {built_html}
   </div>
 </div>''')
-
-    filters = payload.get("filters") or {}
-    if filters:
-        parts.append(_tickets_generator_filter_html(filters))
 
     if not groups:
         parts.append('<div class="filter-pill">No tickets generated for this date.</div>')
