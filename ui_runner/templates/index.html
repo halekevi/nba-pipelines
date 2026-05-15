@@ -226,7 +226,7 @@ body::after{content:'';position:fixed;inset:0;
 }
 
 /* status cards */
-.status-row{display:grid;gap:14px;margin-bottom:28px;}
+.status-row{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
 .scard{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,0.3),0 1px 0 rgba(255,255,255,0.05) inset;}
 .scard:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.07) inset;}
 .scard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;}
@@ -1891,7 +1891,7 @@ body::before{
     <!-- COMBINED SLATE PANEL -->
     <div class="slate-expand" id="sp-combined">
       <div class="slate-toolbar">
-        <input class="slate-filter-input" type="text" placeholder="Filter player / prop / sport…" oninput="filterSlate('combined',this.value)" id="sf-combined"/>
+status-row
         <button class="slate-filter-btn" id="sfb-combined-over"     onclick="toggleDirFilter('combined','OVER',this)">▲ OVER</button>
         <button class="slate-filter-btn" id="sfb-combined-under"    onclick="toggleDirFilter('combined','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-combined-goblin"   onclick="togglePickFilter('combined','Goblin',this)">Goblin</button>
