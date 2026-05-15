@@ -1,5 +1,5 @@
-/**
- * Global scrollbar — same family as /tickets (tickets_latest / tickets_built):
+/**rgba(200, 200, 200, 0.55)
+ * Grgba(200, 200, 200, 0.55)lobal scrollbar — same family as /tickets (tickets_latest / tickets_built):
  * narrow track, soft grey pill thumb, WebKit + Firefox.
  * More specific rules (e.g. .slate-table-wrap) on individual pages still override.
  */
@@ -16,13 +16,13 @@ html {
   background: rgba(255, 255, 255, 0.02);
 }
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(200, 200, 200, 0.28);
+  background-color: rgba(200, 200, 200, 0.55);
   border-radius: 100px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(220, 220, 220, 0.42);
+  background-color: rgba(220, 220, 220, 0.70);
   background-clip: padding-box;
 }
 *::-webkit-scrollbar-corner {
@@ -36,7 +36,7 @@ html {
   background: rgba(0, 0, 0, 0.06);
 }
 [data-theme="light"] *::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 100, 100, 0.38);
+  background-color: rgba(100, 100, 100, 0.55);
   background-clip: padding-box;
 }
 [data-theme="light"] *::-webkit-scrollbar-thumb:hover {
