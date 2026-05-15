@@ -97,7 +97,8 @@
 
 .tickets-built .ticket-filter-bar-action,
 .tickets-built #expand-all,
-.tickets-built #collapse-all {
+.tickets-built #collapse-all,
+.tickets-built #uniform-buckets-toggle {
   padding: 6px 12px;
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -113,7 +114,8 @@
 
 .tickets-built .ticket-filter-bar-action:hover,
 .tickets-built #expand-all:hover,
-.tickets-built #collapse-all:hover {
+.tickets-built #collapse-all:hover,
+.tickets-built #uniform-buckets-toggle:hover {
   border-color: var(--cyan);
   color: var(--cyan);
 }

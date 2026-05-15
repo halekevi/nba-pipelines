@@ -47,6 +47,29 @@
 }
 .utp-toggle:hover { filter: brightness(1.12); transform: translateY(-1px); }
 .utp-toggle .utp-toggle-icon { font-size: 18px; }
+
+/* /tickets — no bottom pill; toggle lives in filter bar */
+.page-tickets .utp-root[data-mode="tickets"] > .utp-toggle {
+  display: none !important;
+}
+
+/* /tickets — panel sits under filter bar; toggle is a filter-bar action */
+.tickets-built .utp-root {
+  margin: 0 0 16px;
+  max-width: none;
+  padding: 0;
+}
+.tickets-built .ticket-filter-bar-action.utp-bar-toggle.active {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #ffd54f;
+  background: rgba(212, 175, 55, 0.12);
+}
+[data-theme="light"] .tickets-built .ticket-filter-bar-action.utp-bar-toggle.active {
+  border-color: rgba(180, 130, 25, 0.55);
+  color: #8a6510;
+  background: rgba(212, 175, 55, 0.14);
+}
+
 .utp-toggle .utp-toggle-meta {
   font-family: 'Inter', sans-serif;
   font-size: 11px;

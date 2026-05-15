@@ -1,0 +1,60 @@
+  <section class="utp-panel" hidden>
+    <div class="utp-panel-head">
+      <h3 class="utp-panel-title" data-utp="title">Uniform Tickets</h3>
+      <div class="utp-panel-sub">
+        Multi-leg slips assembled from <code>strict_mode</code> picks where every leg lives in
+        the same hit-rate band (Elite / Premium / Strong / Value). Backtest tab shows realized
+        joint hit rates and EV across all graded dates.
+      </div>
+      <div class="utp-tabs">
+        <button type="button" class="active" data-utp-tab="today">Today</button>
+        <button type="button" data-utp-tab="backtest">Backtest</button>
+      </div>
+    </div>
+
+    <div data-utp="today-wrap">
+      <div class="utp-controls">
+        <label>Date
+          <input type="date" data-utp="date-input"/>
+        </label>
+        <label>Showing
+          <span data-utp="date-label" style="color:var(--utp-text);font-weight:600;">—</span>
+        </label>
+        <label>Size
+          <select data-utp="size-filter">
+            <option value="">All sizes</option>
+            <option value="2">2-leg</option>
+            <option value="3">3-leg</option>
+            <option value="4">4-leg</option>
+            <option value="5">5-leg</option>
+            <option value="6">6-leg</option>
+          </select>
+        </label>
+        <label>Bucket
+          <select data-utp="bucket-filter">
+            <option value="all">All buckets</option>
+            <option value="elite">Elite</option>
+            <option value="premium">Premium</option>
+            <option value="strong">Strong</option>
+            <option value="value">Value</option>
+          </select>
+        </label>
+      </div>
+      <div data-utp="summary-host"></div>
+      <div data-utp="tickets-host"></div>
+      <div class="utp-foot" data-utp="foot"></div>
+    </div>
+
+    <div data-utp="backtest-wrap" hidden>
+      <p class="utp-panel-sub" style="margin-bottom:10px;">
+        Rolling per-(size, bucket) joint hit rate and EV on $1 stakes, computed from all
+        graded slates the assembler has touched. <strong>PrizePicks void rule:</strong>
+        when ≥1 leg voids (DNP / no action), the slip drops that leg and pays at the
+        next-smaller tier when remaining legs all hit (e.g., 5-leg with 1 void → 4-leg
+        all-hit payout). The <em>Eff Pay</em> column is the average realized multiplier
+        after that adjustment; <em>Wilson Low</em> is the 95% confidence floor on the
+        realized hit rate.
+      </p>
+      <div data-utp="backtest-host"></div>
+    </div>
+  </section>

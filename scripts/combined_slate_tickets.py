@@ -12779,6 +12779,11 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
     )
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all" style="border-radius:999px;">EXPAND ALL</button>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all" style="border-radius:999px;">COLLAPSE ALL</button>')
+    chunks.append(
+        '<button type="button" class="ticket-filter-bar-action utp-bar-toggle" data-utp="toggle" '
+        'id="uniform-buckets-toggle" style="border-radius:999px;" aria-expanded="false" '
+        'title="Today&apos;s tickets grouped by realized hit-rate band">🎫 UNIFORM</button>'
+    )
     chunks.append("</div>")
     return "".join(chunks)
 
@@ -13678,7 +13683,15 @@ def render_tickets_body_html(
     var frag = document.createDocumentFragment();
     visible.forEach(function(g){ g.style.display = ''; frag.appendChild(g); });
     if(bar){
-      shell.insertBefore(frag, bar.nextSibling);
+      var insertBefore = bar.nextElementSibling;
+      if(insertBefore && insertBefore.classList && insertBefore.classList.contains('utp-root')){
+        insertBefore = insertBefore.nextElementSibling;
+      }
+      if(insertBefore){
+        shell.insertBefore(frag, insertBefore);
+      } else {
+        shell.appendChild(frag);
+      }
     } else {
       shell.appendChild(frag);
     }

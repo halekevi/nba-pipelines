@@ -345,13 +345,32 @@
     };
   }
 
+  function findTicketsToggle(root) {
+    if (root.getAttribute('data-mode') !== 'tickets') return null;
+    return document.querySelector('.tickets-built .ticket-filter-bar [data-utp="toggle"]');
+  }
+
+  function dockTicketsPanel(root) {
+    if (root.getAttribute('data-mode') !== 'tickets') return;
+    const bar = document.querySelector('.tickets-built .ticket-filter-bar');
+    if (!bar || !bar.parentNode) return;
+    if (root.previousElementSibling === bar) return;
+    bar.insertAdjacentElement('afterend', root);
+  }
+
   function init() {
     document.querySelectorAll('.utp-root').forEach((root) => {
       if (root.__utpInit) return;
       root.__utpInit = true;
 
-      const toggleBtn = root.querySelector('[data-utp="toggle"]');
+      dockTicketsPanel(root);
+
+      if (root.getAttribute('data-mode') === 'tickets') {
+        root.querySelectorAll('.utp-toggle').forEach((el) => el.remove());
+      }
+
       const panel = root.querySelector('.utp-panel');
+      const toggleBtn = root.querySelector('[data-utp="toggle"]') || findTicketsToggle(root);
       let started = false;
 
       const start = () => {
@@ -360,13 +379,22 @@
         controller(root).then((c) => { root.__utp = c; });
       };
 
+      const setOpen = (open) => {
+        if (!toggleBtn) return;
+        toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggleBtn.classList.toggle('active', open);
+      };
+
       if (toggleBtn && panel) {
+        setOpen(!panel.hasAttribute('hidden'));
         toggleBtn.addEventListener('click', () => {
           const open = !panel.hasAttribute('hidden');
           if (open) {
             panel.setAttribute('hidden', '');
+            setOpen(false);
           } else {
             panel.removeAttribute('hidden');
+            setOpen(true);
             start();
           }
         });
