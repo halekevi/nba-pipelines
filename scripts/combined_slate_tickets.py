@@ -127,6 +127,7 @@ _TICKET_MODEL_FEATURES: list[str] = []
 # Defaults are applied in apply_default_sport_inputs() after --date is resolved.
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx")
+DEFAULT_CFB_PATH = os.path.join(REPO_ROOT, "Sports", "CFB", "step6_ranked_cfb.xlsx")
 DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx")
 DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx")
 DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.xlsx")
@@ -265,6 +266,13 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
             os.path.join(REPO_ROOT, "NFL", "data", "outputs", "step8_nfl_direction_clean.xlsx"),
         )
 
+    if not str(getattr(args, "cfb", "") or "").strip():
+        args.cfb = _first_existing_path(
+            os.path.join(out, "cfb", "step6_ranked_cfb.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "CFB", "step6_ranked_cfb.xlsx"),
+            os.path.join(REPO_ROOT, "CFB", "step6_ranked_cfb.xlsx"),
+        )
+
 
 def print_combined_slate_input_paths(args: argparse.Namespace) -> None:
     """Echo resolved inputs so missing step8 files are obvious before loading."""
@@ -309,6 +317,7 @@ def print_combined_slate_input_paths(args: argparse.Namespace) -> None:
     _line("Tennis", args.tennis, optional=True)
     _line("WNBA", args.wnba, optional=True)
     _line("NFL", args.nfl, optional=True)
+    _line("CFB", getattr(args, "cfb", ""), optional=True)
 
 
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
@@ -2598,7 +2607,7 @@ MAX_LEGS_TENNIS = 3
 TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
-ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL")
+ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL", "CFB")
 # NFL — Phase 1 scaffold only; keep off slate until step8 + historical hit rates exist (Sept 2026).
 # Reference: {"NFL": False}  # activate September 2026 — do not add "NFL" to ACTIVE_SPORTS yet.
 
@@ -4559,7 +4568,7 @@ def publish_wnba_slate_merge_into_web(
 
 
 def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None):
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None, cfb=None):
     """Write full per-sport ranked slate to slate_latest.json for the web UI.
 
     Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
@@ -4571,6 +4580,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
         "sports": {
             "nba":    dataframe_to_slate_sport_rows(nba),
             "cbb":    dataframe_to_slate_sport_rows(cbb),
+            "cfb":    dataframe_to_slate_sport_rows(cfb),
             "nhl":    dataframe_to_slate_sport_rows(nhl),
             "soccer": dataframe_to_slate_sport_rows(soccer),
             "tennis": dataframe_to_slate_sport_rows(tennis),
@@ -4674,7 +4684,9 @@ def render_tickets_html(payload: dict) -> str:
         s = (sport or "").upper()
         if "NBA" in s:
             return "<span style='background:#c8ff00;color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em;'>NBA</span>"
-        if "CBB" in s or "NCAA" in s:
+        if "CFB" in s or s == "NCAAF":
+            return "<span style='background:#8B4513;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em;'>CFB</span>"
+        if "CBB" in s or ("NCAA" in s and "CFB" not in s):
             return "<span style='background:#00e5ff;color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em;'>CBB</span>"
         if "NHL" in s:
             return "<span style='background:#5bc4f5;color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em;'>NHL</span>"
@@ -5851,6 +5863,53 @@ def load_cbb(path: str) -> pd.DataFrame:
         df["is_tournament_game"] = ((_ts.notna()) & (_ts > 0)) | ((_os.notna()) & (_os > 0))
     else:
         df["is_tournament_game"] = False
+
+    return df
+
+
+def load_cfb(path: str) -> pd.DataFrame:
+    """College Football step6 ranked workbook (same layout as CBB step6)."""
+    from utils.cfb_playoff_metadata import (
+        CFB_AP_TOP25_2026,
+        cfb_playoff_info,
+        cfb_row_in_playoff,
+        norm_cfb_team_abbr,
+    )
+
+    path = resolve_input_path(path, fallback_filename="step6_ranked_cfb.xlsx")
+    df = load_cbb(path)
+    if df is None or len(df) == 0:
+        return df
+    df = df.copy()
+    df["sport"] = "CFB"
+
+    team_src = "team" if "team" in df.columns else ("pp_team" if "pp_team" in df.columns else "")
+    opp_src = "opp" if "opp" in df.columns else ("opp_team_abbr" if "opp_team_abbr" in df.columns else "")
+    if team_src:
+        t_abbr = df[team_src].map(norm_cfb_team_abbr)
+        if "team_seed" not in df.columns or df["team_seed"].isna().all():
+            df["team_seed"] = t_abbr.map(lambda a: cfb_playoff_info(a)[0])
+        if "playoff_round" not in df.columns:
+            df["playoff_round"] = t_abbr.map(lambda a: cfb_playoff_info(a)[1])
+        df["team_ap_rank"] = t_abbr.map(lambda a: CFB_AP_TOP25_2026.get(a, ""))
+    if opp_src:
+        o_abbr = df[opp_src].map(norm_cfb_team_abbr)
+        df["opp_seed"] = o_abbr.map(lambda a: cfb_playoff_info(a)[0])
+        df["opp_playoff_round"] = o_abbr.map(lambda a: cfb_playoff_info(a)[1])
+        df["opp_ap_rank"] = o_abbr.map(lambda a: CFB_AP_TOP25_2026.get(a, ""))
+
+    if "is_playoff_game" not in df.columns:
+        if team_src and opp_src:
+            df["is_playoff_game"] = df.apply(
+                lambda r: int(cfb_row_in_playoff(r[team_src], r[opp_src])),
+                axis=1,
+            )
+        else:
+            df["is_playoff_game"] = 0
+    df["is_tournament_game"] = df["is_playoff_game"]
+
+    if "team_playoff_seed" in df.columns and "team_seed" in df.columns and df["team_seed"].isna().all():
+        df["team_seed"] = df["team_playoff_seed"]
 
     return df
 
@@ -7334,6 +7393,7 @@ def build_combined_slate(
     nba1q: pd.DataFrame = None,
     nba1h: pd.DataFrame = None,
     nfl: pd.DataFrame = None,
+    cfb: pd.DataFrame = None,
 ) -> pd.DataFrame:
     keep = [
         "sport",
@@ -7404,6 +7464,8 @@ def build_combined_slate(
         frames.append(safe_keep(nba1h, keep))
     if nfl is not None and len(nfl) > 0:
         frames.append(safe_keep(nfl, keep))
+    if cfb is not None and len(cfb) > 0:
+        frames.append(safe_keep(cfb, keep))
     combined = pd.concat(frames, ignore_index=True)
 
     if "rank_score" in combined.columns:
@@ -10083,6 +10145,14 @@ def main():
             f"then {DEFAULT_NFL_PATH}"
         ),
     )
+    ap.add_argument(
+        "--cfb",
+        default="",
+        help=(
+            "CFB step6. When omitted: outputs/<date>/cfb/step6_ranked_cfb.xlsx, "
+            f"then {DEFAULT_CFB_PATH}"
+        ),
+    )
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
@@ -10570,6 +10640,23 @@ def main():
     else:
         print("  [NFL] skipped (empty --nfl / no default file)")
 
+    cfb = None
+    cfb_path = str(getattr(args, "cfb", "") or "").strip()
+    if cfb_path:
+        try:
+            cfb = load_cfb(cfb_path)
+            cfb = enforce_target_date(
+                cfb, "CFB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            cfb = attach_standard_refs(cfb)
+            print(f"  {len(cfb)} CFB props loaded")
+            _load_audit_row("CFB", cfb_path, cfb)
+        except Exception as e:
+            print(f"  WARNING: Could not load CFB file: {e}")
+            cfb = None
+    else:
+        print("  [CFB] skipped (empty --cfb / no default file)")
+
     # ✅ Attach Standard sibling refs AFTER normalized columns exist
     nba = attach_standard_refs(nba)
     cbb = attach_standard_refs(cbb)
@@ -10647,6 +10734,7 @@ def main():
     nba1q = drop_stale_rows(nba1q, args.date, "NBA1Q")
     nba1h = drop_stale_rows(nba1h, args.date, "NBA1H")
     nfl = drop_stale_rows(nfl, args.date, "NFL")
+    cfb = drop_stale_rows(cfb, args.date, "CFB")
 
     # Apply teammate-absence usage redistribution before ticket eligibility filtering.
     nba = apply_usage_redistribution(nba, "NBA", args.date, REPO_ROOT)
@@ -10660,6 +10748,7 @@ def main():
     nba1q = apply_usage_redistribution(nba1q, "NBA1Q", args.date, REPO_ROOT) if nba1q is not None else nba1q
     nba1h = apply_usage_redistribution(nba1h, "NBA1H", args.date, REPO_ROOT) if nba1h is not None else nba1h
     nfl = apply_usage_redistribution(nfl, "NFL", args.date, REPO_ROOT) if nfl is not None else nfl
+    cfb = apply_usage_redistribution(cfb, "CFB", args.date, REPO_ROOT) if cfb is not None else cfb
 
     nba = drop_demon_over_rows(nba, "NBA")
     cbb = drop_demon_over_rows(cbb, "CBB")
@@ -10672,13 +10761,14 @@ def main():
     nba1q = drop_demon_over_rows(nba1q, "NBA1Q")
     nba1h = drop_demon_over_rows(nba1h, "NBA1H")
     nfl = drop_demon_over_rows(nfl, "NFL")
+    cfb = drop_demon_over_rows(cfb, "CFB")
 
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
                                     tennis=tennis,
                                     wnba=wnba,
                                     wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h,
-                                    nfl=nfl)
+                                    nfl=nfl, cfb=cfb)
     reliability_index = _load_prop_reliability_index()
     if reliability_index:
         print(f"  [reliability] loaded {len(reliability_index)} prop-direction buckets from {PROP_RELIABILITY_LATEST_PATH}")
@@ -11085,15 +11175,17 @@ def main():
     cbb_pool = pool(cbb)
     mlb_pool = pool(mlb)
     nfl_pool = pool(nfl) if nfl is not None and len(nfl) > 0 else None
+    cfb_pool = pool(cfb) if cfb is not None and len(cfb) > 0 else None
     combo_pool = pool(combined)
     mlb_elig = len(mlb_pool) if mlb_pool is not None else 0
     nfl_elig = len(nfl_pool) if nfl_pool is not None else 0
+    cfb_elig = len(cfb_pool) if cfb_pool is not None else 0
     _nhl_ticket_pool_n = (
         len(pool(nhl)) if nhl is not None and len(nhl) > 0 else 0
     )
     print(
-        f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | MLB eligible: {mlb_elig} | "
-        f"NFL eligible: {nfl_elig} | Combined: {len(combo_pool)}"
+        f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | CFB eligible: {cfb_elig} | "
+        f"MLB eligible: {mlb_elig} | NFL eligible: {nfl_elig} | Combined: {len(combo_pool)}"
     )
     print(
         f"  NHL ticket-pool legs (relaxed NHL hit-rate caps + Tier C in strict mode): {_nhl_ticket_pool_n}"
@@ -11698,6 +11790,7 @@ def main():
     sport_pool_map: list[tuple[str, pd.DataFrame | None]] = [
         ("NBA", nba_pool),
         ("CBB", cbb_pool),
+        ("CFB", cfb_pool),
         ("NHL", pool(nhl) if nhl is not None and len(nhl) > 0 else None),
         ("SOCCER", pool(soccer) if soccer is not None and len(soccer) > 0 else None),
         ("TENNIS", pool(tennis) if tennis is not None and len(tennis) > 0 else None),
@@ -12108,7 +12201,7 @@ def main():
             discard_tracker=discard_tracker,
         )
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba)
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb)
         try:
             ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
             generate_payout_ladder_examples(payload, ex_out)

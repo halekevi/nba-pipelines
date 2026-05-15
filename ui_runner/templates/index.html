@@ -234,6 +234,7 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.nba1h{background:rgba(255,155,86,.1);border:1px solid rgba(255,155,86,.22);}
 .scard-icon.nba1q{background:rgba(255,214,102,.1);border:1px solid rgba(255,214,102,.25);}
 .scard-icon.cbb{background:rgba(127,199,217,.1);border:1px solid rgba(127,199,217,.2);}
+.scard-icon.cfb{background:rgba(139,69,19,.14);border:1px solid rgba(210,150,80,.28);}
 .scard-icon.nhl{background:rgba(183,168,255,.1);border:1px solid rgba(183,168,255,.2);}
 .scard-icon.soccer{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.2);}
 .scard-icon.mlb{background:rgba(255,121,121,.1);border:1px solid rgba(255,121,121,.22);}
@@ -316,6 +317,7 @@ body::after{content:'';position:fixed;inset:0;
 .sp-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.28);}
 .sp-nba1q{background:rgba(255,214,102,.14);color:#ffd87a;border:1px solid rgba(255,214,102,.3);}
 .sp-cbb{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
+.sp-cfb{background:rgba(139,69,19,.16);color:#e8c88a;border:1px solid rgba(210,150,80,.32);}
 .sp-nhl{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .sp-soccer{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
 .sp-mlb{background:rgba(255,121,121,.12);color:#ff8c8c;border:1px solid rgba(255,121,121,.26);}
@@ -986,7 +988,7 @@ body::before{
   <!-- HERO -->
   <div class="hero">
     <div class="hero-copy">
-      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · TENNIS · WNBA · Prop Intelligence</div>
+      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · CFB · WCBB · NHL · SOCCER · MLB · NFL · TENNIS · WNBA · Prop Intelligence</div>
       <h1 class="hero-title">
         <span class="ht1 prop-hero-prefix">Prop</span>
         <span class="ht2">Oracle</span>
@@ -1411,6 +1413,21 @@ body::before{
         <div class="scard-val" id="sc-cbb-val">Checking...</div>
       </div>
 
+      <div class="scard loading" id="sc-cfb" onclick="toggleSlatePanel('cfb')">
+        <div class="scard-head">
+          <div class="scard-icon cfb">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#e8c88a" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
+          <div class="scard-title">CFB SLATE</div>
+          <span class="sbadge loading" id="sc-cfb-badge">—</span>
+          <span class="scard-toggle">▾</span>
+        </div>
+        <div class="scard-val" id="sc-cfb-val">Checking...</div>
+      </div>
+
       <div class="scard loading" id="sc-nhl" onclick="toggleSlatePanel('nhl')">
         <div class="scard-head">
           <div class="scard-icon nhl">
@@ -1663,6 +1680,43 @@ body::before{
           <th onclick="sortSlate('cbb','game_time')">TIME</th>
         </tr></thead>
         <tbody id="stb-cbb"></tbody>
+      </table></div>
+    </div>
+
+    <div class="slate-expand" id="sp-cfb">
+      <div class="slate-toolbar">
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('cfb',this.value)" id="sf-cfb"/>
+        <button class="slate-filter-btn" id="sfb-cfb-over" onclick="toggleDirFilter('cfb','OVER',this)">▲ OVER</button>
+        <button class="slate-filter-btn" id="sfb-cfb-under" onclick="toggleDirFilter('cfb','UNDER',this)">▼ UNDER</button>
+        <button class="slate-filter-btn" id="sfb-cfb-goblin" onclick="togglePickFilter('cfb','Goblin',this)">Goblin</button>
+        <button class="slate-filter-btn" id="sfb-cfb-standard" onclick="togglePickFilter('cfb','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('cfb','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('cfb','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('cfb','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('cfb','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('cfb','D',this)">D</button>
+        </span>
+        <span class="slate-row-count" id="src-cfb"></span>
+      </div>
+      <div class="slate-table-wrap"><table class="slate-table" id="st-cfb">
+        <thead><tr>
+          <th onclick="sortSlate('cfb','tier')">TIER</th>
+          <th onclick="sortSlate('cfb','rank_score')">RANK</th>
+          <th onclick="sortSlate('cfb','player')">PLAYER</th>
+          <th onclick="sortSlate('cfb','team')">TEAM</th>
+          <th onclick="sortSlate('cfb','opp')">OPP</th>
+          <th onclick="sortSlate('cfb','prop')">PROP</th>
+          <th onclick="sortSlate('cfb','pick_type')">TYPE</th>
+          <th onclick="sortSlate('cfb','line')">LINE</th>
+          <th onclick="sortSlate('cfb','dir')">DIR</th>
+          <th onclick="sortSlate('cfb','edge')">EDGE</th>
+          <th onclick="sortSlate('cfb','hit_rate')">HIT%</th>
+          <th onclick="sortSlate('cfb','l5_over')">L5 O</th>
+          <th onclick="sortSlate('cfb','l5_under')">L5 U</th>
+          <th onclick="sortSlate('cfb','game_time')">TIME</th>
+        </tr></thead>
+        <tbody id="stb-cfb"></tbody>
       </table></div>
     </div>
 
@@ -2608,6 +2662,7 @@ function sportDisplayLabel(rawSport) {
     NBA1H: 'NBA (1H)',
     NBA1Q: 'NBA (1Q)',
     CBB: 'CBB',
+    CFB: 'College Football',
     WCBB: 'WCBB',
     NHL: 'NHL',
     SOCCER: 'Soccer',
@@ -2632,7 +2687,7 @@ async function refreshStatus() {
       if (r2.ok) d = await r2.json();
     } catch (e2) {}
   }
-  const statusIds = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
+  const statusIds = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
   if (!d) {
     for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
     return;
@@ -2641,6 +2696,7 @@ async function refreshStatus() {
   applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
   applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
   applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
+  applyStatusCard("cfb",      d.cfb?.slate,      "CFB Slate");
   applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
   applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
@@ -3128,7 +3184,7 @@ const RENDER_TOKEN = {};
 const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 const L5_FILTER_MIN_HITS = 4;
 
-const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','nfl','tennis','wnba'];
+const SPORTS = ['nba','nba1h','nba1q','cbb','cfb','nhl','soccer','mlb','nfl','tennis','wnba'];
 SPORTS.forEach(s => {
   SLATE_STATE[s] = { sortKey: 'abs_edge', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
 });

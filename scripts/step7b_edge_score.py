@@ -23,7 +23,7 @@ from edge_predict_utils import apply_ml_prob_post_calibration
 
 SCRIPT_NAME = "step7b_edge_score"
 
-SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB", "TENNIS", "WNBA", "NFL"}
+SPORT_ALIASES = {"NBA", "CBB", "CFB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB", "TENNIS", "WNBA", "NFL"}
 
 
 def _repo_root() -> Path:
@@ -117,6 +117,17 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         candidates = [
             Sr / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
             root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
+        ]
+    elif sp == "CFB":
+        out_glob = sorted(
+            (root / "outputs").glob("*/cfb/step6_ranked_cfb.xlsx"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        candidates = list(out_glob) + [
+            Sr / "CFB" / "step6_ranked_cfb.xlsx",
+            root / "Sports" / "CFB" / "step6_ranked_cfb.xlsx",
+            root / "CFB" / "step6_ranked_cfb.xlsx",
         ]
     elif sp == "CBB":
         candidates = [

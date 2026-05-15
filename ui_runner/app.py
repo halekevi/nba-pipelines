@@ -140,6 +140,13 @@ NBA1H_TICKETS = NBA_DIR / "best_tickets_nba1h.xlsx"
 NBA1Q_TICKETS = NBA_DIR / "best_tickets_nba1q.xlsx"
 CBB_SLATE     = CBB_DIR / "step6_ranked_cbb.xlsx"
 WCBB_SLATE    = CBB_DIR / "step6_ranked_wcbb.xlsx"
+CFB_DIR       = _sport_dir("CFB")
+CFB_SLATE     = _first_existing_file(
+    [
+        CFB_DIR / "step6_ranked_cfb.xlsx",
+        BASE_DIR / "Sports" / "CFB" / "step6_ranked_cfb.xlsx",
+    ]
+)
 # NHL pipeline writes under NHL/outputs/ (same as run_pipeline.ps1).
 NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
@@ -2928,6 +2935,12 @@ def api_pipeline_status():
     nba1q_slate_p = _resolve_outputs_artifact(days, "step8_nba1q_direction_clean_{d}.xlsx", NBA1Q_SLATE)
     cbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_cbb_{d}.xlsx", CBB_SLATE)
     wcbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_wcbb_{d}.xlsx", WCBB_SLATE)
+    cfb_slate_p = _resolve_outputs_artifact(
+        days,
+        "cfb/step6_ranked_cfb.xlsx",
+        CFB_SLATE,
+        CFB_DIR / "step6_ranked_cfb.xlsx",
+    )
     nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
     soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
     mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
@@ -3000,6 +3013,9 @@ def api_pipeline_status():
         },
         "cbb": {
             "slate": _sport_slate_status(cbb_slate_p, "cbb", slate_counts, slate_disk_info, status_js_ts, card_disp),
+        },
+        "cfb": {
+            "slate": _sport_slate_status(cfb_slate_p, "cfb", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "wcbb": {
             "slate": _sport_slate_status(wcbb_slate_p, "wcbb", slate_counts, slate_disk_info, status_js_ts, card_disp),
@@ -4561,7 +4577,7 @@ def api_vision_screenshot():
 
 
 # Order for Income page sport table (graded single-sport tickets / props only).
-_SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
+_SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "CFB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
 
 
 def _to_float(v: Any, default: float = 0.0) -> float:

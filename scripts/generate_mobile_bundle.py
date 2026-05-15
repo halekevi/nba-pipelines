@@ -52,12 +52,12 @@ def _mtime_utc_string(path: Path | None) -> str:
     return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 # Keep aligned with ui_runner/app.py page_income _SPORT_BREAKDOWN_ORDER.
-SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
+SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "CFB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
 
 
 def _normalize_sport_label(raw):
     s = str(raw or "").strip().upper()
-    aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "NFL", "NBA1Q": "NBA", "NBA1H": "NBA"}
+    aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "CFB", "NBA1Q": "NBA", "NBA1H": "NBA"}
     return aliases.get(s, s)
 
 
@@ -857,7 +857,7 @@ async function fetch_smart(localPath) {
             (slate_payload.get("date") if isinstance(slate_payload, dict) else "") or ""
         ).strip()[:10]
         modified_default = f"{slate_date} 12:00:00" if slate_date else ""
-        status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
+        status_sports = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
         R = ROOT_DIR
         combined_candidates = list(R.glob("combined_slate_tickets_*.xlsx"))
         _out_root = R / "outputs"
@@ -887,6 +887,13 @@ async function fetch_smart(localPath) {
             ),
             "cbb": _first_existing_path(
                 [R / "Sports" / "CBB" / "step6_ranked_cbb.xlsx", R / "CBB" / "step6_ranked_cbb.xlsx"]
+            ),
+            "cfb": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "cfb" / "step6_ranked_cfb.xlsx",
+                    R / "Sports" / "CFB" / "step6_ranked_cfb.xlsx",
+                    R / "CFB" / "step6_ranked_cfb.xlsx",
+                ]
             ),
             "nhl": _first_existing_path(
                 [

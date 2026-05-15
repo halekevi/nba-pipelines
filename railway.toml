@@ -35,7 +35,7 @@ startCommand = "sh scripts/railway_gunicorn.sh"
 healthcheckPath = "/ping"
 healthcheckTimeout = 180
 
-# cache-bust: 2026-05-15 15:50 — force redeploy (tickets filter rows removed; scripts/combined_slate_tickets.py)
+# cache-bust: 2026-05-15 16:30 — CFB pipeline wired into combined slate + Slate Explorer UI
 #
 # Income (/income): Daily P&L rows come from grade_history.json, appended by
 #   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
