@@ -379,7 +379,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .props-filter-pill.active{background:var(--accent-gold);border-color:var(--accent-gold);color:#0a0a0f;}
 .props-filter-pill[data-filter="HIT"].active{background:#00ff88;border-color:#00ff88;color:#0a0a0f;}
 .props-filter-pill[data-filter="MISS"].active{background:#ff6b6b;border-color:#ff6b6b;color:#0a0a0f;}
-.props-filter-pill[data-filter="OTHER"].active{background:var(--amber);border-color:var(--amber);color:#0a0a0f;}
+.props-filter-pill[data-filter="VOID"].active{background:var(--amber);border-color:var(--amber);color:#0a0a0f;}
 .props-eval-search-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
 .props-eval-search-row label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;}
 .props-eval-toolbar input[type="search"]{
@@ -1430,7 +1430,7 @@ select option,
               <button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>
               <button type="button" class="props-filter-pill" data-filter="HIT" aria-pressed="false">HITS</button>
               <button type="button" class="props-filter-pill" data-filter="MISS" aria-pressed="false">MISSES</button>
-              <button type="button" class="props-filter-pill" data-filter="OTHER" aria-pressed="false">OTHER</button>
+              <button type="button" class="props-filter-pill" data-filter="VOID" aria-pressed="false">VOIDS</button>
             </div>
           </div>
           <div class="props-eval-filter-row">
@@ -2399,11 +2399,39 @@ function setActivePropsFilterPill(group, btn) {
     btn.setAttribute('aria-pressed', 'true');
   }
 }
+var PROPS_EVAL_SPORT_PILLS = [
+  'NBA', 'NBA1Q', 'NBA1H', 'CBB', 'CFB', 'NFL', 'WNBA', 'MLB', 'NHL', 'SOCCER', 'TENNIS'
+];
+function normalizePropsEvalSport(s) {
+  var u = String(s || '').toUpperCase().trim();
+  if (u === 'WCBB') return 'CBB';
+  if (u === 'SOC') return 'SOCCER';
+  return u;
+}
+function propsEvalSportMatches(rowSport, filterSport) {
+  if (!filterSport) return true;
+  var rs = normalizePropsEvalSport(rowSport);
+  var fs = String(filterSport || '').toUpperCase();
+  if (rs === fs) return true;
+  if (fs === 'CBB' && rs === 'WCBB') return true;
+  return false;
+}
+function propsEvalIsVoidResult(r) {
+  var ru = String((r && r.result) || '').toUpperCase();
+  if (ru === 'VOID') return true;
+  if (ru === 'PUSH' || ru === 'CASH') return true;
+  if (r && r.void_reason && String(r.void_reason).trim()) return true;
+  return ru !== 'HIT' && ru !== 'MISS' && ru !== 'WIN' && ru !== 'LOSS' && ru !== 'LOSE' && ru !== '';
+}
 function fillPropsSportFilter(rows) {
   const group = document.getElementById('props-filter-sport-group');
   if (!group) return;
   const cur = getPropsFilterGroupValue('props-filter-sport-group');
-  const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
+  const fromData = new Set(rows.map(function (r) { return normalizePropsEvalSport(r.sport); }).filter(Boolean));
+  const sports = PROPS_EVAL_SPORT_PILLS.slice();
+  fromData.forEach(function (s) {
+    if (sports.indexOf(s) < 0) sports.push(s);
+  });
   group.innerHTML =
     '<button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>' +
     sports.map(function (s) {
@@ -2488,14 +2516,14 @@ function applyPropsEvalFilters() {
   const q = (((document.getElementById('props-filter-q') || {}).value) || '').trim().toLowerCase();
   const rows = window._propsEvalCache || [];
   const filtered = rows.filter(function (r) {
-    if (sport && String(r.sport || '').toUpperCase() !== sport) return false;
+    if (sport && !propsEvalSportMatches(r.sport, sport)) return false;
     var pt = String(r.pick_type || '').toUpperCase();
     if (pickTypeF === 'NO_DEMON' && pt.indexOf('DEMON') >= 0) return false;
     if (pickTypeF && pickTypeF !== 'NO_DEMON' && pt.indexOf(pickTypeF) < 0) return false;
     const ru = String(r.result || '').toUpperCase();
-    if (resF === 'HIT' && ru !== 'HIT') return false;
-    if (resF === 'MISS' && ru !== 'MISS') return false;
-    if (resF === 'OTHER' && (ru === 'HIT' || ru === 'MISS')) return false;
+    if (resF === 'HIT' && ru !== 'HIT' && ru !== 'WIN' && ru !== 'WIN_NO_MULT') return false;
+    if (resF === 'MISS' && ru !== 'MISS' && ru !== 'LOSS' && ru !== 'LOSE') return false;
+    if (resF === 'VOID' && !propsEvalIsVoidResult(r)) return false;
     if (!q) return true;
     const hay = [r.player_name, r.prop_type, r.team, r.opp_team, r.pick_type, r.tier, r.direction]
       .map(function (x) { return String(x || '').toLowerCase(); }).join(' ');
@@ -2509,11 +2537,12 @@ function applyPropsEvalFilters() {
   });
   renderPropsEvalCards(filtered);
   scheduleSyncPropsEvalHeight();
-  var fHit = 0, fMiss = 0;
+  var fHit = 0, fMiss = 0, fVoid = 0;
   filtered.forEach(function (r) {
     var ru = String(r.result || '').toUpperCase();
-    if (ru === 'HIT') fHit += 1;
-    else if (ru === 'MISS') fMiss += 1;
+    if (ru === 'HIT' || ru === 'WIN' || ru === 'WIN_NO_MULT') fHit += 1;
+    else if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') fMiss += 1;
+    else if (propsEvalIsVoidResult(r)) fVoid += 1;
   });
   const el = document.getElementById('props-eval-counts');
   if (el) {
@@ -2521,7 +2550,8 @@ function applyPropsEvalFilters() {
     if (pickTypeF === 'NO_DEMON') note = ' · demon excluded';
     else if (pickTypeF === 'DEMON') note = ' · demon only';
     else if (pickTypeF) note = ' · ' + pickTypeF.toLowerCase() + ' only';
-    el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded · ' + fHit + ' hits, ' + fMiss + ' misses' + note;
+    el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded · ' +
+      fHit + ' hits, ' + fMiss + ' misses, ' + fVoid + ' voids' + note;
   }
 }
 function mapGradedJsonToEvalRow(p) {
