@@ -58,7 +58,36 @@ TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 # Ticket source: combined_slate_tickets*{date}*.xlsx under outputs/<date>/ (see find_ticket_json).
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
 FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
-ALLOWED_TICKET_SPORTS = {"NBA", "NBA1H", "NBA1Q", "WNBA", "CBB", "NHL", "SOCCER", "MLB", "WCBB"}
+ALLOWED_TICKET_SPORTS = {
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "WNBA",
+    "CBB",
+    "WCBB",
+    "CFB",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "MLB",
+    "TENNIS",
+}
+
+# Stats-bar sport win-rate columns (align with Grades Prop Evaluation pills + ACTIVE_SPORTS).
+TICKET_EVAL_SPORT_ORDER: tuple[str, ...] = (
+    "NBA",
+    "NBA1Q",
+    "NBA1H",
+    "CBB",
+    "WCBB",
+    "CFB",
+    "NFL",
+    "WNBA",
+    "MLB",
+    "NHL",
+    "SOCCER",
+    "TENNIS",
+)
 
 _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
     "player": "player",
@@ -1261,7 +1290,38 @@ def _sport_key(sport: str) -> str:
     s = (sport or "").strip().upper().replace(" ", "")
     if s in ("SOC", "MLS", "EPL"):
         return "SOCCER"
+    if s in ("NCAAF",):
+        return "CFB"
+    if s in ("NCAAB",):
+        return "CBB"
     return s
+
+
+def _ticket_sport_sort_rank(bucket: str) -> int:
+    if bucket == "Cross-sport":
+        return 10_000
+    sk = _sport_key(bucket)
+    try:
+        return TICKET_EVAL_SPORT_ORDER.index(sk)
+    except ValueError:
+        return 999
+
+
+def _empty_sport_ticket_summary() -> dict[str, dict[str, int]]:
+    return {s: {"wins": 0, "losses": 0} for s in TICKET_EVAL_SPORT_ORDER}
+
+
+def _sum_sport_win_rate_html(sport: str, pct: float | None) -> str:
+    lab = f"{sport} TKT WIN RATE"
+    if pct is not None:
+        return (
+            f'<div class="sum-item"><div class="sum-val">{pct:.1f}%</div>'
+            f'<div class="sum-lab">{lab}</div></div>'
+        )
+    return (
+        f'<div class="sum-item"><div class="sum-val pend">—</div>'
+        f'<div class="sum-lab">{lab}</div></div>'
+    )
 
 
 def _ticket_group_bucket(group_name: str) -> str:
@@ -1284,9 +1344,13 @@ def _ticket_bucket_skin_class(bucket: str) -> str:
         "NBA1Q": "sb-nba1q",
         "CBB": "sb-cbb",
         "WCBB": "sb-wcbb",
+        "CFB": "sb-cfb",
+        "NFL": "sb-nfl",
+        "WNBA": "sb-wnba",
         "NHL": "sb-nhl",
         "SOCCER": "sb-soccer",
         "MLB": "sb-mlb",
+        "TENNIS": "sb-tennis",
     }.get(sk, "sb-default")
 
 
@@ -1299,7 +1363,9 @@ def _bucket_ticket_groups(groups: list[dict[str, Any]]) -> list[tuple[str, list[
             m[key] = []
             order.append(key)
         m[key].append(g)
-    return [(k, m[k]) for k in order]
+    bucketed = [(k, m[k]) for k in order]
+    bucketed.sort(key=lambda kv: (_ticket_sport_sort_rank(kv[0]), kv[0]))
+    return bucketed
 
 
 def _leg_match_buckets(sport: str) -> list[str]:
@@ -1329,6 +1395,12 @@ def _leg_match_buckets(sport: str) -> list[str]:
         return ["SOCCER"]
     if s == "MLB":
         return ["MLB"]
+    if s == "CFB":
+        return ["CFB"]
+    if s == "NFL":
+        return ["NFL"]
+    if s == "TENNIS":
+        return ["TENNIS"]
     return [s] if s else []
 
 
@@ -2689,15 +2761,7 @@ def _build_html(
     perfect = 0
     money_wins = 0
     money_losses = 0
-    sport_ticket_summary: dict[str, dict[str, int]] = {
-        "NBA": {"wins": 0, "losses": 0},
-        "NBA1Q": {"wins": 0, "losses": 0},
-        "NBA1H": {"wins": 0, "losses": 0},
-        "NHL": {"wins": 0, "losses": 0},
-        "MLB": {"wins": 0, "losses": 0},
-        "SOCCER": {"wins": 0, "losses": 0},
-        "WNBA": {"wins": 0, "losses": 0},
-    }
+    sport_ticket_summary = _empty_sport_ticket_summary()
     for t in tickets_flat:
         gname = str(t.get("_group_name") or "Group")
         legs = t.get("legs") or []
@@ -2731,18 +2795,15 @@ def _build_html(
             continue
         pays_money = _ticket_pays_money(gname, gs)
         bucket = _sport_key(_ticket_group_bucket(gname))
-        sport_rollup = None
-        if bucket in sport_ticket_summary:
-            sport_rollup = bucket
+        if bucket not in sport_ticket_summary:
+            sport_ticket_summary[bucket] = {"wins": 0, "losses": 0}
 
         if pays_money:
             money_wins += 1
-            if sport_rollup:
-                sport_ticket_summary[sport_rollup]["wins"] += 1
+            sport_ticket_summary[bucket]["wins"] += 1
         else:
             money_losses += 1
-            if sport_rollup:
-                sport_ticket_summary[sport_rollup]["losses"] += 1
+            sport_ticket_summary[bucket]["losses"] += 1
 
     ticket_decided = money_wins + money_losses
     ticket_pct = (100.0 * money_wins / ticket_decided) if ticket_decided else 0.0
@@ -2753,13 +2814,10 @@ def _build_html(
         d = w + l
         return (100.0 * w / d) if d > 0 else None
 
-    nba_ticket_pct = _ticket_win_rate_pct("NBA")
-    nba1q_ticket_pct = _ticket_win_rate_pct("NBA1Q")
-    nba1h_ticket_pct = _ticket_win_rate_pct("NBA1H")
-    nhl_ticket_pct = _ticket_win_rate_pct("NHL")
-    mlb_ticket_pct = _ticket_win_rate_pct("MLB")
-    soccer_ticket_pct = _ticket_win_rate_pct("SOCCER")
-    wnba_ticket_pct = _ticket_win_rate_pct("WNBA")
+    sport_win_rate_lines = [
+        _sum_sport_win_rate_html(sport, _ticket_win_rate_pct(sport))
+        for sport in TICKET_EVAL_SPORT_ORDER
+    ]
 
     pay_summary_rows: list[dict[str, Any]] = []
     for t in tickets_flat:
@@ -2879,6 +2937,9 @@ def _build_html(
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
 .sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
 .sport-mlb{background:rgba(255,121,121,.12);color:#ff9a9a;border:1px solid rgba(255,121,121,.32);}
+.sport-cfb{background:rgba(200,120,60,.12);color:#e8a86a;border:1px solid rgba(200,120,60,.34);}
+.sport-nfl{background:rgba(120,180,255,.12);color:#9ec5ff;border:1px solid rgba(120,180,255,.34);}
+.sport-tennis{background:rgba(243,156,18,.12);color:#f5b041;border:1px solid rgba(243,156,18,.34);}
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
@@ -3058,42 +3119,9 @@ def _build_html(
         '<div class="stats-bar">',
         '<div class="sum-row">',
         f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">TICKET HIT RATE</div></div>',
-        (
-            f'<div class="sum-item"><div class="sum-val">{nba_ticket_pct:.1f}%</div><div class="sum-lab">NBA TKT WIN RATE</div></div>'
-            if nba_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{nba1q_ticket_pct:.1f}%</div><div class="sum-lab">NBA1Q TKT WIN RATE</div></div>'
-            if nba1q_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1Q TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{nba1h_ticket_pct:.1f}%</div><div class="sum-lab">NBA1H TKT WIN RATE</div></div>'
-            if nba1h_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1H TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{nhl_ticket_pct:.1f}%</div><div class="sum-lab">NHL TKT WIN RATE</div></div>'
-            if nhl_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NHL TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{mlb_ticket_pct:.1f}%</div><div class="sum-lab">MLB TKT WIN RATE</div></div>'
-            if mlb_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">MLB TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{soccer_ticket_pct:.1f}%</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>'
-            if soccer_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>'
-        ),
-        (
-            f'<div class="sum-item"><div class="sum-val">{wnba_ticket_pct:.1f}%</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>'
-            if wnba_ticket_pct is not None
-            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>'
-        ),
+        *sport_win_rate_lines,
         f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>',
+
         f'<div class="sum-item"><div class="sum-val green">{hits}</div><div class="sum-lab">HITS</div></div>',
         f'<div class="sum-item"><div class="sum-val red">{misses}</div><div class="sum-lab">MISSES</div></div>',
         f'<div class="sum-item"><div class="sum-val void">{voids}</div><div class="sum-lab">VOID/PUSH</div></div>',
@@ -4114,6 +4142,14 @@ def _build_html(
     parts.append("</div>")
     parts.append(
         f'<script src="/static/site-nav-chrome.js?v={_TICKET_EVAL_NAV_CHROME_VER}" defer></script>'
+    )
+    parts.append(
+        "<script>"
+        "(function(){function c(){"
+        "document.querySelectorAll('details.ticket-bucket,details.grades-sport-bucket')"
+        ".forEach(function(d){d.removeAttribute('open');d.open=false;});}"
+        "c();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',c);"
+        "})();</script>"
     )
     parts.append("</body></html>")
     return "\n".join(parts), history_record

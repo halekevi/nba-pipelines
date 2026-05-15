@@ -1467,18 +1467,21 @@ function slateIframeDocLooksReady(doc) {
   return false;
 }
 
-/** Ticket iframe readiness check with broad selectors (ticket markup evolves often). */
+/** Ticket iframe readiness — wait until ticket cards exist (summary bar alone is not enough). */
 function ticketIframeDocLooksReady(doc) {
   if (!doc || !doc.body) return false;
   try {
     const title = String(doc.title || '').toLowerCase();
-    if (title.includes('ticket') && title.includes('eval')) {
-      const t = (doc.body.innerText || '').trim();
-      if (t.length >= 12) return true;
+    const ticketShell =
+      doc.querySelector('.ticket-eval-main, .ticket-sections-wrap, details.ticket-bucket');
+    if (title.includes('ticket') && title.includes('eval') || ticketShell) {
+      return !!doc.querySelector(
+        '.ticket-sections-wrap section.sec, .ticket-eval-main section.sec, details.ticket-bucket article.ticket-card'
+      );
     }
     if (
       doc.querySelector(
-        '.ticket-eval-main, .ticket-sections-wrap, details.ticket-bucket, .grade-eval-summary, .stats-bar, table, details'
+        '.grade-eval-summary, .stats-bar, table, details'
       )
     ) {
       return true;
@@ -1489,6 +1492,96 @@ function ticketIframeDocLooksReady(doc) {
     if (text.length >= 24) return true;
   } catch (_e) {}
   return false;
+}
+
+function enforceTicketEvalBucketsCollapsed(doc) {
+  if (!doc) return;
+  doc.querySelectorAll('details.ticket-bucket, details.grades-sport-bucket').forEach((el) => {
+    el.removeAttribute('open');
+    el.open = false;
+  });
+}
+
+/** All PropOracle pipelines — matches build_ticket_eval.TICKET_EVAL_SPORT_ORDER */
+var TICKET_EVAL_SPORT_ORDER = [
+  'NBA', 'NBA1Q', 'NBA1H', 'CBB', 'WCBB', 'CFB', 'NFL', 'WNBA', 'MLB', 'NHL', 'SOCCER', 'TENNIS'
+];
+
+function ticketEvalSportRank(label) {
+  const sk = String(label || '').trim().toUpperCase();
+  const i = TICKET_EVAL_SPORT_ORDER.indexOf(sk);
+  return i >= 0 ? i : 999;
+}
+
+/** Insert missing pipeline win-rate columns on older baked ticket_eval HTML. */
+function ensureTicketEvalSportStatsBar(doc) {
+  if (!doc) return;
+  const row = doc.querySelector('.stats-bar .sum-row');
+  if (!row) return;
+  const items = Array.from(row.querySelectorAll('.sum-item'));
+  let head = null;
+  let allGen = null;
+  const bySport = {};
+  const tail = [];
+  items.forEach(function (item) {
+    const lab = (item.querySelector('.sum-lab') || {}).textContent.trim();
+    if (lab === 'TICKET HIT RATE') {
+      head = item;
+      return;
+    }
+    if (lab === 'ALL GENERATED WIN RATE') {
+      allGen = item;
+      return;
+    }
+    const m = lab.match(/^(.+?) TKT WIN RATE$/);
+    if (m) {
+      bySport[m[1].trim().toUpperCase()] = item;
+      return;
+    }
+    tail.push(item);
+  });
+  if (!head || !allGen) return;
+  const frag = doc.createDocumentFragment();
+  frag.appendChild(head);
+  TICKET_EVAL_SPORT_ORDER.forEach(function (sport) {
+    if (bySport[sport]) {
+      frag.appendChild(bySport[sport]);
+      delete bySport[sport];
+    } else {
+      const el = doc.createElement('div');
+      el.className = 'sum-item';
+      el.innerHTML =
+        '<div class="sum-val pend">—</div><div class="sum-lab">' +
+        sport +
+        ' TKT WIN RATE</div>';
+      frag.appendChild(el);
+    }
+  });
+  Object.keys(bySport)
+    .sort()
+    .forEach(function (sport) {
+      frag.appendChild(bySport[sport]);
+    });
+  frag.appendChild(allGen);
+  tail.forEach(function (item) {
+    frag.appendChild(item);
+  });
+  row.replaceChildren(frag);
+}
+
+function scheduleTicketFrameCollapse(frame) {
+  if (!frame) return;
+  const delays = [0, 80, 250, 700, 1800];
+  delays.forEach((ms) => {
+    setTimeout(function () {
+      try {
+        if (activeTab !== 'tickets') return;
+        const doc = frame.contentDocument;
+        if (!doc || !ticketIframeDocLooksReady(doc)) return;
+        collapseSportsInTicketFrame(frame);
+      } catch (_e) {}
+    }, ms);
+  });
 }
 
 /** Bounded fetch: avoids Grades hub stuck on “scanning…” if a proxy/Railway request never completes. */
@@ -2158,12 +2251,25 @@ function collapseSportsInTicketFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
   ensureFrameCollapseCss(doc);
-  const wrap = doc.querySelector('.wrap');
+  const wrap = doc.querySelector('.wrap.ticket-eval-main') || doc.querySelector('.wrap');
   if (!wrap) return;
 
-  // Always regroup by actual section headers, regardless of pre-existing wrappers.
+  enforceTicketEvalBucketsCollapsed(doc);
+
   const sections = Array.from(wrap.querySelectorAll('section.sec'));
   if (!sections.length) return;
+
+  const hubBuckets = wrap.querySelectorAll(':scope > details.grades-sport-bucket');
+  if (hubBuckets.length && sections.every((sec) => sec.closest('details.grades-sport-bucket'))) {
+    const tsWrap = wrap.querySelector('.ticket-sections-wrap');
+    if (tsWrap) {
+      try {
+        tsWrap.remove();
+      } catch (_r) {}
+    }
+    enforceTicketEvalBucketsCollapsed(doc);
+    return;
+  }
 
   // Remove any prior bucket wrappers injected by this page or embedded report.
   wrap.querySelectorAll(':scope > details.grades-sport-bucket, :scope > details.ticket-bucket')
@@ -2187,7 +2293,10 @@ function collapseSportsInTicketFrame(frame) {
 
   let idx = 0;
   const _mobTk = gradesFrameMobileLayout();
-  groups.forEach((groupSecs, key) => {
+  const sortedGroups = Array.from(groups.entries()).sort((a, b) => {
+    return ticketEvalSportRank(a[0]) - ticketEvalSportRank(b[0]) || String(a[0]).localeCompare(String(b[0]));
+  });
+  sortedGroups.forEach(([key, groupSecs]) => {
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
     // Default collapsed for all groups on load.
@@ -2223,6 +2332,7 @@ function collapseSportsInTicketFrame(frame) {
       tsWrap.remove();
     } catch (_r) {}
   }
+  enforceTicketEvalBucketsCollapsed(doc);
   collapseAllSlateDetails(doc);
 }
 
@@ -2799,7 +2909,10 @@ async function loadTicketEval(dateStr) {
         applyTicketEvalGradesEmbed(tf.contentDocument);
       } catch (_e0) {}
       try {
-        collapseSportsInTicketFrame(tf);
+        ensureTicketEvalSportStatsBar(tf.contentDocument);
+      } catch (_e0b) {}
+      try {
+        scheduleTicketFrameCollapse(tf);
       } catch (_e) {}
       try {
         window.setupGradesBarsScrollHide();
@@ -2850,7 +2963,8 @@ async function loadTicketEval(dateStr) {
   if (sameDoc) {
     try {
       applyTicketEvalGradesEmbed(tf.contentDocument);
-      collapseSportsInTicketFrame(tf);
+      ensureTicketEvalSportStatsBar(tf.contentDocument);
+      scheduleTicketFrameCollapse(tf);
       syncTicketFrameHeight(tf);
       setupTicketFrameAutoHeight(tf);
     } catch (_e7) {}
