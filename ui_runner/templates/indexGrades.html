@@ -361,13 +361,32 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
 .insights-card.insights-card-empty{display:none !important;}
 .grades-props-inner{width:100%;max-width:none;margin:0;}
-.props-eval-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px;margin-bottom:14px;}
-.props-eval-toolbar label{font-size:12px;letter-spacing:0.8px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
-.props-eval-toolbar select,.props-eval-toolbar input[type="search"]{
-  font-family:'Inter',sans-serif;font-size:12px;padding:6px 10px;border-radius:10px;
-  border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.05);color:var(--text);min-width:120px;
+.props-eval-toolbar{display:flex;flex-direction:column;gap:12px;margin-top:12px;margin-bottom:14px;}
+.props-eval-filter-row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 10px;}
+.props-eval-filter-label{
+  flex:0 0 auto;min-width:4.5rem;padding-top:6px;
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;
 }
-.props-eval-toolbar input[type="search"]{min-width:160px;flex:1 1 140px;max-width:280px;}
+.props-filter-pills{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 0;min-width:0;}
+.props-filter-pill{
+  padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);
+  background:transparent;color:var(--text);cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.05em;
+  transition:border-color .15s ease,color .15s ease,background .15s ease;
+  white-space:nowrap;
+}
+.props-filter-pill:hover{border-color:var(--accent-gold);color:var(--accent-gold);}
+.props-filter-pill.active{background:var(--accent-gold);border-color:var(--accent-gold);color:#0a0a0f;}
+.props-filter-pill[data-filter="HIT"].active{background:#00ff88;border-color:#00ff88;color:#0a0a0f;}
+.props-filter-pill[data-filter="MISS"].active{background:#ff6b6b;border-color:#ff6b6b;color:#0a0a0f;}
+.props-filter-pill[data-filter="OTHER"].active{background:var(--amber);border-color:var(--amber);color:#0a0a0f;}
+.props-eval-search-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.props-eval-search-row label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;}
+.props-eval-toolbar input[type="search"]{
+  font-family:'Inter',sans-serif;font-size:12px;padding:8px 12px;border-radius:10px;
+  border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.05);color:var(--text);
+  min-width:160px;flex:1 1 180px;max-width:100%;
+}
 .props-eval-counts{font-family:'Inter',sans-serif;font-size:12px;color:var(--cyan);letter-spacing:0.4px;margin-bottom:6px;}
 /* Desktop: responsive card masonry */
 .props-eval-grid{
@@ -404,7 +423,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 [data-theme="light"] .prop-eval-stat.hit{color:#0d7a3e!important;}
 [data-theme="light"] .prop-eval-stat.miss{color:#c42b18!important;}
 [data-theme="light"] .prop-eval-stat.other{color:#b8860b!important;}
-[data-theme="light"] .props-eval-toolbar select,
+[data-theme="light"] .props-filter-pill{border-color:rgba(0,0,0,0.18);color:rgba(0,0,0,0.78);}
+[data-theme="light"] .props-filter-pill.active{background:var(--accent-gold);border-color:var(--accent-gold);color:#0a0a0f;}
 [data-theme="light"] .props-eval-toolbar input[type="search"]{
   background:rgba(255,255,255,0.85)!important;border-color:rgba(0,0,0,0.12)!important;color:rgba(0,0,0,0.85)!important;
 }
@@ -463,6 +483,10 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @media (max-width:900px),(pointer:coarse){
   .iframe-shell-stage > .grade-frame{z-index:2;pointer-events:auto;}
   .grades-analytics-wrap{z-index:6;}
+  .props-eval-filter-label{min-width:100%;padding-top:0;margin-bottom:2px;}
+  .props-filter-pill{padding:8px 12px;font-size:12px;}
+  .props-eval-search-row{width:100%;}
+  .props-eval-search-row input[type="search"]{width:100%;flex:1 1 100%;}
   .props-eval-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1351,31 +1375,35 @@ select option,
         <h3 class="insights-card-title">Prop evaluation</h3>
         <p class="insights-card-sub">Every graded prop for the report date (hit / miss / other). When <code>graded_props_YYYY-MM-DD.json</code> is deployed under <code>ui_runner/templates/</code> (written by <code>build_grades_html.py</code>), this tab loads from that file. Otherwise it uses archived rows from <code>props_history</code> in <code>data/cache/*_props_history.db</code>. The date must match the <strong>slate grade date</strong> (same <code>YYYY-MM-DD</code> as <code>outputs/&lt;date&gt;/</code>). Use <strong>Jump to date</strong> if pills default to the wrong year.</p>
         <div class="props-eval-toolbar">
-          <label>Sport
-            <select id="props-filter-sport" aria-label="Filter by sport">
-              <option value="">All sports</option>
-            </select>
-          </label>
-          <label>Result
-            <select id="props-filter-result" aria-label="Filter by result">
-              <option value="">All</option>
-              <option value="HIT">Hits</option>
-              <option value="MISS">Misses</option>
-              <option value="OTHER">Other / pending</option>
-            </select>
-          </label>
-          <label>Pick Type
-            <select id="props-filter-picktype" aria-label="Filter by pick type">
-              <option value="">All pick types (default)</option>
-              <option value="NO_DEMON">No Demon</option>
-              <option value="GOBLIN">Goblin only</option>
-              <option value="STANDARD">Standard only</option>
-              <option value="DEMON">Demon only</option>
-            </select>
-          </label>
-          <label style="flex:1 1 200px;max-width:100%;">Search
+          <div class="props-eval-filter-row">
+            <span class="props-eval-filter-label">Sport</span>
+            <div class="props-filter-pills" id="props-filter-sport-group" role="group" aria-label="Filter by sport">
+              <button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>
+            </div>
+          </div>
+          <div class="props-eval-filter-row">
+            <span class="props-eval-filter-label">Result</span>
+            <div class="props-filter-pills" id="props-filter-result-group" role="group" aria-label="Filter by result">
+              <button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>
+              <button type="button" class="props-filter-pill" data-filter="HIT" aria-pressed="false">HITS</button>
+              <button type="button" class="props-filter-pill" data-filter="MISS" aria-pressed="false">MISSES</button>
+              <button type="button" class="props-filter-pill" data-filter="OTHER" aria-pressed="false">OTHER</button>
+            </div>
+          </div>
+          <div class="props-eval-filter-row">
+            <span class="props-eval-filter-label">Pick type</span>
+            <div class="props-filter-pills" id="props-filter-picktype-group" role="group" aria-label="Filter by pick type">
+              <button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>
+              <button type="button" class="props-filter-pill" data-filter="NO_DEMON" aria-pressed="false">NO DEMON</button>
+              <button type="button" class="props-filter-pill" data-filter="GOBLIN" aria-pressed="false">GOBLIN</button>
+              <button type="button" class="props-filter-pill" data-filter="STANDARD" aria-pressed="false">STANDARD</button>
+              <button type="button" class="props-filter-pill" data-filter="DEMON" aria-pressed="false">DEMON</button>
+            </div>
+          </div>
+          <div class="props-eval-search-row">
+            <label for="props-filter-q">Search</label>
             <input type="search" id="props-filter-q" placeholder="Player, prop, team…" autocomplete="off" aria-label="Search props"/>
-          </label>
+          </div>
         </div>
         <div class="props-eval-counts" id="props-eval-counts"></div>
       </div>
@@ -2242,14 +2270,40 @@ function propsEvalOutcomeRank(result) {
   if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') return 2;
   return 3;
 }
+function getPropsFilterGroupValue(groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return '';
+  const active = group.querySelector('.props-filter-pill.active');
+  return active ? (active.getAttribute('data-filter') || '') : '';
+}
+function setActivePropsFilterPill(group, btn) {
+  if (!group) return;
+  group.querySelectorAll('.props-filter-pill').forEach(function (p) {
+    p.classList.remove('active');
+    p.setAttribute('aria-pressed', 'false');
+  });
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+  }
+}
 function fillPropsSportFilter(rows) {
-  const sel = document.getElementById('props-filter-sport');
-  if (!sel) return;
-  const cur = sel.value;
+  const group = document.getElementById('props-filter-sport-group');
+  if (!group) return;
+  const cur = getPropsFilterGroupValue('props-filter-sport-group');
   const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
-  sel.innerHTML = '<option value="">All sports</option>' +
-    sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
-  if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
+  group.innerHTML =
+    '<button type="button" class="props-filter-pill active" data-filter="" aria-pressed="true">ALL</button>' +
+    sports.map(function (s) {
+      return '<button type="button" class="props-filter-pill" data-filter="' + escProps(s) + '" aria-pressed="false">' + escProps(s) + '</button>';
+    }).join('');
+  var restore = null;
+  if (cur) {
+    group.querySelectorAll('.props-filter-pill').forEach(function (p) {
+      if ((p.getAttribute('data-filter') || '') === cur) restore = p;
+    });
+  }
+  setActivePropsFilterPill(group, restore || group.querySelector('.props-filter-pill[data-filter=""]'));
 }
 /** Team vs opponent; strips placeholders so we do not show "NYY vs —" when opp is missing in JSON. */
 function formatPropEvalMatchup(r) {
@@ -2316,9 +2370,9 @@ function renderPropsEvalCards(rows) {
   grid.appendChild(frag);
 }
 function applyPropsEvalFilters() {
-  const sport = (document.getElementById('props-filter-sport') || {}).value || '';
-  const resF = (document.getElementById('props-filter-result') || {}).value || '';
-  const pickTypeF = (document.getElementById('props-filter-picktype') || {}).value || '';
+  const sport = getPropsFilterGroupValue('props-filter-sport-group');
+  const resF = getPropsFilterGroupValue('props-filter-result-group');
+  const pickTypeF = getPropsFilterGroupValue('props-filter-picktype-group');
   const q = (((document.getElementById('props-filter-q') || {}).value) || '').trim().toLowerCase();
   const rows = window._propsEvalCache || [];
   const filtered = rows.filter(function (r) {
@@ -2480,9 +2534,13 @@ async function loadGradesProps(dateStr) {
   }
 }
 (function initPropsEvalFilters() {
-  ['props-filter-sport', 'props-filter-result', 'props-filter-picktype'].forEach(function (id) {
-    var el = document.getElementById(id);
-    if (el) el.addEventListener('change', applyPropsEvalFilters);
+  document.querySelectorAll('.props-filter-pills').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+      var btn = e.target.closest('.props-filter-pill');
+      if (!btn || !group.contains(btn)) return;
+      setActivePropsFilterPill(group, btn);
+      applyPropsEvalFilters();
+    });
   });
   var qel = document.getElementById('props-filter-q');
   if (qel) qel.addEventListener('input', applyPropsEvalFilters);
