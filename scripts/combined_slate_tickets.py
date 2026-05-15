@@ -12938,10 +12938,8 @@ def render_tickets_body_html(
         groups, _n_g_full, _n_g_show = _cap_ticket_groups_for_ui(groups_all, _ui_cap)
         if _n_g_show < _n_g_full:
             _ui_cap_note = (
-                f' &nbsp;·&nbsp; <span style="opacity:.85;font-size:12px;">Showing {_n_g_show} of {_n_g_full} groups '
-                f"(top {_ui_cap} per sport / pick-type / size by EV; full list in "
-                f'<a href="/tickets_latest.json" style="color:var(--cyan);">JSON</a> '
-                f"or set PROPORACLE_TICKETS_UI_MAX_GROUPS_PER_BUCKET=0)</span>"
+                f' &nbsp;·&nbsp; <span style="opacity:.85;font-size:12px;">'
+                f"Showing {_n_g_show} of {_n_g_full} groups</span>"
             )
     else:
         groups = groups_all
