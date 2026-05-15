@@ -215,7 +215,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-05-02-railway-commands-json"
+_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-tickets-ui")[:12] or "2026-05-15-tickets-ui"
 
 
 def _deploy_git_sha_short() -> str:
@@ -4667,7 +4667,7 @@ def _normalize_sport_label(raw: Any) -> str:
     aliases = {
         "NCAAB": "CBB",
         "WCBB": "CBB",
-        "NCAAF": "NFL",
+        "NCAAF": "CFB",
         "NBA1Q": "NBA",
         "NBA1H": "NBA",
     }
