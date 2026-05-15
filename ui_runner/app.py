@@ -3999,6 +3999,89 @@ def _extract_history_series(row: dict[str, Any]) -> tuple[list[float], list[floa
     return actual_vals, line_vals
 
 
+def _normalize_prop_merge_key(raw: object) -> str:
+    """Align with dashboard merge keys (sheet shortcodes vs ticket long names)."""
+    t = (
+        str(raw or "")
+        .strip()
+        .lower()
+        .replace(" ", "")
+        .replace("\u2013", "-")
+        .replace("\u2014", "-")
+    )
+    canon = {
+        "pra": "pts+rebs+asts",
+        "pr": "pts+rebs",
+        "pa": "pts+asts",
+        "pts": "points",
+        "ast": "assists",
+        "reb": "rebounds",
+        "points": "points",
+        "rebounds": "rebounds",
+        "assists": "assists",
+        "pts+rebs": "pts+rebs",
+        "pts+asts": "pts+asts",
+        "pts+rebs+asts": "pts+rebs+asts",
+        "points+rebounds": "pts+rebs",
+        "points+assists": "pts+asts",
+        "points+rebounds+assists": "pts+rebs+asts",
+    }
+    return canon.get(t, t)
+
+
+def _normalize_player_merge_key(name: object) -> str:
+    return " ".join(str(name or "").strip().lower().split())
+
+
+def _normalize_dir_merge(raw: object) -> str:
+    s = str(raw or "OVER").strip().upper()
+    if s in ("O", "OV", "OVR"):
+        return "OVER"
+    if s in ("U", "UN", "UND"):
+        return "UNDER"
+    return s
+
+
+def _line_tokens_from_record(row: dict[str, Any]) -> list[str]:
+    toks: list[str] = []
+    seen: set[str] = set()
+    for key in ("line", "standard_line", "book_line", "prop_line"):
+        v = row.get(key)
+        if v is None or v == "":
+            continue
+        try:
+            f = float(v)
+            if math.isfinite(f):
+                s = f"{f:.3f}"
+                if s not in seen:
+                    seen.add(s)
+                    toks.append(s)
+                continue
+        except (TypeError, ValueError):
+            pass
+        s2 = str(v).strip()
+        if s2 and s2 not in seen:
+            seen.add(s2)
+            toks.append(s2)
+    return toks if toks else [""]
+
+
+def _pick_scalar_history_fields(leg: dict[str, Any]) -> dict[str, Any]:
+    """Expose per-game columns + standard_projection on /api/slate picks for client merge/charts."""
+    out: dict[str, Any] = {}
+    sp = leg.get("standard_projection")
+    if sp is not None and sp != "":
+        out["standard_projection"] = sp
+    sl = leg.get("standard_line")
+    if sl is not None and sl != "":
+        out["standard_line"] = sl
+    for i in range(1, 11):
+        for suffix in (f"g{i}", f"stat_g{i}"):
+            if suffix in leg and leg[suffix] is not None and leg[suffix] != "":
+                out[suffix] = leg[suffix]
+    return out
+
+
 def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
     """
     Home /api/slate fallback when tickets_latest.json is missing or has no leg rows.
@@ -4112,19 +4195,20 @@ def api_slate():
                         for row in rows:
                             if not isinstance(row, dict):
                                 continue
-                            player_norm = str(row.get("player") or "").strip().lower()
-                            prop_norm = str(row.get("prop") or row.get("prop_type") or "").strip().lower()
-                            dir_norm = str(row.get("dir") or row.get("direction") or "OVER").strip().upper()
-                            line_val = row.get("line")
-                            try:
-                                line_norm = f"{float(line_val):.3f}"
-                            except (TypeError, ValueError):
-                                line_norm = str(line_val or "").strip()
-                            key = (sport_norm, player_norm, prop_norm, f"{dir_norm}|{line_norm}")
-                            if key in slate_history_map:
-                                continue
+                            player_norm = _normalize_player_merge_key(row.get("player"))
+                            prop_norm = _normalize_prop_merge_key(
+                                row.get("prop") or row.get("prop_type")
+                            )
+                            dir_norm = _normalize_dir_merge(
+                                row.get("dir") or row.get("direction")
+                            )
                             actual_series, line_series = _extract_history_series(row)
-                            if actual_series:
+                            if not actual_series:
+                                continue
+                            for lt in _line_tokens_from_record(row):
+                                key = (sport_norm, player_norm, prop_norm, f"{dir_norm}|{lt}")
+                                if key in slate_history_map:
+                                    continue
                                 slate_history_map[key] = (actual_series, line_series)
             except Exception:
                 slate_history_map = {}
@@ -4157,42 +4241,44 @@ def api_slate():
                         actual_series, line_series = _extract_history_series(leg)
                         if not actual_series and slate_history_map:
                             sport_norm = str(leg.get("sport") or "").strip().upper()
-                            player_norm = str(leg.get("player") or "").strip().lower()
-                            prop_norm = str(leg.get("prop_type") or "").strip().lower()
-                            dir_norm = str(leg.get("direction") or "OVER").strip().upper()
-                            line_val = leg.get("line")
-                            try:
-                                line_norm = f"{float(line_val):.3f}"
-                            except (TypeError, ValueError):
-                                line_norm = str(line_val or "").strip()
-                            hist_key = (sport_norm, player_norm, prop_norm, f"{dir_norm}|{line_norm}")
-                            backfill = slate_history_map.get(hist_key)
-                            if backfill:
-                                actual_series, line_series = backfill
+                            player_norm = _normalize_player_merge_key(leg.get("player"))
+                            prop_norm = _normalize_prop_merge_key(leg.get("prop_type"))
+                            dir_norm = _normalize_dir_merge(leg.get("direction"))
+                            for lt in _line_tokens_from_record(leg):
+                                hist_key = (
+                                    sport_norm,
+                                    player_norm,
+                                    prop_norm,
+                                    f"{dir_norm}|{lt}",
+                                )
+                                backfill = slate_history_map.get(hist_key)
+                                if backfill:
+                                    actual_series, line_series = backfill
+                                    break
                         abs_edge_leg = _api_slate_pick_abs_edge(leg)
-                        picks.append(
-                            {
-                                "sport": leg.get("sport", ""),
-                                "initials": leg.get("initials", ""),
-                                "player": leg.get("player", ""),
-                                "prop": leg.get("prop_type", ""),
-                                "line": leg.get("line", 0),
-                                "pick": leg.get("pick_type", "Standard"),
-                                "dir": leg.get("direction", "OVER"),
-                                "hit": round((leg.get("hit_rate") or 0) * 100),
-                                "edge": leg.get("edge") or 0,
-                                "abs_edge": abs_edge_leg,
-                                "projection": _pick_projection_from_mapping(leg),
-                                "l5_over": l5_over,
-                                "l5_under": l5_under,
-                                "l10_over": l10_over,
-                                "l10_under": l10_under,
-                                "l5_avg": leg.get("l5_avg"),
-                                "season_avg": leg.get("season_avg"),
-                                "actual_series": actual_series,
-                                "line_series": line_series,
-                            }
-                        )
+                        pick_entry: dict[str, Any] = {
+                            "sport": leg.get("sport", ""),
+                            "initials": leg.get("initials", ""),
+                            "player": leg.get("player", ""),
+                            "prop": leg.get("prop_type", ""),
+                            "line": leg.get("line", 0),
+                            "pick": leg.get("pick_type", "Standard"),
+                            "dir": leg.get("direction", "OVER"),
+                            "hit": round((leg.get("hit_rate") or 0) * 100),
+                            "edge": leg.get("edge") or 0,
+                            "abs_edge": abs_edge_leg,
+                            "projection": _pick_projection_from_mapping(leg),
+                            "l5_over": l5_over,
+                            "l5_under": l5_under,
+                            "l10_over": l10_over,
+                            "l10_under": l10_under,
+                            "l5_avg": leg.get("l5_avg"),
+                            "season_avg": leg.get("season_avg"),
+                            "actual_series": actual_series,
+                            "line_series": line_series,
+                        }
+                        pick_entry.update(_pick_scalar_history_fields(leg))
+                        picks.append(pick_entry)
             picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
             base = {
                 "picks": picks,

@@ -1977,6 +1977,7 @@ status-row
       <div class="sec-line"></div>
       <a href="/tickets" class="edges-see-all">See All Picks ↗</a>
     </div>
+    <div id="top-edges-debug" style="font-size:9px;font-family:Inter,sans-serif;color:var(--muted2);letter-spacing:0.04em;margin:-4px 0 10px;min-height:12px;"></div>
     
     <div class="sub-header" style="color:var(--green);">
       ▲ OVER EDGES
@@ -2061,6 +2062,21 @@ let SLATE_DEBUG_META = { source: "", generated_at: "", date: "" };
 /** True after Full Slate rows successfully mapped into ALL_SLATE (Excel or merged JSON). */
 let SLATE_CARDS_POPULATED = false;
 
+/** Fills optional #top-edges-debug. Never throw: loadSlateData calls this immediately before ticket→sheet merge. */
+function renderTopEdgesDebugTag() {
+  const el = document.getElementById("top-edges-debug");
+  if (!el) return;
+  const bid = document.documentElement.getAttribute("data-ui-build") || "";
+  const sha = (document.documentElement.getAttribute("data-deploy-sha") || "").trim();
+  const m = SLATE_DEBUG_META || {};
+  const parts = [
+    bid && `ui ${bid}`,
+    sha && sha.slice(0, 7),
+    m.source && `slate:${m.source}`,
+  ].filter(Boolean);
+  el.textContent = parts.length ? parts.join(" · ") : "—";
+}
+
 function fmtEdgeCell(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n.toFixed(2) : "—";
@@ -2075,13 +2091,19 @@ function fmtEdgePick(p) {
   return n.toFixed(2);
 }
 
-/** Model-projected stat (step8 projection). Fallback: line + edge. */
+/** Model-projected stat: prefer API projection; never treat 0 as valid for normal stat totals. */
 function projectedStatForPick(p) {
   if (!p) return null;
-  const raw = p.projection ?? p.proj ?? p.Projected;
-  const pj = Number(raw);
-  if (Number.isFinite(pj)) return pj;
-  const line = Number(p.line);
+  const line = coercePropLine(p);
+  const tryProj = (raw) => {
+    const pj = Number(raw);
+    if (!Number.isFinite(pj)) return null;
+    if (pj === 0 && Number.isFinite(line) && line >= 2) return null;
+    return pj;
+  };
+  let pj = tryProj(p.projection ?? p.proj ?? p.Projected);
+  if (pj == null) pj = tryProj(p.standard_projection);
+  if (pj != null) return pj;
   const edge = Number(p.edge);
   if (Number.isFinite(line) && Number.isFinite(edge)) return line + edge;
   return Number.isFinite(line) ? line : null;
@@ -2125,34 +2147,315 @@ function normalizeSeries(vals) {
   return out;
 }
 
-function historySeriesForPick(p, n) {
-  let actual = normalizeSeries(p.actual_series).slice(-n);
-  if (!actual.length) {
-    const gcols = ["g1","g2","g3","g4","g5","g6","g7","g8","g9","g10"].slice(0, n);
-    const vals = gcols.map(k => p[k]).filter(v => v !== null && v !== undefined && Number.isFinite(Number(v))).map(Number);
-    if (vals.length >= Math.min(3, n)) actual = vals;
+/** Parse floats from pipeline / JSON (mirrors ui_runner app _extract_history_series). */
+function parseFiniteNumber(v) {
+  if (v === null || v === undefined || v === "") return null;
+  const n = Number(v);
+  if (!Number.isFinite(n) || Number.isNaN(n)) return null;
+  return n;
+}
+
+/**
+ * Build per-game stat arrays in pipeline order: g1 = most recent, …, gN.
+ * Mirrors Python _extract_history_series (stat_g / actual_g / g, plus line_g / prop_line_g).
+ */
+function extractPerGameSeriesFromObject(obj, maxN = 10) {
+  const actualVals = [];
+  const lineVals = [];
+  if (!obj || typeof obj !== "object") return { actualVals, lineVals };
+  for (let i = 1; i <= maxN; i++) {
+    let aval = null;
+    for (const key of [
+      `stat_g${i}`, `Stat_G${i}`, `STAT_G${i}`, `Actual_G${i}`, `actual_g${i}`, `g${i}`, `G${i}`,
+    ]) {
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+      aval = parseFiniteNumber(obj[key]);
+      if (aval !== null) break;
+    }
+    if (aval === null) continue;
+    actualVals.push(aval);
+
+    let lval = null;
+    for (const key of [
+      `line_g${i}`, `Line_G${i}`, `PROP_LINE_G${i}`, `prop_line_g${i}`, `Prop_Line_G${i}`,
+    ]) {
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+      lval = parseFiniteNumber(obj[key]);
+      if (lval !== null) break;
+    }
+    lineVals.push(lval !== null ? lval : null);
   }
-  if (actual.length >= Math.min(3, n)) {
-    const lineRaw = normalizeSeries(p.line_series);
-    const lineSeries = lineRaw.length ? lineRaw.slice(-actual.length) : Array.from({length: actual.length}, () => Number(p.line));
-    return {actual, lineSeries};
+  return { actualVals, lineVals };
+}
+
+/** Excel / combined row: parallel column names → object for extractPerGameSeriesFromObject. */
+function extractPerGameFromColumnsRow(columns, row) {
+  const o = {};
+  if (!Array.isArray(columns) || !Array.isArray(row)) {
+    return extractPerGameSeriesFromObject({}, 10);
+  }
+  for (let i = 0; i < columns.length; i++) {
+    const nm = String(columns[i] ?? "").trim();
+    if (!nm || row[i] === undefined || row[i] === null || row[i] === "") continue;
+    o[nm] = row[i];
+  }
+  return extractPerGameSeriesFromObject(o, 10);
+}
+
+/** Prefer first-n games when series is longest-first recent (pipeline g1..gn); fallback to tail when short. */
+function takeFirstNGames(series, n) {
+  if (!Array.isArray(series) || !n) return [];
+  if (series.length >= n) return series.slice(0, n);
+  return series.slice();
+}
+
+/** l5_avg is sometimes a hit-rate fraction (≤1); never use it as stat level vs a real book line. */
+function plausibleStatBaseline(l5Avg, seasonAvg, bookLine) {
+  const L = Number(bookLine);
+  const tryOne = (raw) => {
+    const avn = Number(raw);
+    if (!Number.isFinite(avn)) return null;
+    if (Number.isFinite(L) && L >= 3 && avn > 0 && avn <= 1) return null;
+    return avn;
+  };
+  const a = tryOne(l5Avg);
+  if (a !== null) return a;
+  const b = tryOne(seasonAvg);
+  if (b !== null) return b;
+  return Number.isFinite(L) ? L : 0;
+}
+
+function normalizePlayerForMerge(s) {
+  return String(s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+/** OVER / UNDER tokens: some Excel feeds use O/U. */
+function normalizeDirForMerge(d) {
+  const s = String(d ?? "").trim().toUpperCase();
+  if (s === "O" || s === "OV" || s === "OVR") return "OVER";
+  if (s === "U" || s === "UN" || s === "UND") return "UNDER";
+  return s;
+}
+
+function pickDirNorm(rec) {
+  if (!rec) return "";
+  const raw = rec.dir != null && rec.dir !== "" ? rec.dir : rec.direction;
+  return normalizeDirForMerge(raw);
+}
+
+/** Prop tokens: combined sheet uses shortcodes (pra, pr, pts) while tickets use long PrizePicks names. */
+const PROP_MERGE_CANON = {
+  pra: "pts+rebs+asts",
+  pr: "pts+rebs",
+  pa: "pts+asts",
+  pts: "points",
+  ast: "assists",
+  reb: "rebounds",
+  points: "points",
+  rebounds: "rebounds",
+  assists: "assists",
+  "pts+rebs": "pts+rebs",
+  "pts+asts": "pts+asts",
+  "pts+rebs+asts": "pts+rebs+asts",
+  "points+rebounds": "pts+rebs",
+  "points+assists": "pts+asts",
+  "points+rebounds+assists": "pts+rebs+asts",
+};
+
+function normalizePropForMerge(s) {
+  let t = String(s ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "");
+  t = t.replace(/\u2013/g, "-").replace(/\u2014/g, "-");
+  if (Object.prototype.hasOwnProperty.call(PROP_MERGE_CANON, t)) return PROP_MERGE_CANON[t];
+  return t;
+}
+
+function propForMergeKey(rec) {
+  if (!rec) return "";
+  const raw = rec.prop != null && String(rec.prop).trim() ? rec.prop : rec.prop_type;
+  return normalizePropForMerge(raw);
+}
+
+/** Promo vs standard lines: register every numeric variant so ticket ↔ sheet rows merge. */
+function mergeLineTokens(rec) {
+  if (!rec) return [""];
+  const toks = new Set();
+  for (const c of [rec.line, rec.standard_line, rec.book_line, rec.prop_line]) {
+    if (c == null || c === "") continue;
+    const x = Number(c);
+    if (Number.isFinite(x)) {
+      toks.add(x.toFixed(3));
+      continue;
+    }
+    const cleaned = String(c)
+      .trim()
+      .replace(/[^0-9.+-]/g, "");
+    const n = Number(cleaned);
+    if (Number.isFinite(n)) toks.add(n.toFixed(3));
+  }
+  return toks.size ? [...toks] : [""];
+}
+
+function slatePickBaseParts(rec, includeSport) {
+  const prop = propForMergeKey(rec);
+  if (includeSport) {
+    return [
+      String(rec.sport || "").trim().toUpperCase(),
+      normalizePlayerForMerge(rec.player),
+      prop,
+      pickDirNorm(rec),
+    ].join("||");
+  }
+  return [normalizePlayerForMerge(rec.player), prop, pickDirNorm(rec)].join("||");
+}
+
+function buildSlatePickMaps(picks) {
+  const fullMap = Object.create(null);
+  const looseMap = Object.create(null);
+  for (const p of picks || []) {
+    const fb = slatePickBaseParts(p, true);
+    const lb = slatePickBaseParts(p, false);
+    for (const lt of mergeLineTokens(p)) {
+      fullMap[`${fb}||${lt}`] = p;
+      looseMap[`${lb}||${lt}`] = p;
+    }
+  }
+  return { fullMap, looseMap };
+}
+
+function resolveSlatePickForRow(row, maps) {
+  for (const lt of mergeLineTokens(row)) {
+    const hit = maps.fullMap[`${slatePickBaseParts(row, true)}||${lt}`];
+    if (hit) return hit;
+  }
+  for (const lt of mergeLineTokens(row)) {
+    const hit = maps.looseMap[`${slatePickBaseParts(row, false)}||${lt}`];
+    if (hit) return hit;
   }
   return null;
+}
+
+/** Numeric book line for charts (handles string "15.5" etc.). */
+function coercePropLine(p) {
+  if (!p) return NaN;
+  const cands = [p.line, p.standard_line, p.book_line, p.prop_line];
+  for (const c of cands) {
+    const n0 = Number(c);
+    if (Number.isFinite(n0) && n0 >= 0) return n0;
+    const s = String(c ?? "")
+      .trim()
+      .replace(/[^0-9.+-]/g, "");
+    const n1 = Number(s);
+    if (Number.isFinite(n1) && n1 >= 0) return n1;
+  }
+  return NaN;
+}
+
+/**
+ * Some feeds mislabel hit/miss (0/1) columns as actual_series. Skip when scale is clearly stat-total.
+ */
+function storedSeriesLooksLikeHitFlags(storedArr, book) {
+  if (!Array.isArray(storedArr) || !storedArr.length) return false;
+  const nums = storedArr.map((x) => Number(x)).filter((x) => Number.isFinite(x));
+  if (!nums.length) return false;
+  const mx = Math.max(...nums);
+  const mn = Math.min(...nums);
+  if (mx > 1.25 || mn < 0) return false;
+  const b = Number(book);
+  if (Number.isFinite(b) && b >= 2) return mx < b * 0.25;
+  // No reliable book line: still reject obvious 0/1-ish "actuals" from mis-labeled Excel columns.
+  return true;
+}
+
+function historySeriesForPick(p, n) {
+  const book = coercePropLine(p);
+  const minNeed = Math.min(3, n);
+  const ex = extractPerGameSeriesFromObject(p, 10);
+
+  const stored = normalizeSeries(Array.isArray(p.actual_series) ? p.actual_series : []);
+  let actual = [];
+
+  /** Recent-first: slice first n stats (pipeline g1 = last game). */
+  const storedN = takeFirstNGames(stored, n);
+  const extractedN = normalizeSeries(takeFirstNGames(ex.actualVals.slice(), Math.min(ex.actualVals.length, n)));
+
+  const fromGC = [];
+  for (let gi = 1; gi <= 10 && fromGC.length < n; gi++) {
+    let v = parseFiniteNumber(p[`g${gi}`]);
+    if (v === null) v = parseFiniteNumber(p[`stat_g${gi}`]);
+    if (v === null) break;
+    fromGC.push(v);
+  }
+  let fromGn = normalizeSeries(fromGC);
+
+  let source = "";
+  const canUseStored =
+    storedN.length >= minNeed && !storedSeriesLooksLikeHitFlags(storedN, book);
+  if (canUseStored) {
+    actual = takeFirstNGames(storedN, n);
+    source = "stored";
+  } else if (extractedN.length >= minNeed) {
+    actual = takeFirstNGames(extractedN, n);
+    source = "extract";
+  } else if (fromGn.length >= minNeed) {
+    actual = takeFirstNGames(fromGn, n);
+    source = "gcols";
+  } else {
+    return null;
+  }
+
+  let lineNums = [];
+
+  if (source === "stored") {
+    const ls = normalizeSeries(Array.isArray(p.line_series) ? p.line_series : []);
+    const lsN = takeFirstNGames(ls, n);
+    for (let i = 0; i < actual.length; i++) {
+      const lv = Number.isFinite(lsN[i])
+        ? lsN[i]
+        : Number.isFinite(book)
+          ? book
+          : actual[i];
+      lineNums.push(streakQuantize(lv));
+    }
+  } else if (source === "extract") {
+    for (let i = 0; i < actual.length; i++) {
+      const lv = ex.lineVals[i];
+      lineNums.push(
+        lv !== null && Number.isFinite(Number(lv))
+          ? streakQuantize(Number(lv))
+          : Number.isFinite(book)
+            ? book
+            : actual[i],
+      );
+    }
+  } else {
+    for (let i = 0; i < actual.length; i++)
+      lineNums.push(Number.isFinite(book) ? book : actual[i]);
+  }
+
+  return { actual, lineSeries: lineNums };
 }
 
 function empiricalHitPctForPick(p, n = 5) {
   const hist = historySeriesForPick(p, n);
   if (!hist || !Array.isArray(hist.actual) || !hist.actual.length) return null;
   const dir = String(p?.dir || "").trim().toUpperCase();
-  const lineVal = Number(p?.line);
+  const lineVal = coercePropLine(p);
   if (!Number.isFinite(lineVal)) return null;
   let hits = 0;
   // Match MLB/NHL pipeline: strict > / < vs line; pushes (== line) are not over or under hits.
-  for (const v of hist.actual) {
+  for (let i = 0; i < hist.actual.length; i++) {
+    const cap =
+      hist.lineSeries && Number.isFinite(hist.lineSeries[i])
+        ? hist.lineSeries[i]
+        : lineVal;
+    if (!Number.isFinite(cap)) continue;
     if (dir === "OVER") {
-      if (v > lineVal) hits += 1;
+      if (hist.actual[i] > cap) hits += 1;
     } else {
-      if (v < lineVal) hits += 1;
+      if (hist.actual[i] < cap) hits += 1;
     }
   }
   return Math.round((hits / hist.actual.length) * 100);
@@ -2234,8 +2537,7 @@ function streakQuantize(x) {
 function getOverStreakSlice(p, n) {
   const line = Number(p.line);
   const L = Number.isFinite(line) ? line : 0;
-  const avn = Number(p.l5_avg ?? p.season_avg);
-  const avg = Number.isFinite(avn) ? avn : L;
+  const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, L);
   return getPD(p.player, L, p.prop, p.sport).slice(-n).map((b) => streakQuantize(avg + (b - L) * 0.62));
 }
 
@@ -2256,8 +2558,7 @@ function streakSparkData(p, n, isOver, hits) {
 function getUnderStreakSeries(p, n, hits) {
   const line = Number(p.line);
   const L = Number.isFinite(line) ? line : 0;
-  const avn = Number(p.l5_avg ?? p.season_avg);
-  const avg = Number.isFinite(avn) ? avn : L;
+  const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, L);
 
   let seed = 0;
   for (const c of String(p.player || "")) seed = (seed * 31 + c.charCodeAt(0)) % 999983;
@@ -2321,13 +2622,13 @@ function expandHistForEdgeChart(p, n) {
   if (hits === null) hits = Math.max(1, Math.min(Math.max(1, n - 1), Math.round(0.65 * n)));
   const synth = streakSparkData(p, n, isOver, hits);
   if (!Array.isArray(synth) || !synth.length) return null;
-  const actual = normalizeSeries(synth).slice(-n);
+  const actual = takeFirstNGames(normalizeSeries(synth), n);
   if (actual.length < Math.min(3, n)) return null;
   const rawLine = normalizeSeries(p.line_series || []);
   let lineSeries =
-    rawLine.length >= actual.length ? rawLine.slice(-actual.length) : [];
+    rawLine.length >= actual.length ? takeFirstNGames(rawLine, actual.length) : [];
   if (!lineSeries.length) {
-    const L = Number(p.line);
+    const L = coercePropLine(p);
     lineSeries = Array.from({ length: actual.length }, () =>
       Number.isFinite(L) ? L : Number(actual[actual.length - 1]) || 0
     );
@@ -2340,9 +2641,7 @@ function seedPlayerDataFromCardPicks(picks) {
     if (!p || !p.player) continue;
     const lineNum = Number(p.line);
     const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
-    const avgRaw = p.l5_avg ?? p.season_avg ?? p.line;
-    const avgN = Number(avgRaw);
-    const avg = Number.isFinite(avgN) ? avgN : (Number.isFinite(lineNum) ? lineNum : 0);
+    const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
     const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
     if (PLAYER_DATA[pk]) continue;
     let s = 0;
@@ -2362,9 +2661,7 @@ function mergePlayerDataFromTicketLegs(picks) {
     if (PLAYER_DATA[pk]) continue;
     const lineNum = Number(p.line);
     const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
-    const avgRaw = p.l5_avg ?? p.season_avg ?? p.line;
-    const avgN = Number(avgRaw);
-    const avg = Number.isFinite(avgN) ? avgN : (Number.isFinite(lineNum) ? lineNum : 0);
+    const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
     let s = 0;
     for (const c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
     PLAYER_DATA[pk] = Array.from({length: 10}, (_, i) => {
@@ -2409,6 +2706,17 @@ function picksFromSlateLatestJson(data) {
       let edge = Number(row.edge != null ? row.edge : 0);
       if (!Number.isFinite(edge)) edge = 0;
       const hitPct = hr <= 1 ? Math.round(hr * 100) : Math.round(hr);
+      const rawExGames = extractPerGameSeriesFromObject(row, 10);
+      let actualSeriesRow = Array.isArray(row.actual_series) ? row.actual_series : [];
+      let lineSeriesRow = Array.isArray(row.line_series) ? row.line_series : [];
+      if (!normalizeSeries(actualSeriesRow).length && rawExGames.actualVals.length) {
+        actualSeriesRow = rawExGames.actualVals;
+      }
+      if (!normalizeSeries(lineSeriesRow).length && rawExGames.lineVals.some((v) => v != null && Number.isFinite(Number(v)))) {
+        lineSeriesRow = rawExGames.lineVals.map((v) =>
+          v != null && Number.isFinite(Number(v)) ? Number(v) : row.line,
+        );
+      }
       picks.push({
         sport: sportLabel,
         tier: row.tier || row.rank_tier || "",
@@ -2428,8 +2736,8 @@ function picksFromSlateLatestJson(data) {
         l10_under,
         l5_avg: row.l5_avg,
         season_avg: row.season_avg || row.szn_avg,
-        actual_series: row.actual_series,
-        line_series: row.line_series,
+        actual_series: actualSeriesRow,
+        line_series: lineSeriesRow,
       });
     }
   }
@@ -2523,8 +2831,9 @@ async function loadSlateData() {
         }));
         for (const p of (d.picks || [])) {
           if (p.player) {
-            const avg = p.l5_avg ?? p.season_avg ?? p.line;
-            const spread = p.line * 0.35;
+            const lineNum = Number(p.line);
+            const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
+            const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
             const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
             if (PLAYER_DATA[pk]) continue;
             let s = 0;
@@ -2573,18 +2882,41 @@ async function loadSlateData() {
     renderTopEdgesDebugTag();
     // Merge actual_series/line_series from /api/slate into ALL_SLATE entries
     if (slatePayload && Array.isArray(slatePayload.picks)) {
-      const _sm = {};
-      slatePayload.picks.forEach(p => {
-        _sm[`${p.player}||${p.prop}||${p.dir}`] = p;
-      });
+      const maps = buildSlatePickMaps(slatePayload.picks);
       for (const row of ALL_SLATE) {
-        const _m = _sm[`${row.player}||${row.prop}||${row.dir}`];
+        const _m = resolveSlatePickForRow(row, maps);
         if (_m) {
-          row.actual_series  = _m.actual_series  || [];
-          row.line_series    = _m.line_series    || [];
-          if (row.l5_avg     == null) row.l5_avg     = _m.l5_avg;
+          const apiAct = _m.actual_series;
+          if (Array.isArray(apiAct) && apiAct.length >= 3) {
+            row.actual_series = apiAct;
+          }
+          const apiLS = _m.line_series;
+          if (Array.isArray(apiLS) && apiLS.length > 0) {
+            row.line_series = apiLS;
+          }
+          if (_m.line != null && _m.line !== "") {
+            row.line = _m.line;
+          }
+          if (_m.standard_line != null && _m.standard_line !== "") {
+            row.standard_line = _m.standard_line;
+          }
+          const apiProj = Number(_m.projection);
+          if (Number.isFinite(apiProj) && apiProj > 0) {
+            row.projection = _m.projection;
+          } else if (row.projection == null || row.projection === "" || Number(row.projection) === 0) {
+            row.projection = _m.projection;
+          }
+          if (_m.standard_projection != null && _m.standard_projection !== "") {
+            row.standard_projection = _m.standard_projection;
+          }
+          if (row.l5_avg == null) row.l5_avg = _m.l5_avg;
           if (row.season_avg == null) row.season_avg = _m.season_avg;
-          if (row.projection == null) row.projection = _m.projection;
+          for (let gi = 1; gi <= 10; gi++) {
+            const gk = `g${gi}`;
+            const sk = `stat_g${gi}`;
+            if (_m[gk] != null && _m[gk] !== "") row[gk] = _m[gk];
+            if (_m[sk] != null && _m[sk] !== "") row[sk] = _m[sk];
+          }
         }
       }
     }
@@ -2745,14 +3077,24 @@ setInterval(refreshStatus, 60000);
 refreshStatus();
 
 // ── SVG chart (full) — premium area chart ──────────────────
-function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
+function makeSVG(data, bookLine, isOver, W=260, H=100, bookLineSeries=null, extraScale=null) {
   if (!data || data.length === 0) {
     return `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No chart data</div>`;
   }
   const pL=32,pR=10,pT=14,pB=22, cW=W-pL-pR, cH=H-pT-pB;
-  const lineVals = Array.isArray(lineSeries) && lineSeries.length === data.length ? lineSeries : Array.from({length:data.length},()=>line);
-  const allVals = [...data, ...lineVals];
-  const pad=Math.max((Math.max(...allVals)-Math.min(...allVals))*0.18, Number(line||0)*0.08);
+  const lineVals = Array.isArray(bookLineSeries) && bookLineSeries.length === data.length ? bookLineSeries : Array.from({length:data.length},()=>bookLine);
+  const scaleExtras = [];
+  const blN = Number(bookLine);
+  if (Number.isFinite(blN)) scaleExtras.push(blN);
+  if (Array.isArray(extraScale)) {
+    for (const x of extraScale) {
+      if (Number.isFinite(Number(x))) scaleExtras.push(Number(x));
+    }
+  }
+  const allVals = [...data, ...lineVals, ...scaleExtras].filter((x) =>
+    Number.isFinite(Number(x)),
+  );
+  const pad=Math.max((Math.max(...allVals)-Math.min(...allVals))*0.18, Number(bookLine||0)*0.08);
   const mn=Math.min(...allVals)-pad, mx=Math.max(...allVals)+pad, R=mx-mn||1;
   const xDenom = Math.max(1, data.length - 1);
   const px=(v,i)=>pL+(i/xDenom)*cW;
@@ -2809,7 +3151,7 @@ function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
     s+=`<text x="${cx}" y="${H-5}" text-anchor="middle" font-size="7" fill="#44446a" font-family="Inter,sans-serif">G${i+1}</text>`;
   });
   s+=`<text x="${pL}" y="${pT-2}" font-size="8" fill="${actualColor}" font-family="Inter,sans-serif">Actual</text>`;
-  s+=`<text x="${pL+34}" y="${pT-2}" font-size="8" fill="${lineColor}" font-family="Inter,sans-serif">Proj</text>`;
+  s+=`<text x="${pL+36}" y="${pT-2}" font-size="8" fill="${lineColor}" font-family="Inter,sans-serif">Line</text>`;
   s+='</svg>'; return s;
 }
 
@@ -2947,31 +3289,38 @@ function renderExpandChart(idx, p, tab) {
     return;
   }
   const show = hist.actual;
-  let showLine =
-    hist.lineSeries && hist.lineSeries.length === show.length
-      ? hist.lineSeries
-      : null;
-  if (!showLine) {
-    const ref = projectedStatForPick(p);
-    const lineVal = Number(p.line);
-    const r = Number.isFinite(ref)
-      ? ref
-      : Number.isFinite(lineVal)
-        ? lineVal
-        : show.reduce((a, b) => a + b, 0) / show.length;
-    showLine = Array.from({ length: show.length }, () => r);
-  }
-  chartEl.innerHTML = makeSVG(show, p.line, isOver, 260, 100, showLine);
-  const avg = show.reduce((a, b) => a + b, 0) / show.length;
+  const coercedBook = coercePropLine(p);
+  const displayBook = Number.isFinite(coercedBook)
+    ? coercedBook
+    : Number.isFinite(Number(p?.line))
+      ? Number(p.line)
+      : NaN;
+  const bookLineVals = Array.from({ length: show.length }, () =>
+    Number.isFinite(displayBook)
+      ? displayBook
+      : show.reduce((a, b) => a + b, 0) / show.length,
+  );
   const proj = projectedStatForPick(p);
+  const scaleExtras = [];
+  if (Number.isFinite(proj)) scaleExtras.push(proj);
+  chartEl.innerHTML = makeSVG(
+    show,
+    displayBook,
+    isOver,
+    260,
+    100,
+    bookLineVals,
+    scaleExtras,
+  );
+  const avg = show.reduce((a, b) => a + b, 0) / show.length;
   const refN = Number.isFinite(proj)
     ? proj
-    : Number.isFinite(Number(p.line))
-      ? Number(p.line)
+    : Number.isFinite(displayBook)
+      ? displayBook
       : avg;
   const maxV = Math.max(
     refN * 1.5,
-    Number(p.line) * 1.5,
+    (Number.isFinite(displayBook) ? displayBook : 0) * 1.5,
     avg * 1.3,
     1
   );
@@ -2979,7 +3328,7 @@ function renderExpandChart(idx, p, tab) {
     Math.min(100, Math.round((avg / maxV) * 100)) + "%";
   pmkrEl.style.left =
     Math.min(100, Math.round((refN / maxV) * 100)) + "%";
-  plblEl.textContent = `${avg.toFixed(1)} vs Proj ${Number.isFinite(proj) ? proj.toFixed(1) : "—"}`;
+  plblEl.textContent = `${avg.toFixed(1)} L5 · Line ${Number.isFinite(displayBook) ? displayBook.toFixed(1) : "—"} · Proj ${Number.isFinite(proj) ? proj.toFixed(1) : "—"}`;
 }
 
 function switchExpandTab(idx, tab, btn) {
@@ -3445,28 +3794,44 @@ function _v(row, keys) {
 
 function syncCardsFromCombinedRows(rows) {
   if (!Array.isArray(rows) || !rows.length) return false;
-  const mapped = rows.map((r) => ({
-    sport: _v(r, ["sport", "Sport"]),
-    initials: _v(r, ["initials", "Initials"]),
-    player: _v(r, ["player", "Player"]),
-    prop: _v(r, ["prop", "Prop"]),
-    line: Number(_v(r, ["line", "Line"])),
-    pick: _v(r, ["pick_type", "pick", "Pick Type", "Pick"]),
-    dir: _v(r, ["dir", "direction", "Dir", "Direction"]),
-    hit: _v(r, ["hit", "hit_rate", "Hit", "Hit Rate"]),
-    edge: Number(_v(r, ["edge", "Edge"])),
-    projection: Number(_v(r, ["projection", "Projection", "Proj"])),
-    l5_over: _v(r, ["l5_over", "L5 Over", "L5 O"]),
-    l5_under: _v(r, ["l5_under", "L5 Under", "L5 U"]),
-    l10_over: _v(r, ["l10_over", "L10 Over", "L10 O"]),
-    l10_under: _v(r, ["l10_under", "L10 Under", "L10 U"]),
-    tier: _v(r, ["tier", "Tier"]),
-    rank_tier: _v(r, ["rank_tier", "Rank Tier"]) || _v(r, ["tier", "Tier"]),
-    l5_avg: _v(r, ["l5_avg", "L5 Avg"]),
-    season_avg: _v(r, ["season_avg", "Season Avg"]),
-    actual_series: _v(r, ["actual_series", "Actual Series"]),
-    line_series: _v(r, ["line_series", "Line Series"]),
-  })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
+  const mapped = rows.map((r) => {
+    const ex = extractPerGameSeriesFromObject(r, 10);
+    let actual_series = _v(r, ["actual_series", "Actual Series"]);
+    let line_series = _v(r, ["line_series", "Line Series"]);
+    actual_series = Array.isArray(actual_series) ? actual_series : [];
+    line_series = Array.isArray(line_series) ? line_series : [];
+    if (!normalizeSeries(actual_series).length && ex.actualVals.length) {
+      actual_series = ex.actualVals;
+    }
+    const lineNum = Number(_v(r, ["line", "Line"]));
+    if (!normalizeSeries(line_series).length && ex.lineVals.some((v) => v != null && Number.isFinite(Number(v)))) {
+      line_series = ex.lineVals.map((v) =>
+        v != null && Number.isFinite(Number(v)) ? Number(v) : lineNum,
+      );
+    }
+    return {
+      sport: _v(r, ["sport", "Sport"]),
+      initials: _v(r, ["initials", "Initials"]),
+      player: _v(r, ["player", "Player"]),
+      prop: _v(r, ["prop", "Prop"]),
+      line: lineNum,
+      pick: _v(r, ["pick_type", "pick", "Pick Type", "Pick"]),
+      dir: _v(r, ["dir", "direction", "Dir", "Direction"]),
+      hit: _v(r, ["hit", "hit_rate", "Hit", "Hit Rate"]),
+      edge: Number(_v(r, ["edge", "Edge"])),
+      projection: Number(_v(r, ["projection", "Projection", "Proj"])),
+      l5_over: _v(r, ["l5_over", "L5 Over", "L5 O"]),
+      l5_under: _v(r, ["l5_under", "L5 Under", "L5 U"]),
+      l10_over: _v(r, ["l10_over", "L10 Over", "L10 O"]),
+      l10_under: _v(r, ["l10_under", "L10 Under", "L10 U"]),
+      tier: _v(r, ["tier", "Tier"]),
+      rank_tier: _v(r, ["rank_tier", "Rank Tier"]) || _v(r, ["tier", "Tier"]),
+      l5_avg: _v(r, ["l5_avg", "L5 Avg"]),
+      season_avg: _v(r, ["season_avg", "Season Avg"]),
+      actual_series,
+      line_series,
+    };
+  }).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
   if (!mapped.length) return false;
   ALL_SLATE = mapped;
   SLATE_CARDS_POPULATED = true;
@@ -3502,28 +3867,44 @@ function syncCardsFromCombinedSheet(columns, rows) {
     line_series: ci("Line Series"),
   };
   const get = (row, i) => (i >= 0 ? row[i] : null);
-  const mapped = rows.map((r) => ({
-    sport: get(r, idx.sport),
-    initials: get(r, idx.initials),
-    player: get(r, idx.player),
-    prop: get(r, idx.prop),
-    line: Number(get(r, idx.line)),
-    pick: get(r, idx.pick),
-    dir: get(r, idx.dir),
-    hit: get(r, idx.hit),
-    edge: Number(get(r, idx.edge)),
-    projection: Number(get(r, idx.projection)),
-    l5_over: get(r, idx.l5_over),
-    l5_under: get(r, idx.l5_under),
-    l10_over: get(r, idx.l10_over),
-    l10_under: get(r, idx.l10_under),
-    l5_avg: get(r, idx.l5_avg),
-    season_avg: get(r, idx.season_avg),
-    tier: get(r, idx.tier),
-    rank_tier: get(r, idx.rank_tier),
-    actual_series: get(r, idx.actual_series),
-    line_series: get(r, idx.line_series),
-  })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
+  const mapped = rows.map((r) => {
+    const ex = extractPerGameFromColumnsRow(columns, r);
+    let actual_series = get(r, idx.actual_series);
+    let line_series = get(r, idx.line_series);
+    actual_series = Array.isArray(actual_series) ? actual_series : [];
+    line_series = Array.isArray(line_series) ? line_series : [];
+    if (!normalizeSeries(actual_series).length && ex.actualVals.length) {
+      actual_series = ex.actualVals;
+    }
+    const lineNum = Number(get(r, idx.line));
+    if (!normalizeSeries(line_series).length && ex.lineVals.some((v) => v != null && Number.isFinite(Number(v)))) {
+      line_series = ex.lineVals.map((v) =>
+        v != null && Number.isFinite(Number(v)) ? Number(v) : lineNum,
+      );
+    }
+    return {
+      sport: get(r, idx.sport),
+      initials: get(r, idx.initials),
+      player: get(r, idx.player),
+      prop: get(r, idx.prop),
+      line: lineNum,
+      pick: get(r, idx.pick),
+      dir: get(r, idx.dir),
+      hit: get(r, idx.hit),
+      edge: Number(get(r, idx.edge)),
+      projection: Number(get(r, idx.projection)),
+      l5_over: get(r, idx.l5_over),
+      l5_under: get(r, idx.l5_under),
+      l10_over: get(r, idx.l10_over),
+      l10_under: get(r, idx.l10_under),
+      l5_avg: get(r, idx.l5_avg),
+      season_avg: get(r, idx.season_avg),
+      tier: get(r, idx.tier),
+      rank_tier: get(r, idx.rank_tier),
+      actual_series,
+      line_series,
+    };
+  }).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
   if (!mapped.length) return false;
   ALL_SLATE = mapped;
   SLATE_CARDS_POPULATED = true;
