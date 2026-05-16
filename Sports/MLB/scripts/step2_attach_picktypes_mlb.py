@@ -61,6 +61,8 @@ PROP_NORM_MAP = {
     "singles":                 "singles",
     "doubles":                 "doubles",
     "triples":                 "triples",
+    "plate appearances":       "plate_appearances",
+    "plateappearances":        "plate_appearances",
     # Pitcher
     "strikeouts":              "strikeouts",
     "pitcher strikeouts":      "strikeouts",
@@ -92,7 +94,7 @@ HITTER_PROPS = {
     "hits", "total_bases", "home_runs", "rbi", "runs",
     "walks", "stolen_bases", "fantasy_score", "hits_runs_rbi",
     "singles", "doubles", "triples",
-    "hitter_strikeouts",
+    "hitter_strikeouts", "plate_appearances",
 }
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
@@ -125,7 +127,7 @@ def norm_pick_type(s: str) -> str:
 
 def norm_prop(s: str) -> str:
     raw = str(s or "").lower().strip()
-    flat = raw.replace("-", "").replace("_", "").replace(" ", "")
+    flat = raw.replace("-", "").replace("_", "").replace(" ", "").replace("+", "")
     for k, v in PROP_NORM_MAP.items():
         if flat == k.replace("-", "").replace("_", "").replace(" ", ""):
             return v

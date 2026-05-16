@@ -172,6 +172,12 @@ def derive_hitter_stat(game: dict, prop_norm: str) -> float:
     rbi= g("rbi",         0)
     r  = g("runs",        0)
     ab = g("atBats",      0)
+    hbp = g("hitByPitch", 0)
+    sf = g("sacFlies", 0)
+    sh = g("sacBunts", 0)
+    pa = g("plateAppearances", np.nan)
+    if pa != pa:  # NaN
+        pa = ab + bb + hbp + sf + sh
 
     # singles = hits - doubles - triples - HR
     d2 = g("doubles",  0)
@@ -196,6 +202,7 @@ def derive_hitter_stat(game: dict, prop_norm: str) -> float:
         "doubles":             d2,
         "triples":             t3,
         "hitter_strikeouts":   h_so,
+        "plate_appearances":   pa,
     }
     return mapping.get(prop_norm, np.nan)
 
@@ -378,7 +385,7 @@ def update_cache(
         if player_type == "pitcher" else
         ["hits", "total_bases", "home_runs", "rbi", "runs", "walks",
          "stolen_bases", "fantasy_score", "hits_runs_rbi", "singles", "doubles", "triples",
-         "hitter_strikeouts"]
+         "hitter_strikeouts", "plate_appearances"]
     )
     derive_fn = derive_pitcher_stat if player_type == "pitcher" else derive_hitter_stat
 

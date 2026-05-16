@@ -431,6 +431,7 @@ function Clear-NBAGeneratedOutputs {
         "step6b_with_game_context.csv",
         "step6c_with_schedule_flags.csv",
         "step6d_with_h2h.csv",
+        "step6e_with_intel.csv",
         "step7_ranked_props.xlsx",
         "step8_all_direction.csv",
         "step8_all_direction_clean.xlsx"
@@ -559,7 +560,7 @@ function Copy-DatedSlateOutput {
 
 # -- step7b edge model scoring (non-fatal if model missing or script errors) ---
 function Invoke-PropOracleStep7b {
-    param([string]$SportLabel)
+    param([string]$SportLabel, [string]$Step7Xlsx = "")
     Push-Location $Root
     try {
         $sp = Join-Path $Root "scripts\step7b_edge_score.py"
@@ -568,6 +569,7 @@ function Invoke-PropOracleStep7b {
             return
         }
         $cmd = "py -3.14 `"$sp`" --sport `"$SportLabel`""
+        if ($Step7Xlsx -ne "") { $cmd += " --step7-xlsx `"$Step7Xlsx`"" }
         Write-Host "  --> step7b ($SportLabel)" -ForegroundColor Yellow
         Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
         $output = Invoke-Expression $cmd 2>&1
@@ -1215,8 +1217,9 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input `"$NBARunOutDir\step6a_with_opp_stats.csv`" --output `"$NBARunOutDir\step6b_with_game_context.csv`" --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
-    if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
-    if ($ok) { Invoke-PropOracleStep7b "NBA" }
+    if ($ok) { $ok = Run-Step "NBA Step 6e - Attach Intel"           $NBADir ".\scripts\step6e_attach_intel.py"                 "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step6e_with_intel.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6e_with_intel.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
+    if ($ok) { Invoke-PropOracleStep7b "NBA" "$NBARunOutDir\step7_ranked_props.xlsx" }
     if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
     if ($ok) {
         $nbaMainStep8 = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
@@ -1363,7 +1366,7 @@ $NBAJob = Start-Job -ScriptBlock {
         }
     }
     function Invoke-Step7b-Job {
-        param([string]$SportLabel, [string]$R)
+        param([string]$SportLabel, [string]$R, [string]$Step7Xlsx = "")
         Push-Location $R
         try {
             $p = Join-Path $R "scripts\step7b_edge_score.py"
@@ -1372,6 +1375,7 @@ $NBAJob = Start-Job -ScriptBlock {
                 return
             }
             $cmd = "py -3.14 `"$p`" --sport `"$SportLabel`""
+            if ($Step7Xlsx -ne "") { $cmd += " --step7-xlsx `"$Step7Xlsx`"" }
             Write-Output "  --> step7b ($SportLabel)"
             Write-Output "        CMD: $cmd"
             $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
@@ -1416,8 +1420,9 @@ $NBAJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input `"$NBARunOutDir\step6a_with_opp_stats.csv`" --output `"$NBARunOutDir\step6b_with_game_context.csv`" --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
-    if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6e - Attach Intel"           $NBADir ".\scripts\step6e_attach_intel.py"                 "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step6e_with_intel.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6e_with_intel.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
+    if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot "$NBARunOutDir\step7_ranked_props.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "Sports\NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
     return $ok
 } -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root, $NBARunOutDir
