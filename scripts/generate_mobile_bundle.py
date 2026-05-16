@@ -909,6 +909,7 @@ async function fetch_smart(localPath) {
             ),
             "mlb": _first_existing_path(
                 [
+                    R / "outputs" / slate_date / "mlb" / "step8_mlb_direction_clean.xlsx",
                     R / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
                     R / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
                 ]

@@ -348,33 +348,32 @@ function Invoke-MLBStep1Fetch {
         [string]$PipelineDate,
         [string]$OutputPath = "step1_mlb_props.csv"
     )
-    $fetchDir = if ($WorkDir) { $WorkDir } else { $NBADir }
-    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (NBA API fetcher, league_id=2)" -ForegroundColor Yellow
-    Push-Location $fetchDir
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)" -ForegroundColor Yellow
+    Push-Location $WorkDir
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        $outParent = Split-Path -Parent $OutputPath
-        if ($outParent -and -not (Test-Path $outParent)) {
-            New-Item -ItemType Directory -Force -Path $outParent | Out-Null
-        }
-        $cmdDisplay = "py -3.14 -u .\scripts\step1_fetch_prizepicks_api.py --league_id 2 --date $PipelineDate --output $OutputPath ..."
-        Write-Host "        CMD: $cmdDisplay" -ForegroundColor DarkGray
-        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_api.py" `
-            --league_id 2 `
-            --game_mode pickem `
-            --per_page 250 `
-            --max_pages 5 `
-            --sleep 2.0 `
-            --cooldown_seconds 90 `
-            --max_cooldowns 3 `
-            --jitter_seconds 10.0 `
-            --append `
-            --allow-nearest-future `
-            --date $PipelineDate `
-            --output $OutputPath 2>&1
+        # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
+        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 2 ..."
+        Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
+        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            --date $PipelineDate --output $OutputPath `
+            --api-retries 2 --api-session-waves 1 `
+            --api-wave-gap-min 8 --api-wave-gap-max 15 `
+            --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
+            --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
         $exit = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
+            $cmd2Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
+            Write-Host "        CMD: $cmd2Display" -ForegroundColor DarkGray
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --playwright --timeout 120 --retries 1 --retry_delay 5 `
+                --date $PipelineDate --output $OutputPath 2>&1
+            $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
         Write-Host "      OK" -ForegroundColor Green; return $true
     } catch {
@@ -519,7 +518,7 @@ function Run-NBAPeriodPipeline {
     if ($ok) { $ok = Run-Step "${tagLower} Step 2 - Attach Pick Types"      $NBADir ".\scripts\step2_attach_picktypes.py"               "--input $step1 --output $step2" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 3 - Attach Defense"         $NBADir ".\scripts\step3_attach_defense.py"                 "--input $step2 --defense data\cache\defense_team_summary.csv --output $step3" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 4 - Player Stats (ESPN)"    $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate $step3 --out $step4 --date $Date" }
-    if ($ok) { $ok = Run-Step "${tagLower} Step 5 - Line Hit Rates"         $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input $step4 --output $step5" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 5 - Line Hit Rates"         $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input $step4 --output $step5 --compute10" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 6 - Team Role Context"      $NBADir ".\scripts\step6_team_role_context.py"              "--input $step5 --output $step6" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 7 - Rank Props"             $NBADir ".\scripts\step7_rank_props.py"                     "--input $step6 --output $step7" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 8 - Direction Context"      $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py") "--input $step7 --sheet ALL --output $step8Csv --xlsx $step8Xlsx --date $Date" }
@@ -1007,7 +1006,7 @@ if ($MLBOnly) {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $mlbStep1Health.ok) {
@@ -1021,16 +1020,7 @@ if ($MLBOnly) {
     }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
-    $mlbStatsCache = Join-Path $MLBRunOutDir "mlb_stats_cache.csv"
-    $mlbStep4Out = Join-Path $MLBRunOutDir "step4_mlb_with_stats.csv"
-    if ($ok -and (Test-Path $mlbStep4Out)) {
-        Write-Host "  [MLB] Reusing existing step4 -> $mlbStep4Out" -ForegroundColor DarkGray
-    } elseif ($ok) {
-        if (-not (Test-Path $mlbStatsCache) -and (Test-Path (Join-Path $MLBDir "mlb_stats_cache.csv"))) {
-            Copy-Item -LiteralPath (Join-Path $MLBDir "mlb_stats_cache.csv") -Destination $mlbStatsCache -Force
-        }
-        $ok = Run-Step "MLB Step 4 - Player Stats" $MLBDir ".\scripts\step4_attach_player_stats_mlb.py" "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache `"$mlbStatsCache`" --output `"$mlbStep4Out`" --season $MLBSeasonYear" -TimeoutSeconds 5400
-    }
+    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season $MLBSeasonYear" -TimeoutSeconds 1200 }
     if ($ok -and $MLBVerify) {
         Write-Host ""
         Write-Host "  [MLBVerify] Step 1-4 completed. Health summary:" -ForegroundColor Cyan
@@ -1420,7 +1410,7 @@ $NBAJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$nbaStep1`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input `"$NBARunOutDir\step5_with_hit_rates.csv`" --output `"$NBARunOutDir\step6_with_team_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input `"$NBARunOutDir\step6_with_team_role_context.csv`" --output `"$NBARunOutDir\step6a_with_opp_stats.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input `"$NBARunOutDir\step6a_with_opp_stats.csv`" --output `"$NBARunOutDir\step6b_with_game_context.csv`" --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
@@ -1713,30 +1703,27 @@ $MLBJob = Start-Job -ScriptBlock {
     }
     function Invoke-MLBStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
-        $fetchDir = if ($Dir) { $Dir } else { Join-Path $SportsRoot "NBA" }
-        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (NBA API fetcher, league_id=2)"
-        Push-Location $fetchDir
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
+        Push-Location $Dir
         try {
-            $outParent = Split-Path -Parent $OutputPath
-            if ($outParent -and -not (Test-Path $outParent)) {
-                New-Item -ItemType Directory -Force -Path $outParent | Out-Null
-            }
-            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_api.py --league_id 2 --date $PipelineDate --output $OutputPath"
-            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_api.py" `
-                --league_id 2 `
-                --game_mode pickem `
-                --per_page 250 `
-                --max_pages 5 `
-                --sleep 2.0 `
-                --cooldown_seconds 90 `
-                --max_cooldowns 3 `
-                --jitter_seconds 10.0 `
-                --append `
-                --allow-nearest-future `
-                --date $PipelineDate `
-                --output $OutputPath 2>&1
+            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --date $PipelineDate --output $OutputPath `
+                --api-retries 2 --api-session-waves 1 `
+                --api-wave-gap-min 8 --api-wave-gap-max 15 `
+                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
+                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
             $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) {
+                Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
+                Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
+                $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                    --playwright --timeout 120 --retries 1 --retry_delay 5 `
+                    --date $PipelineDate --output $OutputPath 2>&1
+                $exit = $LASTEXITCODE
+                foreach ($line in $output) { Write-Output "        $line" }
+            }
             if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
             Write-Output "[MLB] OK: MLB Step 1"; return $true
         } catch {
@@ -1798,7 +1785,7 @@ $MLBJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $NBADir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $health.ok) {
@@ -1819,7 +1806,7 @@ $MLBJob = Start-Job -ScriptBlock {
                 Write-Output "[MLB] Synced step1 from legacy data/outputs -> $mlbStep1"
             } else {
                 Write-Output "[MLB] step1 unhealthy ($($health.reason)) — emergency fetch"
-                $ok = Invoke-MLBStep1Fetch-Job -Dir $NBADir -PipelineDate $Date -OutputPath $mlbStep1
+                $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date -OutputPath $mlbStep1
             }
         }
     }

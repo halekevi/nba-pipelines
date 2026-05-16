@@ -44,7 +44,7 @@
   "mlb": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-06 21:51:25"
+      "modified": "2026-05-16 16:52:22"
     }
   },
   "nfl": {
@@ -62,13 +62,13 @@
   "wnba": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 15:05:18"
+      "modified": "2026-05-16 16:17:16"
     }
   },
   "combined": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 15:15:15"
+      "modified": "2026-05-16 17:02:50"
     }
   }
 }
