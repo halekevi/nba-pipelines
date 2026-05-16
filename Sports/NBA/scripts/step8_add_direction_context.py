@@ -376,6 +376,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'intel_season_hit_rate', 'intel_cushion', 'intel_cv_pct',
         'intel_l5_vs_season',
         'intel_season_games',
+        'intel_opp_vs_league_pct', 'intel_opp_avg_allowed',
+        'intel_opp_avg_allowed_pos', 'intel_opp_vs_league_pct_pos',
         # ── Full game log (g1-g10) and H2H ───────────────────────────────
         'stat_g1', 'stat_g2', 'stat_g3', 'stat_g4', 'stat_g5',
         'stat_g6', 'stat_g7', 'stat_g8', 'stat_g9', 'stat_g10',
@@ -436,6 +438,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'intel_cv_pct':            'CV%',
         'intel_l5_vs_season':      'L5 vs Season',
         'intel_season_games':      'Season GP',
+        'intel_opp_vs_league_pct': 'Opp vs Lg %',
+        'intel_opp_avg_allowed':   'Opp Allowed Avg',
+        'intel_opp_avg_allowed_pos':   'Opp Allowed Avg (Pos)',
+        'intel_opp_vs_league_pct_pos': 'Opp vs Lg % (Pos)',
         # Game log
         'stat_last10_avg':         'Last 10 Avg',
         'stat_g1': 'G1', 'stat_g2': 'G2', 'stat_g3': 'G3',

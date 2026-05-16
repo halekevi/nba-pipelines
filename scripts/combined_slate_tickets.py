@@ -3212,6 +3212,47 @@ def _demon_passes_quality_gate(row: pd.Series | dict) -> bool:
     return True
 
 
+def _resolve_l5_cols(row: pd.Series, direction: str) -> tuple[float, float]:
+    """
+    Return (l5_hits, l5_games_played) for the play direction.
+
+    Column aliases — step8 clean xlsx uses last5_over / last5_under;
+    raw step8 CSV uses l5_over / l5_under. Both are hit counts (0–5),
+    NOT games played. Games played comes from l5_games_played,
+    n_legs_sample, or line_games_played_5 (whichever is present).
+
+    Returns (0.0, 0.0) when nothing is resolvable.
+    """
+    if direction == "UNDER":
+        hits_keys = ("l5_under", "last5_under")
+    else:
+        hits_keys = ("l5_over", "last5_over")
+
+    hits_raw = None
+    for k in hits_keys:
+        v = row.get(k)
+        if v is not None and str(v).strip() not in ("", "nan", "None"):
+            hits_raw = v
+            break
+
+    gp_raw = (
+        row.get("l5_games_played")
+        or row.get("n_legs_sample")
+        or row.get("line_games_played_5")
+    )
+    gp_num = pd.to_numeric(gp_raw, errors="coerce")
+    has_gp = pd.notna(gp_num) and float(gp_num) > 0
+    has_hits = hits_raw is not None
+
+    if not has_hits and not has_gp:
+        return 0.0, 0.0
+
+    hits = pd.to_numeric(hits_raw, errors="coerce") if has_hits else np.nan
+    hits = 0.0 if pd.isna(hits) else float(hits)
+    gp = float(gp_num) if has_gp else 5.0
+    return hits, gp
+
+
 def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     """
     Selection / est_win_prob leg probability.
@@ -3237,16 +3278,16 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
                         return 1.0 - ov, "over_hit_rate_inverted"
                 except (TypeError, ValueError):
                     pass
-            l5u = pd.to_numeric(row.get("l5_under"), errors="coerce")
-            if pd.notna(l5u):
-                return float(l5u) / 5.0, "l5_under_proxy"
+            _l5u_hits, _l5u_gp = _resolve_l5_cols(row, "UNDER")
+            if _l5u_gp > 0:
+                return _l5u_hits / _l5u_gp, "l5_under_proxy"
             return row.get("hit_rate"), "hit_rate_fallback"
         o = row.get("over_hit_rate")
         if o is not None and str(o).strip() != "":
             return o, "over_hit_rate"
-        l5o = pd.to_numeric(row.get("l5_over"), errors="coerce")
-        if pd.notna(l5o):
-            return float(l5o) / 5.0, "l5_over_proxy"
+        _l5o_hits, _l5o_gp = _resolve_l5_cols(row, "OVER")
+        if _l5o_gp > 0:
+            return _l5o_hits / _l5o_gp, "l5_over_proxy"
         return row.get("hit_rate"), "hit_rate_fallback"
 
     hr_raw, hr_source = _directional_hr_raw()
@@ -3259,19 +3300,15 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     if hr_raw is not None and pd.isna(hr_raw):
         hr_raw = None
 
-    if direction == "UNDER":
-        l5_s = row.get("l5_under")
-    else:
-        l5_s = row.get("l5_over")
-    l5_sample = pd.to_numeric(l5_s, errors="coerce")
-    l5_n = 0.0 if pd.isna(l5_sample) else float(l5_sample)
+    l5_hits, l5_gp = _resolve_l5_cols(row, direction)
+    l5_n = l5_gp
     pick_type = str(row.get("pick_type", "") or "").strip().lower()
     sport = str(row.get("sport", "") or "").strip().upper()
 
     if "demon" in pick_type and sport in ("NHL", "SOCCER", "SOC"):
         hr = _to_prob_0_1(hr_raw)
         ml = _to_prob_0_1(row.get("ml_prob"))
-        has_sample = l5_n >= 3.0
+        has_sample = l5_gp >= 3.0
         hr_val = float(hr) if hr is not None else 0.0
         ml_val = float(ml) if ml is not None else 0.0
         hr_prob = min(0.75, hr_val)
@@ -7520,11 +7557,6 @@ def load_mlb(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
-    fantasy_mask = _fantasy_prop_mask(df)
-    if fantasy_mask.any():
-        n_drop = int(fantasy_mask.sum())
-        df = df.loc[~fantasy_mask].copy()
-        print(f"  [load_mlb] Excluded {n_drop} fantasy props from slate explorer")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 

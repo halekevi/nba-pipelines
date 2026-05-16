@@ -1418,7 +1418,9 @@ def main() -> None:
     # Converted to a projection multiplier: ±0.02 per 5% deviation, capped ±0.06.
     # This is separate from the general intel_def_z weight (0.40) in the score —
     # it directly adjusts the projection so edge and hit rates benefit too.
-    opp_pct_raw    = _to_num(out.get("intel_opp_vs_league_pct", pd.Series(np.nan, index=out.index))).fillna(0.0) / 100.0
+    _opp_pct_pos    = _to_num(out.get("intel_opp_vs_league_pct_pos", pd.Series(np.nan, index=out.index)))
+    _opp_pct_pooled = _to_num(out.get("intel_opp_vs_league_pct", pd.Series(np.nan, index=out.index)))
+    opp_pct_raw     = _opp_pct_pos.combine_first(_opp_pct_pooled).fillna(0.0) / 100.0
     opp_prop_adj   = (opp_pct_raw / 0.05 * 0.02).clip(-0.06, 0.06)
     opp_prop_adj_dr = pd.Series(
         np.where(bet_is_under, -opp_prop_adj, opp_prop_adj), index=out.index
@@ -1506,7 +1508,9 @@ def main() -> None:
     # intel_season_hit_rate: % of season games OVER this line (0-100 scale → normalise)
     intel_shr_raw  = _to_num(out.get("intel_season_hit_rate", pd.Series(np.nan, index=out.index))).fillna(50.0) / 100.0
     # intel_opp_vs_league_pct: how generous/tight this opponent is (+= give up more)
-    intel_def_raw  = _to_num(out.get("intel_opp_vs_league_pct", pd.Series(np.nan, index=out.index))).fillna(0.0) / 100.0
+    _def_pos    = _to_num(out.get("intel_opp_vs_league_pct_pos", pd.Series(np.nan, index=out.index)))
+    _def_pooled = _to_num(out.get("intel_opp_vs_league_pct", pd.Series(np.nan, index=out.index)))
+    intel_def_raw = _def_pos.combine_first(_def_pooled).fillna(0.0) / 100.0
     # intel_cv_pct: consistency — lower = better. Invert so high = consistent
     intel_cv_raw   = _to_num(out.get("intel_cv_pct", pd.Series(np.nan, index=out.index))).fillna(50.0)
     intel_cons_raw = (100.0 - intel_cv_raw.clip(0, 100)) / 100.0  # 0-1, higher=consistent

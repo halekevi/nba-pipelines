@@ -248,7 +248,12 @@ def main() -> None:
     ml_prob = apply_ml_prob_post_calibration(p_platt, feat_sp, pt_l, dirs_u, mdir)
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     abs_edge_col = pd.to_numeric(df2.get("abs_edge", pd.Series(np.nan, index=df2.index)), errors="coerce")
-    edge_mag = abs_edge_col.where(abs_edge_col.notna(), edge_col.abs()).fillna(0.0)
+    # For UNDER legs, edge is negative (projection < line) — flip sign so
+    # a strong UNDER edge produces a high implied_prob, same as OVER.
+    # abs_edge is already direction-aware magnitude when present; only the
+    # raw edge fallback needs the sign flip.
+    signed_edge = edge_col.where(dirs_u.eq("OVER"), -edge_col)
+    edge_mag = abs_edge_col.where(abs_edge_col.notna(), signed_edge.abs()).fillna(0.0)
     implied_prob = 1.0 / (1.0 + np.exp(-edge_mag.clip(-20, 20)))
     comp = pd.to_numeric(
         df2.get("composite_hit_rate", df2.get("line_hit_rate", pd.Series(0.5, index=df2.index))),
@@ -277,9 +282,36 @@ def main() -> None:
             use_opp_l5 = opp_l5.notna()
             if use_opp_l5.any():
                 comp = pd.Series(np.where(use_opp_l5, (0.70 * comp + 0.30 * opp_l5), comp), index=df2.index)
+
+    # ── Defense matchup blend into comp (NBA only) ────────────────────────────
+    # Prefer position-split opp %; fall back to pooled. Both come from step6e.
+    # Maps opp_vs_league_pct to a 0–1 matchup score:
+    #   +20% generous → ~0.67  |  0% neutral → 0.50  |  −20% tight → ~0.33
+    # Capped at ±30% to prevent extreme single-game outliers dominating.
+    if feat_sp == "NBA":
+        _def_pos = pd.to_numeric(
+            df2.get("intel_opp_vs_league_pct_pos", pd.Series(np.nan, index=df2.index)),
+            errors="coerce",
+        )
+        _def_pool = pd.to_numeric(
+            df2.get("intel_opp_vs_league_pct", pd.Series(np.nan, index=df2.index)),
+            errors="coerce",
+        )
+        _def_pct = _def_pos.combine_first(_def_pool)
+        _def_known = _def_pct.notna()
+        if _def_known.any():
+            _def_norm = ((_def_pct.clip(-30, 30) / 30.0) + 1.0) / 2.0
+            _def_norm = _def_norm.fillna(0.5)
+            comp = pd.Series(
+                np.where(_def_known, 0.85 * comp + 0.15 * _def_norm, comp),
+                index=df2.index,
+            )
+
     ml_s = pd.Series(ml_prob, index=df2.index, dtype=float)
     edge_score = ml_s - implied_prob
     if sp in ("NHL", "SOCCER", "NFL"):
+        blended = 0.15 * ml_s + 0.85 * comp
+    elif feat_sp == "NBA":
         blended = 0.15 * ml_s + 0.85 * comp
     else:
         blended = 0.3 * ml_s + 0.7 * comp

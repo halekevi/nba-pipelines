@@ -28,6 +28,8 @@ New columns added:
   intel_cushion           — season avg minus line (positive = soft line)
   intel_opp_avg_allowed   — avg this stat allowed per player-game vs this opponent
   intel_opp_vs_league_pct — how much more/less than league avg opponent allows (+= generous)
+  intel_opp_avg_allowed_pos   — same, filtered to player's position bucket (G/F/C)
+  intel_opp_vs_league_pct_pos — position-split vs league (when sample >= 10)
 
 Run:
   py -3.14 scripts/step6e_attach_intel.py
@@ -112,6 +114,19 @@ TEAM_NORM = {
     "WAS": "WSH",  "UTA": "UTAH",
 }
 
+# ESPN position values in DB are G/F/C; slate may use PF/PG/SF/SG.
+_POS_NORMALIZE: dict[str, str] = {
+    "PG": "G", "SG": "G",
+    "SF": "F", "PF": "F",
+    "C": "C",
+    "G": "G", "F": "F",
+}
+
+
+def _normalize_pos(pos: str) -> str | None:
+    """Return DB-compatible position bucket or None if unrecognized."""
+    return _POS_NORMALIZE.get(str(pos).strip().upper())
+
 
 def _norm_name(n: str) -> str:
     if not n or pd.isna(n):
@@ -166,14 +181,19 @@ def _player_vals(con: sqlite3.Connection, player_norm: str,
 
 
 def _opp_vals(con: sqlite3.Connection, opp_team: str,
-              db_col: str) -> list[float]:
+              db_col: str, position: str | None = None) -> list[float]:
     """Per-player-game values allowed by opp_team for a stat (full season).
     DB has no opp_team column — derive opponent from home_team/away_team vs team.
     A player's opponent is: home_team if the player's team == away_team, else away_team.
+    Optional position filters nba.position to G/F/C bucket.
     """
     if not db_col or not opp_team:
         return []
     try:
+        pos_clause = " AND upper(position) = upper(?)" if position else ""
+        params: list = [opp_team, opp_team, opp_team]
+        if position:
+            params.append(position)
         rows = con.execute(f"""
             SELECT {db_col}
             FROM nba
@@ -181,7 +201,8 @@ def _opp_vals(con: sqlite3.Connection, opp_team: str,
                 (upper(team) != upper(?) AND (upper(home_team) = upper(?) OR upper(away_team) = upper(?)))
             )
               AND {db_col} IS NOT NULL
-        """, [opp_team, opp_team, opp_team]).fetchall()
+            {pos_clause}
+        """, params).fetchall()
         return [float(r[0]) for r in rows if r[0] is not None]
     except Exception:
         return []
@@ -200,8 +221,10 @@ EMPTY_INTEL = {
     "intel_cv_pct":            np.nan,
     "intel_season_hit_rate":   np.nan,
     "intel_cushion":           np.nan,
-    "intel_opp_avg_allowed":   np.nan,
-    "intel_opp_vs_league_pct": np.nan,
+    "intel_opp_avg_allowed":        np.nan,
+    "intel_opp_vs_league_pct":      np.nan,
+    "intel_opp_avg_allowed_pos":    np.nan,
+    "intel_opp_vs_league_pct_pos":  np.nan,
 }
 
 
@@ -250,7 +273,12 @@ def compute_intel(row: pd.Series, con: sqlite3.Connection,
 
     # ── Opponent defense ──────────────────────────────────────────────────────
     if opp_team:
+        raw_pos = str(row.get("pos", row.get("position", ""))).strip()
+        db_pos = _normalize_pos(raw_pos)
+
         stat_for_opp = db_col
+
+        # ── Pooled (all positions) ────────────────────────────────────────────
         opp_vals = _opp_vals(con, opp_team, stat_for_opp)
         # 3-PT Made: some DB builds are sparse on fg3m vs opp; fg3a is a stable
         # "3PT volume allowed" proxy aligned with opponent 3PT defense curves.
@@ -265,6 +293,20 @@ def compute_intel(row: pd.Series, con: sqlite3.Connection,
                 result["intel_opp_vs_league_pct"] = round(
                     (opp_avg / lg_avg - 1) * 100, 1
                 )
+
+        # ── Position-split (≥10 player-games vs opp; else pooled only) ───────
+        if db_pos:
+            opp_vals_pos = _opp_vals(con, opp_team, stat_for_opp, position=db_pos)
+            if not opp_vals_pos and db_col == "fg3m":
+                opp_vals_pos = _opp_vals(con, opp_team, "fg3a", position=db_pos)
+            if len(opp_vals_pos) >= 10:
+                opp_avg_pos = float(np.mean(opp_vals_pos))
+                lg_avg = league_avgs.get(stat_for_opp) or league_avgs.get(db_col)
+                result["intel_opp_avg_allowed_pos"] = round(opp_avg_pos, 3)
+                if lg_avg and lg_avg > 0:
+                    result["intel_opp_vs_league_pct_pos"] = round(
+                        (opp_avg_pos / lg_avg - 1) * 100, 1
+                    )
 
     return result
 

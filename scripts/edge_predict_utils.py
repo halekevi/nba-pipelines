@@ -29,7 +29,9 @@ ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     # NBA
     ("NBA", "standard", "OVER"): 0.55,
     ("NBA", "goblin", "OVER"): 0.74,
-    ("NBA", "demon", "OVER"): 0.43,
+    # NBA demon OVER: isotonic calibrator (edge_slice_calibrators.pkl) handles
+    # this slice. Ticket-layer exclusion (5 independent gates) is the trust
+    # control. Scalar removed 2026-05-16.
     # NHL — provisional (thin samples; isotonic pass needed)
     ("NHL", "standard", "OVER"): 0.65,
     ("NHL", "standard", "UNDER"): 1.50,

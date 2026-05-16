@@ -530,7 +530,7 @@ MAX_CLASS_DOMINANCE_PCT = 90.0  # skip if dominant hit class > 90%
 MIN_HOLDOUT_ROWS_PER_SPORT = 50
 
 # Slice isotonic: fit on a stratified subset of TRAIN only (disjoint from holdout `te` used for Platt).
-SLICE_ISOTONIC_MIN_N = 200
+DEFAULT_SLICE_ISOTONIC_MIN_N = 200
 ISO_CALIB_TRAIN_FRAC = 0.15
 # Deactivated in prod: rows may remain in unified training history; do not allocate isotonic calibrators.
 INACTIVE_SPORTS = frozenset({"CBB"})
@@ -1002,6 +1002,8 @@ def _fit_slice_isotonic_calibrators(
     features_active: list[str],
     calibrated: EdgeCalibratedModel,
     models_dir: Path,
+    *,
+    isotonic_min_n: int = DEFAULT_SLICE_ISOTONIC_MIN_N,
 ) -> tuple[list[str], list[str]]:
     """
     Fit per-(sport, pick_type, direction) isotonic regressors on Platt probabilities
@@ -1013,7 +1015,7 @@ def _fit_slice_isotonic_calibrators(
     if len(tr) < 80:
         skipped.append("insufficient_train_rows_for_iso_split")
         joblib.dump(
-            {"calibrators": {}, "min_n": SLICE_ISOTONIC_MIN_N, "fitted_keys": [], "skipped": skipped, "version": 1},
+            {"calibrators": {}, "min_n": isotonic_min_n, "fitted_keys": [], "skipped": skipped, "version": 1},
             models_dir / "edge_slice_calibrators.pkl",
             compress=3,
         )
@@ -1034,7 +1036,7 @@ def _fit_slice_isotonic_calibrators(
     if len(tr_iso) < 30:
         skipped.append("iso_split_too_small")
         joblib.dump(
-            {"calibrators": {}, "min_n": SLICE_ISOTONIC_MIN_N, "fitted_keys": [], "skipped": skipped, "version": 1},
+            {"calibrators": {}, "min_n": isotonic_min_n, "fitted_keys": [], "skipped": skipped, "version": 1},
             models_dir / "edge_slice_calibrators.pkl",
             compress=3,
         )
@@ -1059,7 +1061,7 @@ def _fit_slice_isotonic_calibrators(
             skipped.append(f"{key}:empty_pick_type")
             continue
         n = len(sub)
-        if n < SLICE_ISOTONIC_MIN_N:
+        if n < isotonic_min_n:
             skipped.append(f"{key}:n={n}")
             continue
         Xi = sub[features_active].astype(float)
@@ -1079,7 +1081,7 @@ def _fit_slice_isotonic_calibrators(
 
     payload = {
         "calibrators": calibrators,
-        "min_n": SLICE_ISOTONIC_MIN_N,
+        "min_n": isotonic_min_n,
         "fitted_keys": fitted_keys,
         "skipped": skipped,
         "version": 1,
@@ -1087,7 +1089,7 @@ def _fit_slice_isotonic_calibrators(
     joblib.dump(payload, models_dir / "edge_slice_calibrators.pkl", compress=3)
     print(
         f"\n[Slice isotonic] fitted={len(fitted_keys)} slices "
-        f"(train calib frac={ISO_CALIB_TRAIN_FRAC}, min_n={SLICE_ISOTONIC_MIN_N}); skipped={len(skipped)}"
+        f"(train calib frac={ISO_CALIB_TRAIN_FRAC}, min_n={isotonic_min_n}); skipped={len(skipped)}"
     )
     return fitted_keys, skipped
 
@@ -1104,13 +1106,14 @@ def _train_unified_edge_model(
     sport_filter: str | None = None,
     dry_run: bool = False,
     temporal_date_column: str | None = None,
+    isotonic_min_n: int = DEFAULT_SLICE_ISOTONIC_MIN_N,
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
 
     print(
-        "  [config] recursive_outputs=%s dedupe=%s temporal_split=%s exclude_player_hr=%s"
-        % (recursive_outputs, dedupe, temporal_split, exclude_player_level_features)
+        "  [config] recursive_outputs=%s dedupe=%s temporal_split=%s exclude_player_hr=%s isotonic_min_n=%s"
+        % (recursive_outputs, dedupe, temporal_split, exclude_player_level_features, isotonic_min_n)
     )
     if temporal_date_column:
         print(f"  [config] temporal_date_column={temporal_date_column!r}")
@@ -1357,7 +1360,7 @@ def _train_unified_edge_model(
     calibrated = EdgeCalibratedModel(model, platt_lr)
 
     iso_fitted, iso_skipped = _fit_slice_isotonic_calibrators(
-        tr, y_train, features_active, calibrated, models_dir
+        tr, y_train, features_active, calibrated, models_dir, isotonic_min_n=isotonic_min_n
     )
 
     prob_test = calibrated.predict_proba(X_test)[:, 1]
@@ -1472,7 +1475,7 @@ def _train_unified_edge_model(
         "exclude_player_level_features_used": exclude_player_level_features,
         "combined_graded_file_paths_omitted": int(n_combined_files_omitted),
         "edge_slice_calibrators_file": "edge_slice_calibrators.pkl",
-        "edge_slice_isotonic_min_n": SLICE_ISOTONIC_MIN_N,
+        "edge_slice_isotonic_min_n": isotonic_min_n,
         "edge_slice_isotonic_train_frac": ISO_CALIB_TRAIN_FRAC,
         "edge_slice_isotonic_inactive_sports": sorted(INACTIVE_SPORTS),
         "edge_slice_isotonic_fitted_count": len(iso_fitted),
@@ -1570,6 +1573,13 @@ def main() -> None:
         action="store_true",
         help="With --input-csv only: print row counts, class balance, and feature completeness; do not train or write models.",
     )
+    ap.add_argument(
+        "--isotonic-min-n",
+        type=int,
+        default=DEFAULT_SLICE_ISOTONIC_MIN_N,
+        dest="isotonic_min_n",
+        help="Minimum slice sample size to fit isotonic calibrator (default 200).",
+    )
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
 
@@ -1622,6 +1632,7 @@ def main() -> None:
                 input_csv=None,
                 sport_filter=None,
                 dry_run=False,
+                isotonic_min_n=int(args.isotonic_min_n),
             )
         return
 
@@ -1636,6 +1647,7 @@ def main() -> None:
         sport_filter=args.sport,
         dry_run=args.dry_run,
         temporal_date_column=str(args.temporal_date_column).strip() if args.temporal_date_column else None,
+        isotonic_min_n=int(args.isotonic_min_n),
     )
 
 
