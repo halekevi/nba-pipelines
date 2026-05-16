@@ -948,21 +948,47 @@ def main() -> None:
 
     # ── Date alignment (folder date vs game date) ───────────────────────────
     fetched_rows = len(df)
+    _tz = ZoneInfo(str(args.tz).strip() or DEFAULT_TZ)
+    _ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
+    board_dates_all = sorted(
+        {
+            str(x)
+            for x in _ts.dt.tz_convert(_tz).dt.date.astype("string").tolist()
+            if x and str(x) != "nan"
+        }
+    )
     filtered_df, fallback_date = _apply_game_date_filter(
         df,
         target_date=str(args.date).strip(),
         tz_name=str(args.tz).strip() or DEFAULT_TZ,
         allow_nearest_future=bool(args.allow_nearest_future),
     )
-    board_dates = sorted({d for d in filtered_df.get("game_date", pd.Series([], dtype=object)).astype(str).tolist() if d and d != "nan"})
+    board_dates = sorted(
+        {d for d in filtered_df.get("game_date", pd.Series([], dtype=object)).astype(str).tolist() if d and d != "nan"}
+    )
     print(
         f"[INFO] NBA step1 fetched={fetched_rows} rows; date_filter={args.date} ({args.tz}); "
         f"survived={len(filtered_df)}"
     )
+    if board_dates_all and not board_dates:
+        print(f"[INFO] NBA step1 board game_dates (unfiltered)={board_dates_all}")
     if board_dates:
         print(f"[INFO] NBA step1 filtered_game_dates={board_dates}")
     if fallback_date:
         print(f"[WARNING] NBA step1 no rows for requested date; using nearest future game_date={fallback_date}")
+
+    if len(filtered_df) == 0 and fetched_rows > 0 and out_path.is_file():
+        try:
+            prev = pd.read_csv(out_path, encoding="utf-8-sig")
+            if len(prev) > 0:
+                print(
+                    f"[WARNING] Date filter would write 0 rows over {len(prev)} existing rows in {args.output}; "
+                    "keeping existing file. Pass --allow-nearest-future or fix --date."
+                )
+                sys.exit(0)
+        except Exception as e:
+            print(f"  [WARN] Could not read existing output for empty-filter guard: {e}")
+
     df = filtered_df
 
     # ── Write output ──────────────────────────────────────────────────────────

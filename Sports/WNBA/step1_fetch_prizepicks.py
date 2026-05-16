@@ -314,6 +314,108 @@ def _included_index(included: List[dict]) -> Dict[Tuple[str, str], dict]:
     return idx
 
 
+def _page_params(
+    league_id: str,
+    game_mode: str,
+    per_page: int,
+    page: int,
+) -> Dict[str, Any]:
+    return {
+        "league_id": str(league_id),
+        "game_mode": str(game_mode),
+        "per_page": int(per_page),
+        "single_stat": "true",
+        "in_game": "false",
+        "page": int(page),
+        "page[number]": int(page),
+        "page[size]": int(per_page),
+    }
+
+
+def _fetch_one_page(
+    session: Any,
+    *,
+    page: int,
+    params: Dict[str, Any],
+    seen_ids: Set[str],
+    cooldown_seconds: float,
+    max_cooldowns: int,
+    jitter_seconds: float,
+    max_403_retries: int,
+    forbidden_backoff_base: float,
+    cooldowns_used: int,
+    forbidden_retries: int,
+) -> Tuple[bool, bool, int, int, List[dict], List[dict]]:
+    """
+    Returns (page_ok, stop_paging, cooldowns_used, forbidden_retries, new_data, new_included).
+    page_ok: this page returned usable rows (or intentional empty end-of-board).
+    """
+    import urllib.parse
+
+    for attempt in range(1, 9):
+        if page == 1:
+            qs = urllib.parse.urlencode(params)
+            url = f"{API_URL}?{qs}" if qs else API_URL
+            r = session.get(url, timeout=30)
+        else:
+            r = session.get(API_URL, params=params, timeout=30)
+
+        if r.status_code == 429:
+            cooldowns_used += 1
+            if cooldowns_used > max_cooldowns:
+                print(f"🛑 429 persists after {max_cooldowns} cooldowns. Stopping early.")
+                return False, True, cooldowns_used, forbidden_retries, [], []
+            sleep_s = cooldown_seconds + random.uniform(0, jitter_seconds)
+            print(f"⏸️ 429 cooldown {cooldowns_used}/{max_cooldowns}: sleeping {sleep_s:.1f}s...")
+            time.sleep(sleep_s)
+            continue
+
+        if r.status_code == 403:
+            forbidden_retries += 1
+            if forbidden_retries > max_403_retries:
+                print(f"🛑 403 persists on page {page}. Stopping early.")
+                return False, True, cooldowns_used, forbidden_retries, [], []
+            try:
+                session.cookies.clear()
+            except Exception:
+                pass
+            if forbidden_retries >= 2:
+                print(
+                    f"⏸️ 403 retry {forbidden_retries}/{max_403_retries} (page {page}): "
+                    "rotating TLS-matched browser profile…"
+                )
+                _rotate_session_headers(session)
+            else:
+                print(
+                    f"⏸️ 403 retry {forbidden_retries}/{max_403_retries} (page {page}): "
+                    "same client fingerprint; cookies cleared only"
+                )
+            backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
+            print(f"⏸️ sleeping {backoff:.1f}s...")
+            time.sleep(backoff)
+            _warm_session(session)
+            continue
+
+        if r.status_code >= 500:
+            time.sleep(5.0 * attempt)
+            continue
+
+        r.raise_for_status()
+        j = r.json()
+        page_data = j.get("data") or []
+        page_new = [x for x in page_data if str(x.get("id", "")) not in seen_ids]
+        if not page_new:
+            print(f"  Page {page}: 0 new rows — stopping pagination")
+            return True, True, cooldowns_used, forbidden_retries, [], j.get("included") or []
+
+        for x in page_new:
+            seen_ids.add(str(x.get("id", "")))
+        print(f"  Page {page}: +{len(page_new)} rows")
+        return True, False, cooldowns_used, forbidden_retries, page_new, j.get("included") or []
+
+    return False, False, cooldowns_used, forbidden_retries, [], []
+
+
 def fetch_pages(
     league_id: str,
     game_mode: str,
@@ -323,8 +425,9 @@ def fetch_pages(
     cooldown_seconds: float,
     max_cooldowns: int,
     jitter_seconds: float,
-    max_403_retries: int = 3,
+    max_403_retries: int = 5,
     forbidden_backoff_base: float = 15.0,
+    first_page_waves: int = 3,
 ) -> Tuple[List[dict], List[dict]]:
     all_data: List[dict] = []
     all_included: List[dict] = []
@@ -334,79 +437,95 @@ def fetch_pages(
     seen_ids: Set[str] = set()
 
     _log_http_backend_once()
-    session = _new_http_session()
-    _rotate_session_headers(session)
-    _warm_session(session)
+    session: Any | None = None
+    waves = max(1, int(first_page_waves))
+    page1_ok = False
 
-    for page in range(1, max_pages + 1):
-        if stop_paging:
+    for wave in range(waves):
+        if session is not None:
+            try:
+                session.close()
+            except Exception:
+                pass
+        session = _new_http_session()
+        _rotate_session_headers(session)
+        if wave == 0:
+            time.sleep(random.uniform(3.0, 8.0))
+        else:
+            gap = random.uniform(12.0, 28.0)
+            print(f"  [session-wave {wave + 1}/{waves}] New session after page-1 failure; pausing {gap:.0f}s…")
+            time.sleep(gap)
+        _warm_session(session)
+        cooldowns_used = 0
+        forbidden_retries = 0
+
+        params = _page_params(league_id, game_mode, per_page, 1)
+        ok, stop, cooldowns_used, forbidden_retries, page_new, inc = _fetch_one_page(
+            session,
+            page=1,
+            params=params,
+            seen_ids=seen_ids,
+            cooldown_seconds=cooldown_seconds,
+            max_cooldowns=max_cooldowns,
+            jitter_seconds=jitter_seconds,
+            max_403_retries=max_403_retries,
+            forbidden_backoff_base=forbidden_backoff_base,
+            cooldowns_used=cooldowns_used,
+            forbidden_retries=forbidden_retries,
+        )
+        if stop:
+            stop_paging = True
             break
-        params = {
-            "league_id": str(league_id),
-            "game_mode": str(game_mode),
-            "per_page": int(per_page),
-            "page": int(page),
-            "page[number]": int(page),
-            "page[size]": int(per_page),
-        }
-        for attempt in range(1, 9):
-            r = session.get(API_URL, params=params, timeout=30)
-
-            if r.status_code == 429:
-                cooldowns_used += 1
-                if cooldowns_used > max_cooldowns:
-                    print(f"🛑 429 persists after {max_cooldowns} cooldowns. Stopping early.")
-                    stop_paging = True
-                    break
-                sleep_s = cooldown_seconds + random.uniform(0, jitter_seconds)
-                print(f"⏸️ 429 cooldown {cooldowns_used}/{max_cooldowns}: sleeping {sleep_s:.1f}s...")
-                time.sleep(sleep_s)
-                continue
-
-            if r.status_code == 403:
-                forbidden_retries += 1
-                if forbidden_retries > max_403_retries:
-                    print(f"🛑 403 persists. Stopping early.")
-                    stop_paging = True
-                    break
-                try:
-                    session.cookies.clear()
-                except Exception:
-                    pass
-                if forbidden_retries >= 2:
-                    print(f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: rotating TLS-matched browser profile…")
-                    _rotate_session_headers(session)
-                else:
-                    print(
-                        f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: "
-                        "same client fingerprint; cookies cleared only"
-                    )
-                backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
-                print(f"⏸️ sleeping {backoff:.1f}s...")
-                time.sleep(backoff)
-                _warm_session(session)
-                continue
-
-            if r.status_code >= 500:
-                time.sleep(5.0 * attempt)
-                continue
-
-            r.raise_for_status()
-            j = r.json()
-            page_data = j.get("data") or []
-            page_new = [x for x in page_data if str(x.get("id","")) not in seen_ids]
-            if not page_new:
-                print(f"  Page {page}: 0 new rows — stopping pagination")
-                stop_paging = True
-                break
-
-            for x in page_new:
-                seen_ids.add(str(x.get("id","")))
+        if ok and page_new:
             all_data.extend(page_new)
-            all_included.extend(j.get("included") or [])
-            print(f"  Page {page}: +{len(page_new)} rows (total={len(all_data)})")
+            all_included.extend(inc)
+            page1_ok = True
+            print(f"  Page 1: total={len(all_data)}")
             time.sleep(sleep + random.uniform(0, 0.5))
             break
+        if ok and not page_new:
+            page1_ok = True
+            stop_paging = True
+            break
+
+    if session is None or not page1_ok or stop_paging:
+        if session is not None:
+            session.close()
+        return all_data, all_included
+
+    for page in range(2, max_pages + 1):
+        if stop_paging:
+            break
+        params = _page_params(league_id, game_mode, per_page, page)
+        ok, stop, cooldowns_used, forbidden_retries, page_new, inc = _fetch_one_page(
+            session,
+            page=page,
+            params=params,
+            seen_ids=seen_ids,
+            cooldown_seconds=cooldown_seconds,
+            max_cooldowns=max_cooldowns,
+            jitter_seconds=jitter_seconds,
+            max_403_retries=max_403_retries,
+            forbidden_backoff_base=forbidden_backoff_base,
+            cooldowns_used=cooldowns_used,
+            forbidden_retries=forbidden_retries,
+        )
+        if stop:
+            stop_paging = True
+            if ok and page_new:
+                all_data.extend(page_new)
+                all_included.extend(inc)
+            break
+        if not ok:
+            print(f"  Page {page}: failed after retries — stopping pagination")
+            break
+        if not page_new:
+            stop_paging = True
+            break
+        all_data.extend(page_new)
+        all_included.extend(inc)
+        print(f"  Page {page}: total={len(all_data)}")
+        time.sleep(sleep + random.uniform(0, 0.5))
 
     session.close()
     return all_data, all_included
@@ -597,9 +716,15 @@ def main():
     ap.add_argument("--max_pages",        type=int,   default=20)
     ap.add_argument("--sleep",            type=float, default=1.2)
     ap.add_argument("--cooldown_seconds", type=float, default=60.0)
-    ap.add_argument("--max_cooldowns",    type=int,   default=2)
-    ap.add_argument("--jitter_seconds",   type=float, default=7.0)
-    ap.add_argument("--max_403_retries",  type=int,   default=3)
+    ap.add_argument("--max_cooldowns",    type=int,   default=3)
+    ap.add_argument("--jitter_seconds",   type=float, default=10.0)
+    ap.add_argument("--max_403_retries",  type=int,   default=5)
+    ap.add_argument(
+        "--first-page-waves",
+        type=int,
+        default=3,
+        help="On repeated page-1 403/empty failure, discard session and retry with fresh TLS (NBA-style).",
+    )
     ap.add_argument("--min_rows",         type=int,   default=30)
     ap.add_argument("--min_teams",        type=int,   default=2)
     ap.add_argument("--date",             default=time.strftime("%Y-%m-%d"))
@@ -666,6 +791,7 @@ def main():
                 max_cooldowns=args.max_cooldowns,
                 jitter_seconds=args.jitter_seconds,
                 max_403_retries=args.max_403_retries,
+                first_page_waves=args.first_page_waves,
             )
         except Exception as e:
             print(f"❌ FETCH_FAILED: HTTP fetch failed: {e}")

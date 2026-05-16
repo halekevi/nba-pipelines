@@ -303,6 +303,35 @@ def parse_boxscore(summary: dict) -> pd.DataFrame:
 
 # ── stat derivation ───────────────────────────────────────────────────────────
 
+def resolve_prop_slug(row: pd.Series) -> str:
+    """Best-effort prop key for derive_stat (prop_norm, else normalized prop_type)."""
+    raw = str(row.get("prop_norm", "") or row.get("prop_type", "")).strip().lower()
+    if not raw:
+        return ""
+    # Quick normalize (subset of step2 norm_prop) when slate still has PP labels.
+    clean = raw.replace(" ", "").replace("-", "").replace("_", "")
+    alias = {
+        "points": "pts", "rebounds": "reb", "assists": "ast", "blocks": "blk",
+        "blockedshots": "blk", "steals": "stl", "turnovers": "tov",
+        "blks+stls": "stocks", "fantasyscore": "fantasy",
+        "pts+rebs+asts": "pra", "points+rebounds+assists": "pra",
+        "pts+rebs": "pr", "points+rebounds": "pr",
+        "pts+asts": "pa", "points+assists": "pa",
+        "rebs+asts": "ra", "rebounds+assists": "ra",
+        "fgm": "fgm", "fgmade": "fgm", "fga": "fga", "fgattempted": "fga",
+        "fieldgoalsmade": "fgm", "fieldgoalsattempted": "fga",
+        "3ptfgmade": "fg3m", "3ptfgattempted": "fg3a", "3ptmade": "fg3m",
+        "3ptattempted": "fg3a", "threepointersmade": "fg3m",
+        "threepointersattempted": "fg3a", "3pointersmade": "fg3m",
+        "3pointersattempted": "fg3a", "2ptfgmade": "fg2m", "2ptfgattempted": "fg2a",
+        "2ptmade": "fg2m", "2ptattempted": "fg2a", "twopointersmade": "fg2m",
+        "twopointersattempted": "fg2a", "ftm": "ftm", "ftmade": "ftm",
+        "fta": "fta", "ftattempted": "fta", "freethrowsmade": "ftm",
+        "freethrowsattempted": "fta",
+    }
+    return alias.get(clean, clean)
+
+
 def derive_stat(df: pd.DataFrame, prop_norm: str) -> pd.Series:
     p = re.sub(r"\(combo\)\s*$", "", (prop_norm or "").lower().strip()).strip()
 
@@ -617,7 +646,7 @@ def main():
 
     for _, row in slate.iterrows():
         player   = str(row.get("player","")).strip()
-        prop_n   = str(row.get("prop_norm", row.get("prop_type",""))).lower().strip()
+        prop_n   = resolve_prop_slug(row)
         line_val = pd.to_numeric(row.get("line",""), errors="coerce")
         p_norm   = _norm_name(player)
 
@@ -634,6 +663,8 @@ def main():
             continue
 
         player_games = cache_filt[cache_filt["ESPN_ATHLETE_ID"].astype(str) == str(ath_id)].copy()
+        if not player_games.empty:
+            player_games = player_games.sort_values("game_date", ascending=False)
 
         if player_games.empty:
             misses.append({"player": player, "reason": "NO_CACHE_GAMES"})

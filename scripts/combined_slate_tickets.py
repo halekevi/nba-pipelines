@@ -346,6 +346,34 @@ def _sanitize_for_json(obj: Any) -> Any:
     return xf if math.isfinite(xf) else None
 
 
+def _write_json_file(path: str, payload: Any) -> None:
+    """Atomic JSON write (temp + replace) with short retries for Windows file locks."""
+    import time
+
+    data = json.dumps(_sanitize_for_json(payload), ensure_ascii=False, default=str, allow_nan=False)
+    directory = os.path.dirname(os.path.abspath(path)) or "."
+    os.makedirs(directory, exist_ok=True)
+    last_err: Exception | None = None
+    for attempt in range(4):
+        tmp = os.path.join(directory, f".{os.path.basename(path)}.{os.getpid()}.{attempt}.tmp")
+        try:
+            with open(tmp, "w", encoding="utf-8", newline="\n") as wf:
+                wf.write(data)
+            os.replace(tmp, path)
+            return
+        except OSError as exc:
+            last_err = exc
+            try:
+                if os.path.isfile(tmp):
+                    os.remove(tmp)
+            except OSError:
+                pass
+            time.sleep(0.2 * (attempt + 1))
+    if last_err is not None:
+        raise last_err
+    raise OSError(f"Failed to write JSON: {path}")
+
+
 def _js_literal_float(x: Any) -> str:
     """Emit a JS literal number or null — never NaN/Infinity (breaks JSON.parse and inline scripts)."""
     if x is None:
@@ -4519,6 +4547,12 @@ def ticket_groups_to_payload(
                     "intel_l5_vs_season":      _safe_float(gv("intel_l5_vs_season")),
                     "l5_over": _safe_float(gv("l5_over") or gv("L5 Over") or gv("line_hits_over_5")),
                     "l5_under": _safe_float(gv("l5_under") or gv("L5 Under") or gv("line_hits_under_5")),
+                    "l5_games_played": _safe_float(
+                        gv("l5_games_played") or gv("line_games_played_5") or gv("Games (5g)")
+                    ),
+                    "l10_games_played": _safe_float(
+                        gv("l10_games_played") or gv("line_games_played_10") or gv("Games (10g)")
+                    ),
                     "l5_side_hits": _safe_float(gv("l5_side_hits")),
                     "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
@@ -4623,8 +4657,10 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "hit_rate":   g("hit_rate"),
             "l5_over":    g("l5_over"),
             "l5_under":   g("l5_under"),
+            "l5_games_played": g("l5_games_played"),
             "l10_over":   g("l10_over"),
             "l10_under":  g("l10_under"),
+            "l10_games_played": g("l10_games_played"),
             "season_avg": g("season_avg") or g("szn_avg"),
             "ml_prob":    g("ml_prob"),
             "def_tier":   g("def_tier") if g("def_tier") else g("Def Tier"),
@@ -4738,12 +4774,9 @@ def publish_wnba_slate_merge_into_web(
         if not str(payload.get("date") or "").strip():
             payload["date"] = d
         payload["generated_at"] = gen_at
-        payload = _sanitize_for_json(payload)
-        with open(slate_path, "w", encoding="utf-8") as wf:
-            json.dump(payload, wf, ensure_ascii=False, default=str, allow_nan=False)
+        _write_json_file(slate_path, payload)
         sport_path = os.path.join(outdir, "slate_sport_wnba.json")
-        with open(sport_path, "w", encoding="utf-8") as wf:
-            json.dump({"ok": True, "sport": "wnba", "rows": rows}, wf, ensure_ascii=False, default=str, allow_nan=False)
+        _write_json_file(sport_path, {"ok": True, "sport": "wnba", "rows": rows})
         n_tot = sum(len(v or []) for v in (payload.get("sports") or {}).values() if isinstance(v, list))
         print(f"  [wnba-slate-web] {slate_path}  (wnba={len(rows)} rows, all_sports={n_tot} props)")
         print(f"  [wnba-slate-web] {sport_path}")
@@ -6398,8 +6431,12 @@ def _load_step8_board_like(
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
         "L5 Under":         "l5_under",
+        "Games (5g)":       "l5_games_played",
         "L10 Over":         "l10_over",
         "L10 Under":        "l10_under",
+        "Games (10g)":      "l10_games_played",
+        "line_games_played_5":  "l5_games_played",
+        "line_games_played_10": "l10_games_played",
         "Def Rank":         "def_rank",
         "Def Tier":         "def_tier",
         "Min Tier":         "min_tier",

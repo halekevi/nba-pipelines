@@ -339,4 +339,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"ERROR [PropOracle-MLB-S8] {type(e).__name__}: {e}")
+        raise SystemExit(1) from e

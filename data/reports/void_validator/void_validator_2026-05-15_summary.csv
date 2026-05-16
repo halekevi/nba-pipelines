@@ -1,7 +1,9 @@
 ﻿file,status,rows,void_rows,acceptable_void_rows,unacceptable_void_rows
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba_2026-05-15.xlsx,ok,1230,1230,1230,0
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_soccer_2026-05-15.xlsx,ok,559,368,368,0
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba1h_2026-05-15.xlsx,ok,63,63,63,0
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba1q_2026-05-15.xlsx,ok,156,156,156,0
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_tennis_2026-05-15.xlsx,ok,28,28,28,0
-H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_wnba_2026-05-15.xlsx,ok,0,0,0,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba_2026-05-15.xlsx,ok,1230,64,64,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nhl_2026-05-15.xlsx,ok,208,18,18,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_mlb_2026-05-15.xlsx,ok,3648,282,282,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_soccer_2026-05-15.xlsx,ok,559,328,328,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba1h_2026-05-15.xlsx,ok,63,0,0,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_nba1q_2026-05-15.xlsx,ok,156,5,5,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_tennis_2026-05-16.xlsx,ok,28,23,23,0
+H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-15\graded_wnba_2026-05-15.xlsx,ok,1072,112,112,0

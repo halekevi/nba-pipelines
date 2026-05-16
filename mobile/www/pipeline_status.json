@@ -32,13 +32,13 @@
   "nhl": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 14:32:14"
+      "modified": "2026-05-16 15:04:06"
     }
   },
   "soccer": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 14:39:08"
+      "modified": "2026-05-16 15:10:31"
     }
   },
   "mlb": {
@@ -56,19 +56,19 @@
   "tennis": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 14:31:28"
+      "modified": "2026-05-16 15:03:26"
     }
   },
   "wnba": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-06 21:51:31"
+      "modified": "2026-05-16 15:05:18"
     }
   },
   "combined": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-16 14:45:02"
+      "modified": "2026-05-16 15:15:15"
     }
   }
 }

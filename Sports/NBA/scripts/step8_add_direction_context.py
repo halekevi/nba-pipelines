@@ -583,4 +583,8 @@ def main() -> None:
     _copy_dated_step8_nba(xlsx_path, (args.date or "").strip())
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"ERROR [PropOracle-NBA-S8] {type(e).__name__}: {e}")
+        raise SystemExit(1) from e

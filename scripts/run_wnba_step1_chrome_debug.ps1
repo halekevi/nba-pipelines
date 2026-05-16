@@ -1,61 +1,85 @@
-# Run WNBA step1 attached to an authenticated Chrome session
-# Usage:
-#   .\scripts\run_wnba_step1_chrome_debug.ps1
-#   .\scripts\run_wnba_step1_chrome_debug.ps1 -Date 2026-04-30 -Port 9222
+#requires -Version 5.1
+<#
+.SYNOPSIS
+  WNBA step1 via Chrome CDP — bypasses PrizePicks DataDome when direct API returns 403.
 
+.NOTES
+  1) pwsh -File scripts\launch_prizepicks_chrome_cdp.ps1 -OpenBoard -LeagueId 3
+  2) Complete login + "Press & Hold" in that Chrome window (board must load).
+  3) pwsh -File scripts\run_wnba_step1_chrome_debug.ps1 -Date 2026-05-16
+
+  See docs\chrome_debug_setup.md and docs\guides\BROWSER_FETCH_SETUP.md
+#>
 param(
-    [string]$Date = (Get-Date -Format "yyyy-MM-dd"),
-    [int]$Port = 9222
+    [string]$CdpUrl = "http://127.0.0.1:9222",
+    [string]$Date = "",
+    [string]$Output = ""
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
+$Root = Split-Path $PSScriptRoot -Parent
+$WNBADir = Join-Path $Root "Sports\WNBA"
+Set-Location $Root
 
-$ScriptPath = $MyInvocation.MyCommand.Path
-if (-not $ScriptPath) { $ScriptPath = $PSCommandPath }
-$ScriptDir = Split-Path -Parent $ScriptPath
-$Root = Split-Path -Parent $ScriptDir
-$SportsRoot = Join-Path $Root "Sports"
-$WNBADir = Join-Path $SportsRoot "WNBA"
+$env:PYTHONUTF8 = "1"
+$env:PYTHONIOENCODING = "utf-8"
 
-$ChromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-$DebugUrl = "http://127.0.0.1:$Port"
-$DebugProfile = Join-Path $env:TEMP "chrome_debug_profile"
-
-if (-not (Test-Path $ChromePath)) {
-    throw "Chrome not found at $ChromePath"
+function Test-CdpEndpoint {
+    param([string]$BaseUrl)
+    try {
+        $u = ($BaseUrl.TrimEnd("/")) + "/json/version"
+        $r = Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 5
+        return ($r.StatusCode -eq 200)
+    } catch {
+        return $false
+    }
 }
 
-Write-Host "[WNBA] Launching Chrome with remote debug on port $Port..." -ForegroundColor Cyan
-Start-Process $ChromePath -ArgumentList `
-    "--remote-debugging-port=$Port", `
-    "--user-data-dir=$DebugProfile", `
-    "https://app.prizepicks.com/"
+if (-not (Test-CdpEndpoint -BaseUrl $CdpUrl)) {
+    Write-Host ""
+    Write-Host "[WNBA CDP] No Chrome debugger at $CdpUrl" -ForegroundColor Yellow
+    Write-Host "  pwsh -File scripts\launch_prizepicks_chrome_cdp.ps1 -OpenBoard -LeagueId 3" -ForegroundColor Cyan
+    Write-Host "  Then solve Press & Hold on the board and re-run this script." -ForegroundColor Yellow
+    Write-Host ""
+    exit 1
+}
 
-Write-Host "[WNBA] Chrome launched. Please:" -ForegroundColor Yellow
-Write-Host "  1. Log in to PrizePicks if prompted" -ForegroundColor Yellow
-Write-Host "  2. Navigate to the WNBA board" -ForegroundColor Yellow
-Write-Host "  3. Solve any captcha/challenge if shown" -ForegroundColor Yellow
-Write-Host "  4. Press ENTER here when ready..." -ForegroundColor Yellow
-Read-Host | Out-Null
+$targetDate = $Date.Trim()
+if (-not $targetDate) {
+    try {
+        $tzEt = [System.TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
+        $targetDate = [System.TimeZoneInfo]::ConvertTimeFromUtc([DateTime]::UtcNow, $tzEt).ToString("yyyy-MM-dd")
+    } catch {
+        $targetDate = (Get-Date).ToString("yyyy-MM-dd")
+    }
+}
 
-Write-Host "[WNBA] Attaching CDP and fetching projections..." -ForegroundColor Cyan
-$env:PYTHONPATH = $Root
+$outPath = $Output.Trim()
+if (-not $outPath) {
+    $outPath = Join-Path $Root "outputs\$targetDate\wnba\step1_wnba_props.csv"
+} elseif (-not [System.IO.Path]::IsPathRooted($outPath)) {
+    $outPath = Join-Path $Root $outPath
+}
+$outDir = Split-Path -Parent $outPath
+if ($outDir -and -not (Test-Path -LiteralPath $outDir)) {
+    New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+}
 
-Push-Location $Root
+Write-Host "[WNBA CDP] $CdpUrl | date=$targetDate | output=$outPath" -ForegroundColor Cyan
+
+Push-Location $WNBADir
 try {
-    & py -3.14 "WNBA/step1_fetch_prizepicks.py" `
-        --playwright `
-        --cdp $DebugUrl `
-        --date $Date `
-        --print-leagues
-    $exitCode = $LASTEXITCODE
+    & py -3.14 -u ".\step1_fetch_prizepicks.py" `
+        --cdp $CdpUrl `
+        --league_id 3 `
+        --timeout 120 `
+        --game_mode pickem `
+        --per_page 250 `
+        --max_pages 10 `
+        --output $outPath `
+        --date $targetDate
 } finally {
     Pop-Location
 }
 
-if ($exitCode -ne 0) {
-    Write-Host "[WNBA] Step1 exited with code $exitCode" -ForegroundColor Red
-    exit $exitCode
-}
-
-Write-Host "[WNBA] Done. Default output is Sports/WNBA/step1_wnba_props.csv (pipeline uses Sports/WNBA/data/outputs/step1_wnba_props.csv)." -ForegroundColor Green
+exit $LASTEXITCODE

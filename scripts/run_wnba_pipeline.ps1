@@ -6,11 +6,14 @@
 #    .\run_wnba_pipeline.ps1 -Date 2026-07-15   # Specify date
 #    .\run_wnba_pipeline.ps1 -RefreshCache      # Wipe ESPN cache + rebuild
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
-#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Fallback: WNBA step1 script (Playwright/CDP); NBA API has no CDP
-#    .\run_wnba_pipeline.ps1 -UsePlaywright             # Fallback: Sports\WNBA\step1_fetch_prizepicks.py (browser)
+#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # PrizePicks via Chrome CDP (bypass DataDome)
+#    .\run_wnba_pipeline.ps1 -PreferBrowser               # Use CDP when port 9222 is up (skip HTTP API)
+#    .\run_wnba_pipeline.ps1 -CdpWhenListening              # Same as PreferBrowser if debug Chrome is on 9222
+#    .\run_wnba_pipeline.ps1 -UsePlaywright             # Sports\WNBA\step1_fetch_prizepicks.py (profile browser)
+#  DataDome: launch Chrome first: pwsh -File scripts\launch_prizepicks_chrome_cdp.ps1 -OpenBoard -LeagueId 3
 #    .\run_wnba_pipeline.ps1 -StatsFrom2025End           # Force step4 rolling stats through 2025-10-20 (overrides prior-season merge)
 #    .\run_wnba_pipeline.ps1 -NoStatsFrom2025End         # Step4: current season only (no 2025 merge in cache)
-#  Default step1 calls Sports\NBA\scripts\step1_fetch_prizepicks_api.py --league_id 3 (same fetch as NBA), output still outputs\<date>\wnba\step1_wnba_props.csv.
+#  Default step1: Sports\WNBA\step1_fetch_prizepicks.py (HTTP: warmup + chrome131 + session waves); NBA API script is fallback (chrome120).
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 #
 #  Combined / game_date contract (2026-05): step1 anchors full-board game_date to --date;
@@ -24,8 +27,13 @@ param(
     [switch]$SkipFetch,
     [string]$Cdp          = "",
     [switch]$UsePlaywright,
+    [switch]$PreferBrowser,
+    [switch]$CdpWhenListening,
+    [switch]$NoCdpFallback,
+    [switch]$HttpOnly,
     [switch]$StatsFrom2025End,
-    [switch]$NoStatsFrom2025End
+    [switch]$NoStatsFrom2025End,
+    [switch]$Step1Only
 )
 
 $ErrorActionPreference = "Continue"
@@ -53,6 +61,123 @@ if ($Cdp) {
 }
 if ($UsePlaywright -and -not $Cdp) {
     Write-Host "  [WNBA step1] UsePlaywright: in-browser PrizePicks fetch (HTTP API disabled)" -ForegroundColor DarkGray
+}
+if ($PreferBrowser -or $CdpWhenListening) {
+    Write-Host "  [WNBA step1] Browser-first: CDP when debug port 9222 is reachable (skip HTTP)" -ForegroundColor DarkCyan
+}
+if ($HttpOnly) {
+    Write-Host "  [WNBA step1] HttpOnly: no CDP fallback even if port 9222 is up" -ForegroundColor DarkYellow
+}
+
+function Get-CsvDataRowCount([string]$CsvPath) {
+    if (-not (Test-Path -LiteralPath $CsvPath)) { return 0 }
+    try {
+        $raw = Import-Csv -LiteralPath $CsvPath
+        if ($null -eq $raw) { return 0 }
+        if ($raw -is [array]) { return $raw.Count }
+        return 1
+    }
+    catch {
+        return 0
+    }
+}
+
+function Test-CdpEndpoint {
+    param([string]$BaseUrl)
+    try {
+        $u = ($BaseUrl.TrimEnd("/")) + "/json/version"
+        $r = Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 4
+        return ($r.StatusCode -eq 200)
+    } catch {
+        return $false
+    }
+}
+
+function Get-WnbaStep1BrowserArgs {
+    param([string]$OutCsv, [string]$SlateDate, [string]$CdpUrl)
+    $a = @(
+        "--league_id", "3",
+        "--playwright",
+        "--timeout", "120",
+        "--game_mode", "pickem",
+        "--per_page", "250",
+        "--max_pages", "10",
+        "--sleep", "1.2",
+        "--cooldown_seconds", "90",
+        "--max_cooldowns", "3",
+        "--jitter_seconds", "10.0",
+        "--output", $OutCsv,
+        "--date", $SlateDate
+    )
+    if ($CdpUrl) {
+        $a += @("--cdp", $CdpUrl)
+    }
+    return ($a -join " ")
+}
+
+function Invoke-WnbaStep1Browser {
+    param([string]$CdpUrl, [string]$Label)
+    $outCsv = Join-Path $WnbaRunOutDir "step1_wnba_props.csv"
+    $browserArgs = Get-WnbaStep1BrowserArgs -OutCsv $outCsv -SlateDate $Date -CdpUrl $CdpUrl
+    return (Run-Step $Label $WNBADir ".\step1_fetch_prizepicks.py" $browserArgs)
+}
+
+function Get-WnbaStep1HttpArgs {
+    param([string]$OutCsv, [string]$SlateDate)
+    return @(
+        "--league_id", "3",
+        "--game_mode", "pickem",
+        "--per_page", "250",
+        "--max_pages", "10",
+        "--sleep", "2.0",
+        "--cooldown_seconds", "90",
+        "--max_cooldowns", "3",
+        "--jitter_seconds", "10.0",
+        "--max_403_retries", "5",
+        "--first-page-waves", "3",
+        "--output", $OutCsv,
+        "--date", $SlateDate
+    ) -join " "
+}
+
+function Invoke-WnbaStep1Http {
+    param(
+        [string]$Label,
+        [string]$Impersonate = ""
+    )
+    $outCsv = Join-Path $WnbaRunOutDir "step1_wnba_props.csv"
+    $savedImp = [string]$env:PROPORACLE_CURL_IMPERSONATE
+    if ($Impersonate) {
+        $env:PROPORACLE_CURL_IMPERSONATE = $Impersonate
+    } elseif (-not $savedImp.Trim()) {
+        $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+    }
+    try {
+        $httpArgs = Get-WnbaStep1HttpArgs -OutCsv $outCsv -SlateDate $Date
+        return (Run-Step $Label $WNBADir ".\step1_fetch_prizepicks.py" $httpArgs)
+    } finally {
+        if ($Impersonate) {
+            if ($savedImp) { $env:PROPORACLE_CURL_IMPERSONATE = $savedImp }
+            else { Remove-Item Env:PROPORACLE_CURL_IMPERSONATE -ErrorAction SilentlyContinue }
+        }
+    }
+}
+
+function Invoke-WnbaStep1HttpNbaFallback {
+    if (-not (Test-Path -LiteralPath $NbaApiStep1)) {
+        Write-Host "  ERROR: NBA API fetcher not found: $NbaApiStep1" -ForegroundColor Red
+        return $false
+    }
+    $outCsv = Join-Path $WnbaRunOutDir "step1_wnba_props.csv"
+    $savedImp = [string]$env:PROPORACLE_CURL_IMPERSONATE
+    $env:PROPORACLE_CURL_IMPERSONATE = "chrome120"
+    try {
+        $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$outCsv`" --date $Date"
+        return (Run-Step "WNBA Step 1 - Fetch PrizePicks (NBA API fallback, chrome120)" $WNBADir $NbaApiStep1 $step1Args)
+    } finally {
+        if ($savedImp) { $env:PROPORACLE_CURL_IMPERSONATE = $savedImp }
+        else { Remove-Item Env:PROPORACLE_CURL_IMPERSONATE -ErrorAction SilentlyContinue }
+    }
 }
 $StartTime = Get-Date
 $script:ProgressDone = 0
@@ -170,28 +295,62 @@ Write-Host ""
 
 $ok = $true
 
-# Step 1 — PrizePicks: default = NBA API script (league_id 3), same as NBA step1; output paths stay under outputs\<date>\wnba\.
-# Browser/CDP: Sports\WNBA\step1_fetch_prizepicks.py only (NBA API has no Playwright).
+# Step 1 — PrizePicks: HTTP API (curl_cffi) when it works; CDP browser when DataDome blocks (Press & Hold).
+# WNBA league_id=3 on board (NBA is 7). Do not close CDP Chrome between solve-challenge and fetch.
+$step1Csv = Join-Path $WnbaRunOutDir "step1_wnba_props.csv"
+if ($SkipFetch -and (Get-CsvDataRowCount -CsvPath $step1Csv) -eq 0) {
+    Write-Host "  [WNBA step1] Existing step1 is empty — forcing fresh fetch" -ForegroundColor Yellow
+    $SkipFetch = $false
+}
+
 if (-not $SkipFetch) {
-    if ($UsePlaywright -or $Cdp) {
-        $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
-        if ($UsePlaywright) {
-            $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+    $cdpDefault = if ($Cdp) { $Cdp } else { "http://127.0.0.1:9222" }
+    $cdpReachable = Test-CdpEndpoint -BaseUrl $cdpDefault
+    $browserFirst = $UsePlaywright -or $Cdp -or $PreferBrowser -or $CdpWhenListening
+    $useBrowserFirst = $browserFirst -and ($Cdp -or $UsePlaywright -or $cdpReachable)
+
+    if ($useBrowserFirst) {
+        if (-not $cdpReachable -and -not $UsePlaywright) {
+            Write-Host "  [WNBA step1] WARN: CDP not reachable at $cdpDefault — launch Chrome:" -ForegroundColor Yellow
+            Write-Host "    pwsh -File scripts\launch_prizepicks_chrome_cdp.ps1 -OpenBoard -LeagueId 3" -ForegroundColor Cyan
         }
-        if ($Cdp) { $step1Args += " --cdp $Cdp" }
-        if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks (browser)" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
+        if ($ok) {
+            $ok = Invoke-WnbaStep1Browser -CdpUrl $(if ($Cdp) { $Cdp } elseif ($cdpReachable) { $cdpDefault } else { "" }) `
+                -Label "WNBA Step 1 - Fetch PrizePicks (browser/CDP)"
+        }
     } else {
-        if (-not (Test-Path -LiteralPath $NbaApiStep1)) {
-            Write-Host "  ERROR: NBA API fetcher not found: $NbaApiStep1" -ForegroundColor Red
-            $ok = $false
-        } else {
-            $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
-            if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks (NBA API, league 3)" $WNBADir $NbaApiStep1 $step1Args }
+        if ($ok) {
+            $ok = Invoke-WnbaStep1Http -Label "WNBA Step 1 - Fetch PrizePicks (HTTP, chrome131)"
+        }
+        if (-not $ok) {
+            Write-Host "  [WNBA step1] HTTP (chrome131) failed — retrying NBA API path (chrome120)..." -ForegroundColor Yellow
+            $ok = Invoke-WnbaStep1HttpNbaFallback
+        }
+        if (-not $ok -and -not $HttpOnly -and -not $NoCdpFallback) {
+            if ($cdpReachable) {
+                Write-Host "  [WNBA step1] HTTP blocked — retrying via Chrome CDP ($cdpDefault)..." -ForegroundColor Yellow
+                $ok = Invoke-WnbaStep1Browser -CdpUrl $cdpDefault -Label "WNBA Step 1 - Fetch PrizePicks (CDP fallback)"
+            } else {
+                Write-Host "  [WNBA step1] HTTP failed and CDP not running. DataDome bypass:" -ForegroundColor Red
+                Write-Host "    1) pwsh -File scripts\launch_prizepicks_chrome_cdp.ps1 -OpenBoard -LeagueId 3" -ForegroundColor Cyan
+                Write-Host "    2) Complete Press & Hold until WNBA board loads" -ForegroundColor Cyan
+                Write-Host "    3) pwsh -File scripts\run_wnba_pipeline.ps1 -Cdp $cdpDefault -Date $Date" -ForegroundColor Cyan
+            }
         }
     }
 } else {
     Write-Host "  --> [SkipFetch] Using existing $WnbaRunOutDir\step1_wnba_props.csv" -ForegroundColor DarkGray
     Write-Host "  [WNBA] If combined dropped WNBA rows, re-run step1 once (no SkipFetch) after board/game_date policy changes." -ForegroundColor DarkYellow
+}
+
+if ($Step1Only) {
+    $n = Get-CsvDataRowCount -CsvPath $step1Csv
+    if (-not $ok -or $n -eq 0) {
+        Write-Host "  [WNBA] Step1Only failed (ok=$ok rows=$n)" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "  [WNBA] Step1Only complete ($n rows) -> $step1Csv" -ForegroundColor Green
+    exit 0
 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 2 - Attach Pick Types" $WNBADir ".\step2_attach_picktypes.py" `
@@ -211,11 +370,14 @@ if ($NoStatsFrom2025End -and -not $StatsFrom2025End) {
     Write-Host "  [WNBA step4] NoStatsFrom2025End: rolling stats use current season cache only (--no-include-prior-season-stats)." -ForegroundColor DarkCyan
 }
 # Default step4 merges 2025+2026 cache rows + ~420d lookback for L5/L10 early in the new season (see step4 --no-include-prior-season-stats).
+if (-not $StatsFrom2025End -and -not $NoStatsFrom2025End) {
+    Write-Host "  [WNBA] L5/L10 use last games from current + prior season in ESPN cache (2025+2026 by default)." -ForegroundColor DarkCyan
+}
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
     "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
-    "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`"" }
+    "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --compute10" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 6 - Team Role Context" $WNBADir ".\step6_team_role_context.py" `
     "--input `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --output `"$WnbaRunOutDir\step6_wnba_context.csv`"" }
