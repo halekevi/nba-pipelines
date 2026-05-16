@@ -4375,10 +4375,15 @@ def compute_image_url(leg: dict) -> Optional[str]:
       needs nba_player_id -> https://cdn.nba.com/headshots/nba/latest/1040x760/<id>.png
     CBB:
       needs espn_player_id -> https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/<id>.png
+    WNBA:
+      ESPN athlete id when available
     """
+    raw = str(leg.get("image_url") or "").strip()
+    if raw and raw.lower() not in ("nan", "none", ""):
+        return raw
     sport = (leg.get("sport") or "").upper()
     if sport == "NBA":
-        pid = _clean_id(leg.get("nba_player_id"))
+        pid = _clean_id(leg.get("nba_player_id") or leg.get("player_id"))
         if pid:
             return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{pid}.png"
         return None
@@ -4386,6 +4391,11 @@ def compute_image_url(leg: dict) -> Optional[str]:
         eid = _clean_id(leg.get("espn_player_id"))
         if eid:
             return f"https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/{eid}.png"
+        return None
+    if sport == "WNBA":
+        eid = _clean_id(leg.get("espn_player_id") or leg.get("espn_athlete_id"))
+        if eid:
+            return f"https://a.espncdn.com/i/headshots/wnba/players/full/{eid}.png"
         return None
     return None
 
@@ -4679,14 +4689,76 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             row["line_underdog"] = g("line_underdog")
         if "line_draftkings" in df.columns and g("line_draftkings") is not None:
             row["line_draftkings"] = g("line_draftkings")
+        sport_val = str(g("sport") or "").strip().upper()
+        if sport_val:
+            row["sport"] = sport_val
+
+        leg_s = pd.Series(
+            {
+                **row,
+                "direction": row.get("dir"),
+                "bet_direction": row.get("dir"),
+                "hit_rate": row.get("hit_rate"),
+                "l5_over": row.get("l5_over"),
+                "l5_under": row.get("l5_under"),
+                "ml_prob": row.get("ml_prob"),
+            }
+        )
+        try:
+            prob_used, prob_src = _resolve_leg_prob(leg_s)
+            row["leg_prob_used"] = round(float(prob_used), 4)
+            row["leg_prob_source"] = prob_src
+        except Exception:
+            pass
+
+        img = g("image_url")
+        if img and str(img).strip().lower() not in ("nan", "none"):
+            row["image_url"] = str(img).strip()
+        else:
+            computed = compute_image_url({**row, "sport": sport_val})
+            if computed:
+                row["image_url"] = computed
+        nba_pid = g("nba_player_id") or g("player_id")
+        if nba_pid:
+            row["nba_player_id"] = _clean_id(nba_pid)
+        eid = g("espn_player_id")
+        if eid:
+            row["espn_player_id"] = _clean_id(eid)
+
+        base_line = safe(g("standard_line")) or safe(g("line"))
+        actuals: List[float] = []
+        line_hist: List[float] = []
         for _i in range(1, 11):
-            _v = g(f"G{_i}")
-            if _v is None:
-                _v = g(f"g{_i}")
-            _vf = safe(_v)
-            if _vf is not None:
-                row[f"g{_i}"] = _vf
-                row[f"stat_g{_i}"] = _vf
+            av = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
+            lv = safe(g(f"line_g{_i}"))
+            if av is not None:
+                actuals.append(float(av))
+                line_hist.append(float(lv) if lv is not None else (float(base_line) if base_line is not None else av))
+                row[f"stat_g{_i}"] = av
+                row[f"g{_i}"] = av
+                if lv is not None:
+                    row[f"line_g{_i}"] = lv
+        if actuals:
+            row["actual_series"] = actuals
+            if base_line is not None:
+                row["line_series"] = line_hist if line_hist else [float(base_line)] * len(actuals)
+            elif line_hist:
+                row["line_series"] = line_hist
+
+        gd = g("game_date")
+        if gd:
+            row["game_date"] = str(gd)[:10]
+        dr = g("days_rest")
+        if dr is not None:
+            row["rest_days"] = dr
+        b2b = g("b2b_flag")
+        if b2b is not None:
+            row["back_to_back"] = str(b2b).strip().lower() in ("1", "true", "yes", "y")
+        if row.get("projection") is None:
+            l5a = g("l5_avg")
+            if l5a is not None:
+                row["projection"] = l5a
+
         rows.append({k: v for k, v in row.items() if v is not None})
     return rows
 
@@ -5876,13 +5948,203 @@ def _apply_l5_truth_from_stat_games(
     return df
 
 
+def _apply_l10_truth_from_stat_games(
+    df: pd.DataFrame, sport_label: str, *, min_stat_games: int = 6
+) -> pd.DataFrame:
+    """Derive L10 Over/Under and last-10 avg from stat_g1..stat_g10 when present."""
+    if df is None or df.empty:
+        return df
+
+    stat_cols = [c for c in [f"stat_g{i}" for i in range(1, 11)] if c in df.columns]
+    if not stat_cols or "line" not in df.columns:
+        return df
+
+    vals = df[stat_cols].apply(pd.to_numeric, errors="coerce")
+    line = pd.to_numeric(df["line"], errors="coerce")
+    valid_n = vals.notna().sum(axis=1)
+    use_mask = valid_n >= int(min_stat_games)
+    if not bool(use_mask.any()):
+        return df
+
+    over = vals.gt(line, axis=0).sum(axis=1).astype(float)
+    under = vals.lt(line, axis=0).sum(axis=1).astype(float)
+    l10_avg = vals.mean(axis=1)
+
+    if "l10_over" not in df.columns:
+        df["l10_over"] = np.nan
+    if "l10_under" not in df.columns:
+        df["l10_under"] = np.nan
+    if "l10_games_played" not in df.columns:
+        df["l10_games_played"] = valid_n.astype(float)
+
+    df.loc[use_mask, "l10_over"] = over[use_mask]
+    df.loc[use_mask, "l10_under"] = under[use_mask]
+    df.loc[use_mask, "l10_games_played"] = valid_n[use_mask].astype(float)
+    if "stat_last10_avg" in df.columns:
+        df.loc[use_mask, "stat_last10_avg"] = l10_avg[use_mask]
+    return df
+
+
+def _ensure_stat_g_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Mirror G1..G10 <-> stat_g1..stat_g10 from step8 clean exports."""
+    if df is None or df.empty:
+        return df
+    for i in range(1, 11):
+        gcol, scol = f"G{i}", f"stat_g{i}"
+        if gcol in df.columns and scol not in df.columns:
+            df[scol] = df[gcol]
+        elif scol in df.columns and gcol not in df.columns:
+            df[gcol] = df[scol]
+    return df
+
+
+def _fill_projection_from_avgs(df: pd.DataFrame) -> pd.DataFrame:
+    """Use last-5 / season avg when model projection is missing (common on Goblin micro-lines)."""
+    if df is None or df.empty or "projection" not in df.columns:
+        return df
+    proj = pd.to_numeric(df["projection"], errors="coerce")
+    miss = proj.isna() | ~np.isfinite(proj)
+    if not bool(miss.any()):
+        return df
+    l5a = pd.to_numeric(df.get("l5_avg", pd.Series(dtype=float)), errors="coerce")
+    sa = pd.to_numeric(df.get("season_avg", pd.Series(dtype=float)), errors="coerce")
+    fill = l5a.where(l5a.notna(), sa)
+    df.loc[miss, "projection"] = fill[miss]
+    return df
+
+
+def _resolve_step1_pp_path(board_path: str, sport: str) -> Optional[Path]:
+    """Locate step1 PP CSV beside the board or under outputs/<date>/<sport>/."""
+    sport_u = str(sport or "").upper()
+    sport_low = sport_u.lower()
+    step1_names = {
+        "NBA": ("step1_pp_props_today.csv",),
+        "WNBA": ("step1_wnba_props.csv",),
+    }.get(sport_u, ())
+    if not step1_names:
+        return None
+    try:
+        parent = Path(board_path).resolve().parent
+    except Exception:
+        parent = None
+    out_root = Path(REPO_ROOT) / "outputs"
+    if out_root.is_dir():
+        dated_hits = sorted(
+            (p for p in out_root.glob(f"*/{sport_low}/{step1_names[0]}") if p.is_file()),
+            reverse=True,
+        )
+        if dated_hits:
+            return dated_hits[0]
+    if parent is not None:
+        hit = next((parent / n for n in step1_names if (parent / n).is_file()), None)
+        if hit is not None:
+            return hit
+    if parent is not None:
+        for part in reversed(parent.parts):
+            if len(part) == 10 and part[4] == "-" and part[7] == "-":
+                dated_dir = Path(REPO_ROOT) / "outputs" / part / sport_low
+                hit = next((dated_dir / n for n in step1_names if (dated_dir / n).is_file()), None)
+                if hit is not None:
+                    return hit
+    legacy_cand = Path(REPO_ROOT) / "Sports" / sport_u / "data" / "outputs"
+    if sport_u == "NBA":
+        legacy_file = legacy_cand / "step1_pp_props_today.csv"
+        if legacy_file.is_file():
+            return legacy_file
+    return None
+
+
+def _merge_step1_pp_metadata(df: pd.DataFrame, board_path: str, sport: str) -> pd.DataFrame:
+    """Attach PrizePicks image_url / player_id from dated step1 when step8 omitted them."""
+    if df is None or df.empty:
+        return df
+    sport_u = str(sport or "").upper()
+    step1_path = _resolve_step1_pp_path(board_path, sport_u)
+    if step1_path is None or not step1_path.is_file():
+        return df
+    try:
+        s1 = pd.read_csv(step1_path, dtype=str, low_memory=False).fillna("")
+    except Exception:
+        return df
+    if s1.empty:
+        return df
+    key_cols = [c for c in ("projection_id", "pp_projection_id", "player", "prop_type", "line") if c in s1.columns]
+    if "projection_id" not in s1.columns and "player" not in s1.columns:
+        return df
+    meta_cols = [c for c in ("image_url", "player_id", "nba_player_id") if c in s1.columns]
+    if not meta_cols:
+        return df
+    s1_sub = s1[key_cols + meta_cols].drop_duplicates(subset=key_cols, keep="first")
+    out = df.copy()
+    if "image_url" not in out.columns:
+        out["image_url"] = ""
+    if "nba_player_id" not in out.columns and sport_u == "NBA":
+        out["nba_player_id"] = ""
+    merge_on = None
+    if "projection_id" in out.columns and "projection_id" in s1_sub.columns:
+        merge_on = ["projection_id"]
+    elif all(c in out.columns for c in ("player", "prop_type", "line")) and all(
+        c in s1_sub.columns for c in ("player", "prop_type", "line")
+    ):
+        merge_on = ["player", "prop_type", "line"]
+    elif all(c in out.columns for c in ("player", "prop_type")) and all(
+        c in s1_sub.columns for c in ("player", "prop_type")
+    ):
+        merge_on = ["player", "prop_type"]
+        s1_sub = s1_sub.sort_values("line", ascending=False).drop_duplicates(
+            subset=["player", "prop_type"], keep="first"
+        )
+    if not merge_on:
+        return df
+    for col in merge_on:
+        if col == "line":
+            out[col] = pd.to_numeric(out[col], errors="coerce").round(2)
+            s1_sub[col] = pd.to_numeric(s1_sub[col], errors="coerce").round(2)
+        else:
+            out[col] = out[col].astype(str).str.strip()
+            s1_sub[col] = s1_sub[col].astype(str).str.strip()
+    out = out.merge(s1_sub, on=merge_on, how="left", suffixes=("", "_pp"))
+    if "image_url_pp" in out.columns:
+        cur = out.get("image_url", pd.Series("", index=out.index))
+        cur_s = cur.astype(str).str.strip()
+        cur_bad = cur.isna() | cur_s.eq("") | cur_s.str.lower().isin(["nan", "none"])
+        pp_s = out["image_url_pp"].astype(str).str.strip()
+        pp_ok = pp_s.ne("") & ~pp_s.str.lower().isin(["nan", "none"])
+        out.loc[cur_bad & pp_ok, "image_url"] = out.loc[cur_bad & pp_ok, "image_url_pp"]
+        out.drop(columns=["image_url_pp"], inplace=True)
+    if sport_u == "NBA":
+        if "nba_player_id" not in out.columns:
+            out["nba_player_id"] = ""
+        for src in ("player_id_pp", "nba_player_id_pp"):
+            if src in out.columns:
+                m = out["nba_player_id"].astype(str).str.strip().eq("")
+                out.loc[m, "nba_player_id"] = out.loc[m, src].apply(_clean_id)
+                out.drop(columns=[src], inplace=True, errors="ignore")
+    return out
+
+
+def _board_history_enrichment(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:
+    """Stat-g truth for L5/L10, projection fallback — shared by NBA load and step8 boards."""
+    if df is None or df.empty:
+        return df
+    df = _ensure_stat_g_columns(df)
+    df = _apply_l5_truth_from_stat_games(df, sport_label)
+    df = _apply_l10_truth_from_stat_games(df, sport_label)
+    df = _fill_projection_from_avgs(df)
+    return df
+
+
 # ── Load & normalize NBA ───────────────────────────────────────────────────────
 def load_nba(path: str) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename="step8_all_direction_clean.xlsx")
 
-    xl = pd.ExcelFile(path, engine="openpyxl")
-    sheet = "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0]
-    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+    if str(path).lower().endswith(".csv"):
+        df = pd.read_csv(path, low_memory=False)
+        df = df.loc[:, ~df.columns.duplicated()].copy()
+    else:
+        xl = pd.ExcelFile(path, engine="openpyxl")
+        sheet = "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0]
+        df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
 
     df = df.rename(
         columns={
@@ -5906,6 +6168,25 @@ def load_nba(path: str) -> pd.DataFrame:
             "Season Avg": "season_avg",
             "L5 Over": "l5_over",
             "L5 Under": "l5_under",
+            "L10 Over": "l10_over",
+            "L10 Under": "l10_under",
+            "Games (5g)": "l5_games_played",
+            "Games (10g)": "l10_games_played",
+            "Standard Line": "standard_line",
+            "Game Date": "game_date",
+            "Days Rest": "days_rest",
+            "image_url": "image_url",
+            "Image URL": "image_url",
+            "G1": "stat_g1",
+            "G2": "stat_g2",
+            "G3": "stat_g3",
+            "G4": "stat_g4",
+            "G5": "stat_g5",
+            "G6": "stat_g6",
+            "G7": "stat_g7",
+            "G8": "stat_g8",
+            "G9": "stat_g9",
+            "G10": "stat_g10",
             "Def Rank": "def_rank",
             "Def Tier": "def_tier",
             "Pace Tier": "pace_tier",
@@ -5933,6 +6214,22 @@ def load_nba(path: str) -> pd.DataFrame:
             "Game Script Note": "game_script_note",
             "game_script_mult": "game_script_mult",
             "game_script_note": "game_script_note",
+            # snake_case step8 CSV (dated outputs/*/nba/)
+            "final_bet_direction": "direction",
+            "bet_direction": "direction",
+            "opp_team": "opp",
+            "prop_norm": "prop_type",
+            "stat_last5_avg": "l5_avg",
+            "stat_last10_avg": "season_avg",
+            "last5_over": "l5_over",
+            "last5_under": "l5_under",
+            "line_games_played_5": "l5_games_played",
+            "line_games_played_10": "l10_games_played",
+            "line_hits_over_10": "l10_over",
+            "line_hits_under_10": "l10_under",
+            "b2b_flag": "b2b_flag",
+            "days_rest": "days_rest",
+            "ESPN_ATHLETE_ID": "espn_player_id",
         }
     )
 
@@ -5940,6 +6237,9 @@ def load_nba(path: str) -> pd.DataFrame:
     df = df.loc[:, ~df.columns.duplicated()].copy()
 
     df["sport"] = "NBA"
+
+    if "direction" not in df.columns and "final_bet_direction" in df.columns:
+        df["direction"] = df["final_bet_direction"]
 
     if "direction" in df.columns:
         if isinstance(df["direction"], pd.DataFrame):
@@ -5969,7 +6269,9 @@ def load_nba(path: str) -> pd.DataFrame:
     if "nba_player_id" in df.columns:
         df["nba_player_id"] = df["nba_player_id"].apply(_clean_id)
 
-    df = _apply_l5_truth_from_stat_games(df, "NBA")
+    df = _board_history_enrichment(df, "NBA")
+    df = _merge_step1_pp_metadata(df, path, "NBA")
+    df = add_l5_play_side_columns(df)
     if "abs_edge" not in df.columns and "edge" in df.columns:
         df["abs_edge"] = pd.to_numeric(df["edge"], errors="coerce").abs()
     elif "abs_edge" in df.columns:
@@ -6387,21 +6689,25 @@ def _load_step8_board_like(
 ) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename=fallback_filename)
     df: pd.DataFrame
-    try:
-        xl = pd.ExcelFile(path, engine="openpyxl")
-        sheet = next((s for s in sheet_order if s in xl.sheet_names), xl.sheet_names[0])
-        df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
-    except PermissionError:
-        base, _ext = os.path.splitext(path)
-        csv_candidates = [
-            f"{base}.csv",
-            f"{base.replace('_clean', '')}.csv",
-        ]
-        csv_path = next((p for p in csv_candidates if os.path.exists(p)), "")
-        if not csv_path:
-            raise
-        print(f"  [{log_prefix}] XLSX locked; using CSV fallback: {csv_path}")
-        df = pd.read_csv(csv_path)
+    if str(path).lower().endswith(".csv"):
+        df = pd.read_csv(path, low_memory=False)
+        df = df.loc[:, ~df.columns.duplicated()].copy()
+    else:
+        try:
+            xl = pd.ExcelFile(path, engine="openpyxl")
+            sheet = next((s for s in sheet_order if s in xl.sheet_names), xl.sheet_names[0])
+            df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+        except PermissionError:
+            base, _ext = os.path.splitext(path)
+            csv_candidates = [
+                f"{base}.csv",
+                f"{base.replace('_clean', '')}.csv",
+            ]
+            csv_path = next((p for p in csv_candidates if os.path.exists(p)), "")
+            if not csv_path:
+                raise
+            print(f"  [{log_prefix}] XLSX locked; using CSV fallback: {csv_path}")
+            df = pd.read_csv(csv_path)
 
     df = df.rename(columns={
         # title-case (from step8 clean xlsx)
@@ -6447,6 +6753,10 @@ def _load_step8_board_like(
         "Void Reason":      "void_reason",
         # snake_case fallbacks
         "player_name":        "player",
+        "player_id":          "nba_player_id",
+        "wnba_player_id":     "nba_player_id",
+        "espn_athlete_id":    "espn_player_id",
+        "image_url":          "image_url",
         "stat_type":          "prop_type",
         "stat_norm":          "prop_type",
         "line_score":         "line",
@@ -6542,8 +6852,16 @@ def _load_step8_board_like(
         df["hit_rate"] = hr
 
     # NBA1Q can overstate hit_rate on tiny windows (e.g., 5/5 => 100%).
-    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
-    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    def _num_col(name: str) -> pd.Series:
+        if name not in df.columns:
+            return pd.Series(np.nan, index=df.index, dtype="float64")
+        col = df[name]
+        if isinstance(col, pd.DataFrame):
+            col = col.iloc[:, 0]
+        return pd.to_numeric(col, errors="coerce")
+
+    l5o = _num_col("l5_over")
+    l5u = _num_col("l5_under")
     l5n = l5o.add(l5u, fill_value=0)
     hits = np.where(
         df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
@@ -6584,6 +6902,11 @@ def _load_step8_board_like(
         df["l5_avg"] = np.nan
     if "season_avg" not in df.columns:
         df["season_avg"] = np.nan
+
+    df = _ensure_stat_g_columns(df)
+    df = _apply_l5_truth_from_stat_games(df, sport, min_stat_games=5)
+    df = _apply_l10_truth_from_stat_games(df, sport, min_stat_games=6)
+    df = _fill_projection_from_avgs(df)
 
     # IMPORTANT:
     # For these boards, upstream "Hit Rate (5g)/(10g)" is direction-aware in many cases
@@ -6655,12 +6978,8 @@ def _load_step8_board_like(
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
-    # Step8 boards expose per-game stats as G1..G10; reconcile L5 from stat_g* only with a full 5-game window.
-    for _gi in range(1, 11):
-        _g, _sg = f"G{_gi}", f"stat_g{_gi}"
-        if _g in df.columns and _sg not in df.columns:
-            df[_sg] = pd.to_numeric(df[_g], errors="coerce")
-    df = _apply_l5_truth_from_stat_games(df, sport, min_stat_games=5)
+    df = _board_history_enrichment(df, sport)
+    df = _merge_step1_pp_metadata(df, path, sport)
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
