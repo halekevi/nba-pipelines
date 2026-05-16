@@ -210,8 +210,17 @@ def parse_players(summary: dict, game_date: str = "", event_id: str = "") -> Lis
             continue
         for k in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD"):
             row.setdefault(k, 0.0)
+        # CFB boxscores have no MIN column; mark participation for rolling-window filters.
+        row["MIN"] = 1.0
         rows.append(row)
     return rows
+
+
+def game_played_for_prop(g: dict, prop: str) -> bool:
+    """True when this cached game should count toward L5/L10 (prop stat exists or any CFB stat)."""
+    if prop and prop_value(prop, g) is not None:
+        return True
+    return any(float(g.get(k, 0) or 0) != 0 for k in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD"))
 
 
 def fantasy(r: dict) -> float:
@@ -298,6 +307,7 @@ def build_player_histories(
     workers: int = 4,
     cache_path: str = "",
     tid_to_abbr: dict = None,
+    end_date: Optional[dt.date] = None,
 ) -> Tuple[Dict, Dict]:
     """
     Parallelized boxscore fetch for CFB with persistent cache + deterministic ordering.
@@ -344,7 +354,8 @@ def build_player_histories(
         import subprocess as _sp, sys as _sys
         _sp.check_call([_sys.executable, "-m", "pip", "install", "tqdm", "--break-system-packages", "-q"])
         from tqdm import tqdm as _tqdm
-    for d in _tqdm(date_range(dt.date.today(), days), desc="Scanning scoreboards", unit="day"):
+    anchor = end_date or dt.date.today()
+    for d in _tqdm(date_range(anchor, days), desc="Scanning scoreboards", unit="day"):
         sb = pull_scoreboard(d)
         for eid, t1, t2, date_str in extract_events(sb):
             if eid not in seen_eids:
@@ -433,8 +444,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",    required=True)
     ap.add_argument("--output",   default="step5b_with_stats_cfb.csv")
-    ap.add_argument("--days",     type=int, default=90,
-                    help="Days of history to scan (default 90; use 120 for full season)")
+    ap.add_argument("--days",     type=int, default=180,
+                    help="Days of history to scan backward from --date (default 180 for cross-season L5)")
+    ap.add_argument("--date",     default="",
+                    help="Anchor date YYYY-MM-DD for scoreboard scan (default: today)")
     ap.add_argument("--n",        type=int, default=10)
     ap.add_argument("--workers",  type=int, default=4)
     ap.add_argument("--cache",    default="cfb_boxscore_cache.csv",
@@ -536,6 +549,10 @@ def main():
         if tid and abbr and tid != "nan":
             tid_to_abbr[tid] = abbr
 
+    end_d = dt.date.today()
+    if str(args.date or "").strip():
+        end_d = dt.datetime.strptime(str(args.date).strip()[:10], "%Y-%m-%d").date()
+
     # ── Parallelized fetch ────────────────────────────────────────────────────
     hist_aid, hist_name = build_player_histories(
         args.days,
@@ -543,6 +560,7 @@ def main():
         workers=args.workers,
         cache_path=cache_path,
         tid_to_abbr=tid_to_abbr,
+        end_date=end_d,
     )
     if not hist_aid and not hist_name:
         log_pipeline_health(
@@ -584,7 +602,7 @@ def main():
         if not games:
             stat_status.append("NO_BOX_HISTORY"); out_rows.append({}); continue
 
-        played = [g for g in games if float(g.get("MIN", 0) or 0) > 0]
+        played = [g for g in games if game_played_for_prop(g, prop)]
         vals = [float(v) for g in played
                 if (v := prop_value(prop, g)) is not None]
 
@@ -609,8 +627,8 @@ def main():
         o["stat_last10_avg"] = round(sum(last10)      / len(last10),      3) if last10      else ""
         o["stat_season_avg"] = round(sum(season_vals) / len(season_vals), 3) if season_vals else ""
 
-        # minutes averages
-        min_vals = [float(g.get("MIN", 0) or 0) for g in played]
+        # minutes averages (CFB: participation flag only)
+        min_vals = [float(g.get("MIN", 1) or 1) for g in played]
         min5 = min_vals[:5]
         o["min_last5_avg"]   = round(sum(min5)    / len(min5),    1) if min5    else ""
         o["min_season_avg"]  = round(sum(min_vals) / len(min_vals), 1) if min_vals else ""

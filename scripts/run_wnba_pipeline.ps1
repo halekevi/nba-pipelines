@@ -374,7 +374,7 @@ if (-not $StatsFrom2025End -and -not $NoStatsFrom2025End) {
     Write-Host "  [WNBA] L5/L10 use last games from current + prior season in ESPN cache (2025+2026 by default)." -ForegroundColor DarkCyan
 }
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
+    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --min-minutes-rolling 20 --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --compute10" }

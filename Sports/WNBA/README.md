@@ -51,7 +51,7 @@ To pull only the **tail** of the 2025 calendar (postseason / October — good fo
 
 `python scripts/backfill_wnba_espn_range.py --preset finals-2025 --season 2025`
 
-Other presets: `full-2025` (May–Oct), `late-2025` (Sep–Oct). ESPN is queried **by date**, not “exactly five games per player”; step4 then takes the last five **cached** games vs the current line.
+Other presets: `full-2025` (May–Oct), `late-2025` (Sep–Oct). ESPN is queried **by date**, not “exactly five games per player”; step4 then takes the last five **cached** games vs the current line (after dropping outings under **20 minutes**, which better matches PrizePicks L5/L10).
 
 ## Where outputs go
 

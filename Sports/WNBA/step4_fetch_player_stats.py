@@ -118,6 +118,24 @@ def _parse_minutes(s: str) -> float:
     return pd.to_numeric(txt, errors="coerce")
 
 
+def _minutes_series(df: pd.DataFrame) -> pd.Series:
+    if df.empty or "MIN" not in df.columns:
+        return pd.Series([np.nan] * len(df), index=df.index)
+    raw = df["MIN"]
+    if pd.api.types.is_numeric_dtype(raw):
+        return pd.to_numeric(raw, errors="coerce")
+    return raw.map(_parse_minutes)
+
+
+def filter_games_by_minutes(df: pd.DataFrame, min_minutes: float) -> pd.DataFrame:
+    """Drop low-minute outings before rolling L5/L10 (aligns with PrizePicks-style windows)."""
+    if df.empty or min_minutes <= 0:
+        return df
+    mins = _minutes_series(df)
+    keep = mins.notna() & (mins >= float(min_minutes))
+    return df.loc[keep].copy()
+
+
 def _norm_stat_key(k: str) -> str:
     return re.sub(r"[^a-z0-9]", "", str(k or "").lower())
 
@@ -426,6 +444,12 @@ def main():
         "Default: merge current and previous season cache rows and widen lookback so L5 can use prior-season games.",
     )
     ap.add_argument("--n",        type=int,   default=10)
+    ap.add_argument(
+        "--min-minutes-rolling",
+        type=float,
+        default=20.0,
+        help="Only count games with at least this many minutes in stat_g*/L5/L10 (0=disable). Default 20.",
+    )
     ap.add_argument("--sleep",    type=float, default=0.8)
     ap.add_argument("--retries",  type=int,   default=4)
     ap.add_argument("--timeout",  type=float, default=30.0)
@@ -665,6 +689,7 @@ def main():
         player_games = cache_filt[cache_filt["ESPN_ATHLETE_ID"].astype(str) == str(ath_id)].copy()
         if not player_games.empty:
             player_games = player_games.sort_values("game_date", ascending=False)
+            player_games = filter_games_by_minutes(player_games, float(args.min_minutes_rolling))
 
         if player_games.empty:
             misses.append({"player": player, "reason": "NO_CACHE_GAMES"})

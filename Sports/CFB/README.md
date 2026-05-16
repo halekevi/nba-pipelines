@@ -33,7 +33,25 @@ Full parallel run includes CFB when the slate date is in **Aug–Jan** (off-seas
 
 - `data/reference/ncaa_football_athletes_master.csv` — bootstrap ESPN athlete map (grows over time)
 - `data/reference/cfb_def_rankings.csv` — team defense ranks (placeholder from CBB template until CFB-specific table is built)
-- `data/cache/cfb_boxscore_cache.csv` — ESPN college-football game logs
+- `data/cache/cfb_boxscore_cache.csv` — ESPN college-football game logs (populate via backfill + step5b)
+
+## Rolling stats (L5 / L10) — backfill prior season
+
+CFB players only play ~12 games per year, so week 1–4 slates need **last season’s games** in the cache for full L5/L10.
+
+**One-time (or preseason) backfill** from repo root:
+
+```powershell
+# 2025 regular season + bowls
+python scripts/backfill_cfb_espn_range.py --preset full-2025 --season 2025
+
+# Prior year (for early fall 2026 slates)
+python scripts/backfill_cfb_espn_range.py --preset full-2024 --season 2024
+```
+
+Other presets: `regular-2025`, `bowls-2025`. Custom range: `--from 2025-08-23 --to 2026-01-19 --season 2025`.
+
+Then run the pipeline (`-CFBOnly` or full parallel). Step 5 scans **200 days** back from `--date` and reads the shared cache.
 
 ## Regular season unit rankings (conference)
 
