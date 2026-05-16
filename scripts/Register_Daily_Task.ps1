@@ -28,6 +28,18 @@ foreach ($s in @($Script5, $ScriptEvening, $Script7, $ScriptRefresh)) {
     }
 }
 
+# Legacy duplicate at 7:00 — same work as PropOracle - Daily 7AM (run_daily_7am.ps1 → run_daily.ps1).
+$LegacyDuplicate7Am = @(
+    "PropORACLE Daily Pipeline"
+)
+foreach ($legacy in $LegacyDuplicate7Am) {
+    $existing = Get-ScheduledTask -TaskName $legacy -ErrorAction SilentlyContinue
+    if ($existing) {
+        Unregister-ScheduledTask -TaskName $legacy -Confirm:$false
+        Write-Host "Removed legacy duplicate task: $legacy" -ForegroundColor Yellow
+    }
+}
+
 function Register-PropTask {
     param(
         [string]$TaskName,

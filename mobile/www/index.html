@@ -1605,6 +1605,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba-under" onclick="toggleDirFilter('nba','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba-goblin" onclick="togglePickFilter('nba','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba-standard" onclick="togglePickFilter('nba','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-nba-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('nba','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-nba-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('nba','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba','A',this)">A</button>
@@ -1642,6 +1644,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba1h-under" onclick="toggleDirFilter('nba1h','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba1h-goblin" onclick="togglePickFilter('nba1h','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba1h-standard" onclick="togglePickFilter('nba1h','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-nba1h-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('nba1h','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-nba1h-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('nba1h','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba1h','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba1h','A',this)">A</button>
@@ -1679,6 +1683,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba1q-under" onclick="toggleDirFilter('nba1q','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba1q-goblin" onclick="togglePickFilter('nba1q','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba1q-standard" onclick="togglePickFilter('nba1q','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-nba1q-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('nba1q','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-nba1q-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('nba1q','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba1q','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba1q','A',this)">A</button>
@@ -1716,6 +1722,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-cbb-under" onclick="toggleDirFilter('cbb','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-cbb-goblin" onclick="togglePickFilter('cbb','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-cbb-standard" onclick="togglePickFilter('cbb','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-cbb-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('cbb','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-cbb-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('cbb','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('cbb','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('cbb','A',this)">A</button>
@@ -1753,6 +1761,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-cfb-under" onclick="toggleDirFilter('cfb','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-cfb-goblin" onclick="togglePickFilter('cfb','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-cfb-standard" onclick="togglePickFilter('cfb','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-cfb-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('cfb','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-cfb-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('cfb','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('cfb','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('cfb','A',this)">A</button>
@@ -1790,6 +1800,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nhl-under" onclick="toggleDirFilter('nhl','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nhl-goblin" onclick="togglePickFilter('nhl','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nhl-standard" onclick="togglePickFilter('nhl','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-nhl-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('nhl','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-nhl-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('nhl','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nhl','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nhl','A',this)">A</button>
@@ -1827,6 +1839,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-soccer-under" onclick="toggleDirFilter('soccer','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-soccer-goblin" onclick="togglePickFilter('soccer','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-soccer-standard" onclick="togglePickFilter('soccer','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-soccer-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('soccer','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-soccer-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('soccer','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('soccer','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('soccer','A',this)">A</button>
@@ -1864,6 +1878,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-mlb-under" onclick="toggleDirFilter('mlb','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-mlb-goblin" onclick="togglePickFilter('mlb','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-mlb-standard" onclick="togglePickFilter('mlb','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-mlb-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('mlb','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-mlb-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('mlb','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('mlb','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('mlb','A',this)">A</button>
@@ -1901,6 +1917,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nfl-under" onclick="toggleDirFilter('nfl','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nfl-goblin" onclick="togglePickFilter('nfl','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nfl-standard" onclick="togglePickFilter('nfl','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-nfl-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('nfl','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-nfl-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('nfl','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nfl','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nfl','A',this)">A</button>
@@ -1938,6 +1956,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-tennis-under" onclick="toggleDirFilter('tennis','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-tennis-goblin" onclick="togglePickFilter('tennis','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-tennis-standard" onclick="togglePickFilter('tennis','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-tennis-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('tennis','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-tennis-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('tennis','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('tennis','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('tennis','A',this)">A</button>
@@ -1975,6 +1995,8 @@ body::before{
         <button class="slate-filter-btn" id="sfb-wnba-under" onclick="toggleDirFilter('wnba','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-wnba-goblin" onclick="togglePickFilter('wnba','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-wnba-standard" onclick="togglePickFilter('wnba','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-wnba-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('wnba','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-wnba-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('wnba','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('wnba','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('wnba','A',this)">A</button>
@@ -2008,11 +2030,13 @@ body::before{
     <!-- COMBINED SLATE PANEL -->
     <div class="slate-expand" id="sp-combined">
       <div class="slate-toolbar">
-status-row
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('combined',this.value)" id="sf-combined"/>
         <button class="slate-filter-btn" id="sfb-combined-over"     onclick="toggleDirFilter('combined','OVER',this)">▲ OVER</button>
         <button class="slate-filter-btn" id="sfb-combined-under"    onclick="toggleDirFilter('combined','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-combined-goblin"   onclick="togglePickFilter('combined','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-combined-standard" onclick="togglePickFilter('combined','Standard',this)">Standard</button>
+        <button class="slate-filter-btn" id="sfb-combined-pp" type="button" title="PrizePicks lines only" onclick="togglePlatformFilter('combined','prizepicks',this)">PrizePicks</button>
+        <button class="slate-filter-btn" id="sfb-combined-ud" type="button" title="Underdog-only picks or props with a matched Underdog line" onclick="togglePlatformFilter('combined','underdog',this)">Underdog</button>
         <span class="slate-tier-group" role="group" aria-label="Tier filter">
           <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('combined','',this)">All</button>
           <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('combined','A',this)">A</button>
@@ -2956,6 +2980,7 @@ async function loadSlateData() {
         ALL_SLATE = (d.picks || []).map(p => ({
           sport: p.sport, initials: p.initials || (p.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase(), player: p.player,
           prop: p.prop, line: p.line, pick: p.pick,
+          pick_platform: p.pick_platform || 'prizepicks',
           standard_line: p.standard_line,
           book_line: p.book_line,
           prop_line: p.prop_line,
@@ -3762,9 +3787,9 @@ const L5_FILTER_MIN_HITS = 4;
 
 const SPORTS = ['nba','nba1h','nba1q','cbb','cfb','nhl','soccer','mlb','nfl','tennis','wnba'];
 SPORTS.forEach(s => {
-  SLATE_STATE[s] = { sortKey: 'abs_edge', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
+  SLATE_STATE[s] = { sortKey: 'abs_edge', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null, platform: null };
 });
-SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
+SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null, platform: null };
 
 function _l5HitCount(val) {
   if (val == null) return null;
@@ -3803,6 +3828,39 @@ function _slateAbsEdge(row) {
   return null;
 }
 
+function _rowPickPlatformNorm(row) {
+  const raw = row && (row.pick_platform != null ? row.pick_platform : row.PickPlatform);
+  let s = String(raw == null || raw === '' ? 'prizepicks' : raw).trim().toLowerCase().replace(/\s+/g, '');
+  if (s === 'pp') s = 'prizepicks';
+  if (s === 'ud') s = 'underdog';
+  if (s === 'dk') s = 'draftkings';
+  return s;
+}
+
+function _slateLineNum(v) {
+  if (v == null || v === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+/** True when the row carries an Underdog book line (matched or UD-only pick). */
+function _rowHasUnderdogLine(row) {
+  if (!row || typeof row !== 'object') return false;
+  return _slateLineNum(row.line_underdog ?? row['Line (UD)']) != null;
+}
+
+/** PrizePicks = default PP rows; Underdog = UD-only rows OR any row with line_underdog set. */
+function _rowMatchesPlatformFilter(row, platformKey) {
+  const plat = _rowPickPlatformNorm(row);
+  if (platformKey === 'prizepicks') {
+    return plat !== 'underdog' && plat !== 'draftkings';
+  }
+  if (platformKey === 'underdog') {
+    return plat === 'underdog' || _rowHasUnderdogLine(row);
+  }
+  return plat === platformKey;
+}
+
 function injectSlateL5Buttons() {
   document.querySelectorAll('.slate-toolbar').forEach((bar) => {
     const input = bar.querySelector('.slate-filter-input[id^="sf-"]');
@@ -3832,6 +3890,47 @@ function injectSlateL5Buttons() {
     } else {
       bar.appendChild(overBtn);
       bar.appendChild(underBtn);
+    }
+  });
+}
+
+function injectSlatePlatformButtons() {
+  document.querySelectorAll('.slate-toolbar').forEach((bar) => {
+    const input = bar.querySelector('.slate-filter-input[id^="sf-"]');
+    if (!input) return;
+    const sport = String(input.id || '').replace(/^sf-/, '');
+    if (!sport) return;
+    if (bar.querySelector(`#sfb-${sport}-pp`)) return;
+
+    const stdBtn = bar.querySelector(`#sfb-${sport}-standard`);
+    const pp = document.createElement('button');
+    pp.className = 'slate-filter-btn';
+    pp.id = `sfb-${sport}-pp`;
+    pp.type = 'button';
+    pp.textContent = 'PrizePicks';
+    pp.title = 'PrizePicks lines only';
+    pp.onclick = () => togglePlatformFilter(sport, 'prizepicks', pp);
+
+    const ud = document.createElement('button');
+    ud.className = 'slate-filter-btn';
+    ud.id = `sfb-${sport}-ud`;
+    ud.type = 'button';
+    ud.textContent = 'Underdog';
+    ud.title = 'Underdog lines only';
+    ud.onclick = () => togglePlatformFilter(sport, 'underdog', ud);
+
+    if (stdBtn && stdBtn.parentNode === bar) {
+      stdBtn.insertAdjacentElement('afterend', pp);
+      pp.insertAdjacentElement('afterend', ud);
+    } else {
+      const tierGroup = bar.querySelector('.slate-tier-group');
+      if (tierGroup && tierGroup.parentNode === bar) {
+        bar.insertBefore(pp, tierGroup);
+        bar.insertBefore(ud, tierGroup);
+      } else {
+        bar.appendChild(pp);
+        bar.appendChild(ud);
+      }
     }
   });
 }
@@ -3930,6 +4029,7 @@ function _fallbackSlateRowsFromTickets(sport) {
       opp:       p.opp    || '',
       prop:      p.prop   || '',
       pick_type: p.pick   || '',
+      pick_platform: p.pick_platform || 'prizepicks',
       line:      p.line,
       dir:       p.dir    || '',
       edge:      p.edge,
@@ -3978,6 +4078,7 @@ function syncCardsFromCombinedRows(rows) {
       prop: _v(r, ["prop", "Prop"]),
       line: lineNum,
       pick: _v(r, ["pick_type", "pick", "Pick Type", "Pick"]),
+      pick_platform: _v(r, ["pick_platform", "Platform"]) || 'prizepicks',
       dir: _v(r, ["dir", "direction", "Dir", "Direction"]),
       hit: _v(r, ["hit", "hit_rate", "Hit", "Hit Rate"]),
       edge: Number(_v(r, ["edge", "Edge"])),
@@ -4027,6 +4128,7 @@ function syncCardsFromCombinedSheet(columns, rows) {
     rank_tier: ci("Rank Tier") >= 0 ? ci("Rank Tier") : ci("Tier"),
     actual_series: ci("Actual Series"),
     line_series: ci("Line Series"),
+    pick_platform: ci("Platform") >= 0 ? ci("Platform") : ci("pick_platform"),
   };
   const get = (row, i) => (i >= 0 ? row[i] : null);
   const mapped = rows.map((r) => {
@@ -4063,6 +4165,7 @@ function syncCardsFromCombinedSheet(columns, rows) {
       season_avg: get(r, idx.season_avg),
       tier: get(r, idx.tier),
       rank_tier: get(r, idx.rank_tier),
+      pick_platform: get(r, idx.pick_platform) || 'prizepicks',
       actual_series,
       line_series,
     };
@@ -4149,6 +4252,7 @@ function renderSlateTable(sport) {
     }
     if (state.dir  && r.dir       !== state.dir)  return false;
     if (state.pick && r.pick_type !== state.pick) return false;
+    if (state.platform && !_rowMatchesPlatformFilter(r, state.platform)) return false;
     if (state.tier) {
       const tv = String(r.tier == null ? '' : r.tier).trim().toUpperCase();
       if (tv !== String(state.tier).toUpperCase()) return false;
@@ -4272,6 +4376,21 @@ function toggleDirFilter(sport, dir, btn) {
     s.dir = dir;
     document.getElementById(`sfb-${sport}-over`)?.classList.remove('on');
     document.getElementById(`sfb-${sport}-under`)?.classList.remove('on');
+    btn.classList.add('on');
+  }
+  scheduleRenderSlateTable(sport);
+}
+
+function togglePlatformFilter(sport, platformKey, btn) {
+  const s = SLATE_STATE[sport];
+  if (!s) return;
+  if (s.platform === platformKey) {
+    s.platform = null;
+    btn.classList.remove('on');
+  } else {
+    s.platform = platformKey;
+    document.getElementById(`sfb-${sport}-pp`)?.classList.remove('on');
+    document.getElementById(`sfb-${sport}-ud`)?.classList.remove('on');
     btn.classList.add('on');
   }
   scheduleRenderSlateTable(sport);
@@ -4414,6 +4533,8 @@ function renderSlateTableDynamic(sport) {
   const l5OverIdx = ci('L5 Over') >= 0 ? ci('L5 Over') : (ci('L5 O') >= 0 ? ci('L5 O') : -1);
   const l5UnderIdx = ci('L5 Under') >= 0 ? ci('L5 Under') : (ci('L5 U') >= 0 ? ci('L5 U') : -1);
   const tierIdx   = ci('Tier') >= 0 ? ci('Tier') : -1;
+  const platformIdx = ci('Platform') >= 0 ? ci('Platform') : ci('pick_platform');
+  const udLineIdx = ci('Line (UD)') >= 0 ? ci('Line (UD)') : ci('line_underdog');
 
   // Filter
   let filtered = allRows.filter(row => {
@@ -4430,6 +4551,13 @@ function renderSlateTableDynamic(sport) {
     }
     if (state.l5 === 'OVER' && l5OverIdx >= 0 && (_l5HitCount(row[l5OverIdx]) ?? -1) < L5_FILTER_MIN_HITS) return false;
     if (state.l5 === 'UNDER' && l5UnderIdx >= 0 && (_l5HitCount(row[l5UnderIdx]) ?? -1) < L5_FILTER_MIN_HITS) return false;
+    if (state.platform) {
+      const faux = {
+        pick_platform: platformIdx >= 0 ? row[platformIdx] : 'prizepicks',
+        line_underdog: udLineIdx >= 0 ? row[udLineIdx] : null,
+      };
+      if (!_rowMatchesPlatformFilter(faux, state.platform)) return false;
+    }
     return true;
   });
 
@@ -4519,6 +4647,7 @@ function sortSlateDynamic(sport, key) {
 // Keep edge/streak sections populated and warm slate panel with NBA first.
 (function bootHomeSlateUi() {
   try {
+    injectSlatePlatformButtons();
     injectSlateL5Buttons();
     loadSlateData();
     fetchSlateSport('nba');

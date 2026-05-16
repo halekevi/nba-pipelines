@@ -222,7 +222,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-slate-api")[:12] or "2026-05-15-slate-api"
+_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-16-pp-ud-btns")[:12] or "2026-05-16-pp-ud-btns"
 
 
 def _deploy_git_sha_short() -> str:
@@ -952,6 +952,11 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "image_url",
         "game_time",
         "sport",
+        "pick_platform",
+        "line_underdog",
+        "line_draftkings",
+        "cross_edge_vs_pp",
+        "best_cross_book",
     }
 )
 
@@ -1057,6 +1062,8 @@ def _slim_slate_sport_cell(key: str, v: Any) -> Any:
         return None
     if isinstance(v, str):
         s = v.strip()
+        if key == "pick_platform":
+            return s.lower().replace(" ", "") if s else None
         return s if s else None
     if isinstance(v, bool):
         return v
