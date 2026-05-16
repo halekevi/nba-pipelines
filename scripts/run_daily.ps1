@@ -10,6 +10,7 @@
          → (F) optional night poll of historical actuals.
          Tennis: -TennisDate defaults to tomorrow (match-day for step8); forwarded to run_pipeline.ps1 with -Date (pipeline folder = today).
          Set env PROPORACLE_PAYOUT_EXPORT_URL (e.g. https://<app>.up.railway.app/api/payout/export-log-hand) to merge Railway volume logs into data\payout_samples\payout_log_hand.csv after STEP E.
+         Combined slate (STEP D via run_pipeline.ps1) fetches Underdog + DraftKings by default; set PROPORACLE_SKIP_ALT_BOOKS=1 or pass -SkipAltBooks to run_pipeline to disable.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
          Use -PollHistoricalActuals to re-run fetch_historical_actuals.py every 90 min (4 passes) after 21:00 ET (see -PollSkip9pmWait).
          -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.

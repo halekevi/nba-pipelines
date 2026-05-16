@@ -2417,6 +2417,13 @@ function coercePropLine(p) {
   return NaN;
 }
 
+/** Book line for synthetic series / getPD: tickets often put the number in standard_line only. */
+function bookLineNumForPick(p) {
+  const c = coercePropLine(p);
+  if (Number.isFinite(c) && c >= 0) return c;
+  return 0;
+}
+
 /**
  * Some feeds mislabel hit/miss (0/1) columns as actual_series. Skip when scale is clearly stat-total.
  */
@@ -2431,6 +2438,16 @@ function storedSeriesLooksLikeHitFlags(storedArr, book) {
   if (Number.isFinite(b) && b >= 2) return mx < b * 0.25;
   // No reliable book line: still reject obvious 0/1-ish "actuals" from mis-labeled Excel columns.
   return true;
+}
+
+/**
+ * Per-game columns (extract / g1–g5): reject 0/1-ish junk vs real book line (same as actual_series).
+ * Use full coercePropLine(pick) so line/standard_line/book_line all count.
+ */
+function perGameSeriesLooksLikeNoise(series, _book, pick) {
+  const b = coercePropLine(pick);
+  if (!Number.isFinite(b) || b < 2) return false;
+  return storedSeriesLooksLikeHitFlags(series, b);
 }
 
 function historySeriesForPick(p, n) {
@@ -2460,10 +2477,10 @@ function historySeriesForPick(p, n) {
   if (canUseStored) {
     actual = takeFirstNGames(storedN, n);
     source = "stored";
-  } else if (extractedN.length >= minNeed) {
+  } else if (extractedN.length >= minNeed && !perGameSeriesLooksLikeNoise(extractedN, book, p)) {
     actual = takeFirstNGames(extractedN, n);
     source = "extract";
-  } else if (fromGn.length >= minNeed) {
+  } else if (fromGn.length >= minNeed && !perGameSeriesLooksLikeNoise(fromGn, book, p)) {
     actual = takeFirstNGames(fromGn, n);
     source = "gcols";
   } else {
@@ -2540,6 +2557,27 @@ function topEdgeL5HitPct(p, dirOverride = "") {
   return pctFromValue(p?.hit);
 }
 
+/** If pipeline L5 is 80%+ but chart/game-log data are flat near zero vs line, omit the card. */
+function passesTopEdgeEmpiricalSanity(p, dir) {
+  const d = String(dir || "OVER").trim().toUpperCase();
+  const gate = topEdgeL5HitPct({ ...p, dir: d }, d);
+  if (!Number.isFinite(gate) || gate < 80) return true;
+  const lineVal = coercePropLine(p);
+  if (!Number.isFinite(lineVal) || lineVal < 2) return true;
+  const emp = empiricalHitPctForPick({ ...p, dir: d }, 5);
+  if (Number.isFinite(emp) && emp <= 0 && gate >= 80) return false;
+  const plot = expandHistForEdgeChart(p, 5);
+  if (plot && Array.isArray(plot.actual) && plot.actual.length >= 3 && gate >= 80) {
+    const nums = plot.actual.map((x) => Number(x)).filter((x) => Number.isFinite(x));
+    if (nums.length >= 3) {
+      const avg = nums.reduce((a, x) => a + x, 0) / nums.length;
+      const mx = Math.max(...nums);
+      if (avg < lineVal * 0.15 && mx < lineVal * 0.35) return false;
+    }
+  }
+  return true;
+}
+
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
@@ -2587,6 +2625,45 @@ function isGoblinPick(p) {
   return t === "goblin";
 }
 
+/**
+ * Top Edges cards/charts: omit Fantasy Score (still in combined slate / tickets for other uses).
+ * Checks several prop fields — feeds differ (display name, PP code, extra spaces).
+ */
+function isFantasyScoreEdgePick(p) {
+  if (!p) return false;
+  const fields = [
+    p.prop,
+    p.prop_type,
+    p.market,
+    p.stat,
+    p.Stat,
+    p.pick_stat,
+    p.selection,
+  ].filter((x) => x != null && String(x).trim() !== "");
+  for (const f of fields) {
+    const raw = String(f)
+      .replace(/\u00a0/g, " ")
+      .trim()
+      .toLowerCase();
+    const compact = raw.replace(/\s+/g, "");
+    if (
+      raw.includes("fantasy score") ||
+      raw.includes("fantasy_score") ||
+      raw.includes("fantasy pts") ||
+      raw.includes("fantasy points") ||
+      compact === "fantasyscore" ||
+      compact === "fantasy" ||
+      compact === "fs" ||
+      compact === "fpts" ||
+      compact.includes("fantasypts") ||
+      (compact.includes("fantasy") && compact.includes("score"))
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /** Deterministic [0,1) — stable per player index (not Math.random). */
 function streakDet01(seed, salt) {
   const x = Math.sin(seed * 12.9898 + salt * 78.233) * 43758.5453;
@@ -2599,8 +2676,7 @@ function streakQuantize(x) {
 
 /** OVER streak slice: re-center synthetic series on pipeline L5 avg so Y scale matches the line. */
 function getOverStreakSlice(p, n) {
-  const line = Number(p.line);
-  const L = Number.isFinite(line) ? line : 0;
+  const L = bookLineNumForPick(p);
   const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, L);
   return getPD(p.player, L, p.prop, p.sport).slice(-n).map((b) => streakQuantize(avg + (b - L) * 0.62));
 }
@@ -2620,8 +2696,7 @@ function streakSparkData(p, n, isOver, hits) {
  * preserves game-to-game variance, and places the last `hits` games below the line (misses above).
  */
 function getUnderStreakSeries(p, n, hits) {
-  const line = Number(p.line);
-  const L = Number.isFinite(line) ? line : 0;
+  const L = bookLineNumForPick(p);
   const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, L);
 
   let seed = 0;
@@ -2703,10 +2778,10 @@ function expandHistForEdgeChart(p, n) {
 function seedPlayerDataFromCardPicks(picks) {
   for (const p of picks || []) {
     if (!p || !p.player) continue;
-    const lineNum = Number(p.line);
-    const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
+    const lineNum = bookLineNumForPick(p);
+    const spread = lineNum * 0.35;
     const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
-    const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
+    const pk = playerSeriesKey(p.player, lineNum, p.prop, p.sport);
     if (PLAYER_DATA[pk]) continue;
     let s = 0;
     for (const c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
@@ -2721,10 +2796,10 @@ function mergePlayerDataFromTicketLegs(picks) {
   for (const p of picks || []) {
     if (!p || !p.player) continue;
     const prop = p.prop || p.prop_type || "";
-    const pk = playerSeriesKey(p.player, p.line, prop, p.sport);
+    const lineNum = bookLineNumForPick(p);
+    const pk = playerSeriesKey(p.player, lineNum, prop, p.sport);
     if (PLAYER_DATA[pk]) continue;
-    const lineNum = Number(p.line);
-    const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
+    const spread = lineNum * 0.35;
     const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
     let s = 0;
     for (const c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
@@ -2881,6 +2956,9 @@ async function loadSlateData() {
         ALL_SLATE = (d.picks || []).map(p => ({
           sport: p.sport, initials: p.initials || (p.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase(), player: p.player,
           prop: p.prop, line: p.line, pick: p.pick,
+          standard_line: p.standard_line,
+          book_line: p.book_line,
+          prop_line: p.prop_line,
           dir: p.dir, hit: p.hit, edge: p.edge,
           projection: p.projection,
           tier: p.tier,
@@ -2895,10 +2973,10 @@ async function loadSlateData() {
         }));
         for (const p of (d.picks || [])) {
           if (p.player) {
-            const lineNum = Number(p.line);
+            const lineNum = bookLineNumForPick(p);
             const avg = plausibleStatBaseline(p.l5_avg, p.season_avg, lineNum);
-            const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
-            const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
+            const spread = lineNum * 0.35;
+            const pk = playerSeriesKey(p.player, lineNum, p.prop, p.sport);
             if (PLAYER_DATA[pk]) continue;
             let s = 0;
             for (let c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
@@ -2963,6 +3041,12 @@ async function loadSlateData() {
           }
           if (_m.standard_line != null && _m.standard_line !== "") {
             row.standard_line = _m.standard_line;
+          }
+          if (_m.book_line != null && _m.book_line !== "") {
+            row.book_line = _m.book_line;
+          }
+          if (_m.prop_line != null && _m.prop_line !== "") {
+            row.prop_line = _m.prop_line;
           }
           const apiProj = Number(_m.projection);
           if (Number.isFinite(apiProj) && apiProj > 0) {
@@ -3280,6 +3364,10 @@ function buildEdgeCard(p, idx) {
   const hitDisplay = topEdgeL5HitPct(p);
   const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
+  const lineDisp = (() => {
+    const v = coercePropLine(p);
+    return Number.isFinite(v) ? v : p.line ?? "—";
+  })();
   const div=document.createElement("div");
   div.className=`edge-card insight-card ${dc}`;
   const hitBar=Math.min(100,hitPct);
@@ -3290,12 +3378,12 @@ function buildEdgeCard(p, idx) {
         <div class="edge-avatar ${dc}">${p.initials || (p.player||"").split(" ").filter(w=>w).map(w=>w[0]).join("").slice(0,2).toUpperCase()}</div>
         <div class="edge-val">
           <div class="edge-num edge-badge ${dc}">${edgeDisp}</div>
-          <div class="edge-mini">${hitPct}% · L${p.line}</div>
+          <div class="edge-mini">${hitPct}% · L${lineDisp}</div>
         </div>
       </div>
       <div class="edge-row edge-row-main">
         <div class="edge-name">${p.player}</div>
-        <div class="edge-prop">${p.dir} ${p.line} · ${p.prop}</div>
+        <div class="edge-prop">${p.dir} ${lineDisp} · ${p.prop}</div>
       </div>
       <div class="edge-row edge-row-tags">
         <div class="edge-tags">
@@ -3434,8 +3522,10 @@ function underEdgeDisplayPick(basePick) {
 function collectUnderEdgeRows() {
   const rows = [];
   for (let i = 0; i < ALL_SLATE.length; i++) {
+    if (isFantasyScoreEdgePick(ALL_SLATE[i])) continue;
     const disp = underEdgeDisplayPick(ALL_SLATE[i]);
     if (!disp) continue;
+    if (isFantasyScoreEdgePick(disp)) continue;
     rows.push({ baseIdx: i, disp });
   }
   return rows;
@@ -3486,7 +3576,7 @@ function renderEdges() {
   const overRows = [];
   for (const p of ALL_SLATE) {
     const dir = String(p.dir || "").trim().toUpperCase();
-    if (dir === "OVER") overRows.push(p);
+    if (dir === "OVER" && !isFantasyScoreEdgePick(p)) overRows.push(p);
   }
   // Top Edges quality gate: keep only rows with strong last-5 directionality
   // (>=4/5, i.e. >=80%) so cards reflect high-confidence short-window form.
@@ -3494,7 +3584,9 @@ function renderEdges() {
     const pct = topEdgeL5HitPct(p, dir);
     return Number.isFinite(pct) && pct >= 80;
   };
-  const overPrimary = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
+  const overPrimary = pickPrimaryLineRows(overRows)
+    .filter((p) => passesEdgeL5Gate(p, "OVER"))
+    .filter((p) => passesTopEdgeEmpiricalSanity(p, "OVER"));
   const stdO = overPrimary.filter((p) => !isGoblinPick(p));
   const gobO = overPrimary.filter((p) => isGoblinPick(p));
   const byEdgeDesc = (a, b) => num(b.edge) - num(a.edge);
@@ -3516,6 +3608,7 @@ function renderEdges() {
   }
   const underRows = pickPrimaryLineRows(underSourceRows.map((x) => x.disp))
     .filter((disp) => passesEdgeL5Gate(disp, "UNDER"))
+    .filter((disp) => passesTopEdgeEmpiricalSanity(disp, "UNDER"))
     .map((disp) => {
       const k = [
         String(disp.sport || "").trim().toUpperCase(),
@@ -3562,9 +3655,11 @@ function streakCard(p, n) {
   const hits = (p.h !== undefined && p.h !== null) ? Math.min(n, Math.max(0, Math.round(p.h))) : n;
   const pct=Math.round((hits/n)*100);
   const data = streakSparkData(p, n, isOver, hits);
-  const spark=makeSparkSVG(data,p.line,isOver,150,48,projectedStatForPick(p));
+  const bookSpark = coercePropLine(p);
+  const spark=makeSparkSVG(data, Number.isFinite(bookSpark) ? bookSpark : Number(p.line), isOver,150,48,projectedStatForPick(p));
   const sc=`sp-${safeSportKey(p)}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
+  const lineDisp = Number.isFinite(bookSpark) ? bookSpark : p.line ?? "—";
   const hc=isOver?"var(--green)":"var(--amber)";
   const bc=isOver?"rgba(125,255,203,.3)":"rgba(255,192,107,.3)";
   const pctCol=pct===100?"var(--green)":pct>=80?"var(--amber)":"var(--red)";
@@ -3576,7 +3671,7 @@ function streakCard(p, n) {
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px;">
       <div style="min-width:0;flex:1;">
         <div style="font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">${p.player}</div>
-        <div style="font-size:10px;color:var(--muted);">${p.dir} ${p.line} · ${p.prop}</div>
+        <div style="font-size:10px;color:var(--muted);">${p.dir} ${lineDisp} · ${p.prop}</div>
         <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
           <span class="edge-sport ${sc}">${sportLabel}</span>
           <span class="edge-pick ${pc}">${p.pick}</span>
@@ -3615,6 +3710,7 @@ function renderStreaks() {
     const out = [];
     for (const p of ALL_SLATE) {
       if (isGoblinPick(p)) continue;
+      if (isFantasyScoreEdgePick(p)) continue;
       const h = resolvedUnderHits(p, n);
       if (h === null || h < 1) continue;
       if (minHits != null && h < minHits) continue;
@@ -3625,6 +3721,7 @@ function renderStreaks() {
   }
 
   const l5all = [...ALL_SLATE]
+    .filter((p) => !isFantasyScoreEdgePick(p))
     .map(p => ({...p, h: streakHits(realHits(p, 5), 5)}))
     .filter(p => p.h !== null && p.h >= 4)
     .sort((a, b) => b.h - a.h);
@@ -3633,6 +3730,7 @@ function renderStreaks() {
   const l5U = underStreakRows(5, 4);
 
   const l10all = [...ALL_SLATE]
+    .filter((p) => !isFantasyScoreEdgePick(p))
     .map(p => ({...p, h: streakHits(realHits(p, 10), 10)}))
     .filter(p => p.h !== null && p.h >= 8)
     .sort((a, b) => b.h - a.h);

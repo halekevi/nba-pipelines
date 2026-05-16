@@ -26,12 +26,11 @@
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
 #    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis steps 2-8 + Combined (no step1 fetch)
-#    .\run_pipeline.ps1 -TennisOnly -TennisDate 2026-05-14   # Override slate date (default: tomorrow)
+#    .\run_pipeline.ps1 -TennisOnly -TennisDate 2026-05-14   # Override slate date (default: day after -Date)
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
-#    .\run_pipeline.ps1 -UseAltBooks           # Optional: include Underdog + DraftKings cross-book inputs
-#    .\run_pipeline.ps1 -SkipAltBooks          # Legacy flag (no-op unless -UseAltBooks is set)
+#    .\run_pipeline.ps1 -SkipAltBooks          # Skip Underdog + DraftKings fetch/merge (PrizePicks-only)
 #
 #  Combined always auto-includes every sport whose step8 output exists on disk.
 #  No -Include flags needed -- just run any sport, combined picks it up.
@@ -44,6 +43,7 @@
 #   Full daily run  : scripts\run_daily.ps1 [-Date YYYY-MM-DD]
 #     STEP C calls  : run_pipeline.ps1 -Date $Today -ForceAll -SkipCombined -SkipPush
 #     STEP D calls  : run_pipeline.ps1 -Date $Today -CombinedOnly -DQWarnOnly
+#   Underdog + DraftKings lines: fetched automatically before combined unless -SkipAltBooks or env PROPORACLE_SKIP_ALT_BOOKS=1
 #   Manual rebuild  : .\run_pipeline.ps1 -Date YYYY-MM-DD [-CombinedOnly]
 #
 # ============================================================
@@ -78,6 +78,7 @@ param(
     [switch]$SkipCombined,
     # Used by scripts/run_daily.ps1 so git push is only handled once there.
     [switch]$SkipPush,
+    # Deprecated: alt-books run by default. Kept so old scripts that pass -UseAltBooks still work.
     [switch]$UseAltBooks,
     [switch]$SkipAltBooks,
     [int]$CacheAgeDays = 7,
@@ -106,6 +107,15 @@ if ($WNBACdp) {
     Write-Host "  [WNBA] CDP for step1 fetch: $WNBACdp" -ForegroundColor DarkGray
 }
 
+function Test-PropOracleAltBooksEnabled {
+    if ($SkipAltBooks) { return $false }
+    $envSkip = [string]$env:PROPORACLE_SKIP_ALT_BOOKS
+    if ($envSkip -eq "1") { return $false }
+    $t = $envSkip.Trim().ToLowerInvariant()
+    if ($t -eq "true" -or $t -eq "yes") { return $false }
+    return $true
+}
+
 # -- Date ---------------------------------------------------------------------
 if (-not $Date) {
     $Date = Get-Date -Format "yyyy-MM-dd"
@@ -119,11 +129,15 @@ if (-not $Date) {
     }
 }
 
-# Tennis targets tomorrow's slate by default (early ET matches before a typical daily run).
-# Override with -TennisDate. Step 8 / dated mirrors use $TennisDate; output folder stays outputs\$Date.
+# Tennis targets the next calendar day vs pipeline -Date (early ET / next-day slate). Override with -TennisDate.
+# Step 8 / dated mirrors use $TennisDate; output folder stays outputs\$Date.
 if (-not $TennisDate) {
-    $TennisDate = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
-    Write-Host "  [Tennis] No TennisDate specified, using tomorrow: $TennisDate" -ForegroundColor DarkGray
+    try {
+        $TennisDate = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).AddDays(1).ToString("yyyy-MM-dd")
+    } catch {
+        $TennisDate = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
+    }
+    Write-Host "  [Tennis] No -TennisDate: using day after pipeline -Date ($Date -> $TennisDate)" -ForegroundColor DarkGray
 } else {
     Write-Host "  [Tennis] Using specified TennisDate: $TennisDate" -ForegroundColor Cyan
 }
@@ -632,12 +646,12 @@ function Invoke-AltBookPy {
 }
 
 function Invoke-AltBookFetches {
-    if (-not $UseAltBooks) {
-        Write-Host "  [alt-books] Skipped (PrizePicks-only mode; pass -UseAltBooks to enable)" -ForegroundColor DarkGray
-        return
-    }
-    if ($SkipAltBooks) {
-        Write-Host "  [alt-books] Skipped (-SkipAltBooks with -UseAltBooks)" -ForegroundColor DarkGray
+    if (-not (Test-PropOracleAltBooksEnabled)) {
+        if ($SkipAltBooks) {
+            Write-Host "  [alt-books] Skipped (-SkipAltBooks)" -ForegroundColor DarkGray
+        } else {
+            Write-Host "  [alt-books] Skipped (env PROPORACLE_SKIP_ALT_BOOKS)" -ForegroundColor DarkGray
+        }
         return
     }
     $UdScript    = Join-Path $Root "scripts\fetch_underdog_pickem.py"
@@ -705,7 +719,7 @@ function Run-Combined {
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
     $CombinedArgs = ""
 
-    if ($UseAltBooks -and -not $SkipAltBooks) {
+    if (Test-PropOracleAltBooksEnabled) {
         $UdCsv = Join-Path $OutDir "underdog_props.csv"
         $DkAll = Join-Path $OutDir "draftkings_props_all.csv"
         $DkNba = Join-Path $OutDir "draftkings_props_nba.csv"
@@ -1020,6 +1034,8 @@ if ($SoccerOnly) {
 if ($TennisOnly) {
     Write-Host "[ TENNIS PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    Write-Host "  [Tennis] Slate day (step8 filter): $TennisDate ET  |  Bundle folder: outputs\$Date" -ForegroundColor DarkGray
+    Write-Host "  [Tennis] Step1 loads the full PrizePicks tennis board (often spans several days). Step8 --date keeps only rows for $TennisDate." -ForegroundColor DarkGray
     $ok = $true
     if (-not $SkipFetch) {
         if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output `"$TennisRunOutDir\step1_tennis_props.csv`"" }
@@ -1508,6 +1524,7 @@ $TennisJob = Start-Job -ScriptBlock {
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    Write-Output "[TENNIS] Step8 filters to ET date $TennisDate; step1 loads full PrizePicks tennis board (may include several calendar days)"
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output `"$TennisRunOutDir\step1_tennis_props.csv`"" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }

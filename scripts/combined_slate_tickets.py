@@ -14,7 +14,9 @@ Cross-book lines (optional):
     outputs/<date>/underdog_props.csv   ← fetch_underdog_pickem.py --output ...
     outputs/<date>/draftkings_props_all.csv ← merge_draftkings_pickem_csvs.py (NBA+NHL+MLB+CBB), or
     outputs/<date>/draftkings_props_nba.csv ← fetch_draftkings_player_props.py --league nba -o ...
-  Join is on sport + team + normalized player + normalized prop label (best-effort; DK/UD naming differs).
+  Join is on sport + team + normalized player + normalized prop label, and the numeric line must match
+  PrizePicks ``line`` within ~0.05. Matched rows populate ``line_underdog`` / ``line_draftkings``; ladder rows
+  that do not match any PP line are appended as extra slate rows with ``pick_platform`` underdog/draftkings.
   After merge, each row gets cross-book comparison: best_cross_line / best_cross_book / cross_edge_vs_pp
   (OVER favors lowest line; UNDER favors highest; edge_vs_pp is points vs PrizePicks).
 
@@ -2057,10 +2059,21 @@ def _ud_join_sport(ud_sid: object) -> str:
     return m.get(u, u)
 
 
-def _load_underdog_alt_csv(path: str) -> pd.DataFrame:
+# Join UD/DK ladder rows to PrizePicks only when this numeric line matches PP ``line``.
+_ALT_LINE_MATCH_ATOL = 0.051
+
+
+def _sport_display_from_join_key(js: object) -> str:
+    j = str(js or "").strip().upper()
+    if j == "SOCCER":
+        return "Soccer"
+    return j
+
+
+def _load_underdog_alt_lines_detail(path: str) -> pd.DataFrame:
     df = pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
     if df.empty:
-        return pd.DataFrame(columns=["_js", "_jt", "_jp", "_jpr", "line_underdog"])
+        return pd.DataFrame()
     df["line"] = pd.to_numeric(df.get("line", np.nan), errors="coerce")
     df = df[df["line"].notna()].copy()
     df["_js"] = df["ud_sport_id"].map(_ud_join_sport)
@@ -2068,18 +2081,13 @@ def _load_underdog_alt_csv(path: str) -> pd.DataFrame:
     df["_jp"] = df["player"].map(_norm_player_join)
     df["_jpr"] = df["prop_type"].map(_norm_prop_label)
     df = df[(df["_jp"] != "") & (df["_jpr"] != "")].copy()
-    g = (
-        df.groupby(["_js", "_jt", "_jp", "_jpr"], as_index=False)["line"]
-        .mean()
-        .rename(columns={"line": "line_underdog"})
-    )
-    return g
+    return df
 
 
-def _load_draftkings_alt_csv(path: str) -> pd.DataFrame:
+def _load_draftkings_alt_lines_detail(path: str) -> pd.DataFrame:
     df = pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
     if df.empty:
-        return pd.DataFrame(columns=["_js", "_jt", "_jp", "_jpr", "line_draftkings"])
+        return pd.DataFrame()
     df["line"] = pd.to_numeric(df.get("line", np.nan), errors="coerce")
     df = df[df["line"].notna()].copy()
     if "board_sport" in df.columns:
@@ -2091,12 +2099,64 @@ def _load_draftkings_alt_csv(path: str) -> pd.DataFrame:
     df["_jt"] = df["team"].map(lambda x: str(x).strip().upper())
     df["_jp"] = df["player"].map(_norm_player_join)
     df = df[(df["_js"] != "") & (df["_jp"] != "") & (df["_jpr"] != "")].copy()
-    g = (
-        df.groupby(["_js", "_jt", "_jp", "_jpr"], as_index=False)["line"]
-        .median()
-        .rename(columns={"line": "line_draftkings"})
-    )
-    return g
+    return df
+
+
+def _empty_row_from_template(cols: pd.Index) -> dict:
+    return {c: np.nan for c in cols}
+
+
+def _append_alt_book_orphan_rows(
+    out: pd.DataFrame,
+    detail: pd.DataFrame,
+    *,
+    book: str,
+) -> pd.DataFrame:
+    """Append alt-book-only ladder rows that did not line-match any PrizePicks row."""
+    if detail is None or detail.empty or "_matched" not in detail.columns:
+        return out
+    miss = detail.loc[~detail["_matched"]].copy()
+    if miss.empty:
+        return out
+    miss = miss.drop_duplicates(subset=["_js", "_jt", "_jp", "_jpr", "line"], keep="first")
+    before = len(out)
+    new_rows: list[dict] = []
+    cols = out.columns
+    for _, r in miss.iterrows():
+        base = _empty_row_from_template(cols)
+        js = str(r.get("_js") or "").strip().upper()
+        sport_disp = _sport_display_from_join_key(js)
+        ln = float(r["line"])
+        pt = str(r.get("pick_type") or "Standard").strip() or "Standard"
+        base.update(
+            {
+                "sport": sport_disp,
+                "tier": "",
+                "rank_score": np.nan,
+                "player": str(r.get("player") or ""),
+                "team": str(r.get("team") or ""),
+                "opp": str(r.get("opp_team") or ""),
+                "prop_type": str(r.get("prop_type") or ""),
+                "pick_type": pt,
+                "line": ln,
+                "direction": "OVER",
+                "edge": np.nan,
+                "projection": np.nan,
+                "hit_rate": np.nan,
+                "game_time": str(r.get("start_time") or ""),
+                "pick_platform": book,
+                "line_underdog": ln if book == "underdog" else np.nan,
+                "line_draftkings": ln if book == "draftkings" else np.nan,
+            }
+        )
+        new_rows.append(base)
+    if not new_rows:
+        return out
+    add = pd.DataFrame(new_rows)
+    add = add.reindex(columns=out.columns, fill_value=np.nan)
+    out = pd.concat([out, add], ignore_index=True)
+    print(f"  [alt-books] {book}: appended {len(out) - before} orphan line row(s) (no PP line match)")
+    return out
 
 
 def attach_alt_book_lines(
@@ -2105,7 +2165,11 @@ def attach_alt_book_lines(
     underdog_csv: str = "",
     draftkings_csv: str = "",
 ) -> pd.DataFrame:
-    """Left-merge Underdog / DraftKings numeric lines onto the combined slate (PrizePicks line stays in `line`)."""
+    """
+    When UD/DK numeric lines match a PrizePicks row (same player/prop/team ± line), fill
+    ``line_underdog`` / ``line_draftkings``. Unmatched alt ladder entries become extra combined rows
+    tagged with ``pick_platform`` = ``underdog`` / ``draftkings``.
+    """
     out = combined.copy()
     out["_js"] = out["sport"].map(_join_sport_key)
     out["_jt"] = [_norm_team_join(t, s) for t, s in zip(out["team"], out["sport"])]
@@ -2113,29 +2177,97 @@ def attach_alt_book_lines(
     out["_jpr"] = out["prop_type"].map(_norm_prop_label)
     join_on = ["_js", "_jt", "_jp", "_jpr"]
 
+    if "pick_platform" not in out.columns:
+        out["pick_platform"] = "prizepicks"
+    else:
+        out["pick_platform"] = (
+            out["pick_platform"].fillna("prizepicks").replace("", "prizepicks").astype(str).str.lower()
+        )
+        out.loc[out["pick_platform"].str.strip() == "", "pick_platform"] = "prizepicks"
+
+    out["line_underdog"] = np.nan
+    out["line_draftkings"] = np.nan
+
+    atol = _ALT_LINE_MATCH_ATOL
+
     u_path = (underdog_csv or "").strip()
     if u_path and os.path.isfile(u_path):
         try:
-            ud = _load_underdog_alt_csv(u_path)
-            if not ud.empty:
-                out = out.merge(ud, on=join_on, how="left")
-                n = int(out["line_underdog"].notna().sum())
-                print(f"  [alt-books] Underdog lines joined: {n} / {len(out)} rows ({u_path})")
+            ud_detail = _load_underdog_alt_lines_detail(u_path)
+            if not ud_detail.empty:
+                ud_detail = ud_detail.copy()
+                ud_detail["_matched"] = False
+                for i in out.index:
+                    if str(out.at[i, "pick_platform"] or "prizepicks").lower() != "prizepicks":
+                        continue
+                    pp_line = pd.to_numeric(out.at[i, "line"], errors="coerce")
+                    if pd.isna(pp_line):
+                        continue
+                    key = (
+                        str(out.at[i, "_js"]),
+                        str(out.at[i, "_jt"]),
+                        str(out.at[i, "_jp"]),
+                        str(out.at[i, "_jpr"]),
+                    )
+                    sub = ud_detail[
+                        (ud_detail["_js"].astype(str) == key[0])
+                        & (ud_detail["_jt"].astype(str) == key[1])
+                        & (ud_detail["_jp"].astype(str) == key[2])
+                        & (ud_detail["_jpr"].astype(str) == key[3])
+                        & np.isclose(ud_detail["line"].astype(float), float(pp_line), rtol=0.0, atol=atol)
+                    ]
+                    if sub.empty:
+                        continue
+                    j = (sub["line"].astype(float) - float(pp_line)).abs().idxmin()
+                    ud_ln = float(sub.loc[j, "line"])
+                    out.at[i, "line_underdog"] = ud_ln
+                    ud_detail.loc[j, "_matched"] = True
+                u_n = int(pd.to_numeric(out["line_underdog"], errors="coerce").notna().sum())
+                print(f"  [alt-books] Underdog lines joined (line-matched): {u_n} / {len(out)} rows ({u_path})")
+                out = _append_alt_book_orphan_rows(out, ud_detail, book="underdog")
         except Exception as e:
             print(f"  [alt-books] WARN Underdog merge skipped: {e}")
-    if "line_underdog" not in out.columns:
-        out["line_underdog"] = np.nan
 
     d_path = (draftkings_csv or "").strip()
     if d_path and os.path.isfile(d_path):
         try:
-            dk = _load_draftkings_alt_csv(d_path)
-            if not dk.empty:
-                out = out.merge(dk, on=join_on, how="left")
-                n = int(out["line_draftkings"].notna().sum())
-                print(f"  [alt-books] DraftKings lines joined: {n} / {len(out)} rows ({d_path})")
+            dk_detail = _load_draftkings_alt_lines_detail(d_path)
+            if not dk_detail.empty:
+                dk_detail = dk_detail.copy()
+                dk_detail["_matched"] = False
+                for i in out.index:
+                    if str(out.at[i, "pick_platform"] or "prizepicks").lower() != "prizepicks":
+                        continue
+                    pp_line = pd.to_numeric(out.at[i, "line"], errors="coerce")
+                    if pd.isna(pp_line):
+                        continue
+                    key = (
+                        str(out.at[i, "_js"]),
+                        str(out.at[i, "_jt"]),
+                        str(out.at[i, "_jp"]),
+                        str(out.at[i, "_jpr"]),
+                    )
+                    sub = dk_detail[
+                        (dk_detail["_js"].astype(str) == key[0])
+                        & (dk_detail["_jt"].astype(str) == key[1])
+                        & (dk_detail["_jp"].astype(str) == key[2])
+                        & (dk_detail["_jpr"].astype(str) == key[3])
+                        & np.isclose(dk_detail["line"].astype(float), float(pp_line), rtol=0.0, atol=atol)
+                    ]
+                    if sub.empty:
+                        continue
+                    j = (sub["line"].astype(float) - float(pp_line)).abs().idxmin()
+                    dk_ln = float(sub.loc[j, "line"])
+                    out.at[i, "line_draftkings"] = dk_ln
+                    dk_detail.loc[j, "_matched"] = True
+                d_n = int(pd.to_numeric(out["line_draftkings"], errors="coerce").notna().sum())
+                print(f"  [alt-books] DraftKings lines joined (line-matched): {d_n} / {len(out)} rows ({d_path})")
+                out = _append_alt_book_orphan_rows(out, dk_detail, book="draftkings")
         except Exception as e:
             print(f"  [alt-books] WARN DraftKings merge skipped: {e}")
+
+    if "line_underdog" not in out.columns:
+        out["line_underdog"] = np.nan
     if "line_draftkings" not in out.columns:
         out["line_draftkings"] = np.nan
 
@@ -2186,6 +2318,12 @@ def add_cross_platform_best_lines(df: pd.DataFrame) -> pd.DataFrame:
     order = ("PrizePicks", "Underdog", "DraftKings")
     short = {"PrizePicks": "PP", "Underdog": "UD", "DraftKings": "DK"}
 
+    pick_plat = (
+        out["pick_platform"].astype(str).str.lower().str.strip()
+        if "pick_platform" in out.columns
+        else pd.Series("prizepicks", index=out.index)
+    )
+
     n = len(out)
     best_line = np.full(n, np.nan, dtype=float)
     best_book = np.array([""] * n, dtype=object)
@@ -2193,11 +2331,26 @@ def add_cross_platform_best_lines(df: pd.DataFrame) -> pd.DataFrame:
     n_books = np.zeros(n, dtype=np.int16)
 
     for i in range(n):
+        plat = str(pick_plat.iloc[i] or "prizepicks").strip().lower()
         vals: dict[str, float] = {}
-        for j, name in enumerate(order):
-            v = mat.iat[i, j]
+        if plat == "prizepicks":
+            for j, name in enumerate(order):
+                v = mat.iat[i, j]
+                if pd.notna(v) and np.isfinite(float(v)):
+                    vals[name] = float(v)
+        elif plat == "underdog":
+            v = ud.iloc[i] if i < len(ud) else float("nan")
             if pd.notna(v) and np.isfinite(float(v)):
-                vals[name] = float(v)
+                vals["Underdog"] = float(v)
+        elif plat == "draftkings":
+            v = dk.iloc[i] if i < len(dk) else float("nan")
+            if pd.notna(v) and np.isfinite(float(v)):
+                vals["DraftKings"] = float(v)
+        else:
+            for j, name in enumerate(order):
+                v = mat.iat[i, j]
+                if pd.notna(v) and np.isfinite(float(v)):
+                    vals[name] = float(v)
         n_books[i] = len(vals)
         if not vals:
             continue
@@ -2271,16 +2424,20 @@ def propagate_alt_book_lines_to_sport_frame(
     sub["_jt"] = [_norm_team_join(t, s) for t, s in zip(sub["team"], sub["sport"])]
     sub["_jp"] = sub["player"].map(_norm_player_join)
     sub["_jpr"] = sub["prop_type"].map(_norm_prop_label)
+    sub["_jln"] = pd.to_numeric(sub["line"], errors="coerce").round(4)
     agg_map: dict = {"line_underdog": "first", "line_draftkings": "first"}
     for c in CROSS_LINE_COLS:
         if c in sub.columns:
             agg_map[c] = "first"
-    agg = sub.groupby(["_jt", "_jp", "_jpr"], as_index=False).agg(agg_map)
+    if "pick_platform" in sub.columns:
+        agg_map["pick_platform"] = "first"
+    agg = sub.groupby(["_jt", "_jp", "_jpr", "_jln"], as_index=False).agg(agg_map)
     out["_jt"] = [_norm_team_join(t, s) for t, s in zip(out["team"], out["sport"])]
     out["_jp"] = out["player"].map(_norm_player_join)
     out["_jpr"] = out["prop_type"].map(_norm_prop_label)
-    out = out.merge(agg, on=["_jt", "_jp", "_jpr"], how="left")
-    return out.drop(columns=["_jt", "_jp", "_jpr"])
+    out["_jln"] = pd.to_numeric(out["line"], errors="coerce").round(4)
+    out = out.merge(agg, on=["_jt", "_jp", "_jpr", "_jln"], how="left")
+    return out.drop(columns=["_jt", "_jp", "_jpr", "_jln"])
 
 
 def _prop_priority_bonus(v: object) -> float:
@@ -4324,6 +4481,7 @@ def ticket_groups_to_payload(
                     "delta_pct": round(float(_dpv), 4) if _dpv is not None else None,
                     "line_underdog": _safe_float(gv("line_underdog")),
                     "line_draftkings": _safe_float(gv("line_draftkings")),
+                    "pick_platform": str(gv("pick_platform") or "prizepicks"),
                     "best_cross_line": _safe_float(gv("best_cross_line")),
                     "best_cross_book": best_book_s,
                     "cross_edge_vs_pp": _safe_float(gv("cross_edge_vs_pp")),
@@ -4460,6 +4618,12 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "l5_under":   g("l5_under"),
             "game_time":  str(g("game_time") or "") or None,
         }
+        if "pick_platform" in df.columns and g("pick_platform") is not None:
+            row["pick_platform"] = g("pick_platform")
+        if "line_underdog" in df.columns and g("line_underdog") is not None:
+            row["line_underdog"] = g("line_underdog")
+        if "line_draftkings" in df.columns and g("line_draftkings") is not None:
+            row["line_draftkings"] = g("line_draftkings")
         for _i in range(1, 11):
             _v = g(f"G{_i}")
             if _v is None:
@@ -9280,6 +9444,7 @@ SLATE_COLS = [
     "ncaa_rank",
     "prop_type",
     "pick_type",
+    "pick_platform",
     "line",
     "line_underdog",
     "line_draftkings",
@@ -9312,7 +9477,7 @@ SLATE_COLS = [
     "opp_vs_avg_pct",
     "game_time",
 ]
-SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 11, 11, 9, 10, 9, 6, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
+SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 9, 10, 6, 11, 11, 9, 10, 9, 6, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
 SLATE_HDRS = [
     "Sport",
     "Tier",
@@ -9329,6 +9494,7 @@ SLATE_HDRS = [
     "NCAA Rank",
     "Prop",
     "Pick Type",
+    "Platform",
     "Line",
     "Line UD",
     "Line DK",
@@ -9376,6 +9542,7 @@ FULL_SLATE_EXTRA_HDRS = {
     "l5_side_hits": "L5 Side Hits",
     "l5_consistency": "L5 Match %",
     "line_underdog": "Line (UD)",
+    "pick_platform": "Platform",
     "line_draftkings": "Line (DK)",
     "best_cross_line": "Best Line",
     "best_cross_book": "Best Book",
@@ -9392,6 +9559,7 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "l5_side_hits": 9,
     "l5_consistency": 10,
     "line_underdog": 11,
+    "pick_platform": 10,
     "line_draftkings": 11,
     "best_cross_line": 9,
     "best_cross_book": 10,
@@ -9416,6 +9584,7 @@ FULL_SLATE_COLS = [
     "ncaa_rank",
     "prop_type",
     "pick_type",
+    "pick_platform",
     "line",
     "line_underdog",
     "line_draftkings",
@@ -12746,6 +12915,9 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
     ]
     for sp in sports_sorted:
         chunks.append(_pill(sp, sp.upper()))
+    chunks.append(_pill("pp", "PP", title_attr=' title="Any leg priced from PrizePicks row"'))
+    chunks.append(_pill("ud", "UD", title_attr=' title="Any leg from Underdog-only ladder row"'))
+    chunks.append(_pill("dk", "DK", title_attr=' title="Any leg from DraftKings-only ladder row"'))
     if has_power:
         chunks.append(_pill("power", "POWER"))
     if has_flex:
@@ -13007,6 +13179,21 @@ def _cap_ticket_groups_for_ui(groups: list, max_per_bucket: int) -> tuple[list, 
     return out, len(groups), len(out)
 
 
+def _ticket_group_platforms_attr(group: dict) -> str:
+    """Space-separated slugs for filter bar: pp, ud, dk."""
+    slugs: set[str] = set()
+    for t in group.get("tickets") or []:
+        for leg in t.get("legs") or []:
+            plat = str(leg.get("pick_platform") or "prizepicks").lower().strip()
+            if plat == "underdog":
+                slugs.add("ud")
+            elif plat == "draftkings":
+                slugs.add("dk")
+            else:
+                slugs.add("pp")
+    return " ".join(sorted(slugs))
+
+
 def render_tickets_body_html(
     payload: dict,
     *,
@@ -13253,9 +13440,10 @@ def render_tickets_body_html(
         d_pc = float(ent.get("payout_confidence") or 0.0)
         d_oi = int(ent.get("original_index", 0))
         rec_cls = d_ev if d_ev in ("strong", "ok", "marginal", "low", "skip") else "skip"
+        d_plat = _ticket_group_platforms_attr(group)
 
         parts.append(f'''
-<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
+<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}" data-platforms="{_h(d_plat)}">
   <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="false">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
@@ -13466,6 +13654,14 @@ def render_tickets_body_html(
                 except (TypeError, ValueError):
                     pass
 
+                plat_raw = str(leg.get("pick_platform") or "prizepicks").lower().strip()
+                if plat_raw == "underdog":
+                    leg_plat_slug = "ud"
+                elif plat_raw == "draftkings":
+                    leg_plat_slug = "dk"
+                else:
+                    leg_plat_slug = "pp"
+
                 # Sport accent chip
                 s_accent = _sport_accent(sport)
                 sport_html = f'<span style="font-size:12px;font-weight:700;color:{s_accent};background:{s_accent}22;padding:3px 8px;border-radius:4px;border:1px solid {s_accent}44;">{_h(sport)}</span>'
@@ -13482,7 +13678,7 @@ def render_tickets_body_html(
                 )
 
                 parts.append(f'''
-          <tr class="leg-row" data-hr-display="{_h(hr_disp)}">
+          <tr class="leg-row" data-hr-display="{_h(hr_disp)}" data-platform="{_h(leg_plat_slug)}">
             <td class="leg-col leg-col-player">
               <div class="pwrap">
                 {av_html}
@@ -13651,6 +13847,12 @@ def render_tickets_body_html(
   function matchesFilter(group, filter){
     if(filter === 'all') return true;
     if(filter === 'top-payout') return true;
+    if(filter === 'pp' || filter === 'ud' || filter === 'dk'){
+      var raw = (group.getAttribute('data-platforms') || '').toLowerCase().trim();
+      if(!raw) return filter === 'pp';
+      var parts = raw.split(/\\s+/).filter(Boolean);
+      return parts.indexOf(filter) >= 0;
+    }
     var ds = (group.getAttribute('data-sport') || '').toLowerCase();
     var dt = (group.getAttribute('data-type') || '').toLowerCase();
     var dp = (group.getAttribute('data-pick') || '').toLowerCase();

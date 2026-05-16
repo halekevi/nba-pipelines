@@ -222,7 +222,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-utp-bar")[:12] or "2026-05-15-utp-bar"
+_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-chart-line")[:12] or "2026-05-15-chart-line"
 
 
 def _deploy_git_sha_short() -> str:
@@ -464,21 +464,58 @@ def _github_raw_fetch_url(url: str) -> str:
     return f"{url}{sep}nocache={int(time.time() * 1000)}"
 
 
+def _template_json_disk_mtime(name: str) -> float | None:
+    """Return st_mtime for templates/<name>, or None if missing/unreadable."""
+    p = TEMPLATES_DIR / name
+    try:
+        return p.stat().st_mtime
+    except OSError:
+        return None
+
+
+def _explorer_json_gz_bust_token() -> str:
+    """Vary gzip response keys when pipeline writes explorer JSON — avoids stale UI after publish."""
+    parts: list[str] = []
+    for fn in ("slate_latest.json", "ticket_eval_slate_latest.json", "tickets_latest.json"):
+        mt = _template_json_disk_mtime(fn)
+        parts.append(str(int(mt) if mt is not None else 0))
+    return ":".join(parts)
+
+
 def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     """Load JSON from disk (or remote URL) with an in-process TTL."""
     if ttl is None:
         ttl = _PIPELINE_JSON_TTL
     key = str(path.resolve())
     now = time.time()
+    url = _DATA_FILE_URL_MAP.get(path.name)
+
+    disk_mtime: float | None = None
+    if not url and path.exists():
+        try:
+            disk_mtime = path.stat().st_mtime
+        except OSError:
+            disk_mtime = None
+
     with _JSON_FILE_CACHE_LOCK:
         entry = _json_file_cache.get(key)
         if entry is not None and now - entry["ts"] <= ttl:
-            data = entry["data"]
-            if path.name in _LARGE_JSON_NAMES:
-                _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
-            return data
+            if url:
+                data = entry["data"]
+                if path.name in _LARGE_JSON_NAMES:
+                    _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
+                return data
+            if disk_mtime is not None and entry.get("mtime") == disk_mtime:
+                data = entry["data"]
+                if path.name in _LARGE_JSON_NAMES:
+                    _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
+                return data
+            if disk_mtime is None and entry.get("mtime") is None:
+                data = entry["data"]
+                if path.name in _LARGE_JSON_NAMES:
+                    _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
+                return data
 
-        url = _DATA_FILE_URL_MAP.get(path.name)
         if url:
             try:
                 fetch_url = _github_raw_fetch_url(url)
@@ -491,7 +528,7 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
                 )
                 with urllib.request.urlopen(req, timeout=25) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
-                _json_file_cache[key] = {"data": data, "ts": time.time()}
+                _json_file_cache[key] = {"data": data, "ts": time.time(), "mtime": None}
                 if path.name in _LARGE_JSON_NAMES:
                     _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
                 return data
@@ -499,7 +536,12 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
                 if not path.exists():
                     raise
         data = json.loads(path.read_text(encoding="utf-8-sig"))
-        _json_file_cache[key] = {"data": data, "ts": time.time()}
+        _disk_mt = None
+        try:
+            _disk_mt = path.stat().st_mtime
+        except OSError:
+            _disk_mt = None
+        _json_file_cache[key] = {"data": data, "ts": time.time(), "mtime": _disk_mt}
         if path.name in _LARGE_JSON_NAMES:
             _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
         return data
@@ -4295,7 +4337,11 @@ def api_slate():
         return base
 
     try:
-        return _gz_json_response("slate-picks-v2-tickets-or-slate", _build_picks, ttl=_PIPELINE_JSON_TTL)
+        return _gz_json_response(
+            f"slate-picks-v2-tickets-or-slate:{_explorer_json_gz_bust_token()}",
+            _build_picks,
+            ttl=_PIPELINE_JSON_TTL,
+        )
     except Exception as e:
         return jsonify({"error": str(e), "picks": []}), 500
 
@@ -4324,7 +4370,7 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 404
     try:
         return _gz_json_response(
-            "slate-sport-slim-v2",
+            f"slate-sport-slim-v2:{_explorer_json_gz_bust_token()}",
             lambda: _slim_slate_sport_payload(_selected_slate_sport_payload()),
             ttl=_PIPELINE_JSON_TTL,
         )
@@ -4389,7 +4435,11 @@ def api_slate_sport_single(sport: str):
         }
 
     try:
-        return _gz_json_response(f"slate-sport-single-v1:{sport_key}", _build, ttl=60.0)
+        return _gz_json_response(
+            f"slate-sport-single-v1:{sport_key}:{_explorer_json_gz_bust_token()}",
+            _build,
+            ttl=60.0,
+        )
     except Exception as e:
         return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 500
 
