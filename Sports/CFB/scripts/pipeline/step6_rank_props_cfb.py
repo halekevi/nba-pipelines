@@ -872,16 +872,24 @@ def main():
     def_rank_col = next((c for c in ["OVERALL_DEF_RANK","OPP_OVERALL_DEF_RANK","opp_def_rank"] if c in out.columns), "")
     if def_rank_col:
         def_rank_num = _to_num(out[def_rank_col])
-        # Auto-detect scale: if max rank > 40, assume full D1 (~362 teams)
-        max_rank = def_rank_num.max()
-        n_teams  = 362.0 if max_rank > 40 else 30.0
+        fbs_n = _to_num(out.get("fbs_team_count", pd.Series(dtype=float)))
+        if fbs_n.notna().any() and float(fbs_n.dropna().iloc[0]) > 0:
+            n_teams = float(fbs_n.dropna().iloc[0])
+        else:
+            max_rank = def_rank_num.max()
+            # FBS ~130 teams; CBB D1 ~362 when mis-routed
+            n_teams = 130.0 if max_rank <= 140 else (362.0 if max_rank > 40 else 30.0)
         mid_rank = (n_teams + 1.0) / 2.0
-        nt = int(n_teams) if not pd.isna(n_teams) else 362
+        nt = int(n_teams) if not pd.isna(n_teams) else 130
+        prior_tier = out.get("def_tier", pd.Series("", index=out.index)).astype(str).str.strip()
         tier_strs = def_rank_num.apply(
             lambda r: def_tier_from_overall_rank(r, nt) if pd.notna(r) else ""
         )
-        out["def_tier"] = tier_strs
-        out["opp_def_tier"] = tier_strs
+        out["def_tier"] = prior_tier.where(prior_tier.ne(""), tier_strs)
+        out["opp_def_tier"] = out.get("opp_def_tier", out["def_tier"]).astype(str)
+        out["opp_def_tier"] = out["opp_def_tier"].where(
+            out["opp_def_tier"].astype(str).str.strip().ne(""), out["def_tier"]
+        )
     else:
         def_rank_num = pd.Series([np.nan] * len(out), index=out.index)
         n_teams  = 362.0

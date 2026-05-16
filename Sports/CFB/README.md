@@ -55,7 +55,7 @@ Then run the pipeline (`-CFBOnly` or full parallel). Step 5 scans **200 days** b
 
 ## Regular season unit rankings (conference)
 
-Pass/rush **offense** and **defense** are ranked **within each FBS conference** with quintile tiers: Elite, Above Avg, Avg, Below Avg, Weak.
+Pass/rush **offense** and **defense** are ranked **within each FBS conference** and **nationally (FBS-wide)** with quintile tiers: Elite, Above Avg, Avg, Below Avg, Weak. Each unit includes ESPN **YDS/G** averages (`*_yds_pg` columns).
 
 | Unit | Rank 1 means |
 |------|----------------|
@@ -71,7 +71,7 @@ py -3.14 scripts\build_cfb_unit_rankings.py --season 2025
 
 Output: `data/reference/cfb_team_unit_rankings.csv`
 
-The pipeline runs this automatically as **CFB Step 3a**, then **Step 3b** attaches columns to each prop row (`team_pass_off_tier`, `opp_pass_def_tier`, `matchup_pass_off_vs_def_tier`, etc.).
+The pipeline runs this automatically as **CFB Step 3a**, then **Step 3b** attaches conference + national ranks/tiers, YDS/G averages, and prop-aware `OVERALL_DEF_RANK` / `def_tier` (pass props → opp pass defense, rush props → opp rush defense).
 
 ## Postseason (playoffs / CFP)
 

@@ -3,7 +3,7 @@
 Build FBS team unit rankings (regular season): pass/rush offense and pass/rush defense.
 
 Ranks and quintile tiers (Elite → Weak) are computed **within each conference**
-using ESPN regular-season byteam stats.
+and **nationally across all FBS teams**, using ESPN regular-season byteam YDS/G averages.
 
 Output: Sports/CFB/data/reference/cfb_team_unit_rankings.csv
 
@@ -134,6 +134,28 @@ def fetch_byteam_units(season: int, seasontype: int = 2) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _rank_and_tier_fbs(
+    df: pd.DataFrame,
+    value_col: str,
+    rank_col: str,
+    tier_col: str,
+    *,
+    ascending: bool,
+) -> None:
+    """Rank across all FBS teams; rank 1 = best unit nationally."""
+    vals = pd.to_numeric(df[value_col], errors="coerce")
+    n = int(vals.notna().sum())
+    df[rank_col] = pd.NA
+    df[tier_col] = ""
+    if n < 2:
+        return
+    ranks = vals.rank(method="min", ascending=ascending)
+    df[rank_col] = ranks
+    for idx, r in ranks.items():
+        if pd.notna(r):
+            df.at[idx, tier_col] = def_tier_from_overall_rank(int(r), n)
+
+
 def _rank_and_tier(
     df: pd.DataFrame,
     value_col: str,
@@ -185,21 +207,64 @@ def build_rankings_table(season: int, seasontype: int = 2) -> pd.DataFrame:
         stats, "rush_def_yds_pg", "rush_def_rank", "rush_def_tier", ascending=True
     )
 
+    # National (FBS-wide) ranks + tiers on the same YDS/G averages
+    _rank_and_tier_fbs(
+        stats, "pass_off_yds_pg", "pass_off_rank_nat", "pass_off_tier_nat", ascending=False
+    )
+    _rank_and_tier_fbs(
+        stats, "rush_off_yds_pg", "rush_off_rank_nat", "rush_off_tier_nat", ascending=False
+    )
+    _rank_and_tier_fbs(
+        stats, "pass_def_yds_pg", "pass_def_rank_nat", "pass_def_tier_nat", ascending=True
+    )
+    _rank_and_tier_fbs(
+        stats, "rush_def_yds_pg", "rush_def_rank_nat", "rush_def_tier_nat", ascending=True
+    )
+
+    stats["total_off_yds_pg"] = (
+        pd.to_numeric(stats["pass_off_yds_pg"], errors="coerce")
+        + pd.to_numeric(stats["rush_off_yds_pg"], errors="coerce")
+    )
+    stats["total_def_yds_pg"] = (
+        pd.to_numeric(stats["pass_def_yds_pg"], errors="coerce")
+        + pd.to_numeric(stats["rush_def_yds_pg"], errors="coerce")
+    )
+    _rank_and_tier_fbs(
+        stats, "total_off_yds_pg", "overall_off_rank_nat", "overall_off_tier_nat", ascending=False
+    )
+    _rank_and_tier_fbs(
+        stats, "total_def_yds_pg", "overall_def_rank_nat", "overall_def_tier_nat", ascending=True
+    )
+
     col_order = [
         "team_abbr",
         "conference",
         "pass_off_yds_pg",
         "pass_off_rank",
         "pass_off_tier",
+        "pass_off_rank_nat",
+        "pass_off_tier_nat",
         "rush_off_yds_pg",
         "rush_off_rank",
         "rush_off_tier",
+        "rush_off_rank_nat",
+        "rush_off_tier_nat",
         "pass_def_yds_pg",
         "pass_def_rank",
         "pass_def_tier",
+        "pass_def_rank_nat",
+        "pass_def_tier_nat",
         "rush_def_yds_pg",
         "rush_def_rank",
         "rush_def_tier",
+        "rush_def_rank_nat",
+        "rush_def_tier_nat",
+        "total_off_yds_pg",
+        "overall_off_rank_nat",
+        "overall_off_tier_nat",
+        "total_def_yds_pg",
+        "overall_def_rank_nat",
+        "overall_def_tier_nat",
     ]
     return stats[col_order].sort_values(["conference", "team_abbr"]).reset_index(drop=True)
 

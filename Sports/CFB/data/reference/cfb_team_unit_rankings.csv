@@ -1,123 +1,123 @@
-team_abbr,conference,pass_off_yds_pg,pass_off_rank,pass_off_tier,rush_off_yds_pg,rush_off_rank,rush_off_tier,pass_def_yds_pg,pass_def_rank,pass_def_tier,rush_def_yds_pg,rush_def_rank,rush_def_tier
-ARMY,American,80.846,14.0,Weak,254.923,2.0,Elite,190.385,2.0,Elite,153.154,7.0,Avg
-CLT,American,204.0,10.0,Below Avg,81.75,14.0,Weak,271.667,14.0,Weak,200.25,12.0,Below Avg
-ECU,American,272.692,4.0,Above Avg,176.308,7.0,Avg,230.769,8.0,Avg,120.231,1.0,Elite
-FAU,American,340.167,1.0,Elite,104.5,13.0,Weak,235.167,10.0,Below Avg,201.333,13.0,Weak
-MEM,American,228.385,8.0,Avg,183.231,6.0,Above Avg,227.154,6.0,Above Avg,132.077,3.0,Elite
-NAVY,American,130.0,12.0,Below Avg,285.615,1.0,Elite,230.0,7.0,Avg,141.308,4.0,Above Avg
-RICE,American,97.615,13.0,Weak,204.769,4.0,Above Avg,240.154,11.0,Below Avg,163.692,8.0,Avg
-TEM,American,197.417,11.0,Below Avg,147.417,11.0,Below Avg,199.5,3.0,Elite,197.333,11.0,Below Avg
-TLSA,American,222.417,9.0,Avg,175.5,8.0,Avg,214.25,4.0,Above Avg,182.417,9.0,Avg
-TULN,American,245.143,7.0,Avg,166.286,10.0,Below Avg,261.643,13.0,Weak,122.571,2.0,Elite
-UAB,American,265.583,5.0,Above Avg,138.667,12.0,Below Avg,232.25,9.0,Avg,191.083,10.0,Below Avg
-UNT,American,318.0,2.0,Elite,194.429,5.0,Above Avg,166.214,1.0,Elite,215.714,14.0,Weak
-USF,American,276.615,3.0,Elite,212.077,3.0,Elite,242.769,12.0,Below Avg,143.692,5.0,Above Avg
-UTSA,American,247.615,6.0,Above Avg,171.154,9.0,Avg,222.692,5.0,Above Avg,149.615,6.0,Above Avg
-BC,acc,280.167,3.0,Elite,103.917,15.0,Weak,255.667,13.0,Below Avg,177.583,17.0,Weak
-CAL,acc,275.923,4.0,Elite,81.692,17.0,Weak,205.154,5.0,Above Avg,156.615,14.0,Below Avg
-CLEM,acc,267.769,6.0,Above Avg,124.462,11.0,Avg,251.231,11.0,Avg,105.462,3.0,Elite
-DUKE,acc,285.357,1.0,Elite,138.143,9.0,Avg,276.786,15.0,Weak,147.429,12.0,Below Avg
-FSU,acc,253.417,8.0,Avg,218.667,1.0,Elite,190.75,2.0,Elite,138.083,10.0,Avg
-GT,acc,262.538,7.0,Above Avg,197.462,2.0,Elite,235.154,9.0,Avg,164.0,15.0,Weak
-LOU,acc,220.615,14.0,Below Avg,163.923,5.0,Above Avg,188.769,1.0,Elite,114.308,6.0,Above Avg
-MIA,acc,253.188,9.0,Avg,151.813,7.0,Above Avg,204.875,4.0,Elite,89.25,1.0,Elite
-NCSU,acc,245.692,10.0,Avg,146.538,8.0,Avg,273.154,14.0,Below Avg,138.769,11.0,Avg
-PITT,acc,273.308,5.0,Above Avg,117.231,13.0,Below Avg,235.308,10.0,Avg,95.077,2.0,Elite
-SMU,acc,283.077,2.0,Elite,133.846,10.0,Avg,283.154,16.0,Weak,111.923,4.0,Elite
-STAN,acc,222.0,13.0,Below Avg,84.5,16.0,Weak,288.917,17.0,Weak,119.25,7.0,Above Avg
-SYR,acc,217.25,15.0,Weak,123.167,12.0,Below Avg,252.75,12.0,Below Avg,174.917,16.0,Weak
-UNC,acc,183.5,16.0,Weak,105.25,14.0,Below Avg,211.25,7.0,Above Avg,125.667,9.0,Avg
-UVA,acc,239.143,11.0,Avg,178.714,4.0,Elite,195.571,3.0,Elite,113.929,5.0,Above Avg
-VT,acc,166.333,17.0,Weak,182.417,3.0,Elite,224.833,8.0,Avg,153.25,13.0,Below Avg
-WAKE,acc,237.692,12.0,Below Avg,156.154,6.0,Above Avg,206.923,6.0,Above Avg,121.615,8.0,Avg
-ILL,big10,235.769,8.0,Above Avg,138.077,13.0,Below Avg,218.385,14.0,Below Avg,126.692,9.0,Avg
-IOWA,big10,143.154,17.0,Weak,176.923,4.0,Elite,172.692,4.0,Elite,107.692,5.0,Above Avg
-IU,big10,239.125,7.0,Above Avg,212.875,1.0,Elite,188.813,6.0,Above Avg,77.188,1.0,Elite
-MD,big10,255.667,4.0,Elite,104.333,17.0,Weak,226.5,16.0,Weak,175.583,15.0,Below Avg
-MICH,big10,186.769,14.0,Below Avg,210.154,2.0,Elite,211.385,12.0,Below Avg,111.923,6.0,Above Avg
-MINN,big10,189.923,12.0,Below Avg,103.231,18.0,Weak,210.538,10.0,Avg,121.077,8.0,Above Avg
-MSU,big10,222.667,10.0,Avg,122.833,15.0,Below Avg,231.333,17.0,Weak,147.333,13.0,Below Avg
-NEB,big10,224.615,9.0,Avg,145.923,10.0,Avg,154.077,2.0,Elite,175.385,14.0,Below Avg
-NU,big10,185.923,15.0,Below Avg,160.154,8.0,Above Avg,193.538,7.0,Above Avg,136.308,10.0,Avg
-ORE,big10,253.6,5.0,Above Avg,198.6,3.0,Elite,157.933,3.0,Elite,115.733,7.0,Above Avg
-OSU,big10,268.214,2.0,Elite,154.357,9.0,Avg,129.714,1.0,Elite,89.357,2.0,Elite
-PSU,big10,187.615,13.0,Below Avg,174.385,5.0,Above Avg,184.231,5.0,Above Avg,142.538,11.0,Avg
-PUR,big10,217.167,11.0,Avg,126.417,14.0,Below Avg,241.667,18.0,Weak,181.833,16.0,Weak
-RUTG,big10,266.083,3.0,Elite,141.0,11.0,Avg,222.917,15.0,Below Avg,209.917,18.0,Weak
-UCLA,big10,180.25,16.0,Weak,139.667,12.0,Below Avg,196.583,8.0,Above Avg,190.417,17.0,Weak
-USC,big10,296.0,1.0,Elite,169.462,6.0,Above Avg,207.538,9.0,Avg,143.231,12.0,Below Avg
-WASH,big10,244.462,6.0,Above Avg,165.462,7.0,Above Avg,211.308,11.0,Avg,100.077,3.0,Elite
-WIS,big10,136.417,18.0,Weak,116.667,16.0,Weak,218.25,13.0,Below Avg,105.25,4.0,Elite
-ARIZ,big12,255.231,4.0,Elite,152.385,12.0,Below Avg,165.308,1.0,Elite,143.231,7.0,Above Avg
-ASU,big12,223.692,6.0,Above Avg,193.615,2.0,Elite,233.462,13.0,Below Avg,124.0,3.0,Elite
-BAY,big12,309.583,1.0,Elite,141.5,13.0,Below Avg,194.917,5.0,Above Avg,197.167,15.0,Weak
-BYU,big12,221.429,8.0,Avg,178.071,5.0,Above Avg,209.714,7.0,Above Avg,122.714,2.0,Elite
-CIN,big12,231.231,5.0,Above Avg,176.077,6.0,Above Avg,220.462,11.0,Below Avg,178.769,13.0,Below Avg
-COLO,big12,202.833,13.0,Below Avg,125.583,15.0,Weak,203.167,6.0,Above Avg,222.5,16.0,Weak
-HOU,big12,216.385,12.0,Below Avg,178.077,4.0,Elite,218.846,10.0,Avg,129.0,4.0,Elite
-ISU,big12,221.417,9.0,Avg,174.667,7.0,Above Avg,218.5,9.0,Avg,138.0,6.0,Above Avg
-KSU,big12,198.75,14.0,Weak,171.333,8.0,Avg,222.417,12.0,Below Avg,163.75,10.0,Avg
-KU,big12,222.25,7.0,Above Avg,168.25,9.0,Avg,214.083,8.0,Avg,173.083,12.0,Below Avg
-OKST,big12,174.083,16.0,Weak,118.333,16.0,Weak,252.417,15.0,Weak,165.917,11.0,Below Avg
-TCU,big12,290.077,2.0,Elite,131.385,14.0,Weak,245.615,14.0,Weak,133.077,5.0,Above Avg
-TTU,big12,278.5,3.0,Elite,182.857,3.0,Elite,190.143,4.0,Elite,68.143,1.0,Elite
-UCF,big12,220.75,10.0,Avg,158.0,11.0,Below Avg,185.083,3.0,Elite,150.667,9.0,Avg
-UTAH,big12,216.615,11.0,Below Avg,266.308,1.0,Elite,177.846,2.0,Elite,181.154,14.0,Weak
-WVU,big12,188.917,15.0,Weak,160.583,10.0,Avg,265.417,16.0,Weak,143.75,8.0,Avg
-CONN,ind,284.385,1.0,Elite,160.846,2.0,Avg,218.462,2.0,Avg,199.538,2.0,Avg
-ND,ind,255.083,2.0,Avg,203.417,1.0,Elite,213.417,1.0,Elite,100.083,1.0,Elite
-AKR,midam,219.0,4.0,Above Avg,134.5,9.0,Below Avg,229.167,12.0,Weak,155.25,7.0,Avg
-BALL,midam,139.917,11.0,Below Avg,131.75,11.0,Below Avg,226.833,11.0,Below Avg,178.833,9.0,Below Avg
-BGSU,midam,151.25,10.0,Below Avg,155.5,6.0,Above Avg,201.667,7.0,Avg,141.417,4.0,Above Avg
-BUFF,midam,229.0,3.0,Elite,132.333,10.0,Below Avg,186.417,5.0,Above Avg,157.167,8.0,Avg
-CMU,midam,167.077,8.0,Avg,163.462,5.0,Above Avg,209.385,9.0,Below Avg,145.692,6.0,Above Avg
-EMU,midam,234.75,2.0,Elite,142.5,8.0,Avg,184.167,4.0,Above Avg,232.083,13.0,Weak
-KENT,midam,197.083,5.0,Above Avg,97.25,12.0,Weak,236.0,13.0,Weak,191.417,11.0,Below Avg
-M-OH,midam,187.286,6.0,Above Avg,150.286,7.0,Avg,200.357,6.0,Above Avg,134.286,3.0,Elite
-MASS,midam,165.083,9.0,Below Avg,82.417,13.0,Weak,212.5,10.0,Below Avg,221.333,12.0,Weak
-NIU,midam,98.833,13.0,Weak,187.083,3.0,Elite,173.917,2.0,Elite,183.333,10.0,Below Avg
-OHIO,midam,184.154,7.0,Avg,227.385,1.0,Elite,208.077,8.0,Avg,144.0,5.0,Above Avg
-TOL,midam,238.077,1.0,Elite,177.154,4.0,Above Avg,158.0,1.0,Elite,96.308,1.0,Elite
-WMU,midam,138.5,12.0,Weak,204.214,2.0,Elite,179.929,3.0,Elite,125.571,2.0,Elite
-AFA,mwest,145.167,12.0,Weak,261.417,1.0,Elite,264.667,12.0,Weak,158.5,7.0,Avg
-BOIS,mwest,244.929,5.0,Above Avg,179.071,4.0,Above Avg,175.571,4.0,Above Avg,162.071,8.0,Avg
-CSU,mwest,215.917,6.0,Avg,108.25,11.0,Weak,221.083,6.0,Avg,204.917,12.0,Weak
-FRES,mwest,183.385,8.0,Avg,170.462,5.0,Above Avg,153.769,1.0,Elite,131.923,3.0,Elite
-HAW,mwest,290.615,1.0,Elite,103.154,12.0,Weak,227.154,7.0,Avg,133.846,4.0,Above Avg
-NEV,mwest,148.667,11.0,Weak,153.5,7.0,Avg,220.25,5.0,Above Avg,149.583,5.0,Above Avg
-SDSU,mwest,157.692,10.0,Below Avg,198.692,2.0,Elite,164.154,2.0,Elite,129.538,2.0,Elite
-SJSU,mwest,282.583,2.0,Elite,119.667,10.0,Below Avg,245.25,10.0,Below Avg,157.917,6.0,Avg
-UNLV,mwest,250.857,3.0,Elite,195.5,3.0,Elite,241.714,9.0,Below Avg,177.429,10.0,Below Avg
-UNM,mwest,204.769,7.0,Avg,152.077,8.0,Avg,229.154,8.0,Avg,112.769,1.0,Elite
-USU,mwest,247.0,4.0,Above Avg,162.462,6.0,Avg,258.846,11.0,Weak,181.231,11.0,Weak
-WYO,mwest,183.0,9.0,Below Avg,131.667,9.0,Below Avg,175.5,3.0,Elite,168.75,9.0,Below Avg
-ORST,pac12,225.833,1.0,Elite,123.917,2.0,Avg,222.417,2.0,Avg,157.417,2.0,Avg
-WSU,pac12,210.538,2.0,Avg,128.154,1.0,Elite,174.385,1.0,Elite,125.154,1.0,Elite
-ALA,sec,263.533,4.0,Elite,104.133,15.0,Weak,169.933,1.0,Elite,126.867,8.0,Avg
-ARK,sec,262.917,5.0,Above Avg,191.917,2.0,Elite,239.25,13.0,Below Avg,185.917,15.0,Weak
-AUB,sec,197.083,15.0,Weak,176.833,5.0,Above Avg,229.833,11.0,Below Avg,99.333,3.0,Elite
-FLA,sec,204.583,13.0,Below Avg,136.75,12.0,Below Avg,222.917,9.0,Avg,153.917,14.0,Weak
-LSU,sec,229.538,10.0,Avg,104.0,16.0,Weak,204.615,6.0,Above Avg,124.077,7.0,Above Avg
-MISS,sec,313.333,1.0,Elite,176.333,6.0,Above Avg,198.933,5.0,Above Avg,149.067,12.0,Below Avg
-MIZ,sec,188.0,16.0,Weak,228.308,1.0,Elite,173.462,2.0,Elite,103.846,4.0,Elite
-MSST,sec,241.154,8.0,Avg,158.0,9.0,Avg,223.0,10.0,Avg,186.308,16.0,Weak
-OU,sec,235.846,9.0,Avg,118.462,13.0,Below Avg,195.231,4.0,Elite,77.308,1.0,Elite
-SC,sec,225.25,11.0,Below Avg,111.083,14.0,Weak,216.333,7.0,Above Avg,136.667,11.0,Below Avg
-TA&M,sec,259.846,6.0,Above Avg,184.692,3.0,Elite,176.615,3.0,Elite,130.769,9.0,Avg
-TENN,sec,292.846,2.0,Elite,173.462,8.0,Avg,244.538,15.0,Weak,152.385,13.0,Below Avg
-TEX,sec,250.692,7.0,Above Avg,137.769,11.0,Below Avg,234.923,12.0,Below Avg,103.923,5.0,Above Avg
-UGA,sec,220.214,12.0,Below Avg,182.143,4.0,Elite,216.5,8.0,Avg,81.5,2.0,Elite
-UK,sec,201.917,14.0,Weak,139.167,10.0,Avg,239.917,14.0,Weak,134.25,10.0,Avg
-VAN,sec,287.308,3.0,Elite,175.538,7.0,Above Avg,249.462,16.0,Weak,108.077,6.0,Above Avg
-DEL,usa,292.462,1.0,Elite,119.154,8.0,Avg,245.615,9.0,Below Avg,159.692,5.0,Above Avg
-FIU,usa,215.385,8.0,Avg,181.615,4.0,Above Avg,249.923,10.0,Below Avg,161.615,6.0,Avg
-JVST,usa,162.0,12.0,Weak,246.714,1.0,Elite,234.5,6.0,Avg,144.286,3.0,Elite
-KENN,usa,243.071,6.0,Avg,159.357,5.0,Above Avg,220.071,2.0,Elite,184.571,11.0,Weak
-LIB,usa,195.5,9.0,Below Avg,194.0,3.0,Elite,196.75,1.0,Elite,179.083,10.0,Below Avg
-LT,usa,163.769,11.0,Weak,195.385,2.0,Elite,240.308,8.0,Avg,134.538,1.0,Elite
-MOST,usa,279.692,2.0,Elite,112.462,10.0,Below Avg,229.462,5.0,Above Avg,153.308,4.0,Above Avg
-MTSU,usa,266.083,4.0,Above Avg,105.5,11.0,Weak,256.167,11.0,Weak,143.083,2.0,Elite
-NMSU,usa,250.667,5.0,Above Avg,77.25,12.0,Weak,236.833,7.0,Avg,165.0,7.0,Avg
-SHSU,usa,184.083,10.0,Below Avg,131.917,7.0,Avg,275.917,12.0,Weak,207.583,12.0,Weak
-UTEP,usa,216.25,7.0,Avg,115.583,9.0,Below Avg,221.833,3.0,Elite,169.5,8.0,Avg
-WKU,usa,272.154,3.0,Elite,134.538,6.0,Avg,224.231,4.0,Above Avg,176.538,9.0,Below Avg
+team_abbr,conference,pass_off_yds_pg,pass_off_rank,pass_off_tier,pass_off_rank_nat,pass_off_tier_nat,rush_off_yds_pg,rush_off_rank,rush_off_tier,rush_off_rank_nat,rush_off_tier_nat,pass_def_yds_pg,pass_def_rank,pass_def_tier,pass_def_rank_nat,pass_def_tier_nat,rush_def_yds_pg,rush_def_rank,rush_def_tier,rush_def_rank_nat,rush_def_tier_nat,total_off_yds_pg,overall_off_rank_nat,overall_off_tier_nat,total_def_yds_pg,overall_def_rank_nat,overall_def_tier_nat
+ARMY,American,80.846,14.0,Weak,122.0,Weak,254.923,2.0,Elite,4.0,Elite,190.385,2.0,Elite,26.0,Above Avg,153.154,7.0,Avg,70.0,Avg,335.769,99.0,Weak,343.539,41.0,Above Avg
+CLT,American,204.0,10.0,Below Avg,84.0,Below Avg,81.75,14.0,Weak,120.0,Weak,271.667,14.0,Weak,117.0,Weak,200.25,12.0,Below Avg,114.0,Weak,285.75,119.0,Weak,471.917,121.0,Weak
+ECU,American,272.692,4.0,Above Avg,21.0,Elite,176.308,7.0,Avg,39.0,Above Avg,230.769,8.0,Avg,84.0,Below Avg,120.231,1.0,Elite,25.0,Elite,449.0,16.0,Elite,351.0,48.0,Above Avg
+FAU,American,340.167,1.0,Elite,1.0,Elite,104.5,13.0,Weak,110.0,Weak,235.167,10.0,Below Avg,91.0,Below Avg,201.333,13.0,Weak,115.0,Weak,444.667,19.0,Elite,436.5,119.0,Weak
+MEM,American,228.385,8.0,Avg,59.0,Avg,183.231,6.0,Above Avg,26.0,Above Avg,227.154,6.0,Above Avg,77.0,Below Avg,132.077,3.0,Elite,41.0,Above Avg,411.616,32.0,Above Avg,359.231,58.0,Avg
+NAVY,American,130.0,12.0,Below Avg,119.0,Weak,285.615,1.0,Elite,1.0,Elite,230.0,7.0,Avg,83.0,Below Avg,141.308,4.0,Above Avg,52.0,Avg,415.615,30.0,Above Avg,371.308,62.0,Avg
+RICE,American,97.615,13.0,Weak,121.0,Weak,204.769,4.0,Above Avg,12.0,Elite,240.154,11.0,Below Avg,97.0,Below Avg,163.692,8.0,Avg,83.0,Below Avg,302.384,112.0,Weak,403.846,94.0,Below Avg
+TEM,American,197.417,11.0,Below Avg,88.0,Below Avg,147.417,11.0,Below Avg,70.0,Avg,199.5,3.0,Elite,35.0,Above Avg,197.333,11.0,Below Avg,112.0,Weak,344.834,90.0,Below Avg,396.83299999999997,85.0,Below Avg
+TLSA,American,222.417,9.0,Avg,65.0,Avg,175.5,8.0,Avg,42.0,Above Avg,214.25,4.0,Above Avg,54.0,Avg,182.417,9.0,Avg,103.0,Weak,397.91700000000003,51.0,Avg,396.66700000000003,84.0,Below Avg
+TULN,American,245.143,7.0,Avg,44.0,Above Avg,166.286,10.0,Below Avg,51.0,Avg,261.643,13.0,Weak,114.0,Weak,122.571,2.0,Elite,28.0,Above Avg,411.429,35.0,Above Avg,384.21399999999994,75.0,Below Avg
+UAB,American,265.583,5.0,Above Avg,27.0,Above Avg,138.667,12.0,Below Avg,78.0,Below Avg,232.25,9.0,Avg,86.0,Below Avg,191.083,10.0,Below Avg,109.0,Weak,404.25,45.0,Above Avg,423.33299999999997,108.0,Weak
+UNT,American,318.0,2.0,Elite,2.0,Elite,194.429,5.0,Above Avg,20.0,Elite,166.214,1.0,Elite,8.0,Elite,215.714,14.0,Weak,119.0,Weak,512.429,1.0,Elite,381.928,73.0,Avg
+USF,American,276.615,3.0,Elite,18.0,Elite,212.077,3.0,Elite,10.0,Elite,242.769,12.0,Below Avg,101.0,Weak,143.692,5.0,Above Avg,58.0,Avg,488.692,3.0,Elite,386.461,78.0,Below Avg
+UTSA,American,247.615,6.0,Above Avg,41.0,Above Avg,171.154,9.0,Avg,47.0,Above Avg,222.692,5.0,Above Avg,69.0,Avg,149.615,6.0,Above Avg,67.0,Avg,418.769,25.0,Elite,372.307,63.0,Avg
+BC,acc,280.167,3.0,Elite,15.0,Elite,103.917,15.0,Weak,114.0,Weak,255.667,13.0,Below Avg,111.0,Weak,177.583,17.0,Weak,96.0,Below Avg,384.08399999999995,66.0,Avg,433.25,117.0,Weak
+CAL,acc,275.923,4.0,Elite,19.0,Elite,81.692,17.0,Weak,121.0,Weak,205.154,5.0,Above Avg,41.0,Above Avg,156.615,14.0,Below Avg,75.0,Below Avg,357.615,79.0,Below Avg,361.769,60.0,Avg
+CLEM,acc,267.769,6.0,Above Avg,24.0,Elite,124.462,11.0,Avg,94.0,Below Avg,251.231,11.0,Avg,108.0,Weak,105.462,3.0,Elite,15.0,Elite,392.231,58.0,Avg,356.693,53.0,Avg
+DUKE,acc,285.357,1.0,Elite,11.0,Elite,138.143,9.0,Avg,79.0,Below Avg,276.786,15.0,Weak,120.0,Weak,147.429,12.0,Below Avg,64.0,Avg,423.5,22.0,Elite,424.21500000000003,110.0,Weak
+FSU,acc,253.417,8.0,Avg,36.0,Above Avg,218.667,1.0,Elite,8.0,Elite,190.75,2.0,Elite,27.0,Above Avg,138.083,10.0,Avg,50.0,Avg,472.084,5.0,Elite,328.83299999999997,27.0,Above Avg
+GT,acc,262.538,7.0,Above Avg,30.0,Above Avg,197.462,2.0,Elite,17.0,Elite,235.154,9.0,Avg,90.0,Below Avg,164.0,15.0,Weak,85.0,Below Avg,460.0,10.0,Elite,399.154,87.0,Below Avg
+LOU,acc,220.615,14.0,Below Avg,71.0,Avg,163.923,5.0,Above Avg,53.0,Avg,188.769,1.0,Elite,23.0,Elite,114.308,6.0,Above Avg,22.0,Elite,384.538,65.0,Avg,303.077,15.0,Elite
+MIA,acc,253.188,9.0,Avg,37.0,Above Avg,151.813,7.0,Above Avg,68.0,Avg,204.875,4.0,Elite,40.0,Above Avg,89.25,1.0,Elite,5.0,Elite,405.001,44.0,Above Avg,294.125,11.0,Elite
+NCSU,acc,245.692,10.0,Avg,43.0,Above Avg,146.538,8.0,Avg,71.0,Avg,273.154,14.0,Below Avg,118.0,Weak,138.769,11.0,Avg,51.0,Avg,392.23,59.0,Avg,411.923,102.0,Weak
+PITT,acc,273.308,5.0,Above Avg,20.0,Elite,117.231,13.0,Below Avg,102.0,Weak,235.308,10.0,Avg,92.0,Below Avg,95.077,2.0,Elite,7.0,Elite,390.539,61.0,Avg,330.385,31.0,Above Avg
+SMU,acc,283.077,2.0,Elite,13.0,Elite,133.846,10.0,Avg,85.0,Below Avg,283.154,16.0,Weak,121.0,Weak,111.923,4.0,Elite,18.0,Elite,416.923,28.0,Above Avg,395.077,83.0,Below Avg
+STAN,acc,222.0,13.0,Below Avg,67.0,Avg,84.5,16.0,Weak,118.0,Weak,288.917,17.0,Weak,122.0,Weak,119.25,7.0,Above Avg,24.0,Elite,306.5,111.0,Weak,408.167,98.0,Below Avg
+SYR,acc,217.25,15.0,Weak,74.0,Avg,123.167,12.0,Below Avg,96.0,Below Avg,252.75,12.0,Below Avg,110.0,Weak,174.917,16.0,Weak,91.0,Below Avg,340.41700000000003,95.0,Below Avg,427.66700000000003,115.0,Weak
+UNC,acc,183.5,16.0,Weak,101.0,Weak,105.25,14.0,Below Avg,109.0,Weak,211.25,7.0,Above Avg,48.0,Above Avg,125.667,9.0,Avg,34.0,Above Avg,288.75,117.0,Weak,336.91700000000003,36.0,Above Avg
+UVA,acc,239.143,11.0,Avg,49.0,Above Avg,178.714,4.0,Elite,32.0,Above Avg,195.571,3.0,Elite,31.0,Above Avg,113.929,5.0,Above Avg,21.0,Elite,417.85699999999997,26.0,Above Avg,309.5,19.0,Elite
+VT,acc,166.333,17.0,Weak,107.0,Weak,182.417,3.0,Elite,28.0,Above Avg,224.833,8.0,Avg,74.0,Avg,153.25,13.0,Below Avg,71.0,Avg,348.75,87.0,Below Avg,378.08299999999997,68.0,Avg
+WAKE,acc,237.692,12.0,Below Avg,52.0,Avg,156.154,6.0,Above Avg,62.0,Avg,206.923,6.0,Above Avg,42.0,Above Avg,121.615,8.0,Avg,27.0,Above Avg,393.846,56.0,Avg,328.538,25.0,Elite
+ILL,big10,235.769,8.0,Above Avg,54.0,Avg,138.077,13.0,Below Avg,80.0,Below Avg,218.385,14.0,Below Avg,58.0,Avg,126.692,9.0,Avg,35.0,Above Avg,373.846,70.0,Avg,345.077,44.0,Above Avg
+IOWA,big10,143.154,17.0,Weak,115.0,Weak,176.923,4.0,Elite,36.0,Above Avg,172.692,4.0,Elite,10.0,Elite,107.692,5.0,Above Avg,16.0,Elite,320.077,106.0,Weak,280.384,8.0,Elite
+IU,big10,239.125,7.0,Above Avg,50.0,Avg,212.875,1.0,Elite,9.0,Elite,188.813,6.0,Above Avg,24.0,Elite,77.188,1.0,Elite,2.0,Elite,452.0,14.0,Elite,266.001,4.0,Elite
+MD,big10,255.667,4.0,Elite,32.0,Above Avg,104.333,17.0,Weak,111.0,Weak,226.5,16.0,Weak,75.0,Below Avg,175.583,15.0,Below Avg,93.0,Below Avg,360.0,77.0,Below Avg,402.08299999999997,92.0,Below Avg
+MICH,big10,186.769,14.0,Below Avg,97.0,Below Avg,210.154,2.0,Elite,11.0,Elite,211.385,12.0,Below Avg,50.0,Avg,111.923,6.0,Above Avg,18.0,Elite,396.923,53.0,Avg,323.308,22.0,Elite
+MINN,big10,189.923,12.0,Below Avg,92.0,Below Avg,103.231,18.0,Weak,115.0,Weak,210.538,10.0,Avg,47.0,Above Avg,121.077,8.0,Above Avg,26.0,Above Avg,293.154,115.0,Weak,331.615,32.0,Above Avg
+MSU,big10,222.667,10.0,Avg,64.0,Avg,122.833,15.0,Below Avg,97.0,Below Avg,231.333,17.0,Weak,85.0,Below Avg,147.333,13.0,Below Avg,63.0,Avg,345.5,89.0,Below Avg,378.666,69.0,Avg
+NEB,big10,224.615,9.0,Avg,62.0,Avg,145.923,10.0,Avg,72.0,Avg,154.077,2.0,Elite,3.0,Elite,175.385,14.0,Below Avg,92.0,Below Avg,370.538,72.0,Avg,329.462,29.0,Above Avg
+NU,big10,185.923,15.0,Below Avg,98.0,Below Avg,160.154,8.0,Above Avg,58.0,Avg,193.538,7.0,Above Avg,28.0,Above Avg,136.308,10.0,Avg,47.0,Above Avg,346.077,88.0,Below Avg,329.846,30.0,Above Avg
+ORE,big10,253.6,5.0,Above Avg,35.0,Above Avg,198.6,3.0,Elite,16.0,Elite,157.933,3.0,Elite,4.0,Elite,115.733,7.0,Above Avg,23.0,Elite,452.2,13.0,Elite,273.666,6.0,Elite
+OSU,big10,268.214,2.0,Elite,23.0,Elite,154.357,9.0,Avg,64.0,Avg,129.714,1.0,Elite,1.0,Elite,89.357,2.0,Elite,6.0,Elite,422.571,23.0,Elite,219.071,1.0,Elite
+PSU,big10,187.615,13.0,Below Avg,95.0,Below Avg,174.385,5.0,Above Avg,44.0,Above Avg,184.231,5.0,Above Avg,20.0,Elite,142.538,11.0,Avg,54.0,Avg,362.0,75.0,Below Avg,326.769,24.0,Elite
+PUR,big10,217.167,11.0,Avg,75.0,Below Avg,126.417,14.0,Below Avg,92.0,Below Avg,241.667,18.0,Weak,99.0,Weak,181.833,16.0,Weak,102.0,Weak,343.584,91.0,Below Avg,423.5,109.0,Weak
+RUTG,big10,266.083,3.0,Elite,25.0,Elite,141.0,11.0,Avg,75.0,Below Avg,222.917,15.0,Below Avg,70.0,Avg,209.917,18.0,Weak,118.0,Weak,407.083,41.0,Above Avg,432.834,116.0,Weak
+UCLA,big10,180.25,16.0,Weak,104.0,Weak,139.667,12.0,Below Avg,76.0,Below Avg,196.583,8.0,Above Avg,32.0,Above Avg,190.417,17.0,Weak,108.0,Weak,319.91700000000003,107.0,Weak,387.0,79.0,Below Avg
+USC,big10,296.0,1.0,Elite,5.0,Elite,169.462,6.0,Above Avg,49.0,Above Avg,207.538,9.0,Avg,43.0,Above Avg,143.231,12.0,Below Avg,56.0,Avg,465.462,7.0,Elite,350.769,47.0,Above Avg
+WASH,big10,244.462,6.0,Above Avg,46.0,Above Avg,165.462,7.0,Above Avg,52.0,Avg,211.308,11.0,Avg,49.0,Above Avg,100.077,3.0,Elite,10.0,Elite,409.924,36.0,Above Avg,311.385,20.0,Elite
+WIS,big10,136.417,18.0,Weak,118.0,Weak,116.667,16.0,Weak,103.0,Weak,218.25,13.0,Below Avg,57.0,Avg,105.25,4.0,Elite,14.0,Elite,253.084,121.0,Weak,323.5,23.0,Elite
+ARIZ,big12,255.231,4.0,Elite,33.0,Above Avg,152.385,12.0,Below Avg,66.0,Avg,165.308,1.0,Elite,7.0,Elite,143.231,7.0,Above Avg,56.0,Avg,407.616,39.0,Above Avg,308.539,18.0,Elite
+ASU,big12,223.692,6.0,Above Avg,63.0,Avg,193.615,2.0,Elite,22.0,Elite,233.462,13.0,Below Avg,87.0,Below Avg,124.0,3.0,Elite,30.0,Above Avg,417.307,27.0,Above Avg,357.462,55.0,Avg
+BAY,big12,309.583,1.0,Elite,4.0,Elite,141.5,13.0,Below Avg,74.0,Avg,194.917,5.0,Above Avg,29.0,Above Avg,197.167,15.0,Weak,111.0,Weak,451.083,15.0,Elite,392.084,82.0,Below Avg
+BYU,big12,221.429,8.0,Avg,68.0,Avg,178.071,5.0,Above Avg,34.0,Above Avg,209.714,7.0,Above Avg,46.0,Above Avg,122.714,2.0,Elite,29.0,Above Avg,399.5,49.0,Above Avg,332.428,33.0,Above Avg
+CIN,big12,231.231,5.0,Above Avg,56.0,Avg,176.077,6.0,Above Avg,40.0,Above Avg,220.462,11.0,Below Avg,64.0,Avg,178.769,13.0,Below Avg,97.0,Below Avg,407.308,40.0,Above Avg,399.231,88.0,Below Avg
+COLO,big12,202.833,13.0,Below Avg,85.0,Below Avg,125.583,15.0,Weak,93.0,Below Avg,203.167,6.0,Above Avg,38.0,Above Avg,222.5,16.0,Weak,121.0,Weak,328.416,103.0,Weak,425.66700000000003,112.0,Weak
+HOU,big12,216.385,12.0,Below Avg,77.0,Below Avg,178.077,4.0,Elite,33.0,Above Avg,218.846,10.0,Avg,61.0,Avg,129.0,4.0,Elite,37.0,Above Avg,394.462,55.0,Avg,347.846,45.0,Above Avg
+ISU,big12,221.417,9.0,Avg,69.0,Avg,174.667,7.0,Above Avg,43.0,Above Avg,218.5,9.0,Avg,60.0,Avg,138.0,6.0,Above Avg,49.0,Above Avg,396.084,54.0,Avg,356.5,52.0,Avg
+KSU,big12,198.75,14.0,Weak,87.0,Below Avg,171.333,8.0,Avg,46.0,Above Avg,222.417,12.0,Below Avg,67.0,Avg,163.75,10.0,Avg,84.0,Below Avg,370.08299999999997,73.0,Avg,386.16700000000003,77.0,Below Avg
+KU,big12,222.25,7.0,Above Avg,66.0,Avg,168.25,9.0,Avg,50.0,Avg,214.083,8.0,Avg,53.0,Avg,173.083,12.0,Below Avg,90.0,Below Avg,390.5,62.0,Avg,387.166,80.0,Below Avg
+OKST,big12,174.083,16.0,Weak,105.0,Weak,118.333,16.0,Weak,101.0,Weak,252.417,15.0,Weak,109.0,Weak,165.917,11.0,Below Avg,87.0,Below Avg,292.416,116.0,Weak,418.334,105.0,Weak
+TCU,big12,290.077,2.0,Elite,9.0,Elite,131.385,14.0,Weak,90.0,Below Avg,245.615,14.0,Weak,104.0,Weak,133.077,5.0,Above Avg,42.0,Above Avg,421.462,24.0,Elite,378.692,70.0,Avg
+TTU,big12,278.5,3.0,Elite,17.0,Elite,182.857,3.0,Elite,27.0,Above Avg,190.143,4.0,Elite,25.0,Elite,68.143,1.0,Elite,1.0,Elite,461.35699999999997,9.0,Elite,258.286,3.0,Elite
+UCF,big12,220.75,10.0,Avg,70.0,Avg,158.0,11.0,Below Avg,60.0,Avg,185.083,3.0,Elite,21.0,Elite,150.667,9.0,Avg,68.0,Avg,378.75,67.0,Avg,335.75,35.0,Above Avg
+UTAH,big12,216.615,11.0,Below Avg,76.0,Below Avg,266.308,1.0,Elite,2.0,Elite,177.846,2.0,Elite,17.0,Elite,181.154,14.0,Weak,100.0,Weak,482.923,4.0,Elite,359.0,57.0,Avg
+WVU,big12,188.917,15.0,Weak,93.0,Below Avg,160.583,10.0,Avg,57.0,Avg,265.417,16.0,Weak,116.0,Weak,143.75,8.0,Avg,59.0,Avg,349.5,86.0,Below Avg,409.167,99.0,Weak
+CONN,ind,284.385,1.0,Elite,12.0,Elite,160.846,2.0,Avg,56.0,Avg,218.462,2.0,Avg,59.0,Avg,199.538,2.0,Avg,113.0,Weak,445.231,18.0,Elite,418.0,104.0,Weak
+ND,ind,255.083,2.0,Avg,34.0,Above Avg,203.417,1.0,Elite,14.0,Elite,213.417,1.0,Elite,52.0,Avg,100.083,1.0,Elite,11.0,Elite,458.5,11.0,Elite,313.5,21.0,Elite
+AKR,midam,219.0,4.0,Above Avg,73.0,Avg,134.5,9.0,Below Avg,84.0,Below Avg,229.167,12.0,Weak,80.0,Below Avg,155.25,7.0,Avg,74.0,Avg,353.5,84.0,Below Avg,384.41700000000003,76.0,Below Avg
+BALL,midam,139.917,11.0,Below Avg,116.0,Weak,131.75,11.0,Below Avg,88.0,Below Avg,226.833,11.0,Below Avg,76.0,Below Avg,178.833,9.0,Below Avg,98.0,Below Avg,271.66700000000003,120.0,Weak,405.666,97.0,Below Avg
+BGSU,midam,151.25,10.0,Below Avg,112.0,Weak,155.5,6.0,Above Avg,63.0,Avg,201.667,7.0,Avg,37.0,Above Avg,141.417,4.0,Above Avg,53.0,Avg,306.75,110.0,Weak,343.084,40.0,Above Avg
+BUFF,midam,229.0,3.0,Elite,58.0,Avg,132.333,10.0,Below Avg,86.0,Below Avg,186.417,5.0,Above Avg,22.0,Elite,157.167,8.0,Avg,76.0,Below Avg,361.33299999999997,76.0,Below Avg,343.584,42.0,Above Avg
+CMU,midam,167.077,8.0,Avg,106.0,Weak,163.462,5.0,Above Avg,54.0,Avg,209.385,9.0,Below Avg,45.0,Above Avg,145.692,6.0,Above Avg,62.0,Avg,330.539,102.0,Weak,355.077,51.0,Avg
+EMU,midam,234.75,2.0,Elite,55.0,Avg,142.5,8.0,Avg,73.0,Avg,184.167,4.0,Above Avg,19.0,Elite,232.083,13.0,Weak,122.0,Weak,377.25,68.0,Avg,416.25,103.0,Weak
+KENT,midam,197.083,5.0,Above Avg,89.0,Below Avg,97.25,12.0,Weak,117.0,Weak,236.0,13.0,Weak,93.0,Below Avg,191.417,11.0,Below Avg,110.0,Weak,294.33299999999997,114.0,Weak,427.41700000000003,114.0,Weak
+M-OH,midam,187.286,6.0,Above Avg,96.0,Below Avg,150.286,7.0,Avg,69.0,Avg,200.357,6.0,Above Avg,36.0,Above Avg,134.286,3.0,Elite,45.0,Above Avg,337.572,97.0,Below Avg,334.64300000000003,34.0,Above Avg
+MASS,midam,165.083,9.0,Below Avg,108.0,Weak,82.417,13.0,Weak,119.0,Weak,212.5,10.0,Below Avg,51.0,Avg,221.333,12.0,Weak,120.0,Weak,247.5,122.0,Weak,433.83299999999997,118.0,Weak
+NIU,midam,98.833,13.0,Weak,120.0,Weak,187.083,3.0,Elite,24.0,Elite,173.917,2.0,Elite,12.0,Elite,183.333,10.0,Below Avg,104.0,Weak,285.916,118.0,Weak,357.25,54.0,Avg
+OHIO,midam,184.154,7.0,Avg,99.0,Weak,227.385,1.0,Elite,7.0,Elite,208.077,8.0,Avg,44.0,Above Avg,144.0,5.0,Above Avg,60.0,Avg,411.539,34.0,Above Avg,352.077,49.0,Above Avg
+TOL,midam,238.077,1.0,Elite,51.0,Avg,177.154,4.0,Above Avg,35.0,Above Avg,158.0,1.0,Elite,5.0,Elite,96.308,1.0,Elite,8.0,Elite,415.231,31.0,Above Avg,254.308,2.0,Elite
+WMU,midam,138.5,12.0,Weak,117.0,Weak,204.214,2.0,Elite,13.0,Elite,179.929,3.0,Elite,18.0,Elite,125.571,2.0,Elite,33.0,Above Avg,342.714,92.0,Below Avg,305.5,16.0,Elite
+AFA,mwest,145.167,12.0,Weak,114.0,Weak,261.417,1.0,Elite,3.0,Elite,264.667,12.0,Weak,115.0,Weak,158.5,7.0,Avg,79.0,Below Avg,406.58399999999995,43.0,Above Avg,423.167,107.0,Weak
+BOIS,mwest,244.929,5.0,Above Avg,45.0,Above Avg,179.071,4.0,Above Avg,31.0,Above Avg,175.571,4.0,Above Avg,15.0,Elite,162.071,8.0,Avg,82.0,Below Avg,424.0,21.0,Elite,337.642,37.0,Above Avg
+CSU,mwest,215.917,6.0,Avg,79.0,Below Avg,108.25,11.0,Weak,107.0,Weak,221.083,6.0,Avg,65.0,Avg,204.917,12.0,Weak,116.0,Weak,324.16700000000003,105.0,Weak,426.0,113.0,Weak
+FRES,mwest,183.385,8.0,Avg,102.0,Weak,170.462,5.0,Above Avg,48.0,Above Avg,153.769,1.0,Elite,2.0,Elite,131.923,3.0,Elite,40.0,Above Avg,353.847,83.0,Below Avg,285.692,9.0,Elite
+HAW,mwest,290.615,1.0,Elite,8.0,Elite,103.154,12.0,Weak,116.0,Weak,227.154,7.0,Avg,77.0,Below Avg,133.846,4.0,Above Avg,43.0,Above Avg,393.769,57.0,Avg,361.0,59.0,Avg
+NEV,mwest,148.667,11.0,Weak,113.0,Weak,153.5,7.0,Avg,65.0,Avg,220.25,5.0,Above Avg,63.0,Avg,149.583,5.0,Above Avg,66.0,Avg,302.16700000000003,113.0,Weak,369.83299999999997,61.0,Avg
+SDSU,mwest,157.692,10.0,Below Avg,111.0,Weak,198.692,2.0,Elite,15.0,Elite,164.154,2.0,Elite,6.0,Elite,129.538,2.0,Elite,38.0,Above Avg,356.384,81.0,Below Avg,293.692,10.0,Elite
+SJSU,mwest,282.583,2.0,Elite,14.0,Elite,119.667,10.0,Below Avg,98.0,Below Avg,245.25,10.0,Below Avg,103.0,Weak,157.917,6.0,Avg,78.0,Below Avg,402.25,48.0,Above Avg,403.16700000000003,93.0,Below Avg
+UNLV,mwest,250.857,3.0,Elite,38.0,Above Avg,195.5,3.0,Elite,18.0,Elite,241.714,9.0,Below Avg,100.0,Weak,177.429,10.0,Below Avg,95.0,Below Avg,446.35699999999997,17.0,Elite,419.14300000000003,106.0,Weak
+UNM,mwest,204.769,7.0,Avg,82.0,Below Avg,152.077,8.0,Avg,67.0,Avg,229.154,8.0,Avg,79.0,Below Avg,112.769,1.0,Elite,20.0,Elite,356.846,80.0,Below Avg,341.923,39.0,Above Avg
+USU,mwest,247.0,4.0,Above Avg,42.0,Above Avg,162.462,6.0,Avg,55.0,Avg,258.846,11.0,Weak,113.0,Weak,181.231,11.0,Weak,101.0,Weak,409.462,37.0,Above Avg,440.077,120.0,Weak
+WYO,mwest,183.0,9.0,Below Avg,103.0,Weak,131.667,9.0,Below Avg,89.0,Below Avg,175.5,3.0,Elite,14.0,Elite,168.75,9.0,Below Avg,88.0,Below Avg,314.66700000000003,109.0,Weak,344.25,43.0,Above Avg
+ORST,pac12,225.833,1.0,Elite,60.0,Avg,123.917,2.0,Avg,95.0,Below Avg,222.417,2.0,Avg,67.0,Avg,157.417,2.0,Avg,77.0,Below Avg,349.75,85.0,Below Avg,379.834,72.0,Avg
+WSU,pac12,210.538,2.0,Avg,81.0,Below Avg,128.154,1.0,Elite,91.0,Below Avg,174.385,1.0,Elite,13.0,Elite,125.154,1.0,Elite,32.0,Above Avg,338.692,96.0,Below Avg,299.539,14.0,Elite
+ALA,sec,263.533,4.0,Elite,28.0,Above Avg,104.133,15.0,Weak,112.0,Weak,169.933,1.0,Elite,9.0,Elite,126.867,8.0,Avg,36.0,Above Avg,367.666,74.0,Avg,296.8,12.0,Elite
+ARK,sec,262.917,5.0,Above Avg,29.0,Above Avg,191.917,2.0,Elite,23.0,Elite,239.25,13.0,Below Avg,95.0,Below Avg,185.917,15.0,Weak,106.0,Weak,454.83399999999995,12.0,Elite,425.16700000000003,111.0,Weak
+AUB,sec,197.083,15.0,Weak,89.0,Below Avg,176.833,5.0,Above Avg,37.0,Above Avg,229.833,11.0,Below Avg,82.0,Below Avg,99.333,3.0,Elite,9.0,Elite,373.916,69.0,Avg,329.166,28.0,Above Avg
+FLA,sec,204.583,13.0,Below Avg,83.0,Below Avg,136.75,12.0,Below Avg,82.0,Below Avg,222.917,9.0,Avg,70.0,Avg,153.917,14.0,Weak,73.0,Avg,341.33299999999997,93.0,Below Avg,376.834,67.0,Avg
+LSU,sec,229.538,10.0,Avg,57.0,Avg,104.0,16.0,Weak,113.0,Weak,204.615,6.0,Above Avg,39.0,Above Avg,124.077,7.0,Above Avg,31.0,Above Avg,333.538,100.0,Weak,328.692,26.0,Above Avg
+MISS,sec,313.333,1.0,Elite,3.0,Elite,176.333,6.0,Above Avg,38.0,Above Avg,198.933,5.0,Above Avg,34.0,Above Avg,149.067,12.0,Below Avg,65.0,Avg,489.66600000000005,2.0,Elite,348.0,46.0,Above Avg
+MIZ,sec,188.0,16.0,Weak,94.0,Below Avg,228.308,1.0,Elite,6.0,Elite,173.462,2.0,Elite,11.0,Elite,103.846,4.0,Elite,12.0,Elite,416.308,29.0,Above Avg,277.308,7.0,Elite
+MSST,sec,241.154,8.0,Avg,48.0,Above Avg,158.0,9.0,Avg,60.0,Avg,223.0,10.0,Avg,72.0,Avg,186.308,16.0,Weak,107.0,Weak,399.154,50.0,Avg,409.308,100.0,Weak
+OU,sec,235.846,9.0,Avg,53.0,Avg,118.462,13.0,Below Avg,100.0,Weak,195.231,4.0,Elite,30.0,Above Avg,77.308,1.0,Elite,3.0,Elite,354.308,82.0,Below Avg,272.539,5.0,Elite
+SC,sec,225.25,11.0,Below Avg,61.0,Avg,111.083,14.0,Weak,106.0,Weak,216.333,7.0,Above Avg,55.0,Avg,136.667,11.0,Below Avg,48.0,Above Avg,336.33299999999997,98.0,Below Avg,353.0,50.0,Avg
+TA&M,sec,259.846,6.0,Above Avg,31.0,Above Avg,184.692,3.0,Elite,25.0,Elite,176.615,3.0,Elite,16.0,Elite,130.769,9.0,Avg,39.0,Above Avg,444.538,20.0,Elite,307.384,17.0,Elite
+TENN,sec,292.846,2.0,Elite,6.0,Elite,173.462,8.0,Avg,45.0,Above Avg,244.538,15.0,Weak,102.0,Weak,152.385,13.0,Below Avg,69.0,Avg,466.308,6.0,Elite,396.923,86.0,Below Avg
+TEX,sec,250.692,7.0,Above Avg,39.0,Above Avg,137.769,11.0,Below Avg,81.0,Below Avg,234.923,12.0,Below Avg,89.0,Below Avg,103.923,5.0,Above Avg,13.0,Elite,388.461,64.0,Avg,338.846,38.0,Above Avg
+UGA,sec,220.214,12.0,Below Avg,72.0,Avg,182.143,4.0,Elite,29.0,Above Avg,216.5,8.0,Avg,56.0,Avg,81.5,2.0,Elite,4.0,Elite,402.35699999999997,47.0,Above Avg,298.0,13.0,Elite
+UK,sec,201.917,14.0,Weak,86.0,Below Avg,139.167,10.0,Avg,77.0,Below Avg,239.917,14.0,Weak,96.0,Below Avg,134.25,10.0,Avg,44.0,Above Avg,341.084,94.0,Below Avg,374.16700000000003,64.0,Avg
+VAN,sec,287.308,3.0,Elite,10.0,Elite,175.538,7.0,Above Avg,41.0,Above Avg,249.462,16.0,Weak,106.0,Weak,108.077,6.0,Above Avg,17.0,Elite,462.846,8.0,Elite,357.539,56.0,Avg
+DEL,usa,292.462,1.0,Elite,7.0,Elite,119.154,8.0,Avg,99.0,Weak,245.615,9.0,Below Avg,104.0,Weak,159.692,5.0,Above Avg,80.0,Below Avg,411.616,32.0,Above Avg,405.307,96.0,Below Avg
+FIU,usa,215.385,8.0,Avg,80.0,Below Avg,181.615,4.0,Above Avg,30.0,Above Avg,249.923,10.0,Below Avg,107.0,Weak,161.615,6.0,Avg,81.0,Below Avg,397.0,52.0,Avg,411.538,101.0,Weak
+JVST,usa,162.0,12.0,Weak,110.0,Weak,246.714,1.0,Elite,5.0,Elite,234.5,6.0,Avg,88.0,Below Avg,144.286,3.0,Elite,61.0,Avg,408.714,38.0,Above Avg,378.786,71.0,Avg
+KENN,usa,243.071,6.0,Avg,47.0,Above Avg,159.357,5.0,Above Avg,59.0,Avg,220.071,2.0,Elite,62.0,Avg,184.571,11.0,Weak,105.0,Weak,402.428,46.0,Above Avg,404.642,95.0,Below Avg
+LIB,usa,195.5,9.0,Below Avg,91.0,Below Avg,194.0,3.0,Elite,21.0,Elite,196.75,1.0,Elite,33.0,Above Avg,179.083,10.0,Below Avg,99.0,Weak,389.5,63.0,Avg,375.83299999999997,66.0,Avg
+LT,usa,163.769,11.0,Weak,109.0,Weak,195.385,2.0,Elite,19.0,Elite,240.308,8.0,Avg,98.0,Below Avg,134.538,1.0,Elite,46.0,Above Avg,359.154,78.0,Below Avg,374.846,65.0,Avg
+MOST,usa,279.692,2.0,Elite,16.0,Elite,112.462,10.0,Below Avg,105.0,Weak,229.462,5.0,Above Avg,81.0,Below Avg,153.308,4.0,Above Avg,72.0,Avg,392.154,60.0,Avg,382.77,74.0,Avg
+MTSU,usa,266.083,4.0,Above Avg,25.0,Elite,105.5,11.0,Weak,108.0,Weak,256.167,11.0,Weak,112.0,Weak,143.083,2.0,Elite,55.0,Avg,371.583,71.0,Avg,399.25,89.0,Below Avg
+NMSU,usa,250.667,5.0,Above Avg,40.0,Above Avg,77.25,12.0,Weak,122.0,Weak,236.833,7.0,Avg,94.0,Below Avg,165.0,7.0,Avg,86.0,Below Avg,327.91700000000003,104.0,Weak,401.83299999999997,91.0,Below Avg
+SHSU,usa,184.083,10.0,Below Avg,100.0,Weak,131.917,7.0,Avg,87.0,Below Avg,275.917,12.0,Weak,119.0,Weak,207.583,12.0,Weak,117.0,Weak,316.0,108.0,Weak,483.5,122.0,Weak
+UTEP,usa,216.25,7.0,Avg,78.0,Below Avg,115.583,9.0,Below Avg,104.0,Weak,221.833,3.0,Elite,66.0,Avg,169.5,8.0,Avg,89.0,Below Avg,331.83299999999997,101.0,Weak,391.33299999999997,81.0,Below Avg
+WKU,usa,272.154,3.0,Elite,22.0,Elite,134.538,6.0,Avg,83.0,Below Avg,224.231,4.0,Above Avg,73.0,Avg,176.538,9.0,Below Avg,94.0,Below Avg,406.692,42.0,Above Avg,400.769,90.0,Below Avg
