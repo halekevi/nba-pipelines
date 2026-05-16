@@ -30,7 +30,8 @@
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
-#    .\run_pipeline.ps1 -SkipAltBooks          # Skip Underdog + DraftKings fetch/merge (PrizePicks-only)
+#    .\run_pipeline.ps1 -UseAltBooks           # Optional: include Underdog + DraftKings cross-book inputs
+#    .\run_pipeline.ps1 -SkipAltBooks          # Legacy flag (no-op unless -UseAltBooks is set)
 #
 #  Combined always auto-includes every sport whose step8 output exists on disk.
 #  No -Include flags needed -- just run any sport, combined picks it up.
@@ -43,7 +44,6 @@
 #   Full daily run  : scripts\run_daily.ps1 [-Date YYYY-MM-DD]
 #     STEP C calls  : run_pipeline.ps1 -Date $Today -ForceAll -SkipCombined -SkipPush
 #     STEP D calls  : run_pipeline.ps1 -Date $Today -CombinedOnly -DQWarnOnly
-#   Underdog + DraftKings lines: fetched automatically before combined unless -SkipAltBooks or env PROPORACLE_SKIP_ALT_BOOKS=1
 #   Manual rebuild  : .\run_pipeline.ps1 -Date YYYY-MM-DD [-CombinedOnly]
 #
 # ============================================================
@@ -78,7 +78,6 @@ param(
     [switch]$SkipCombined,
     # Used by scripts/run_daily.ps1 so git push is only handled once there.
     [switch]$SkipPush,
-    # Deprecated: alt-books run by default. Kept so old scripts that pass -UseAltBooks still work.
     [switch]$UseAltBooks,
     [switch]$SkipAltBooks,
     [int]$CacheAgeDays = 7,
@@ -105,15 +104,6 @@ if (-not $WNBACdp) { $WNBACdp = [string]$env:PRIZEPICKS_CDP }
 $WNBACdp = $WNBACdp.Trim()
 if ($WNBACdp) {
     Write-Host "  [WNBA] CDP for step1 fetch: $WNBACdp" -ForegroundColor DarkGray
-}
-
-function Test-PropOracleAltBooksEnabled {
-    if ($SkipAltBooks) { return $false }
-    $envSkip = [string]$env:PROPORACLE_SKIP_ALT_BOOKS
-    if ($envSkip -eq "1") { return $false }
-    $t = $envSkip.Trim().ToLowerInvariant()
-    if ($t -eq "true" -or $t -eq "yes") { return $false }
-    return $true
 }
 
 # -- Date ---------------------------------------------------------------------
@@ -319,48 +309,72 @@ function Invoke-PropOracleMobileBundle {
     return (Run-Step "Generate mobile bundle" $Root ".\scripts\generate_mobile_bundle.py" "")
 }
 
-function Invoke-MLBStep1Fetch {
+function Invoke-NBAStep1Fetch {
     param(
         [string]$WorkDir,
         [string]$PipelineDate,
-        [string]$OutputPath = "step1_mlb_props.csv"
+        [string]$OutputPath
     )
-    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)" -ForegroundColor Yellow
+    Write-Host "  --> NBA Step 1 - Fetch PrizePicks (emergency / recovery)" -ForegroundColor Yellow
     Push-Location $WorkDir
     try {
-        $env:PYTHONUTF8       = "1"
+        $env:PYTHONUTF8 = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
-        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 2 ..."
-        Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
-        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-            --date $PipelineDate --output $OutputPath `
-            --api-retries 2 --api-session-waves 1 `
-            --api-wave-gap-min 8 --api-wave-gap-max 15 `
-            --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
-            --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
+        $outDir = Split-Path -Parent $OutputPath
+        if ($outDir -and -not (Test-Path -LiteralPath $outDir)) {
+            New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+        }
+        $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
+            --league_id 7 --game_mode pickem --per_page 250 --max_pages 5 `
+            --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
+            --replace --date $PipelineDate --allow-nearest-future `
+            --output $OutputPath 2>&1
         $exit = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
-        if ($exit -ne 0) {
-            Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
-            $cmd2Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
-            Write-Host "        CMD: $cmd2Display" -ForegroundColor DarkGray
-            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                --playwright --timeout 120 --retries 1 --retry_delay 5 `
-                --date $PipelineDate --output $OutputPath 2>&1
-            $exit = $LASTEXITCODE
-            foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
-        }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
-        Write-Host "      OK" -ForegroundColor Green; return $true
+        Write-Host "      OK" -ForegroundColor Green
+        return $true
     } catch {
-        Write-Host "      EXCEPTION: $_" -ForegroundColor Red; return $false
+        Write-Host "      EXCEPTION: $_" -ForegroundColor Red
+        return $false
     } finally {
         Pop-Location
     }
 }
 
-function Get-MLBStep1DateHealth {
+function Invoke-MLBStep1Fetch {
+    param(
+        [string]$PipelineDate,
+        [string]$OutputPath
+    )
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (same API as NBA, league_id=2)" -ForegroundColor Yellow
+    Push-Location $NBADir
+    try {
+        $env:PYTHONUTF8 = "1"
+        $env:PYTHONIOENCODING = "utf-8"
+        $outDir = Split-Path -Parent $OutputPath
+        if ($outDir -and -not (Test-Path -LiteralPath $outDir)) {
+            New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+        }
+        $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
+            --league_id 2 --game_mode pickem --per_page 250 --max_pages 5 `
+            --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
+            --replace --date $PipelineDate --allow-nearest-future `
+            --output $OutputPath 2>&1
+        $exit = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
+        Write-Host "      OK" -ForegroundColor Green
+        return $true
+    } catch {
+        Write-Host "      EXCEPTION: $_" -ForegroundColor Red
+        return $false
+    } finally {
+        Pop-Location
+    }
+}
+
+function Get-Step1DateHealth {
     param(
         [string]$CsvPath,
         [string]$TargetDate
@@ -383,6 +397,37 @@ function Get-MLBStep1DateHealth {
     }
     $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
     return @{ ok = ($match.Count -gt 0); rows = $rows.Count; reason = $reason }
+}
+
+function Get-NBAStep1DateHealth {
+    param([string]$CsvPath, [string]$TargetDate)
+    return (Get-Step1DateHealth -CsvPath $CsvPath -TargetDate $TargetDate)
+}
+
+function Get-MLBStep1DateHealth {
+    param([string]$CsvPath, [string]$TargetDate)
+    return (Get-Step1DateHealth -CsvPath $CsvPath -TargetDate $TargetDate)
+}
+
+function Clear-NBAGeneratedOutputs {
+    param([string]$BaseDir)
+    foreach ($p in @(
+        "step1_pp_props_today.csv",
+        "step2_with_picktypes.csv",
+        "step3_with_defense.csv",
+        "step4_with_stats.csv",
+        "step5_with_hit_rates.csv",
+        "step6_with_team_role_context.csv",
+        "step6a_with_opp_stats.csv",
+        "step6b_with_game_context.csv",
+        "step6c_with_schedule_flags.csv",
+        "step6d_with_h2h.csv",
+        "step7_ranked_props.xlsx",
+        "step8_all_direction.csv",
+        "step8_all_direction_clean.xlsx"
+    )) {
+        Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Clear-MLBGeneratedOutputs {
@@ -646,12 +691,12 @@ function Invoke-AltBookPy {
 }
 
 function Invoke-AltBookFetches {
-    if (-not (Test-PropOracleAltBooksEnabled)) {
-        if ($SkipAltBooks) {
-            Write-Host "  [alt-books] Skipped (-SkipAltBooks)" -ForegroundColor DarkGray
-        } else {
-            Write-Host "  [alt-books] Skipped (env PROPORACLE_SKIP_ALT_BOOKS)" -ForegroundColor DarkGray
-        }
+    if (-not $UseAltBooks) {
+        Write-Host "  [alt-books] Skipped (PrizePicks-only mode; pass -UseAltBooks to enable)" -ForegroundColor DarkGray
+        return
+    }
+    if ($SkipAltBooks) {
+        Write-Host "  [alt-books] Skipped (-SkipAltBooks with -UseAltBooks)" -ForegroundColor DarkGray
         return
     }
     $UdScript    = Join-Path $Root "scripts\fetch_underdog_pickem.py"
@@ -719,7 +764,7 @@ function Run-Combined {
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
     $CombinedArgs = ""
 
-    if (Test-PropOracleAltBooksEnabled) {
+    if ($UseAltBooks -and -not $SkipAltBooks) {
         $UdCsv = Join-Path $OutDir "underdog_props.csv"
         $DkAll = Join-Path $OutDir "draftkings_props_all.csv"
         $DkNba = Join-Path $OutDir "draftkings_props_nba.csv"
@@ -882,7 +927,7 @@ if ($WNBAOnly) {
         exit 1
     }
     $wnbaInvoke = @{ Date = $Date }
-    if ($RefreshCache) { $wnbaInvoke["RefreshCache"] = $true }
+    # WNBA cache wipe only via scripts\run_wnba_pipeline.ps1 -RefreshCache (not NBA -RefreshCache).
     if ($SkipFetch) { $wnbaInvoke["SkipFetch"] = $true }
     if ($WNBACdp) { $wnbaInvoke["Cdp"] = $WNBACdp }
     & $wnbaPs1 @wnbaInvoke
@@ -952,7 +997,7 @@ if ($MLBOnly) {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $mlbStep1Health.ok) {
@@ -1126,8 +1171,33 @@ if ($NBAOnly) {
     }
 
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$NBARunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Host "  [NBA] Skipping step1 fetch -- using existing $NBARunOutDir\step1_pp_props_today.csv" -ForegroundColor DarkGray }
-    if ($ok) { $ok = Run-Step "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$NBARunOutDir\step1_pp_props_today.csv`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
+    $nbaStep1Solo = Join-Path $NBARunOutDir "step1_pp_props_today.csv"
+    if (-not $SkipFetch) {
+        if ($ok) {
+            $ok = Run-Step "NBA Step 1 - Fetch PrizePicks" $NBADir ".\scripts\step1_fetch_prizepicks_api.py" `
+                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1Solo`" --date $Date --allow-nearest-future"
+        }
+    } else {
+        Write-Host "  [NBA] Skipping step1 fetch -- using existing $nbaStep1Solo" -ForegroundColor DarkGray
+        $nbaHealth = Get-NBAStep1DateHealth -CsvPath $nbaStep1Solo -TargetDate $Date
+        if (-not $nbaHealth.ok) {
+            $legacy = Join-Path $NBADir "data\outputs\step1_pp_props_today.csv"
+            $legHealth = Get-NBAStep1DateHealth -CsvPath $legacy -TargetDate $Date
+            if ($legHealth.ok) {
+                Copy-Item -LiteralPath $legacy -Destination $nbaStep1Solo -Force
+                Write-Host "  [NBA] Synced step1 from legacy data/outputs" -ForegroundColor Cyan
+            } else {
+                Write-Host "  [NBA] step1 unhealthy ($($nbaHealth.reason)) — emergency fetch" -ForegroundColor Yellow
+                $ok = Invoke-NBAStep1Fetch -WorkDir $NBADir -PipelineDate $Date -OutputPath $nbaStep1Solo
+            }
+        }
+    }
+    $nbaHealthGate = Get-NBAStep1DateHealth -CsvPath $nbaStep1Solo -TargetDate $Date
+    if (-not $nbaHealthGate.ok) {
+        Write-Host "  [NBA] Aborting: no valid step1 for $Date ($($nbaHealthGate.reason))" -ForegroundColor Red
+        $ok = $false
+    }
+    if ($ok) { $ok = Run-Step "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$nbaStep1Solo`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`"" }
@@ -1243,6 +1313,46 @@ $NBAJob = Start-Job -ScriptBlock {
         } catch { Write-Output "[NBA] EXCEPTION in $Label`: $_"; return $false
         } finally { Pop-Location }
     }
+    function Get-Step1DateHealth-Job {
+        param([string]$CsvPath, [string]$TargetDate)
+        if (-not (Test-Path $CsvPath)) { return @{ ok = $false; reason = "missing_file" } }
+        try { $rows = Import-Csv -Path $CsvPath } catch { return @{ ok = $false; reason = "read_error" } }
+        if (-not $rows -or $rows.Count -eq 0) { return @{ ok = $false; reason = "empty_file" } }
+        $match = @()
+        if ($rows[0].PSObject.Properties.Name -contains "game_date") {
+            $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
+        } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
+            $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+        } else {
+            return @{ ok = $false; reason = "missing_date_columns" }
+        }
+        $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
+        return @{ ok = ($match.Count -gt 0); reason = $reason }
+    }
+    function Invoke-NBAStep1Fetch-Job {
+        param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
+        Write-Output "[NBA] --> NBA Step 1 - Fetch PrizePicks (emergency / recovery)"
+        Push-Location $Dir
+        try {
+            $outDir = Split-Path -Parent $OutputPath
+            if ($outDir -and -not (Test-Path -LiteralPath $outDir)) {
+                New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+            }
+            $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
+                --league_id 7 --game_mode pickem --per_page 250 --max_pages 5 `
+                --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
+                --replace --date $PipelineDate --allow-nearest-future `
+                --output $OutputPath 2>&1
+            $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[NBA] FAILED: NBA Step 1 (exit $exit)"; return $false }
+            Write-Output "[NBA] OK: NBA Step 1"; return $true
+        } catch {
+            Write-Output "[NBA] EXCEPTION: NBA Step 1: $_"; return $false
+        } finally {
+            Pop-Location
+        }
+    }
     function Invoke-Step7b-Job {
         param([string]$SportLabel, [string]$R)
         Push-Location $R
@@ -1262,8 +1372,33 @@ $NBAJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$NBARunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Output "[NBA] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$NBARunOutDir\step1_pp_props_today.csv`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
+    $nbaStep1 = Join-Path $NBARunOutDir "step1_pp_props_today.csv"
+    if (-not $SkipFetch) {
+        if ($ok) {
+            $ok = Run-Step-Job "NBA Step 1 - Fetch PrizePicks" $NBADir ".\scripts\step1_fetch_prizepicks_api.py" `
+                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1`" --date $Date --allow-nearest-future"
+        }
+    } else {
+        Write-Output "[NBA] Skipping step1 fetch"
+        $health = Get-Step1DateHealth-Job -CsvPath $nbaStep1 -TargetDate $Date
+        if (-not $health.ok) {
+            $legacy = Join-Path $NBADir "data\outputs\step1_pp_props_today.csv"
+            $legHealth = Get-Step1DateHealth-Job -CsvPath $legacy -TargetDate $Date
+            if ($legHealth.ok) {
+                Copy-Item -LiteralPath $legacy -Destination $nbaStep1 -Force
+                Write-Output "[NBA] Synced step1 from legacy data/outputs -> $nbaStep1"
+            } else {
+                Write-Output "[NBA] step1 unhealthy ($($health.reason)) — emergency fetch"
+                $ok = Invoke-NBAStep1Fetch-Job -Dir $NBADir -PipelineDate $Date -OutputPath $nbaStep1
+            }
+        }
+    }
+    $health = Get-Step1DateHealth-Job -CsvPath $nbaStep1 -TargetDate $Date
+    if (-not $health.ok) {
+        Write-Output "[NBA] Aborting steps 2-8: no valid step1 for $Date ($($health.reason))"
+        $ok = $false
+    }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$nbaStep1`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`"" }
@@ -1541,7 +1676,7 @@ $TennisJob = Start-Job -ScriptBlock {
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
-    param($MLBDir, $Date, $SkipFetch, $RepoRoot, $MLBRunOutDir, $MlbSeasonYear)
+    param($MLBDir, $Date, $SkipFetch, $RepoRoot, $MLBRunOutDir, $MlbSeasonYear, $NBADir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1558,28 +1693,22 @@ $MLBJob = Start-Job -ScriptBlock {
         } finally { Pop-Location }
     }
     function Invoke-MLBStep1Fetch-Job {
-        param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
-        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
-        Push-Location $Dir
+        param([string]$NbaDir, [string]$PipelineDate, [string]$OutputPath)
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (same API as NBA, league_id=2)"
+        Push-Location $NbaDir
         try {
-            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
-            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                --date $PipelineDate --output $OutputPath `
-                --api-retries 2 --api-session-waves 1 `
-                --api-wave-gap-min 8 --api-wave-gap-max 15 `
-                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
-                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
+            $outDir = Split-Path -Parent $OutputPath
+            if ($outDir -and -not (Test-Path -LiteralPath $outDir)) {
+                New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+            }
+            Write-Output "        CMD: py -3.14 .\scripts\step1_fetch_prizepicks_api.py --league_id 2 ... --output $OutputPath"
+            $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
+                --league_id 2 --game_mode pickem --per_page 250 --max_pages 5 `
+                --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
+                --replace --date $PipelineDate --allow-nearest-future `
+                --output $OutputPath 2>&1
             $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
-            if ($exit -ne 0) {
-                Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
-                Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
-                $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                    --playwright --timeout 120 --retries 1 --retry_delay 5 `
-                    --date $PipelineDate --output $OutputPath 2>&1
-                $exit = $LASTEXITCODE
-                foreach ($line in $output) { Write-Output "        $line" }
-            }
             if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
             Write-Output "[MLB] OK: MLB Step 1"; return $true
         } catch {
@@ -1641,7 +1770,7 @@ $MLBJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -NbaDir $NBADir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $health.ok) {
@@ -1652,6 +1781,25 @@ $MLBJob = Start-Job -ScriptBlock {
         }
     } else {
         Write-Output "[MLB] Skipping step1 fetch"
+        $mlbStep1 = Join-Path $MLBRunOutDir "step1_mlb_props.csv"
+        $health = Get-MLBStep1DateHealth-Job -CsvPath $mlbStep1 -TargetDate $Date
+        if (-not $health.ok) {
+            $legacy = Join-Path $MLBDir "data\outputs\step1_mlb_props.csv"
+            $legHealth = Get-MLBStep1DateHealth-Job -CsvPath $legacy -TargetDate $Date
+            if ($legHealth.ok) {
+                Copy-Item -LiteralPath $legacy -Destination $mlbStep1 -Force
+                Write-Output "[MLB] Synced step1 from legacy data/outputs -> $mlbStep1"
+            } else {
+                Write-Output "[MLB] step1 unhealthy ($($health.reason)) — emergency fetch"
+                $ok = Invoke-MLBStep1Fetch-Job -NbaDir $NBADir -PipelineDate $Date -OutputPath $mlbStep1
+            }
+        }
+    }
+    $mlbStep1Check = Join-Path $MLBRunOutDir "step1_mlb_props.csv"
+    $mlbHealth = Get-MLBStep1DateHealth-Job -CsvPath $mlbStep1Check -TargetDate $Date
+    if (-not $mlbHealth.ok) {
+        Write-Output "[MLB] Aborting steps 2-8: no valid step1 for $Date ($($mlbHealth.reason))"
+        $ok = $false
     }
     if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
@@ -1662,13 +1810,13 @@ $MLBJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
     if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "Sports\MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root, $MLBRunOutDir, $MLBSeasonYear
+} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root, $MLBRunOutDir, $MLBSeasonYear, $NBADir
 
 # -- WNBA Job (parallel full run from $WNBA_SEASON_START; optional -ForceWNBA) ---
 $WNBAJob = $null
 if ($wnbaParallel) {
     $WNBAJob = Start-Job -ScriptBlock {
-        param($RepoRoot, $PipelineDate, $SkipFetchFlag, $RefreshCacheFlag, $WnbaCdp)
+        param($RepoRoot, $PipelineDate, $SkipFetchFlag, $WnbaCdp)
         $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
         $wnbaPs1 = Join-Path $RepoRoot "scripts\run_wnba_pipeline.ps1"
         if (-not (Test-Path -LiteralPath $wnbaPs1)) {
@@ -1678,7 +1826,7 @@ if ($wnbaParallel) {
         Push-Location $RepoRoot
         try {
             $wnbaInvoke = @{ Date = $PipelineDate }
-            if ($RefreshCacheFlag) { $wnbaInvoke["RefreshCache"] = $true }
+            # WNBA ESPN cache is independent of NBA -RefreshCache (do not wipe 6297-row backfill on full runs).
             if ($SkipFetchFlag) { $wnbaInvoke["SkipFetch"] = $true }
             if ($WnbaCdp) { $wnbaInvoke["Cdp"] = $WnbaCdp }
             & $wnbaPs1 @wnbaInvoke
@@ -1692,7 +1840,7 @@ if ($wnbaParallel) {
         } finally {
             Pop-Location
         }
-    } -ArgumentList $Root, $Date, [bool]$SkipFetch, [bool]$RefreshCache, $WNBACdp
+    } -ArgumentList $Root, $Date, [bool]$SkipFetch, $WNBACdp
 }
 
 # -- NFL Job ------------------------------------------------------------------
@@ -1817,6 +1965,13 @@ if (-not $mlbStep1Health.ok) {
     $MLBSuccess = $false
 } else {
     $MLBSuccess = $MLBSuccess -and $true
+}
+
+$nbaStep1Health = Get-NBAStep1DateHealth -CsvPath (Join-Path $NBARunOutDir "step1_pp_props_today.csv") -TargetDate $Date
+if (-not $nbaStep1Health.ok) {
+    Write-Host "  [NBA] stale/invalid step1 for $Date ($($nbaStep1Health.reason)); clearing NBA outputs from this run." -ForegroundColor Yellow
+    Clear-NBAGeneratedOutputs -BaseDir $NBARunOutDir
+    $NBASuccess = $false
 }
 
 # Dated NBA main step8 for run_grader (avoids empty grades after the live workbook rolls to the next slate day).

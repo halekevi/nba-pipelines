@@ -73,7 +73,9 @@ if (-not $targetDate) {
 
 $outPath = $Output.Trim()
 if (-not $outPath) {
-    $outPath = Join-Path $Root "Sports\MLB\step1_mlb_props.csv"
+    $outPath = Join-Path $Root "outputs\$targetDate\mlb\step1_mlb_props.csv"
+    $outDir = Split-Path $outPath -Parent
+    if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Force -Path $outDir | Out-Null }
 }
 elseif (-not [System.IO.Path]::IsPathRooted($outPath)) {
     $outPath = Join-Path $Root $outPath

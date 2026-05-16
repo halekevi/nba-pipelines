@@ -2,8 +2,8 @@
 """
 step1_fetch_prizepicks_mlb.py  (MLB Pipeline)
 
-Default: direct PrizePicks API via NBA/scripts/step1_fetch_prizepicks_api.py (curl_cffi
-browser TLS impersonation when installed; else requests). No Playwright/CDP unless --playwright.
+Default for run_pipeline.ps1 / run_daily.ps1: Sports/NBA/scripts/step1_fetch_prizepicks_api.py
+with --league_id 2 (same flags as NBA). This script remains for manual --cdp / --playwright runs.
 
 Optional legacy path: Playwright intercept (DataDome-heavy). Use only if API fails.
 

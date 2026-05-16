@@ -1151,6 +1151,7 @@ Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
 $railwayCopies = @(
     @{ Src = "NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "NBA\step8_all_direction_clean.xlsx" },
     @{ Src = "Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Soccer\step8_soccer_direction_clean.xlsx" },
+    @{ Src = "outputs\$Today\mlb\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
     @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
     @{ Src = "Tennis\outputs\step8_tennis_direction_clean.xlsx"; Dst = "Tennis\step8_tennis_direction_clean.xlsx" }
 )
@@ -1546,6 +1547,10 @@ if ($NowHour -ge 10) {
     Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: late slate refresh (all sports step1 --append + full pipeline -SkipFetch)"
 
     $NBADir = Join-Path $SportsRoot "NBA"
+    $lateNbaOutDir = Join-Path $Root "outputs\$Today\nba"
+    if (-not (Test-Path -LiteralPath $lateNbaOutDir)) {
+        New-Item -ItemType Directory -Force -Path $lateNbaOutDir | Out-Null
+    }
     $lateNbaArgs = @(
         # Gentler late-fetch anti-403 settings.
         "--league_id", "7",
@@ -1559,7 +1564,8 @@ if ($NowHour -ge 10) {
         "--jitter_seconds", "14.0",
         "--append",
         "--date", $Today,
-        "--output", "data\outputs\step1_pp_props_today.csv"
+        "--allow-nearest-future",
+        "--output", (Join-Path $Root "outputs\$Today\nba\step1_pp_props_today.csv")
     )
     Push-Location $NBADir
     try {
@@ -1599,39 +1605,34 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
     }
 
-    Write-Host "[MLB] Fetching MLB props (direct API first; Playwright fallback)..." -ForegroundColor Cyan
+    Write-Host "[MLB] Fetching MLB props (same API fetcher as NBA, league_id=2)..." -ForegroundColor Cyan
+    $NBADir = Join-Path $SportsRoot "NBA"
     $MLBDir = Join-Path $SportsRoot "MLB"
-    Push-Location $MLBDir
+    $mlbLateOut = Join-Path $Root "outputs\$Today\mlb\step1_mlb_props.csv"
+    $mlbLateDir = Split-Path $mlbLateOut -Parent
+    if (-not (Test-Path $mlbLateDir)) { New-Item -ItemType Directory -Force -Path $mlbLateDir | Out-Null }
+    Push-Location $NBADir
     try {
-        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-            "--max-pages" "5" `
-            "--api-retries" "5" `
-            "--api-session-waves" "3" `
-            "--api-wave-gap-min" "30" `
-            "--api-wave-gap-max" "75" `
-            "--api-403-cooldown-after" "4" `
-            "--api-403-cooldown-seconds" "180" `
-            "--api-403-cooldown-jitter-min" "20" `
-            "--api-403-cooldown-jitter-max" "80" `
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_api.py" `
+            "--league_id" "2" `
+            "--game_mode" "pickem" `
+            "--per_page" "250" `
+            "--max_pages" "5" `
+            "--sleep" "2.0" `
+            "--cooldown_seconds" "90" `
+            "--max_cooldowns" "3" `
+            "--jitter_seconds" "10.0" `
             "--append" `
+            "--allow-nearest-future" `
             "--date" "$Today" `
-            "--output" "step1_mlb_props.csv"
-        if ($LASTEXITCODE -ne 0) {
-            Write-Warning "[NBA_LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright"
-            Write-Log "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE); trying Playwright"
-            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                "--playwright" `
-                "--timeout" "240" `
-                "--append" `
-                "--date" "$Today" `
-                "--output" "step1_mlb_props.csv"
-        }
+            "--output" $mlbLateOut
     }
     finally {
         Pop-Location
     }
     if ($LASTEXITCODE -ne 0) {
-        $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
+        $mlbOut = $mlbLateOut
+        if (-not (Test-Path $mlbOut)) { $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv" }
         $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
         if ($mlbRows -gt 0) {
             Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE), but fallback rows are present ($mlbRows) - continuing"
@@ -1640,6 +1641,16 @@ if ($NowHour -ge 10) {
         else {
             Write-Warning "[NBA_LATE_FETCH][HIGH] MLB step1 failed (exit $LASTEXITCODE) and no fallback rows are available; continuing other sports"
             Write-Log "[NBA_LATE_FETCH][HIGH] MLB step1 exit $LASTEXITCODE with no fallback rows"
+        }
+    }
+
+    $wnbaLatePs1 = Join-Path $Root "scripts\run_wnba_pipeline.ps1"
+    if (Test-Path -LiteralPath $wnbaLatePs1) {
+        Write-Host "[LATE_FETCH] Fetching WNBA props..." -ForegroundColor Cyan
+        & pwsh -NoProfile -File $wnbaLatePs1 -Date $Today -Step1Only
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[NBA_LATE_FETCH] WNBA step1 failed (exit $LASTEXITCODE) — continuing"
+            Write-Log "[NBA_LATE_FETCH] WARN: WNBA step1 exit $LASTEXITCODE"
         }
     }
 
