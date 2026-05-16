@@ -1311,16 +1311,31 @@ def _empty_sport_ticket_summary() -> dict[str, dict[str, int]]:
     return {s: {"wins": 0, "losses": 0} for s in TICKET_EVAL_SPORT_ORDER}
 
 
-def _sum_sport_win_rate_html(sport: str, pct: float | None) -> str:
+def _sum_sport_win_rate_html(
+    sport: str, pct: float | None, *, pending_ticket_slips: int = 0
+) -> str:
     lab = f"{sport} TKT WIN RATE"
+    tip = ""
+    if pending_ticket_slips > 0 and pct is None:
+        plural = "s" if pending_ticket_slips != 1 else ""
+        tip = html.escape(
+            f"{pending_ticket_slips} ticket slip{plural} still have UNGRADED legs "
+            "(no graded row / actual yet—run grader after matches; tennis often uses "
+            "next calendar day workbook merge)."
+        )
+    title_attr = f' title="{tip}"' if tip else ""
     if pct is not None:
         return (
             f'<div class="sum-item"><div class="sum-val">{pct:.1f}%</div>'
             f'<div class="sum-lab">{lab}</div></div>'
         )
+    badge = ""
+    if pending_ticket_slips > 0:
+        badge = f'<span class="sum-lab-badge">{pending_ticket_slips} pending</span>'
     return (
-        f'<div class="sum-item"><div class="sum-val pend">—</div>'
-        f'<div class="sum-lab">{lab}</div></div>'
+        f'<div class="sum-item sum-item-pending-sport"{title_attr}>'
+        f'<div class="sum-val pend">—</div>'
+        f'<div class="sum-lab">{lab}{badge}</div></div>'
     )
 
 
@@ -1332,6 +1347,27 @@ def _ticket_group_bucket(group_name: str) -> str:
     if n.upper().startswith("XSPORT"):
         return "Cross-sport"
     return n.split()[0] or "Other"
+
+
+def _ticket_sport_bucket_for_money_summary(group_name: str, legs: list[Any] | None) -> str:
+    """
+    Map a ticket to a TICKET_EVAL_SPORT_ORDER rollup for the stats-bar % columns.
+
+    Sheet ``group_name`` often does not start with the sport token (e.g. "Tennis Flex",
+    mixed titles, or "NBA Coverage"); using only :func:`_ticket_group_bucket` can mis-bucket Tennis
+    (and others) so TENNIS TKT WIN RATE stays empty. When every leg exposes the same ``sport``, prefer
+    that canon key (:func:`_sport_key`).
+    """
+    sks: list[str] = []
+    for lg in legs or []:
+        if isinstance(lg, dict):
+            s = _sport_key(str(lg.get("sport") or ""))
+            if s:
+                sks.append(s)
+    uniq = sorted(set(sks))
+    if len(uniq) == 1:
+        return uniq[0]
+    return _sport_key(_ticket_group_bucket(group_name))
 
 
 def _ticket_bucket_skin_class(bucket: str) -> str:
@@ -2789,6 +2825,7 @@ def _build_html(
     money_wins = 0
     money_losses = 0
     sport_ticket_summary = _empty_sport_ticket_summary()
+    sport_ticket_pending: dict[str, int] = {}
     for t in tickets_flat:
         gname = str(t.get("_group_name") or "Group")
         legs = t.get("legs") or []
@@ -2817,11 +2854,13 @@ def _build_html(
         if all(x == "HIT" for x in gs):
             perfect += 1
         if any(x == "UNGRADED" for x in gs):
+            bsk = _ticket_sport_bucket_for_money_summary(gname, legs)
+            sport_ticket_pending[bsk] = sport_ticket_pending.get(bsk, 0) + 1
             continue
         if all(x == "VOID" for x in gs):
             continue
         pays_money = _ticket_pays_money(gname, gs)
-        bucket = _sport_key(_ticket_group_bucket(gname))
+        bucket = _ticket_sport_bucket_for_money_summary(gname, legs)
         if bucket not in sport_ticket_summary:
             sport_ticket_summary[bucket] = {"wins": 0, "losses": 0}
 
@@ -2842,7 +2881,11 @@ def _build_html(
         return (100.0 * w / d) if d > 0 else None
 
     sport_win_rate_lines = [
-        _sum_sport_win_rate_html(sport, _ticket_win_rate_pct(sport))
+        _sum_sport_win_rate_html(
+            sport,
+            _ticket_win_rate_pct(sport),
+            pending_ticket_slips=int(sport_ticket_pending.get(sport, 0)),
+        )
         for sport in TICKET_EVAL_SPORT_ORDER
     ]
 
@@ -3002,6 +3045,9 @@ def _build_html(
         "border-radius:0 0 18px 18px;padding-top:11px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}",
+        ".sum-item-pending-sport{cursor:help;}",
+        ".sum-lab-badge{display:block;font-size:9px;line-height:1.15;color:var(--pending);opacity:.96;"
+        "margin-top:3px;font-weight:600;text-transform:none;letter-spacing:0;}",
         ".sum-val{font-family:'Inter',sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
         ".sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}",
         ".sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}",

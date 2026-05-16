@@ -222,7 +222,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-chart-line")[:12] or "2026-05-15-chart-line"
+_UI_BUILD_ID = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "2026-05-15-slate-api")[:12] or "2026-05-15-slate-api"
 
 
 def _deploy_git_sha_short() -> str:
@@ -941,6 +941,15 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "hit_rate",
         "l5_over",
         "l5_under",
+        "l10_over",
+        "l10_under",
+        "season_avg",
+        "ml_prob",
+        "def_tier",
+        "standard_line",
+        "standard_projection",
+        "opponent_def_rank",
+        "image_url",
         "game_time",
         "sport",
     }
@@ -1054,11 +1063,25 @@ def _slim_slate_sport_cell(key: str, v: Any) -> Any:
     if isinstance(v, (int, float)):
         if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
             return None
-        if key in ("edge", "rank_score", "abs_edge"):
+        if key in ("edge", "rank_score", "abs_edge", "ml_prob"):
             return round(float(v), 4)
         if key == "hit_rate":
             return round(float(v), 6)
-        if key in ("line", "l5_over", "l5_under", "projection"):
+        if key == "opponent_def_rank":
+            fv = float(v)
+            if fv.is_integer():
+                return int(fv)
+            return round(fv, 4)
+        if key in (
+            "line",
+            "l5_over",
+            "l5_under",
+            "l10_over",
+            "l10_under",
+            "projection",
+            "standard_line",
+            "season_avg",
+        ):
             fv = float(v)
             if fv.is_integer():
                 return int(fv)
@@ -4108,6 +4131,95 @@ def _line_tokens_from_record(row: dict[str, Any]) -> list[str]:
     return toks if toks else [""]
 
 
+def _normalize_api_slate_sport_query(raw: str | None) -> str:
+    """Uppercase sport key for ?sport= on /api/slate (case-insensitive input)."""
+    return (raw or "").strip().upper()
+
+
+def _apply_sport_filter_to_slate_payload(
+    payload: dict[str, Any], sport_filter: str
+) -> dict[str, Any]:
+    if not sport_filter:
+        return payload
+    picks = payload.get("picks")
+    if not isinstance(picks, list):
+        return payload
+    filtered = [
+        p
+        for p in picks
+        if isinstance(p, dict)
+        and str(p.get("sport") or "").strip().upper() == sport_filter
+    ]
+    out = {**payload, "picks": filtered}
+    out["sport_filter"] = sport_filter
+    return out
+
+
+def _api_slate_pick_moat_fields(r: dict[str, Any]) -> dict[str, Any]:
+    """Expose rank tier, ML prob, matchup, and book context on /api/slate picks."""
+
+    def fnum(x: Any) -> float | None:
+        if x is None or x == "":
+            return None
+        try:
+            v = float(x)
+            if math.isnan(v) or math.isinf(v):
+                return None
+            return v
+        except (TypeError, ValueError):
+            return None
+
+    def fstr(x: Any) -> str | None:
+        if x is None:
+            return None
+        s = str(x).strip()
+        return s if s else None
+
+    opp_raw = r.get("opp")
+    if opp_raw is None or (isinstance(opp_raw, str) and not opp_raw.strip()):
+        opp_raw = r.get("opp_team")
+
+    def_rank: float | None = None
+    for k in (
+        "opponent_def_rank",
+        "opp_def_rank",
+        "OVERALL_DEF_RANK",
+        "def_rank",
+        "ncaa_rank",
+    ):
+        if k in r:
+            def_rank = fnum(r.get(k))
+            if def_rank is not None:
+                break
+
+    bcl = r.get("best_cross_line")
+    book_line = fnum(bcl if bcl not in (None, "") else r.get("book_line"))
+    line_plain = fnum(r.get("line"))
+    prop_line = fnum(r.get("prop_line"))
+    if prop_line is None:
+        prop_line = line_plain
+
+    gt = fstr(r.get("game_time") or r.get("event_start_time"))
+
+    return {
+        "team": fstr(r.get("team")),
+        "opp": fstr(opp_raw),
+        "ml_prob": fnum(r.get("ml_prob")),
+        "tier": fstr(r.get("tier")),
+        "rank": fnum(r.get("rank_score")),
+        "def_tier": fstr(r.get("def_tier") or r.get("Def Tier")),
+        "opponent_def_rank": def_rank,
+        "book_line": book_line,
+        "prop_line": prop_line,
+        "game_time": gt,
+        "image_url": fstr(r.get("image_url")),
+        "injury_status": fstr(r.get("injury_status")),
+        "pick_platform": fstr(r.get("pick_platform")),
+        "leg_prob_used": fnum(r.get("leg_prob_used")),
+        "leg_prob_source": fstr(r.get("leg_prob_source")),
+    }
+
+
 def _pick_scalar_history_fields(leg: dict[str, Any]) -> dict[str, Any]:
     """Expose per-game columns + standard_projection on /api/slate picks for client merge/charts."""
     out: dict[str, Any] = {}
@@ -4181,28 +4293,28 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
             except (TypeError, ValueError):
                 edge = 0.0
             actual_series, line_series = _extract_history_series(row)
-            picks.append(
-                {
-                    "sport": sport_label,
-                    "initials": _player_initials_from_name(player),
-                    "player": player,
-                    "prop": prop,
-                    "line": line,
-                    "pick": row.get("pick_type") or "Standard",
-                    "dir": str(dirv).strip().upper() or "OVER",
-                    "hit": round(hr * 100),
-                    "edge": edge,
-                    "projection": _pick_projection_from_mapping(row),
-                    "l5_over": l5_over,
-                    "l5_under": l5_under,
-                    "l10_over": l10_over,
-                    "l10_under": l10_under,
-                    "l5_avg": row.get("l5_avg"),
-                    "season_avg": row.get("season_avg") or row.get("szn_avg"),
-                    "actual_series": actual_series,
-                    "line_series": line_series,
-                }
-            )
+            pick_row: dict[str, Any] = {
+                "sport": sport_label,
+                "initials": _player_initials_from_name(player),
+                "player": player,
+                "prop": prop,
+                "line": line,
+                "pick": row.get("pick_type") or "Standard",
+                "dir": str(dirv).strip().upper() or "OVER",
+                "hit": round(hr * 100),
+                "edge": edge,
+                "projection": _pick_projection_from_mapping(row),
+                "l5_over": l5_over,
+                "l5_under": l5_under,
+                "l10_over": l10_over,
+                "l10_under": l10_under,
+                "l5_avg": row.get("l5_avg"),
+                "season_avg": row.get("season_avg") or row.get("szn_avg"),
+                "actual_series": actual_series,
+                "line_series": line_series,
+            }
+            pick_row.update(_api_slate_pick_moat_fields(row))
+            picks.append(pick_row)
     if not picks:
         return None
     picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
@@ -4222,6 +4334,7 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
 @app.get("/api/slate")
 def api_slate():
     tickets_path = TEMPLATES_DIR / "tickets_latest.json"
+    sport_q = _normalize_api_slate_sport_query(request.args.get("sport"))
 
     def _build_picks():
         slate_history_map: dict[tuple[str, str, str, str], tuple[list[float], list[float]]] = {}
@@ -4319,6 +4432,7 @@ def api_slate():
                             "actual_series": actual_series,
                             "line_series": line_series,
                         }
+                        pick_entry.update(_api_slate_pick_moat_fields(leg))
                         pick_entry.update(_pick_scalar_history_fields(leg))
                         picks.append(pick_entry)
             picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
@@ -4336,10 +4450,13 @@ def api_slate():
         base.setdefault("source", None)
         return base
 
+    def _build_filtered():
+        return _apply_sport_filter_to_slate_payload(_build_picks(), sport_q)
+
     try:
         return _gz_json_response(
-            f"slate-picks-v2-tickets-or-slate:{_explorer_json_gz_bust_token()}",
-            _build_picks,
+            f"slate-picks-v3-tickets-or-slate:{sport_q or 'all'}:{_explorer_json_gz_bust_token()}",
+            _build_filtered,
             ttl=_PIPELINE_JSON_TTL,
         )
     except Exception as e:

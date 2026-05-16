@@ -39,6 +39,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 8px;width:100%;max-width:min(1920px,98vw);padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar){margin-bottom:0;padding-bottom:8px;border-bottom:none;border-radius:16px 16px 0 0;box-shadow:none;}body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar)+.stats-bar{margin-top:-1px;border-top:none;border-radius:0 0 18px 18px;padding-top:11px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
 .sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
 .sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
+.sum-item-pending-sport{cursor:help;}
+.sum-lab-badge{display:block;font-size:9px;line-height:1.15;color:var(--pending);opacity:.96;margin-top:3px;font-weight:600;text-transform:none;letter-spacing:0;}
 .sum-val{font-family:'Inter',sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
 .sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
 .sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
@@ -200,23 +202,23 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="stats-bar">
 <div class="sum-row">
 <div class="sum-item"><div class="sum-val">22.8%</div><div class="sum-lab">TICKET HIT RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1Q TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1H TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">CBB TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WCBB TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">CFB TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NFL TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport" title="32 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">NBA TKT WIN RATE<span class="sum-lab-badge">32 pending</span></div></div>
+<div class="sum-item sum-item-pending-sport" title="1 ticket slip still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">NBA1Q TKT WIN RATE<span class="sum-lab-badge">1 pending</span></div></div>
+<div class="sum-item sum-item-pending-sport" title="3 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">NBA1H TKT WIN RATE<span class="sum-lab-badge">3 pending</span></div></div>
+<div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">CBB TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">WCBB TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">CFB TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">NFL TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val">24.0%</div><div class="sum-lab">MLB TKT WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val">6.7%</div><div class="sum-lab">NHL TKT WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val">25.0%</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE</div></div>
+<div class="sum-item sum-item-pending-sport" title="5 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE<span class="sum-lab-badge">5 pending</span></div></div>
 <div class="sum-item"><div class="sum-val">22.8%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val green">559</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">371</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">261</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val void">36</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">225</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">46</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">46</div><div class="sum-lab">PAID TIX</div></div>
 <div class="sum-item"><div class="sum-val red">156</div><div class="sum-lab">NO PAYOUT</div></div>
@@ -226,7 +228,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-05-14</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-05-14/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (261 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-05-14/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-05-14/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-05-14/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (225 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-05-14/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-05-14/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-nba">
 <summary><span>NBA</span><span class="ticket-bucket-meta">32 sections · 32 tickets</span></summary>
@@ -307,14 +309,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.76</div>
 </div>
 <div class="legrow leg-pend">
@@ -340,14 +342,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Dylan Harper</div>
+<div class="pl-void">Dylan Harper<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">14.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.31</div>
 </div>
 <div class="legrow leg-pend">
@@ -426,14 +428,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.56</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.76</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -492,14 +494,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Dylan Harper</div>
+<div class="pl-void">Dylan Harper<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">14.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.31</div>
 </div>
 <div class="legrow leg-pend">
@@ -555,14 +557,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.56</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.76</div>
 </div>
 <div class="legrow leg-pend">
@@ -661,14 +663,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.56</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.76</div>
 </div>
 <div class="legrow leg-pend">
@@ -724,14 +726,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.56</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_TIER_D;VOID_STD_OVER_LOW_ML_PROB; NO_ACTUAL">VOID_TIER_D;VOID_STD_OVER…</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.76</div>
 </div>
 <div class="legrow leg-pend">
@@ -843,14 +845,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Keldon Johnson</div>
+<div class="pl-void">Keldon Johnson<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.85</div>
 </div>
 <div class="legrow leg-pend">
@@ -876,14 +878,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_TIER_D;VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_TIER_D;VOID_LOW_MINU…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.75</div>
 </div>
 <div class="legrow leg-pend">
@@ -942,14 +944,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jaden McDaniels</div>
+<div class="pl-void">Jaden McDaniels<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.57</div>
 </div>
 <div class="legrow leg-pend">
@@ -985,14 +987,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Victor Wembanyama</div>
+<div class="pl-void">Victor Wembanyama<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">10.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.45</div>
 </div>
 <div class="legrow leg-pend">
@@ -1028,14 +1030,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julian Champagnie</div>
+<div class="pl-void">Julian Champagnie<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.2</div>
 </div>
 <div class="legrow leg-pend">
@@ -1081,14 +1083,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Keldon Johnson</div>
+<div class="pl-void">Keldon Johnson<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.85</div>
 </div>
 <div class="legrow leg-pend">
@@ -1157,24 +1159,24 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Naz Reid</div>
+<div class="pl-void">Naz Reid<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julius Randle</div>
+<div class="pl-void">Julius Randle<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.65</div>
 </div>
 <div class="legrow leg-pend">
@@ -1187,14 +1189,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Victor Wembanyama</div>
+<div class="pl-void">Victor Wembanyama<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.59</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1220,34 +1222,34 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Naz Reid</div>
+<div class="pl-void">Naz Reid<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Stephon Castle</div>
+<div class="pl-void">Stephon Castle<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">De&#x27;Aaron Fox</div>
+<div class="pl-void">De&#x27;Aaron Fox<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1273,14 +1275,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.45</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Victor Wembanyama</div>
+<div class="pl-void">Victor Wembanyama<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">10.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.45</div>
 </div>
 <div class="legrow leg-pend">
@@ -1316,14 +1318,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_TIER_D;VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_TIER_D;VOID_LOW_MINU…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.75</div>
 </div>
 <div class="legrow leg-pend">
@@ -1432,14 +1434,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">3.87</div>
 </div>
 <div class="legrow leg-pend">
@@ -1495,44 +1497,44 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.87</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">De&#x27;Aaron Fox</div>
+<div class="pl-void">De&#x27;Aaron Fox<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.81</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Naz Reid</div>
+<div class="pl-void">Naz Reid<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julius Randle</div>
+<div class="pl-void">Julius Randle<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.65</div>
 </div>
 <div class="legrow leg-pend">
@@ -1568,24 +1570,24 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.66</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Victor Wembanyama</div>
+<div class="pl-void">Victor Wembanyama<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.59</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.55</div>
 </div>
 <div class="legrow leg-pend">
@@ -1621,14 +1623,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Mike Conley</div>
+<div class="pl-void">Mike Conley<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.05</div>
 </div>
 <div class="legrow leg-pend">
@@ -1641,34 +1643,34 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Naz Reid</div>
+<div class="pl-void">Naz Reid<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Stephon Castle</div>
+<div class="pl-void">Stephon Castle<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">De&#x27;Aaron Fox</div>
+<div class="pl-void">De&#x27;Aaron Fox<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1684,24 +1686,24 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Naz Reid</div>
+<div class="pl-void">Naz Reid<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Julius Randle</div>
+<div class="pl-void">Julius Randle<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs SAS</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.65</div>
 </div>
 <div class="legrow leg-pend">
@@ -1714,24 +1716,24 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Victor Wembanyama</div>
+<div class="pl-void">Victor Wembanyama<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.59</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-void">Devin Vassell<span class="warning-chip" title="VOID_LOW_MINUTES_NON_A; NO_ACTUAL">VOID_LOW_MINUTES_NON_A; N…</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs MIN</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.55</div>
 </div>
 <div class="legrow leg-pend">

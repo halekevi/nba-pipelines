@@ -4489,8 +4489,15 @@ def ticket_groups_to_payload(
                     "hit_rate": _safe_float(gv("hit_rate")),
                     "over_hit_rate": _safe_float(gv("over_hit_rate") or gv("hit_rate_over_L5")),
                     "under_hit_rate": _safe_float(gv("under_hit_rate") or gv("hit_rate_under_L5")),
-                    "ml_prob": _safe_float(gv("ml_prob")),
-                    "rank_score": _safe_float(gv("rank_score")),
+            "ml_prob": _safe_float(gv("ml_prob")),
+            "rank_score": _safe_float(gv("rank_score")),
+            "tier": str(gv("tier") or gv("Tier") or ""),
+            "opponent_def_rank": _safe_float(
+                gv("opponent_def_rank")
+                or gv("opp_def_rank")
+                or gv("OVERALL_DEF_RANK")
+                or gv("def_rank")
+            ),
                     "game_time": game_time_s,
                     "event_start_time": game_time_s or None,
                     "posted_at": str(gv("posted_at") or "") or None,
@@ -4616,6 +4623,18 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "hit_rate":   g("hit_rate"),
             "l5_over":    g("l5_over"),
             "l5_under":   g("l5_under"),
+            "l10_over":   g("l10_over"),
+            "l10_under":  g("l10_under"),
+            "season_avg": g("season_avg") or g("szn_avg"),
+            "ml_prob":    g("ml_prob"),
+            "def_tier":   g("def_tier") if g("def_tier") else g("Def Tier"),
+            "opponent_def_rank": g("opponent_def_rank")
+            or g("opp_def_rank")
+            or g("OVERALL_DEF_RANK")
+            or g("def_rank"),
+            "standard_line": g("standard_line"),
+            "standard_projection": g("standard_projection"),
+            "projection": g("projection") or g("intel_projection"),
             "game_time":  str(g("game_time") or "") or None,
         }
         if "pick_platform" in df.columns and g("pick_platform") is not None:
