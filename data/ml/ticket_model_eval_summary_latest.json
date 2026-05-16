@@ -1,12 +1,12 @@
 {
-  "created_at_utc": "2026-05-15T12:14:43.389433+00:00",
+  "created_at_utc": "2026-05-16T12:01:49.834115+00:00",
   "input_csv": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\data\\ml\\ticket_training_dataset.csv",
   "model_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\models\\ticket_model.pkl",
   "features_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\models\\ticket_model_features.json",
   "bucketed_models_enabled": false,
   "bucket_model_status": {},
-  "rows_decided": 29996,
-  "date_count": 70,
+  "rows_decided": 30504,
+  "date_count": 71,
   "top_n": 10,
   "blend_weight": 0.35,
   "ranking_mode": "blend",
@@ -20,8 +20,8 @@
   "best_config": {
     "top_n": 10,
     "weight": 0.35,
-    "date_count": 70,
-    "model_cash_rate": 0.8880839002267574,
+    "date_count": 71,
+    "model_cash_rate": 0.8882517326179297,
     "delta_cash_rate": 0.0,
     "delta_avg_net_10": 0.0,
     "delta_total_net_10": 0.0,
@@ -31,8 +31,8 @@
     {
       "top_n": 10,
       "weight": 0.35,
-      "date_count": 70,
-      "model_cash_rate": 0.8880839002267574,
+      "date_count": 71,
+      "model_cash_rate": 0.8882517326179297,
       "delta_cash_rate": 0.0,
       "delta_avg_net_10": 0.0,
       "delta_total_net_10": 0.0,
@@ -40,12 +40,12 @@
     }
   ],
   "overall": {
-    "cash_rate": 0.3697159621282838,
-    "avg_net_10": 0.6896225496732895,
-    "avg_pred_p_cash": 0.39877572427202185
+    "cash_rate": 0.3704104379753475,
+    "avg_net_10": 0.6589865591397848,
+    "avg_pred_p_cash": 0.39876768081250724
   },
   "by_date_avg_delta": {
-    "model_cash_rate": 0.8880839002267574,
+    "model_cash_rate": 0.8882517326179297,
     "delta_cash_rate": 0.0,
     "delta_avg_net_10": 0.0,
     "delta_total_net_10": 0.0,
@@ -56,81 +56,81 @@
       "bin": 1,
       "lo": 0.0,
       "hi": 0.1,
-      "n": 11997,
-      "avg_pred": 0.060162837859266,
-      "empirical": 0.001000250062515629
+      "n": 12378,
+      "avg_pred": 0.05867985119755607,
+      "empirical": 0.001454192922927775
     },
     {
       "bin": 2,
       "lo": 0.1,
       "hi": 0.2,
-      "n": 3224,
-      "avg_pred": 0.145282478757877,
-      "empirical": 0.043424317617866005
+      "n": 2693,
+      "avg_pred": 0.14944874708976671,
+      "empirical": 0.05161529892313405
     },
     {
       "bin": 3,
       "lo": 0.2,
       "hi": 0.30000000000000004,
-      "n": 2064,
-      "avg_pred": 0.250463085895898,
-      "empirical": 0.18846899224806202
+      "n": 2447,
+      "avg_pred": 0.24699920173677312,
+      "empirical": 0.14344094809971394
     },
     {
       "bin": 4,
       "lo": 0.30000000000000004,
       "hi": 0.4,
-      "n": 1387,
-      "avg_pred": 0.3287478180426864,
-      "empirical": 0.3028118240807498
+      "n": 1582,
+      "avg_pred": 0.3315849769512466,
+      "empirical": 0.37041719342604296
     },
     {
       "bin": 5,
       "lo": 0.4,
       "hi": 0.5,
-      "n": 691,
-      "avg_pred": 0.4537530867227616,
-      "empirical": 0.5846599131693199
+      "n": 582,
+      "avg_pred": 0.45345974879348794,
+      "empirical": 0.4896907216494845
     },
     {
       "bin": 6,
       "lo": 0.5,
       "hi": 0.6000000000000001,
-      "n": 985,
-      "avg_pred": 0.5472843060183873,
-      "empirical": 0.5857868020304569
+      "n": 1074,
+      "avg_pred": 0.5480664193528626,
+      "empirical": 0.6042830540037244
     },
     {
       "bin": 7,
       "lo": 0.6000000000000001,
       "hi": 0.7000000000000001,
-      "n": 741,
-      "avg_pred": 0.656079615044671,
-      "empirical": 0.8663967611336032
+      "n": 685,
+      "avg_pred": 0.6531029740601849,
+      "empirical": 0.8773722627737226
     },
     {
       "bin": 8,
       "lo": 0.7000000000000001,
       "hi": 0.8,
-      "n": 443,
-      "avg_pred": 0.7446094939823429,
-      "empirical": 0.9480812641083521
+      "n": 481,
+      "avg_pred": 0.7449645822305454,
+      "empirical": 0.8648648648648649
     },
     {
       "bin": 9,
       "lo": 0.8,
       "hi": 0.9,
-      "n": 1999,
-      "avg_pred": 0.8594489976551568,
-      "empirical": 0.8529264632316158
+      "n": 2081,
+      "avg_pred": 0.8637540783263634,
+      "empirical": 0.8769822200864968
     },
     {
       "bin": 10,
       "lo": 0.9,
       "hi": 1.0,
-      "n": 6465,
-      "avg_pred": 0.991787988211561,
-      "empirical": 0.9870069605568446
+      "n": 6501,
+      "avg_pred": 0.9922346615624995,
+      "empirical": 0.9889247808029534
     }
   ]
 }
