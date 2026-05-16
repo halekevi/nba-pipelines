@@ -138,7 +138,8 @@ def _build_nhl_actuals_lookup(
         if pd.isna(act):
             continue
         src = str(row.get("source", "")).strip().lower()
-        src_conf = int(pd.to_numeric(row.get("source_conflict"), errors="coerce") or 0)
+        _sc = pd.to_numeric(row.get("source_conflict"), errors="coerce")
+        src_conf = 0 if pd.isna(_sc) else int(_sc)
         pack = (float(act), src, src_conf)
         lut[(pl, tm, pk)] = pack
         ln = _lastname_token(pl)

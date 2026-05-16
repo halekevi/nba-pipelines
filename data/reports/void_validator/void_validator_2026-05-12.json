@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-12",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_nba_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 573,
+      "void_rows": 36,
+      "acceptable_void_rows": 36,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_nhl_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 455,
+      "void_rows": 3,
+      "acceptable_void_rows": 3,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_mlb_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 3554,
+      "void_rows": 239,
+      "acceptable_void_rows": 239,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_soccer_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 1774,
+      "void_rows": 1008,
+      "acceptable_void_rows": 1008,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_nba1h_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_tennis_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 276,
+      "void_rows": 27,
+      "acceptable_void_rows": 27,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-12\\graded_wnba_2026-05-12.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

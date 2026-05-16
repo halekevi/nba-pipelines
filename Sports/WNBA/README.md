@@ -20,6 +20,20 @@ Common options:
 
 Default step 1 uses the same PrizePicks HTTP path as NBA (`Sports/NBA/scripts/step1_fetch_prizepicks_api.py` with `--league_id 3`). Outputs remain under this sport folder and under `outputs/<date>/`.
 
+## Rolling stats (L5 / last season)
+
+`step4_fetch_player_stats.py` **by default** combines **current and previous** `SEASON` rows in `wnba_espn_cache.csv` and uses a **~420-day** lookback so early-season slates still get up to five prior games for L5. Pass `--no-include-prior-season-stats` to restrict to one season only.
+
+If 2025 rows are missing from the cache, run a one-time backfill, for example:
+
+`python scripts/backfill_wnba_espn_range.py --from 2025-05-01 --to 2025-10-31 --season 2025`
+
+To pull only the **tail** of the 2025 calendar (postseason / October — good for filling L5 with “recent 2025” games without re-fetching the whole season):
+
+`python scripts/backfill_wnba_espn_range.py --preset finals-2025 --season 2025`
+
+Other presets: `full-2025` (May–Oct), `late-2025` (Sep–Oct). ESPN is queried **by date**, not “exactly five games per player”; step4 then takes the last five **cached** games vs the current line.
+
 ## Where outputs go
 
 - **Per-step artifacts (canonical run):** `outputs/<date>/wnba/` — e.g. `step1_wnba_props.csv` through step 9 outputs.

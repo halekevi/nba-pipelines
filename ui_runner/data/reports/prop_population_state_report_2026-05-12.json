@@ -1,0 +1,842 @@
+{
+  "date": "2026-05-12",
+  "current_population": {
+    "input_rows": 1621,
+    "old": {
+      "eligible_rows": 389,
+      "counts_by_group": {
+        "GOBLIN_OVER": 330,
+        "STANDARD_OVER": 54,
+        "STANDARD_UNDER": 5
+      },
+      "counts_by_sport_group": {
+        "NBA": {
+          "GOBLIN_OVER": 260,
+          "STANDARD_OVER": 17,
+          "STANDARD_UNDER": 4
+        },
+        "NBA1H": {
+          "STANDARD_OVER": 22,
+          "STANDARD_UNDER": 1
+        },
+        "NBA1Q": {
+          "GOBLIN_OVER": 70,
+          "STANDARD_OVER": 15
+        }
+      },
+      "discard_reasons": {
+        "NBA": {
+          "prop_banned": 138,
+          "directional_l5_hr_fail": 827,
+          "standard_over_edge_below_floor": 4,
+          "picktype_direction_tier_policy_fail": 25,
+          "prop_quality_below_floor": 65
+        },
+        "NBA1H": {
+          "prop_banned": 26,
+          "directional_l5_hr_fail": 33,
+          "standard_over_edge_below_floor": 1
+        },
+        "NBA1Q": {
+          "directional_l5_hr_fail": 77,
+          "picktype_direction_tier_policy_fail": 34,
+          "prop_quality_below_floor": 2
+        }
+      },
+      "funnel": {
+        "stages": [
+          "input",
+          "after_prop_ban",
+          "after_fantasy_score",
+          "after_directional_l5_hr",
+          "after_standard_over_edge_floor",
+          "after_standard_under_edge_floor",
+          "after_picktype_direction_tier_policy",
+          "after_pick_type",
+          "after_void_reason",
+          "after_prop_quality"
+        ],
+        "snapshots": {
+          "input": {
+            "ALL": 1621,
+            "NBA": 1340,
+            "NBA1H": 83,
+            "NBA1Q": 198
+          },
+          "after_prop_ban": {
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
+          },
+          "after_fantasy_score": {
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
+          },
+          "after_directional_l5_hr": {
+            "ALL": 520,
+            "NBA": 375,
+            "NBA1H": 24,
+            "NBA1Q": 121
+          },
+          "after_standard_over_edge_floor": {
+            "ALL": 515,
+            "NBA": 371,
+            "NBA1H": 23,
+            "NBA1Q": 121
+          },
+          "after_standard_under_edge_floor": {
+            "ALL": 515,
+            "NBA": 371,
+            "NBA1H": 23,
+            "NBA1Q": 121
+          },
+          "after_picktype_direction_tier_policy": {
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
+          },
+          "after_pick_type": {
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
+          },
+          "after_void_reason": {
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
+          },
+          "after_prop_quality": {
+            "ALL": 389,
+            "NBA": 281,
+            "NBA1H": 23,
+            "NBA1Q": 85
+          }
+        }
+      }
+    },
+    "new": {
+      "eligible_rows": 366,
+      "counts_by_group": {
+        "GOBLIN_OVER": 330,
+        "STANDARD_OVER": 35,
+        "STANDARD_UNDER": 1
+      },
+      "counts_by_sport_group": {
+        "NBA": {
+          "GOBLIN_OVER": 260,
+          "STANDARD_OVER": 14,
+          "STANDARD_UNDER": 1
+        },
+        "NBA1H": {
+          "STANDARD_OVER": 18
+        },
+        "NBA1Q": {
+          "GOBLIN_OVER": 70,
+          "STANDARD_OVER": 3
+        }
+      },
+      "discard_reasons": {
+        "NBA": {
+          "prop_banned": 138,
+          "directional_l5_hr_fail": 827,
+          "standard_over_edge_below_floor": 30,
+          "standard_under_edge_below_floor": 3,
+          "picktype_direction_tier_policy_fail": 25,
+          "prop_quality_below_floor": 42
+        },
+        "NBA1H": {
+          "prop_banned": 26,
+          "directional_l5_hr_fail": 33,
+          "standard_over_edge_below_floor": 5,
+          "standard_under_edge_below_floor": 1
+        },
+        "NBA1Q": {
+          "directional_l5_hr_fail": 77,
+          "standard_over_edge_below_floor": 12,
+          "picktype_direction_tier_policy_fail": 34,
+          "prop_quality_below_floor": 2
+        }
+      },
+      "funnel": {
+        "stages": [
+          "input",
+          "after_prop_ban",
+          "after_fantasy_score",
+          "after_directional_l5_hr",
+          "after_standard_over_edge_floor",
+          "after_standard_under_edge_floor",
+          "after_picktype_direction_tier_policy",
+          "after_pick_type",
+          "after_void_reason",
+          "after_prop_quality"
+        ],
+        "snapshots": {
+          "input": {
+            "ALL": 1621,
+            "NBA": 1340,
+            "NBA1H": 83,
+            "NBA1Q": 198
+          },
+          "after_prop_ban": {
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
+          },
+          "after_fantasy_score": {
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
+          },
+          "after_directional_l5_hr": {
+            "ALL": 520,
+            "NBA": 375,
+            "NBA1H": 24,
+            "NBA1Q": 121
+          },
+          "after_standard_over_edge_floor": {
+            "ALL": 473,
+            "NBA": 345,
+            "NBA1H": 19,
+            "NBA1Q": 109
+          },
+          "after_standard_under_edge_floor": {
+            "ALL": 469,
+            "NBA": 342,
+            "NBA1H": 18,
+            "NBA1Q": 109
+          },
+          "after_picktype_direction_tier_policy": {
+            "ALL": 410,
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
+          },
+          "after_pick_type": {
+            "ALL": 410,
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
+          },
+          "after_void_reason": {
+            "ALL": 410,
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
+          },
+          "after_prop_quality": {
+            "ALL": 366,
+            "NBA": 275,
+            "NBA1H": 18,
+            "NBA1Q": 73
+          }
+        }
+      }
+    }
+  },
+  "historical_backtest": {
+    "per_date": [
+      {
+        "date": "2026-02-19",
+        "n_standard": 274,
+        "n_old_pass": 264,
+        "n_new_pass": 206,
+        "hr_all_standard": 0.7007299270072993,
+        "hr_old_pass": 0.7083333333333334,
+        "hr_new_pass": 0.7524271844660194
+      },
+      {
+        "date": "2026-02-20",
+        "n_standard": 155,
+        "n_old_pass": 148,
+        "n_new_pass": 132,
+        "hr_all_standard": 0.864516129032258,
+        "hr_old_pass": 0.8716216216216216,
+        "hr_new_pass": 0.9090909090909091
+      },
+      {
+        "date": "2026-02-24",
+        "n_standard": 247,
+        "n_old_pass": 238,
+        "n_new_pass": 194,
+        "hr_all_standard": 0.6275303643724697,
+        "hr_old_pass": 0.6470588235294118,
+        "hr_new_pass": 0.6752577319587629
+      },
+      {
+        "date": "2026-02-25",
+        "n_standard": 147,
+        "n_old_pass": 143,
+        "n_new_pass": 126,
+        "hr_all_standard": 0.7959183673469388,
+        "hr_old_pass": 0.7902097902097902,
+        "hr_new_pass": 0.7777777777777778
+      },
+      {
+        "date": "2026-03-06",
+        "n_standard": 684,
+        "n_old_pass": 544,
+        "n_new_pass": 237,
+        "hr_all_standard": 0.5570175438596491,
+        "hr_old_pass": 0.5422794117647058,
+        "hr_new_pass": 0.5232067510548524
+      },
+      {
+        "date": "2026-03-07",
+        "n_standard": 677,
+        "n_old_pass": 527,
+        "n_new_pass": 227,
+        "hr_all_standard": 0.5288035450516987,
+        "hr_old_pass": 0.523719165085389,
+        "hr_new_pass": 0.5330396475770925
+      },
+      {
+        "date": "2026-03-08",
+        "n_standard": 932,
+        "n_old_pass": 719,
+        "n_new_pass": 300,
+        "hr_all_standard": 0.5107296137339056,
+        "hr_old_pass": 0.5271210013908206,
+        "hr_new_pass": 0.5533333333333333
+      },
+      {
+        "date": "2026-03-10",
+        "n_standard": 955,
+        "n_old_pass": 749,
+        "n_new_pass": 269,
+        "hr_all_standard": 0.5099476439790576,
+        "hr_old_pass": 0.5180240320427236,
+        "hr_new_pass": 0.49070631970260226
+      },
+      {
+        "date": "2026-03-12",
+        "n_standard": 206,
+        "n_old_pass": 166,
+        "n_new_pass": 86,
+        "hr_all_standard": 0.5145631067961165,
+        "hr_old_pass": 0.5301204819277109,
+        "hr_new_pass": 0.5465116279069767
+      },
+      {
+        "date": "2026-03-13",
+        "n_standard": 448,
+        "n_old_pass": 358,
+        "n_new_pass": 154,
+        "hr_all_standard": 0.5178571428571429,
+        "hr_old_pass": 0.5335195530726257,
+        "hr_new_pass": 0.512987012987013
+      },
+      {
+        "date": "2026-03-14",
+        "n_standard": 688,
+        "n_old_pass": 528,
+        "n_new_pass": 226,
+        "hr_all_standard": 0.4941860465116279,
+        "hr_old_pass": 0.48674242424242425,
+        "hr_new_pass": 0.4336283185840708
+      },
+      {
+        "date": "2026-03-15",
+        "n_standard": 519,
+        "n_old_pass": 446,
+        "n_new_pass": 215,
+        "hr_all_standard": 0.4527938342967245,
+        "hr_old_pass": 0.4618834080717489,
+        "hr_new_pass": 0.4604651162790698
+      },
+      {
+        "date": "2026-03-16",
+        "n_standard": 410,
+        "n_old_pass": 310,
+        "n_new_pass": 123,
+        "hr_all_standard": 0.47073170731707314,
+        "hr_old_pass": 0.4838709677419355,
+        "hr_new_pass": 0.6097560975609756
+      },
+      {
+        "date": "2026-03-17",
+        "n_standard": 635,
+        "n_old_pass": 532,
+        "n_new_pass": 313,
+        "hr_all_standard": 0.5779527559055118,
+        "hr_old_pass": 0.5864661654135338,
+        "hr_new_pass": 0.6357827476038339
+      },
+      {
+        "date": "2026-03-18",
+        "n_standard": 112,
+        "n_old_pass": 102,
+        "n_new_pass": 55,
+        "hr_all_standard": 0.5267857142857143,
+        "hr_old_pass": 0.5392156862745098,
+        "hr_new_pass": 0.5454545454545454
+      },
+      {
+        "date": "2026-03-19",
+        "n_standard": 93,
+        "n_old_pass": 87,
+        "n_new_pass": 47,
+        "hr_all_standard": 0.5806451612903226,
+        "hr_old_pass": 0.5977011494252874,
+        "hr_new_pass": 0.5319148936170213
+      },
+      {
+        "date": "2026-03-20",
+        "n_standard": 483,
+        "n_old_pass": 399,
+        "n_new_pass": 179,
+        "hr_all_standard": 0.4782608695652174,
+        "hr_old_pass": 0.47117794486215536,
+        "hr_new_pass": 0.49162011173184356
+      },
+      {
+        "date": "2026-03-21",
+        "n_standard": 503,
+        "n_old_pass": 431,
+        "n_new_pass": 238,
+        "hr_all_standard": 0.49304174950298213,
+        "hr_old_pass": 0.5011600928074246,
+        "hr_new_pass": 0.5042016806722689
+      },
+      {
+        "date": "2026-03-22",
+        "n_standard": 208,
+        "n_old_pass": 186,
+        "n_new_pass": 98,
+        "hr_all_standard": 0.4807692307692308,
+        "hr_old_pass": 0.4838709677419355,
+        "hr_new_pass": 0.4897959183673469
+      },
+      {
+        "date": "2026-03-23",
+        "n_standard": 275,
+        "n_old_pass": 275,
+        "n_new_pass": 250,
+        "hr_all_standard": 0.9018181818181819,
+        "hr_old_pass": 0.9018181818181819,
+        "hr_new_pass": 0.908
+      },
+      {
+        "date": "2026-03-24",
+        "n_standard": 293,
+        "n_old_pass": 226,
+        "n_new_pass": 98,
+        "hr_all_standard": 0.49829351535836175,
+        "hr_old_pass": 0.48672566371681414,
+        "hr_new_pass": 0.5714285714285714
+      },
+      {
+        "date": "2026-03-25",
+        "n_standard": 928,
+        "n_old_pass": 821,
+        "n_new_pass": 504,
+        "hr_all_standard": 0.5172413793103449,
+        "hr_old_pass": 0.5225334957369062,
+        "hr_new_pass": 0.5496031746031746
+      },
+      {
+        "date": "2026-03-26",
+        "n_standard": 222,
+        "n_old_pass": 179,
+        "n_new_pass": 74,
+        "hr_all_standard": 0.5540540540540541,
+        "hr_old_pass": 0.5418994413407822,
+        "hr_new_pass": 0.5405405405405406
+      },
+      {
+        "date": "2026-03-27",
+        "n_standard": 781,
+        "n_old_pass": 664,
+        "n_new_pass": 369,
+        "hr_all_standard": 0.5224071702944942,
+        "hr_old_pass": 0.536144578313253,
+        "hr_new_pass": 0.5338753387533876
+      },
+      {
+        "date": "2026-03-28",
+        "n_standard": 7,
+        "n_old_pass": 7,
+        "n_new_pass": 5,
+        "hr_all_standard": 0.14285714285714285,
+        "hr_old_pass": 0.14285714285714285,
+        "hr_new_pass": 0.2
+      },
+      {
+        "date": "2026-03-29",
+        "n_standard": 586,
+        "n_old_pass": 492,
+        "n_new_pass": 259,
+        "hr_all_standard": 0.4880546075085324,
+        "hr_old_pass": 0.47560975609756095,
+        "hr_new_pass": 0.46332046332046334
+      },
+      {
+        "date": "2026-03-30",
+        "n_standard": 985,
+        "n_old_pass": 767,
+        "n_new_pass": 354,
+        "hr_all_standard": 0.5431472081218274,
+        "hr_old_pass": 0.5488917861799217,
+        "hr_new_pass": 0.5480225988700564
+      },
+      {
+        "date": "2026-03-31",
+        "n_standard": 705,
+        "n_old_pass": 536,
+        "n_new_pass": 187,
+        "hr_all_standard": 0.49361702127659574,
+        "hr_old_pass": 0.48507462686567165,
+        "hr_new_pass": 0.4919786096256685
+      },
+      {
+        "date": "2026-04-01",
+        "n_standard": 1045,
+        "n_old_pass": 788,
+        "n_new_pass": 314,
+        "hr_all_standard": 0.539712918660287,
+        "hr_old_pass": 0.5621827411167513,
+        "hr_new_pass": 0.5955414012738853
+      },
+      {
+        "date": "2026-04-02",
+        "n_standard": 862,
+        "n_old_pass": 647,
+        "n_new_pass": 240,
+        "hr_all_standard": 0.5011600928074246,
+        "hr_old_pass": 0.49304482225656876,
+        "hr_new_pass": 0.5291666666666667
+      },
+      {
+        "date": "2026-04-03",
+        "n_standard": 619,
+        "n_old_pass": 479,
+        "n_new_pass": 176,
+        "hr_all_standard": 0.49434571890145396,
+        "hr_old_pass": 0.4989561586638831,
+        "hr_new_pass": 0.45454545454545453
+      },
+      {
+        "date": "2026-04-04",
+        "n_standard": 242,
+        "n_old_pass": 195,
+        "n_new_pass": 88,
+        "hr_all_standard": 0.4793388429752066,
+        "hr_old_pass": 0.4564102564102564,
+        "hr_new_pass": 0.4659090909090909
+      },
+      {
+        "date": "2026-04-05",
+        "n_standard": 1056,
+        "n_old_pass": 825,
+        "n_new_pass": 352,
+        "hr_all_standard": 0.4962121212121212,
+        "hr_old_pass": 0.48727272727272725,
+        "hr_new_pass": 0.4914772727272727
+      },
+      {
+        "date": "2026-04-06",
+        "n_standard": 348,
+        "n_old_pass": 271,
+        "n_new_pass": 108,
+        "hr_all_standard": 0.5114942528735632,
+        "hr_old_pass": 0.5350553505535055,
+        "hr_new_pass": 0.5370370370370371
+      },
+      {
+        "date": "2026-04-07",
+        "n_standard": 654,
+        "n_old_pass": 537,
+        "n_new_pass": 235,
+        "hr_all_standard": 0.48623853211009177,
+        "hr_old_pass": 0.478584729981378,
+        "hr_new_pass": 0.4808510638297872
+      },
+      {
+        "date": "2026-04-08",
+        "n_standard": 399,
+        "n_old_pass": 298,
+        "n_new_pass": 122,
+        "hr_all_standard": 0.506265664160401,
+        "hr_old_pass": 0.5268456375838926,
+        "hr_new_pass": 0.5491803278688525
+      },
+      {
+        "date": "2026-04-09",
+        "n_standard": 351,
+        "n_old_pass": 301,
+        "n_new_pass": 153,
+        "hr_all_standard": 0.45584045584045585,
+        "hr_old_pass": 0.4684385382059801,
+        "hr_new_pass": 0.45098039215686275
+      },
+      {
+        "date": "2026-04-10",
+        "n_standard": 878,
+        "n_old_pass": 720,
+        "n_new_pass": 352,
+        "hr_all_standard": 0.6753986332574032,
+        "hr_old_pass": 0.6958333333333333,
+        "hr_new_pass": 0.7357954545454546
+      },
+      {
+        "date": "2026-04-14",
+        "n_standard": 395,
+        "n_old_pass": 334,
+        "n_new_pass": 165,
+        "hr_all_standard": 0.5392405063291139,
+        "hr_old_pass": 0.5389221556886228,
+        "hr_new_pass": 0.5393939393939394
+      },
+      {
+        "date": "2026-04-15",
+        "n_standard": 323,
+        "n_old_pass": 264,
+        "n_new_pass": 122,
+        "hr_all_standard": 0.5108359133126935,
+        "hr_old_pass": 0.5037878787878788,
+        "hr_new_pass": 0.5081967213114754
+      },
+      {
+        "date": "2026-04-17",
+        "n_standard": 329,
+        "n_old_pass": 262,
+        "n_new_pass": 97,
+        "hr_all_standard": 0.5197568389057751,
+        "hr_old_pass": 0.5534351145038168,
+        "hr_new_pass": 0.6288659793814433
+      },
+      {
+        "date": "2026-04-18",
+        "n_standard": 663,
+        "n_old_pass": 528,
+        "n_new_pass": 220,
+        "hr_all_standard": 0.5279034690799397,
+        "hr_old_pass": 0.5170454545454546,
+        "hr_new_pass": 0.5409090909090909
+      },
+      {
+        "date": "2026-04-19",
+        "n_standard": 27,
+        "n_old_pass": 17,
+        "n_new_pass": 4,
+        "hr_all_standard": 0.8888888888888888,
+        "hr_old_pass": 0.8823529411764706,
+        "hr_new_pass": 0.75
+      },
+      {
+        "date": "2026-04-20",
+        "n_standard": 26,
+        "n_old_pass": 18,
+        "n_new_pass": 6,
+        "hr_all_standard": 0.6923076923076923,
+        "hr_old_pass": 0.7777777777777778,
+        "hr_new_pass": 1.0
+      },
+      {
+        "date": "2026-04-21",
+        "n_standard": 26,
+        "n_old_pass": 19,
+        "n_new_pass": 7,
+        "hr_all_standard": 0.6923076923076923,
+        "hr_old_pass": 0.6842105263157895,
+        "hr_new_pass": 0.5714285714285714
+      },
+      {
+        "date": "2026-04-22",
+        "n_standard": 406,
+        "n_old_pass": 294,
+        "n_new_pass": 104,
+        "hr_all_standard": 0.5123152709359606,
+        "hr_old_pass": 0.47278911564625853,
+        "hr_new_pass": 0.5
+      },
+      {
+        "date": "2026-04-23",
+        "n_standard": 560,
+        "n_old_pass": 417,
+        "n_new_pass": 156,
+        "hr_all_standard": 0.5142857142857142,
+        "hr_old_pass": 0.49160671462829736,
+        "hr_new_pass": 0.5192307692307693
+      },
+      {
+        "date": "2026-04-24",
+        "n_standard": 539,
+        "n_old_pass": 406,
+        "n_new_pass": 125,
+        "hr_all_standard": 0.5176252319109462,
+        "hr_old_pass": 0.5221674876847291,
+        "hr_new_pass": 0.592
+      },
+      {
+        "date": "2026-04-25",
+        "n_standard": 761,
+        "n_old_pass": 569,
+        "n_new_pass": 177,
+        "hr_all_standard": 0.5085413929040736,
+        "hr_old_pass": 0.5149384885764499,
+        "hr_new_pass": 0.480225988700565
+      },
+      {
+        "date": "2026-04-26",
+        "n_standard": 680,
+        "n_old_pass": 505,
+        "n_new_pass": 202,
+        "hr_all_standard": 0.47941176470588237,
+        "hr_old_pass": 0.48118811881188117,
+        "hr_new_pass": 0.4801980198019802
+      },
+      {
+        "date": "2026-04-27",
+        "n_standard": 568,
+        "n_old_pass": 414,
+        "n_new_pass": 143,
+        "hr_all_standard": 0.4982394366197183,
+        "hr_old_pass": 0.5072463768115942,
+        "hr_new_pass": 0.5664335664335665
+      },
+      {
+        "date": "2026-04-28",
+        "n_standard": 685,
+        "n_old_pass": 499,
+        "n_new_pass": 174,
+        "hr_all_standard": 0.5211678832116788,
+        "hr_old_pass": 0.5230460921843687,
+        "hr_new_pass": 0.5172413793103449
+      },
+      {
+        "date": "2026-04-29",
+        "n_standard": 454,
+        "n_old_pass": 334,
+        "n_new_pass": 130,
+        "hr_all_standard": 0.5506607929515418,
+        "hr_old_pass": 0.5508982035928144,
+        "hr_new_pass": 0.4846153846153846
+      },
+      {
+        "date": "2026-04-30",
+        "n_standard": 21,
+        "n_old_pass": 15,
+        "n_new_pass": 5,
+        "hr_all_standard": 0.6666666666666666,
+        "hr_old_pass": 0.6666666666666666,
+        "hr_new_pass": 0.8
+      },
+      {
+        "date": "2026-05-01",
+        "n_standard": 67,
+        "n_old_pass": 48,
+        "n_new_pass": 14,
+        "hr_all_standard": 0.5223880597014925,
+        "hr_old_pass": 0.4791666666666667,
+        "hr_new_pass": 0.35714285714285715
+      },
+      {
+        "date": "2026-05-02",
+        "n_standard": 183,
+        "n_old_pass": 126,
+        "n_new_pass": 55,
+        "hr_all_standard": 0.7103825136612022,
+        "hr_old_pass": 0.7063492063492064,
+        "hr_new_pass": 0.7636363636363637
+      },
+      {
+        "date": "2026-05-03",
+        "n_standard": 22,
+        "n_old_pass": 13,
+        "n_new_pass": 4,
+        "hr_all_standard": 0.6818181818181818,
+        "hr_old_pass": 0.6923076923076923,
+        "hr_new_pass": 1.0
+      },
+      {
+        "date": "2026-05-04",
+        "n_standard": 420,
+        "n_old_pass": 256,
+        "n_new_pass": 92,
+        "hr_all_standard": 0.44285714285714284,
+        "hr_old_pass": 0.453125,
+        "hr_new_pass": 0.42391304347826086
+      },
+      {
+        "date": "2026-05-05",
+        "n_standard": 400,
+        "n_old_pass": 247,
+        "n_new_pass": 93,
+        "hr_all_standard": 0.5225,
+        "hr_old_pass": 0.562753036437247,
+        "hr_new_pass": 0.6451612903225806
+      },
+      {
+        "date": "2026-05-06",
+        "n_standard": 424,
+        "n_old_pass": 273,
+        "n_new_pass": 102,
+        "hr_all_standard": 0.41745283018867924,
+        "hr_old_pass": 0.45787545787545786,
+        "hr_new_pass": 0.47058823529411764
+      },
+      {
+        "date": "2026-05-07",
+        "n_standard": 432,
+        "n_old_pass": 245,
+        "n_new_pass": 77,
+        "hr_all_standard": 0.5069444444444444,
+        "hr_old_pass": 0.5142857142857142,
+        "hr_new_pass": 0.5064935064935064
+      },
+      {
+        "date": "2026-05-08",
+        "n_standard": 413,
+        "n_old_pass": 330,
+        "n_new_pass": 158,
+        "hr_all_standard": 0.47699757869249393,
+        "hr_old_pass": 0.4666666666666667,
+        "hr_new_pass": 0.43037974683544306
+      },
+      {
+        "date": "2026-05-09",
+        "n_standard": 380,
+        "n_old_pass": 284,
+        "n_new_pass": 105,
+        "hr_all_standard": 0.5210526315789473,
+        "hr_old_pass": 0.5316901408450704,
+        "hr_new_pass": 0.6190476190476191
+      },
+      {
+        "date": "2026-05-10",
+        "n_standard": 399,
+        "n_old_pass": 317,
+        "n_new_pass": 121,
+        "hr_all_standard": 0.5463659147869674,
+        "hr_old_pass": 0.5709779179810726,
+        "hr_new_pass": 0.5867768595041323
+      },
+      {
+        "date": "2026-05-11",
+        "n_standard": 411,
+        "n_old_pass": 301,
+        "n_new_pass": 117,
+        "hr_all_standard": 0.41605839416058393,
+        "hr_old_pass": 0.4186046511627907,
+        "hr_new_pass": 0.358974358974359
+      }
+    ],
+    "aggregate": {
+      "dates": 65,
+      "n_old_pass_total": 23240,
+      "n_new_pass_total": 10440,
+      "weighted_hr_old_pass": 0.5311531841652324,
+      "weighted_hr_new_pass": 0.5543103448275862,
+      "weighted_hr_delta": 0.02315716066235385,
+      "net_population_change": -12800
+    }
+  }
+}

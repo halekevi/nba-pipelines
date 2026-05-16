@@ -1,0 +1,56 @@
+{
+  "generated_at_utc": "2026-05-11T17:14:56.996121+00:00",
+  "date": "2026-05-11",
+  "source_output": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\combined_slate_tickets_2026-05-11.xlsx",
+  "audit": {
+    "tickets": 2948,
+    "unique_leg_sets": 1634,
+    "duplicate_rate": 0.44572591587516963,
+    "pair_count": 4343878,
+    "jaccard_mean": 0.0043049057024990515,
+    "jaccard_p90": 0.0,
+    "jaccard_max": 1.0,
+    "by_legs": {
+      "2": {
+        "tickets": 622,
+        "unique_leg_sets": 311,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.0031636557569732463,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "3": {
+        "tickets": 531,
+        "unique_leg_sets": 343,
+        "duplicate_rate": 0.3540489642184558,
+        "jaccard_mean": 0.0035568347368795084,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "4": {
+        "tickets": 588,
+        "unique_leg_sets": 336,
+        "duplicate_rate": 0.4285714285714286,
+        "jaccard_mean": 0.004526593634127618,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "5": {
+        "tickets": 605,
+        "unique_leg_sets": 331,
+        "duplicate_rate": 0.45289256198347105,
+        "jaccard_mean": 0.005523194445530387,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "6": {
+        "tickets": 602,
+        "unique_leg_sets": 313,
+        "duplicate_rate": 0.48006644518272423,
+        "jaccard_mean": 0.006446162906878989,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      }
+    }
+  }
+}

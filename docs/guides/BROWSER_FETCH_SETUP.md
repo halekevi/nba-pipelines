@@ -136,7 +136,8 @@ Also update `TRACKABLE_PROPS` to the prop types for your sport, and the
 | MLB   | 2         |
 | NHL   | 12        |
 | WNBA  | 27        |
-| CBB   | 8         |
+| CBB   | 20        |
+| CFB   | 15        |
 | Soccer (generic) | 178 |
 | PGA Golf | 15    |
 

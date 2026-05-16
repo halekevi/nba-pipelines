@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-14",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_nba_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_nhl_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 509,
+      "void_rows": 1,
+      "acceptable_void_rows": 1,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_mlb_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 2765,
+      "void_rows": 317,
+      "acceptable_void_rows": 317,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_soccer_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 1343,
+      "void_rows": 739,
+      "acceptable_void_rows": 739,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_nba1h_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_tennis_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 21,
+      "void_rows": 21,
+      "acceptable_void_rows": 21,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-14\\graded_wnba_2026-05-14.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

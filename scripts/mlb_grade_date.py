@@ -18,6 +18,10 @@ Postponed / canceled games: there is no game log row for that calendar date, so 
 empty. After grading, this script queries the MLB Stats API schedule and sets
 ``void_reason_grade`` to ``POSTPONED`` for VOID + NO_ACTUAL legs whose ``team`` played in a
 postponed or canceled game that day (so Excel and ticket eval show why there is no stat).
+
+**L5 / Hit% / stat_g1… columns on the step8 slate** come from the MLB pipeline’s cached game logs
+(``step4_attach_player_stats_mlb``), not from this grading fetch. This script only pulls the
+**official gameLog split for the slate date** to decide graded HIT/MISS once games are final.
 """
 
 from __future__ import annotations
@@ -274,8 +278,15 @@ def _fetch_actuals_csv(
                     id_map[a] = str(b).strip()
 
     names = sorted({str(x).strip() for x in slate_df["Player"].tolist() if str(x).strip()})
-    print(f"  Resolving MLB IDs ({len(names)} unique names)...")
-    for nm in names:
+    print(
+        f"  [MLB actuals] slate_rows={len(slate_df):,}; unique_players={len(names):,}; "
+        f"season={season} (Stats API gameLog)",
+        flush=True,
+    )
+    print(f"  Resolving MLB IDs ({len(names)} unique names)...", flush=True)
+    for i, nm in enumerate(names, start=1):
+        if i == 1 or i % 75 == 0 or i == len(names):
+            print(f"  ... id lookup {i}/{len(names)}", flush=True)
         key = s2.norm_name(nm)
         if not key:
             continue
@@ -284,7 +295,7 @@ def _fetch_actuals_csv(
         pid = s2.search_mlb_player(nm)
         if pid:
             id_map[key] = pid
-            print(f"    + {nm} -> {pid}")
+            print(f"    + {nm} -> {pid}", flush=True)
 
     if update_id_cache:
         _merge_id_cache(id_cache_path, id_map)
@@ -331,7 +342,8 @@ def _fetch_actuals_csv(
                 fallback_logged.add(fk)
                 print(
                     f"  [MLB actuals] date fallback: {player_name} log_date={log_date_used} "
-                    f"used for slate_date={d}"
+                    f"used for slate_date={d}",
+                    flush=True,
                 )
             return sp
         return None
@@ -403,7 +415,26 @@ def _fetch_actuals_csv(
             "opp_team": opp_team,
         }
 
+    print(
+        f"  [MLB actuals] built_unique_props={len(out_rows):,}; "
+        f"skipped_no_mlb_id_rows={no_id:,}; "
+        f"skipped_no_game_log_for_date={no_game:,}; "
+        f"skipped_bad_prop_or_nan_stat={bad_prop:,}",
+        flush=True,
+    )
+    if not out_rows:
+        print(
+            f"  [MLB actuals] NOTE: 0 rows written. Game logs ARE fetched from statsapi.mlb.com; "
+            f"this usually means no gameLog entry dated {d} (or +1d fallback) yet — e.g. games not "
+            "final — or many players lack resolved MLB IDs (see skipped_no_mlb_id_rows). "
+            "L5/stat_g* on the slate still come from the pipeline cache, not this step.",
+            flush=True,
+        )
+
+    _cols = ["player", "prop", "actual", "game_date", "mlb_player_id", "team", "opp_team"]
     act_df = pd.DataFrame(list(out_rows.values()))
+    if act_df.empty:
+        act_df = pd.DataFrame(columns=_cols)
     return act_df, id_map, no_id, no_game, bad_prop
 
 
@@ -507,6 +538,10 @@ def main() -> None:
 
     slate_df = pd.read_excel(slate_path, sheet_name=args.sheet)
     slate_df.columns = [str(c).strip() for c in slate_df.columns]
+    print(
+        f"  Reading slate: {slate_path.name} sheet={args.sheet!r} ({len(slate_df):,} rows)",
+        flush=True,
+    )
     req = ("Player", "Prop")
     miss = [c for c in req if c not in slate_df.columns]
     if miss:
@@ -523,9 +558,14 @@ def main() -> None:
         Path(args.id_cache),
         args.update_id_cache,
     )
-    act_df.sort_values(["player", "prop"]).to_csv(actuals_path, index=False, encoding="utf-8-sig")
-    print(f"  Wrote {len(act_df)} actual rows -> {actuals_path}")
-    print(f"  (no mlb id: {no_id}, no game on {d}: {no_game}, bad prop/stat: {bad_prop})")
+    if not act_df.empty:
+        act_df = act_df.sort_values(["player", "prop"])
+    act_df.to_csv(actuals_path, index=False, encoding="utf-8-sig")
+    print(f"  Wrote {len(act_df)} actual rows -> {actuals_path}", flush=True)
+    print(
+        f"  (no mlb id: {no_id}, no game on {d}: {no_game}, bad prop/stat: {bad_prop})",
+        flush=True,
+    )
 
     if args.skip_grade:
         return

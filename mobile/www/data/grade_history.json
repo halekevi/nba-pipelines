@@ -835,5 +835,140 @@
       "count": 123,
       "wins": 23
     }
+  },
+  {
+    "date": "2026-05-10",
+    "n_tickets": 592,
+    "wins": 100,
+    "guarantees": 0,
+    "losses": 492,
+    "win_rate": 0.1689,
+    "avg_ev_predicted": null,
+    "net_per_10": -1.25,
+    "roi_pct": -12.51,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 592,
+      "wins": 100
+    }
+  },
+  {
+    "date": "2026-05-11",
+    "n_tickets": 178,
+    "wins": 34,
+    "guarantees": 0,
+    "losses": 144,
+    "win_rate": 0.191,
+    "avg_ev_predicted": null,
+    "net_per_10": -1.44,
+    "roi_pct": -14.38,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 178,
+      "wins": 34
+    }
+  },
+  {
+    "date": "2026-05-12",
+    "n_tickets": 366,
+    "wins": 91,
+    "guarantees": 0,
+    "losses": 275,
+    "win_rate": 0.2486,
+    "avg_ev_predicted": null,
+    "net_per_10": 8.2,
+    "roi_pct": 81.97,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 366,
+      "wins": 91
+    }
+  },
+  {
+    "date": "2026-05-13",
+    "n_tickets": 52,
+    "wins": 13,
+    "guarantees": 0,
+    "losses": 39,
+    "win_rate": 0.25,
+    "avg_ev_predicted": null,
+    "net_per_10": 1.18,
+    "roi_pct": 11.82,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 52,
+      "wins": 13
+    }
+  },
+  {
+    "date": "2026-05-14",
+    "n_tickets": 202,
+    "wins": 46,
+    "guarantees": 0,
+    "losses": 156,
+    "win_rate": 0.2277,
+    "avg_ev_predicted": null,
+    "net_per_10": 1.77,
+    "roi_pct": 17.7,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 202,
+      "wins": 46
+    }
   }
 ]

@@ -8,6 +8,14 @@ $Root = Split-Path $PSScriptRoot -Parent
 $SportsRoot = Join-Path $Root "Sports"
 $DateDir = Join-Path $Root "outputs\$Date"
 $CanonicalDateDir = Join-Path $DateDir "canonical"
+# Tennis slate/matches: next calendar day vs bundle --Date (same contract as run_pipeline.ps1 -TennisDate).
+$TennisSlateDate = $Date
+try {
+    $TennisSlateDate = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).AddDays(1).ToString("yyyy-MM-dd")
+} catch { }
+if ($TennisSlateDate -ne $Date) {
+    Write-Host "[GRADER] Tennis match day (actuals/step8/graded names): $TennisSlateDate | Bundle folder: outputs\$Date" -ForegroundColor DarkGray
+}
 
 $TicketsFileFrozenCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
 $TicketsFileFrozen = Join-Path $DateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
@@ -29,7 +37,7 @@ $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
 $WCBBActuals = Join-Path $DateDir "actuals_wcbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
 $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
-$TennisActuals  = Join-Path $DateDir "actuals_tennis_$Date.csv"
+$TennisActuals  = Join-Path $DateDir "actuals_tennis_$TennisSlateDate.csv"
 $MlbActuals    = Join-Path $DateDir "actuals_mlb_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
 $FetchTennisActualsScript = Join-Path $Root "scripts\fetch_tennis_actuals.py"
@@ -60,7 +68,7 @@ $SoccerGradedFile = Join-Path $DateDir "graded_soccer_$Date.xlsx"
 $NBA1HGradedFile = Join-Path $DateDir "graded_nba1h_$Date.xlsx"
 $NBA1QGradedFile = Join-Path $DateDir "graded_nba1q_$Date.xlsx"
 $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
-$TennisGradedFile = Join-Path $DateDir "graded_tennis_$Date.xlsx"
+$TennisGradedFile = Join-Path $DateDir "graded_tennis_$TennisSlateDate.xlsx"
 $WNBAActuals = Join-Path $DateDir "actuals_wnba_$Date.csv"
 $WNBAGradedFile = Join-Path $DateDir "graded_wnba_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
@@ -76,12 +84,15 @@ function Copy-PropOracleGradedSlateBundle {
         [string]$RepoRoot,
         [string]$GradeDate,
         [string]$OutputsDir,
-        [int]$MaxFileBytes
+        [int]$MaxFileBytes,
+        # Tennis graded workbook is named for match day (bundle Date + 1). Empty => graded_tennis_$GradeDate.
+        [string]$TennisGradedDate = ""
     )
 
     $destRoot = Join-Path $RepoRoot "ui_runner\graded_slate\$GradeDate"
     New-Item -ItemType Directory -Force -Path $destRoot | Out-Null
 
+    $tennisGradedLeaf = if ($TennisGradedDate) { "graded_tennis_$TennisGradedDate.xlsx" } else { "graded_tennis_$GradeDate.xlsx" }
     $names = @(
         "graded_nba_$GradeDate.xlsx",
         "graded_cbb_$GradeDate.xlsx",
@@ -90,7 +101,7 @@ function Copy-PropOracleGradedSlateBundle {
         "graded_mlb_$GradeDate.xlsx",
         "graded_soccer_$GradeDate.xlsx",
         "graded_wnba_$GradeDate.xlsx",
-        "graded_tennis_$GradeDate.xlsx",
+        $tennisGradedLeaf,
         "combined_tickets_graded_$GradeDate.xlsx"
     )
 
@@ -168,6 +179,24 @@ function Resolve-FirstExisting {
     return $null
 }
 
+## Warn when the resolved workbook is not clearly tied to -Date (static Sports\ copies are a common footgun).
+## CSV slates often omit ISO dates in the filename — skip warning for .csv to avoid noise.
+function Warn-IfSlateFilenameMissingGradeDate {
+    param(
+        [string]$ResolvedPath,
+        [string]$GradeDate,
+        [string]$SportLabel
+    )
+    if (-not $ResolvedPath -or -not $GradeDate) { return }
+    if (-not (Test-Path -LiteralPath $ResolvedPath)) { return }
+    $leaf = Split-Path $ResolvedPath -Leaf
+    $ext = [System.IO.Path]::GetExtension($leaf).ToLowerInvariant()
+    if ($ext -eq '.csv') { return }
+    if ($leaf -notmatch [regex]::Escape($GradeDate)) {
+        Write-Warning "[$SportLabel] Slate '$leaf' does not contain '$GradeDate' in the file name. The grader keeps rows matching game_date (or time) for that calendar day. Build or copy the dated step8 under outputs\$GradeDate\, or pass -Date to match Game Date in the workbook."
+    }
+}
+
 Write-Host "`n=====================================" -ForegroundColor Green
 Write-Host "   SLATE IQ GRADER RUNNER" -ForegroundColor Green
 Write-Host "   Date: $Date"
@@ -181,6 +210,7 @@ if (-not (Test-Path $DateDir)) {
 # Default: college only (CBB/WCBB). NBA 1H / 1Q stay enabled - use static step8 + period actuals as usual.
 # Re-enable all: set PROPORACLE_GRADER_DISABLED_SPORTS to empty string.
 # Temporarily skip period props: PROPORACLE_GRADER_DISABLED_SPORTS=cbb,wcbb,nba1h,nba1q
+# Optional: fail if slate has zero rows for -Date (set PROPORACLE_GRADER_STRICT_SLATE_DATE=1 — enforced in slate_grader.py).
 $GraderDisabledSports = @('cbb', 'wcbb')
 if ($null -ne $env:PROPORACLE_GRADER_DISABLED_SPORTS) {
     $envRaw = [string]$env:PROPORACLE_GRADER_DISABLED_SPORTS
@@ -291,23 +321,25 @@ if (Test-Path $FetchActualsScript) {
 
     if (Test-Path $FetchTennisActualsScript) {
         Run-Py "Fetch Tennis Actuals" $Root $FetchTennisActualsScript @(
-            "--date", $Date,
+            "--date", $TennisSlateDate,
             "--output", $TennisActuals
         )
     }
 
     if (Test-Path $TennisGraderScript) {
-        $TennisStep8Dated = Join-Path $DateDir "step8_tennis_direction_clean_$Date.xlsx"
+        $TennisStep8DatedNext = Join-Path $DateDir "step8_tennis_direction_clean_$TennisSlateDate.xlsx"
+        $TennisStep8DatedLegacy = Join-Path $DateDir "step8_tennis_direction_clean_$Date.xlsx"
         $TennisStep8Canonical = Join-Path $DateDir "tennis\step8_tennis_direction_clean.xlsx"
         $TennisStep8Static = Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"
         $TennisStep8Csv = Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction.csv"
-        $TennisSlateFile = Resolve-FirstExisting @($TennisStep8Canonical, $TennisStep8Dated, $TennisStep8Static, $TennisStep8Csv)
+        $TennisSlateFile = Resolve-FirstExisting @($TennisStep8DatedNext, $TennisStep8DatedLegacy, $TennisStep8Canonical, $TennisStep8Static, $TennisStep8Csv)
         if (-not $TennisSlateFile) {
             Write-Host "Skipping Tennis grader (no step8 tennis slate; build Tennis pipeline or place step8 under outputs\$Date or Tennis\outputs)." -ForegroundColor Yellow
         }
         else {
+            Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $TennisSlateFile -GradeDate $TennisSlateDate -SportLabel "Tennis"
             Run-Py "Tennis Grader" $Root $TennisGraderScript @(
-                "--date", $Date,
+                "--date", $TennisSlateDate,
                 "--slate", $TennisSlateFile,
                 "--output", $TennisGradedFile
             ) -PreferPy314
@@ -419,12 +451,15 @@ if ((Test-Path $ExportNbaFullSlateScript) -and (Test-Path $DateDir)) {
 $NBASlateFile = Resolve-FirstExisting @(
     $NbaFullSlateForGrade,
     $NBAExtractOut,
-    $NBAStep8Canonical,
     $NBAStep8Dated,
+    $NBAStep8Canonical,
     $NBAStep8Static,
     $NBAStep8Static2
 )
-if ($NBASlateFile) { Write-Host "[GRADER] NBA slate: $(Split-Path $NBASlateFile -Leaf)" -ForegroundColor Cyan }
+if ($NBASlateFile) {
+    Write-Host "[GRADER] NBA slate: $(Split-Path $NBASlateFile -Leaf)" -ForegroundColor Cyan
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $NBASlateFile -GradeDate $Date -SportLabel "NBA"
+}
 $CBBSlateXlsx = Resolve-FirstExisting @(
     (Join-Path $DateDir "cbb\step6_ranked_cbb.xlsx"),
     (Join-Path $DateDir "step6_ranked_cbb_$Date.xlsx"),
@@ -436,20 +471,23 @@ $NHLStep8Canonical = Join-Path $DateDir "nhl\step8_nhl_direction_clean.xlsx"
 $NHLStep8Static = Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"
 $NHLStep8Static2 = Join-Path $SportsRoot "NHL\step8_nhl_direction_clean.xlsx"
 $NHLSlateFile = Resolve-FirstExisting @(
-    $NHLStep8Canonical,
     $NHLStep8Dated,
+    $NHLStep8Canonical,
     $NHLStep8Static,
     $NHLStep8Static2
 )
-if ($NHLSlateFile) { Write-Host "[GRADER] NHL slate: $(Split-Path $NHLSlateFile -Leaf)" -ForegroundColor Cyan }
+if ($NHLSlateFile) {
+    Write-Host "[GRADER] NHL slate: $(Split-Path $NHLSlateFile -Leaf)" -ForegroundColor Cyan
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $NHLSlateFile -GradeDate $Date -SportLabel "NHL"
+}
 
 $SoccerStep8Dated = Join-Path $DateDir "step8_soccer_direction_clean_$Date.xlsx"
 $SoccerStep8Canonical = Join-Path $DateDir "soccer\step8_soccer_direction_clean.xlsx"
 $SoccerStep8Static = Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"
 $SoccerStep8Static2 = Join-Path $SportsRoot "Soccer\step8_soccer_direction_clean.xlsx"
 $SoccerSlateFile = Resolve-FirstExisting @(
-    $SoccerStep8Canonical,
     $SoccerStep8Dated,
+    $SoccerStep8Canonical,
     $SoccerStep8Static,
     $SoccerStep8Static2
 )
@@ -480,12 +518,19 @@ $NBA1QSlateFile = Resolve-FirstExisting @(
     $DatedNBA1QPath,
     (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx")
 )
+if ($NBA1HSlateFile) {
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $NBA1HSlateFile -GradeDate $Date -SportLabel "NBA1H"
+}
+if ($NBA1QSlateFile) {
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $NBA1QSlateFile -GradeDate $Date -SportLabel "NBA1Q"
+}
 $WCBBSlateFile = Resolve-FirstExisting @(
     (Join-Path $DateDir "step6_ranked_wcbb_$Date.xlsx"),
     (Join-Path $SportsRoot "CBB\step6_ranked_wcbb.xlsx")
 )
 if ($SoccerSlateFile -and (Test-Path $SoccerSlateFile)) {
     Write-Host "[GRADER] Soccer slate: $(Split-Path $SoccerSlateFile -Leaf)" -ForegroundColor Cyan
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $SoccerSlateFile -GradeDate $Date -SportLabel "Soccer"
 }
 else {
     Write-Host "Soccer slate: not found (tried outputs\$Date\, Soccer\outputs\, Soccer\)" -ForegroundColor Yellow
@@ -596,7 +641,10 @@ else {
         $MLBStep8Static,
         $MLBStep8Static2
     )
-    if ($MLBSlateFile) { Write-Host "[GRADER] MLB slate: $(Split-Path $MLBSlateFile -Leaf)" -ForegroundColor Cyan }
+    if ($MLBSlateFile) {
+        Write-Host "[GRADER] MLB slate: $(Split-Path $MLBSlateFile -Leaf)" -ForegroundColor Cyan
+        Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $MLBSlateFile -GradeDate $Date -SportLabel "MLB"
+    }
     if ((Test-Path $MLBActuals) -and $MLBSlateFile -and (Test-Path $MLBSlateFile)) {
         Run-Py "Grade MLB Slate" $Root "scripts\nhl_soccer_grader.py" @(
             "--sport", "MLB",
@@ -615,13 +663,17 @@ $WnbaStep8Dated = Join-Path $DateDir "step8_wnba_direction_clean_$Date.xlsx"
 $WnbaStep8Canonical = Join-Path $DateDir "wnba\step8_wnba_direction_clean.xlsx"
 $WnbaStep8Static = Join-Path $SportsRoot "WNBA\step8_wnba_direction_clean.xlsx"
 $WnbaStep8Static2 = Join-Path $SportsRoot "WNBA\outputs\step8_wnba_direction_clean.xlsx"
+# Prefer dated step8 under outputs\<date>\ so grade date matches slate (avoid static Sports copy from another day).
 $WNBASlateFile = Resolve-FirstExisting @(
-    $WnbaStep8Canonical,
     $WnbaStep8Dated,
+    $WnbaStep8Canonical,
     $WnbaStep8Static,
     $WnbaStep8Static2
 )
-if ($WNBASlateFile) { Write-Host "[GRADER] WNBA slate: $(Split-Path $WNBASlateFile -Leaf)" -ForegroundColor Cyan }
+if ($WNBASlateFile) {
+    Write-Host "[GRADER] WNBA slate: $(Split-Path $WNBASlateFile -Leaf)" -ForegroundColor Cyan
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $WNBASlateFile -GradeDate $Date -SportLabel "WNBA"
+}
 if ((Test-Path $WNBAActuals) -and $WNBASlateFile -and (Test-Path $WNBASlateFile) -and (Test-Path $SlateGraderScript)) {
     Run-Py "Grade WNBA Slate" $Root $SlateGraderScript @(
         "--sport", "WNBA",
@@ -1008,7 +1060,7 @@ if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
 # Copy graded workbooks for Railway / git (outputs/ is not deployed)
 # =============================
 if (Test-Path $DateDir) {
-    Copy-PropOracleGradedSlateBundle -RepoRoot $Root -GradeDate $Date -OutputsDir $DateDir -MaxFileBytes $GradedSlateMaxBytes
+    Copy-PropOracleGradedSlateBundle -RepoRoot $Root -GradeDate $Date -TennisGradedDate $TennisSlateDate -OutputsDir $DateDir -MaxFileBytes $GradedSlateMaxBytes
     if (-not $PushGradedSlate) {
         Write-Host "[GRADER] To commit and push graded_slate, re-run with -PushGradedSlate" -ForegroundColor DarkGray
     }

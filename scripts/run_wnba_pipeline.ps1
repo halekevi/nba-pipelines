@@ -8,8 +8,8 @@
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
 #    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Fallback: WNBA step1 script (Playwright/CDP); NBA API has no CDP
 #    .\run_wnba_pipeline.ps1 -UsePlaywright             # Fallback: Sports\WNBA\step1_fetch_prizepicks.py (browser)
-#    .\run_wnba_pipeline.ps1 -StatsFrom2025End           # Force step4 rolling stats through 2025-10-20
-#    .\run_wnba_pipeline.ps1 -NoStatsFrom2025End         # Opt out (early season defaults to 2025 window May–Jun)
+#    .\run_wnba_pipeline.ps1 -StatsFrom2025End           # Force step4 rolling stats through 2025-10-20 (overrides prior-season merge)
+#    .\run_wnba_pipeline.ps1 -NoStatsFrom2025End         # Step4: current season only (no 2025 merge in cache)
 #  Default step1 calls Sports\NBA\scripts\step1_fetch_prizepicks_api.py --league_id 3 (same fetch as NBA), output still outputs\<date>\wnba\step1_wnba_props.csv.
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 #
@@ -201,17 +201,18 @@ if ($ok) { $ok = Run-Step "WNBA Step 3 - Attach Defense" $WNBADir ".\step3_attac
     "--input `"$WnbaRunOutDir\step2_wnba_picktypes.csv`" --defense wnba_defense_summary.csv --output `"$WnbaRunOutDir\step3_wnba_defense.csv`"" }
 
 $step4Attach = ""
-$use2025L5 = $false
-if ($StatsFrom2025End) { $use2025L5 = $true }
-elseif (-not $NoStatsFrom2025End -and $Date -match '^2026-0[56]-') {
-    $use2025L5 = $true
-}
-if ($use2025L5) {
+if ($StatsFrom2025End) {
     $step4Attach = " --attach-stats-through 2025-10-20 --attach-stats-season 2025 --attach-stats-lookback-days 240"
-    Write-Host "  [WNBA step4] Rolling stats use 2025 season window through 2025-10-20 (full L5 samples early in 2026)." -ForegroundColor DarkCyan
+    Write-Host "  [WNBA step4] StatsFrom2025End: rolling stats use only 2025 season through 2025-10-20 (overrides prior-season merge)." -ForegroundColor DarkCyan
 }
+$step4NoPrior = ""
+if ($NoStatsFrom2025End -and -not $StatsFrom2025End) {
+    $step4NoPrior = " --no-include-prior-season-stats"
+    Write-Host "  [WNBA step4] NoStatsFrom2025End: rolling stats use current season cache only (--no-include-prior-season-stats)." -ForegroundColor DarkCyan
+}
+# Default step4 merges 2025+2026 cache rows + ~420d lookback for L5/L10 early in the new season (see step4 --no-include-prior-season-stats).
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach" }
+    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`"" }

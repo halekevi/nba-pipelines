@@ -340,6 +340,140 @@
         }
       ]
     },
+    "cfb": {
+      "label": "CFB Pipeline",
+      "workdir": "Sports/CFB",
+      "commands": [
+        {
+          "id": "cfb_step1",
+          "label": "Step 1 — Fetch PrizePicks (CFB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step1_pp_cfb_scraper.py",
+            "--out",
+            "../../outputs/{TODAY}/cfb/step1_cfb.csv"
+          ]
+        },
+        {
+          "id": "cfb_step2",
+          "label": "Step 2 — Normalize",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step2_normalize.py",
+            "--input",
+            "../../outputs/{TODAY}/cfb/step1_cfb.csv",
+            "--output",
+            "../../outputs/{TODAY}/cfb/step2_cfb.csv"
+          ]
+        },
+        {
+          "id": "cfb_step3a",
+          "label": "Step 3a — Build Pass/Run Unit Rankings",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/build_cfb_unit_rankings.py",
+            "--season",
+            "2025",
+            "--out",
+            "data/reference/cfb_team_unit_rankings.csv"
+          ]
+        },
+        {
+          "id": "cfb_step3b",
+          "label": "Step 3b — Attach Pass/Run Ranks",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step3_attach_unit_rankings.py",
+            "--input",
+            "../../outputs/{TODAY}/cfb/step2_cfb.csv",
+            "--rankings",
+            "data/reference/cfb_team_unit_rankings.csv",
+            "--output",
+            "../../outputs/{TODAY}/cfb/step3_with_unit_rankings_cfb.csv"
+          ]
+        },
+        {
+          "id": "cfb_step4",
+          "label": "Step 4 — Attach ESPN IDs",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step5a_attach_espn_ids.py",
+            "--input",
+            "../../outputs/{TODAY}/cfb/step3_with_unit_rankings_cfb.csv",
+            "--output",
+            "../../outputs/{TODAY}/cfb/step3_cfb.csv",
+            "--master",
+            "data/reference/ncaa_football_athletes_master.csv"
+          ]
+        },
+        {
+          "id": "cfb_step5",
+          "label": "Step 5 — Boxscore Stats",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step5b_attach_boxscore_stats.py",
+            "--input",
+            "../../outputs/{TODAY}/cfb/step3_cfb.csv",
+            "--output",
+            "../../outputs/{TODAY}/cfb/step5b_cfb.csv",
+            "--cache",
+            "data/cache/cfb_boxscore_cache.csv",
+            "--days",
+            "90",
+            "--workers",
+            "4"
+          ]
+        },
+        {
+          "id": "cfb_step6",
+          "label": "Step 6 — Rank Props",
+          "cmd": [
+            "py",
+            "-3.14",
+            "./scripts/pipeline/step6_rank_props_cfb.py",
+            "--input",
+            "../../outputs/{TODAY}/cfb/step5b_cfb.csv",
+            "--output",
+            "../../outputs/{TODAY}/cfb/step6_ranked_cfb.xlsx",
+            "--date",
+            "{TODAY}",
+            "--cache",
+            "data/cache/cfb_boxscore_cache.csv"
+          ]
+        },
+        {
+          "id": "cfb_full",
+          "label": "CFB Full Pipeline (Steps 1-6)",
+          "cmd_chain": [
+            "cfb_step1",
+            "cfb_step2",
+            "cfb_step3a",
+            "cfb_step3b",
+            "cfb_step4",
+            "cfb_step5",
+            "cfb_step6"
+          ]
+        },
+        {
+          "id": "cfb_run_script",
+          "label": "CFB (via run_pipeline.ps1 -CFBOnly)",
+          "cmd": [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            "../../run_pipeline.ps1",
+            "-CFBOnly"
+          ]
+        }
+      ]
+    },
     "combined": {
       "label": "Combined Slate + Tickets",
       "workdir": "",

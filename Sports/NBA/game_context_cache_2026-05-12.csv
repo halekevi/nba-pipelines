@@ -1,0 +1,4 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+SAS,MIN,218.5,-10.5,114.5,True,False,NORMAL,live
+SAS/MIN,MIN,218.5,-10.5,114.5,True,False,NORMAL,live
+MIN,SAS,218.5,10.5,104.0,True,False,NORMAL,live

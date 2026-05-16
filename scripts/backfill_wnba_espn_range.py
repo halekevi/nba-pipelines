@@ -11,6 +11,14 @@ last N games through a chosen end date (e.g. finals) via:
 
 Example (full 2025 regular season + playoffs into cache):
   python scripts/backfill_wnba_espn_range.py --from 2025-05-01 --to 2025-10-31 --season 2025
+
+ESPN is queried by calendar date, not “N games per player”. To approximate “last games of 2025”
+(playoffs / finals) use a late window, e.g. --preset late-2025 or finals-2025.
+
+Presets (pair with --season 2025):
+  full-2025     May–Oct 2025 (full calendar span we use for cache)
+  late-2025     Sep 1 – Oct 31 2025 (postseason-heavy; good with early 2026 L5)
+  finals-2025   Oct 1 – Oct 31 2025 (minimal tail — smallest useful chunk before 2026 season)
 """
 
 from __future__ import annotations
@@ -20,11 +28,19 @@ import importlib.util
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
+
+# ISO (start, end) inclusive. Tune finals-2025 if ESPN shifts postseason dates in a given year.
+PRESETS: dict[str, Tuple[str, str]] = {
+    "full-2025": ("2025-05-01", "2025-10-31"),
+    "late-2025": ("2025-09-01", "2025-10-31"),
+    "finals-2025": ("2025-10-01", "2025-10-31"),
+}
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
@@ -53,8 +69,14 @@ def _expand_dates(d0: date, d1: date) -> list[date]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill WNBA ESPN games into cache + SQLite.")
-    ap.add_argument("--from", dest="date_from", required=True, help="Start calendar date YYYY-MM-DD (inclusive).")
-    ap.add_argument("--to", dest="date_to", required=True, help="End calendar date YYYY-MM-DD (inclusive).")
+    ap.add_argument(
+        "--preset",
+        choices=sorted(PRESETS.keys()),
+        default="",
+        help="Date range shortcut (overrides --from/--to when set). Use with --season.",
+    )
+    ap.add_argument("--from", dest="date_from", default="", help="Start calendar date YYYY-MM-DD (inclusive).")
+    ap.add_argument("--to", dest="date_to", default="", help="End calendar date YYYY-MM-DD (inclusive).")
     ap.add_argument("--season", required=True, help="Value stored in cache SEASON column (e.g. 2025).")
     ap.add_argument(
         "--cache",
@@ -67,8 +89,16 @@ def main() -> None:
     ap.add_argument("--timeout", type=float, default=30.0)
     args = ap.parse_args()
 
-    d0 = date.fromisoformat(args.date_from)
-    d1 = date.fromisoformat(args.date_to)
+    if args.preset:
+        d0s, d1s = PRESETS[args.preset]
+        d0 = date.fromisoformat(d0s)
+        d1 = date.fromisoformat(d1s)
+        print(f"[backfill] preset {args.preset}: {d0} .. {d1}")
+    else:
+        if not str(args.date_from).strip() or not str(args.date_to).strip():
+            raise SystemExit("Provide --preset or both --from and --to (YYYY-MM-DD).")
+        d0 = date.fromisoformat(args.date_from.strip())
+        d1 = date.fromisoformat(args.date_to.strip())
     if d1 < d0:
         raise SystemExit("--to must be on or after --from")
 

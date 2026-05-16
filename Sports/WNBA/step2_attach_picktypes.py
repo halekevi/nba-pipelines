@@ -46,9 +46,16 @@ def norm_prop(s: str) -> str:
         "pts+asts":"pa","points+assists":"pa",
         "rebs+asts":"ra","rebounds+assists":"ra",
         "fgm":"fgm","fgmade":"fgm","fga":"fga","fgattempted":"fga",
+        "fieldgoalsmade":"fgm","fieldgoalsattempted":"fga",
         "3ptfgmade":"fg3m","3ptfgattempted":"fg3a","fg3m":"fg3m","fg3a":"fg3a",
+        "3ptmade":"fg3m","3ptattempted":"fg3a",
+        "threepointersmade":"fg3m","threepointersattempted":"fg3a",
+        "3pointersmade":"fg3m","3pointersattempted":"fg3a",
         "2ptfgmade":"fg2m","2ptfgattempted":"fg2a","fg2m":"fg2m","fg2a":"fg2a",
+        "2ptmade":"fg2m","2ptattempted":"fg2a",
+        "twopointersmade":"fg2m","twopointersattempted":"fg2a",
         "ftm":"ftm","ftmade":"ftm","fta":"fta","ftattempted":"fta",
+        "freethrowsmade":"ftm","freethrowsattempted":"fta",
     }
     return exact_map.get(clean, clean)
 

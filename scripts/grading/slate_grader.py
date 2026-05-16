@@ -433,6 +433,15 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     return df
 
 
+def _strict_slate_date_env_exit(message: str) -> None:
+    """When PROPORACLE_GRADER_STRICT_SLATE_DATE is set, exit non-zero instead of producing an empty graded slate."""
+    v = (os.environ.get("PROPORACLE_GRADER_STRICT_SLATE_DATE") or "").strip().lower()
+    if v not in ("1", "true", "yes", "on"):
+        return
+    print(f"ERROR: {message}", file=sys.stderr)
+    sys.exit(2)
+
+
 def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
     """
     Keep only rows whose game date matches date_str (YYYY-MM-DD).
@@ -450,13 +459,23 @@ def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFr
             if mask.any():
                 print(f"  INFO: Slate date filter ({date_str}) [game_date]: kept {int(mask.sum())}/{len(df)} rows")
                 return df.loc[mask].copy()
+            sample_dates = sorted(
+                {str(gd_i)[:10] for gd_i in gd.loc[nonempty].tolist() if str(gd_i).strip() not in ("", "nan", "None", "<NA>")}
+            )[:16]
             print(
                 f"  WARN: Date filter {date_str} on 'game_date': 0 rows match -- "
                 f"graded workbook will be empty (slate is for other day(s))."
             )
+            if sample_dates:
+                print(f"  INFO: Non-empty game_date values on this slate (sample): {sample_dates}")
             print(
                 "  HINT: Use run_grader.ps1 -Date <ET slate calendar date>, "
                 "or place that day's step8 workbook under outputs\\<date>\\ for extraction."
+            )
+            _strict_slate_date_env_exit(
+                f"Strict slate date (PROPORACLE_GRADER_STRICT_SLATE_DATE): "
+                f"no rows with game_date={date_str}. Slate carries other dates (see INFO above). "
+                "Unset the env var to allow an empty graded workbook."
             )
             return df.iloc[0:0].copy()
 
@@ -487,6 +506,10 @@ def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFr
         print(
             "  HINT: Use run_grader.ps1 -Date <game-day> matching Game Time in the slate, "
             "or place that day's step8 workbook under outputs\\<date>\\ for extraction."
+        )
+        _strict_slate_date_env_exit(
+            f"Strict slate date (PROPORACLE_GRADER_STRICT_SLATE_DATE): "
+            f"no '{col}' timestamps match calendar day {date_str}."
         )
         return df.loc[mask].copy()
     print(f"  INFO: Slate date filter ({date_str}): kept {int(mask.sum())}/{len(df)} rows")

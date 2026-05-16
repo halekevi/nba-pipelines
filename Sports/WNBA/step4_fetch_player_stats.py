@@ -23,6 +23,9 @@ Output adds (per row):
   last5_over, last5_under, last5_push, last5_hit_rate
   unsupported_prop, unsupported_reason
 
+Rolling windows can include the previous WNBA season (e.g. 2025 rows when --season is 2026)
+so early-season L5/ L10 are not starved. Use --no-include-prior-season-stats to disable.
+
 Run:
   py -3.14 step4_fetch_player_stats.py \
       --slate step3_wnba_defense.csv \
@@ -329,12 +332,12 @@ def derive_stat(df: pd.DataFrame, prop_norm: str) -> pd.Series:
     if p in ("stl","steals"):           return stl
     if p in ("blk","blocks"):           return blk
     if p in ("tov","turnovers","to"):   return tov
-    if p == "fga":                      return fga
-    if p == "fgm":                      return fgm
-    if p in ("fg3a","3pta"):            return fg3a
-    if p in ("fg3m","3ptm","3ptmade","3pt made","3pm"): return fg3m
-    if p in ("fg2a","2pta"):            return fg2a
-    if p in ("fg2m","2ptm"):            return fg2m
+    if p in ("fga","fieldgoalsattempted"): return fga
+    if p in ("fgm","fieldgoalsmade"): return fgm
+    if p in ("fg3a","3pta","3ptattempted","threepointersattempted","3pointersattempted"): return fg3a
+    if p in ("fg3m","3ptm","3ptmade","3pt made","3pm","threepointersmade","3pointersmade"): return fg3m
+    if p in ("fg2a","2pta","2ptattempted","twopointersattempted"): return fg2a
+    if p in ("fg2m","2ptm","2ptmade","twopointersmade"): return fg2m
     if p in ("fta","freethrowsattempted"): return fta
     if p in ("ftm","freethrowsmade"):   return ftm
     if p in ("fantasy","fantasy_score"):
@@ -387,6 +390,12 @@ def main():
         default=240,
         help="Days before --attach-stats-through to include in the rolling window (default 240).",
     )
+    ap.add_argument(
+        "--no-include-prior-season-stats",
+        action="store_true",
+        help="Restrict rolling stats to a single SEASON label and the normal --days lookback only. "
+        "Default: merge current and previous season cache rows and widen lookback so L5 can use prior-season games.",
+    )
     ap.add_argument("--n",        type=int,   default=10)
     ap.add_argument("--sleep",    type=float, default=0.8)
     ap.add_argument("--retries",  type=int,   default=4)
@@ -411,6 +420,24 @@ def main():
         stat_target = target_date
         stat_season = str(args.season)
         stat_days = int(args.days)
+
+    # Rolling-stat window: optional merge with prior WNBA season in cache (e.g. 2025 + 2026) + longer lookback
+    include_prior_for_stats = (not attach_through) and (not bool(getattr(args, "no_include_prior_season_stats", False)))
+    merged_season_labels: set[str] = {str(stat_season)}
+    effective_stat_days = int(stat_days)
+    if include_prior_for_stats:
+        sy = str(stat_season).strip()[:4]
+        try:
+            y = int(sy)
+            if 2000 < y < 2100:
+                merged_season_labels.add(str(y - 1))
+        except ValueError:
+            pass
+        effective_stat_days = max(effective_stat_days, 420)
+        print(
+            f"→ Prior-season merge for rolling stats: SEASON in {sorted(merged_season_labels)} "
+            f"(lookback {effective_stat_days}d, end {pd.Timestamp(stat_target).date()})"
+        )
 
     print(f"→ Loading slate: {args.slate}")
     slate = pd.read_csv(args.slate, dtype=str, encoding="utf-8-sig").fillna("")
@@ -548,7 +575,7 @@ def main():
 
     # Filter cache to season + date range (for props / stat_g*), independent of fetch window when attach-* is set
     cache_dates = pd.to_datetime(cache["game_date"], errors="coerce")
-    cutoff_stat = stat_target - timedelta(days=stat_days)
+    cutoff_stat = stat_target - timedelta(days=int(effective_stat_days))
     if "SEASON" not in cache.columns:
         if attach_through:
             raise RuntimeError(
@@ -557,7 +584,7 @@ def main():
             )
         season_mask = pd.Series(True, index=cache.index)
     else:
-        season_mask = cache["SEASON"].fillna("").astype(str) == str(stat_season)
+        season_mask = cache["SEASON"].fillna("").astype(str).isin(merged_season_labels)
     cache_filt = cache[
         season_mask
         & (cache_dates >= pd.Timestamp(cutoff_stat))
