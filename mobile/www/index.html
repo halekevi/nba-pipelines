@@ -2643,6 +2643,16 @@ function resolvedOverHits(p, n) {
   return Math.max(0, Math.min(n, n - hu));
 }
 
+/** Show L5/L10 hit counts with sample size when early season (< n games). */
+function formatL5Cell(overVal, underVal, gamesPlayed, window) {
+  const n = window === 10 ? 10 : 5;
+  const gp = gamesPlayed != null && gamesPlayed !== "" ? Number(gamesPlayed) : null;
+  const sample = gp != null && Number.isFinite(gp) && gp > 0 ? Math.min(n, Math.round(gp)) : n;
+  const suffix = sample < n ? `/${sample}` : "";
+  const fmt = (v) => (v != null && v !== "" ? `${v}${suffix}` : "—");
+  return { over: fmt(overVal), under: fmt(underVal) };
+}
+
 /** Goblin is OVER-only in this product — exclude from under-edge and under-streak surfaces. */
 function isGoblinPick(p) {
   const t = String(p?.pick ?? p?.pick_type ?? "").trim().toLowerCase();
@@ -4041,9 +4051,28 @@ function _fallbackSlateRowsFromTickets(sport) {
     }));
 }
 
+function _slateRowIsFantasyProp(row, sport) {
+  if (!row) return false;
+  if (typeof row === 'object' && !Array.isArray(row)) {
+    return isFantasyScoreEdgePick({
+      prop: row.prop,
+      prop_type: row.prop_type || row.prop,
+      market: row.market,
+      stat: row.stat,
+    });
+  }
+  if (Array.isArray(row)) {
+    const cols = SLATE_COLS[sport] || SLATE_COLS.combined || [];
+    const pi = cols.indexOf('Prop') >= 0 ? cols.indexOf('Prop') : cols.indexOf('Stat');
+    if (pi >= 0) return isFantasyScoreEdgePick({ prop: row[pi] });
+  }
+  return false;
+}
+
 function _setSlateSportRows(sport, rows) {
   delete SLATE_COLS[sport];
-  SLATE_DATA[sport] = Array.isArray(rows) ? rows : [];
+  const raw = Array.isArray(rows) ? rows : [];
+  SLATE_DATA[sport] = raw.filter((r) => !_slateRowIsFantasyProp(r, sport));
   SLATE_DATA[sport].sort((a,b) => Math.abs(b?.edge||0) - Math.abs(a?.edge||0));
 }
 
@@ -4317,8 +4346,9 @@ function renderSlateTable(sport) {
     const tierCls = `tier-${r.tier || 'D'}`;
     const pickNorm = String(r.pick_type || '').trim().toLowerCase();
     const pickCls = pickNorm === 'goblin' ? 'pick-goblin-cell' : pickNorm === 'demon' ? 'pick-demon-cell' : 'pick-standard-cell';
-    const l5o = r.l5_over  != null ? r.l5_over  : '—';
-    const l5u = r.l5_under != null ? r.l5_under : '—';
+    const l5fmt = formatL5Cell(r.l5_over, r.l5_under, r.l5_games_played, 5);
+    const l5o = l5fmt.over;
+    const l5u = l5fmt.under;
     const rankStr = r.rank_score != null ? r.rank_score.toFixed(2) : '—';
     const timeStr = formatGameTimeDisplay(r.game_time);
     return `<tr>

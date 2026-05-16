@@ -7520,6 +7520,11 @@ def load_mlb(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
+    fantasy_mask = _fantasy_prop_mask(df)
+    if fantasy_mask.any():
+        n_drop = int(fantasy_mask.sum())
+        df = df.loc[~fantasy_mask].copy()
+        print(f"  [load_mlb] Excluded {n_drop} fantasy props from slate explorer")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 

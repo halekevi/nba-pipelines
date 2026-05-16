@@ -991,7 +991,7 @@ def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
     if not had_wnba:
         out.extend(_wnba_slate_rows_from_step8_fallback())
     out.sort(key=_rank, reverse=True)
-    return _filter_invalid_demon_slate_rows(out)
+    return _filter_slate_explorer_rows(out)
 
 
 def _wnba_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
@@ -1134,6 +1134,29 @@ def _filter_invalid_demon_slate_rows(rows: list[Any]) -> list[Any]:
     return out
 
 
+def _is_fantasy_slate_row(record: dict[str, Any]) -> bool:
+    """True when a slate explorer row is a fantasy-score market (hide in UI)."""
+    for col in ("prop", "prop_type", "market", "stat"):
+        txt = str(record.get(col) or "").strip().lower()
+        if txt and "fantasy" in txt:
+            return True
+    return False
+
+
+def _filter_fantasy_slate_rows(rows: list[Any]) -> list[Any]:
+    if not isinstance(rows, list):
+        return rows
+    return [
+        r
+        for r in rows
+        if not (isinstance(r, dict) and _is_fantasy_slate_row(r))
+    ]
+
+
+def _filter_slate_explorer_rows(rows: list[Any]) -> list[Any]:
+    return _filter_fantasy_slate_rows(_filter_invalid_demon_slate_rows(rows))
+
+
 def _api_slate_pick_abs_edge(record: dict[str, Any]) -> float:
     """|edge| for /api/slate picks; prefer pipeline abs_edge when present."""
     ae = record.get("abs_edge")
@@ -1173,7 +1196,7 @@ def _slim_slate_sport_payload(payload: dict) -> dict:
                 slim_rows.append(_slim_slate_sport_row(r))
             else:
                 slim_rows.append(r)
-        slim_sports[k] = _filter_invalid_demon_slate_rows(slim_rows)
+        slim_sports[k] = _filter_slate_explorer_rows(slim_rows)
     return {
         "date": payload.get("date"),
         "generated_at": payload.get("generated_at"),
@@ -1193,7 +1216,12 @@ def _slate_counts() -> tuple[dict[str, int], dict]:
     except Exception:
         return {}, disk_info
     sports = payload.get("sports") or {}
-    counts = {str(k).lower(): len(v or []) for k, v in sports.items()}
+    counts: dict[str, int] = {}
+    for k, v in sports.items():
+        rows = v or []
+        if isinstance(rows, list):
+            rows = _filter_slate_explorer_rows(rows)
+        counts[str(k).lower()] = len(rows)
     return counts, disk_info
 
 
@@ -4550,7 +4578,7 @@ def api_slate_sport_single(sport: str):
         slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
         if not slim_rows and sport_key == "wnba":
             slim_rows = _wnba_slate_rows_from_step8_fallback()
-        slim_rows = _filter_invalid_demon_slate_rows(slim_rows)
+        slim_rows = _filter_slate_explorer_rows(slim_rows)
         return {
             "date": payload.get("date"),
             "generated_at": payload.get("generated_at"),
