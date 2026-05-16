@@ -270,7 +270,11 @@ def load_cache(path: Path) -> pd.DataFrame:
 
 
 def save_cache(cache: pd.DataFrame, path: Path) -> None:
-    cache.to_csv(path, index=False, encoding="utf-8-sig")
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.stem}.tmp{path.suffix}")
+    cache.to_csv(tmp, index=False, encoding="utf-8-sig", lineterminator="\n")
+    tmp.replace(path)
 
 
 def fetch_game_log(player_id: str, group: str, season: str) -> List[dict]:
@@ -881,3 +885,4 @@ if __name__ == "__main__":
             start=Path(__file__),
         )
         print(f"❌ MLB step4 failed (logged). {type(e).__name__}: {e}")
+        sys.exit(1)
