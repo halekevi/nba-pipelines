@@ -1618,11 +1618,10 @@ CSS = """
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0a0a14}
+html{height:100%;overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable;-webkit-overflow-scrolling:touch;background:#0a0a14}
 body{font-family:'Inter',sans-serif;background:#0a0a14;color:var(--text);min-height:100%;height:auto;max-height:none;margin:0;overflow-x:hidden;overflow-y:visible;padding-bottom:max(10px, env(safe-area-inset-bottom, 0px));font-size:clamp(14px,1.02vw,16px);line-height:1.45}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 header,.main{position:relative;z-index:1}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 
 header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
@@ -1683,7 +1682,7 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .pbw-panel-title.worst{color:#993C1D}
 .pbw-mini-bar{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
 .pbw-mini-bar-fill{height:100%}
-.pbw-heatmap-wrap{overflow:auto;border:1px solid var(--glass-bd);border-radius:12px}
+.pbw-heatmap-wrap{overflow:scroll;scrollbar-gutter:stable;border:1px solid var(--glass-bd);border-radius:12px}
 .pbw-heatmap{width:100%;border-collapse:separate;border-spacing:0}
 .pbw-heatmap th,.pbw-heatmap td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:center}
 .pbw-heatmap th:first-child,.pbw-heatmap td:first-child{position:sticky;left:0;background:#0f1324;text-align:left;z-index:1}
@@ -2153,7 +2152,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517static"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>{CSS}</style>

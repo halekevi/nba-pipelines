@@ -407,10 +407,10 @@ def combined_summary(df):
 # ── CSS ────────────────────────────────────────────────────────────────────────
 CSS = """:root{--bg:#070a10;--bg2:#0c1018;--bg3:#111722;--border:#1c2333;--bd2:#243044;--text:#e8edf5;--muted:#4a5568;--muted2:#6b7a94;--blue:#3b82f6;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6}
 *{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable;height:100%}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(59,130,246,.04) 0%,transparent 70%);pointer-events:none}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(16,185,129,.03) 0%,transparent 70%);pointer-events:none}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 header{background:rgba(7,10,16,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:186px;height:186px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45))}
@@ -498,6 +498,7 @@ def build_html(df: pd.DataFrame, date_str: str) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Slate Eval — {h(display_date)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517static"/>
 <style>{CSS}</style>
 </head>
 <body>

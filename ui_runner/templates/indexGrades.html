@@ -57,7 +57,8 @@ html.page-grades-root body.page-grades{
   min-height:100%!important;
   max-height:none!important;
   overflow-x:hidden!important;
-  overflow-y:auto!important;
+  overflow-y:scroll!important;
+  scrollbar-gutter:stable;
   -webkit-overflow-scrolling:touch!important;
   overscroll-behavior-y:contain;
 }
@@ -167,7 +168,8 @@ html.page-grades-root #props-eval-panel{
   max-width:100%!important;
 }
 html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
-  overflow-y:auto!important;
+  overflow-y:scroll!important;
+  scrollbar-gutter:stable;
   -webkit-overflow-scrolling:touch!important;
 }
 body.page-grades{
@@ -358,7 +360,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 /* Ticket tab: pull iframe flush under toolbar (ticket_eval has its own KPI bar) */
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
-.grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
+.grades-analytics-wrap{position:absolute;inset:0;overflow:scroll;scrollbar-gutter:stable;padding:20px 24px 36px;z-index:4;background:transparent;}
 .insights-card.insights-card-empty{display:none !important;}
 .grades-props-inner{width:100%;max-width:none;margin:0;}
 .props-eval-toolbar{display:flex;flex-direction:column;gap:12px;margin-top:12px;margin-bottom:14px;}

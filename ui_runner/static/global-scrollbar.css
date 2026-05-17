@@ -57,3 +57,25 @@ html {
 [data-theme="light"] *::-webkit-scrollbar-corner {
   background: rgba(0, 0, 0, 0.08);
 }
+
+/* Nested scroll panels (Tickets tables, Grades heatmaps, hub panels) */
+.scrollx,
+.top-tabs,
+.pbw-heatmap-wrap,
+.grades-analytics-wrap,
+.po-scroll-panel {
+  scrollbar-gutter: stable;
+}
+
+.scrollx,
+.top-tabs {
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pbw-heatmap-wrap,
+.grades-analytics-wrap,
+.po-scroll-panel {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}

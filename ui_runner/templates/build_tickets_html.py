@@ -499,12 +499,11 @@ CSS = """
   --green:#39ff6e;--amber:#f0a500;--red:#ff4d4d;--purple:#a78bfa;--blue:#00e5ff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable;height:100%}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,255,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,0,.03) 1px,transparent 1px);background-size:40px 40px;animation:gridScroll 20s linear infinite;pointer-events:none;z-index:0;}
 @keyframes gridScroll{from{background-position:0 0;}to{background-position:0 40px;}}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:0;}
-::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
 /* ── UNIFIED NAV ── */
 @import url('/static/css/site-nav-unified.css');
@@ -568,8 +567,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .sport-section.collapsed .sport-body{max-height:0!important;}
 
 /* ── TABS ── */
-.top-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.top-tabs::-webkit-scrollbar{height:2px;}
+.top-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:scroll;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;}
 .top-tab{font-size:10px;letter-spacing:1px;padding:8px 14px;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;}
 .top-tab:hover{color:var(--text);}.top-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .top-panel{display:none;}.top-panel.active{display:block;}
@@ -595,7 +593,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* ── TABLES (desktop) ── */
 .table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px;}
 .ticket-card .table-wrap{border:none;border-radius:0;margin-bottom:0;}
-.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.scrollx{overflow-x:scroll;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 th{font-size:9px;letter-spacing:.08em;color:var(--accent);padding:8px 10px;text-align:left;background:rgba(200,255,0,.03);border-bottom:1px solid var(--border);white-space:nowrap;font-family:'Bebas Neue',sans-serif;}
 th.right{text-align:right;}
@@ -759,6 +757,7 @@ def build_html(xlsx_path: Path) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>PropOracle — Tickets {display_date}</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517static"/>
 <style>{CSS}</style>
 </head>
 <body class="mobile-bundle">
