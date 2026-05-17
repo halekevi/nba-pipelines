@@ -3025,6 +3025,7 @@ def _build_html(
         '<meta name="theme-color" content="#050505"/>',
         f"<title>Ticket Eval — {json_date}</title>",
         '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>',
+        '<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>',
         f'<link rel="stylesheet" href="/static/proporacle-page-shell.css?v={_TICKET_EVAL_SHELL_CSS_VER}"/>',
         f'<link rel="stylesheet" href="/static/site-nav-unified.css?v={_TICKET_EVAL_NAV_UNIFIED_VER}"/>',
         f'<link rel="stylesheet" href="/static/nav-mobile-shared.css?v={_TICKET_EVAL_NAV_MOBILE_VER}"/>',
@@ -3532,7 +3533,7 @@ def _build_html(
   .manual-tb .chip-dup    {{ background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32); }}
 
   .manual-tb .manual-prop-list {{
-    max-height:520px;overflow-y:auto;
+    max-height:520px;overflow-y:scroll;scrollbar-gutter:stable;
     border:1px solid var(--glass-bd);
     background:rgba(255,255,255,0.02);
     border-radius:16px;padding:12px;

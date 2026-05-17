@@ -757,7 +757,7 @@ def build_html(xlsx_path: Path) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>PropOracle — Tickets {display_date}</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517static"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>
 <style>{CSS}</style>
 </head>
 <body class="mobile-bundle">

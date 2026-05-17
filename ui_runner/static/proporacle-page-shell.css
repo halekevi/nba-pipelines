@@ -3,6 +3,7 @@
 /* Mobile web + WebView: tokens + tap/text baseline (also linked on / and /grades). :root --po-mobile-* also in mobile-content-width.css. */
 @import url('proporacle-mobile-schema.css');
 @import url('global-scrollbar.css');
+/* Platform scroll surface (same as /tickets) — shell pages inherit via global-scrollbar.css */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#050505;--surface:rgba(20,20,20,0.6);--card:rgba(20,20,20,0.6);--border:rgba(212,175,55,0.15);

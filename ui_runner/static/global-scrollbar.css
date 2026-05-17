@@ -1,10 +1,13 @@
 /**
- * Global scrollbar — always visible (classic track, not overlay / hover-only).
- * WebKit + Firefox. Page-specific rules (e.g. .slate-table-wrap) may override.
+ * PropOracle platform scrollbar (matches /tickets).
+ * Always-visible classic bars — html + every scroll panel uses the same thumb/track.
+ * Link: /static/global-scrollbar.css?v=20260517platform
  */
 html {
+  overflow-x: hidden;
   overflow-y: scroll;
   scrollbar-gutter: stable;
+  height: 100%;
   scrollbar-width: thin;
   scrollbar-color: rgba(200, 200, 200, 0.78) rgba(255, 255, 255, 0.08);
 }
@@ -58,24 +61,36 @@ html {
   background: rgba(0, 0, 0, 0.08);
 }
 
-/* Nested scroll panels (Tickets tables, Grades heatmaps, hub panels) */
+/* Scroll panels — same behavior as Tickets (.scrollx, .top-tabs, tables, modals) */
 .scrollx,
 .top-tabs,
+.slate-table-wrap,
+.table-wrap,
+.log-table-wrap,
 .pbw-heatmap-wrap,
 .grades-analytics-wrap,
+.modal-card,
 .po-scroll-panel {
   scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
 }
 
 .scrollx,
 .top-tabs {
   overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
 }
 
+.slate-table-wrap,
+.table-wrap,
+.log-table-wrap,
 .pbw-heatmap-wrap,
 .grades-analytics-wrap,
+.modal-card,
 .po-scroll-panel {
   overflow: scroll;
-  -webkit-overflow-scrolling: touch;
+}
+
+.slate-table-wrap {
+  overflow-x: scroll;
+  overflow-y: scroll;
 }

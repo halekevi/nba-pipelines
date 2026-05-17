@@ -498,7 +498,7 @@ def build_html(df: pd.DataFrame, date_str: str) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Slate Eval — {h(display_date)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517static"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>
 <style>{CSS}</style>
 </head>
 <body>
