@@ -5,6 +5,7 @@
 #  Usage:
 #    .\regenerate_defense_caches.ps1           # Refresh NBA/WNBA/NHL/Soccer defense CSVs (tier labels) — run before pipeline if defense logic changed
 #    .\run_pipeline.ps1                        # All sports parallel + Combined
+#    .\run_pipeline.ps1 -Sport NBA               # Same as -NBAOnly (shorthand)
 #    .\run_pipeline.ps1 -NBAOnly               # NBA only + Combined
 #    .\run_pipeline.ps1 -CBBOnly               # CBB only + Combined
 #    .\run_pipeline.ps1 -CFBOnly               # College Football only + Combined
@@ -88,7 +89,9 @@ param(
     # Intentionally no-op here; ticket quality warnings are handled inside downstream scripts.
     [switch]$DQWarnOnly,
     # Chrome CDP URL for WNBA step1 (PrizePicks); parallel WNBA job receives this explicitly (env may not propagate).
-    [string]$WNBACdp = ""
+    [string]$WNBACdp = "",
+    # Shorthand for *Only switches: NBA, WNBA, MLB, NHL, Soccer, CBB, CFB, Tennis, NFL
+    [string]$Sport = ""
 )
 
 $ErrorActionPreference = "Continue"
@@ -135,6 +138,25 @@ if (-not $TennisDate) {
 if ($MLBVerify -and -not $MLBOnly) {
     Write-Host "  [MLBVerify] Enabling -MLBOnly automatically." -ForegroundColor DarkGray
     $MLBOnly = $true
+}
+
+if ($Sport -and $Sport.Trim()) {
+    switch ($Sport.Trim().ToUpper()) {
+        "NBA"    { $NBAOnly = $true }
+        "WNBA"   { $WNBAOnly = $true }
+        "MLB"    { $MLBOnly = $true }
+        "NHL"    { $NHLOnly = $true }
+        "SOCCER" { $SoccerOnly = $true }
+        "CBB"    { $CBBOnly = $true }
+        "CFB"    { $CFBOnly = $true }
+        "TENNIS" { $TennisOnly = $true }
+        "NFL"    { $NFLOnly = $true }
+        default {
+            Write-Host "  [ERROR] Unknown -Sport '$Sport'. Use NBA, WNBA, MLB, NHL, Soccer, CBB, CFB, Tennis, or NFL." -ForegroundColor Red
+            exit 1
+        }
+    }
+    Write-Host "  [-Sport $Sport] -> running that sport only." -ForegroundColor DarkGray
 }
 
 # MLB step4 ESPN/cache season: use slate calendar year (2026 slates must not pass --season 2025).
