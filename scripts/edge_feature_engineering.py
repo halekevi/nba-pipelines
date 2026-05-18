@@ -74,6 +74,14 @@ FEATURE_COLUMNS: list[str] = [
     "wind_speed_mph",
     "wind_out_to_cf",
     "weather_flag_encoded",
+    # NHL-only (NST / NHL API via SPORT_FEATURE_OVERRIDES)
+    "pp_toi_per_game",
+    "pp_toi_pct",
+    "pp_unit_tier_encoded",
+    "line_combo_toi_pct",
+    "line_combo_cf_pct",
+    "line_combo_xgf_pct",
+    "on_pp1_line",
 ]
 
 SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
@@ -89,7 +97,18 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "wind_out_to_cf",
         "weather_flag_encoded",
     ],
+    "NHL": [
+        "pp_toi_per_game",
+        "pp_toi_pct",
+        "pp_unit_tier_encoded",
+        "line_combo_toi_pct",
+        "line_combo_cf_pct",
+        "line_combo_xgf_pct",
+        "on_pp1_line",
+    ],
 }
+
+_PP_UNIT_ENC = {"NO_PP": 0.0, "PP_FRINGE": 1.0, "PP2": 2.0, "PP1": 3.0}
 
 _PITCHER_ADV_ENC = {"favor_pitcher": 0.0, "neutral": 1.0, "favor_batter": 2.0}
 _PARK_TIER_ENC = {"pitcher": 0.0, "neutral": 1.0, "hitter": 2.0}
@@ -504,6 +523,27 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
         out["pitcher_advantage_encoded"] = np.nan
         out["park_tier_encoded"] = np.nan
         out["weather_flag_encoded"] = np.nan
+
+    pu = _first_col(out, ("pp_unit_tier",)).astype(str).str.strip().str.upper()
+    out["pp_unit_tier_encoded"] = pu.map(_PP_UNIT_ENC).astype(float)
+
+    for col in (
+        "pp_toi_per_game",
+        "pp_toi_pct",
+        "line_combo_toi_pct",
+        "line_combo_cf_pct",
+        "line_combo_xgf_pct",
+        "on_pp1_line",
+    ):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "NHL":
+            out[col] = np.nan
+        elif col == "on_pp1_line":
+            out[col] = _to_num(out[col]).fillna(0.0)
+
+    if sp != "NHL":
+        out["pp_unit_tier_encoded"] = np.nan
 
     return out
 
