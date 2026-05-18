@@ -12,10 +12,14 @@ Expect: `200` and `400+ rows`. Stop if not.
 
 ## 2. Populate caches
 
+NBA step4 lives under the dated run folder (`outputs\YYYY-MM-DD\nba\`), not `Sports\NBA\`. Use the latest slate that has `step4_with_stats.csv`, or skip this block and let step 3 run 4b–4d.
+
 ```powershell
+$Date = "2026-05-18"   # match a folder under outputs\ that has nba\step1_pp_props_today.csv
+
 py -3.14 Sports\NBA\scripts\step4b_attach_nba_context.py `
-  --input Sports\NBA\step4_with_stats.csv `
-  --output Sports\NBA\step4_with_stats.csv `
+  --input "outputs\$Date\nba\step4_with_stats.csv" `
+  --output "outputs\$Date\nba\step4_with_stats.csv" `
   --season 2024-25 --refresh
 
 py -3.14 Sports\WNBA\scripts\step4b_attach_wnba_context.py `
