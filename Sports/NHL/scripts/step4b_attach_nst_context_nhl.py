@@ -39,6 +39,7 @@ from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 from nhl_pp_api import (
     current_season_id,
     load_pp_cache,
+    pp_toi_seconds_to_minutes,
     pp_unit_tier,
     refresh_pp_cache,
     season_id_from_year,
@@ -90,14 +91,15 @@ def build_pp_lookup(pp_df: pd.DataFrame) -> Dict[str, dict]:
         pid = str(r.get("playerId", "")).strip()
         if not pid or pid == "nan":
             continue
-        ppg = _to_float(r.get("ppTimeOnIcePerGame"))
+        ppg_sec = _to_float(r.get("ppTimeOnIcePerGame"))
+        ppg_min = pp_toi_seconds_to_minutes(ppg_sec)
         out[pid] = {
-            "pp_toi_per_game": ppg,
+            "pp_toi_per_game": ppg_min,
             "pp_toi_pct": _to_float(r.get("ppTimeOnIcePctPerGame")),
             "pp_toi_total_sec": _to_float(r.get("ppTimeOnIce")),
             "pp_goals": _to_float(r.get("ppGoals")),
             "pp_points": _to_float(r.get("ppPoints")),
-            "pp_unit_tier": pp_unit_tier(ppg) if ppg is not None else "",
+            "pp_unit_tier": pp_unit_tier(ppg_min) if ppg_min is not None else "",
             "team": str(r.get("teamAbbrevs", "")).strip().upper(),
         }
     return out

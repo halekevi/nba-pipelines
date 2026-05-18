@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -108,11 +109,24 @@ def refresh_pp_cache(season_id: Optional[int] = None, path: Path = DEFAULT_CACHE
     return combined
 
 
-def pp_unit_tier(pp_toi_pg: float) -> str:
-    if pp_toi_pg >= 2.5:
+def pp_toi_seconds_to_minutes(sec_per_game: Optional[float]) -> Optional[float]:
+    """NHL API ppTimeOnIcePerGame is seconds per game, not minutes."""
+    if sec_per_game is None:
+        return None
+    try:
+        s = float(sec_per_game)
+        if not np.isfinite(s):
+            return None
+        return round(s / 60.0, 3)
+    except (TypeError, ValueError):
+        return None
+
+
+def pp_unit_tier(pp_toi_min_pg: float) -> str:
+    if pp_toi_min_pg >= 2.5:
         return "PP1"
-    if pp_toi_pg >= 1.0:
+    if pp_toi_min_pg >= 1.0:
         return "PP2"
-    if pp_toi_pg >= 0.25:
+    if pp_toi_min_pg >= 0.25:
         return "PP_FRINGE"
     return "NO_PP"
