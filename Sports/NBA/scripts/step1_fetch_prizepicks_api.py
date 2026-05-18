@@ -993,6 +993,14 @@ def main() -> None:
 
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    try:
+        _root = Path(__file__).resolve().parents[3]
+        if str(_root) not in sys.path:
+            sys.path.insert(0, str(_root))
+        from scripts.line_history_archive import archive_lines
+        archive_lines(df, sport="NBA")
+    except Exception as _arch_exc:
+        print(f"  [WARN] line_history archive skipped: {_arch_exc}")
     if len(df) == 0:
         print(f"\n[INFO] Saved empty date-filtered NBA step1 CSV -> {args.output}")
         sys.exit(0)

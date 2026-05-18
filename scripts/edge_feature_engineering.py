@@ -62,7 +62,44 @@ FEATURE_COLUMNS: list[str] = [
     "context_known",
     "defense_known",
     "minutes_known",
+    "role_stability_score",
+    # MLB-only (neutral fill on other sports via SPORT_FEATURE_OVERRIDES)
+    "batting_order_pos",
+    "top_of_order",
+    "opp_pitcher_era_vs_batter_hand",
+    "opp_pitcher_k9_vs_batter_hand",
+    "pitcher_advantage_encoded",
+    "park_factor_overall",
+    "park_tier_encoded",
+    "wind_speed_mph",
+    "wind_out_to_cf",
+    "weather_flag_encoded",
 ]
+
+SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
+    "MLB": [
+        "batting_order_pos",
+        "top_of_order",
+        "opp_pitcher_era_vs_batter_hand",
+        "opp_pitcher_k9_vs_batter_hand",
+        "pitcher_advantage_encoded",
+        "park_factor_overall",
+        "park_tier_encoded",
+        "wind_speed_mph",
+        "wind_out_to_cf",
+        "weather_flag_encoded",
+    ],
+}
+
+_PITCHER_ADV_ENC = {"favor_pitcher": 0.0, "neutral": 1.0, "favor_batter": 2.0}
+_PARK_TIER_ENC = {"pitcher": 0.0, "neutral": 1.0, "hitter": 2.0}
+_WEATHER_FLAG_ENC = {
+    "dome": 0.0,
+    "calm": 1.0,
+    "moderate_wind": 2.0,
+    "high_wind": 3.0,
+    "rain": 4.0,
+}
 
 
 def _to_num(s: pd.Series) -> pd.Series:
@@ -435,6 +472,38 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
             out[_new_col] = _neutral
 
     out = add_stratification_columns(out, df)
+
+    # MLB enrichment encodings (NaN / 0 on non-MLB rows)
+    pa = _first_col(out, ("pitcher_advantage",)).astype(str).str.strip().str.lower()
+    out["pitcher_advantage_encoded"] = pa.map(_PITCHER_ADV_ENC).astype(float)
+
+    pt = _first_col(out, ("park_tier",)).astype(str).str.strip().str.lower()
+    out["park_tier_encoded"] = pt.map(_PARK_TIER_ENC).astype(float)
+
+    wf = _first_col(out, ("weather_flag",)).astype(str).str.strip().str.lower()
+    out["weather_flag_encoded"] = wf.map(_WEATHER_FLAG_ENC).astype(float)
+
+    for col in (
+        "batting_order_pos",
+        "top_of_order",
+        "opp_pitcher_era_vs_batter_hand",
+        "opp_pitcher_k9_vs_batter_hand",
+        "park_factor_overall",
+        "wind_speed_mph",
+        "wind_out_to_cf",
+        "role_stability_score",
+    ):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "MLB":
+            out[col] = np.nan
+        elif col in ("top_of_order", "wind_out_to_cf"):
+            out[col] = _to_num(out[col]).fillna(0.0)
+
+    if sp != "MLB":
+        out["pitcher_advantage_encoded"] = np.nan
+        out["park_tier_encoded"] = np.nan
+        out["weather_flag_encoded"] = np.nan
 
     return out
 

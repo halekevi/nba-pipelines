@@ -749,6 +749,23 @@ def main():
     for k, v in new_cols.items():
         out[k] = v
 
+    try:
+        from role_stability import role_stability
+
+        def _wnba_usage_l10(row: pd.Series) -> list:
+            vals: list = []
+            for i in range(1, 11):
+                v = pd.to_numeric(row.get(f"stat_g{i}"), errors="coerce")
+                if pd.notna(v) and float(v) >= 0:
+                    vals.append(float(v))
+            return vals
+
+        out["minutes_L10_list"] = out.apply(_wnba_usage_l10, axis=1)
+        out["role_stability_score"] = out["minutes_L10_list"].apply(role_stability)
+        out["high_variance_role"] = pd.to_numeric(out["role_stability_score"], errors="coerce").lt(0.35)
+    except Exception as _rs_exc:
+        print(f"  [WARN] role_stability_score skipped: {_rs_exc}")
+
     out.to_csv(args.out, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.out,

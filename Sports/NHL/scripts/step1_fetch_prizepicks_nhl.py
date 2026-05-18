@@ -387,6 +387,17 @@ def write_csv(rows, path):
     print(f"✅ Saved {len(rows)} rows -> {path}")
 
 
+def _archive_nhl_lines(df: pd.DataFrame) -> None:
+    try:
+        root = Path(__file__).resolve().parents[3]
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from scripts.line_history_archive import archive_lines
+        archive_lines(df, sport="NHL")
+    except Exception as exc:
+        print(f"  [WARN] line_history archive skipped: {exc}")
+
+
 def _write_nhl_output(rows: list, out_path: Path, append: bool) -> None:
     """Write NHL props; with --append, merge with existing CSV and semantic-dedupe (keep='last')."""
     if not rows:
@@ -424,11 +435,14 @@ def _write_nhl_output(rows: list, out_path: Path, append: bool) -> None:
                 f"{len(combined)} after dedup (subset={dedup_cols})"
             )
             print(f"✅ Saved {len(combined)} rows -> {out_path}")
+            _archive_nhl_lines(combined)
         except Exception as e:
             print(f"  [WARN] --append merge failed ({e}); writing this fetch only")
             write_csv(rows, str(out_path))
+            _archive_nhl_lines(new_df)
     else:
         write_csv(rows, str(out_path))
+        _archive_nhl_lines(new_df)
 
 
 def main():

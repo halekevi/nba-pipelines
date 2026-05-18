@@ -580,8 +580,50 @@ def attach_stats(
             slate.at[idx, "stat_status"] = "OK"
             status_counts["OK"] += 1
 
+    slate = _attach_role_stability(slate, sport, con, id_col, is_combo_sep=combo_sep)
     slate = slate.drop(columns=["_line_num"], errors="ignore")
     return slate, status_counts
+
+
+def _attach_role_stability(
+    slate: pd.DataFrame,
+    sport: str,
+    con: sqlite3.Connection,
+    id_col: str,
+    is_combo_sep: str = "|",
+) -> pd.DataFrame:
+    """Add minutes_L10_list, role_stability_score, high_variance_role from DB samples."""
+    from role_stability import role_stability
+
+    sport = sport.lower()
+    if "minutes_L10_list" not in slate.columns:
+        slate["minutes_L10_list"] = [[] for _ in range(len(slate))]
+    slate["role_stability_score"] = np.nan
+    slate["high_variance_role"] = False
+
+    for idx, row in slate.iterrows():
+        raw_id = str(row.get(id_col, "")).strip()
+        if not raw_id or raw_id in ("nan", "") or is_combo_sep in raw_id:
+            continue
+        mins: List[float] = []
+        if sport in ("nba", "cbb", "nba1h", "nba1q"):
+            table = "nba" if sport.startswith("nba") else sport
+            mins = _query_vals(con, table, "ESPN_ATHLETE_ID = ?", "minutes", (raw_id,), 10)
+        elif sport == "nhl":
+            pname = str(row.get("player_name", row.get("player", ""))).strip()
+            mins = get_vals_nhl(con, pname, "time on ice", 10)
+        elif sport == "soccer":
+            pname = str(row.get("player", "")).strip()
+            mins = get_vals_soccer(con, raw_id, "minutes", 10, player_name=pname)
+
+        if len(mins) < 3:
+            continue
+        slate.at[idx, "minutes_L10_list"] = mins
+        score = role_stability(mins)
+        if score is not None:
+            slate.at[idx, "role_stability_score"] = score
+            slate.at[idx, "high_variance_role"] = score < 0.35
+    return slate
 
 
 # ── DB health check ────────────────────────────────────────────────────────────

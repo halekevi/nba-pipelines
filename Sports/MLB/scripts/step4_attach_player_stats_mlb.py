@@ -859,6 +859,21 @@ def main() -> None:
         print(f"Wrote misses → {args.debug_misses}")
 
     slate.drop(columns=["_line_num"], errors="ignore", inplace=True)
+
+    from role_stability import role_stability
+
+    def _usage_l10(row: pd.Series) -> list:
+        vals: list = []
+        for i in range(1, N + 1):
+            v = pd.to_numeric(row.get(f"stat_g{i}"), errors="coerce")
+            if pd.notna(v) and float(v) >= 0:
+                vals.append(float(v))
+        return vals
+
+    slate["minutes_L10_list"] = slate.apply(_usage_l10, axis=1)
+    slate["role_stability_score"] = slate["minutes_L10_list"].apply(role_stability)
+    slate["high_variance_role"] = pd.to_numeric(slate["role_stability_score"], errors="coerce").lt(0.35)
+
     slate.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.output,

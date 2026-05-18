@@ -1000,6 +1000,13 @@ def main():
         sys.exit(1)
 
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    try:
+        if str(_PROPORACLE_ROOT) not in sys.path:
+            sys.path.insert(0, str(_PROPORACLE_ROOT))
+        from scripts.line_history_archive import archive_lines
+        archive_lines(df, sport="MLB")
+    except Exception as _arch_exc:
+        print(f"  [WARN] line_history archive skipped: {_arch_exc}")
     _write_snapshot(df, target_date=str(args.date).strip())
 
     rows_n  = len(df)

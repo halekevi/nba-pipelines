@@ -907,6 +907,14 @@ def main():
         sys.exit(1)
 
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    try:
+        _root = Path(__file__).resolve().parents[2]
+        if str(_root) not in sys.path:
+            sys.path.insert(0, str(_root))
+        from scripts.line_history_archive import archive_lines
+        archive_lines(df, sport="WNBA")
+    except Exception as _arch_exc:
+        print(f"  [WARN] line_history archive skipped: {_arch_exc}")
     _write_snapshots(df, str(args.date).strip())
     print(f"✅ Saved → {out_path}  rows={rows_n}  teams={teams_n}")
 
