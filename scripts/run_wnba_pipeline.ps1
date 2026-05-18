@@ -181,7 +181,7 @@ function Invoke-WnbaStep1HttpNbaFallback {
 }
 $StartTime = Get-Date
 $script:ProgressDone = 0
-$script:ProgressTotal = if ($SkipFetch) { 8 } else { 9 }  # pipeline stages + optional fetch (no dated copy batch)
+$script:ProgressTotal = if ($SkipFetch) { 9 } else { 10 }  # pipeline stages + optional fetch (no dated copy batch)
 
 $env:PYTHONUTF8       = "1"
 $env:PYTHONIOENCODING = "utf-8"
@@ -375,6 +375,9 @@ if (-not $StatsFrom2025End -and -not $NoStatsFrom2025End) {
 }
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
     "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --min-minutes-rolling 20 --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
+
+if ($ok) { $ok = Run-Step "WNBA Step 4b - Usage/Pace/Star Context" $WNBADir ".\scripts\step4b_attach_wnba_context.py" `
+    "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2025" -TimeoutSeconds 600 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --compute10" }
