@@ -51,6 +51,65 @@ STEP8_FEATURE_COLS = [
     "pp_projection_id",
 ]
 
+# Raw step4b/c/d enrichment columns (joined from step8 when pipeline has run them).
+ENRICHMENT_RAW_COLS = [
+    # MLB
+    "batting_order_pos",
+    "top_of_order",
+    "opp_pitcher_era_vs_batter_hand",
+    "opp_pitcher_k9_vs_batter_hand",
+    "pitcher_advantage",
+    "park_factor_overall",
+    "park_tier",
+    "wind_speed_mph",
+    "wind_out_to_cf",
+    "weather_flag",
+    "role_stability_score",
+    # NHL
+    "pp_toi_per_game",
+    "pp_toi_pct",
+    "pp_unit_tier",
+    "line_combo_toi_pct",
+    "line_combo_cf_pct",
+    "line_combo_xgf_pct",
+    "on_pp1_line",
+    # WNBA
+    "usage_pct",
+    "usage_tier",
+    "team_pace",
+    "opp_pace",
+    "pace_delta",
+    "pace_context",
+    "star_tier",
+    "is_franchise_star",
+    "foul_trouble_risk",
+    "b2b_flag",
+    "b2b_rest_context",
+    # NBA
+    "reb_pct",
+    "ast_pct",
+    "game_pace",
+    "usage_role_type",
+    "opp_def_rating",
+    "team_implied_total",
+    "opp_implied_total",
+    "game_script_context",
+    "team_star_out",
+    "key_facilitator_out",
+    "usage_vacuum",
+    "injury_boost_candidate",
+    "high_variance_role",
+    "minutes_floor_L10",
+    "minutes_ceil_L10",
+    "minutes_cv_L10",
+    "opp_pts_allowed_vs_position",
+    "opp_reb_allowed_vs_position",
+    "opp_ast_allowed_vs_position",
+    "positional_matchup_tier",
+]
+
+JOIN_FEATURE_COLS = list(dict.fromkeys(STEP8_FEATURE_COLS + ENRICHMENT_RAW_COLS))
+
 
 def normalize_name(s: Any) -> str:
     s = unicodedata.normalize("NFKC", str(s or ""))
@@ -547,7 +606,7 @@ def main() -> int:
             if args.verbose:
                 print(f"  [{sport} {file_date}] no step8 rows on disk — join skipped for {n_grad:,} rows")
             g2 = g.copy()
-            for c in STEP8_FEATURE_COLS:
+            for c in JOIN_FEATURE_COLS:
                 g2[c] = np.nan
             g2["step8_game_date"] = ""
             g2["_joined"] = False
@@ -565,7 +624,7 @@ def main() -> int:
             if args.verbose:
                 print(f"  [{sport} {file_date}] step8 has no rows within ±1d of file_date — skipped {n_grad:,} rows")
             g2 = g.copy()
-            for c in STEP8_FEATURE_COLS:
+            for c in JOIN_FEATURE_COLS:
                 g2[c] = np.nan
             g2["step8_game_date"] = ""
             g2["_joined"] = False
@@ -599,7 +658,7 @@ def main() -> int:
         merge_on = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"]
         if loose_pick:
             merge_on = ["_n_player", "_n_prop", "_n_line", "_n_dir"]
-        feat_cols = merge_on + ["_game_d"] + [c for c in STEP8_FEATURE_COLS if c in s8.columns]
+        feat_cols = merge_on + ["_game_d"] + [c for c in JOIN_FEATURE_COLS if c in s8.columns]
         feat_cols = list(dict.fromkeys(feat_cols))
         feat = s8[[c for c in feat_cols if c in s8.columns]].copy()
         if "ml_prob" in s8.columns and "ml_prob" not in feat.columns:
@@ -610,7 +669,7 @@ def main() -> int:
             on=merge_on,
             how="left",
         )
-        for c in STEP8_FEATURE_COLS:
+        for c in JOIN_FEATURE_COLS:
             if c not in m.columns:
                 m[c] = np.nan
         _tol_d = (m["_file_d"] - m["_game_d"]).abs()
@@ -621,7 +680,7 @@ def main() -> int:
             if c in m.columns:
                 feat_present = feat_present | m[c].notna()
         m["_joined"] = m["_tol"] & feat_present
-        for c in STEP8_FEATURE_COLS:
+        for c in JOIN_FEATURE_COLS:
             if c in m.columns:
                 m.loc[~m["_joined"], c] = np.nan
         m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
@@ -664,7 +723,7 @@ def main() -> int:
     # Feature completeness on joined rows
     jmask = out_df["blended_score"].notna() if "blended_score" in out_df.columns else pd.Series(False, index=out_df.index)
     if jmask.any():
-        sub = out_df.loc[jmask, [c for c in STEP8_FEATURE_COLS if c in out_df.columns]]
+        sub = out_df.loc[jmask, [c for c in JOIN_FEATURE_COLS if c in out_df.columns]]
         comp = {c: float(sub[c].notna().mean()) for c in sub.columns}
         print("Feature completeness (joined rows, non-null rate):", comp)
 
