@@ -29,8 +29,11 @@ from xgboost import XGBClassifier
 
 from edge_feature_engineering import (
     FEATURE_COLUMNS,
+    WNBA_FEATURE_COLUMNS,
     _direction_series,
     build_feature_vector,
+    drop_nba_features_below_fill_threshold,
+    drop_wnba_features_below_fill_threshold,
     fill_minutes_cv_median_by_sport,
 )
 from edge_ml_bundle import EdgeCalibratedModel
@@ -531,6 +534,8 @@ MIN_HOLDOUT_ROWS_PER_SPORT = 50
 
 # Slice isotonic: fit on a stratified subset of TRAIN only (disjoint from holdout `te` used for Platt).
 DEFAULT_SLICE_ISOTONIC_MIN_N = 200
+# WNBA uses the same per-sport isotonic path when graded rows >= min_n (default 200).
+WNBA_SLICE_ISOTONIC_MIN_N = 200
 ISO_CALIB_TRAIN_FRAC = 0.15
 # Deactivated in prod: rows may remain in unified training history; do not allocate isotonic calibrators.
 INACTIVE_SPORTS = frozenset({"CBB"})
@@ -1334,6 +1339,22 @@ def _train_unified_edge_model(
             features_active = before_ex
         else:
             print("\n[Training] Excluded player-level feature: player_hr_historical")
+
+    if WNBA_FEATURE_COLUMNS and (tr["sport"].astype(str).str.upper() == "WNBA").any():
+        features_active, wnba_dropped = drop_wnba_features_below_fill_threshold(features_active, tr)
+        if wnba_dropped:
+            print(
+                f"\n[WNBA] Dropped low-fill features (<50% non-null on WNBA train rows): "
+                f"{wnba_dropped}"
+            )
+
+    if (tr["sport"].astype(str).str.upper() == "NBA").any():
+        features_active, nba_dropped = drop_nba_features_below_fill_threshold(features_active, tr)
+        if nba_dropped:
+            print(
+                f"\n[NBA] Dropped low-fill features (<60% non-null on NBA train rows): "
+                f"{nba_dropped}"
+            )
 
     X_train = tr[features_active].astype(float)
     X_test = te[features_active].astype(float)

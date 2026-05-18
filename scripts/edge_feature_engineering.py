@@ -26,6 +26,7 @@ SPORT_ENCODING = {
     "MLB": 4,
     "NBA1H": 5,
     "NBA1Q": 6,
+    "WNBA": 7,
 }
 
 FEATURE_COLUMNS: list[str] = [
@@ -82,6 +83,39 @@ FEATURE_COLUMNS: list[str] = [
     "line_combo_cf_pct",
     "line_combo_xgf_pct",
     "on_pp1_line",
+    # WNBA-only
+    "usage_pct",
+    "usage_tier_encoded",
+    "team_pace",
+    "opp_pace",
+    "pace_delta",
+    "pace_context_encoded",
+    "star_tier",
+    "is_franchise_star",
+    "foul_trouble_risk_encoded",
+    "b2b_flag",
+    "b2b_rest_context_encoded",
+    # NBA-only (usage%/pace shared with WNBA columns above)
+    "reb_pct",
+    "ast_pct",
+    "game_pace",
+    "usage_role_type_encoded",
+    "opp_def_rating",
+    "team_implied_total",
+    "opp_implied_total",
+    "game_script_context_encoded",
+    "team_star_out",
+    "key_facilitator_out",
+    "usage_vacuum",
+    "injury_boost_candidate",
+    "high_variance_role",
+    "minutes_floor_L10",
+    "minutes_ceil_L10",
+    "minutes_cv_L10",
+    "opp_pts_allowed_vs_position",
+    "opp_reb_allowed_vs_position",
+    "opp_ast_allowed_vs_position",
+    "positional_matchup_tier_encoded",
 ]
 
 SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
@@ -106,7 +140,155 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "line_combo_xgf_pct",
         "on_pp1_line",
     ],
+    "WNBA": [
+        "usage_pct",
+        "usage_tier_encoded",
+        "team_pace",
+        "opp_pace",
+        "pace_delta",
+        "pace_context_encoded",
+        "star_tier",
+        "is_franchise_star",
+        "foul_trouble_risk_encoded",
+        "b2b_flag",
+        "b2b_rest_context_encoded",
+    ],
+    "NBA": [
+        "usage_pct",
+        "usage_tier_encoded",
+        "usage_role_type_encoded",
+        "reb_pct",
+        "ast_pct",
+        "team_pace",
+        "opp_pace",
+        "game_pace",
+        "pace_delta",
+        "pace_context_encoded",
+        "opp_def_rating",
+        "team_implied_total",
+        "opp_implied_total",
+        "game_script_context_encoded",
+        "team_star_out",
+        "key_facilitator_out",
+        "usage_vacuum",
+        "injury_boost_candidate",
+        "role_stability_score",
+        "high_variance_role",
+        "minutes_floor_L10",
+        "minutes_ceil_L10",
+        "minutes_cv_L10",
+        "opp_pts_allowed_vs_position",
+        "opp_reb_allowed_vs_position",
+        "opp_ast_allowed_vs_position",
+        "positional_matchup_tier_encoded",
+    ],
 }
+
+_USAGE_TIER_ENC = {"low": 0.0, "medium": 1.0, "high": 2.0}
+_NBA_USAGE_TIER_ENC = {"role": 0.0, "medium": 1.0, "high": 2.0, "star": 3.0}
+_USAGE_ROLE_TYPE_ENC = {
+    "role_player": 0.0,
+    "scorer": 1.0,
+    "rebounder": 2.0,
+    "playmaker": 3.0,
+}
+_PACE_CONTEXT_ENC = {
+    "low_pace": 0.0,
+    "medium": 1.0,
+    "medium_pace": 1.0,
+    "high_pace": 2.0,
+}
+_GAME_SCRIPT_ENC = {
+    "underdog": 0.0,
+    "pick_em": 1.0,
+    "slight_favorite": 2.0,
+    "heavy_favorite": 3.0,
+}
+_POS_MATCHUP_ENC = {"unfavorable": 0.0, "neutral": 1.0, "favorable": 2.0}
+_FOUL_RISK_ENC = {"low": 0.0, "medium": 1.0, "high": 2.0}
+_B2B_REST_ENC = {"normal_rest": 0.0, "b2b_second": 1.0}
+
+WNBA_FEATURE_COLUMNS: list[str] = list(SPORT_FEATURE_OVERRIDES.get("WNBA", []))
+WNBA_MIN_FEATURE_FILL_FRAC = 0.50
+
+
+def wnba_features_with_sufficient_fill(
+    df: pd.DataFrame,
+    *,
+    min_frac: float = WNBA_MIN_FEATURE_FILL_FRAC,
+) -> set[str]:
+    """Return WNBA override columns with non-null rate >= min_frac on WNBA rows."""
+    if not WNBA_FEATURE_COLUMNS:
+        return set()
+    wnba = df.loc[df["sport"].astype(str).str.strip().str.upper().eq("WNBA")]
+    if wnba.empty:
+        return set(WNBA_FEATURE_COLUMNS)
+    ok: set[str] = set()
+    for col in WNBA_FEATURE_COLUMNS:
+        if col not in wnba.columns:
+            continue
+        rate = float(pd.to_numeric(wnba[col], errors="coerce").notna().mean())
+        if rate >= float(min_frac):
+            ok.add(col)
+    # star_tier always registered (step4b defaults missing players to tier 2)
+    if "star_tier" in WNBA_FEATURE_COLUMNS:
+        ok.add("star_tier")
+    if "is_franchise_star" in WNBA_FEATURE_COLUMNS:
+        ok.add("is_franchise_star")
+    return ok
+
+
+def drop_wnba_features_below_fill_threshold(
+    feature_cols: list[str],
+    df: pd.DataFrame,
+    *,
+    min_frac: float = WNBA_MIN_FEATURE_FILL_FRAC,
+) -> tuple[list[str], list[str]]:
+    """Remove WNBA-only columns from training when fill rate is below threshold."""
+    allowed = wnba_features_with_sufficient_fill(df, min_frac=min_frac)
+    dropped = [c for c in WNBA_FEATURE_COLUMNS if c in feature_cols and c not in allowed]
+    kept = [c for c in feature_cols if c not in WNBA_FEATURE_COLUMNS or c in allowed]
+    return kept, dropped
+
+
+NBA_FEATURE_COLUMNS: list[str] = list(SPORT_FEATURE_OVERRIDES.get("NBA", []))
+NBA_MIN_FEATURE_FILL_FRAC = 0.60
+
+
+def nba_features_with_sufficient_fill(
+    df: pd.DataFrame,
+    *,
+    min_frac: float = NBA_MIN_FEATURE_FILL_FRAC,
+) -> set[str]:
+    if not NBA_FEATURE_COLUMNS:
+        return set()
+    nba = df.loc[df["sport"].astype(str).str.strip().str.upper().eq("NBA")]
+    if nba.empty:
+        return set(NBA_FEATURE_COLUMNS)
+    ok: set[str] = set()
+    for col in NBA_FEATURE_COLUMNS:
+        if col not in nba.columns:
+            continue
+        rate = float(pd.to_numeric(nba[col], errors="coerce").notna().mean())
+        if rate >= float(min_frac):
+            ok.add(col)
+    for col in ("usage_role_type_encoded", "positional_matchup_tier_encoded"):
+        if col in NBA_FEATURE_COLUMNS:
+            ok.add(col)
+    return ok
+
+
+def drop_nba_features_below_fill_threshold(
+    feature_cols: list[str],
+    df: pd.DataFrame,
+    *,
+    min_frac: float = NBA_MIN_FEATURE_FILL_FRAC,
+) -> tuple[list[str], list[str]]:
+    allowed = nba_features_with_sufficient_fill(df, min_frac=min_frac)
+    dropped = [c for c in NBA_FEATURE_COLUMNS if c in feature_cols and c not in allowed]
+    kept = [c for c in feature_cols if c not in NBA_FEATURE_COLUMNS or c in allowed]
+    return kept, dropped
+
 
 _PP_UNIT_ENC = {"NO_PP": 0.0, "PP_FRINGE": 1.0, "PP2": 2.0, "PP1": 3.0}
 
@@ -544,6 +726,92 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
 
     if sp != "NHL":
         out["pp_unit_tier_encoded"] = np.nan
+
+    ut = _first_col(out, ("usage_tier",)).astype(str).str.strip().str.lower()
+    if sp == "NBA":
+        out["usage_tier_encoded"] = ut.map(_NBA_USAGE_TIER_ENC).astype(float)
+    elif sp == "WNBA":
+        out["usage_tier_encoded"] = ut.map(_USAGE_TIER_ENC).astype(float)
+    else:
+        out["usage_tier_encoded"] = np.nan
+
+    ur = _first_col(out, ("usage_role_type",)).astype(str).str.strip().str.lower()
+    out["usage_role_type_encoded"] = ur.map(_USAGE_ROLE_TYPE_ENC).astype(float)
+
+    pc = _first_col(out, ("pace_context",)).astype(str).str.strip().str.lower()
+    out["pace_context_encoded"] = pc.map(_PACE_CONTEXT_ENC).astype(float)
+
+    gs = _first_col(out, ("game_script_context",)).astype(str).str.strip().str.lower()
+    out["game_script_context_encoded"] = gs.map(_GAME_SCRIPT_ENC).astype(float)
+
+    pm = _first_col(out, ("positional_matchup_tier",)).astype(str).str.strip().str.lower()
+    out["positional_matchup_tier_encoded"] = pm.map(_POS_MATCHUP_ENC).astype(float)
+    if sp == "NBA":
+        out["positional_matchup_tier_encoded"] = out["positional_matchup_tier_encoded"].fillna(1.0)
+
+    fr = _first_col(out, ("foul_trouble_risk",)).astype(str).str.strip().str.lower()
+    out["foul_trouble_risk_encoded"] = fr.map(_FOUL_RISK_ENC).astype(float)
+
+    br = _first_col(out, ("b2b_rest_context",)).astype(str).str.strip().str.lower()
+    out["b2b_rest_context_encoded"] = br.map(_B2B_REST_ENC).astype(float)
+
+    for col in ("usage_pct", "team_pace", "opp_pace", "pace_delta"):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp not in ("NBA", "WNBA"):
+            out[col] = np.nan
+
+    for col in ("star_tier", "is_franchise_star", "b2b_flag"):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "WNBA":
+            out[col] = np.nan
+        elif col in ("is_franchise_star", "b2b_flag"):
+            out[col] = _to_num(out[col]).fillna(0.0)
+        elif col == "star_tier":
+            out[col] = _to_num(out[col]).fillna(2.0)
+
+    nba_cols = (
+        "reb_pct",
+        "ast_pct",
+        "game_pace",
+        "opp_def_rating",
+        "team_implied_total",
+        "opp_implied_total",
+        "usage_vacuum",
+        "minutes_floor_L10",
+        "minutes_ceil_L10",
+        "minutes_cv_L10",
+        "opp_pts_allowed_vs_position",
+        "opp_reb_allowed_vs_position",
+        "opp_ast_allowed_vs_position",
+    )
+    for col in nba_cols:
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "NBA":
+            out[col] = np.nan
+
+    for col in ("team_star_out", "key_facilitator_out", "injury_boost_candidate", "high_variance_role"):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "NBA":
+            out[col] = np.nan
+        else:
+            out[col] = _to_num(out[col]).fillna(0.0)
+
+    if sp != "WNBA":
+        out["foul_trouble_risk_encoded"] = np.nan
+        out["b2b_rest_context_encoded"] = np.nan
+
+    if sp != "NBA":
+        out["usage_role_type_encoded"] = np.nan
+        out["game_script_context_encoded"] = np.nan
+        out["positional_matchup_tier_encoded"] = np.nan
+
+    if sp not in ("NBA", "WNBA"):
+        out["usage_tier_encoded"] = np.nan
+        out["pace_context_encoded"] = np.nan
 
     return out
 

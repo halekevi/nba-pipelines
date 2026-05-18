@@ -26,7 +26,7 @@ from edge_feature_engineering import (  # type: ignore
 
 # Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
 ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
-    # NBA
+    # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
     ("NBA", "standard", "OVER"): 0.55,
     ("NBA", "goblin", "OVER"): 0.74,
     # NBA demon OVER: isotonic calibrator (edge_slice_calibrators.pkl) handles
@@ -45,6 +45,10 @@ ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     ("SOCCER", "standard", "OVER"): 0.60,
     ("SOCCER", "goblin", "OVER"): 0.63,
     ("SOCCER", "demon", "OVER"): 2.00,
+    # WNBA scalars: set to 1.0 pending 200+ graded rows — recalibrate after first full month of graded WNBA slates
+    ("WNBA", "standard", "OVER"): 1.0,
+    ("WNBA", "standard", "UNDER"): 1.0,
+    ("WNBA", "goblin", "OVER"): 1.0,
 }
 
 _SLICE_CAL_PATH: Path | None = None
