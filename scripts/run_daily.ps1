@@ -356,6 +356,36 @@ if (-not $SkipGrader) {
             }
             else {
                 Write-Log "STEP A - Grader ($Yesterday): OK"
+                $trackScript = Join-Path $Root "scripts\track_prediction_accuracy.py"
+                $compareScript = Join-Path $Root "scripts\compare_shadow_vs_live.py"
+                if (Test-Path $trackScript) {
+                    Write-Host "Running prediction accuracy tracker..." -ForegroundColor DarkGray
+                    Push-Location $Root
+                    try {
+                        & py -3.14 -X utf8 $trackScript --days 30
+                        if ($LASTEXITCODE -ne 0) {
+                            Write-Warning "track_prediction_accuracy.py exited $LASTEXITCODE"
+                        }
+                    }
+                    catch {
+                        Write-Warning "track_prediction_accuracy.py failed: $($_.Exception.Message)"
+                    }
+                    finally { Pop-Location }
+                }
+                if (Test-Path $compareScript) {
+                    Write-Host "Running shadow vs live comparison..." -ForegroundColor DarkGray
+                    Push-Location $Root
+                    try {
+                        & py -3.14 -X utf8 $compareScript --days 7
+                        if ($LASTEXITCODE -ne 0) {
+                            Write-Warning "compare_shadow_vs_live.py exited $LASTEXITCODE"
+                        }
+                    }
+                    catch {
+                        Write-Warning "compare_shadow_vs_live.py failed: $($_.Exception.Message)"
+                    }
+                    finally { Pop-Location }
+                }
             }
         }
         catch {

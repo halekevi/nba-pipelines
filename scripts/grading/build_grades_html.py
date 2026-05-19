@@ -320,7 +320,13 @@ def _norm_result_display(row: dict) -> str:
     return "—"
 
 
-def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
+def prop_row_for_api(
+    row: dict,
+    sport: str,
+    *,
+    live_ticket_keys: set[tuple[str, ...]] | None = None,
+    shadow_ticket_keys: set[tuple[str, ...]] | None = None,
+) -> dict[str, str] | None:
     """One flat dict per prop row for the Prop Evaluation tab."""
     def _pick(*keys: str) -> str:
         for k in keys:
@@ -417,6 +423,23 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
             if inferred:
                 pick_type = inferred
 
+    on_live = False
+    on_shadow = False
+    if live_ticket_keys or shadow_ticket_keys:
+        try:
+            import sys
+            _scripts = ROOT_DIR / "scripts"
+            if str(_scripts) not in sys.path:
+                sys.path.insert(0, str(_scripts))
+            from ticket_leg_index import prop_matches_ticket_keys  # noqa: WPS433
+
+            if live_ticket_keys:
+                on_live = prop_matches_ticket_keys(row, sport, live_ticket_keys)
+            if shadow_ticket_keys:
+                on_shadow = prop_matches_ticket_keys(row, sport, shadow_ticket_keys)
+        except Exception:
+            on_live = on_shadow = False
+
     return {
         "sport": sport,
         "player": player,
@@ -444,6 +467,8 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "void_reason": void_reason or "",
         "result": result,
         "pp_projection_id": proj_id or "",
+        "on_ticket": on_live,
+        "on_shadow_ticket": on_shadow,
     }
 
 
@@ -452,10 +477,30 @@ def export_graded_props_json(
     out_dir: Path,
     bundles: list[tuple[str, list[dict]]],
 ) -> Path:
+    live_keys: set[tuple[str, ...]] = set()
+    shadow_keys: set[tuple[str, ...]] = set()
+    try:
+        import sys
+        _scripts = ROOT_DIR / "scripts"
+        if str(_scripts) not in sys.path:
+            sys.path.insert(0, str(_scripts))
+        from ticket_leg_index import load_ticket_leg_keys  # noqa: WPS433
+
+        tpl = ROOT_DIR / "ui_runner" / "templates"
+        live_keys = load_ticket_leg_keys(tpl / "tickets_latest.json")
+        shadow_keys = load_ticket_leg_keys(tpl / "shadow_tickets_latest.json")
+    except Exception:
+        pass
+
     props: list[dict[str, str]] = []
     for sport, rows in bundles:
         for row in rows:
-            p = prop_row_for_api(row, sport)
+            p = prop_row_for_api(
+                row,
+                sport,
+                live_ticket_keys=live_keys,
+                shadow_ticket_keys=shadow_keys,
+            )
             if p:
                 props.append(p)
     payload = {

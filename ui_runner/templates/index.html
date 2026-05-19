@@ -1149,6 +1149,11 @@ body::before{
   .slate-table tr:nth-child(even) td{background:rgba(255,255,255,0.018);}
   .slate-table tr:hover td{background:rgba(212,175,55,0.05)!important;}
   .tier-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;letter-spacing:.4px;}
+  .conf-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:middle;flex-shrink:0;}
+  .conf-dot.conf-high{background:#3dd68c;box-shadow:0 0 4px rgba(61,214,140,.5);}
+  .conf-dot.conf-medium{background:#e6c84a;box-shadow:0 0 4px rgba(230,200,74,.35);}
+  .conf-dot.conf-low{background:#e85d5d;box-shadow:0 0 4px rgba(232,93,93,.4);}
+  .conf-dot.conf-tracking{background:#6b7280;opacity:.85;}
   .tier-A{background:rgba(212,175,55,.12);color:var(--accent);border:1px solid rgba(212,175,55,.25);}
   .tier-B{background:rgba(127,199,217,.1);color:var(--cyan);border:1px solid rgba(127,199,217,.2);}
   .tier-C{background:rgba(183,168,255,.1);color:var(--purple);border:1px solid rgba(183,168,255,.2);}
@@ -2195,6 +2200,8 @@ function mapApiPickToSlateRow(p) {
     standard_projection: p.standard_projection,
     opponent_def_rank: p.opponent_def_rank,
     image_url: p.image_url,
+    confidence_tier: p.confidence_tier,
+    confidence_slice_hr: p.confidence_slice_hr,
   };
 }
 
@@ -2621,6 +2628,19 @@ function l10StreakBadgeHtml(p) {
     return `<span class="l10-streak-badge l10-cold" title="Last 10 games under today's line">❄️ ${under}/10</span>`;
   }
   return "";
+}
+
+function confDotHtml(p) {
+  const t = String(p?.confidence_tier || 'TRACKING').trim().toUpperCase();
+  const cls = { HIGH: 'conf-high', MEDIUM: 'conf-medium', LOW: 'conf-low' }[t] || 'conf-tracking';
+  let tip = 'Collecting data';
+  if (t === 'LOW') {
+    const hr = p?.confidence_slice_hr;
+    tip = (hr != null && hr !== '') ? `Model HR: ${hr}%` : 'Model HR: low';
+  } else if (t === 'TRACKING') {
+    tip = 'Collecting data';
+  }
+  return `<span class="conf-dot ${cls}" title="${tip.replace(/"/g, '&quot;')}" aria-hidden="true"></span>`;
 }
 
 /** Detail panel L10 over/under bar (skipped when counts missing). */
@@ -3445,7 +3465,7 @@ function buildEdgeCard(p, idx) {
         <div class="edge-tags">
           <span class="edge-sport ${sc}">${sportLabel}</span>
           <span class="edge-pick ${pc}">${p.pick}</span>
-          ${p.tier ? `<span class="tier-badge tier-${p.tier}">${p.tier}</span>` : ''}
+          ${p.tier ? `<span class="tier-badge tier-${p.tier}">${p.tier}</span>` : ''}${confDotHtml(p)}
         </div>
         <div class="edge-line-badge">${hitPct}% hit</div>
       </div>
@@ -4473,7 +4493,7 @@ function renderSlateTable(sport) {
     const rankStr = r.rank_score != null ? r.rank_score.toFixed(2) : '—';
     const timeStr = formatGameTimeDisplay(r.game_time);
     return `<tr class="slate-row-clickable" data-slate-idx="${rowIdx}">
-      <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span></td>
+      <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span>${confDotHtml(r)}</td>
       <td class="slate-rank-cell">${rankStr}</td>
       <td style="color:var(--text);font-weight:600;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}${l10StreakBadgeHtml(r)}</td>
       <td style="color:var(--muted);">${r.team || '—'}</td>

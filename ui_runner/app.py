@@ -66,8 +66,6 @@ if str(BASE_DIR) not in sys.path:
 
 from utils.prop_reconcile import reconcile_props_history_dict
 from utils.proporacle_data_root import grade_history_read_paths, persistent_data_dir
-from scripts.build_line_series import LineSeriesCache
-from scripts.l10_streak_utils import compute_l10_streak_label
 from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
@@ -959,8 +957,6 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "line_draftkings",
         "cross_edge_vs_pp",
         "best_cross_book",
-        "book_line",
-        "prop_line",
     }
 )
 
@@ -994,9 +990,6 @@ def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
     had_wnba = isinstance(sports.get("wnba"), list) and len(sports["wnba"]) > 0
     if not had_wnba:
         out.extend(_wnba_slate_rows_from_step8_fallback())
-    had_nhl = isinstance(sports.get("nhl"), list) and len(sports["nhl"]) > 0
-    if not had_nhl:
-        out.extend(_nhl_slate_rows_from_step8_fallback())
     out.sort(key=_rank, reverse=True)
     return _filter_slate_explorer_rows(out)
 
@@ -1056,65 +1049,6 @@ def _wnba_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
                 continue
             rr = dict(r)
             rr["sport"] = "WNBA"
-            out_fb.append(_slim_slate_sport_row(rr))
-        return out_fb
-    finally:
-        if path_inserted and sys.path and sys.path[0] == scripts_dir:
-            sys.path.pop(0)
-
-
-def _nhl_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
-    """Same pattern as WNBA: hydrate NHL explorer rows from step8 when slate_latest omits them."""
-    import importlib.util
-
-    cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
-    if not cst_path.is_file():
-        return []
-    scripts_dir = str(BASE_DIR / "scripts")
-    path_inserted = False
-    if scripts_dir not in sys.path:
-        sys.path.insert(0, scripts_dir)
-        path_inserted = True
-    try:
-        try:
-            spec = importlib.util.spec_from_file_location("combined_slate_tickets_nhl_fb", cst_path)
-            if spec is None or spec.loader is None:
-                return []
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-        except Exception:
-            return []
-        pref: str | None = None
-        try:
-            pld = _selected_slate_sport_payload()
-            t = str((pld or {}).get("date") or "").strip()[:10]
-            if len(t) == 10:
-                pref = t
-        except Exception:
-            pass
-        days = _slate_day_candidates(pref)
-        xlsx_path = _resolve_outputs_artifact(
-            days,
-            [
-                "nhl/step8_nhl_direction_clean.xlsx",
-                "nhl/step8_nhl_direction.xlsx",
-                "step8_nhl_direction_clean_{d}.xlsx",
-                "step8_nhl_direction_{d}.xlsx",
-            ],
-            NHL_SLATE,
-            NHL_DIR / "step8_nhl_direction_clean.xlsx",
-            NHL_DIR / "step8_nhl_direction.xlsx",
-        )
-        if not xlsx_path.is_file():
-            return []
-        df = mod.load_nhl(str(xlsx_path))
-        raw_rows = mod.dataframe_to_slate_sport_rows(df)
-        out_fb: list[dict[str, Any]] = []
-        for r in raw_rows:
-            if not isinstance(r, dict):
-                continue
-            rr = dict(r)
-            rr["sport"] = "NHL"
             out_fb.append(_slim_slate_sport_row(rr))
         return out_fb
     finally:
@@ -3501,6 +3435,28 @@ def api_tickets_latest():
         return jsonify({"error": str(e), "groups": []}), 500
 
 
+@app.get("/api/tickets/winrate")
+def api_tickets_winrate():
+    """Win-rate optimized ticket pool (tickets_winrate_latest.json)."""
+    json_path = TEMPLATES_DIR / "tickets_winrate_latest.json"
+    if not json_path.is_file():
+        return jsonify(
+            {
+                "error": "tickets_winrate_latest.json not found",
+                "groups": [],
+                "mode": "win_rate",
+            }
+        ), 404
+    try:
+        data = read_json_cached(json_path)
+        resp = jsonify(data)
+        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        return resp
+    except Exception as e:
+        return jsonify({"error": str(e), "groups": []}), 500
+
+
 def _ticket_ev_summary_from_payload(data: dict | None) -> dict[str, Any]:
     """
     Aggregate empirical EV (tickets_latest.json payout blocks).
@@ -4165,97 +4121,6 @@ def _extract_history_series(row: dict[str, Any]) -> tuple[list[float], list[floa
     return actual_vals, line_vals
 
 
-def _resolve_l10_counts(row: dict[str, Any]) -> tuple[Any, Any, Any, Any]:
-    """Normalize l10 over/under/streak from step5 or slate column aliases."""
-    l10_over = row.get("l10_over")
-    if l10_over is None:
-        l10_over = (
-            row.get("line_hits_over_10")
-            or row.get("over_L10")
-            or row.get("L10 Over")
-            or row.get("hit_rate_over_L10")
-        )
-    l10_under = row.get("l10_under")
-    if l10_under is None:
-        l10_under = (
-            row.get("line_hits_under_10")
-            or row.get("under_L10")
-            or row.get("L10 Under")
-        )
-    if l10_under is None and l10_over is not None:
-        ho = _side_hit_count_for_slate_picks(l10_over, 10)
-        if ho is not None:
-            l10_under = 10 - ho
-
-    l10_streak = row.get("l10_streak")
-    if l10_streak is None and l10_over is not None and l10_under is not None:
-        l10_streak = compute_l10_streak_label(
-            l10_over,
-            l10_under,
-            str(row.get("direction") or row.get("dir") or "OVER"),
-        )
-
-    l10_over_pct = row.get("l10_over_pct")
-    if l10_over_pct is None and l10_over is not None and l10_under is not None:
-        try:
-            ov = float(l10_over)
-            un = float(l10_under)
-            total = ov + un
-            if total > 0:
-                l10_over_pct = ov / total
-        except (TypeError, ValueError):
-            l10_over_pct = None
-
-    return l10_over, l10_under, l10_streak, l10_over_pct
-
-
-def _merge_line_series_from_archive(
-    pick: dict[str, Any],
-    row: dict[str, Any],
-    cache: LineSeriesCache | None,
-) -> None:
-    """Prefer line_history.db snapshots when per-game line_g* are missing."""
-    existing = pick.get("line_series")
-    if isinstance(existing, list) and len(existing) >= 2:
-        return
-    if cache is None:
-        return
-    player = str(row.get("player") or pick.get("player") or "").strip()
-    prop = str(
-        row.get("prop_type") or row.get("prop") or pick.get("prop") or ""
-    ).strip()
-    sport = str(row.get("sport") or pick.get("sport") or "").strip()
-    hist = cache.get(player, prop, sport)
-    if hist:
-        pick["line_series"] = hist
-
-
-def _enrich_api_slate_pick(
-    pick: dict[str, Any],
-    row: dict[str, Any],
-    *,
-    line_cache: LineSeriesCache | None = None,
-) -> dict[str, Any]:
-    l10_over, l10_under, l10_streak, l10_over_pct = _resolve_l10_counts(row)
-    pick["l10_over"] = l10_over
-    pick["l10_under"] = l10_under
-    pick["l10_streak"] = l10_streak
-    pick["l10_over_pct"] = l10_over_pct
-    pick["season_avg"] = (
-        row.get("season_avg")
-        or row.get("avg_season")
-        or row.get("szn_avg")
-        or pick.get("season_avg")
-    )
-    proj = _pick_projection_from_mapping(row)
-    if proj is not None:
-        pick["projection"] = proj
-    elif pick.get("projection") is None:
-        pick["projection"] = row.get("proj") or row.get("intel_projection")
-    _merge_line_series_from_archive(pick, row, line_cache)
-    return pick
-
-
 def _normalize_prop_merge_key(raw: object) -> str:
     """Align with dashboard merge keys (sheet shortcodes vs ticket long names)."""
     t = (
@@ -4393,14 +4258,12 @@ def _api_slate_pick_moat_fields(r: dict[str, Any]) -> dict[str, Any]:
 
     gt = fstr(r.get("game_time") or r.get("event_start_time"))
 
-    rank_v = fnum(r.get("rank_score"))
     return {
         "team": fstr(r.get("team")),
         "opp": fstr(opp_raw),
         "ml_prob": fnum(r.get("ml_prob")),
         "tier": fstr(r.get("tier")),
-        "rank": rank_v,
-        "rank_score": rank_v,
+        "rank": fnum(r.get("rank_score")),
         "def_tier": fstr(r.get("def_tier") or r.get("Def Tier")),
         "opponent_def_rank": def_rank,
         "book_line": book_line,
@@ -4472,6 +4335,12 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
                 ho = _side_hit_count_for_slate_picks(l5_over, 5)
                 if ho is not None:
                     l5_under = 5 - ho
+            l10_over = row.get("l10_over")
+            l10_under = row.get("l10_under")
+            if l10_under is None and l10_over is not None:
+                ho = _side_hit_count_for_slate_picks(l10_over, 10)
+                if ho is not None:
+                    l10_under = 10 - ho
             try:
                 hr = float(row.get("hit_rate") or 0.0)
             except (TypeError, ValueError):
@@ -4491,14 +4360,17 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
                 "dir": str(dirv).strip().upper() or "OVER",
                 "hit": round(hr * 100),
                 "edge": edge,
+                "projection": _pick_projection_from_mapping(row),
                 "l5_over": l5_over,
                 "l5_under": l5_under,
+                "l10_over": l10_over,
+                "l10_under": l10_under,
                 "l5_avg": row.get("l5_avg"),
+                "season_avg": row.get("season_avg") or row.get("szn_avg"),
                 "actual_series": actual_series,
                 "line_series": line_series,
             }
             pick_row.update(_api_slate_pick_moat_fields(row))
-            _enrich_api_slate_pick(pick_row, row)
             picks.append(pick_row)
     if not picks:
         return None
@@ -4522,7 +4394,6 @@ def api_slate():
     sport_q = _normalize_api_slate_sport_query(request.args.get("sport"))
 
     def _build_picks():
-        line_series_cache = LineSeriesCache()
         slate_history_map: dict[tuple[str, str, str, str], tuple[list[float], list[float]]] = {}
         if _template_json_available("slate_latest.json"):
             try:
@@ -4573,6 +4444,12 @@ def api_slate():
                             ho = _side_hit_count_for_slate_picks(l5_over, 5)
                             if ho is not None:
                                 l5_under = 5 - ho
+                        l10_over = leg.get("l10_over")
+                        l10_under = leg.get("l10_under")
+                        if l10_under is None and l10_over is not None:
+                            ho = _side_hit_count_for_slate_picks(l10_over, 10)
+                            if ho is not None:
+                                l10_under = 10 - ho
                         actual_series, line_series = _extract_history_series(leg)
                         if not actual_series and slate_history_map:
                             sport_norm = str(leg.get("sport") or "").strip().upper()
@@ -4602,15 +4479,18 @@ def api_slate():
                             "hit": round((leg.get("hit_rate") or 0) * 100),
                             "edge": leg.get("edge") or 0,
                             "abs_edge": abs_edge_leg,
+                            "projection": _pick_projection_from_mapping(leg),
                             "l5_over": l5_over,
                             "l5_under": l5_under,
+                            "l10_over": l10_over,
+                            "l10_under": l10_under,
                             "l5_avg": leg.get("l5_avg"),
+                            "season_avg": leg.get("season_avg"),
                             "actual_series": actual_series,
                             "line_series": line_series,
                         }
                         pick_entry.update(_api_slate_pick_moat_fields(leg))
                         pick_entry.update(_pick_scalar_history_fields(leg))
-                        _enrich_api_slate_pick(pick_entry, leg, line_cache=line_series_cache)
                         picks.append(pick_entry)
             picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
             base = {
@@ -4658,14 +4538,6 @@ def api_slate_sport():
                 "sports": {},
             }
         ), 404
-    sport_q = str(request.args.get("sport") or "").strip().lower()
-    if sport_q in ("", "all"):
-        sport_q = ""
-    elif sport_q == "combined":
-        pass
-    else:
-        # Single-sport lazy load via ?sport=nhl (same payload shape as /api/slate-sport/<sport>).
-        return api_slate_sport_single(sport_q)
     try:
         _selected_slate_sport_payload()
     except ValueError as e:
@@ -4728,8 +4600,6 @@ def api_slate_sport_single(sport: str):
         slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
         if not slim_rows and sport_key == "wnba":
             slim_rows = _wnba_slate_rows_from_step8_fallback()
-        if not slim_rows and sport_key == "nhl":
-            slim_rows = _nhl_slate_rows_from_step8_fallback()
         slim_rows = _filter_slate_explorer_rows(slim_rows)
         return {
             "date": payload.get("date"),

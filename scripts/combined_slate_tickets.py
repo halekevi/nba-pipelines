@@ -99,7 +99,6 @@ from utils.goblin_demon_multiplier import (
     multiplier_summary as gd_multiplier_summary,
 )
 from utils.ticket_diversity import apply_diversity_filter
-from scripts.l10_streak_utils import sanitize_l10_streak_label
 
 _log_slate = logging.getLogger("combined_slate_tickets")
 
@@ -2770,10 +2769,8 @@ NHL_LEG_MIN_HIT_RATE = {
     4: 0.60,
 }
 # Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
-# Raised 2026-05-19: 13% realized HR on standard OVER over full graded window.
-SOCCER_OVER_MIN_EDGE = 0.80
-# Soccer standard OVER: Tier A only until xG fill > 60%.
-SOCCER_STANDARD_OVER_MAX_TIER = "A"
+# TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
+SOCCER_OVER_MIN_EDGE = 0.60
 
 DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
     "NBA": {"over": 0.70, "under": 0.30, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
@@ -3384,6 +3381,191 @@ def win_prob(leg_probs_with_source, _n_legs: int) -> float:
     if not vals:
         return TICKET_PROB_FLOOR
     return float(np.clip(np.prod(vals), TICKET_PROB_FLOOR, TICKET_PROB_CAP))
+
+
+_WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1H", "NBA1Q"})
+_WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
+
+
+def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
+    """P(win) leg factor: leg_prob_used → composite_hit_rate/hit_rate → ml_prob → 0.55."""
+    if isinstance(leg, pd.Series):
+        leg = leg.to_dict()
+    for key in ("leg_prob_used", "composite_hit_rate", "hit_rate", "ml_prob"):
+        raw = leg.get(key)
+        if raw is None or raw == "":
+            continue
+        try:
+            v = float(raw)
+            if math.isfinite(v):
+                return float(np.clip(v, 0.0, 1.0))
+        except (TypeError, ValueError):
+            continue
+    return 0.55
+
+
+def _compute_p_win_from_rows(rows: list) -> float:
+    p = 1.0
+    for row in rows or []:
+        p *= _leg_prob_for_p_win_from_mapping(row)
+    return float(np.clip(p, 0.0, 1.0))
+
+
+def _enrich_slip_p_win_fields(slip: dict, *, mode: str = "ev") -> None:
+    legs = slip.get("legs") or []
+    if legs:
+        p_win = _compute_p_win_from_rows(legs)
+    else:
+        rows = slip.get("rows") or []
+        p_win = _compute_p_win_from_rows(rows)
+    slip["p_win"] = round(p_win, 6)
+    slip["expected_wins_per_100"] = round(p_win * 100, 1)
+    slip["mode"] = mode
+    if mode == "win_rate":
+        pay_mult = float(slip.get("payout_multiplier") or 1.0)
+        slip["win_rate_score"] = round(p_win * math.log(1.0 + max(pay_mult, 0.0)), 6)
+
+
+def _group_max_p_win(group: dict) -> float:
+    best = 0.0
+    for t in group.get("tickets") or []:
+        if not isinstance(t, dict):
+            continue
+        try:
+            pw = float(t.get("p_win") or 0.0)
+            if math.isfinite(pw):
+                best = max(best, pw)
+        except (TypeError, ValueError):
+            pass
+    return best
+
+
+def _win_rate_sport_allowed(sport_key: str, leg_prob: float) -> bool:
+    su = str(sport_key or "").strip().upper()
+    if su in _WIN_RATE_PRIMARY_SPORTS:
+        return True
+    if su in _WIN_RATE_EXTRA_SPORTS:
+        return float(leg_prob) >= 0.60
+    return False
+
+
+def _row_win_rate_eligible(
+    row: pd.Series | dict,
+    *,
+    min_leg_prob: float,
+    min_composite_hr: float,
+) -> bool:
+    if isinstance(row, pd.Series):
+        row_d = row.to_dict()
+    else:
+        row_d = dict(row)
+    pt = str(row_d.get("pick_type") or "").strip().lower()
+    tier = str(row_d.get("tier") or "").strip().upper()
+    if pt == "goblin":
+        pass
+    elif pt == "standard" and tier == "A":
+        pass
+    else:
+        return False
+    leg_prob = _leg_prob_for_p_win_from_mapping(row_d)
+    if leg_prob < float(min_leg_prob):
+        return False
+    comp = row_d.get("composite_hit_rate")
+    if comp is None or comp == "":
+        comp = row_d.get("hit_rate")
+    try:
+        comp_f = float(comp) if comp is not None and comp != "" else 0.0
+    except (TypeError, ValueError):
+        comp_f = 0.0
+    if comp_f < float(min_composite_hr):
+        return False
+    sport = str(row_d.get("sport") or "").strip().upper()
+    return _win_rate_sport_allowed(sport, leg_prob)
+
+
+def _filter_win_rate_pool(
+    df: pd.DataFrame | None,
+    *,
+    min_leg_prob: float,
+    min_composite_hr: float,
+) -> pd.DataFrame:
+    if df is None or df.empty:
+        return pd.DataFrame()
+    out_rows: list[dict] = []
+    for _, r in df.iterrows():
+        if _row_win_rate_eligible(r, min_leg_prob=min_leg_prob, min_composite_hr=min_composite_hr):
+            out_rows.append(r.to_dict())
+    if not out_rows:
+        return pd.DataFrame()
+    return pd.DataFrame(out_rows)
+
+
+def build_win_rate_ticket_groups(
+    sport_frames: list[tuple[str, pd.DataFrame]],
+    *,
+    min_leg_prob: float,
+    min_composite_hr: float,
+    max_legs: int,
+    max_tickets: int,
+) -> list[tuple[str, list, None]]:
+    """Build up to max_tickets win-rate slips (2–max_legs legs), sorted by p_win."""
+    max_legs = max(2, min(3, int(max_legs)))
+    candidates: list[dict] = []
+    for label, raw_df in sport_frames:
+        wr_df = _filter_win_rate_pool(
+            raw_df, min_leg_prob=min_leg_prob, min_composite_hr=min_composite_hr
+        )
+        if wr_df is None or len(wr_df) < 2:
+            continue
+        for n in range(2, max_legs + 1):
+            if len(wr_df) < n:
+                continue
+            built = build_tickets(
+                wr_df,
+                n,
+                max_tickets=max(5, int(max_tickets) * 2),
+                ticket_sort_mode="rank",
+                player_ticket_counts=defaultdict(int),
+            )
+            for t in built:
+                rows = list(t.get("rows") or [])
+                p_win = _compute_p_win_from_rows(rows)
+                pay_mult = float(t.get("payout_multiplier") or 1.0)
+                t = dict(t)
+                t["p_win"] = p_win
+                t["win_rate_score"] = p_win * math.log(1.0 + max(pay_mult, 0.0))
+                t["mode"] = "win_rate"
+                t["_sport_label"] = label
+                candidates.append(t)
+
+    candidates.sort(key=lambda x: (-float(x.get("p_win") or 0.0), -float(x.get("win_rate_score") or 0.0)))
+    seen: set[frozenset] = set()
+    picked: list[dict] = []
+    for t in candidates:
+        rows = [dict(r) for r in (t.get("rows") or [])]
+        key = _ticket_row_dedup_key(rows)
+        if key in seen:
+            continue
+        seen.add(key)
+        picked.append(t)
+        if len(picked) >= int(max_tickets):
+            break
+
+    groups: list[tuple[str, list, None]] = []
+    for t in picked:
+        rows = list(t.get("rows") or [])
+        n = len(rows)
+        sport_label = str(t.get("_sport_label") or "Mixed")
+        pts = {str(r.get("pick_type") or "").strip().lower() for r in rows}
+        if pts == {"goblin"}:
+            pool_tag = "Goblin"
+        elif pts == {"standard"}:
+            pool_tag = "Standard"
+        else:
+            pool_tag = "Mixed"
+        gn = f"{sport_label} {n}-Leg {pool_tag}"
+        groups.append((gn, [t], None))
+    return groups
 
 
 def flex_cash_prob(leg_probs_with_source: list) -> float:
@@ -4520,8 +4702,6 @@ def ticket_groups_to_payload(
                 player_s = str(gv("player") or "")
                 team_s = str(gv("team") or "")
                 opp_s = str(gv("opp") or gv("opp_team") or "").strip()
-                if opp_s.upper() in ("UNKNOWN_OPP", "UNKNOWN"):
-                    opp_s = ""
                 prop_s = str(gv("prop_type") or "")
                 dir_s = str(gv("direction") or "")
                 game_time_s = str(gv("game_time") or "")
@@ -4609,11 +4789,6 @@ def ticket_groups_to_payload(
                     "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
-                    "l10_over_pct": _safe_float(gv("l10_over_pct")),
-                    "l10_streak": sanitize_l10_streak_label(gv("l10_streak")),
-                    "projection": _safe_float(
-                        gv("projection") or gv("intel_projection") or gv("proj")
-                    ),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
@@ -4663,38 +4838,13 @@ def ticket_groups_to_payload(
             except Exception:
                 slip["payout"] = None
 
+            _enrich_slip_p_win_fields(slip, mode=str(t.get("mode") or "ev"))
+
             group["tickets"].append(slip)
 
         payload["groups"].append(group)
 
     return payload
-
-
-def _safe_parse_float(v) -> float | None:
-    """Parse stat/line cells; tennis and other sports use em-dash placeholders for missing games."""
-    import math
-
-    if v is None:
-        return None
-    try:
-        if pd.isna(v):
-            return None
-    except (TypeError, ValueError):
-        pass
-    if isinstance(v, (int, float)):
-        try:
-            fv = float(v)
-            return fv if math.isfinite(fv) else None
-        except (TypeError, ValueError):
-            return None
-    s = str(v).strip()
-    if not s or s in ("—", "–", "-", "N/A", "n/a", "NA", "nan", "None", "none"):
-        return None
-    try:
-        fv = float(s.replace(",", ""))
-        return fv if math.isfinite(fv) else None
-    except (TypeError, ValueError):
-        return None
 
 
 def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
@@ -4744,8 +4894,6 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "l5_games_played": g("l5_games_played"),
             "l10_over":   g("l10_over"),
             "l10_under":  g("l10_under"),
-            "l10_over_pct": g("l10_over_pct"),
-            "l10_streak": sanitize_l10_streak_label(g("l10_streak")),
             "l10_games_played": g("l10_games_played"),
             "season_avg": g("season_avg") or g("szn_avg"),
             "ml_prob":    g("ml_prob"),
@@ -4801,17 +4949,15 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
         if eid:
             row["espn_player_id"] = _clean_id(eid)
 
-        base_line = _safe_parse_float(safe(g("standard_line")) or safe(g("line")))
+        base_line = safe(g("standard_line")) or safe(g("line"))
         actuals: List[float] = []
         line_hist: List[float] = []
         for _i in range(1, 11):
-            av_raw = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
-            lv_raw = safe(g(f"line_g{_i}"))
-            av = _safe_parse_float(av_raw)
+            av = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
+            lv = safe(g(f"line_g{_i}"))
             if av is not None:
-                lv = _safe_parse_float(lv_raw)
-                actuals.append(av)
-                line_hist.append(lv if lv is not None else (base_line if base_line is not None else av))
+                actuals.append(float(av))
+                line_hist.append(float(lv) if lv is not None else (float(base_line) if base_line is not None else av))
                 row[f"stat_g{_i}"] = av
                 row[f"g{_i}"] = av
                 if lv is not None:
@@ -4819,7 +4965,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
         if actuals:
             row["actual_series"] = actuals
             if base_line is not None:
-                row["line_series"] = line_hist if line_hist else [base_line] * len(actuals)
+                row["line_series"] = line_hist if line_hist else [float(base_line)] * len(actuals)
             elif line_hist:
                 row["line_series"] = line_hist
 
@@ -5785,10 +5931,18 @@ def write_web_outputs(
     merge_existing_for_date: bool = False,
     apply_template_cap: bool = False,
     discard_tracker: DiscardTracker | None = None,
+    json_filename: str = "tickets_latest.json",
+    skip_ui_filters: bool = False,
 ):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
-    json_path = os.path.join(outdir, "tickets_latest.json")
+    json_path = os.path.join(outdir, json_filename)
+    if skip_ui_filters:
+        payload = _sanitize_for_json(payload)
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
+        print(f"[OK] Web JSON  -> {json_path}")
+        return
     payload = filter_web_tickets_for_ui(
         payload,
         require_positive_ev=require_positive_ev,
@@ -6058,34 +6212,6 @@ def _apply_l10_truth_from_stat_games(
     df.loc[use_mask, "l10_over"] = over[use_mask]
     df.loc[use_mask, "l10_under"] = under[use_mask]
     df.loc[use_mask, "l10_games_played"] = valid_n[use_mask].astype(float)
-    total_ou = over + under
-    if "l10_over_pct" not in df.columns:
-        df["l10_over_pct"] = np.nan
-    df.loc[use_mask, "l10_over_pct"] = over[use_mask] / total_ou[use_mask].replace(0, np.nan)
-    if "l10_streak" not in df.columns:
-        df["l10_streak"] = pd.Series([None] * len(df), dtype=object)
-    else:
-        df["l10_streak"] = df["l10_streak"].astype(object)
-    direction = (
-        df["direction"].astype(str).str.strip().str.upper()
-        if "direction" in df.columns
-        else (
-            df["dir"].astype(str).str.strip().str.upper()
-            if "dir" in df.columns
-            else pd.Series(["OVER"] * len(df), index=df.index)
-        )
-    )
-    try:
-        from scripts.l10_streak_utils import compute_l10_streak_label
-
-        for idx in df.index[use_mask]:
-            df.at[idx, "l10_streak"] = compute_l10_streak_label(
-                df.at[idx, "l10_over"],
-                df.at[idx, "l10_under"],
-                str(direction.at[idx]),
-            )
-    except Exception:
-        pass
     if "stat_last10_avg" in df.columns:
         df.loc[use_mask, "stat_last10_avg"] = l10_avg[use_mask]
     return df
@@ -7186,10 +7312,8 @@ def load_soccer(path: str) -> pd.DataFrame:
             .str.upper()
         )
         bad_opp = opp_norm.isin({"", "UNKNOWN_OPP", "UNKNOWN"})
-        df.loc[bad_opp, "opp"] = ""
-        if "opp_team" in df.columns:
-            df.loc[bad_opp, "opp_team"] = ""
         # Soft-degrade unknown opponent rows instead of hard dropping the entire sport pool.
+        # Keep the prop leg but strip opponent-dependent context fields.
         df["opp_known"] = (~bad_opp).astype(bool)
         if bad_opp.any():
             for dep_col in ("def_tier", "vs_def", "opp_def_tier"):
@@ -7197,12 +7321,11 @@ def load_soccer(path: str) -> pd.DataFrame:
                     df.loc[bad_opp, dep_col] = None
             if "load_warn" not in df.columns:
                 df["load_warn"] = None
-            df.loc[bad_opp, "load_warn"] = "opp_unknown"
+            df.loc[bad_opp, "load_warn"] = "UNKNOWN_OPP"
             print(
                 f"  [load_soccer] kept {int(bad_opp.sum())} rows with unknown opponent metadata "
                 f"(opp_known=False; opponent-dependent fields nulled)"
             )
-    df = _board_history_enrichment(df, "Soccer")
     return df
 
 
@@ -7669,10 +7792,6 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
         "L5 Under":         "l5_under",
-        "L10 Over":         "l10_over",
-        "L10 Under":        "l10_under",
-        "G1": "stat_g1", "G2": "stat_g2", "G3": "stat_g3", "G4": "stat_g4", "G5": "stat_g5",
-        "G6": "stat_g6", "G7": "stat_g7", "G8": "stat_g8", "G9": "stat_g9", "G10": "stat_g10",
         "Def Rank":         "def_rank",
         "Def Tier":         "def_tier",
         "Min Tier":         "min_tier",
@@ -7697,8 +7816,6 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "opponent":           "opp",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_soccer_hit10",
-        "line_hits_over_10": "l10_over",
-        "line_hits_under_10": "l10_under",
         "Game Script Mult": "game_script_mult",
         "Game Script Note": "game_script_note",
         "game_script_mult": "game_script_mult",
@@ -7809,7 +7926,6 @@ def load_nba1q(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
-    df = _board_history_enrichment(df, "NBA1Q")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
@@ -7848,10 +7964,6 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
         "L5 Under":         "l5_under",
-        "L10 Over":         "l10_over",
-        "L10 Under":        "l10_under",
-        "G1": "stat_g1", "G2": "stat_g2", "G3": "stat_g3", "G4": "stat_g4", "G5": "stat_g5",
-        "G6": "stat_g6", "G7": "stat_g7", "G8": "stat_g8", "G9": "stat_g9", "G10": "stat_g10",
         "Def Rank":         "def_rank",
         "Def Tier":         "def_tier",
         "Min Tier":         "min_tier",
@@ -7876,8 +7988,6 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "opponent":           "opp",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_soccer_hit10",
-        "line_hits_over_10": "l10_over",
-        "line_hits_under_10": "l10_under",
         "Game Script Mult": "game_script_mult",
         "Game Script Note": "game_script_note",
         "game_script_mult": "game_script_mult",
@@ -7988,7 +8098,6 @@ def load_nba1h(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
-    df = _board_history_enrichment(df, "NBA1H")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
@@ -11041,6 +11150,32 @@ def main():
         dest="web_template_cap",
         help="Apply per-sport leg-count template quotas to /tickets JSON. Default off for full deduped coverage.",
     )
+    ap.add_argument(
+        "--win-rate-mode",
+        action="store_true",
+        dest="win_rate_mode",
+        help="Win-rate ticket pass only: 2-3 leg goblin / Tier-A standard, sort by p_win, separate JSON output.",
+    )
+    ap.add_argument(
+        "--max-legs",
+        type=int,
+        default=None,
+        dest="max_legs",
+        help="Max legs per ticket (win-rate mode: capped at 3).",
+    )
+    ap.add_argument(
+        "--min-leg-prob",
+        type=float,
+        default=0.55,
+        dest="min_leg_prob",
+        help="Minimum leg_prob_used per leg (win-rate mode).",
+    )
+    ap.add_argument(
+        "--web-filename",
+        default="",
+        dest="web_filename",
+        help="Override web JSON filename (e.g. tickets_winrate_latest.json).",
+    )
 
     args = ap.parse_args()
     global PAYOUT_DEBUG
@@ -11056,6 +11191,9 @@ def main():
         args.date = slate_calendar_date_ymd()
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
+    if getattr(args, "win_rate_mode", False):
+        cap = int(args.max_legs) if args.max_legs is not None else 3
+        args.max_ticket_legs = max(2, min(3, cap))
     args.ticket_gen_starts = max(1, min(64, int(args.ticket_gen_starts)))
     args.nba_structured_variants = max(1, min(8, int(args.nba_structured_variants)))
     args.ticket_model_weight = max(0.0, min(1.0, float(args.ticket_model_weight)))
@@ -11679,26 +11817,6 @@ def main():
                 f"UNDER kept={_under_kept}/{_under_total} removed={_under_total - _under_kept}"
             )
 
-        # Soccer standard OVER: Tier A only (B/C blocked at ticket pool).
-        if sport == "SOCCER" and {"pick_type", "direction", "tier"}.issubset(filtered_df.columns):
-            _pt_soc = filtered_df["pick_type"].astype(str).str.strip().str.upper()
-            _dir_soc = filtered_df["direction"].astype(str).str.strip().str.upper()
-            _tier_soc = filtered_df["tier"].astype(str).str.strip().str.upper()
-            _std_over = _pt_soc.eq("STANDARD") & _dir_soc.eq("OVER")
-            _tier_ok = _tier_soc.eq(str(SOCCER_STANDARD_OVER_MAX_TIER).upper())
-            _tier_drop = _std_over & ~_tier_ok
-            _tier_dropped_n = int(_tier_drop.sum())
-            if _tier_dropped_n > 0:
-                discard_tracker.log_count("SOCCER", "SOCCER_STD_OVER_TIER_B_GATE", _tier_dropped_n)
-            filtered_df = filtered_df[~_tier_drop].copy()
-            _std_over_kept = int((_std_over & ~_tier_drop).sum())
-            print(
-                "  [SOCCER TIER GATE] "
-                f"standard OVER kept={_std_over_kept} "
-                f"(Tier {SOCCER_STANDARD_OVER_MAX_TIER} only); "
-                f"blocked={_tier_dropped_n}"
-            )
-
         # MLB: allow both OVER and UNDER; directional edge + L5 consistency now controls selection.
 
         # Tennis: OVER only for Aces + Games Won; other props keep both directions.
@@ -11878,6 +11996,62 @@ def main():
         f"  NHL ticket-pool legs (relaxed NHL hit-rate caps + Tier C in strict mode): {_nhl_ticket_pool_n}"
     )
     print(f"  CBB Goblin rank floor: {CBB_GOBLIN_MIN_RANK} (NBA uses global floor: {args.min_rank})")
+
+    if getattr(args, "win_rate_mode", False):
+        print("\n[win-rate] Generating win-rate optimized tickets (separate from EV pool)...")
+        wr_max_legs = max(2, min(3, int(args.max_legs) if args.max_legs is not None else 3))
+        wr_min_prob = float(getattr(args, "min_leg_prob", 0.55) or 0.55)
+        wr_sport_frames: list[tuple[str, pd.DataFrame]] = []
+        for label, frame in (
+            ("NBA", nba),
+            ("WNBA", wnba),
+            ("MLB", mlb),
+            ("NHL", nhl),
+            ("Tennis", tennis),
+        ):
+            if frame is not None and len(frame) > 0:
+                wr_sport_frames.append((label, pool(frame)))
+        wr_groups = build_win_rate_ticket_groups(
+            wr_sport_frames,
+            min_leg_prob=wr_min_prob,
+            min_composite_hr=0.52,
+            max_legs=wr_max_legs,
+            max_tickets=int(args.max_tickets),
+        )
+        print(f"  [win-rate] Built {len(wr_groups)} ticket groups ({sum(len(g[1]) for g in wr_groups)} slips)")
+        wr_payload = ticket_groups_to_payload(
+            wr_groups,
+            args.date,
+            thresholds,
+            bankroll=max(0.0, float(args.bankroll)),
+            curve_stake_usd=float(args.curve_stake_usd),
+        )
+        wr_payload["mode"] = "win_rate"
+        wr_payload["max_legs"] = wr_max_legs
+        wr_payload["sort"] = "p_win"
+        for g in wr_payload.get("groups") or []:
+            for slip in g.get("tickets") or []:
+                _enrich_slip_p_win_fields(slip, mode="win_rate")
+        if args.write_web:
+            web_name = str(args.web_filename or "").strip() or "tickets_winrate_latest.json"
+            write_web_outputs(
+                wr_payload,
+                args.web_outdir,
+                require_positive_ev=False,
+                merge_existing_for_date=False,
+                apply_template_cap=False,
+                json_filename=web_name,
+                skip_ui_filters=True,
+            )
+        if args.output:
+            wb_wr = Workbook()
+            wb_wr.remove(wb_wr.active)
+            for gn, tix, _bg in wr_groups:
+                write_ticket_sheet(wb_wr, tix, _excel_ticket_sheet_title(gn), "FFD54F", label="Win-Rate")
+            wb_wr.save(args.output)
+            print(f"[OK] Win-rate workbook -> {args.output}")
+        print("[win-rate] Done (EV ticket generation skipped).")
+        return
 
     print("Generating tickets + workbook...")
     wb = Workbook()
@@ -13011,9 +13185,6 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .ev-marginal { color: #ffaa00; }
 .tickets-built .ev-low { color: #ff8844; }
 .tickets-built .ev-skip { color: #ff4444; }
-.tickets-built .l10-streak-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:6px;white-space:nowrap;vertical-align:middle;}
-.tickets-built .l10-streak-badge.l10-hot{background:rgba(125,255,203,.12);color:#7dffcb;border:1px solid rgba(125,255,203,.35);}
-.tickets-built .l10-streak-badge.l10-cold{background:rgba(100,180,255,.12);color:#7eb8ff;border:1px solid rgba(100,180,255,.35);}
 .tickets-built .ticket-filter-pill[data-filter="top-payout"].active {
   border-color: rgba(255, 215, 0, 0.42);
   color: #ffd54f;
@@ -13079,6 +13250,48 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .best-ticket-row:last-child { border-bottom: 0; }
 .tickets-built .best-ticket-name { color: var(--text); font-weight: 600; }
 .tickets-built .best-ticket-meta { font-size: 12px; }
+.tickets-built .winrate-best-panel {
+  margin: 0 0 20px 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  background: linear-gradient(145deg, rgba(18, 22, 32, 0.98), rgba(8, 12, 20, 0.98));
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+.tickets-built .winrate-best-panel .winrate-best-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffd54f;
+  margin-bottom: 4px;
+}
+.tickets-built .winrate-best-panel .winrate-best-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.tickets-built .winrate-best-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+.tickets-built .winrate-best-row:last-child { border-bottom: 0; }
+.tickets-built .winrate-best-row:hover { background: rgba(255, 215, 0, 0.04); }
+.tickets-built .winrate-best-rank { color: #ffd54f; font-weight: 700; min-width: 28px; }
+.tickets-built .winrate-best-name { color: var(--text); font-weight: 600; flex: 1; }
+.tickets-built .winrate-best-legs { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.tickets-built .winrate-best-stats { text-align: right; font-size: 12px; white-space: nowrap; }
+.tickets-built .winrate-best-pwin { color: #00ff88; font-weight: 700; font-size: 14px; }
+.tickets-built .ticket-pwin-ev-badge {
+  font-size: 12px;
+  color: #00ff88;
+  margin-left: 8px;
+  font-weight: 600;
+}
 </style>"""
 
 
@@ -13467,6 +13680,7 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         '<span class="ticket-filter-sort-label">Sort</span>'
         '<select id="ticket-sort-select" class="ticket-filter-sort">'
         '<option value="ev_desc" selected>EV ↓</option>'
+        '<option value="pwin_desc">P(WIN) ↓</option>'
         '<option value="ev_asc">EV ↑</option>'
         '<option value="group">Group #</option>'
         '<option value="hit_rate">Hit Rate</option>'
@@ -13620,6 +13834,90 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
   </td>
 </tr>"""
 
+def _winrate_best_panel_html() -> str:
+    """Pinned panel: top 5 win-rate tickets from tickets_winrate_latest.json."""
+    path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_winrate_latest.json"
+    if not path.is_file():
+        return (
+            '<motionless class="winrate-best-panel" aria-live="polite">'
+            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
+            '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
+            "</motionless>"
+        ).replace("motionless", "motionless").replace("motionless", "div")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return (
+            '<motionless class="winrate-best-panel">'
+            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST</motionless>'
+            '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
+            "</motionless>"
+        ).replace("motionless", "div")
+    generated_at = str((data or {}).get("generated_at") or "")
+    flat: list[tuple[float, dict, str]] = []
+    for g in (data or {}).get("groups") or []:
+        gn = str(g.get("group_name") or "Ticket")
+        for t in g.get("tickets") or []:
+            if not isinstance(t, dict):
+                continue
+            try:
+                pw = float(t.get("p_win") or 0.0)
+            except (TypeError, ValueError):
+                pw = 0.0
+            flat.append((pw, t, gn))
+    flat.sort(key=lambda x: -x[0])
+    top = flat[:5]
+    if not top:
+        return (
+            '<div class="winrate-best-panel">'
+            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST</motionless>'
+            '<motionless class="winrate-best-sub">No win-rate tickets yet for this slate.</motionless>'
+            "</div>"
+        ).replace("motionless", "motionless")
+    rows: list[str] = []
+    for i, (pw, t, gn) in enumerate(top, start=1):
+        legs = t.get("legs") or []
+        leg_labels = []
+        for leg in legs[:3]:
+            if isinstance(leg, dict):
+                leg_labels.append(str(leg.get("player") or "")[:18])
+        leg_txt = " · ".join(leg_labels) if leg_labels else "—"
+        n_legs = len(legs) or t.get("n_legs") or 0
+        ev_v = t.get("ev_power")
+        if ev_v is None and isinstance(t.get("payout"), dict):
+            ev_v = (t.get("payout") or {}).get("ev")
+        try:
+            ev_f = float(ev_v) if ev_v is not None else 0.0
+        except (TypeError, ValueError):
+            ev_f = 0.0
+        pay = t.get("payout_multiplier") or t.get("power_payout")
+        try:
+            pay_f = float(pay) if pay is not None else 0.0
+        except (TypeError, ValueError):
+            pay_f = 0.0
+        rows.append(
+            f'<div class="winrate-best-row" data-winrate-rank="{i}" role="button" tabindex="0">'
+            f'<span class="winrate-best-rank">#{i}</span>'
+            f'<span class="winrate-best-name">{_h(gn)}'
+            f'<div class="winrate-best-legs">{_h(leg_txt)}</motionless>'
+            f'</span>'
+            f'<span class="winrate-best-stats">'
+            f'<div class="winrate-best-pwin">P(win) {_fmt(pw * 100, 0)}%</div>'
+            f'<motionless>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</motionless>'
+            f"</span></div>"
+        )
+    sub = f"Updated: {_h(generated_at)}" if generated_at else ""
+    body = "".join(r.replace("motionless", "div") for r in rows)
+    return (
+        '<div class="winrate-best-panel" id="winrate-best-panel">'
+        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
+        f'<div class="winrate-best-sub">{sub}</motionless>'
+        f"{body}"
+        "</div>"
+    ).replace("motionless", "div")
+
+
 def _group_max_ev_for_ui_cap(group: dict) -> float:
     best = float("-inf")
     for t in group.get("tickets") or []:
@@ -13713,53 +14011,6 @@ def _ticket_group_platforms_attr(group: dict) -> str:
             else:
                 slugs.add("pp")
     return " ".join(sorted(slugs))
-
-
-def _l10_hit_count_for_ticket(raw: object, n: int = 10) -> int | None:
-    try:
-        x = float(raw)
-    except (TypeError, ValueError):
-        return None
-    if not math.isfinite(x):
-        return None
-    if x <= 1.0:
-        return max(0, min(n, int(round(x * n))))
-    return max(0, min(n, int(round(x))))
-
-
-def _ticket_l10_streak_badge_html(leg: dict) -> str:
-    streak = str(leg.get("l10_streak") or "").strip().upper()
-    if streak == "HOT":
-        hits = _l10_hit_count_for_ticket(leg.get("l10_over"), 10)
-        if hits is None:
-            return ""
-        return (
-            f' <span class="l10-streak-badge l10-hot" title="L10 over today\'s line">'
-            f"🔥 {hits}/10</span>"
-        )
-    if streak == "COLD":
-        hits = _l10_hit_count_for_ticket(leg.get("l10_under"), 10)
-        if hits is None:
-            return ""
-        return (
-            f' <span class="l10-streak-badge l10-cold" title="L10 under today\'s line">'
-            f"❄️ {hits}/10</span>"
-        )
-    return ""
-
-
-def _ticket_streak_summary_html(legs: list) -> str:
-    if not legs:
-        return ""
-    total = len(legs)
-    hot = sum(1 for leg in legs if str(leg.get("l10_streak") or "").upper() == "HOT")
-    cold = sum(1 for leg in legs if str(leg.get("l10_streak") or "").upper() == "COLD")
-    half = total / 2.0
-    if hot >= half and hot > 0:
-        return f' <span class="l10-streak-badge l10-hot">🔥 {hot}/{total} HOT</span>'
-    if cold >= half and cold > 0:
-        return f' <span class="l10-streak-badge l10-cold">❄️ {cold}/{total} COLD</span>'
-    return ""
 
 
 def render_tickets_body_html(
@@ -13911,6 +14162,7 @@ def render_tickets_body_html(
                 "ev": ev_a,
                 "ev_score": _group_max_ev_for_ui_cap(group),
                 "hit_score": _group_hit_rate_score(tickets),
+                "p_win_score": _group_max_p_win(group),
                 "original_index": original_index,
                 "payout_confidence": pc_max,
             }
@@ -14005,13 +14257,14 @@ def render_tickets_body_html(
         d_ev = ent["ev"]
         d_ev_score = float(ent.get("ev_score") or 0.0)
         d_hit_score = float(ent.get("hit_score") or 0.0)
+        d_p_win_score = float(ent.get("p_win_score") or 0.0)
         d_pc = float(ent.get("payout_confidence") or 0.0)
         d_oi = int(ent.get("original_index", 0))
         rec_cls = d_ev if d_ev in ("strong", "ok", "marginal", "low", "skip") else "skip"
         d_plat = _ticket_group_platforms_attr(group)
 
         parts.append(f'''
-<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}" data-platforms="{_h(d_plat)}">
+<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-p-win="{_fmt(d_p_win_score, 6)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}" data-platforms="{_h(d_plat)}">
   <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="false">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
@@ -14024,6 +14277,15 @@ def render_tickets_body_html(
         for ticket in tickets:
             ticket_no = ticket.get("ticket_no") or ""
             win_prob = ticket.get("est_win_prob")
+            try:
+                p_win_val = float(ticket.get("p_win")) if ticket.get("p_win") is not None else None
+            except (TypeError, ValueError):
+                p_win_val = None
+            if p_win_val is None:
+                try:
+                    p_win_val = float(win_prob) if win_prob is not None else None
+                except (TypeError, ValueError):
+                    p_win_val = None
             avg_hr = ticket.get("avg_hit_rate")
             ev = ticket.get("ev_power")
             t_power_pay = ticket.get("power_payout") or ticket.get("base_power_payout")
@@ -14115,7 +14377,6 @@ def render_tickets_body_html(
 
             warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
                          if has_warn else "")
-            streak_summary_html = _ticket_streak_summary_html(legs)
 
             parts.append(f'''
 <div class="ticket" style="border-left:4px solid {accent};">
@@ -14123,7 +14384,6 @@ def render_tickets_body_html(
       <div class="ticket-hdr">
         <span class="ticket-no">#{_h(ticket_no)}</span>
         {hdr_brackets}
-        {streak_summary_html}
         {warn_html}
       </div>
       <div class="kpi-row">
@@ -14186,11 +14446,8 @@ def render_tickets_body_html(
                 line_underdog = leg.get("line_underdog")
                 line_draftkings = leg.get("line_draftkings")
                 team = leg.get("team") or ""
-                opp = str(leg.get("opp") or "").strip()
-                if opp.upper() in ("UNKNOWN_OPP", "UNKNOWN"):
-                    opp = ""
+                opp = leg.get("opp") or ""
                 initials = leg.get("initials") or player[:2].upper()
-                streak_badge_html = _ticket_l10_streak_badge_html(leg)
 
                 # Direction badge
                 dir_cls = "dir-over" if direction == "OVER" else "dir-under"
@@ -14256,7 +14513,7 @@ def render_tickets_body_html(
               <div class="pwrap">
                 {av_html}
                 <div>
-                  <div style="font-weight:600;font-size:14px;">{_h(player)}{streak_badge_html}</div>
+                  <div style="font-weight:600;font-size:14px;">{_h(player)}</div>
                   <div style="font-size:12px;color:var(--muted);">{_h(matchup)}</div>
                 </div>
               </div>
@@ -14412,6 +14669,10 @@ def render_tickets_body_html(
     }
     if(sortMode === 'hit_rate'){
       groups.sort(function(a,b){ return parseNum(b, 'data-hit-score') - parseNum(a, 'data-hit-score'); });
+      return;
+    }
+    if(sortMode === 'pwin_desc'){
+      groups.sort(function(a,b){ return parseNum(b, 'data-p-win') - parseNum(a, 'data-p-win'); });
       return;
     }
     groups.sort(function(a,b){ return parseNum(b, 'data-ev-score') - parseNum(a, 'data-ev-score'); });
