@@ -1097,6 +1097,15 @@ if ($SoccerOnly) {
     }
     if ($ok) { $ok = Run-Step "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input `"$SoccerRunOutDir\step2_soccer_picktypes.csv`" --defense cache\soccer_defense_summary.csv --output `"$SoccerRunOutDir\step3_soccer_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
+    if ($ok) {
+        $soccerFbrefSeason = $Date.Substring(0, 4)
+        if ([int]$soccerFbrefSeason -ge 1) {
+            $y = [int]$soccerFbrefSeason
+            $m = [int]$Date.Substring(5, 2)
+            if ($m -ge 8) { $soccerFbrefSeason = "$y-$($y + 1)" } else { $soccerFbrefSeason = "$($y - 1)-$y" }
+        }
+        $ok = Run-Step "Soccer Step 4b - FBref xG Context" $SoccerDir ".\scripts\step4b_attach_fbref_xg_soccer.py" "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --season $soccerFbrefSeason" -TimeoutSeconds 300
+    }
     if ($ok) { $ok = Run-Step "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
     if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }
@@ -1661,6 +1670,15 @@ $SoccerJob = Start-Job -ScriptBlock {
     }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input `"$SoccerRunOutDir\step2_soccer_picktypes.csv`" --defense cache\soccer_defense_summary.csv --output `"$SoccerRunOutDir\step3_soccer_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
+    if ($ok) {
+        $soccerFbrefSeason = $Date.Substring(0, 4)
+        if ([int]$soccerFbrefSeason -ge 1) {
+            $y = [int]$soccerFbrefSeason
+            $m = [int]$Date.Substring(5, 2)
+            if ($m -ge 8) { $soccerFbrefSeason = "$y-$($y + 1)" } else { $soccerFbrefSeason = "$($y - 1)-$y" }
+        }
+        $ok = Run-Step-Job "Soccer Step 4b - FBref xG Context" $SoccerDir ".\scripts\step4b_attach_fbref_xg_soccer.py" "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --season $soccerFbrefSeason"
+    }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }

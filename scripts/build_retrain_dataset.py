@@ -106,6 +106,13 @@ ENRICHMENT_RAW_COLS = [
     "opp_reb_allowed_vs_position",
     "opp_ast_allowed_vs_position",
     "positional_matchup_tier",
+    # Soccer
+    "player_xg_per90",
+    "player_xag_per90",
+    "player_goals_minus_xg",
+    "player_shots_per90",
+    "xg_tier",
+    "xg_data_source",
 ]
 
 JOIN_FEATURE_COLS = list(dict.fromkeys(STEP8_FEATURE_COLS + ENRICHMENT_RAW_COLS))

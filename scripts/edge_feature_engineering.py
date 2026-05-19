@@ -116,6 +116,12 @@ FEATURE_COLUMNS: list[str] = [
     "opp_reb_allowed_vs_position",
     "opp_ast_allowed_vs_position",
     "positional_matchup_tier_encoded",
+    # Soccer-only (FBref xG)
+    "player_xg_per90",
+    "player_xag_per90",
+    "player_goals_minus_xg",
+    "player_shots_per90",
+    "xg_tier_encoded",
 ]
 
 SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
@@ -152,6 +158,13 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "foul_trouble_risk_encoded",
         "b2b_flag",
         "b2b_rest_context_encoded",
+    ],
+    "Soccer": [
+        "player_xg_per90",
+        "player_xag_per90",
+        "player_goals_minus_xg",
+        "player_shots_per90",
+        "xg_tier_encoded",
     ],
     "NBA": [
         "usage_pct",
@@ -294,6 +307,7 @@ _PP_UNIT_ENC = {"NO_PP": 0.0, "PP_FRINGE": 1.0, "PP2": 2.0, "PP1": 3.0}
 
 _PITCHER_ADV_ENC = {"favor_pitcher": 0.0, "neutral": 1.0, "favor_batter": 2.0}
 _PARK_TIER_ENC = {"pitcher": 0.0, "neutral": 1.0, "hitter": 2.0}
+_XG_TIER_ENC = {"cache_miss": 0.0, "low": 1.0, "mid": 2.0, "high": 3.0}
 _WEATHER_FLAG_ENC = {
     "dome": 0.0,
     "calm": 1.0,
@@ -812,6 +826,18 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     if sp not in ("NBA", "WNBA"):
         out["usage_tier_encoded"] = np.nan
         out["pace_context_encoded"] = np.nan
+
+    xt = _first_col(out, ("xg_tier",)).astype(str).str.strip().str.lower()
+    out["xg_tier_encoded"] = xt.map(_XG_TIER_ENC).astype(float)
+
+    for col in ("player_xg_per90", "player_xag_per90", "player_goals_minus_xg", "player_shots_per90"):
+        if col not in out.columns:
+            out[col] = np.nan
+        if sp != "SOCCER":
+            out[col] = np.nan
+
+    if sp != "SOCCER":
+        out["xg_tier_encoded"] = np.nan
 
     return out
 
