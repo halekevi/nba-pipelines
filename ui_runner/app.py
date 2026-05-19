@@ -957,6 +957,8 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "line_draftkings",
         "cross_edge_vs_pp",
         "best_cross_book",
+        "book_line",
+        "prop_line",
     }
 )
 
@@ -990,6 +992,9 @@ def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
     had_wnba = isinstance(sports.get("wnba"), list) and len(sports["wnba"]) > 0
     if not had_wnba:
         out.extend(_wnba_slate_rows_from_step8_fallback())
+    had_nhl = isinstance(sports.get("nhl"), list) and len(sports["nhl"]) > 0
+    if not had_nhl:
+        out.extend(_nhl_slate_rows_from_step8_fallback())
     out.sort(key=_rank, reverse=True)
     return _filter_slate_explorer_rows(out)
 
@@ -1049,6 +1054,65 @@ def _wnba_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
                 continue
             rr = dict(r)
             rr["sport"] = "WNBA"
+            out_fb.append(_slim_slate_sport_row(rr))
+        return out_fb
+    finally:
+        if path_inserted and sys.path and sys.path[0] == scripts_dir:
+            sys.path.pop(0)
+
+
+def _nhl_slate_rows_from_step8_fallback() -> list[dict[str, Any]]:
+    """Same pattern as WNBA: hydrate NHL explorer rows from step8 when slate_latest omits them."""
+    import importlib.util
+
+    cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
+    if not cst_path.is_file():
+        return []
+    scripts_dir = str(BASE_DIR / "scripts")
+    path_inserted = False
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+        path_inserted = True
+    try:
+        try:
+            spec = importlib.util.spec_from_file_location("combined_slate_tickets_nhl_fb", cst_path)
+            if spec is None or spec.loader is None:
+                return []
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+        except Exception:
+            return []
+        pref: str | None = None
+        try:
+            pld = _selected_slate_sport_payload()
+            t = str((pld or {}).get("date") or "").strip()[:10]
+            if len(t) == 10:
+                pref = t
+        except Exception:
+            pass
+        days = _slate_day_candidates(pref)
+        xlsx_path = _resolve_outputs_artifact(
+            days,
+            [
+                "nhl/step8_nhl_direction_clean.xlsx",
+                "nhl/step8_nhl_direction.xlsx",
+                "step8_nhl_direction_clean_{d}.xlsx",
+                "step8_nhl_direction_{d}.xlsx",
+            ],
+            NHL_SLATE,
+            NHL_DIR / "step8_nhl_direction_clean.xlsx",
+            NHL_DIR / "step8_nhl_direction.xlsx",
+        )
+        if not xlsx_path.is_file():
+            return []
+        df = mod.load_nhl(str(xlsx_path))
+        raw_rows = mod.dataframe_to_slate_sport_rows(df)
+        out_fb: list[dict[str, Any]] = []
+        for r in raw_rows:
+            if not isinstance(r, dict):
+                continue
+            rr = dict(r)
+            rr["sport"] = "NHL"
             out_fb.append(_slim_slate_sport_row(rr))
         return out_fb
     finally:
@@ -4236,12 +4300,14 @@ def _api_slate_pick_moat_fields(r: dict[str, Any]) -> dict[str, Any]:
 
     gt = fstr(r.get("game_time") or r.get("event_start_time"))
 
+    rank_v = fnum(r.get("rank_score"))
     return {
         "team": fstr(r.get("team")),
         "opp": fstr(opp_raw),
         "ml_prob": fnum(r.get("ml_prob")),
         "tier": fstr(r.get("tier")),
-        "rank": fnum(r.get("rank_score")),
+        "rank": rank_v,
+        "rank_score": rank_v,
         "def_tier": fstr(r.get("def_tier") or r.get("Def Tier")),
         "opponent_def_rank": def_rank,
         "book_line": book_line,
@@ -4516,6 +4582,14 @@ def api_slate_sport():
                 "sports": {},
             }
         ), 404
+    sport_q = str(request.args.get("sport") or "").strip().lower()
+    if sport_q in ("", "all"):
+        sport_q = ""
+    elif sport_q == "combined":
+        pass
+    else:
+        # Single-sport lazy load via ?sport=nhl (same payload shape as /api/slate-sport/<sport>).
+        return api_slate_sport_single(sport_q)
     try:
         _selected_slate_sport_payload()
     except ValueError as e:
@@ -4578,6 +4652,8 @@ def api_slate_sport_single(sport: str):
         slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
         if not slim_rows and sport_key == "wnba":
             slim_rows = _wnba_slate_rows_from_step8_fallback()
+        if not slim_rows and sport_key == "nhl":
+            slim_rows = _nhl_slate_rows_from_step8_fallback()
         slim_rows = _filter_slate_explorer_rows(slim_rows)
         return {
             "date": payload.get("date"),

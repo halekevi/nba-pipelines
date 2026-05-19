@@ -3440,8 +3440,13 @@ function completeSlateFrameLoad(frame) {
 // ─── LOAD a date's report ─────────────────────────────────────────────────────
 function loadDate(dateStr){
   restoreGradesToolbarToParent();
-  const idx = availableDates.indexOf(dateStr);
-  if(idx === -1 && !dateStr) return;
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(String(dateStr))) return;
+  let idx = availableDates.indexOf(dateStr);
+  if (idx === -1) {
+    availableDates.push(dateStr);
+    availableDates.sort();
+    idx = availableDates.indexOf(dateStr);
+  }
   currentDateIdx = idx;
   currentDateStr = dateStr;
 
@@ -3665,6 +3670,10 @@ window.addEventListener('pageshow', function (ev) {
   const yest = yesterdayStr();
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
+  // Optimistic load so the hub is not blank while report_dates is scanned.
+  try {
+    loadDate(yest);
+  } catch (_earlyLoad) {}
 
   const params = new URLSearchParams(window.location.search);
   const qpDateRaw = (params.get('date') || '').trim().slice(0, 10);
