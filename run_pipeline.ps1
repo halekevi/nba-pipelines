@@ -54,6 +54,7 @@ param(
     [string]$OddsApiKey = "",
     [switch]$NBAOnly,
     [switch]$CBBOnly,
+    [switch]$ForceCBB,
     [switch]$CFBOnly,
     [switch]$NHLOnly,
     [switch]$MLBOnly,
@@ -986,9 +987,9 @@ if ($NFLOnly) {
         exit 1
     }
     if ($SkipFetch) {
-        & $nflPs1 -Date $Date -SkipFetch
+        & $nflPs1 -Date $Date -OutDir $NFLRunOutDir -SkipFetch
     } else {
-        & $nflPs1 -Date $Date
+        & $nflPs1 -Date $Date -OutDir $NFLRunOutDir
     }
     $nflOk = ($LASTEXITCODE -eq 0)
     if ($nflOk) {
@@ -1185,6 +1186,7 @@ if ($CBBOnly) {
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out `"$CBBRunOutDir\step1_cbb.csv`"" } } else { Write-Host "  [CBB] Skipping step1 fetch -- using existing $CBBRunOutDir\step1_cbb.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CBBRunOutDir\step1_cbb.csv`" --output `"$CBBRunOutDir\step2_cbb.csv`"" }
     if ($ok) { $ok = Run-Step "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input `"$CBBRunOutDir\step2_cbb.csv`" --defense data\reference\cbb_def_rankings.csv --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step "CBB Step 3c - Torvik Team Context"     $CBBDir ".\scripts\step3c_attach_torvik_context.py"                        "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --season 2025-26 --refresh" }
     if ($ok) { $ok = Run-Step "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3_cbb.csv`" --master data/reference/ncaa_mbb_athletes_master.csv" }
     if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CBBRunOutDir\step3_cbb.csv`" --output `"$CBBRunOutDir\step5b_cbb.csv`"" }
     if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input `"$CBBRunOutDir\step5b_cbb.csv`" --output `"$CBBRunOutDir\step6_ranked_cbb.xlsx`"" }
@@ -1308,10 +1310,12 @@ if (-not $wnbaParallel) {
     Write-Host "  [WNBA] Parallel job skipped until $WNBA_SEASON_START (use -ForceWNBA to run early)." -ForegroundColor DarkGray
 }
 
-# Men's CBB: no expected slate on/after 2026-04-07 (align with scripts\run_daily.ps1 Get-MissingTodaySlateOutputs).
-$CBB_PARALLEL_ACTIVE = ($Date -lt "2026-04-07")
+# Men's CBB: Nov 1 – Apr 15 slate window, or -ForceCBB for off-season validation.
+$dCbb = [datetime]::ParseExact($Date, "yyyy-MM-dd", $null)
+$CBB_IN_SEASON = ($dCbb.Month -ge 11 -or $dCbb.Month -le 4) -and -not ($dCbb.Month -eq 4 -and $dCbb.Day -gt 15)
+$CBB_PARALLEL_ACTIVE = $ForceCBB -or $CBB_IN_SEASON
 if (-not $CBB_PARALLEL_ACTIVE) {
-    Write-Host "  [CBB] Parallel job skipped (men's season ended; date >= 2026-04-07)." -ForegroundColor DarkGray
+    Write-Host "  [CBB] Parallel job skipped (off-season; use -ForceCBB to run)." -ForegroundColor DarkGray
 }
 
 # NFL PrizePicks-style board: run Aug–Feb only (off-season roughly Mar–Jul). Adjust if PP adds a summer slate.
@@ -1509,6 +1513,7 @@ $CBBJob = Start-Job -ScriptBlock {
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out `"$CBBRunOutDir\step1_cbb.csv`"" } } else { Write-Output "[CBB] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CBBRunOutDir\step1_cbb.csv`" --output `"$CBBRunOutDir\step2_cbb.csv`"" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input `"$CBBRunOutDir\step2_cbb.csv`" --defense data\reference\cbb_def_rankings.csv --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 3c - Torvik Team Context"     $CBBDir ".\scripts\step3c_attach_torvik_context.py"                        "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --season 2025-26 --refresh" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3_cbb.csv`" --master data/reference/ncaa_mbb_athletes_master.csv" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CBBRunOutDir\step3_cbb.csv`" --output `"$CBBRunOutDir\step5b_cbb.csv`"" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input `"$CBBRunOutDir\step5b_cbb.csv`" --output `"$CBBRunOutDir\step6_ranked_cbb.xlsx`"" }
@@ -1959,14 +1964,19 @@ $NFLJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NFL Step 1 - Fetch PrizePicks" $NFLDir ".\scripts\step1_fetch_prizepicks_nfl.py" "--output `"$NFLRunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Output "[NFL] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 2 - Clean Props" $NFLDir ".\scripts\step2_clean_props.py" "" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output `"$NFLRunOutDir\step7_nfl_ranked.xlsx`"" }
-    if ($ok) { Invoke-Step7b-Job "NFL" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--date $Date --output `"$NFLRunOutDir\step8_nfl_direction_clean.xlsx`"" }
+    $nflPs1Job = Join-Path $RepoRoot "scripts\run_nfl_pipeline.ps1"
+    $skipArg = if ($SkipFetch) { " -SkipFetch" } else { "" }
+    $cmd = "& `"$nflPs1Job`" -Date `"$Date`" -OutDir `"$NFLRunOutDir`"$skipArg"
+    Write-Output "[NFL] --> full pipeline via run_nfl_pipeline.ps1"
+    Write-Output "        CMD: $cmd"
+    try {
+        $output = Invoke-Expression $cmd 2>&1
+        foreach ($line in $output) { Write-Output "        $line" }
+        if ($LASTEXITCODE -ne 0) { $ok = $false; Write-Output "[NFL] FAILED pipeline (exit $LASTEXITCODE)" }
+    } catch {
+        $ok = $false
+        Write-Output "[NFL] EXCEPTION: $_"
+    }
     return $ok
 } -ArgumentList $NFLDir, $Date, $SkipFetch, $Root, 2025, $NFLRunOutDir
 }
