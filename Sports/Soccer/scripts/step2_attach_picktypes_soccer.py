@@ -465,26 +465,10 @@ def build_opp_team_from_home_away(df: pd.DataFrame) -> pd.Series:
     return opp
 
 def _game_team_pair_map(df: pd.DataFrame) -> Dict[str, Tuple[str, str]]:
-    """
-    Map pp_game_id -> (TEAM_A, TEAM_B) using the two unique teams appearing in that game.
-    If a game doesn't have exactly 2 teams, it won't be mapped.
-    """
-    game_col = "pp_game_id"
-    if game_col not in df.columns:
-        return {}
-    tmp = df[[game_col, "team"]].copy()
-    tmp[game_col] = tmp[game_col].astype(str).str.strip()
-    tmp["team"] = tmp["team"].astype(str).str.strip().str.upper()
+    """Delegate to soccer_opp_utils (atomic teams — combo A/B counts as two sides)."""
+    from soccer_opp_utils import game_pair_map
 
-    pairs: Dict[str, Tuple[str, str]] = {}
-    for gid, g in tmp.groupby(game_col, dropna=False):
-        gid = str(gid).strip()
-        if not gid:
-            continue
-        teams = [t for t in g["team"].unique().tolist() if t]
-        if len(teams) == 2:
-            pairs[gid] = (teams[0], teams[1])
-    return pairs
+    return game_pair_map(df)
 
 def build_opp_team_from_game_pairing(df: pd.DataFrame) -> pd.Series:
     """
@@ -577,16 +561,10 @@ def main() -> None:
         df.loc[combos_mask, "team_1"]   = [x[0] for x in t_splits]
         df.loc[combos_mask, "team_2"]   = [x[1] for x in t_splits]
 
-    # --- opp_team: try home/away first; fallback to game pairing ---
-    opp1 = build_opp_team_from_home_away(df)
-    df["opp_team"] = opp1
+    # --- opp_team: home/away + atomic pp_game_id pairing (combo rows included) ---
+    from soccer_opp_utils import fill_opp_team_column
 
-    need_fallback = df["opp_team"].astype(str).str.strip().eq("")
-    if need_fallback.any():
-        opp2 = build_opp_team_from_game_pairing(df)
-        df.loc[need_fallback, "opp_team"] = opp2.loc[need_fallback]
-
-    # sanity print
+    df = fill_opp_team_column(df)
     filled = (df["opp_team"].astype(str).str.strip() != "").sum()
     print(f"  opp_team filled: {filled}/{len(df)}")
 

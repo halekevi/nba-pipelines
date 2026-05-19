@@ -243,44 +243,16 @@ def main() -> None:
         "SHABAB":               "SHABAB",
         "KHALEEJ":              "KHALEEJ",
     }
-    df["opp_team"] = df["opp_team"].map(lambda x: OPP_TEAM_ALIASES.get(x, x))
+    from soccer_opp_utils import apply_team_aliases, fill_opp_team_column, load_team_aliases
 
-    # --- SAFETY: derive opp_team from pp_game_id if still blank ---
-    if "pp_game_id" in df.columns and "team" in df.columns:
-        need = df["opp_team"].astype(str).str.strip().eq("")
-        if need.any():
-            tmp = df[["pp_game_id", "team"]].copy()
-            tmp["pp_game_id"] = tmp["pp_game_id"].astype(str).str.strip()
-            tmp["team"] = tmp["team"].astype(str).str.strip().str.upper()
+    csv_aliases = load_team_aliases()
+    merged_aliases = {**csv_aliases, **OPP_TEAM_ALIASES}
+    df["opp_team"] = apply_team_aliases(df["opp_team"], merged_aliases)
+    df = fill_opp_team_column(df)
+    df["opp_team"] = apply_team_aliases(df["opp_team"], merged_aliases)
 
-            # Build game->team pair map
-            pairs = {}
-            for gid, g in tmp.groupby("pp_game_id", dropna=False):
-                gid = str(gid).strip()
-                if not gid:
-                    continue
-                teams = [t for t in g["team"].unique().tolist() if t]
-                if len(teams) == 2:
-                    pairs[gid] = (teams[0], teams[1])
-
-            if pairs:
-                def _opp_from_pair(gid: str, team: str) -> str:
-                    p = pairs.get(gid)
-                    if not p:
-                        return ""
-                    a, b = p
-                    if team == a: return b
-                    if team == b: return a
-                    return ""
-
-                gid_col  = df.loc[need, "pp_game_id"].astype(str).str.strip()
-                team_col = df.loc[need, "team"].astype(str).str.strip().str.upper()
-                df.loc[need, "opp_team"] = [
-                    _opp_from_pair(g, t) for g, t in zip(gid_col, team_col)
-                ]
-
-            filled = (df["opp_team"].astype(str).str.strip() != "").sum()
-            print(f"  ✅ opp_team filled after pp_game_id safety net: {filled}/{len(df)}")
+    filled = (df["opp_team"].astype(str).str.strip() != "").sum()
+    print(f"  ✅ opp_team filled after alias + game pairing: {filled}/{len(df)}")
 
     if "is_combo_player" not in df.columns:
         df["is_combo_player"] = df.get("player", "").astype(str).str.contains(r"\+").astype(int)

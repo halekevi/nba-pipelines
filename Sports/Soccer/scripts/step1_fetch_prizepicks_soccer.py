@@ -153,8 +153,18 @@ def build_rows(data: list, included: list, league_name: str) -> list:
         pos         = str(p.get("position", "")).strip()
         image_url   = str(p.get("image_url") or p.get("image_url_small") or "").strip()
 
-        home       = str(g.get("home_team", "")).strip().upper()
-        away       = str(g.get("away_team", "")).strip().upper()
+        home = str(
+            g.get("home_team")
+            or g.get("home_team_name")
+            or g.get("home")
+            or ""
+        ).strip().upper()
+        away = str(
+            g.get("away_team")
+            or g.get("away_team_name")
+            or g.get("away")
+            or ""
+        ).strip().upper()
         start_time = str(g.get("start_time", attrs.get("start_time", ""))).strip()
 
         opp_team = ""

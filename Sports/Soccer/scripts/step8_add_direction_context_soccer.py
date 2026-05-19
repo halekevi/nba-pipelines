@@ -315,33 +315,12 @@ def main() -> None:
 
     out = df.copy()
 
-    # Backfill opponent labels from game context when opp_team is missing.
-    # Many soccer rows share pp_game_id; if each game has exactly two teams,
-    # infer each row's opponent as the "other" team in that game.
-    if "opp_team" in out.columns and "pp_game_id" in out.columns and "team" in out.columns:
-        opp_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
-        if opp_blank.any():
-            game_team_map = (
-                out.loc[:, ["pp_game_id", "team"]]
-                .astype(str)
-                .assign(team=lambda x: x["team"].str.strip(), pp_game_id=lambda x: x["pp_game_id"].str.strip())
-                .groupby("pp_game_id")["team"]
-                .apply(lambda s: sorted({t for t in s.tolist() if t and t.lower() not in ("nan", "none", "null")}))
-                .to_dict()
-            )
-            inferred = []
-            for _, r in out.loc[opp_blank, ["pp_game_id", "team"]].iterrows():
-                gid = str(r.get("pp_game_id", "")).strip()
-                team = str(r.get("team", "")).strip()
-                teams = game_team_map.get(gid, [])
-                if len(teams) == 2 and team in teams:
-                    inferred.append(teams[0] if teams[1] == team else teams[1])
-                else:
-                    inferred.append("")
-            out.loc[opp_blank, "opp_team"] = inferred
-            # Keep non-empty placeholder for unresolved rows so downstream views are explicit.
-            still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
-            out.loc[still_blank, "opp_team"] = "UNKNOWN_OPP"
+    # Backfill opponent from pp_game_id pairing (atomic teams — not raw combo strings).
+    if "opp_team" in out.columns:
+        from soccer_opp_utils import fill_opp_team_column, sanitize_unknown_opp
+
+        out = fill_opp_team_column(out)
+        out["opp_team"] = sanitize_unknown_opp(out["opp_team"])
 
     reconcile_signed_edge_abs_dataframe(out)
 
