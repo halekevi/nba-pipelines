@@ -27,28 +27,35 @@ from edge_feature_engineering import (  # type: ignore
 # Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
 ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
-    ("NBA", "standard", "OVER"): 0.55,
-    ("NBA", "goblin", "OVER"): 0.74,
-    # NBA demon OVER: isotonic calibrator (edge_slice_calibrators.pkl) handles
-    # this slice. Ticket-layer exclusion (5 independent gates) is the trust
-    # control. Scalar removed 2026-05-16.
+    ("NBA", "standard", "OVER"): 0.7917,
+    ("NBA", "goblin", "OVER"): 0.8591,
+    ("NBA", "demon", "OVER"): 0.9331,
+    ("NBA", "standard", "UNDER"): 1.0308,
+    # NBA demon: scalar + isotonic; ticket-layer exclusion still primary for new slates.
     # NHL — provisional (thin samples; isotonic pass needed)
-    ("NHL", "standard", "OVER"): 0.65,
-    ("NHL", "standard", "UNDER"): 1.50,
-    ("NHL", "goblin", "OVER"): 0.52,
-    ("NHL", "demon", "OVER"): 2.00,
+    ("NHL", "standard", "OVER"): 1.6422,
+    ("NHL", "standard", "UNDER"): 0.7299,
+    ("NHL", "goblin", "OVER"): 2.2124,
+    ("NHL", "demon", "OVER"): 1.8855,
     # MLB
-    ("MLB", "standard", "OVER"): 0.62,
-    ("MLB", "goblin", "OVER"): 0.64,
-    ("MLB", "demon", "OVER"): 0.42,
+    ("MLB", "standard", "OVER"): 1.2028,
+    ("MLB", "goblin", "OVER"): 1.2398,
+    ("MLB", "demon", "OVER"): 1.4152,
     # Soccer — step7b sport key is SOCCER (not report label "Soccer")
-    ("SOCCER", "standard", "OVER"): 0.60,
-    ("SOCCER", "goblin", "OVER"): 0.63,
-    ("SOCCER", "demon", "OVER"): 2.00,
-    # WNBA scalars: set to 1.0 pending 200+ graded rows — recalibrate after first full month of graded WNBA slates
-    ("WNBA", "standard", "OVER"): 1.0,
-    ("WNBA", "standard", "UNDER"): 1.0,
-    ("WNBA", "goblin", "OVER"): 1.0,
+    ("SOCCER", "standard", "OVER"): 2.5,
+    ("SOCCER", "goblin", "OVER"): 0.6942,
+    ("SOCCER", "demon", "OVER"): 2.121,
+    # WNBA — recalibrated from graded archive (scripts/recalibrate_ml_prob_scalars.py --sport WNBA)
+    ("WNBA", "standard", "OVER"): 1.4452,
+    ("WNBA", "standard", "UNDER"): 0.7829,
+    ("WNBA", "goblin", "OVER"): 1.3802,
+    ("WNBA", "demon", "OVER"): 2.2358,
+    ("MLB", "standard", "UNDER"): 0.9615,
+    ("SOCCER", "goblin", "UNDER"): 1.0811,
+    ("SOCCER", "standard", "UNDER"): 1.6993,
+    ("CBB", "goblin", "OVER"): 0.8054,
+    ("CBB", "standard", "OVER"): 0.9911,
+    ("CBB", "standard", "UNDER"): 0.8652,
 }
 
 _SLICE_CAL_PATH: Path | None = None
