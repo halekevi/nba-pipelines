@@ -87,6 +87,8 @@ param(
     # Compatibility flag passed by run_daily combined-only invocation.
     # Intentionally no-op here; ticket quality warnings are handled inside downstream scripts.
     [switch]$DQWarnOnly,
+    # Second combined pass with relaxed gates -> ui_runner/templates/shadow_tickets_latest.json
+    [switch]$Shadow,
     # Chrome CDP URL for WNBA step1 (PrizePicks); parallel WNBA job receives this explicitly (env may not propagate).
     [string]$WNBACdp = ""
 )
@@ -920,11 +922,65 @@ function Run-Combined {
         } catch {
             Write-Host "[PostGrader] WARN: $_" -ForegroundColor Yellow
         }
+        if ($Shadow) {
+            Run-ShadowCombined
+        }
     } else {
         Write-Host "  Combined FAILED" -ForegroundColor Red
     }
     Write-Host ""
     return $okC
+}
+
+function Run-ShadowCombined {
+    if ($SkipCombined) {
+        Write-Host "  [shadow] Skipping shadow pass (-SkipCombined)" -ForegroundColor DarkGray
+        return
+    }
+    Write-Host ""
+    Write-Host "[ SHADOW TICKETS — relaxed gates ]" -ForegroundColor DarkYellow
+    $ShadowOut = Join-Path $Root "shadow_tickets_$Date.xlsx"
+    Push-Location $Root
+    try {
+        $env:PYTHONUTF8 = "1"
+        $env:PYTHONIOENCODING = "utf-8"
+        $pyArgs = @(
+            ".\scripts\combined_slate_tickets.py",
+            "--date", $Date,
+            "--allow-cross-date-fallback",
+            "--output", $ShadowOut,
+            "--tiers", "A,B,C,D",
+            "--min-hit-rate", "0.0",
+            "--min-edge=-99",
+            "--max-tickets", "100",
+            "--ticket-gen-starts", "128",
+            "--nba-structured-variants", "8",
+            "--ticket-candidate-sort", "rule",
+            "--prioritize-ticket-hit",
+            "--write-web",
+            "--web-outdir", $WebOutDir,
+            "--shadow-mode",
+            "--no-web-ev-gate"
+        )
+        Write-Host "        CMD: py -3.14 $($pyArgs -join ' ')" -ForegroundColor DarkGray
+        & py -3.14 @pyArgs
+        $shadowExit = $LASTEXITCODE
+    } catch {
+        Write-Host "  [shadow] EXCEPTION: $_" -ForegroundColor Red
+        $shadowExit = 1
+    } finally {
+        Pop-Location
+    }
+    if ($shadowExit -eq 0) {
+        $shadowJson = Join-Path $WebOutDir "shadow_tickets_latest.json"
+        if (Test-Path $shadowJson) {
+            Write-Host "  [shadow] OK -> $shadowJson" -ForegroundColor Green
+        } else {
+            Write-Host "  [shadow] WARN: shadow_tickets_latest.json not found" -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "  [shadow] Shadow ticket pass FAILED (exit $shadowExit)" -ForegroundColor Red
+    }
 }
 
 # -- Helper: print elapsed + done banner --------------------------------------
