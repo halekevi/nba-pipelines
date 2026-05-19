@@ -27,13 +27,25 @@ def _load_cache(db_path: Path) -> dict[tuple[str, str, str], tuple[float | None,
             )
             """
         )
+        # Rows are keyed by pick_type/line_bucket; roll up to sport×direction×tier for UI.
+        agg_hits: dict[tuple[str, str, str], float] = {}
+        agg_n: dict[tuple[str, str, str], int] = {}
         for sport, direction, tier, hr, n in cur.fetchall():
             key = (
                 str(sport or "").strip().upper(),
                 str(direction or "").strip().upper(),
                 str(tier or "").strip().upper() or "—",
             )
-            out[key] = (float(hr) if hr is not None else None, int(n or 0))
+            ni = int(n or 0)
+            if ni <= 0:
+                continue
+            agg_n[key] = agg_n.get(key, 0) + ni
+            if hr is not None:
+                agg_hits[key] = agg_hits.get(key, 0.0) + float(hr) * ni
+        for key, total_n in agg_n.items():
+            hits = agg_hits.get(key)
+            hr_agg = (hits / total_n) if hits is not None and total_n > 0 else None
+            out[key] = (hr_agg, total_n)
     except sqlite3.Error:
         return {}
     finally:
