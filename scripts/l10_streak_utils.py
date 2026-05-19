@@ -48,6 +48,21 @@ def compute_l10_streak_label(
     return "NEUTRAL"
 
 
+def sanitize_l10_streak_label(streak: object) -> str | None:
+    """Normalize streak for JSON/UI; pandas NaN must not become the string 'NAN'."""
+    if streak is None:
+        return None
+    try:
+        if pd.isna(streak):
+            return None
+    except (TypeError, ValueError):
+        pass
+    s = str(streak).strip().upper()
+    if s in ("", "NAN", "NONE"):
+        return None
+    return s or None
+
+
 def add_l10_ui_columns(
     df: pd.DataFrame,
     *,

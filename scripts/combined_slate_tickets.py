@@ -99,6 +99,7 @@ from utils.goblin_demon_multiplier import (
     multiplier_summary as gd_multiplier_summary,
 )
 from utils.ticket_diversity import apply_diversity_filter
+from scripts.l10_streak_utils import sanitize_l10_streak_label
 
 _log_slate = logging.getLogger("combined_slate_tickets")
 
@@ -4607,7 +4608,7 @@ def ticket_groups_to_payload(
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
                     "l10_over_pct": _safe_float(gv("l10_over_pct")),
-                    "l10_streak": str(gv("l10_streak") or "").strip().upper() or None,
+                    "l10_streak": sanitize_l10_streak_label(gv("l10_streak")),
                     "projection": _safe_float(
                         gv("projection") or gv("intel_projection") or gv("proj")
                     ),
@@ -4742,7 +4743,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "l10_over":   g("l10_over"),
             "l10_under":  g("l10_under"),
             "l10_over_pct": g("l10_over_pct"),
-            "l10_streak": g("l10_streak"),
+            "l10_streak": sanitize_l10_streak_label(g("l10_streak")),
             "l10_games_played": g("l10_games_played"),
             "season_avg": g("season_avg") or g("szn_avg"),
             "ml_prob":    g("ml_prob"),
