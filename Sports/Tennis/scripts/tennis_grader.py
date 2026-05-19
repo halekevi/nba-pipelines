@@ -89,6 +89,19 @@ def _empty_graded() -> pd.DataFrame:
     return pd.DataFrame(columns=_DEF_GRADED_COLS)
 
 
+def _slate_field(row: pd.Series, *keys: str) -> str:
+    for key in keys:
+        if key not in row.index:
+            continue
+        val = row.get(key)
+        if val is None:
+            continue
+        s = str(val).strip()
+        if s and s.lower() not in ("nan", "none", "null"):
+            return s
+    return ""
+
+
 def main() -> None:
     print("[Tennis grader] Starting...")
     ap = argparse.ArgumentParser()
@@ -207,6 +220,12 @@ def main() -> None:
                 "result": res,
                 "reason": void_reason if res == "VOID" else "",
                 "notes": note_out,
+                "ml_prob": _slate_field(r, "ml_prob", "ML Prob"),
+                "tier": _slate_field(r, "tier", "Tier"),
+                "edge": _slate_field(r, "edge", "Edge"),
+                "pick_type": _slate_field(r, "pick_type", "Pick Type"),
+                "team": _slate_field(r, "team", "Team"),
+                "blended_score": _slate_field(r, "blended_score", "Blended Score"),
             }
         )
 

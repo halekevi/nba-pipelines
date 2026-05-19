@@ -27,6 +27,7 @@ SPORT_ENCODING = {
     "NBA1H": 5,
     "NBA1Q": 6,
     "WNBA": 7,
+    "TENNIS": 8,
 }
 
 FEATURE_COLUMNS: list[str] = [

@@ -18,6 +18,7 @@ import argparse
 import datetime as _dt
 import shutil
 import sys
+import warnings
 import zoneinfo
 from pathlib import Path
 
@@ -50,6 +51,35 @@ def _norm_pick_type(x: str) -> str:
     if "gob" in t: return "Goblin"
     if "dem" in t: return "Demon"
     return "Standard"
+
+
+def _attach_unified_ml_prob(out: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    """Apply unified edge model ml_prob (non-fatal; keeps heuristic ml_prob on failure)."""
+    scripts_dir = repo_root / "scripts"
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    try:
+        from edge_predict_utils import predict_unified_edge_scores  # noqa: WPS433
+
+        work = out.copy()
+        if "bet_direction" not in work.columns and "final_bet_direction" in work.columns:
+            work["bet_direction"] = work["final_bet_direction"]
+        pred = predict_unified_edge_scores(work, sport_for_model="TENNIS")
+        if pred is None:
+            print("[Tennis step8] WARN unified ml_prob unavailable — keeping step7 ml_prob")
+            return out
+        ml_p, edge_sc, blended = pred
+        filled = int(ml_p.notna().sum())
+        out["ml_prob"] = pd.to_numeric(ml_p, errors="coerce").round(4)
+        out["edge_score"] = pd.to_numeric(edge_sc, errors="coerce").round(4)
+        out["blended_score"] = pd.to_numeric(blended, errors="coerce").round(4)
+        if "prob_source" in out.columns:
+            out.loc[ml_p.notna(), "prob_source"] = "ml_prob_unified"
+        print(f"[Tennis step8] unified ml_prob filled {filled}/{len(out)} rows")
+    except Exception as exc:
+        print(f"[Tennis step8] WARN unified ml_prob failed: {exc}")
+        warnings.warn(f"Tennis unified ml_prob skipped: {exc}", stacklevel=2)
+    return out
 
 
 TIER_COLORS = {
@@ -444,7 +474,11 @@ def main() -> None:
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"]    = reason
     out["direction"] = out["final_bet_direction"]
+    out["bet_direction"] = out["final_bet_direction"]
     out["DEF_TIER"] = "N/A"
+
+    repo_root = Path(__file__).resolve().parents[3]
+    out = _attach_unified_ml_prob(out, repo_root)
 
     hr5b = pd.to_numeric(out.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
     hr10b = pd.to_numeric(out.get("line_hit_rate_over_ou_10", np.nan), errors="coerce")

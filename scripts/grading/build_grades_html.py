@@ -189,7 +189,7 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
             if nk.lower() == "prop_type_norm":      nk = "Prop Type"
             if nk.lower() == "pick_type":           nk = "Pick Type"
             if nk.lower() == "tier":                nk = "Tier"
-            if nk.lower() == "pick_type":           nk = "Pick Type"
+            if nk.lower() in ("ml_prob", "ml prob"): nk = "ML Prob"
             nr[nk] = v
         normalized.append(nr)
     # Recompute display tiers for historical files:

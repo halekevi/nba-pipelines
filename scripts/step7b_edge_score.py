@@ -114,8 +114,14 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             root / "Soccer" / "step7_soccer_ranked.xlsx",
         ]
     elif sp == "TENNIS":
-        candidates = [
+        out_glob = sorted(
+            (root / "outputs").glob("*/tennis/step7_tennis_ranked.xlsx"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        candidates = list(out_glob) + [
             Sr / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
+            Sr / "Tennis" / "step7_tennis_ranked.xlsx",
             root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
         ]
     elif sp == "CFB":
