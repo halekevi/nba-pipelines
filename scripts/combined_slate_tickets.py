@@ -2770,8 +2770,10 @@ NHL_LEG_MIN_HIT_RATE = {
     4: 0.60,
 }
 # Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
-# TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
-SOCCER_OVER_MIN_EDGE = 0.60
+# Raised 2026-05-19: 13% realized HR on standard OVER over full graded window.
+SOCCER_OVER_MIN_EDGE = 0.80
+# Soccer standard OVER: Tier A only until xG fill > 60%.
+SOCCER_STANDARD_OVER_MAX_TIER = "A"
 
 DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
     "NBA": {"over": 0.70, "under": 0.30, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
@@ -11675,6 +11677,26 @@ def main():
                 f"OVER kept={_over_kept}/{_over_total} removed={_over_total - _over_kept} "
                 f"(edge>={SOCCER_OVER_MIN_EDGE:.2f}); "
                 f"UNDER kept={_under_kept}/{_under_total} removed={_under_total - _under_kept}"
+            )
+
+        # Soccer standard OVER: Tier A only (B/C blocked at ticket pool).
+        if sport == "SOCCER" and {"pick_type", "direction", "tier"}.issubset(filtered_df.columns):
+            _pt_soc = filtered_df["pick_type"].astype(str).str.strip().str.upper()
+            _dir_soc = filtered_df["direction"].astype(str).str.strip().str.upper()
+            _tier_soc = filtered_df["tier"].astype(str).str.strip().str.upper()
+            _std_over = _pt_soc.eq("STANDARD") & _dir_soc.eq("OVER")
+            _tier_ok = _tier_soc.eq(str(SOCCER_STANDARD_OVER_MAX_TIER).upper())
+            _tier_drop = _std_over & ~_tier_ok
+            _tier_dropped_n = int(_tier_drop.sum())
+            if _tier_dropped_n > 0:
+                discard_tracker.log_count("SOCCER", "SOCCER_STD_OVER_TIER_B_GATE", _tier_dropped_n)
+            filtered_df = filtered_df[~_tier_drop].copy()
+            _std_over_kept = int((_std_over & ~_tier_drop).sum())
+            print(
+                "  [SOCCER TIER GATE] "
+                f"standard OVER kept={_std_over_kept} "
+                f"(Tier {SOCCER_STANDARD_OVER_MAX_TIER} only); "
+                f"blocked={_tier_dropped_n}"
             )
 
         # MLB: allow both OVER and UNDER; directional edge + L5 consistency now controls selection.

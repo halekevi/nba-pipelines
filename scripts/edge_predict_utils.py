@@ -29,9 +29,8 @@ ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
     ("NBA", "standard", "OVER"): 0.7917,
     ("NBA", "goblin", "OVER"): 0.8591,
-    ("NBA", "demon", "OVER"): 0.9331,
+    # Demon+OVER excluded from calibration — unbookable (drop_demon_over_rows).
     ("NBA", "standard", "UNDER"): 1.0308,
-    # NBA demon: scalar + isotonic; ticket-layer exclusion still primary for new slates.
     # NHL — provisional (thin samples; isotonic pass needed)
     ("NHL", "standard", "OVER"): 1.6422,
     ("NHL", "standard", "UNDER"): 0.7299,

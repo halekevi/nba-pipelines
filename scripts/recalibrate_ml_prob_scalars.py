@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import re
 import sys
 from pathlib import Path
@@ -23,6 +24,13 @@ if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
 from edge_predict_utils import ML_PROB_CALIBRATION_SCALARS  # noqa: E402
+
+logger = logging.getLogger(__name__)
+
+# Per-sport scalar ceiling overrides (recalibrate script only; not live inference).
+CLIP_HI_OVERRIDES: dict[str, float] = {
+    "SOCCER": 3.0,  # default 2.50 — Soccer standard OVER severely underestimated
+}
 
 # Target hit rates for linear scalar tuning (post-isotonic).
 _SLICE_TARGETS: dict[tuple[str, str, str], float] = {
@@ -133,6 +141,27 @@ def load_graded_json_rows(
     return pd.DataFrame(rows)
 
 
+def _is_ticket_eligible_slice(pick_type: str, direction: str) -> bool:
+    """Mirror combined_slate_tickets drop_demon_over_rows — demon+OVER is unbookable."""
+    return not (_norm_pick(pick_type) == "demon" and _norm_dir(direction) == "OVER")
+
+
+def exclude_unbookable_demon_over(
+    df: pd.DataFrame,
+    *,
+    include_demon: bool = False,
+) -> pd.DataFrame:
+    if df.empty or include_demon:
+        return df
+    pt = df["pick_type"].astype(str).str.strip().str.lower()
+    dr = df["direction"].astype(str).str.strip().str.upper()
+    demon_over_mask = pt.eq("demon") & dr.eq("OVER")
+    excluded = int(demon_over_mask.sum())
+    if excluded > 0:
+        logger.info("Excluding %s demon+OVER rows (unbookable)", f"{excluded:,}")
+    return df.loc[~demon_over_mask].copy()
+
+
 def recommend_scalars(
     df: pd.DataFrame,
     *,
@@ -151,11 +180,12 @@ def recommend_scalars(
         actual_hr = float(g["hit"].mean())
         key = (str(sp), str(pt), str(dr))
         target = actual_hr if use_actual_target else _SLICE_TARGETS.get(key, 0.50)
+        sport_clip_hi = float(CLIP_HI_OVERRIDES.get(str(sp).upper(), clip_hi))
         if n < min_n or mean_p <= 0.01:
             rec = None
             note = f"n<{min_n}" if n < min_n else "mean_p too low"
         else:
-            rec = float(np.clip(target / mean_p, clip_lo, clip_hi))
+            rec = float(np.clip(target / mean_p, clip_lo, sport_clip_hi))
             note = "ok"
         cur = ML_PROB_CALIBRATION_SCALARS.get(key)
         out_rows.append(
@@ -169,6 +199,8 @@ def recommend_scalars(
                 "target_hit_rate": round(target, 4),
                 "current_scalar": cur,
                 "recommended_scalar": round(rec, 4) if rec is not None else None,
+                "ticket_eligible": _is_ticket_eligible_slice(pt, dr),
+                "clip_hi": sport_clip_hi,
                 "status": note,
             }
         )
@@ -230,8 +262,15 @@ def main() -> int:
     ap.add_argument("--max-files", type=int, default=None, help="Only use last N graded JSON files")
     ap.add_argument("--use-actual-target", action="store_true", help="Target = slice hit rate (not policy default)")
     ap.add_argument("--apply", action="store_true", help="Patch edge_predict_utils.py scalars in place")
+    ap.add_argument(
+        "--include-demon",
+        action="store_true",
+        help="Include demon+OVER rows (diagnostic; default excludes unbookable demon+OVER)",
+    )
     ap.add_argument("--out-csv", type=Path, default=None, help="Write recommendations CSV")
     args = ap.parse_args()
+
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     df = load_graded_json_rows(_REPO, sport=args.sport, max_files=args.max_files)
     if df.empty:
@@ -239,6 +278,10 @@ def main() -> int:
         return 1
 
     print(f"Loaded {len(df):,} graded rows from mobile/www/graded_props_*.json")
+    df = exclude_unbookable_demon_over(df, include_demon=bool(args.include_demon))
+    if df.empty:
+        print("No rows left after demon+OVER exclusion.")
+        return 1
     if args.sport:
         print(f"  sport filter: {args.sport.upper()} → {len(df):,} rows")
 
