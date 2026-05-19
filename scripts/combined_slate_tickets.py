@@ -4660,6 +4660,33 @@ def ticket_groups_to_payload(
     return payload
 
 
+def _safe_parse_float(v) -> float | None:
+    """Parse stat/line cells; tennis and other sports use em-dash placeholders for missing games."""
+    import math
+
+    if v is None:
+        return None
+    try:
+        if pd.isna(v):
+            return None
+    except (TypeError, ValueError):
+        pass
+    if isinstance(v, (int, float)):
+        try:
+            fv = float(v)
+            return fv if math.isfinite(fv) else None
+        except (TypeError, ValueError):
+            return None
+    s = str(v).strip()
+    if not s or s in ("—", "–", "-", "N/A", "n/a", "NA", "nan", "None", "none"):
+        return None
+    try:
+        fv = float(s.replace(",", ""))
+        return fv if math.isfinite(fv) else None
+    except (TypeError, ValueError):
+        return None
+
+
 def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
     """Convert a step7/step8 direction dataframe to Slate Explorer row dicts (see _SLATE_SPORT_UI_KEYS)."""
     import math
@@ -4762,15 +4789,17 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
         if eid:
             row["espn_player_id"] = _clean_id(eid)
 
-        base_line = safe(g("standard_line")) or safe(g("line"))
+        base_line = _safe_parse_float(safe(g("standard_line")) or safe(g("line")))
         actuals: List[float] = []
         line_hist: List[float] = []
         for _i in range(1, 11):
-            av = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
-            lv = safe(g(f"line_g{_i}"))
+            av_raw = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
+            lv_raw = safe(g(f"line_g{_i}"))
+            av = _safe_parse_float(av_raw)
             if av is not None:
-                actuals.append(float(av))
-                line_hist.append(float(lv) if lv is not None else (float(base_line) if base_line is not None else av))
+                lv = _safe_parse_float(lv_raw)
+                actuals.append(av)
+                line_hist.append(lv if lv is not None else (base_line if base_line is not None else av))
                 row[f"stat_g{_i}"] = av
                 row[f"g{_i}"] = av
                 if lv is not None:
@@ -4778,7 +4807,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
         if actuals:
             row["actual_series"] = actuals
             if base_line is not None:
-                row["line_series"] = line_hist if line_hist else [float(base_line)] * len(actuals)
+                row["line_series"] = line_hist if line_hist else [base_line] * len(actuals)
             elif line_hist:
                 row["line_series"] = line_hist
 
