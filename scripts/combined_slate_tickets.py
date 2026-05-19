@@ -7667,6 +7667,10 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
         "L5 Under":         "l5_under",
+        "L10 Over":         "l10_over",
+        "L10 Under":        "l10_under",
+        "G1": "stat_g1", "G2": "stat_g2", "G3": "stat_g3", "G4": "stat_g4", "G5": "stat_g5",
+        "G6": "stat_g6", "G7": "stat_g7", "G8": "stat_g8", "G9": "stat_g9", "G10": "stat_g10",
         "Def Rank":         "def_rank",
         "Def Tier":         "def_tier",
         "Min Tier":         "min_tier",
@@ -7691,6 +7695,8 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "opponent":           "opp",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "line_hits_over_10": "l10_over",
+        "line_hits_under_10": "l10_under",
         "Game Script Mult": "game_script_mult",
         "Game Script Note": "game_script_note",
         "game_script_mult": "game_script_mult",
@@ -7801,6 +7807,7 @@ def load_nba1q(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = _board_history_enrichment(df, "NBA1Q")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
@@ -7839,6 +7846,10 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
         "L5 Under":         "l5_under",
+        "L10 Over":         "l10_over",
+        "L10 Under":        "l10_under",
+        "G1": "stat_g1", "G2": "stat_g2", "G3": "stat_g3", "G4": "stat_g4", "G5": "stat_g5",
+        "G6": "stat_g6", "G7": "stat_g7", "G8": "stat_g8", "G9": "stat_g9", "G10": "stat_g10",
         "Def Rank":         "def_rank",
         "Def Tier":         "def_tier",
         "Min Tier":         "min_tier",
@@ -7863,6 +7874,8 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "opponent":           "opp",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "line_hits_over_10": "l10_over",
+        "line_hits_under_10": "l10_under",
         "Game Script Mult": "game_script_mult",
         "Game Script Note": "game_script_note",
         "game_script_mult": "game_script_mult",
@@ -7973,6 +7986,7 @@ def load_nba1h(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = _board_history_enrichment(df, "NBA1H")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 

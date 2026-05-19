@@ -46,6 +46,11 @@ else:
 
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from scripts.l10_streak_utils import finalize_l10_ui_columns
+
 _ET = ZoneInfo("America/New_York")
 
 
@@ -160,6 +165,25 @@ def write_sheet(wb, name, data):
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     df2 = df.copy()
+    if "minutes_tier" in df2.columns:
+        df2["minutes_tier"] = df2["minutes_tier"].astype(object)
+    # step8 main() loads step7 with dtype=str; coerce game-log / L10 numerics before math.
+    for col in (
+        "line",
+        "last5_over",
+        "last5_under",
+        "l10_over",
+        "l10_under",
+        "l10_over_pct",
+        "line_hits_over_10",
+        "line_hits_under_10",
+    ):
+        if col in df2.columns:
+            df2[col] = pd.to_numeric(df2[col], errors="coerce")
+    for i in range(1, 11):
+        gcol = f"stat_g{i}"
+        if gcol in df2.columns:
+            df2[gcol] = pd.to_numeric(df2[gcol], errors="coerce")
     # Prefer pipeline minutes labels over ML numeric buckets (0–3).
     if "minutes_tier_label" in df2.columns:
         lbl = df2["minutes_tier_label"].astype(str).str.strip()
@@ -321,6 +345,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2.loc[has_hist, "line_hit_rate_over_ou_5"] = (over_n[has_hist] / valid_n[has_hist]).round(4)
             df2.loc[has_hist, "line_hit_rate_under_ou_5"] = (under_n[has_hist] / valid_n[has_hist]).round(4)
 
+    # L10 streak columns for UI/tickets (NBA1H/NBA1Q boards use stat_g* from step4/5).
+    if "line" in df2.columns:
+        df2 = finalize_l10_ui_columns(df2, line_col="line")
+
     # Sample size proxy used by downstream eligibility void exceptions.
     if "n_legs_sample" not in df2.columns:
         df2["n_legs_sample"] = np.nan
@@ -367,6 +395,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
+        'l10_over', 'l10_under', 'l10_over_pct', 'l10_streak',
         'n_legs_sample',
         'OVERALL_DEF_RANK', 'DEF_TIER',
         'minutes_tier', 'shot_role', 'usage_role',

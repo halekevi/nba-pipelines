@@ -102,6 +102,8 @@ def add_l10_ui_columns(
     ):
         if col not in out.columns:
             out[col] = np.nan
+        else:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
     if "l10_streak" not in out.columns:
         out["l10_streak"] = pd.Series([None] * len(out), dtype=object)
     else:
@@ -138,6 +140,8 @@ def finalize_l10_ui_columns(df: pd.DataFrame, *, line_col: str = "line") -> pd.D
     out = add_l10_ui_columns(df, line_col=line_col, min_games=1)
     if out is df:
         out = df.copy()
+    if "l10_streak" in out.columns:
+        out["l10_streak"] = out["l10_streak"].astype(object)
 
     alias_pairs = (
         ("line_hits_over_10", "line_hits_under_10"),
