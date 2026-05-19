@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-16",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_nba_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_nhl_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 264,
+      "void_rows": 3,
+      "acceptable_void_rows": 3,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_mlb_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 7462,
+      "void_rows": 3204,
+      "acceptable_void_rows": 3204,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_soccer_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 7466,
+      "void_rows": 3844,
+      "acceptable_void_rows": 3844,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_nba1h_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_tennis_2026-05-17.xlsx",
+      "status": "ok",
+      "rows": 169,
+      "void_rows": 169,
+      "acceptable_void_rows": 169,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-16\\graded_wnba_2026-05-16.xlsx",
+      "status": "ok",
+      "rows": 496,
+      "void_rows": 496,
+      "acceptable_void_rows": 496,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

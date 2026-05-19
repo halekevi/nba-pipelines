@@ -4,7 +4,7 @@
 "player": "Jannik Sinner",
 "tour": "ATP",
 "rank": 1,
-"points": 14350.0,
+"points": 14700.0,
 "player_key": "jannik sinner"
 },
 {
@@ -12,7 +12,7 @@
 "player": "Carlos Alcaraz",
 "tour": "ATP",
 "rank": 2,
-"points": 12960.0,
+"points": 11960.0,
 "player_key": "carlos alcaraz"
 },
 {
@@ -20,7 +20,7 @@
 "player": "Alexander Zverev",
 "tour": "ATP",
 "rank": 3,
-"points": 5805.0,
+"points": 5705.0,
 "player_key": "alexander zverev"
 },
 {
@@ -28,7 +28,7 @@
 "player": "Novak Djokovic",
 "tour": "ATP",
 "rank": 4,
-"points": 4700.0,
+"points": 4710.0,
 "player_key": "novak djokovic"
 },
 {
@@ -36,7 +36,7 @@
 "player": "Felix Auger-Aliassime",
 "tour": "ATP",
 "rank": 5,
-"points": 4050.0,
+"points": 4060.0,
 "player_key": "felix augeraliassime"
 },
 {
@@ -48,132 +48,132 @@
 "player_key": "ben shelton"
 },
 {
+"espn_athlete_id": "2383",
+"player": "Daniil Medvedev",
+"tour": "ATP",
+"rank": 7,
+"points": 3760.0,
+"player_key": "daniil medvedev"
+},
+{
 "espn_athlete_id": "2946",
 "player": "Taylor Fritz",
 "tour": "ATP",
-"rank": 7,
-"points": 3770.0,
+"rank": 8,
+"points": 3720.0,
 "player_key": "taylor fritz"
 },
 {
 "espn_athlete_id": "2651",
 "player": "Alex de Minaur",
 "tour": "ATP",
-"rank": 8,
-"points": 3755.0,
-"player_key": "alex de minaur"
-},
-{
-"espn_athlete_id": "2383",
-"player": "Daniil Medvedev",
-"tour": "ATP",
 "rank": 9,
-"points": 3460.0,
-"player_key": "daniil medvedev"
-},
-{
-"espn_athlete_id": "3764",
-"player": "Lorenzo Musetti",
-"tour": "ATP",
-"rank": 10,
-"points": 3415.0,
-"player_key": "lorenzo musetti"
+"points": 3665.0,
+"player_key": "alex de minaur"
 },
 {
 "espn_athlete_id": "2865",
 "player": "Alexander Bublik",
 "tour": "ATP",
-"rank": 11,
-"points": 3355.0,
+"rank": 10,
+"points": 3230.0,
 "player_key": "alexander bublik"
+},
+{
+"espn_athlete_id": "3764",
+"player": "Lorenzo Musetti",
+"tour": "ATP",
+"rank": 11,
+"points": 3115.0,
+"player_key": "lorenzo musetti"
 },
 {
 "espn_athlete_id": "7602",
 "player": "Flavio Cobolli",
 "tour": "ATP",
 "rank": 12,
-"points": 2750.0,
+"points": 2790.0,
 "player_key": "flavio cobolli"
-},
-{
-"espn_athlete_id": "3754",
-"player": "Jiri Lehecka",
-"tour": "ATP",
-"rank": 13,
-"points": 2715.0,
-"player_key": "jiri lehecka"
 },
 {
 "espn_athlete_id": "2642",
 "player": "Andrey Rublev",
 "tour": "ATP",
-"rank": 14,
-"points": 2590.0,
+"rank": 13,
+"points": 2780.0,
 "player_key": "andrey rublev"
+},
+{
+"espn_athlete_id": "3754",
+"player": "Jiri Lehecka",
+"tour": "ATP",
+"rank": 14,
+"points": 2715.0,
+"player_key": "jiri lehecka"
 },
 {
 "espn_athlete_id": "2367",
 "player": "Karen Khachanov",
 "tour": "ATP",
 "rank": 15,
-"points": 2220.0,
+"points": 2320.0,
 "player_key": "karen khachanov"
+},
+{
+"espn_athlete_id": "7833",
+"player": "Luciano Darderi",
+"tour": "ATP",
+"rank": 16,
+"points": 2260.0,
+"player_key": "luciano darderi"
+},
+{
+"espn_athlete_id": "2989",
+"player": "Casper Ruud",
+"tour": "ATP",
+"rank": 17,
+"points": 2185.0,
+"player_key": "casper ruud"
 },
 {
 "espn_athlete_id": "9376",
 "player": "Valentin Vacherot",
 "tour": "ATP",
-"rank": 16,
-"points": 2147.0,
+"rank": 18,
+"points": 2103.0,
 "player_key": "valentin vacherot"
 },
 {
 "espn_athlete_id": "10052",
 "player": "Arthur Fils",
 "tour": "ATP",
-"rank": 17,
-"points": 2130.0,
-"player_key": "arthur fils"
-},
-{
-"espn_athlete_id": "2964",
-"player": "Tommy Paul",
-"tour": "ATP",
-"rank": 18,
-"points": 1975.0,
-"player_key": "tommy paul"
-},
-{
-"espn_athlete_id": "2366",
-"player": "Cameron Norrie",
-"tour": "ATP",
 "rank": 19,
-"points": 1918.0,
-"player_key": "cameron norrie"
-},
-{
-"espn_athlete_id": "7833",
-"player": "Luciano Darderi",
-"tour": "ATP",
-"rank": 20,
-"points": 1890.0,
-"player_key": "luciano darderi"
+"points": 2040.0,
+"player_key": "arthur fils"
 },
 {
 "espn_athlete_id": "10386",
 "player": "Learner Tien",
 "tour": "ATP",
-"rank": 21,
-"points": 1870.0,
+"rank": 20,
+"points": 1940.0,
 "player_key": "learner tien"
 },
 {
 "espn_athlete_id": "2708",
 "player": "Frances Tiafoe",
 "tour": "ATP",
-"rank": 22,
-"points": 1865.0,
+"rank": 21,
+"points": 1905.0,
 "player_key": "frances tiafoe"
+},
+{
+"espn_athlete_id": "2366",
+"player": "Cameron Norrie",
+"tour": "ATP",
+"rank": 22,
+"points": 1888.0,
+"player_key": "cameron norrie"
 },
 {
 "espn_athlete_id": "3212",
@@ -188,31 +188,31 @@
 "player": "Arthur Rinderknech",
 "tour": "ATP",
 "rank": 24,
-"points": 1736.0,
+"points": 1711.0,
 "player_key": "arthur rinderknech"
-},
-{
-"espn_athlete_id": "2989",
-"player": "Casper Ruud",
-"tour": "ATP",
-"rank": 25,
-"points": 1735.0,
-"player_key": "casper ruud"
 },
 {
 "espn_athlete_id": "3739",
 "player": "Tomas Martin Etcheverry",
 "tour": "ATP",
-"rank": 26,
-"points": 1660.0,
+"rank": 25,
+"points": 1630.0,
 "player_key": "tomas martin etcheverry"
+},
+{
+"espn_athlete_id": "2964",
+"player": "Tommy Paul",
+"tour": "ATP",
+"rank": 26,
+"points": 1625.0,
+"player_key": "tommy paul"
 },
 {
 "espn_athlete_id": "3700",
 "player": "Francisco Cerundolo",
 "tour": "ATP",
 "rank": 27,
-"points": 1620.0,
+"points": 1570.0,
 "player_key": "francisco cerundolo"
 },
 {
@@ -220,38 +220,46 @@
 "player": "Jakub Mensik",
 "tour": "ATP",
 "rank": 28,
-"points": 1600.0,
+"points": 1510.0,
 "player_key": "jakub mensik"
+},
+{
+"espn_athlete_id": "12657",
+"player": "Rafael Jodar",
+"tour": "ATP",
+"rank": 29,
+"points": 1461.0,
+"player_key": "rafael jodar"
 },
 {
 "espn_athlete_id": "11745",
 "player": "Joao Fonseca",
 "tour": "ATP",
-"rank": 29,
+"rank": 30,
 "points": 1435.0,
 "player_key": "joao fonseca"
-},
-{
-"espn_athlete_id": "2886",
-"player": "Corentin Moutet",
-"tour": "ATP",
-"rank": 30,
-"points": 1413.0,
-"player_key": "corentin moutet"
 },
 {
 "espn_athlete_id": "3319",
 "player": "Tallon Griekspoor",
 "tour": "ATP",
 "rank": 31,
-"points": 1360.0,
+"points": 1340.0,
 "player_key": "tallon griekspoor"
+},
+{
+"espn_athlete_id": "2886",
+"player": "Corentin Moutet",
+"tour": "ATP",
+"rank": 32,
+"points": 1323.0,
+"player_key": "corentin moutet"
 },
 {
 "espn_athlete_id": "3774",
 "player": "Brandon Nakashima",
 "tour": "ATP",
-"rank": 32,
+"rank": 33,
 "points": 1295.0,
 "player_key": "brandon nakashima"
 },
@@ -259,24 +267,16 @@
 "espn_athlete_id": "3085",
 "player": "Ugo Humbert",
 "tour": "ATP",
-"rank": 33,
+"rank": 34,
 "points": 1280.0,
 "player_key": "ugo humbert"
-},
-{
-"espn_athlete_id": "12657",
-"player": "Rafael Jodar",
-"tour": "ATP",
-"rank": 34,
-"points": 1273.0,
-"player_key": "rafael jodar"
 },
 {
 "espn_athlete_id": "2970",
 "player": "Alejandro Tabilo",
 "tour": "ATP",
 "rank": 35,
-"points": 1248.0,
+"points": 1278.0,
 "player_key": "alejandro tabilo"
 },
 {
@@ -284,7 +284,7 @@
 "player": "Alexander Blockx",
 "tour": "ATP",
 "rank": 36,
-"points": 1200.0,
+"points": 1238.0,
 "player_key": "alexander blockx"
 },
 {
@@ -296,388 +296,388 @@
 "player_key": "denis shapovalov"
 },
 {
-"espn_athlete_id": "2709",
-"player": "Jaume Munar",
-"tour": "ATP",
-"rank": 38,
-"points": 1155.0,
-"player_key": "jaume munar"
-},
-{
 "espn_athlete_id": "3356",
 "player": "Zizou Bergs",
 "tour": "ATP",
-"rank": 39,
-"points": 1140.0,
+"rank": 38,
+"points": 1150.0,
 "player_key": "zizou bergs"
 },
 {
-"espn_athlete_id": "3659",
-"player": "Holger Rune",
+"espn_athlete_id": "2709",
+"player": "Jaume Munar",
 "tour": "ATP",
-"rank": 40,
-"points": 1110.0,
-"player_key": "holger rune"
+"rank": 39,
+"points": 1105.0,
+"player_key": "jaume munar"
 },
 {
 "espn_athlete_id": "3811",
 "player": "Tomas Machac",
 "tour": "ATP",
-"rank": 41,
-"points": 1100.0,
+"rank": 40,
+"points": 1080.0,
 "player_key": "tomas machac"
 },
 {
 "espn_athlete_id": "11400",
 "player": "Alex Michelsen",
 "tour": "ATP",
-"rank": 42,
-"points": 1090.0,
+"rank": 41,
+"points": 1075.0,
 "player_key": "alex michelsen"
-},
-{
-"espn_athlete_id": "3368",
-"player": "Sebastian Korda",
-"tour": "ATP",
-"rank": 43,
-"points": 1050.0,
-"player_key": "sebastian korda"
 },
 {
 "espn_athlete_id": "9992",
 "player": "Mariano Navone",
 "tour": "ATP",
-"rank": 44,
-"points": 1046.0,
+"rank": 42,
+"points": 1066.0,
 "player_key": "mariano navone"
+},
+{
+"espn_athlete_id": "3659",
+"player": "Holger Rune",
+"tour": "ATP",
+"rank": 43,
+"points": 1060.0,
+"player_key": "holger rune"
 },
 {
 "espn_athlete_id": "1266",
 "player": "Adrian Mannarino",
 "tour": "ATP",
-"rank": 45,
-"points": 1035.0,
+"rank": 44,
+"points": 1037.0,
 "player_key": "adrian mannarino"
-},
-{
-"espn_athlete_id": "3885",
-"player": "Gabriel Diallo",
-"tour": "ATP",
-"rank": 46,
-"points": 1000.0,
-"player_key": "gabriel diallo"
 },
 {
 "espn_athlete_id": "464",
 "player": "Marin Cilic",
 "tour": "ATP",
+"rank": 45,
+"points": 1010.0,
+"player_key": "marin cilic"
+},
+{
+"espn_athlete_id": "3368",
+"player": "Sebastian Korda",
+"tour": "ATP",
+"rank": 46,
+"points": 1000.0,
+"player_key": "sebastian korda"
+},
+{
+"espn_athlete_id": "2874",
+"player": "Miomir Kecmanovic",
+"tour": "ATP",
 "rank": 47,
 "points": 980.0,
-"player_key": "marin cilic"
+"player_key": "miomir kecmanovic"
+},
+{
+"espn_athlete_id": "3885",
+"player": "Gabriel Diallo",
+"tour": "ATP",
+"rank": 48,
+"points": 975.0,
+"player_key": "gabriel diallo"
 },
 {
 "espn_athlete_id": "11383",
 "player": "Ethan Quinn",
 "tour": "ATP",
-"rank": 48,
-"points": 977.0,
+"rank": 49,
+"points": 974.0,
 "player_key": "ethan quinn"
 },
 {
-"espn_athlete_id": "9213",
-"player": "Fabian Marozsan",
-"tour": "ATP",
-"rank": 49,
-"points": 975.0,
-"player_key": "fabian marozsan"
-},
-{
-"espn_athlete_id": "3856",
-"player": "Jack Draper",
+"espn_athlete_id": "4115",
+"player": "Nuno Borges",
 "tour": "ATP",
 "rank": 50,
-"points": 960.0,
-"player_key": "jack draper"
+"points": 970.0,
+"player_key": "nuno borges"
 },
 {
 "espn_athlete_id": "10638",
 "player": "Terence Atmane",
 "tour": "ATP",
 "rank": 51,
-"points": 958.0,
+"points": 938.0,
 "player_key": "terence atmane"
 },
 {
-"espn_athlete_id": "4115",
-"player": "Nuno Borges",
+"espn_athlete_id": "9213",
+"player": "Fabian Marozsan",
 "tour": "ATP",
 "rank": 52,
-"points": 950.0,
-"player_key": "nuno borges"
-},
-{
-"espn_athlete_id": "2726",
-"player": "Hubert Hurkacz",
-"tour": "ATP",
-"rank": 53,
-"points": 930.0,
-"player_key": "hubert hurkacz"
+"points": 935.0,
+"player_key": "fabian marozsan"
 },
 {
 "espn_athlete_id": "3310",
 "player": "Botic Van De Zandschulp",
 "tour": "ATP",
-"rank": 54,
-"points": 898.0,
+"rank": 53,
+"points": 935.0,
 "player_key": "botic van de zandschulp"
-},
-{
-"espn_athlete_id": "3809",
-"player": "Vit Kopriva",
-"tour": "ATP",
-"rank": 55,
-"points": 896.0,
-"player_key": "vit kopriva"
-},
-{
-"espn_athlete_id": "4011",
-"player": "Roman Andres Burruchaga",
-"tour": "ATP",
-"rank": 56,
-"points": 885.0,
-"player_key": "roman andres burruchaga"
-},
-{
-"espn_athlete_id": "1862",
-"player": "Marton Fucsovics",
-"tour": "ATP",
-"rank": 57,
-"points": 884.0,
-"player_key": "marton fucsovics"
-},
-{
-"espn_athlete_id": "8885",
-"player": "Giovanni Mpetshi Perricard",
-"tour": "ATP",
-"rank": 58,
-"points": 880.0,
-"player_key": "giovanni mpetshi perricard"
-},
-{
-"espn_athlete_id": "3322",
-"player": "Yannick Hanfmann",
-"tour": "ATP",
-"rank": 59,
-"points": 879.0,
-"player_key": "yannick hanfmann"
-},
-{
-"espn_athlete_id": "2862",
-"player": "Alexei Popyrin",
-"tour": "ATP",
-"rank": 60,
-"points": 870.0,
-"player_key": "alexei popyrin"
-},
-{
-"espn_athlete_id": "3666",
-"player": "Camilo Ugo Carabelli",
-"tour": "ATP",
-"rank": 61,
-"points": 865.0,
-"player_key": "camilo ugo carabelli"
-},
-{
-"espn_athlete_id": "11226",
-"player": "Ignacio Buse",
-"tour": "ATP",
-"rank": 62,
-"points": 863.0,
-"player_key": "ignacio buse"
-},
-{
-"espn_athlete_id": "3621",
-"player": "Jenson Brooksby",
-"tour": "ATP",
-"rank": 63,
-"points": 862.0,
-"player_key": "jenson brooksby"
-},
-{
-"espn_athlete_id": "3203",
-"player": "Daniel Altmaier",
-"tour": "ATP",
-"rank": 64,
-"points": 860.0,
-"player_key": "daniel altmaier"
-},
-{
-"espn_athlete_id": "3340",
-"player": "Sebastian Baez",
-"tour": "ATP",
-"rank": 65,
-"points": 840.0,
-"player_key": "sebastian baez"
-},
-{
-"espn_athlete_id": "3052",
-"player": "Lorenzo Sonego",
-"tour": "ATP",
-"rank": 66,
-"points": 830.0,
-"player_key": "lorenzo sonego"
-},
-{
-"espn_athlete_id": "8325",
-"player": "Hamad Medjedovic",
-"tour": "ATP",
-"rank": 67,
-"points": 804.0,
-"player_key": "hamad medjedovic"
-},
-{
-"espn_athlete_id": "11222",
-"player": "Raphael Collignon",
-"tour": "ATP",
-"rank": 68,
-"points": 802.0,
-"player_key": "raphael collignon"
-},
-{
-"espn_athlete_id": "4010",
-"player": "Thiago Agustin Tirante",
-"tour": "ATP",
-"rank": 69,
-"points": 801.0,
-"player_key": "thiago agustin tirante"
-},
-{
-"espn_athlete_id": "2874",
-"player": "Miomir Kecmanovic",
-"tour": "ATP",
-"rank": 70,
-"points": 795.0,
-"player_key": "miomir kecmanovic"
-},
-{
-"espn_athlete_id": "4022",
-"player": "Valentin Royer",
-"tour": "ATP",
-"rank": 71,
-"points": 788.0,
-"player_key": "valentin royer"
 },
 {
 "espn_athlete_id": "4008",
 "player": "Juan Manuel Cerundolo",
 "tour": "ATP",
-"rank": 72,
-"points": 776.0,
+"rank": 54,
+"points": 935.0,
 "player_key": "juan manuel cerundolo"
 },
 {
-"espn_athlete_id": "7841",
-"player": "Arthur Cazaux",
+"espn_athlete_id": "3322",
+"player": "Yannick Hanfmann",
 "tour": "ATP",
-"rank": 73,
-"points": 770.0,
-"player_key": "arthur cazaux"
+"rank": 55,
+"points": 899.0,
+"player_key": "yannick hanfmann"
 },
 {
-"espn_athlete_id": "2952",
-"player": "Reilly Opelka",
+"espn_athlete_id": "8325",
+"player": "Hamad Medjedovic",
 "tour": "ATP",
-"rank": 74,
-"points": 768.0,
-"player_key": "reilly opelka"
+"rank": 56,
+"points": 894.0,
+"player_key": "hamad medjedovic"
 },
 {
-"espn_athlete_id": "2869",
-"player": "Stefanos Tsitsipas",
+"espn_athlete_id": "11226",
+"player": "Ignacio Buse",
 "tour": "ATP",
-"rank": 75,
-"points": 765.0,
-"player_key": "stefanos tsitsipas"
+"rank": 57,
+"points": 893.0,
+"player_key": "ignacio buse"
 },
 {
-"espn_athlete_id": "2416",
-"player": "Kamil Majchrzak",
+"espn_athlete_id": "4010",
+"player": "Thiago Agustin Tirante",
 "tour": "ATP",
-"rank": 76,
-"points": 747.0,
-"player_key": "kamil majchrzak"
+"rank": 58,
+"points": 887.0,
+"player_key": "thiago agustin tirante"
 },
 {
-"espn_athlete_id": "1993",
-"player": "Marcos Giron",
+"espn_athlete_id": "1862",
+"player": "Marton Fucsovics",
 "tour": "ATP",
-"rank": 77,
-"points": 745.0,
-"player_key": "marcos giron"
+"rank": 59,
+"points": 884.0,
+"player_key": "marton fucsovics"
 },
 {
-"espn_athlete_id": "2278",
-"player": "Marco Trungelliti",
+"espn_athlete_id": "3621",
+"player": "Jenson Brooksby",
 "tour": "ATP",
-"rank": 78,
-"points": 743.0,
-"player_key": "marco trungelliti"
+"rank": 60,
+"points": 872.0,
+"player_key": "jenson brooksby"
+},
+{
+"espn_athlete_id": "2862",
+"player": "Alexei Popyrin",
+"tour": "ATP",
+"rank": 61,
+"points": 870.0,
+"player_key": "alexei popyrin"
+},
+{
+"espn_athlete_id": "3340",
+"player": "Sebastian Baez",
+"tour": "ATP",
+"rank": 62,
+"points": 860.0,
+"player_key": "sebastian baez"
+},
+{
+"espn_athlete_id": "3809",
+"player": "Vit Kopriva",
+"tour": "ATP",
+"rank": 63,
+"points": 856.0,
+"player_key": "vit kopriva"
+},
+{
+"espn_athlete_id": "11222",
+"player": "Raphael Collignon",
+"tour": "ATP",
+"rank": 64,
+"points": 854.0,
+"player_key": "raphael collignon"
+},
+{
+"espn_athlete_id": "3203",
+"player": "Daniel Altmaier",
+"tour": "ATP",
+"rank": 65,
+"points": 843.0,
+"player_key": "daniel altmaier"
+},
+{
+"espn_athlete_id": "4011",
+"player": "Roman Andres Burruchaga",
+"tour": "ATP",
+"rank": 66,
+"points": 833.0,
+"player_key": "roman andres burruchaga"
+},
+{
+"espn_athlete_id": "11640",
+"player": "Martin Landaluce",
+"tour": "ATP",
+"rank": 67,
+"points": 827.0,
+"player_key": "martin landaluce"
+},
+{
+"espn_athlete_id": "3666",
+"player": "Camilo Ugo Carabelli",
+"tour": "ATP",
+"rank": 68,
+"points": 825.0,
+"player_key": "camilo ugo carabelli"
+},
+{
+"espn_athlete_id": "3052",
+"player": "Lorenzo Sonego",
+"tour": "ATP",
+"rank": 69,
+"points": 815.0,
+"player_key": "lorenzo sonego"
+},
+{
+"espn_athlete_id": "11396",
+"player": "Adolfo Daniel Vallejo",
+"tour": "ATP",
+"rank": 70,
+"points": 786.0,
+"player_key": "adolfo daniel vallejo"
 },
 {
 "espn_athlete_id": "10105",
 "player": "Dino Prizmic",
 "tour": "ATP",
-"rank": 79,
-"points": 740.0,
+"rank": 71,
+"points": 785.0,
 "player_key": "dino prizmic"
 },
 {
 "espn_athlete_id": "10153",
 "player": "Mattia Bellucci",
 "tour": "ATP",
-"rank": 80,
-"points": 737.0,
+"rank": 72,
+"points": 777.0,
 "player_key": "mattia bellucci"
 },
 {
-"espn_athlete_id": "1857",
-"player": "James Duckworth",
+"espn_athlete_id": "4022",
+"player": "Valentin Royer",
 "tour": "ATP",
-"rank": 81,
-"points": 722.0,
-"player_key": "james duckworth"
+"rank": 73,
+"points": 773.0,
+"player_key": "valentin royer"
 },
 {
-"espn_athlete_id": "3304",
-"player": "Sebastian Ofner",
+"espn_athlete_id": "3856",
+"player": "Jack Draper",
 "tour": "ATP",
-"rank": 82,
-"points": 711.0,
-"player_key": "sebastian ofner"
+"rank": 74,
+"points": 760.0,
+"player_key": "jack draper"
+},
+{
+"espn_athlete_id": "2952",
+"player": "Reilly Opelka",
+"tour": "ATP",
+"rank": 75,
+"points": 758.0,
+"player_key": "reilly opelka"
+},
+{
+"espn_athlete_id": "7841",
+"player": "Arthur Cazaux",
+"tour": "ATP",
+"rank": 76,
+"points": 757.0,
+"player_key": "arthur cazaux"
+},
+{
+"espn_athlete_id": "2416",
+"player": "Kamil Majchrzak",
+"tour": "ATP",
+"rank": 77,
+"points": 747.0,
+"player_key": "kamil majchrzak"
+},
+{
+"espn_athlete_id": "2726",
+"player": "Hubert Hurkacz",
+"tour": "ATP",
+"rank": 78,
+"points": 740.0,
+"player_key": "hubert hurkacz"
 },
 {
 "espn_athlete_id": "2337",
 "player": "Jan-Lennard Struff",
 "tour": "ATP",
-"rank": 83,
-"points": 709.0,
+"rank": 79,
+"points": 739.0,
 "player_key": "janlennard struff"
 },
 {
-"espn_athlete_id": "11396",
-"player": "Adolfo Daniel Vallejo",
+"espn_athlete_id": "8885",
+"player": "Giovanni Mpetshi Perricard",
 "tour": "ATP",
-"rank": 84,
-"points": 703.0,
-"player_key": "adolfo daniel vallejo"
+"rank": 80,
+"points": 735.0,
+"player_key": "giovanni mpetshi perricard"
 },
 {
-"espn_athlete_id": "8710",
-"player": "Alexandr Shevchenko",
+"espn_athlete_id": "2278",
+"player": "Marco Trungelliti",
+"tour": "ATP",
+"rank": 81,
+"points": 731.0,
+"player_key": "marco trungelliti"
+},
+{
+"espn_athlete_id": "2869",
+"player": "Stefanos Tsitsipas",
+"tour": "ATP",
+"rank": 82,
+"points": 725.0,
+"player_key": "stefanos tsitsipas"
+},
+{
+"espn_athlete_id": "1857",
+"player": "James Duckworth",
+"tour": "ATP",
+"rank": 83,
+"points": 722.0,
+"player_key": "james duckworth"
+},
+{
+"espn_athlete_id": "1993",
+"player": "Marcos Giron",
+"tour": "ATP",
+"rank": 84,
+"points": 705.0,
+"player_key": "marcos giron"
+},
+{
+"espn_athlete_id": "3953",
+"player": "Zachary Svajda",
 "tour": "ATP",
 "rank": 85,
-"points": 698.0,
-"player_key": "alexandr shevchenko"
+"points": 696.0,
+"player_key": "zachary svajda"
 },
 {
 "espn_athlete_id": "10239",
@@ -692,40 +692,40 @@
 "player": "Damir Dzumhur",
 "tour": "ATP",
 "rank": 87,
-"points": 674.0,
+"points": 694.0,
 "player_key": "damir dzumhur"
 },
 {
-"espn_athlete_id": "2875",
-"player": "Wu Yibing",
+"espn_athlete_id": "2362",
+"player": "Quentin Halys",
 "tour": "ATP",
 "rank": 88,
-"points": 669.0,
-"player_key": "wu yibing"
+"points": 690.0,
+"player_key": "quentin halys"
 },
 {
-"espn_athlete_id": "10958",
-"player": "Patrick Kypson",
+"espn_athlete_id": "8710",
+"player": "Alexandr Shevchenko",
 "tour": "ATP",
 "rank": 89,
-"points": 669.0,
-"player_key": "patrick kypson"
-},
-{
-"espn_athlete_id": "3953",
-"player": "Zachary Svajda",
-"tour": "ATP",
-"rank": 90,
-"points": 666.0,
-"player_key": "zachary svajda"
+"points": 689.0,
+"player_key": "alexandr shevchenko"
 },
 {
 "espn_athlete_id": "1590",
 "player": "Pablo Carreno Busta",
 "tour": "ATP",
-"rank": 91,
-"points": 663.0,
+"rank": 90,
+"points": 685.0,
 "player_key": "pablo carreno busta"
+},
+{
+"espn_athlete_id": "3304",
+"player": "Sebastian Ofner",
+"tour": "ATP",
+"rank": 91,
+"points": 671.0,
+"player_key": "sebastian ofner"
 },
 {
 "espn_athlete_id": "13158",
@@ -736,50 +736,58 @@
 "player_key": "eliot spizzirri"
 },
 {
-"espn_athlete_id": "2362",
-"player": "Quentin Halys",
+"espn_athlete_id": "2875",
+"player": "Wu Yibing",
 "tour": "ATP",
 "rank": 93,
-"points": 653.0,
-"player_key": "quentin halys"
-},
-{
-"espn_athlete_id": "11640",
-"player": "Martin Landaluce",
-"tour": "ATP",
-"rank": 94,
-"points": 639.0,
-"player_key": "martin landaluce"
+"points": 655.0,
+"player_key": "wu yibing"
 },
 {
 "espn_athlete_id": "3849",
 "player": "Aleksandar Kovacevic",
 "tour": "ATP",
-"rank": 95,
-"points": 639.0,
+"rank": 94,
+"points": 649.0,
 "player_key": "aleksandar kovacevic"
 },
 {
-"espn_athlete_id": "3716",
-"player": "Rinky Hijikata",
+"espn_athlete_id": "10958",
+"player": "Patrick Kypson",
 "tour": "ATP",
-"rank": 96,
-"points": 637.0,
-"player_key": "rinky hijikata"
+"rank": 95,
+"points": 649.0,
+"player_key": "patrick kypson"
 },
 {
-"espn_athlete_id": "8814",
-"player": "Luca Van Assche",
+"espn_athlete_id": "3793",
+"player": "Matteo Arnaldi",
+"tour": "ATP",
+"rank": 96,
+"points": 636.0,
+"player_key": "matteo arnaldi"
+},
+{
+"espn_athlete_id": "3772",
+"player": "Emilio Nava",
 "tour": "ATP",
 "rank": 97,
-"points": 636.0,
-"player_key": "luca van assche"
+"points": 631.0,
+"player_key": "emilio nava"
+},
+{
+"espn_athlete_id": "2355",
+"player": "Benjamin Bonzi",
+"tour": "ATP",
+"rank": 98,
+"points": 629.0,
+"player_key": "benjamin bonzi"
 },
 {
 "espn_athlete_id": "1733",
 "player": "Roberto Bautista Agut",
 "tour": "ATP",
-"rank": 98,
+"rank": 99,
 "points": 629.0,
 "player_key": "roberto bautista agut"
 },
@@ -787,121 +795,113 @@
 "espn_athlete_id": "3471",
 "player": "Aleksandar Vukic",
 "tour": "ATP",
-"rank": 99,
+"rank": 100,
 "points": 626.0,
 "player_key": "aleksandar vukic"
-},
-{
-"espn_athlete_id": "2622",
-"player": "Matteo Berrettini",
-"tour": "ATP",
-"rank": 100,
-"points": 625.0,
-"player_key": "matteo berrettini"
-},
-{
-"espn_athlete_id": "2355",
-"player": "Benjamin Bonzi",
-"tour": "ATP",
-"rank": 101,
-"points": 616.0,
-"player_key": "benjamin bonzi"
-},
-{
-"espn_athlete_id": "3897",
-"player": "Jesper de Jong",
-"tour": "ATP",
-"rank": 102,
-"points": 610.0,
-"player_key": "jesper de jong"
 },
 {
 "espn_athlete_id": "3093",
 "player": "Adam Walton",
 "tour": "ATP",
-"rank": 103,
-"points": 608.0,
+"rank": 101,
+"points": 614.0,
 "player_key": "adam walton"
 },
 {
-"espn_athlete_id": "2228",
-"player": "Cristian Garin",
+"espn_athlete_id": "3716",
+"player": "Rinky Hijikata",
+"tour": "ATP",
+"rank": 102,
+"points": 599.0,
+"player_key": "rinky hijikata"
+},
+{
+"espn_athlete_id": "8814",
+"player": "Luca Van Assche",
+"tour": "ATP",
+"rank": 103,
+"points": 599.0,
+"player_key": "luca van assche"
+},
+{
+"espn_athlete_id": "2720",
+"player": "Jan Choinski",
 "tour": "ATP",
 "rank": 104,
-"points": 602.0,
-"player_key": "cristian garin"
-},
-{
-"espn_athlete_id": "3308",
-"player": "Alexandre Muller",
-"tour": "ATP",
-"rank": 105,
-"points": 601.0,
-"player_key": "alexandre muller"
-},
-{
-"espn_athlete_id": "3793",
-"player": "Matteo Arnaldi",
-"tour": "ATP",
-"rank": 106,
-"points": 596.0,
-"player_key": "matteo arnaldi"
+"points": 599.0,
+"player_key": "jan choinski"
 },
 {
 "espn_athlete_id": "3935",
 "player": "Sho Shimabukuro",
 "tour": "ATP",
-"rank": 107,
+"rank": 105,
 "points": 596.0,
 "player_key": "sho shimabukuro"
-},
-{
-"espn_athlete_id": "3772",
-"player": "Emilio Nava",
-"tour": "ATP",
-"rank": 108,
-"points": 594.0,
-"player_key": "emilio nava"
-},
-{
-"espn_athlete_id": "8136",
-"player": "Titouan Droguet",
-"tour": "ATP",
-"rank": 109,
-"points": 594.0,
-"player_key": "titouan droguet"
-},
-{
-"espn_athlete_id": "11398",
-"player": "Chak Lam Coleman Wong",
-"tour": "ATP",
-"rank": 110,
-"points": 583.0,
-"player_key": "chak lam coleman wong"
-},
-{
-"espn_athlete_id": "10095",
-"player": "Filip Misolic",
-"tour": "ATP",
-"rank": 111,
-"points": 576.0,
-"player_key": "filip misolic"
-},
-{
-"espn_athlete_id": "7599",
-"player": "Francesco Maestrelli",
-"tour": "ATP",
-"rank": 112,
-"points": 575.0,
-"player_key": "francesco maestrelli"
 },
 {
 "espn_athlete_id": "2635",
 "player": "Alex Molcan",
 "tour": "ATP",
-"rank": 113,
-"points": 571.0,
+"rank": 106,
+"points": 596.0,
 "player_key": "alex molcan"
+},
+{
+"espn_athlete_id": "2622",
+"player": "Matteo Berrettini",
+"tour": "ATP",
+"rank": 107,
+"points": 585.0,
+"player_key": "matteo berrettini"
+},
+{
+"espn_athlete_id": "3308",
+"player": "Alexandre Muller",
+"tour": "ATP",
+"rank": 108,
+"points": 581.0,
+"player_key": "alexandre muller"
+},
+{
+"espn_athlete_id": "3897",
+"player": "Jesper de Jong",
+"tour": "ATP",
+"rank": 109,
+"points": 580.0,
+"player_key": "jesper de jong"
+},
+{
+"espn_athlete_id": "8136",
+"player": "Titouan Droguet",
+"tour": "ATP",
+"rank": 110,
+"points": 578.0,
+"player_key": "titouan droguet"
+},
+{
+"espn_athlete_id": "3812",
+"player": "Dalibor Svrcina",
+"tour": "ATP",
+"rank": 111,
+"points": 577.0,
+"player_key": "dalibor svrcina"
+},
+{
+"espn_athlete_id": "10130",
+"player": "Martin Damm",
+"tour": "ATP",
+"rank": 112,
+"points": 575.0,
+"player_key": "martin damm"
+},
+{
+"espn_athlete_id": "11398",
+"player": "Chak Lam Coleman Wong",
+"tour": "ATP",
+"rank": 113,
+"points": 574.0,
+"player_key": "chak lam coleman wong"
 },
 {
 "espn_athlete_id": "10044",
@@ -912,74 +912,66 @@
 "player_key": "francisco comesana"
 },
 {
-"espn_athlete_id": "10130",
-"player": "Martin Damm",
-"tour": "ATP",
-"rank": 115,
-"points": 547.0,
-"player_key": "martin damm"
-},
-{
-"espn_athlete_id": "3812",
-"player": "Dalibor Svrcina",
-"tour": "ATP",
-"rank": 116,
-"points": 547.0,
-"player_key": "dalibor svrcina"
-},
-{
 "espn_athlete_id": "2498",
 "player": "Nikoloz Basilashvili",
 "tour": "ATP",
-"rank": 117,
-"points": 539.0,
+"rank": 115,
+"points": 569.0,
 "player_key": "nikoloz basilashvili"
 },
 {
-"espn_athlete_id": "3375",
-"player": "Hugo Gaston",
+"espn_athlete_id": "2228",
+"player": "Cristian Garin",
 "tour": "ATP",
-"rank": 118,
-"points": 535.0,
-"player_key": "hugo gaston"
+"rank": 116,
+"points": 552.0,
+"player_key": "cristian garin"
 },
 {
 "espn_athlete_id": "10219",
 "player": "Jaime Faria",
 "tour": "ATP",
-"rank": 119,
-"points": 529.0,
+"rank": 117,
+"points": 548.0,
 "player_key": "jaime faria"
 },
 {
 "espn_athlete_id": "10248",
 "player": "Henrique Rocha",
 "tour": "ATP",
-"rank": 120,
-"points": 529.0,
+"rank": 118,
+"points": 528.0,
 "player_key": "henrique rocha"
 },
 {
-"espn_athlete_id": "11755",
-"player": "Vilius Gaubas",
+"espn_athlete_id": "264",
+"player": "Stan Wawrinka",
 "tour": "ATP",
-"rank": 121,
-"points": 527.0,
-"player_key": "vilius gaubas"
+"rank": 119,
+"points": 528.0,
+"player_key": "stan wawrinka"
 },
 {
-"espn_athlete_id": "2720",
-"player": "Jan Choinski",
+"espn_athlete_id": "3375",
+"player": "Hugo Gaston",
 "tour": "ATP",
-"rank": 122,
-"points": 526.0,
-"player_key": "jan choinski"
+"rank": 120,
+"points": 527.0,
+"player_key": "hugo gaston"
+},
+{
+"espn_athlete_id": "8243",
+"player": "Leandro Riedi",
+"tour": "ATP",
+"rank": 121,
+"points": 525.0,
+"player_key": "leandro riedi"
 },
 {
 "espn_athlete_id": "11685",
 "player": "Jacob Fearnley",
 "tour": "ATP",
-"rank": 123,
+"rank": 122,
 "points": 523.0,
 "player_key": "jacob fearnley"
 },
@@ -987,49 +979,57 @@
 "espn_athlete_id": "13829",
 "player": "Nicolai Budkov Kjaer",
 "tour": "ATP",
-"rank": 124,
-"points": 519.0,
+"rank": 123,
+"points": 520.0,
 "player_key": "nicolai budkov kjaer"
 },
 {
-"espn_athlete_id": "264",
-"player": "Stan Wawrinka",
+"espn_athlete_id": "3979",
+"player": "Pablo Llamas Ruiz",
 "tour": "ATP",
-"rank": 125,
-"points": 518.0,
-"player_key": "stan wawrinka"
+"rank": 124,
+"points": 515.0,
+"player_key": "pablo llamas ruiz"
 },
 {
 "espn_athlete_id": "4029",
 "player": "Tristan Schoolkate",
 "tour": "ATP",
-"rank": 126,
+"rank": 125,
 "points": 512.0,
 "player_key": "tristan schoolkate"
 },
 {
-"espn_athlete_id": "4099",
-"player": "Otto Virtanen",
+"espn_athlete_id": "2627",
+"player": "Andrea Pellegrino",
 "tour": "ATP",
-"rank": 127,
-"points": 512.0,
-"player_key": "otto virtanen"
-},
-{
-"espn_athlete_id": "8243",
-"player": "Leandro Riedi",
-"tour": "ATP",
-"rank": 128,
-"points": 506.0,
-"player_key": "leandro riedi"
+"rank": 126,
+"points": 507.0,
+"player_key": "andrea pellegrino"
 },
 {
 "espn_athlete_id": "2206",
 "player": "Mackenzie McDonald",
 "tour": "ATP",
-"rank": 129,
+"rank": 127,
 "points": 501.0,
 "player_key": "mackenzie mcdonald"
+},
+{
+"espn_athlete_id": "7599",
+"player": "Francesco Maestrelli",
+"tour": "ATP",
+"rank": 128,
+"points": 490.0,
+"player_key": "francesco maestrelli"
+},
+{
+"espn_athlete_id": "10095",
+"player": "Filip Misolic",
+"tour": "ATP",
+"rank": 129,
+"points": 489.0,
+"player_key": "filip misolic"
 },
 {
 "espn_athlete_id": "7608",
@@ -1040,171 +1040,171 @@
 "player_key": "shintaro mochizuki"
 },
 {
-"espn_athlete_id": "3486",
-"player": "Carlos Taberner",
-"tour": "ATP",
-"rank": 131,
-"points": 477.0,
-"player_key": "carlos taberner"
-},
-{
-"espn_athlete_id": "1769",
-"player": "Dusan Lajovic",
-"tour": "ATP",
-"rank": 132,
-"points": 471.0,
-"player_key": "dusan lajovic"
-},
-{
-"espn_athlete_id": "1849",
-"player": "Hugo Dellien",
-"tour": "ATP",
-"rank": 133,
-"points": 468.0,
-"player_key": "hugo dellien"
-},
-{
-"espn_athlete_id": "9923",
-"player": "Tomas Barrios Vera",
-"tour": "ATP",
-"rank": 134,
-"points": 464.0,
-"player_key": "tomas barrios vera"
-},
-{
 "espn_athlete_id": "4030",
 "player": "Dane Sweeny",
 "tour": "ATP",
-"rank": 135,
-"points": 462.0,
+"rank": 131,
+"points": 468.0,
 "player_key": "dane sweeny"
-},
-{
-"espn_athlete_id": "2623",
-"player": "Pedro Martinez",
-"tour": "ATP",
-"rank": 136,
-"points": 461.0,
-"player_key": "pedro martinez"
 },
 {
 "espn_athlete_id": "10126",
 "player": "Jack Pinnington Jones",
 "tour": "ATP",
-"rank": 137,
-"points": 461.0,
+"rank": 132,
+"points": 468.0,
 "player_key": "jack pinnington jones"
 },
 {
-"espn_athlete_id": "2318",
-"player": "Alex Bolt",
+"espn_athlete_id": "11755",
+"player": "Vilius Gaubas",
 "tour": "ATP",
-"rank": 138,
-"points": 456.0,
-"player_key": "alex bolt"
+"rank": 133,
+"points": 464.0,
+"player_key": "vilius gaubas"
 },
 {
-"espn_athlete_id": "3979",
-"player": "Pablo Llamas Ruiz",
+"espn_athlete_id": "4099",
+"player": "Otto Virtanen",
 "tour": "ATP",
-"rank": 139,
-"points": 448.0,
-"player_key": "pablo llamas ruiz"
+"rank": 134,
+"points": 462.0,
+"player_key": "otto virtanen"
 },
 {
-"espn_athlete_id": "3696",
-"player": "Moez Echargui",
+"espn_athlete_id": "9923",
+"player": "Tomas Barrios Vera",
 "tour": "ATP",
-"rank": 140,
-"points": 447.0,
-"player_key": "moez echargui"
+"rank": 135,
+"points": 450.0,
+"player_key": "tomas barrios vera"
+},
+{
+"espn_athlete_id": "1769",
+"player": "Dusan Lajovic",
+"tour": "ATP",
+"rank": 136,
+"points": 446.0,
+"player_key": "dusan lajovic"
 },
 {
 "espn_athlete_id": "2682",
 "player": "Stefano Travaglia",
 "tour": "ATP",
-"rank": 141,
-"points": 444.0,
+"rank": 137,
+"points": 443.0,
 "player_key": "stefano travaglia"
 },
 {
-"espn_athlete_id": "2244",
-"player": "Jordan Thompson",
+"espn_athlete_id": "3696",
+"player": "Moez Echargui",
 "tour": "ATP",
-"rank": 142,
-"points": 438.0,
-"player_key": "jordan thompson"
+"rank": 138,
+"points": 441.0,
+"player_key": "moez echargui"
+},
+{
+"espn_athlete_id": "1849",
+"player": "Hugo Dellien",
+"tour": "ATP",
+"rank": 139,
+"points": 437.0,
+"player_key": "hugo dellien"
 },
 {
 "espn_athlete_id": "10427",
 "player": "Arthur Gea",
 "tour": "ATP",
-"rank": 143,
+"rank": 140,
 "points": 436.0,
 "player_key": "arthur gea"
+},
+{
+"espn_athlete_id": "2623",
+"player": "Pedro Martinez",
+"tour": "ATP",
+"rank": 141,
+"points": 431.0,
+"player_key": "pedro martinez"
 },
 {
 "espn_athlete_id": "2636",
 "player": "Roman Safiullin",
 "tour": "ATP",
-"rank": 144,
-"points": 433.0,
+"rank": 142,
+"points": 430.0,
 "player_key": "roman safiullin"
 },
 {
-"espn_athlete_id": "3820",
-"player": "Francesco Passaro",
+"espn_athlete_id": "13240",
+"player": "Elmer Moller",
 "tour": "ATP",
-"rank": 145,
-"points": 431.0,
-"player_key": "francesco passaro"
+"rank": 143,
+"points": 426.0,
+"player_key": "elmer moller"
 },
 {
 "espn_athlete_id": "2863",
 "player": "Lloyd Harris",
 "tour": "ATP",
-"rank": 146,
+"rank": 144,
 "points": 423.0,
 "player_key": "lloyd harris"
+},
+{
+"espn_athlete_id": "3486",
+"player": "Carlos Taberner",
+"tour": "ATP",
+"rank": 145,
+"points": 420.0,
+"player_key": "carlos taberner"
+},
+{
+"espn_athlete_id": "12932",
+"player": "Michael Zheng",
+"tour": "ATP",
+"rank": 146,
+"points": 414.0,
+"player_key": "michael zheng"
 },
 {
 "espn_athlete_id": "7509",
 "player": "Kyrian Jacquet",
 "tour": "ATP",
 "rank": 147,
-"points": 423.0,
+"points": 411.0,
 "player_key": "kyrian jacquet"
+},
+{
+"espn_athlete_id": "2244",
+"player": "Jordan Thompson",
+"tour": "ATP",
+"rank": 148,
+"points": 408.0,
+"player_key": "jordan thompson"
 },
 {
 "espn_athlete_id": "2361",
 "player": "Billy Harris",
 "tour": "ATP",
-"rank": 148,
-"points": 421.0,
+"rank": 149,
+"points": 408.0,
 "player_key": "billy harris"
 },
 {
-"espn_athlete_id": "12932",
-"player": "Michael Zheng",
-"tour": "ATP",
-"rank": 149,
-"points": 414.0,
-"player_key": "michael zheng"
-},
-{
-"espn_athlete_id": "3301",
-"player": "Christopher O'Connell",
+"espn_athlete_id": "3694",
+"player": "Facundo Diaz Acosta",
 "tour": "ATP",
 "rank": 150,
-"points": 413.0,
-"player_key": "christopher oconnell"
+"points": 407.0,
+"player_key": "facundo diaz acosta"
 },
 {
 "espn_athlete_id": "3038",
 "player": "Aryna Sabalenka",
 "tour": "WTA",
 "rank": 1,
-"points": 10110.0,
+"points": 9960.0,
 "player_key": "aryna sabalenka"
 },
 {
@@ -1212,7 +1212,7 @@
 "player": "Elena Rybakina",
 "tour": "WTA",
 "rank": 2,
-"points": 8555.0,
+"points": 8705.0,
 "player_key": "elena rybakina"
 },
 {
@@ -1220,7 +1220,7 @@
 "player": "Iga Swiatek",
 "tour": "WTA",
 "rank": 3,
-"points": 6948.0,
+"points": 7273.0,
 "player_key": "iga swiatek"
 },
 {
@@ -1236,7 +1236,7 @@
 "player": "Jessica Pegula",
 "tour": "WTA",
 "rank": 5,
-"points": 6136.0,
+"points": 6286.0,
 "player_key": "jessica pegula"
 },
 {
@@ -1244,46 +1244,38 @@
 "player": "Amanda Anisimova",
 "tour": "WTA",
 "rank": 6,
-"points": 5985.0,
+"points": 5958.0,
 "player_key": "amanda anisimova"
+},
+{
+"espn_athlete_id": "1797",
+"player": "Elina Svitolina",
+"tour": "WTA",
+"rank": 7,
+"points": 4315.0,
+"player_key": "elina svitolina"
 },
 {
 "espn_athlete_id": "9820",
 "player": "Mirra Andreeva",
 "tour": "WTA",
-"rank": 7,
+"rank": 8,
 "points": 4181.0,
 "player_key": "mirra andreeva"
-},
-{
-"espn_athlete_id": "2615",
-"player": "Jasmine Paolini",
-"tour": "WTA",
-"rank": 8,
-"points": 3722.0,
-"player_key": "jasmine paolini"
 },
 {
 "espn_athlete_id": "11219",
 "player": "Victoria Mboko",
 "tour": "WTA",
 "rank": 9,
-"points": 3531.0,
+"points": 3395.0,
 "player_key": "victoria mboko"
-},
-{
-"espn_athlete_id": "1797",
-"player": "Elina Svitolina",
-"tour": "WTA",
-"rank": 10,
-"points": 3530.0,
-"player_key": "elina svitolina"
 },
 {
 "espn_athlete_id": "3039",
 "player": "Karolina Muchova",
 "tour": "WTA",
-"rank": 11,
+"rank": 10,
 "points": 3318.0,
 "player_key": "karolina muchova"
 },
@@ -1291,24 +1283,32 @@
 "espn_athlete_id": "2183",
 "player": "Belinda Bencic",
 "tour": "WTA",
-"rank": 12,
-"points": 3090.0,
+"rank": 11,
+"points": 3145.0,
 "player_key": "belinda bencic"
 },
 {
 "espn_athlete_id": "6970",
 "player": "Linda Noskova",
 "tour": "WTA",
-"rank": 13,
-"points": 2999.0,
+"rank": 12,
+"points": 3054.0,
 "player_key": "linda noskova"
+},
+{
+"espn_athlete_id": "2615",
+"player": "Jasmine Paolini",
+"tour": "WTA",
+"rank": 13,
+"points": 2787.0,
+"player_key": "jasmine paolini"
 },
 {
 "espn_athlete_id": "3182",
 "player": "Ekaterina Alexandrova",
 "tour": "WTA",
 "rank": 14,
-"points": 2669.0,
+"points": 2679.0,
 "player_key": "ekaterina alexandrova"
 },
 {
@@ -1316,7 +1316,7 @@
 "player": "Marta Kostyuk",
 "tour": "WTA",
 "rank": 15,
-"points": 2507.0,
+"points": 2387.0,
 "player_key": "marta kostyuk"
 },
 {
@@ -1332,46 +1332,54 @@
 "player": "Iva Jovic",
 "tour": "WTA",
 "rank": 17,
-"points": 2235.0,
+"points": 2306.0,
 "player_key": "iva jovic"
 },
 {
-"espn_athlete_id": "3792",
-"player": "Clara Tauson",
+"espn_athlete_id": "1774",
+"player": "Sorana Cirstea",
 "tour": "WTA",
 "rank": 18,
-"points": 2030.0,
-"player_key": "clara tauson"
+"points": 1985.0,
+"player_key": "sorana cirstea"
 },
 {
 "espn_athlete_id": "1556",
 "player": "Madison Keys",
 "tour": "WTA",
 "rank": 19,
-"points": 1946.0,
+"points": 1962.0,
 "player_key": "madison keys"
-},
-{
-"espn_athlete_id": "8017",
-"player": "Diana Shnaider",
-"tour": "WTA",
-"rank": 20,
-"points": 1946.0,
-"player_key": "diana shnaider"
 },
 {
 "espn_athlete_id": "3840",
 "player": "Liudmila Samsonova",
 "tour": "WTA",
-"rank": 21,
-"points": 1895.0,
+"rank": 20,
+"points": 1950.0,
 "player_key": "liudmila samsonova"
+},
+{
+"espn_athlete_id": "3792",
+"player": "Clara Tauson",
+"tour": "WTA",
+"rank": 21,
+"points": 1920.0,
+"player_key": "clara tauson"
+},
+{
+"espn_athlete_id": "2977",
+"player": "Anna Kalinskaya",
+"tour": "WTA",
+"rank": 22,
+"points": 1868.0,
+"player_key": "anna kalinskaya"
 },
 {
 "espn_athlete_id": "2221",
 "player": "Elise Mertens",
 "tour": "WTA",
-"rank": 22,
+"rank": 23,
 "points": 1858.0,
 "player_key": "elise mertens"
 },
@@ -1379,65 +1387,57 @@
 "espn_athlete_id": "3641",
 "player": "Leylah Fernandez",
 "tour": "WTA",
-"rank": 23,
-"points": 1851.0,
+"rank": 24,
+"points": 1796.0,
 "player_key": "leylah fernandez"
 },
 {
-"espn_athlete_id": "2977",
-"player": "Anna Kalinskaya",
+"espn_athlete_id": "8017",
+"player": "Diana Shnaider",
 "tour": "WTA",
-"rank": 24,
-"points": 1758.0,
-"player_key": "anna kalinskaya"
+"rank": 25,
+"points": 1796.0,
+"player_key": "diana shnaider"
 },
 {
 "espn_athlete_id": "3913",
 "player": "Hailey Baptiste",
 "tour": "WTA",
-"rank": 25,
-"points": 1747.0,
+"rank": 26,
+"points": 1712.0,
 "player_key": "hailey baptiste"
 },
 {
 "espn_athlete_id": "2392",
 "player": "Marie Bouzkova",
 "tour": "WTA",
-"rank": 26,
-"points": 1651.0,
+"rank": 27,
+"points": 1596.0,
 "player_key": "marie bouzkova"
 },
 {
-"espn_athlete_id": "1774",
-"player": "Sorana Cirstea",
-"tour": "WTA",
-"rank": 27,
-"points": 1595.0,
-"player_key": "sorana cirstea"
-},
-{
-"espn_athlete_id": "2737",
-"player": "Jaqueline Cristian",
+"espn_athlete_id": "2971",
+"player": "Anastasia Potapova",
 "tour": "WTA",
 "rank": 28,
-"points": 1437.0,
-"player_key": "jaqueline cristian"
+"points": 1470.0,
+"player_key": "anastasia potapova"
+},
+{
+"espn_athlete_id": "2195",
+"player": "Jelena Ostapenko",
+"tour": "WTA",
+"rank": 29,
+"points": 1464.0,
+"player_key": "jelena ostapenko"
 },
 {
 "espn_athlete_id": "3380",
 "player": "Ann Li",
 "tour": "WTA",
-"rank": 29,
-"points": 1435.0,
-"player_key": "ann li"
-},
-{
-"espn_athlete_id": "3398",
-"player": "Emma Raducanu",
-"tour": "WTA",
 "rank": 30,
-"points": 1430.0,
-"player_key": "emma raducanu"
+"points": 1460.0,
+"player_key": "ann li"
 },
 {
 "espn_athlete_id": "3157",
@@ -1448,100 +1448,100 @@
 "player_key": "cristina bucsa"
 },
 {
-"espn_athlete_id": "6048",
-"player": "Zheng Qinwen",
-"tour": "WTA",
-"rank": 32,
-"points": 1405.0,
-"player_key": "zheng qinwen"
-},
-{
 "espn_athlete_id": "3387",
 "player": "Wang Xinyu",
 "tour": "WTA",
-"rank": 33,
+"rank": 32,
 "points": 1401.0,
 "player_key": "wang xinyu"
+},
+{
+"espn_athlete_id": "2737",
+"player": "Jaqueline Cristian",
+"tour": "WTA",
+"rank": 33,
+"points": 1382.0,
+"player_key": "jaqueline cristian"
 },
 {
 "espn_athlete_id": "14146",
 "player": "Maya Joint",
 "tour": "WTA",
 "rank": 34,
-"points": 1380.0,
+"points": 1370.0,
 "player_key": "maya joint"
-},
-{
-"espn_athlete_id": "3785",
-"player": "Emma Navarro",
-"tour": "WTA",
-"rank": 35,
-"points": 1377.0,
-"player_key": "emma navarro"
-},
-{
-"espn_athlete_id": "2195",
-"player": "Jelena Ostapenko",
-"tour": "WTA",
-"rank": 36,
-"points": 1369.0,
-"player_key": "jelena ostapenko"
 },
 {
 "espn_athlete_id": "7819",
 "player": "Sara Bejlek",
 "tour": "WTA",
-"rank": 37,
-"points": 1360.0,
+"rank": 35,
+"points": 1369.0,
 "player_key": "sara bejlek"
-},
-{
-"espn_athlete_id": "2971",
-"player": "Anastasia Potapova",
-"tour": "WTA",
-"rank": 38,
-"points": 1355.0,
-"player_key": "anastasia potapova"
 },
 {
 "espn_athlete_id": "2248",
 "player": "Katerina Siniakova",
 "tour": "WTA",
-"rank": 39,
-"points": 1342.0,
+"rank": 36,
+"points": 1362.0,
 "player_key": "katerina siniakova"
 },
 {
-"espn_athlete_id": "6368",
-"player": "Janice Tjen",
+"espn_athlete_id": "3398",
+"player": "Emma Raducanu",
 "tour": "WTA",
-"rank": 40,
-"points": 1317.0,
-"player_key": "janice tjen"
-},
-{
-"espn_athlete_id": "3831",
-"player": "Elisabetta Cocciaretto",
-"tour": "WTA",
-"rank": 41,
-"points": 1290.0,
-"player_key": "elisabetta cocciaretto"
+"rank": 37,
+"points": 1360.0,
+"player_key": "emma raducanu"
 },
 {
 "espn_athlete_id": "7759",
 "player": "Alexandra Eala",
 "tour": "WTA",
-"rank": 42,
-"points": 1285.0,
+"rank": 38,
+"points": 1340.0,
 "player_key": "alexandra eala"
 },
 {
-"espn_athlete_id": "6403",
-"player": "Lois Boisson",
+"espn_athlete_id": "3785",
+"player": "Emma Navarro",
+"tour": "WTA",
+"rank": 39,
+"points": 1327.0,
+"player_key": "emma navarro"
+},
+{
+"espn_athlete_id": "3831",
+"player": "Elisabetta Cocciaretto",
+"tour": "WTA",
+"rank": 40,
+"points": 1320.0,
+"player_key": "elisabetta cocciaretto"
+},
+{
+"espn_athlete_id": "6368",
+"player": "Janice Tjen",
+"tour": "WTA",
+"rank": 41,
+"points": 1292.0,
+"player_key": "janice tjen"
+},
+{
+"espn_athlete_id": "2042",
+"player": "Barbora Krejcikova",
+"tour": "WTA",
+"rank": 42,
+"points": 1271.0,
+"player_key": "barbora krejcikova"
+},
+{
+"espn_athlete_id": "8419",
+"player": "Tereza Valentova",
 "tour": "WTA",
 "rank": 43,
-"points": 1268.0,
-"player_key": "lois boisson"
+"points": 1265.0,
+"player_key": "tereza valentova"
 },
 {
 "espn_athlete_id": "2735",
@@ -1552,268 +1552,268 @@
 "player_key": "marketa vondrousova"
 },
 {
-"espn_athlete_id": "2672",
-"player": "Magdalena Frech",
+"espn_athlete_id": "3142",
+"player": "Dayana Yastremska",
 "tour": "WTA",
 "rank": 45,
-"points": 1263.0,
-"player_key": "magdalena frech"
+"points": 1246.0,
+"player_key": "dayana yastremska"
 },
 {
 "espn_athlete_id": "1881",
 "player": "Laura Siegemund",
 "tour": "WTA",
 "rank": 46,
-"points": 1250.0,
+"points": 1230.0,
 "player_key": "laura siegemund"
-},
-{
-"espn_athlete_id": "3018",
-"player": "Maria Sakkari",
-"tour": "WTA",
-"rank": 47,
-"points": 1238.0,
-"player_key": "maria sakkari"
-},
-{
-"espn_athlete_id": "8419",
-"player": "Tereza Valentova",
-"tour": "WTA",
-"rank": 48,
-"points": 1231.0,
-"player_key": "tereza valentova"
-},
-{
-"espn_athlete_id": "5848",
-"player": "Peyton Stearns",
-"tour": "WTA",
-"rank": 49,
-"points": 1211.0,
-"player_key": "peyton stearns"
 },
 {
 "espn_athlete_id": "5528",
 "player": "McCartney Kessler",
 "tour": "WTA",
+"rank": 47,
+"points": 1229.0,
+"player_key": "mccartney kessler"
+},
+{
+"espn_athlete_id": "3018",
+"player": "Maria Sakkari",
+"tour": "WTA",
+"rank": 48,
+"points": 1208.0,
+"player_key": "maria sakkari"
+},
+{
+"espn_athlete_id": "2672",
+"player": "Magdalena Frech",
+"tour": "WTA",
+"rank": 49,
+"points": 1208.0,
+"player_key": "magdalena frech"
+},
+{
+"espn_athlete_id": "6403",
+"player": "Lois Boisson",
+"tour": "WTA",
 "rank": 50,
 "points": 1204.0,
-"player_key": "mccartney kessler"
+"player_key": "lois boisson"
 },
 {
 "espn_athlete_id": "6059",
 "player": "Jessica Bouzas Maneiro",
 "tour": "WTA",
 "rank": 51,
-"points": 1186.0,
+"points": 1200.0,
 "player_key": "jessica bouzas maneiro"
-},
-{
-"espn_athlete_id": "3142",
-"player": "Dayana Yastremska",
-"tour": "WTA",
-"rank": 52,
-"points": 1175.0,
-"player_key": "dayana yastremska"
-},
-{
-"espn_athlete_id": "2042",
-"player": "Barbora Krejcikova",
-"tour": "WTA",
-"rank": 53,
-"points": 1156.0,
-"player_key": "barbora krejcikova"
 },
 {
 "espn_athlete_id": "2346",
 "player": "Tatjana Maria",
 "tour": "WTA",
-"rank": 54,
-"points": 1086.0,
+"rank": 52,
+"points": 1111.0,
 "player_key": "tatjana maria"
 },
 {
-"espn_athlete_id": "1649",
-"player": "Magda Linette",
+"espn_athlete_id": "6048",
+"player": "Zheng Qinwen",
 "tour": "WTA",
-"rank": 55,
-"points": 1084.0,
-"player_key": "magda linette"
-},
-{
-"espn_athlete_id": "7209",
-"player": "Sonay Kartal",
-"tour": "WTA",
-"rank": 56,
-"points": 1057.0,
-"player_key": "sonay kartal"
+"rank": 53,
+"points": 1080.0,
+"player_key": "zheng qinwen"
 },
 {
 "espn_athlete_id": "13478",
 "player": "Yuliia Starodubtseva",
 "tour": "WTA",
-"rank": 57,
-"points": 1044.0,
+"rank": 54,
+"points": 1078.0,
 "player_key": "yuliia starodubtseva"
-},
-{
-"espn_athlete_id": "2734",
-"player": "Anna Bondar",
-"tour": "WTA",
-"rank": 58,
-"points": 1043.0,
-"player_key": "anna bondar"
-},
-{
-"espn_athlete_id": "6816",
-"player": "Antonia Ruzic",
-"tour": "WTA",
-"rank": 59,
-"points": 1041.0,
-"player_key": "antonia ruzic"
-},
-{
-"espn_athlete_id": "2054",
-"player": "Katie Boulter",
-"tour": "WTA",
-"rank": 60,
-"points": 1036.0,
-"player_key": "katie boulter"
-},
-{
-"espn_athlete_id": "3899",
-"player": "Varvara Gracheva",
-"tour": "WTA",
-"rank": 61,
-"points": 1032.0,
-"player_key": "varvara gracheva"
 },
 {
 "espn_athlete_id": "6708",
 "player": "Talia Gibson",
 "tour": "WTA",
-"rank": 62,
-"points": 1021.0,
+"rank": 55,
+"points": 1036.0,
 "player_key": "talia gibson"
 },
 {
 "espn_athlete_id": "3223",
 "player": "Catherine McNally",
 "tour": "WTA",
-"rank": 63,
-"points": 1018.0,
+"rank": 56,
+"points": 1032.0,
 "player_key": "catherine mcnally"
 },
 {
-"espn_athlete_id": "6061",
-"player": "Elsa Jacquemot",
+"espn_athlete_id": "1649",
+"player": "Magda Linette",
 "tour": "WTA",
-"rank": 64,
-"points": 1007.0,
-"player_key": "elsa jacquemot"
+"rank": 57,
+"points": 1029.0,
+"player_key": "magda linette"
+},
+{
+"espn_athlete_id": "2734",
+"player": "Anna Bondar",
+"tour": "WTA",
+"rank": 58,
+"points": 1023.0,
+"player_key": "anna bondar"
 },
 {
 "espn_athlete_id": "5604",
 "player": "Zeynep Sonmez",
 "tour": "WTA",
-"rank": 65,
-"points": 998.0,
+"rank": 59,
+"points": 1020.0,
 "player_key": "zeynep sonmez"
+},
+{
+"espn_athlete_id": "7209",
+"player": "Sonay Kartal",
+"tour": "WTA",
+"rank": 60,
+"points": 1019.0,
+"player_key": "sonay kartal"
+},
+{
+"espn_athlete_id": "6816",
+"player": "Antonia Ruzic",
+"tour": "WTA",
+"rank": 61,
+"points": 1011.0,
+"player_key": "antonia ruzic"
 },
 {
 "espn_athlete_id": "2191",
 "player": "Daria Kasatkina",
 "tour": "WTA",
-"rank": 66,
+"rank": 62,
 "points": 987.0,
 "player_key": "daria kasatkina"
 },
 {
-"espn_athlete_id": "2748",
-"player": "Elena-Gabriela Ruse",
+"espn_athlete_id": "6061",
+"player": "Elsa Jacquemot",
 "tour": "WTA",
-"rank": 67,
-"points": 963.0,
-"player_key": "elenagabriela ruse"
-},
-{
-"espn_athlete_id": "5705",
-"player": "Oleksandra Oliynykova",
-"tour": "WTA",
-"rank": 68,
-"points": 940.0,
-"player_key": "oleksandra oliynykova"
-},
-{
-"espn_athlete_id": "8404",
-"player": "Petra Marcinko",
-"tour": "WTA",
-"rank": 69,
-"points": 934.0,
-"player_key": "petra marcinko"
-},
-{
-"espn_athlete_id": "2665",
-"player": "Veronika Kudermetova",
-"tour": "WTA",
-"rank": 70,
-"points": 933.0,
-"player_key": "veronika kudermetova"
-},
-{
-"espn_athlete_id": "3000",
-"player": "Panna Udvardy",
-"tour": "WTA",
-"rank": 71,
-"points": 931.0,
-"player_key": "panna udvardy"
+"rank": 63,
+"points": 984.0,
+"player_key": "elsa jacquemot"
 },
 {
 "espn_athlete_id": "6500",
 "player": "Solana Sierra",
 "tour": "WTA",
-"rank": 72,
-"points": 924.0,
+"rank": 64,
+"points": 974.0,
 "player_key": "solana sierra"
 },
 {
-"espn_athlete_id": "707",
-"player": "Zhang Shuai",
+"espn_athlete_id": "7804",
+"player": "Nikola Bartunkova",
 "tour": "WTA",
-"rank": 73,
-"points": 924.0,
-"player_key": "zhang shuai"
+"rank": 65,
+"points": 970.0,
+"player_key": "nikola bartunkova"
 },
 {
-"espn_athlete_id": "2746",
-"player": "Sofia Kenin",
+"espn_athlete_id": "5705",
+"player": "Oleksandra Oliynykova",
 "tour": "WTA",
-"rank": 74,
-"points": 922.0,
-"player_key": "sofia kenin"
+"rank": 66,
+"points": 970.0,
+"player_key": "oleksandra oliynykova"
+},
+{
+"espn_athlete_id": "3899",
+"player": "Varvara Gracheva",
+"tour": "WTA",
+"rank": 67,
+"points": 966.0,
+"player_key": "varvara gracheva"
+},
+{
+"espn_athlete_id": "3000",
+"player": "Panna Udvardy",
+"tour": "WTA",
+"rank": 68,
+"points": 951.0,
+"player_key": "panna udvardy"
+},
+{
+"espn_athlete_id": "2054",
+"player": "Katie Boulter",
+"tour": "WTA",
+"rank": 69,
+"points": 941.0,
+"player_key": "katie boulter"
+},
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"tour": "WTA",
+"rank": 70,
+"points": 933.0,
+"player_key": "donna vekic"
+},
+{
+"espn_athlete_id": "2748",
+"player": "Elena-Gabriela Ruse",
+"tour": "WTA",
+"rank": 71,
+"points": 928.0,
+"player_key": "elenagabriela ruse"
 },
 {
 "espn_athlete_id": "2751",
 "player": "Renata Zarazua",
 "tour": "WTA",
-"rank": 75,
-"points": 920.0,
+"rank": 72,
+"points": 925.0,
 "player_key": "renata zarazua"
 },
 {
-"espn_athlete_id": "3908",
-"player": "Kamilla Rakhimova",
+"espn_athlete_id": "2114",
+"player": "Taylor Townsend",
 "tour": "WTA",
-"rank": 76,
+"rank": 73,
 "points": 919.0,
-"player_key": "kamilla rakhimova"
+"player_key": "taylor townsend"
+},
+{
+"espn_athlete_id": "707",
+"player": "Zhang Shuai",
+"tour": "WTA",
+"rank": 74,
+"points": 919.0,
+"player_key": "zhang shuai"
 },
 {
 "espn_athlete_id": "1802",
 "player": "Yulia Putintseva",
 "tour": "WTA",
-"rank": 77,
+"rank": 75,
 "points": 918.0,
 "player_key": "yulia putintseva"
+},
+{
+"espn_athlete_id": "8404",
+"player": "Petra Marcinko",
+"tour": "WTA",
+"rank": 76,
+"points": 917.0,
+"player_key": "petra marcinko"
+},
+{
+"espn_athlete_id": "3404",
+"player": "Camila Osorio",
+"tour": "WTA",
+"rank": 77,
+"points": 912.0,
+"player_key": "camila osorio"
 },
 {
 "espn_athlete_id": "2028",
@@ -1824,10 +1824,18 @@
 "player_key": "beatriz haddad maia"
 },
 {
+"espn_athlete_id": "5775",
+"player": "Anastasia Zakharova",
+"tour": "WTA",
+"rank": 79,
+"points": 903.0,
+"player_key": "anastasia zakharova"
+},
+{
 "espn_athlete_id": "5309",
 "player": "Alycia Parks",
 "tour": "WTA",
-"rank": 79,
+"rank": 80,
 "points": 902.0,
 "player_key": "alycia parks"
 },
@@ -1835,257 +1843,249 @@
 "espn_athlete_id": "5260",
 "player": "Eva Lys",
 "tour": "WTA",
-"rank": 80,
+"rank": 81,
 "points": 901.0,
 "player_key": "eva lys"
-},
-{
-"espn_athlete_id": "5775",
-"player": "Anastasia Zakharova",
-"tour": "WTA",
-"rank": 81,
-"points": 888.0,
-"player_key": "anastasia zakharova"
-},
-{
-"espn_athlete_id": "2588",
-"player": "Kimberly Birrell",
-"tour": "WTA",
-"rank": 82,
-"points": 880.0,
-"player_key": "kimberly birrell"
-},
-{
-"espn_athlete_id": "3404",
-"player": "Camila Osorio",
-"tour": "WTA",
-"rank": 83,
-"points": 876.0,
-"player_key": "camila osorio"
-},
-{
-"espn_athlete_id": "6571",
-"player": "Oksana Selekhmeteva",
-"tour": "WTA",
-"rank": 84,
-"points": 871.0,
-"player_key": "oksana selekhmeteva"
-},
-{
-"espn_athlete_id": "3184",
-"player": "Emiliana Arango",
-"tour": "WTA",
-"rank": 85,
-"points": 868.0,
-"player_key": "emiliana arango"
-},
-{
-"espn_athlete_id": "5878",
-"player": "Veronika Erjavec",
-"tour": "WTA",
-"rank": 86,
-"points": 868.0,
-"player_key": "veronika erjavec"
-},
-{
-"espn_athlete_id": "3040",
-"player": "Tamara Korpatsch",
-"tour": "WTA",
-"rank": 87,
-"points": 868.0,
-"player_key": "tamara korpatsch"
-},
-{
-"espn_athlete_id": "1549",
-"player": "Ajla Tomljanovic",
-"tour": "WTA",
-"rank": 88,
-"points": 867.0,
-"player_key": "ajla tomljanovic"
-},
-{
-"espn_athlete_id": "2040",
-"player": "Donna Vekic",
-"tour": "WTA",
-"rank": 89,
-"points": 862.0,
-"player_key": "donna vekic"
 },
 {
 "espn_athlete_id": "2458",
 "player": "Viktorija Golubic",
 "tour": "WTA",
-"rank": 90,
-"points": 854.0,
+"rank": 82,
+"points": 901.0,
 "player_key": "viktorija golubic"
 },
 {
-"espn_athlete_id": "3388",
-"player": "Simona Waltert",
+"espn_athlete_id": "2588",
+"player": "Kimberly Birrell",
 "tour": "WTA",
-"rank": 91,
-"points": 840.0,
-"player_key": "simona waltert"
-},
-{
-"espn_athlete_id": "10830",
-"player": "Lilli Tagger",
-"tour": "WTA",
-"rank": 92,
-"points": 836.0,
-"player_key": "lilli tagger"
+"rank": 83,
+"points": 880.0,
+"player_key": "kimberly birrell"
 },
 {
 "espn_athlete_id": "2411",
 "player": "Anhelina Kalinina",
 "tour": "WTA",
-"rank": 93,
-"points": 833.0,
+"rank": 84,
+"points": 873.0,
 "player_key": "anhelina kalinina"
 },
 {
-"espn_athlete_id": "7804",
-"player": "Nikola Bartunkova",
+"espn_athlete_id": "5878",
+"player": "Veronika Erjavec",
+"tour": "WTA",
+"rank": 85,
+"points": 873.0,
+"player_key": "veronika erjavec"
+},
+{
+"espn_athlete_id": "3908",
+"player": "Kamilla Rakhimova",
+"tour": "WTA",
+"rank": 86,
+"points": 872.0,
+"player_key": "kamilla rakhimova"
+},
+{
+"espn_athlete_id": "2665",
+"player": "Veronika Kudermetova",
+"tour": "WTA",
+"rank": 87,
+"points": 868.0,
+"player_key": "veronika kudermetova"
+},
+{
+"espn_athlete_id": "2746",
+"player": "Sofia Kenin",
+"tour": "WTA",
+"rank": 88,
+"points": 867.0,
+"player_key": "sofia kenin"
+},
+{
+"espn_athlete_id": "6571",
+"player": "Oksana Selekhmeteva",
+"tour": "WTA",
+"rank": 89,
+"points": 865.0,
+"player_key": "oksana selekhmeteva"
+},
+{
+"espn_athlete_id": "1549",
+"player": "Ajla Tomljanovic",
+"tour": "WTA",
+"rank": 90,
+"points": 857.0,
+"player_key": "ajla tomljanovic"
+},
+{
+"espn_athlete_id": "10830",
+"player": "Lilli Tagger",
+"tour": "WTA",
+"rank": 91,
+"points": 857.0,
+"player_key": "lilli tagger"
+},
+{
+"espn_athlete_id": "5848",
+"player": "Peyton Stearns",
+"tour": "WTA",
+"rank": 92,
+"points": 856.0,
+"player_key": "peyton stearns"
+},
+{
+"espn_athlete_id": "3388",
+"player": "Simona Waltert",
+"tour": "WTA",
+"rank": 93,
+"points": 856.0,
+"player_key": "simona waltert"
+},
+{
+"espn_athlete_id": "3332",
+"player": "Diane Parry",
 "tour": "WTA",
 "rank": 94,
-"points": 831.0,
-"player_key": "nikola bartunkova"
+"points": 853.0,
+"player_key": "diane parry"
 },
 {
 "espn_athlete_id": "5941",
 "player": "Daria Snigur",
 "tour": "WTA",
 "rank": 95,
-"points": 828.0,
+"points": 839.0,
 "player_key": "daria snigur"
 },
 {
-"espn_athlete_id": "2114",
-"player": "Taylor Townsend",
+"espn_athlete_id": "3040",
+"player": "Tamara Korpatsch",
 "tour": "WTA",
 "rank": 96,
-"points": 824.0,
-"player_key": "taylor townsend"
-},
-{
-"espn_athlete_id": "2902",
-"player": "Anna Blinkova",
-"tour": "WTA",
-"rank": 97,
-"points": 823.0,
-"player_key": "anna blinkova"
-},
-{
-"espn_athlete_id": "14563",
-"player": "Hanne Vandewinkel",
-"tour": "WTA",
-"rank": 98,
-"points": 804.0,
-"player_key": "hanne vandewinkel"
-},
-{
-"espn_athlete_id": "6953",
-"player": "Lanlana Tararudee",
-"tour": "WTA",
-"rank": 99,
-"points": 801.0,
-"player_key": "lanlana tararudee"
+"points": 829.0,
+"player_key": "tamara korpatsch"
 },
 {
 "espn_athlete_id": "10500",
 "player": "Ella Seidel",
 "tour": "WTA",
-"rank": 100,
-"points": 789.0,
+"rank": 97,
+"points": 818.0,
 "player_key": "ella seidel"
 },
 {
-"espn_athlete_id": "7815",
-"player": "Francesca Jones",
+"espn_athlete_id": "3184",
+"player": "Emiliana Arango",
 "tour": "WTA",
-"rank": 101,
-"points": 784.0,
-"player_key": "francesca jones"
+"rank": 98,
+"points": 813.0,
+"player_key": "emiliana arango"
 },
 {
-"espn_athlete_id": "2731",
-"player": "Paula Badosa",
+"espn_athlete_id": "2902",
+"player": "Anna Blinkova",
 "tour": "WTA",
-"rank": 102,
-"points": 781.0,
-"player_key": "paula badosa"
+"rank": 99,
+"points": 803.0,
+"player_key": "anna blinkova"
+},
+{
+"espn_athlete_id": "6953",
+"player": "Lanlana Tararudee",
+"tour": "WTA",
+"rank": 100,
+"points": 799.0,
+"player_key": "lanlana tararudee"
 },
 {
 "espn_athlete_id": "7797",
 "player": "Sinja Kraus",
 "tour": "WTA",
-"rank": 103,
-"points": 780.0,
+"rank": 101,
+"points": 795.0,
 "player_key": "sinja kraus"
 },
 {
-"espn_athlete_id": "3746",
-"player": "Katie Volynets",
+"espn_athlete_id": "14563",
+"player": "Hanne Vandewinkel",
 "tour": "WTA",
-"rank": 104,
-"points": 761.0,
-"player_key": "katie volynets"
+"rank": 102,
+"points": 790.0,
+"player_key": "hanne vandewinkel"
 },
 {
-"espn_athlete_id": "6724",
-"player": "Ashlyn Krueger",
+"espn_athlete_id": "2731",
+"player": "Paula Badosa",
 "tour": "WTA",
-"rank": 105,
-"points": 746.0,
-"player_key": "ashlyn krueger"
+"rank": 103,
+"points": 782.0,
+"player_key": "paula badosa"
 },
 {
 "espn_athlete_id": "6488",
 "player": "Darja Vidmanova",
 "tour": "WTA",
-"rank": 106,
-"points": 740.0,
+"rank": 104,
+"points": 767.0,
 "player_key": "darja vidmanova"
 },
 {
-"espn_athlete_id": "8495",
-"player": "Lulu Sun",
+"espn_athlete_id": "7815",
+"player": "Francesca Jones",
 "tour": "WTA",
-"rank": 107,
-"points": 735.0,
-"player_key": "lulu sun"
-},
-{
-"espn_athlete_id": "3332",
-"player": "Diane Parry",
-"tour": "WTA",
-"rank": 108,
-"points": 730.0,
-"player_key": "diane parry"
-},
-{
-"espn_athlete_id": "5734",
-"player": "Moyuka Uchijima",
-"tour": "WTA",
-"rank": 109,
-"points": 729.0,
-"player_key": "moyuka uchijima"
-},
-{
-"espn_athlete_id": "824",
-"player": "Anastasia Pavlyuchenkova",
-"tour": "WTA",
-"rank": 110,
-"points": 727.0,
-"player_key": "anastasia pavlyuchenkova"
+"rank": 105,
+"points": 736.0,
+"player_key": "francesca jones"
 },
 {
 "espn_athlete_id": "7778",
 "player": "Victoria Jimenez Kasintseva",
 "tour": "WTA",
-"rank": 111,
-"points": 711.0,
+"rank": 106,
+"points": 730.0,
 "player_key": "victoria jimenez kasintseva"
+},
+{
+"espn_athlete_id": "6724",
+"player": "Ashlyn Krueger",
+"tour": "WTA",
+"rank": 107,
+"points": 721.0,
+"player_key": "ashlyn krueger"
+},
+{
+"espn_athlete_id": "3746",
+"player": "Katie Volynets",
+"tour": "WTA",
+"rank": 108,
+"points": 715.0,
+"player_key": "katie volynets"
+},
+{
+"espn_athlete_id": "740",
+"player": "Karolina Pliskova",
+"tour": "WTA",
+"rank": 109,
+"points": 710.0,
+"player_key": "karolina pliskova"
+},
+{
+"espn_athlete_id": "5734",
+"player": "Moyuka Uchijima",
+"tour": "WTA",
+"rank": 110,
+"points": 707.0,
+"player_key": "moyuka uchijima"
+},
+{
+"espn_athlete_id": "8495",
+"player": "Lulu Sun",
+"tour": "WTA",
+"rank": 111,
+"points": 702.0,
+"player_key": "lulu sun"
 },
 {
 "espn_athlete_id": "6769",
@@ -2096,290 +2096,266 @@
 "player_key": "darja semenistaja"
 },
 {
-"espn_athlete_id": "3417",
-"player": "Maja Chwalinska",
-"tour": "WTA",
-"rank": 113,
-"points": 697.0,
-"player_key": "maja chwalinska"
-},
-{
-"espn_athlete_id": "2179",
-"player": "Mayar Sherif",
-"tour": "WTA",
-"rank": 114,
-"points": 693.0,
-"player_key": "mayar sherif"
-},
-{
-"espn_athlete_id": "2916",
-"player": "Yuan Yue",
-"tour": "WTA",
-"rank": 115,
-"points": 683.0,
-"player_key": "yuan yue"
-},
-{
 "espn_athlete_id": "3133",
 "player": "Kaja Juvan",
 "tour": "WTA",
-"rank": 116,
-"points": 683.0,
+"rank": 113,
+"points": 696.0,
 "player_key": "kaja juvan"
+},
+{
+"espn_athlete_id": "824",
+"player": "Anastasia Pavlyuchenkova",
+"tour": "WTA",
+"rank": 114,
+"points": 694.0,
+"player_key": "anastasia pavlyuchenkova"
 },
 {
 "espn_athlete_id": "7436",
 "player": "Dominika Salkova",
 "tour": "WTA",
-"rank": 117,
-"points": 676.0,
+"rank": 115,
+"points": 694.0,
 "player_key": "dominika salkova"
 },
 {
-"espn_athlete_id": "2738",
-"player": "Rebecca Sramkova",
+"espn_athlete_id": "3417",
+"player": "Maja Chwalinska",
 "tour": "WTA",
-"rank": 118,
-"points": 675.0,
-"player_key": "rebecca sramkova"
+"rank": 116,
+"points": 693.0,
+"player_key": "maja chwalinska"
 },
 {
 "espn_athlete_id": "2764",
 "player": "Dalma Galfi",
 "tour": "WTA",
-"rank": 119,
-"points": 674.0,
+"rank": 117,
+"points": 691.0,
 "player_key": "dalma galfi"
 },
 {
-"espn_athlete_id": "1809",
-"player": "Aliaksandra Sasnovich",
+"espn_athlete_id": "2916",
+"player": "Yuan Yue",
 "tour": "WTA",
-"rank": 120,
-"points": 664.0,
-"player_key": "aliaksandra sasnovich"
+"rank": 118,
+"points": 688.0,
+"player_key": "yuan yue"
 },
 {
-"espn_athlete_id": "2599",
-"player": "Julia Grabher",
+"espn_athlete_id": "10501",
+"player": "Maria Timofeeva",
 "tour": "WTA",
-"rank": 121,
-"points": 662.0,
-"player_key": "julia grabher"
+"rank": 119,
+"points": 686.0,
+"player_key": "maria timofeeva"
 },
 {
 "espn_athlete_id": "9169",
 "player": "Alina Korneeva",
 "tour": "WTA",
-"rank": 122,
-"points": 657.0,
+"rank": 120,
+"points": 685.0,
 "player_key": "alina korneeva"
 },
 {
-"espn_athlete_id": "6413",
-"player": "Polina Kudermetova",
+"espn_athlete_id": "2738",
+"player": "Rebecca Sramkova",
 "tour": "WTA",
-"rank": 123,
-"points": 631.0,
-"player_key": "polina kudermetova"
-},
-{
-"espn_athlete_id": "5057",
-"player": "Suzan Lamens",
-"tour": "WTA",
-"rank": 124,
-"points": 630.0,
-"player_key": "suzan lamens"
+"rank": 121,
+"points": 670.0,
+"player_key": "rebecca sramkova"
 },
 {
 "espn_athlete_id": "6570",
 "player": "Alina Charaeva",
 "tour": "WTA",
-"rank": 125,
-"points": 625.0,
+"rank": 122,
+"points": 664.0,
 "player_key": "alina charaeva"
 },
 {
-"espn_athlete_id": "7672",
-"player": "Taylah Preston",
+"espn_athlete_id": "2599",
+"player": "Julia Grabher",
 "tour": "WTA",
-"rank": 126,
-"points": 609.0,
-"player_key": "taylah preston"
+"rank": 123,
+"points": 661.0,
+"player_key": "julia grabher"
 },
 {
 "espn_athlete_id": "4453",
 "player": "Leolia Jeanjean",
 "tour": "WTA",
-"rank": 127,
-"points": 608.0,
+"rank": 124,
+"points": 653.0,
 "player_key": "leolia jeanjean"
 },
 {
-"espn_athlete_id": "6916",
-"player": "Marina Stakusic",
+"espn_athlete_id": "6413",
+"player": "Polina Kudermetova",
+"tour": "WTA",
+"rank": 125,
+"points": 648.0,
+"player_key": "polina kudermetova"
+},
+{
+"espn_athlete_id": "1809",
+"player": "Aliaksandra Sasnovich",
+"tour": "WTA",
+"rank": 126,
+"points": 642.0,
+"player_key": "aliaksandra sasnovich"
+},
+{
+"espn_athlete_id": "14460",
+"player": "Kaitlin Quevedo",
+"tour": "WTA",
+"rank": 127,
+"points": 622.0,
+"player_key": "kaitlin quevedo"
+},
+{
+"espn_athlete_id": "7672",
+"player": "Taylah Preston",
 "tour": "WTA",
 "rank": 128,
-"points": 601.0,
-"player_key": "marina stakusic"
+"points": 611.0,
+"player_key": "taylah preston"
 },
 {
-"espn_athlete_id": "12287",
-"player": "Emerson Jones",
+"espn_athlete_id": "5057",
+"player": "Suzan Lamens",
 "tour": "WTA",
 "rank": 129,
-"points": 592.0,
-"player_key": "emerson jones"
+"points": 604.0,
+"player_key": "suzan lamens"
 },
 {
-"espn_athlete_id": "740",
-"player": "Karolina Pliskova",
+"espn_athlete_id": "2179",
+"player": "Mayar Sherif",
 "tour": "WTA",
 "rank": 130,
-"points": 590.0,
-"player_key": "karolina pliskova"
+"points": 593.0,
+"player_key": "mayar sherif"
 },
 {
 "espn_athlete_id": "11317",
 "player": "Himeno Sakatsume",
 "tour": "WTA",
 "rank": 131,
-"points": 582.0,
+"points": 587.0,
 "player_key": "himeno sakatsume"
 },
 {
-"espn_athlete_id": "2780",
-"player": "Zhu Lin",
+"espn_athlete_id": "2984",
+"player": "Rebeka Masarova",
 "tour": "WTA",
 "rank": 132,
-"points": 574.0,
-"player_key": "zhu lin"
+"points": 572.0,
+"player_key": "rebeka masarova"
+},
+{
+"espn_athlete_id": "6916",
+"player": "Marina Stakusic",
+"tour": "WTA",
+"rank": 133,
+"points": 572.0,
+"player_key": "marina stakusic"
 },
 {
 "espn_athlete_id": "3034",
 "player": "Tamara Zidansek",
 "tour": "WTA",
-"rank": 133,
-"points": 573.0,
-"player_key": "tamara zidansek"
-},
-{
-"espn_athlete_id": "3262",
-"player": "Danielle Collins",
-"tour": "WTA",
 "rank": 134,
-"points": 572.0,
-"player_key": "danielle collins"
-},
-{
-"espn_athlete_id": "2582",
-"player": "Priscilla Hon",
-"tour": "WTA",
-"rank": 135,
-"points": 569.0,
-"player_key": "priscilla hon"
-},
-{
-"espn_athlete_id": "10501",
-"player": "Maria Timofeeva",
-"tour": "WTA",
-"rank": 136,
 "points": 565.0,
-"player_key": "maria timofeeva"
-},
-{
-"espn_athlete_id": "2979",
-"player": "Bianca Andreescu",
-"tour": "WTA",
-"rank": 137,
-"points": 564.0,
-"player_key": "bianca andreescu"
-},
-{
-"espn_athlete_id": "3889",
-"player": "Katarzyna Kawa",
-"tour": "WTA",
-"rank": 138,
-"points": 560.0,
-"player_key": "katarzyna kawa"
-},
-{
-"espn_athlete_id": "14460",
-"player": "Kaitlin Quevedo",
-"tour": "WTA",
-"rank": 139,
-"points": 556.0,
-"player_key": "kaitlin quevedo"
+"player_key": "tamara zidansek"
 },
 {
 "espn_athlete_id": "5937",
 "player": "Elvina Kalieva",
 "tour": "WTA",
-"rank": 140,
-"points": 553.0,
+"rank": 135,
+"points": 561.0,
 "player_key": "elvina kalieva"
+},
+{
+"espn_athlete_id": "12287",
+"player": "Emerson Jones",
+"tour": "WTA",
+"rank": 136,
+"points": 557.0,
+"player_key": "emerson jones"
+},
+{
+"espn_athlete_id": "2780",
+"player": "Zhu Lin",
+"tour": "WTA",
+"rank": 137,
+"points": 552.0,
+"player_key": "zhu lin"
 },
 {
 "espn_athlete_id": "8411",
 "player": "Lisa Pigato",
 "tour": "WTA",
-"rank": 141,
-"points": 547.0,
+"rank": 138,
+"points": 551.0,
 "player_key": "lisa pigato"
 },
 {
-"espn_athlete_id": "3155",
-"player": "Wang Xiyu",
+"espn_athlete_id": "3889",
+"player": "Katarzyna Kawa",
 "tour": "WTA",
-"rank": 142,
-"points": 536.0,
-"player_key": "wang xiyu"
+"rank": 139,
+"points": 546.0,
+"player_key": "katarzyna kawa"
+},
+{
+"espn_athlete_id": "4291",
+"player": "Andrea Lazaro Garcia",
+"tour": "WTA",
+"rank": 140,
+"points": 546.0,
+"player_key": "andrea lazaro garcia"
 },
 {
 "espn_athlete_id": "2584",
 "player": "Maddison Inglis",
 "tour": "WTA",
-"rank": 143,
+"rank": 141,
 "points": 534.0,
 "player_key": "maddison inglis"
 },
 {
-"espn_athlete_id": "3148",
-"player": "Olga Danilovic",
+"espn_athlete_id": "14080",
+"player": "Veronika Podrez",
 "tour": "WTA",
-"rank": 144,
-"points": 534.0,
-"player_key": "olga danilovic"
+"rank": 142,
+"points": 530.0,
+"player_key": "veronika podrez"
 },
 {
-"espn_athlete_id": "8410",
-"player": "Lola Radivojevic",
+"espn_athlete_id": "2582",
+"player": "Priscilla Hon",
 "tour": "WTA",
-"rank": 145,
-"points": 531.0,
-"player_key": "lola radivojevic"
+"rank": 143,
+"points": 527.0,
+"player_key": "priscilla hon"
 },
 {
 "espn_athlete_id": "14562",
 "player": "Sofia Costoulas",
 "tour": "WTA",
-"rank": 146,
+"rank": 144,
 "points": 527.0,
 "player_key": "sofia costoulas"
-},
-{
-"espn_athlete_id": "810",
-"player": "Arantxa Rus",
-"tour": "WTA",
-"rank": 147,
-"points": 525.0,
-"player_key": "arantxa rus"
 },
 {
 "espn_athlete_id": "2974",
 "player": "Kayla Day",
 "tour": "WTA",
-"rank": 148,
+"rank": 145,
 "points": 522.0,
 "player_key": "kayla day"
 },
@@ -2387,16 +2363,40 @@
 "espn_athlete_id": "13479",
 "player": "Mary Stoiana",
 "tour": "WTA",
-"rank": 149,
+"rank": 146,
 "points": 521.0,
 "player_key": "mary stoiana"
 },
 {
-"espn_athlete_id": "3705",
-"player": "Joanna Garland",
+"espn_athlete_id": "8410",
+"player": "Lola Radivojevic",
+"tour": "WTA",
+"rank": 147,
+"points": 519.0,
+"player_key": "lola radivojevic"
+},
+{
+"espn_athlete_id": "3155",
+"player": "Wang Xiyu",
+"tour": "WTA",
+"rank": 148,
+"points": 516.0,
+"player_key": "wang xiyu"
+},
+{
+"espn_athlete_id": "810",
+"player": "Arantxa Rus",
+"tour": "WTA",
+"rank": 149,
+"points": 516.0,
+"player_key": "arantxa rus"
+},
+{
+"espn_athlete_id": "6929",
+"player": "Linda Fruhvirtova",
 "tour": "WTA",
 "rank": 150,
-"points": 520.0,
-"player_key": "joanna garland"
+"points": 506.0,
+"player_key": "linda fruhvirtova"
 }
 ]

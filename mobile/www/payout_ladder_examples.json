@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T15:15:19.673473+00:00",
+  "generated_at": "2026-05-19T20:51:39.685057+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -8,22 +8,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -34,22 +34,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -60,22 +60,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -86,22 +86,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -112,22 +112,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -138,22 +138,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -164,22 +164,22 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -190,32 +190,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -226,32 +226,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -262,32 +262,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -298,32 +298,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -334,32 +334,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -370,32 +370,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -406,32 +406,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 7.0,
+          "player": "Devin Vassell",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -442,32 +442,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -478,32 +478,32 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
+        },
+        {
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
+          "pick_type": "Demon",
+          "delta": 3.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -514,42 +514,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -560,42 +560,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -606,42 +606,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -652,42 +652,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -698,42 +698,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -744,42 +744,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -790,42 +790,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 7.0,
+          "player": "Devin Vassell",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -836,42 +836,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -882,42 +882,42 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
+          "pick_type": "Demon",
+          "delta": 3.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -928,52 +928,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -984,52 +984,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1040,52 +1040,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1096,52 +1096,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1152,52 +1152,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1208,52 +1208,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1264,52 +1264,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 7.0,
+          "player": "Devin Vassell",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1320,52 +1320,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1376,52 +1376,52 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
+          "pick_type": "Demon",
+          "delta": 3.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1432,62 +1432,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1498,62 +1498,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1564,62 +1564,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1630,62 +1630,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1696,62 +1696,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1762,62 +1762,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1828,62 +1828,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 7.0,
+          "player": "Devin Vassell",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1894,62 +1894,62 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Jordan Clarkson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 6.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 21.0,
+          "player": "Naz Reid",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jaden McDaniels",
-          "prop_type": "Pts+Asts",
-          "line": 13.5,
-          "standard_line": 17.5,
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1960,60 +1960,60 @@
         {
           "player": "OG Anunoby",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 24.5,
+          "line": 23.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dylan Harper",
+          "player": "Mikal Bridges",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Julian Champagnie",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 15.0,
-          "standard_line": 15.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaden McDaniels",
-          "prop_type": "Two Pointers Made",
-          "line": 4.0,
-          "standard_line": 4.0,
+          "line": 19.0,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Tyrese Maxey",
+          "player": "Jordan Clarkson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jose Alvarado",
+          "prop_type": "Pts+Asts",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Landry Shamet",
           "prop_type": "Points",
-          "line": 20.5,
-          "standard_line": 24.5,
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Joel Embiid",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.0,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 3.5,
           "direction": "OVER",
           "hit_rate": 0.8
         }

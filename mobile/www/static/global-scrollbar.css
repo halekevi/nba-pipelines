@@ -1,7 +1,7 @@
 /**
  * PropOracle platform scrollbar (matches /tickets).
  * Always-visible classic bars — html + every scroll panel uses the same thumb/track.
- * Link: static/global-scrollbar.css?v=20260517platform
+ * Link: /static/global-scrollbar.css?v=20260517platform
  */
 html {
   overflow-x: hidden;

@@ -1,0 +1,15 @@
+{
+  "run_ts_utc": "2026-05-18T11:52:57Z",
+  "slate_date": "2026-05-18",
+  "mode_requested": "shadow",
+  "mode_applied": "off",
+  "model_stage": {
+    "dataset_ok": true,
+    "train_ok": true,
+    "eval_ok": true,
+    "model_allowed": false
+  },
+  "eval_summary_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\data\\ml\\ticket_model_eval_summary_latest.json",
+  "eval_by_date_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\data\\ml\\ticket_model_eval_by_date.csv",
+  "eval_history_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\data\\ml\\ticket_model_eval_history.csv"
+}
