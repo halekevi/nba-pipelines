@@ -71,11 +71,18 @@
     scroll-behavior: auto;
   }
 
-  body {
+  body:not(.page-grades) {
     overscroll-behavior-x: none;
     min-height: 100dvh;
     min-height: -webkit-fill-available;
     padding-bottom: max(48px, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.page-grades {
+    overscroll-behavior-x: none;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+    padding-bottom: 0 !important;
   }
 
   /* iOS: avoid auto-zoom on focus (inputs < 16px) */
@@ -296,7 +303,7 @@
   body.page-grades .grades-body {
     margin-left: env(safe-area-inset-left, 0px) !important;
     margin-right: env(safe-area-inset-right, 0px) !important;
-    margin-bottom: 0.75rem !important;
+    margin-bottom: 0 !important;
   }
 
   body.page-grades .grades-page {
@@ -1225,35 +1232,47 @@ nav.snav .mobile-menu a {
     margin: 0 !important;
   }
 
-  body {
+  body:not(.page-grades) {
     padding-bottom: var(--po-mobile-body-pad-extra) !important;
   }
 
   .shell,
   .wrap,
   #app,
-  .grades-body,
-  .grades-page,
   .wrap.ticket-eval-main,
   .income-wrap,
   .page-ev {
     padding-bottom: var(--po-mobile-nav-clearance) !important;
   }
 
-  /* Override the generic 82px bottom-nav clearance for the grades flex layout — the snav is
-     sticky inside the flex column so padding-bottom fights flex sizing. body.page-grades prefix
-     beats .grades-body / .grades-page in this same block (higher specificity). */
-  body.page-grades .grades-body,
-  body.page-grades .grades-page {
+  /* Grades: one bottom gutter for the fixed tab bar (avoid body + column double-padding). */
+  body.page-grades {
     padding-bottom: 0 !important;
+  }
+
+  body.page-grades .grades-page {
+    padding-bottom: var(--po-mobile-nav-clearance) !important;
+  }
+
+  body.page-grades .grades-body {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
   }
 }
 
-/* Grades: landscape — same override (no stacked nav gutter inside flex column) */
+/* Grades: landscape — shorter tab bar; still reserve one clearance on the page column */
 @media (max-width: 768px) and (orientation: landscape) {
-  body.page-grades .grades-body,
-  body.page-grades .grades-page {
+  body.page-grades {
     padding-bottom: 0 !important;
+  }
+
+  body.page-grades .grades-page {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.page-grades .grades-body {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
   }
 }
 
