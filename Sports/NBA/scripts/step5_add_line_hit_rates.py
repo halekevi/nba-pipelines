@@ -31,10 +31,17 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
 from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
@@ -177,6 +184,7 @@ def main() -> None:
         else:
             print("ℹ️ --compute10 requested, but stat_g6..stat_g10 not present. Skipping 10-game metrics.")
 
+    df = finalize_l10_ui_columns(df, line_col=args.line_col)
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}")
     print(f"Rows: {len(df)}")

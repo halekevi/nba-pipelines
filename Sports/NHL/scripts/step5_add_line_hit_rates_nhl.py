@@ -25,6 +25,7 @@ import pandas as pd
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 try:
     from tqdm import tqdm as _tqdm
@@ -330,6 +331,8 @@ def main():
         row["hit_rate_over_L10"] = hr_L10
         row["over_L10"] = over_L10
         row["under_L10"] = s10 - over_L10
+        row["l10_over"] = over_L10
+        row["l10_under"] = s10 - over_L10
         row["sample_L10"] = s10
         row["hit_rate_over_L20"] = hr_L20
         row["over_L20"] = over_L20
@@ -356,6 +359,9 @@ def main():
 
     write_csv(results, args.output)
     df_out = pd.read_csv(args.output, low_memory=False, encoding="utf-8-sig")
+    line_col = "line_score" if "line_score" in df_out.columns else "line"
+    df_out = finalize_l10_ui_columns(df_out, line_col=line_col)
+    df_out.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.output,
         df=df_out,

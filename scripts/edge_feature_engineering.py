@@ -58,6 +58,10 @@ FEATURE_COLUMNS: list[str] = [
     "dir_line_gap_norm",     # normalized (median_actual - line), direction-aware, 0..1
     "opp_hr_historical",     # opponent-specific graded hit rate
     "player_hr_historical",  # player-specific graded hit rate on this prop type
+    "l10_over",
+    "l10_under",
+    "l10_over_pct",
+    "l10_streak_encoded",
     # ── Stratification / data-quality (see graded_line_quality_features) ──
     "line_bucket_encoded",
     "context_known",
@@ -194,6 +198,10 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "opp_reb_allowed_vs_position",
         "opp_ast_allowed_vs_position",
         "positional_matchup_tier_encoded",
+        "l10_over",
+        "l10_under",
+        "l10_over_pct",
+        "l10_streak",
     ],
 }
 
@@ -219,6 +227,8 @@ _GAME_SCRIPT_ENC = {
 }
 _POS_MATCHUP_ENC = {"unfavorable": 0.0, "neutral": 1.0, "favorable": 2.0}
 _FOUL_RISK_ENC = {"low": 0.0, "medium": 1.0, "high": 2.0}
+_L10_STREAK_ENC = {"COLD": 0.0, "NEUTRAL": 1.0, "HOT": 2.0}
+
 _B2B_REST_ENC = {"normal_rest": 0.0, "b2b_second": 1.0}
 
 WNBA_FEATURE_COLUMNS: list[str] = list(SPORT_FEATURE_OVERRIDES.get("WNBA", []))
@@ -658,6 +668,19 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     out["def_tier_encoded"] = def_te
     out["hit_rate_L5"] = hr5
     out["hit_rate_L10"] = hr10
+
+    l10_over = _to_num(_first_col(out, ("l10_over", "line_hits_over_10", "over_L10")))
+    l10_under = _to_num(_first_col(out, ("l10_under", "line_hits_under_10", "under_L10")))
+    l10_pct = _to_num(_first_col(out, ("l10_over_pct",)))
+    l10_total = l10_over + l10_under
+    l10_pct = l10_pct.where(l10_pct.notna(), l10_over / l10_total.replace(0, np.nan))
+    streak_raw = _first_col(out, ("l10_streak",)).astype(str).str.strip().str.upper()
+    streak_enc = streak_raw.map(_L10_STREAK_ENC).astype(float)
+    out["l10_over"] = l10_over
+    out["l10_under"] = l10_under
+    out["l10_over_pct"] = l10_pct
+    out["l10_streak_encoded"] = streak_enc
+
     out["avg_L5_vs_line"] = av5vl
     out["avg_L10_vs_line"] = av10vl
     out["edge"] = edge

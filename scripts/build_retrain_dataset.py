@@ -113,6 +113,11 @@ ENRICHMENT_RAW_COLS = [
     "player_shots_per90",
     "xg_tier",
     "xg_data_source",
+    # L10 streak (all sports with game logs)
+    "l10_over",
+    "l10_under",
+    "l10_over_pct",
+    "l10_streak",
 ]
 
 JOIN_FEATURE_COLS = list(dict.fromkeys(STEP8_FEATURE_COLS + ENRICHMENT_RAW_COLS))

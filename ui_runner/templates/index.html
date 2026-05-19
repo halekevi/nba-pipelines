@@ -348,6 +348,13 @@ body::after{content:'';position:fixed;inset:0;
 .prop-detail-close{background:none;border:1px solid rgba(255,255,255,.2);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:11px;letter-spacing:.08em;}
 .prop-detail-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;}
 .prop-detail-meta .expand-stat{padding:8px;}
+.l10-streak-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
+.l10-streak-badge.l10-hot{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.35);}
+.l10-streak-badge.l10-cold{background:rgba(100,180,255,.12);color:#7eb8ff;border:1px solid rgba(100,180,255,.35);}
+.l10-bar-wrap{margin-top:10px;font-size:11px;color:var(--muted);}
+.l10-bar{font-family:ui-monospace,monospace;letter-spacing:.06em;font-size:12px;line-height:1.4;}
+.l10-bar-over{color:var(--green);}
+.l10-bar-label{margin-top:4px;font-weight:600;}
 .streak-card{cursor:pointer;}
 .expand-tabs{display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);}
 .expand-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:8px;font-family:"Inter",sans-serif;font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);cursor:pointer;transition:all .15s;text-transform:uppercase;}
@@ -2179,6 +2186,8 @@ function mapApiPickToSlateRow(p) {
     l5_under: p.l5_under != null ? p.l5_under : resolvedUnderHits(p, 5),
     l10_over: p.l10_over,
     l10_under: p.l10_under != null ? p.l10_under : resolvedUnderHits(p, 10),
+    l10_streak: p.l10_streak,
+    l10_over_pct: p.l10_over_pct,
     l5_avg: p.l5_avg,
     season_avg: p.season_avg,
     actual_series: p.actual_series,
@@ -2597,6 +2606,37 @@ function streakHits(raw, n) {
   if (x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
   if (x > n && x <= 100) return Math.max(0, Math.min(n, Math.round((x / 100) * n)));
   return Math.max(0, Math.min(n, Math.round(x)));
+}
+
+/** HOT/COLD L10 badge for edge cards and slate rows (NEUTRAL → nothing). */
+function l10StreakBadgeHtml(p) {
+  const streak = String(p?.l10_streak || "").trim().toUpperCase();
+  if (streak !== "HOT" && streak !== "COLD") return "";
+  const over = streakHits(p?.l10_over, 10);
+  const under = streakHits(p?.l10_under, 10);
+  if (streak === "HOT" && over != null) {
+    return `<span class="l10-streak-badge l10-hot" title="Last 10 games over today's line">🔥 ${over}/10</span>`;
+  }
+  if (streak === "COLD" && under != null) {
+    return `<span class="l10-streak-badge l10-cold" title="Last 10 games under today's line">❄️ ${under}/10</span>`;
+  }
+  return "";
+}
+
+/** Detail panel L10 over/under bar (skipped when counts missing). */
+function l10BarHtml(p) {
+  const over = streakHits(p?.l10_over, 10);
+  const under = streakHits(p?.l10_under, 10);
+  if (over == null && under == null) return "";
+  const ov = over != null ? over : 0;
+  const un = under != null ? under : 0;
+  const filled = Math.max(0, Math.min(10, ov));
+  const empty = Math.max(0, 10 - filled);
+  const bar = "█".repeat(filled) + "░".repeat(empty);
+  return `<div class="l10-bar-wrap">
+    <div class="l10-bar l10-bar-over">${bar}</div>
+    <div class="l10-bar-label">${ov}/10 OVERs · ${un}/10 UNDERs</div>
+  </div>`;
 }
 
 /**
@@ -3398,7 +3438,7 @@ function buildEdgeCard(p, idx) {
         </div>
       </div>
       <div class="edge-row edge-row-main">
-        <div class="edge-name">${p.player}</div>
+        <div class="edge-name">${p.player}${l10StreakBadgeHtml(p)}</div>
         <div class="edge-prop">${p.dir} ${lineDisp} · ${p.prop}</div>
       </div>
       <div class="edge-row edge-row-tags">
@@ -3698,13 +3738,15 @@ function openPropDetailPanel(p) {
   }
   if (chart) {
     const hist = expandHistForEdgeChart(p, 5);
+    let chartHtml = "";
     if (hist && hist.actual.length) {
       const isOver = String(p.dir || "").toUpperCase() === "OVER";
       const book = Number.isFinite(coercePropLine(p)) ? coercePropLine(p) : Number(p.line);
-      chart.innerHTML = makeSVG(hist.actual, book, isOver, 280, 110, null, [projectedStatForPick(p)]);
+      chartHtml = makeSVG(hist.actual, book, isOver, 280, 110, null, [projectedStatForPick(p)]);
     } else {
-      chart.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted2);font-size:12px;">No game log series for this prop.</div>';
+      chartHtml = '<div style="padding:24px;text-align:center;color:var(--muted2);font-size:12px;">No game log series for this prop.</div>';
     }
+    chart.innerHTML = chartHtml + l10BarHtml(p);
   }
   if (meta) {
     const pct = (v) => (v != null && v !== "" ? String(v) : "—");
@@ -3714,6 +3756,7 @@ function openPropDetailPanel(p) {
       ["TEAM", pct(p.team)], ["OPP", pct(p.opp)], ["TIER", pct(p.tier)],
       ["RANK", pct(p.rank_score)], ["DEF", pct(p.def_tier)], ["ML PROB", mlStr],
       ["EDGE", edgeStr], ["BOOK LINE", pct(p.book_line ?? p.prop_line ?? p.line)],
+      ["SEASON AVG", pct(p.season_avg)], ["PROJECTION", pct(p.projection)],
       ["GAME TIME", formatGameTimeDisplay(p.game_time)],
     ];
     meta.innerHTML = rows.map(([lbl, val]) =>
@@ -4432,7 +4475,7 @@ function renderSlateTable(sport) {
     return `<tr class="slate-row-clickable" data-slate-idx="${rowIdx}">
       <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span></td>
       <td class="slate-rank-cell">${rankStr}</td>
-      <td style="color:var(--text);font-weight:600;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}</td>
+      <td style="color:var(--text);font-weight:600;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}${l10StreakBadgeHtml(r)}</td>
       <td style="color:var(--muted);">${r.team || '—'}</td>
       <td style="color:var(--muted);">${r.opp  || '—'}</td>
       <td style="color:var(--text);">${r.prop || '—'}</td>

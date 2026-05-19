@@ -177,6 +177,8 @@ def main() -> None:
             except (TypeError, ValueError):
                 continue
         if not vals:
+            # TODO Phase 2: fetch ATP/WTA match history via Jeff Sackmann tennis_atp/tennis_wta
+            # free CSV dataset when ESPN cache has no games for this prop key.
             df.iat[pos, df.columns.get_loc("stat_status")] = "NO_DATA"
         else:
             df.iat[pos, df.columns.get_loc("stat_status")] = "OK"
@@ -194,6 +196,8 @@ def main() -> None:
     df["stat_last5_avg"] = sub.iloc[:, :5].mean(axis=1)
     df["stat_last10_avg"] = sub.mean(axis=1)
     df["stat_season_avg"] = df["stat_last10_avg"]
+    # Slate/API: empty list when no stat_g* (no historical game log in step4 yet).
+    df["actual_series"] = ""
 
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8-sig")

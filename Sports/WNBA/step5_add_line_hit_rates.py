@@ -41,6 +41,7 @@ import pandas as pd
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 
@@ -184,6 +185,7 @@ def main() -> None:
         else:
             print("ℹ️ --compute10 requested, but stat_g6..stat_g10 not present. Skipping 10-game metrics.")
 
+    df = finalize_l10_ui_columns(df, line_col=args.line_col)
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.output,

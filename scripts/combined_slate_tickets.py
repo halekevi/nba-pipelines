@@ -4734,6 +4734,8 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "l5_games_played": g("l5_games_played"),
             "l10_over":   g("l10_over"),
             "l10_under":  g("l10_under"),
+            "l10_over_pct": g("l10_over_pct"),
+            "l10_streak": g("l10_streak"),
             "l10_games_played": g("l10_games_played"),
             "season_avg": g("season_avg") or g("szn_avg"),
             "ml_prob":    g("ml_prob"),
@@ -6046,6 +6048,34 @@ def _apply_l10_truth_from_stat_games(
     df.loc[use_mask, "l10_over"] = over[use_mask]
     df.loc[use_mask, "l10_under"] = under[use_mask]
     df.loc[use_mask, "l10_games_played"] = valid_n[use_mask].astype(float)
+    total_ou = over + under
+    if "l10_over_pct" not in df.columns:
+        df["l10_over_pct"] = np.nan
+    df.loc[use_mask, "l10_over_pct"] = over[use_mask] / total_ou[use_mask].replace(0, np.nan)
+    if "l10_streak" not in df.columns:
+        df["l10_streak"] = pd.Series([None] * len(df), dtype=object)
+    else:
+        df["l10_streak"] = df["l10_streak"].astype(object)
+    direction = (
+        df["direction"].astype(str).str.strip().str.upper()
+        if "direction" in df.columns
+        else (
+            df["dir"].astype(str).str.strip().str.upper()
+            if "dir" in df.columns
+            else pd.Series(["OVER"] * len(df), index=df.index)
+        )
+    )
+    try:
+        from scripts.l10_streak_utils import compute_l10_streak_label
+
+        for idx in df.index[use_mask]:
+            df.at[idx, "l10_streak"] = compute_l10_streak_label(
+                df.at[idx, "l10_over"],
+                df.at[idx, "l10_under"],
+                str(direction.at[idx]),
+            )
+    except Exception:
+        pass
     if "stat_last10_avg" in df.columns:
         df.loc[use_mask, "stat_last10_avg"] = l10_avg[use_mask]
     return df
