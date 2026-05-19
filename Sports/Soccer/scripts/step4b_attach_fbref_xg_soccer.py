@@ -98,12 +98,13 @@ def attach_xg(df: pd.DataFrame, season: str, cache: dict) -> pd.DataFrame:
         if not hit:
             continue
         has_xg = hit.get("player_xg_per90") is not None
+        source = str(hit.get("xg_data_source") or ("fbref" if has_xg else "cache_miss"))
         for c in ("player_xg_per90", "player_xag_per90", "player_goals_minus_xg", "player_shots_per90"):
             if hit.get(c) is not None:
                 out.at[idx, c] = hit[c]
         if has_xg:
             out.at[idx, "xg_tier"] = hit.get("xg_tier") or "mid"
-            out.at[idx, "xg_data_source"] = "fbref"
+            out.at[idx, "xg_data_source"] = source
         else:
             out.at[idx, "xg_tier"] = "cache_miss"
             out.at[idx, "xg_data_source"] = "cache_miss"

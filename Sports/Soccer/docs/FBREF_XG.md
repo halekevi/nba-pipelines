@@ -2,16 +2,27 @@
 
 ## Manual HTML workflow
 
+**Do not use Playwright, curl, or headless fetch for FBref** — Cloudflare blocks them.
+Use Chrome **Save Complete**, or copy an existing save:
+
+```powershell
+py -3.14 Sports\Soccer\scripts\sync_epl_shooting_html.py --source "$env:USERPROFILE\Downloads\Premier-League-Stats.htm"
+```
+
 1. List leagues and required filenames:
    ```powershell
    py scripts/build_fbref_soccer_ref.py --list-leagues
    ```
 
-2. Open FBref league stats in Chrome (example EPL):
-   https://fbref.com/en/comps/9/stats/Premier-League-Stats
+2. Open FBref **Shooting** table in Chrome (EPL example — works when Expected/xG is paywalled):
+   https://fbref.com/en/comps/9/shooting/Premier-League-Stats
 
-3. **File → Save As → Webpage, Complete** into:
-   `data/cache/fbref_html/epl_summary.html`
+3. **File → Save As → Webpage, Complete** into either:
+   - `data/cache/fbref_html/epl_summary.html` (primary), or
+   - `data/cache/fbref_html/epl_shooting.html` (optional dedicated file)
+
+   The parser uses **npxG/xG** when present; otherwise **SoT/90 × 0.33** and **Sh/90**
+   as `proxy_shots` (`xg_data_source = proxy_shots`).
 
 4. Refresh the xG cache:
    ```powershell
@@ -36,7 +47,7 @@
 | `player_goals_minus_xg` | Goals minus xG (finishing luck) |
 | `player_shots_per90` | Shots per 90 |
 | `xg_tier` | `low` / `mid` / `high` (league cache tertiles) or `cache_miss` |
-| `xg_data_source` | `fbref` or `cache_miss` |
+| `xg_data_source` | `fbref`, `proxy_shots` (SoT/90 proxy), or `cache_miss` |
 
 ## Validation target
 
