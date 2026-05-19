@@ -22,19 +22,20 @@
 
 ## Phase 5 (September): Production activation
 
-### Running scaffold steps locally
-
-PrizePicks `league_id` for NFL is **9** (see `scripts/capture_entries.py`). Step1 does not require `NFL_PIPELINE_ACTIVE`.
-
-Steps 2, 4, and 6 are gated until you opt in:
+### Running the full pipeline (dated outputs)
 
 ```powershell
-set NFL_PIPELINE_ACTIVE=1
-cd NFL
-py -3.14 scripts\step2_clean_props.py
-py -3.14 scripts\step4_defense_rankings.py
-py -3.14 scripts\step6_historical_hit_rates.py
+$env:NFL_PIPELINE_ACTIVE = "1"
+.\run_pipeline.ps1 -Sport NFL -SkipFetch -Date 2026-05-18
+# or
+.\scripts\run_nfl_pipeline.ps1 -Date 2026-05-18 -OutDir outputs\2026-05-18\nfl -SkipFetch
 ```
+
+Target artifact: `outputs/<date>/nfl/step8_nfl_direction_clean.xlsx`
+
+PrizePicks `league_id` for NFL is **9**. Step1 does not require `NFL_PIPELINE_ACTIVE`; steps 2+ require `NFL_PIPELINE_ACTIVE=1` (set automatically by the runners above).
+
+First-time step1 fetch needs a Playwright browser profile (see `scripts/capture_entries.py`).
 
 ### Outputs (paths relative to `NFL/`)
 

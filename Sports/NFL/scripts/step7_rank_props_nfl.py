@@ -65,8 +65,14 @@ def main() -> None:
         print("[NFL step7] player column missing")
         sys.exit(1)
 
-    line = _num(df.get("line_score", df.get("line", np.nan)))
-    proj = _num(df.get("projection", df.get("proj", np.nan)))
+    def _col_series(*names: str) -> pd.Series:
+        for n in names:
+            if n in df.columns:
+                return df[n]
+        return pd.Series(np.nan, index=df.index)
+
+    line = _num(_col_series("line_score", "line"))
+    proj = _num(_col_series("projection", "proj"))
     if proj.isna().all() and line.notna().any():
         proj = line.copy()
     edge = proj - line
