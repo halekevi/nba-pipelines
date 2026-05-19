@@ -4517,6 +4517,8 @@ def ticket_groups_to_payload(
                 player_s = str(gv("player") or "")
                 team_s = str(gv("team") or "")
                 opp_s = str(gv("opp") or gv("opp_team") or "").strip()
+                if opp_s.upper() in ("UNKNOWN_OPP", "UNKNOWN"):
+                    opp_s = ""
                 prop_s = str(gv("prop_type") or "")
                 dir_s = str(gv("direction") or "")
                 game_time_s = str(gv("game_time") or "")
@@ -4604,6 +4606,11 @@ def ticket_groups_to_payload(
                     "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
+                    "l10_over_pct": _safe_float(gv("l10_over_pct")),
+                    "l10_streak": str(gv("l10_streak") or "").strip().upper() or None,
+                    "projection": _safe_float(
+                        gv("projection") or gv("intel_projection") or gv("proj")
+                    ),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
@@ -7176,8 +7183,10 @@ def load_soccer(path: str) -> pd.DataFrame:
             .str.upper()
         )
         bad_opp = opp_norm.isin({"", "UNKNOWN_OPP", "UNKNOWN"})
+        df.loc[bad_opp, "opp"] = ""
+        if "opp_team" in df.columns:
+            df.loc[bad_opp, "opp_team"] = ""
         # Soft-degrade unknown opponent rows instead of hard dropping the entire sport pool.
-        # Keep the prop leg but strip opponent-dependent context fields.
         df["opp_known"] = (~bad_opp).astype(bool)
         if bad_opp.any():
             for dep_col in ("def_tier", "vs_def", "opp_def_tier"):
@@ -7185,11 +7194,12 @@ def load_soccer(path: str) -> pd.DataFrame:
                     df.loc[bad_opp, dep_col] = None
             if "load_warn" not in df.columns:
                 df["load_warn"] = None
-            df.loc[bad_opp, "load_warn"] = "UNKNOWN_OPP"
+            df.loc[bad_opp, "load_warn"] = "opp_unknown"
             print(
                 f"  [load_soccer] kept {int(bad_opp.sum())} rows with unknown opponent metadata "
                 f"(opp_known=False; opponent-dependent fields nulled)"
             )
+    df = _board_history_enrichment(df, "Soccer")
     return df
 
 
@@ -12964,6 +12974,9 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .ev-marginal { color: #ffaa00; }
 .tickets-built .ev-low { color: #ff8844; }
 .tickets-built .ev-skip { color: #ff4444; }
+.tickets-built .l10-streak-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:6px;white-space:nowrap;vertical-align:middle;}
+.tickets-built .l10-streak-badge.l10-hot{background:rgba(125,255,203,.12);color:#7dffcb;border:1px solid rgba(125,255,203,.35);}
+.tickets-built .l10-streak-badge.l10-cold{background:rgba(100,180,255,.12);color:#7eb8ff;border:1px solid rgba(100,180,255,.35);}
 .tickets-built .ticket-filter-pill[data-filter="top-payout"].active {
   border-color: rgba(255, 215, 0, 0.42);
   color: #ffd54f;
@@ -13665,6 +13678,53 @@ def _ticket_group_platforms_attr(group: dict) -> str:
     return " ".join(sorted(slugs))
 
 
+def _l10_hit_count_for_ticket(raw: object, n: int = 10) -> int | None:
+    try:
+        x = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(x):
+        return None
+    if x <= 1.0:
+        return max(0, min(n, int(round(x * n))))
+    return max(0, min(n, int(round(x))))
+
+
+def _ticket_l10_streak_badge_html(leg: dict) -> str:
+    streak = str(leg.get("l10_streak") or "").strip().upper()
+    if streak == "HOT":
+        hits = _l10_hit_count_for_ticket(leg.get("l10_over"), 10)
+        if hits is None:
+            return ""
+        return (
+            f' <span class="l10-streak-badge l10-hot" title="L10 over today\'s line">'
+            f"🔥 {hits}/10</span>"
+        )
+    if streak == "COLD":
+        hits = _l10_hit_count_for_ticket(leg.get("l10_under"), 10)
+        if hits is None:
+            return ""
+        return (
+            f' <span class="l10-streak-badge l10-cold" title="L10 under today\'s line">'
+            f"❄️ {hits}/10</span>"
+        )
+    return ""
+
+
+def _ticket_streak_summary_html(legs: list) -> str:
+    if not legs:
+        return ""
+    total = len(legs)
+    hot = sum(1 for leg in legs if str(leg.get("l10_streak") or "").upper() == "HOT")
+    cold = sum(1 for leg in legs if str(leg.get("l10_streak") or "").upper() == "COLD")
+    half = total / 2.0
+    if hot >= half and hot > 0:
+        return f' <span class="l10-streak-badge l10-hot">🔥 {hot}/{total} HOT</span>'
+    if cold >= half and cold > 0:
+        return f' <span class="l10-streak-badge l10-cold">❄️ {cold}/{total} COLD</span>'
+    return ""
+
+
 def render_tickets_body_html(
     payload: dict,
     *,
@@ -14018,6 +14078,7 @@ def render_tickets_body_html(
 
             warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
                          if has_warn else "")
+            streak_summary_html = _ticket_streak_summary_html(legs)
 
             parts.append(f'''
 <div class="ticket" style="border-left:4px solid {accent};">
@@ -14025,6 +14086,7 @@ def render_tickets_body_html(
       <div class="ticket-hdr">
         <span class="ticket-no">#{_h(ticket_no)}</span>
         {hdr_brackets}
+        {streak_summary_html}
         {warn_html}
       </div>
       <div class="kpi-row">
@@ -14087,8 +14149,11 @@ def render_tickets_body_html(
                 line_underdog = leg.get("line_underdog")
                 line_draftkings = leg.get("line_draftkings")
                 team = leg.get("team") or ""
-                opp = leg.get("opp") or ""
+                opp = str(leg.get("opp") or "").strip()
+                if opp.upper() in ("UNKNOWN_OPP", "UNKNOWN"):
+                    opp = ""
                 initials = leg.get("initials") or player[:2].upper()
+                streak_badge_html = _ticket_l10_streak_badge_html(leg)
 
                 # Direction badge
                 dir_cls = "dir-over" if direction == "OVER" else "dir-under"
@@ -14154,7 +14219,7 @@ def render_tickets_body_html(
               <div class="pwrap">
                 {av_html}
                 <div>
-                  <div style="font-weight:600;font-size:14px;">{_h(player)}</div>
+                  <div style="font-weight:600;font-size:14px;">{_h(player)}{streak_badge_html}</div>
                   <div style="font-size:12px;color:var(--muted);">{_h(matchup)}</div>
                 </div>
               </div>
