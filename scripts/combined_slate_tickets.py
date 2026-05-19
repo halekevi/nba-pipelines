@@ -3385,10 +3385,12 @@ def win_prob(leg_probs_with_source, _n_legs: int) -> float:
 
 _WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1H", "NBA1Q"})
 _WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
+# Cap per-leg factor in p_win product — l5_over_proxy can return 0.99 on hot streaks (artifact).
+MAX_LEG_PROB_FOR_P_WIN = 0.80
 
 
 def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
-    """P(win) leg factor: leg_prob_used → composite_hit_rate/hit_rate → ml_prob → 0.55."""
+    """P(win) leg factor: leg_prob_used → composite_hit_rate/hit_rate → ml_prob → 0.55 (capped)."""
     if isinstance(leg, pd.Series):
         leg = leg.to_dict()
     for key in ("leg_prob_used", "composite_hit_rate", "hit_rate", "ml_prob"):
@@ -3398,10 +3400,10 @@ def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
         try:
             v = float(raw)
             if math.isfinite(v):
-                return float(np.clip(v, 0.0, 1.0))
+                return float(np.clip(v, 0.0, min(1.0, MAX_LEG_PROB_FOR_P_WIN)))
         except (TypeError, ValueError):
             continue
-    return 0.55
+    return min(0.55, MAX_LEG_PROB_FOR_P_WIN)
 
 
 def _compute_p_win_from_rows(rows: list) -> float:
