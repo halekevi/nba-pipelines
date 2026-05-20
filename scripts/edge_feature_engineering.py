@@ -63,6 +63,14 @@ FEATURE_COLUMNS: list[str] = [
     "l10_under",
     "l10_over_pct",
     "l10_streak_encoded",
+    # NBA1H-only (neutral fill elsewhere via SPORT_FEATURE_OVERRIDES)
+    "h1_hit_rate_over",
+    "h1_hit_rate_under",
+    "h1_sample_n",
+    "h1_consistency",
+    "h1_line_value_ratio",
+    "h1_implied_total",
+    "q1_pace_proxy",
     # ── Stratification / data-quality (see graded_line_quality_features) ──
     "line_bucket_encoded",
     "context_known",
@@ -180,6 +188,15 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "surface_specialist",
         "surface_struggle",
         "n_matches_on_surface",
+    ],
+    "NBA1H": [
+        "h1_hit_rate_over",
+        "h1_hit_rate_under",
+        "h1_sample_n",
+        "h1_consistency",
+        "h1_line_value_ratio",
+        "h1_implied_total",
+        "q1_pace_proxy",
     ],
     "NBA": [
         "usage_pct",

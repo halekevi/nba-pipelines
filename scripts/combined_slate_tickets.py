@@ -2772,6 +2772,56 @@ NHL_LEG_MIN_HIT_RATE = {
 # TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
 SOCCER_OVER_MIN_EDGE = 0.60
 
+# ── Model-performance ticket gates (Track A + auto-gate from tracker) ─────────
+# REVERT NBA1H WHEN: track_model_performance.py shows NBA1H AUC >= 0.52 for 3
+# consecutive days in data/model_performance_log.jsonl
+# HOW TO REVERT: Set NBA1H_TICKET_GATE = False below, or clear NBA1H in
+# data/model_gate_recommendations.json (auto-gate lifts when AUC recovers).
+# NBA1H props still flow through pipeline, slate explorer, and graded archive.
+ALWAYS_ALLOW_SPORTS = frozenset({"NBA", "MLB"})
+NBA1H_TICKET_GATE = True
+NBA1H_TICKET_GATE_REASON = "AUC 0.4650 — model anti-predictive"
+_MODEL_GATE_RECOMMENDATIONS_PATH = os.path.join(REPO_ROOT, "data", "model_gate_recommendations.json")
+_MODEL_GATE_CACHE: dict[str, dict] | None = None
+_MODEL_GATE_LOGGED: set[str] = set()
+
+
+def _load_model_gate_recommendations() -> dict[str, dict]:
+    path = Path(_MODEL_GATE_RECOMMENDATIONS_PATH)
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _sport_ticket_gated(sport: str) -> tuple[bool, str]:
+    """True if sport must not enter EV / win-rate ticket pools (slate unchanged)."""
+    su = str(sport or "").strip().upper()
+    if not su or su in ALWAYS_ALLOW_SPORTS:
+        return False, ""
+    if NBA1H_TICKET_GATE and su == "NBA1H":
+        return True, NBA1H_TICKET_GATE_REASON
+    global _MODEL_GATE_CACHE
+    if _MODEL_GATE_CACHE is None:
+        _MODEL_GATE_CACHE = _load_model_gate_recommendations()
+    rec = (_MODEL_GATE_CACHE or {}).get(su)
+    if isinstance(rec, dict) and rec.get("gate"):
+        return True, str(rec.get("reason") or "model performance gate")
+    return False, ""
+
+
+def _log_auto_gate_once(sport: str, reason: str) -> None:
+    global _MODEL_GATE_LOGGED
+    su = str(sport or "").strip().upper()
+    if su in _MODEL_GATE_LOGGED:
+        return
+    _MODEL_GATE_LOGGED.add(su)
+    print(f"  [AUTO-GATE] {su} gated by model performance tracker — {reason}")
+
+
 DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
     "NBA": {"over": 0.70, "under": 0.30, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
     "NBA1Q": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
@@ -3383,7 +3433,7 @@ def win_prob(leg_probs_with_source, _n_legs: int) -> float:
     return float(np.clip(np.prod(vals), TICKET_PROB_FLOOR, TICKET_PROB_CAP))
 
 
-_WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1H", "NBA1Q"})
+_WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1Q"})
 _WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
 # Cap per-leg factor in p_win product — l5_over_proxy can return 0.99 on hot streaks (artifact).
 MAX_LEG_PROB_FOR_P_WIN = 0.80
@@ -3680,6 +3730,9 @@ def build_win_rate_anchor_ticket(
 
 def _win_rate_sport_allowed(sport_key: str, leg_prob: float) -> bool:
     su = str(sport_key or "").strip().upper()
+    gated, reason = _sport_ticket_gated(su)
+    if gated:
+        return False
     if su in _WIN_RATE_PRIMARY_SPORTS:
         return True
     if su in _WIN_RATE_EXTRA_SPORTS:
@@ -11921,12 +11974,31 @@ def main():
     funnel_tracker = FunnelTracker()
     funnel_seen_sports: set[str] = set()
 
+    global _MODEL_GATE_CACHE
+    _MODEL_GATE_CACHE = _load_model_gate_recommendations()
+    if _MODEL_GATE_CACHE:
+        for sp, rec in _MODEL_GATE_CACHE.items():
+            if isinstance(rec, dict) and rec.get("gate") and sp not in ALWAYS_ALLOW_SPORTS:
+                if not (NBA1H_TICKET_GATE and sp == "NBA1H"):
+                    _log_auto_gate_once(sp, str(rec.get("reason") or "AUC gate"))
+    if NBA1H_TICKET_GATE:
+        print(f"  [ticket-gate] NBA1H excluded from tickets — {NBA1H_TICKET_GATE_REASON}")
+
     def pool(df, pt=None):
         if df is None or len(df) == 0:
             return df
 
         sport = str(df["sport"].iloc[0]).upper() if "sport" in df.columns and len(df) > 0 else ""
         total_loaded = int(len(df))
+
+        gated, gate_reason = _sport_ticket_gated(sport)
+        if gated:
+            if sport and sport not in ALWAYS_ALLOW_SPORTS and not (NBA1H_TICKET_GATE and sport == "NBA1H"):
+                _log_auto_gate_once(sport, gate_reason)
+            gate_reason_key = "NBA1H_AUC_GATE" if sport == "NBA1H" else "MODEL_AUC_GATE"
+            discard_tracker.log_count(sport or "ALL", gate_reason_key, total_loaded)
+            funnel_tracker.checkpoint_df("after_model_auc_gate", pd.DataFrame(), default_sport=sport or "ALL")
+            return pd.DataFrame()
 
         # Sport-specific prop exclusions
         excluded = set()
@@ -12297,6 +12369,9 @@ def main():
             ("NHL", nhl),
             ("Tennis", tennis),
         ):
+            if _sport_ticket_gated(label)[0]:
+                print(f"  [win-rate] {label} excluded (model AUC gate)")
+                continue
             if frame is not None and len(frame) > 0:
                 wr_sport_frames.append((label, pool(frame)))
         wr_groups = build_win_rate_ticket_groups(

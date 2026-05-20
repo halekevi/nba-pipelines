@@ -19,7 +19,10 @@ import pandas as pd
 _REPO = Path(__file__).resolve().parent.parent
 _LOG = _REPO / "data" / "model_performance_log.jsonl"
 _ALERTS = _REPO / "data" / "model_alerts.json"
+_GATES = _REPO / "data" / "model_gate_recommendations.json"
 _MIN_N = 30
+_ALWAYS_ALLOW_SPORTS = frozenset({"NBA", "MLB"})
+_GATE_AUC_THRESHOLD = 0.50
 
 
 def _parse_hit(result: object) -> int | None:
@@ -159,6 +162,39 @@ def print_table(sports: dict[str, dict]) -> None:
         )
 
 
+def write_gate_recommendations(sports: dict[str, dict]) -> dict[str, dict]:
+    """Sport-level ticket gate flags for combined_slate_tickets auto-gate."""
+    out: dict[str, dict] = {}
+    for sport, metrics in sorted(sports.items()):
+        su = str(sport).strip().upper()
+        auc = metrics.get("auc")
+        if su in _ALWAYS_ALLOW_SPORTS:
+            out[su] = {
+                "gate": False,
+                "auc": auc,
+                "reason": "OK (ALWAYS_ALLOW_SPORTS)",
+            }
+            continue
+        status = str(metrics.get("status") or "")
+        if auc is None or status == "insufficient data":
+            out[su] = {"gate": False, "auc": auc, "reason": "insufficient data"}
+        elif float(auc) < _GATE_AUC_THRESHOLD:
+            out[su] = {
+                "gate": True,
+                "auc": float(auc),
+                "reason": f"AUC {float(auc):.4f} < {_GATE_AUC_THRESHOLD}",
+            }
+        else:
+            out[su] = {
+                "gate": False,
+                "auc": float(auc),
+                "reason": "OK",
+            }
+    _GATES.parent.mkdir(parents=True, exist_ok=True)
+    _GATES.write_text(json.dumps(out, indent=2), encoding="utf-8")
+    return out
+
+
 def update_alerts(sports: dict[str, dict], *, history_lines: list[dict]) -> list[dict]:
     alerts: list[dict] = []
     recent = history_lines[-3:]
@@ -212,10 +248,18 @@ def main() -> int:
                     pass
 
     alerts = update_alerts(sports, history_lines=history)
+    gates = write_gate_recommendations(sports)
     print_table(sports)
+    print("\nTicket gate recommendations:")
+    for sport, rec in sorted(gates.items()):
+        status = "GATED" if rec.get("gate") else "OK"
+        auc = rec.get("auc")
+        auc_s = f"{auc:.4f}" if auc is not None else "—"
+        print(f"  {sport:<10} AUC={auc_s} {status} — {rec.get('reason', '')}")
     if alerts:
         print(f"\n{len(alerts)} alert(s) written -> {_ALERTS}")
-    print(f"\nAppended run -> {_LOG}")
+    print(f"\nGate file -> {_GATES}")
+    print(f"Appended run -> {_LOG}")
     return 0
 
 
