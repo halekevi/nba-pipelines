@@ -88,6 +88,9 @@ from usage_redistribution import apply_usage_redistribution
 
 # Repo root = parent of scripts/ (this file lives in scripts/)
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+
+# Set by --shadow-mode: relaxed pool gates; writes shadow_tickets_latest.json only.
+SHADOW_MODE: bool = False
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 from utils.defense_tiers import normalize_def_tier_label
@@ -2541,6 +2544,13 @@ LEG_PROB_CAPS = {
     "hit_rate": 0.72,
     "hit_rate_demon": 0.75,
     "fallback_const": 0.65,
+    # L5 hit-count / rate proxies inflate to 1.0 on 5/5 — cap for honest P(win) display.
+    "l5_over_proxy": 0.80,
+    "l5_under_proxy": 0.80,
+    "over_hit_rate": 0.80,
+    "under_hit_rate": 0.80,
+    "over_hit_rate_inverted": 0.80,
+    "hit_rate_fallback": 0.72,
 }
 TICKET_PROB_FLOOR = 1e-6
 TICKET_PROB_CAP = 0.999
@@ -3253,60 +3263,90 @@ def _resolve_l5_cols(row: pd.Series, direction: str) -> tuple[float, float]:
     return hits, gp
 
 
+def _prob_band(raw: Any, *, lo: float = 0.30, hi: float = 0.85) -> float | None:
+    """Normalize to 0–1 and accept only if strictly inside (lo, hi)."""
+    v = _to_prob_0_1(raw)
+    if v is None or not math.isfinite(v):
+        return None
+    if lo < v < hi:
+        return float(v)
+    return None
+
+
+def _shrink_l5(l5_rate: float, season_hr: float | None = None) -> float:
+    """Bayesian blend: 5 L5 games vs 10-game season prior (cap 0.78)."""
+    prior = season_hr if season_hr is not None and 0.30 < season_hr < 0.85 else 0.58
+    shrunk = (float(l5_rate) * 5.0 + prior * 10.0) / 15.0
+    return round(min(shrunk, 0.78), 3)
+
+
+def _season_hr_for_shrink(row: pd.Series) -> float | None:
+    for key in ("composite_hit_rate", "hit_rate", "intel_season_hit_rate"):
+        v = _prob_band(row.get(key))
+        if v is not None:
+            return v
+    return None
+
+
+def _infer_blended_score(row: pd.Series | dict) -> float | None:
+    """step8 blended_score, or 0.7×composite_hr + 0.3×ml_prob when both exist."""
+    if isinstance(row, dict):
+        get = row.get
+    else:
+        get = row.get if hasattr(row, "get") else (lambda k, d=None: getattr(row, k, d))
+
+    direct = _prob_band(get("blended_score"))
+    if direct is not None:
+        return direct
+
+    comp = _prob_band(get("composite_hit_rate") or get("hit_rate"))
+    ml = _prob_band(get("ml_prob"))
+    if comp is not None and ml is not None:
+        mixed = 0.7 * comp + 0.3 * ml
+        if 0.30 < mixed < 0.85:
+            return float(mixed)
+    return None
+
+
+def _directional_l10_pct(row: pd.Series, direction: str) -> float | None:
+    """Direction-aware L10 hit rate as 0–1 probability (capped at 0.78)."""
+    direction = str(direction or "OVER").strip().upper()
+    if direction == "UNDER":
+        pct = _prob_band(row.get("l10_under_pct"))
+        hits_raw = row.get("l10_under")
+    else:
+        pct = _prob_band(row.get("l10_over_pct"))
+        hits_raw = row.get("l10_over")
+    if pct is not None:
+        return min(pct, 0.78)
+    hits = pd.to_numeric(hits_raw, errors="coerce")
+    gp = pd.to_numeric(row.get("l10_games_played"), errors="coerce")
+    if pd.isna(hits) or not math.isfinite(float(hits)):
+        return None
+    hits_f = float(hits)
+    if hits_f > 1.0 and hits_f <= 10.0:
+        denom = float(gp) if pd.notna(gp) and float(gp) > 0 else 10.0
+        rate = hits_f / denom
+    else:
+        rate = hits_f
+    v = _prob_band(rate)
+    return min(v, 0.78) if v is not None else None
+
+
 def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     """
-    Selection / est_win_prob leg probability.
-    Prefer empirical hit_rate when L5 sample is sufficient; else ML (capped), rank, edge, shrunk HR.
+    leg_prob_used priority (win-rate / P(win) display):
+      blended_score → composite_hit_rate → ml_prob → l10_proxy → l5_shrunk → default 0.55
     """
     direction = str(
         row.get("bet_direction") or row.get("direction_used") or row.get("direction") or "OVER"
     ).strip().upper()
-
-    def _directional_hr_raw() -> tuple[Any, str]:
-        """Resolve direction-aware hit rate with safe fallbacks."""
-        if direction == "UNDER":
-            u = row.get("under_hit_rate")
-            if u is not None and str(u).strip() != "":
-                return u, "under_hit_rate"
-            o = row.get("over_hit_rate")
-            if o is not None and str(o).strip() != "":
-                try:
-                    ov = float(o)
-                    if ov > 1.0:
-                        ov = ov / 100.0
-                    if math.isfinite(ov):
-                        return 1.0 - ov, "over_hit_rate_inverted"
-                except (TypeError, ValueError):
-                    pass
-            _l5u_hits, _l5u_gp = _resolve_l5_cols(row, "UNDER")
-            if _l5u_gp > 0:
-                return _l5u_hits / _l5u_gp, "l5_under_proxy"
-            return row.get("hit_rate"), "hit_rate_fallback"
-        o = row.get("over_hit_rate")
-        if o is not None and str(o).strip() != "":
-            return o, "over_hit_rate"
-        _l5o_hits, _l5o_gp = _resolve_l5_cols(row, "OVER")
-        if _l5o_gp > 0:
-            return _l5o_hits / _l5o_gp, "l5_over_proxy"
-        return row.get("hit_rate"), "hit_rate_fallback"
-
-    hr_raw, hr_source = _directional_hr_raw()
-
-    try:
-        if hr_raw is not None and isinstance(hr_raw, float) and (math.isnan(hr_raw) or not math.isfinite(hr_raw)):
-            hr_raw = None
-    except TypeError:
-        pass
-    if hr_raw is not None and pd.isna(hr_raw):
-        hr_raw = None
-
-    l5_hits, l5_gp = _resolve_l5_cols(row, direction)
-    l5_n = l5_gp
     pick_type = str(row.get("pick_type", "") or "").strip().lower()
     sport = str(row.get("sport", "") or "").strip().upper()
+    l5_hits, l5_gp = _resolve_l5_cols(row, direction)
 
     if "demon" in pick_type and sport in ("NHL", "SOCCER", "SOC"):
-        hr = _to_prob_0_1(hr_raw)
+        hr = _to_prob_0_1(row.get("composite_hit_rate") or row.get("hit_rate"))
         ml = _to_prob_0_1(row.get("ml_prob"))
         has_sample = l5_gp >= 3.0
         hr_val = float(hr) if hr is not None else 0.0
@@ -3319,52 +3359,28 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
         demon_prob = min(ml_prob, 0.72)
         return _clip_prob(demon_prob, "ml_prob_demon"), "ml_prob_demon"
 
-    if hr_raw is not None and str(hr_raw).strip() != "" and l5_n >= 3.0:
-        try:
-            hit_prob = float(hr_raw)
-            if hit_prob > 1.0:
-                hit_prob = hit_prob / 100.0
-            hit_prob = max(0.50, min(0.99, hit_prob))
-            return hit_prob, hr_source
-        except (TypeError, ValueError):
-            pass
+    blended = _infer_blended_score(row)
+    if blended is not None:
+        return blended, "blended_score"
 
-    # Priority 1: calibrated ML probability (cap via LEG_PROB_CAPS["ml_prob"]).
-    mlp = pd.to_numeric(row.get("ml_prob"), errors="coerce")
-    if pd.notna(mlp) and 0.0 < float(mlp) < 1.0:
-        return _clip_prob(float(mlp), "ml_prob"), "ml_prob"
+    composite = _prob_band(row.get("composite_hit_rate") or row.get("hit_rate"))
+    if composite is not None:
+        return composite, "composite_hr"
 
-    # Priority 2: rank_score sigmoid (composite signal).
-    rs = pd.to_numeric(row.get("rank_score"), errors="coerce")
-    if pd.notna(rs):
-        return _clip_prob(_rank_score_to_prob(float(rs)), "rank_score"), "rank_score"
+    mlp = _prob_band(row.get("ml_prob"))
+    if mlp is not None:
+        return mlp, "ml_prob"
 
-    # Priority 3: edge-to-probability (magnitude — signed raw edge punishes UNDERs).
-    ae = pd.to_numeric(row.get("abs_edge"), errors="coerce")
-    edge_raw = pd.to_numeric(row.get("edge"), errors="coerce")
-    edge_mag = ae if pd.notna(ae) else (abs(float(edge_raw)) if pd.notna(edge_raw) else float("nan"))
-    thresh = get_edge_threshold(
-        row.get("sport", ""), row.get("prop_type", ""), row.get("pick_type", "")
-    )
-    if pd.notna(edge_mag):
-        shifted = float(edge_mag) - float(thresh)
-        prob = 1.0 / (1.0 + math.exp(-shifted * 0.6))
-        return _clip_prob(prob, "edge"), "edge"
+    l10_pct = _directional_l10_pct(row, direction)
+    if l10_pct is not None:
+        return l10_pct, "l10_proxy"
 
-    # Priority 4: shrunk hit rate.
-    hr = pd.to_numeric(row.get("hit_rate"), errors="coerce")
-    if pd.notna(hr):
-        hr_val = float(hr)
-        if 1.0 < hr_val <= 100.0:
-            hr_val = hr_val / 100.0
-        if 0.0 < hr_val < 1.0:
-            n = pd.to_numeric(row.get("l5_games", row.get("sample_n", 5)), errors="coerce")
-            if pd.isna(n) or float(n) <= 0:
-                n = 5.0
-            hit_rate_shrunk = (hr_val * float(n) + 0.55 * 5.0) / (float(n) + 5.0)
-            return _clip_prob(float(hit_rate_shrunk), "hit_rate"), "hit_rate"
+    if l5_gp > 0:
+        l5_raw = float(l5_hits) / float(l5_gp)
+        season = _season_hr_for_shrink(row)
+        return _shrink_l5(l5_raw, season), "l5_shrunk"
 
-    return DEFAULT_LEG_PROB_FALLBACK, "fallback_const"
+    return DEFAULT_LEG_PROB_FALLBACK, "default"
 
 
 def win_prob(leg_probs_with_source, _n_legs: int) -> float:
@@ -3390,10 +3406,10 @@ MAX_LEG_PROB_FOR_P_WIN = 0.80
 
 
 def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
-    """P(win) leg factor: leg_prob_used → composite_hit_rate/hit_rate → ml_prob → 0.55 (capped)."""
+    """P(win) leg factor: leg_prob_used → blended_score → composite_hit_rate → ml_prob → 0.55 (capped)."""
     if isinstance(leg, pd.Series):
         leg = leg.to_dict()
-    for key in ("leg_prob_used", "composite_hit_rate", "hit_rate", "ml_prob"):
+    for key in ("leg_prob_used", "blended_score", "composite_hit_rate", "hit_rate", "ml_prob"):
         raw = leg.get(key)
         if raw is None or raw == "":
             continue
@@ -4710,6 +4726,14 @@ def ticket_groups_to_payload(
                 best_book_s = str(gv("best_cross_book") or "")
                 line_f = _safe_float(gv("line"))
                 line_key = f"{float(line_f):.3f}" if line_f is not None else ""
+                _comp_hr = _safe_float(
+                    gv("composite_hit_rate") or gv("composite_hr") or gv("Composite Hit Rate") or gv("hit_rate")
+                )
+                _blend_sc = _safe_float(gv("blended_score") or gv("Blended Score"))
+                if _blend_sc is None and _comp_hr is not None:
+                    _ml_b = _safe_float(gv("ml_prob"))
+                    if _ml_b is not None:
+                        _blend_sc = round(0.7 * float(_comp_hr) + 0.3 * float(_ml_b), 4)
                 id_material = "|".join(
                     [
                         sport_s.strip().lower(),
@@ -4749,17 +4773,19 @@ def ticket_groups_to_payload(
                     "cross_edge_vs_pp": _safe_float(gv("cross_edge_vs_pp")),
                     "cross_n_books": _safe_int_cross_books(gv("cross_n_books")),
                     "hit_rate": _safe_float(gv("hit_rate")),
+                    "composite_hit_rate": _comp_hr,
+                    "blended_score": _blend_sc,
                     "over_hit_rate": _safe_float(gv("over_hit_rate") or gv("hit_rate_over_L5")),
                     "under_hit_rate": _safe_float(gv("under_hit_rate") or gv("hit_rate_under_L5")),
-            "ml_prob": _safe_float(gv("ml_prob")),
-            "rank_score": _safe_float(gv("rank_score")),
-            "tier": str(gv("tier") or gv("Tier") or ""),
-            "opponent_def_rank": _safe_float(
-                gv("opponent_def_rank")
-                or gv("opp_def_rank")
-                or gv("OVERALL_DEF_RANK")
-                or gv("def_rank")
-            ),
+                    "ml_prob": _safe_float(gv("ml_prob")),
+                    "rank_score": _safe_float(gv("rank_score")),
+                    "tier": str(gv("tier") or gv("Tier") or ""),
+                    "opponent_def_rank": _safe_float(
+                        gv("opponent_def_rank")
+                        or gv("opp_def_rank")
+                        or gv("OVERALL_DEF_RANK")
+                        or gv("def_rank")
+                    ),
                     "game_time": game_time_s,
                     "event_start_time": game_time_s or None,
                     "posted_at": str(gv("posted_at") or "") or None,
@@ -4791,6 +4817,8 @@ def ticket_groups_to_payload(
                     "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
+                    "l10_over_pct": _safe_float(gv("l10_over_pct")),
+                    "l10_under_pct": _safe_float(gv("l10_under_pct")),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
@@ -4816,7 +4844,9 @@ def ticket_groups_to_payload(
                         leg[f"line_g{_i}"] = _line_hist_v
                 leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport", "")).upper() == "NBA1Q" else None
                 leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
-                leg["leg_prob_used"] = _safe_float(leg_prob_used)
+                leg["leg_prob_used"] = _safe_float(
+                    min(float(leg_prob_used or 0.0), MAX_LEG_PROB_FOR_P_WIN)
+                )
                 leg["leg_prob_source"] = leg_prob_source
                 leg["image_url"] = compute_image_url(leg)
                 leg["initials"] = player_initials(leg.get("player", ""))
@@ -4932,7 +4962,9 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
         )
         try:
             prob_used, prob_src = _resolve_leg_prob(leg_s)
-            row["leg_prob_used"] = round(float(prob_used), 4)
+            row["leg_prob_used"] = round(
+                min(float(prob_used), MAX_LEG_PROB_FOR_P_WIN), 4
+            )
             row["leg_prob_source"] = prob_src
         except Exception:
             pass
@@ -4952,22 +4984,25 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             row["espn_player_id"] = _clean_id(eid)
 
         base_line = safe(g("standard_line")) or safe(g("line"))
+        base_line_f = _safe_float(base_line)
         actuals: List[float] = []
         line_hist: List[float] = []
         for _i in range(1, 11):
             av = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
             lv = safe(g(f"line_g{_i}"))
-            if av is not None:
-                actuals.append(float(av))
-                line_hist.append(float(lv) if lv is not None else (float(base_line) if base_line is not None else av))
+            av_f = _safe_float(av)
+            if av_f is not None:
+                actuals.append(av_f)
+                lv_f = _safe_float(lv)
+                line_hist.append(lv_f if lv_f is not None else (base_line_f if base_line_f is not None else av_f))
                 row[f"stat_g{_i}"] = av
                 row[f"g{_i}"] = av
                 if lv is not None:
                     row[f"line_g{_i}"] = lv
         if actuals:
             row["actual_series"] = actuals
-            if base_line is not None:
-                row["line_series"] = line_hist if line_hist else [float(base_line)] * len(actuals)
+            if base_line_f is not None:
+                row["line_series"] = line_hist if line_hist else [base_line_f] * len(actuals)
             elif line_hist:
                 row["line_series"] = line_hist
 
@@ -7084,6 +7119,15 @@ def _load_step8_board_like(
         if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
             hr = hr / 100.0
         df["hit_rate"] = hr
+
+    if "composite_hit_rate" not in df.columns and "hit_rate" in df.columns:
+        df["composite_hit_rate"] = df["hit_rate"]
+    if "ml_prob" in df.columns:
+        df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+    if "blended_score" not in df.columns or pd.to_numeric(df.get("blended_score"), errors="coerce").isna().all():
+        comp = pd.to_numeric(df.get("composite_hit_rate", df.get("hit_rate")), errors="coerce")
+        ml = pd.to_numeric(df.get("ml_prob"), errors="coerce")
+        df["blended_score"] = 0.7 * comp + 0.3 * ml
 
     # NBA1Q can overstate hit_rate on tiny windows (e.g., 5/5 => 100%).
     def _num_col(name: str) -> pd.Series:
@@ -11178,8 +11222,24 @@ def main():
         dest="web_filename",
         help="Override web JSON filename (e.g. tickets_winrate_latest.json).",
     )
+    ap.add_argument(
+        "--shadow-mode",
+        action="store_true",
+        dest="shadow_mode",
+        help=(
+            "Relaxed ticket pool gates for shadow comparison. "
+            "Writes shadow_tickets_latest.json only (never overwrites tickets_latest.json)."
+        ),
+    )
 
     args = ap.parse_args()
+    global SHADOW_MODE
+    SHADOW_MODE = bool(getattr(args, "shadow_mode", False))
+    if SHADOW_MODE:
+        print(
+            "[shadow] SHADOW_MODE on — relaxed pool gates; "
+            "web output -> shadow_tickets_latest.json"
+        )
     global PAYOUT_DEBUG
     PAYOUT_DEBUG = bool(args.debug_payout)
     configure_payout_ladder(use_reverted_ladder=bool(args.use_reverted_ladder))
@@ -11207,7 +11267,7 @@ def main():
             "[tickets] strict pool: min hit rate >= 0.65, "
             f"max FINAL legs={args.max_ticket_legs} (use --no-high-conviction for wider pools)"
         )
-    if args.prioritize_ticket_hit:
+    if args.prioritize_ticket_hit and not SHADOW_MODE:
         args.min_hit_rate = max(float(args.min_hit_rate), 0.72)
         print(
             "[tickets] prioritize-ticket-hit: pool min hit rate >= 0.72, raised per-leg floors, "
@@ -11768,9 +11828,11 @@ def main():
                 filtered_df["rank_score"] = pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) * strat_mult
 
         # Sport-specific hit rate floors based on empirical data
-        effective_min_hit = args.min_hit_rate
+        effective_min_hit = float(args.min_hit_rate)
 
-        if pt == ["Goblin"]:
+        if SHADOW_MODE:
+            pass
+        elif pt == ["Goblin"]:
             if sport == "NBA":
                 effective_min_hit = max(args.min_hit_rate, 0.62)   # NBA Goblin: 64.3% overall
             elif sport == "CBB":
@@ -11801,7 +11863,7 @@ def main():
             effective_min_hit = min(float(args.min_hit_rate), 0.50)
 
         # Soccer OVER legs require stronger edge support; keep UNDER legs unchanged.
-        if sport == "SOCCER" and "direction" in filtered_df.columns:
+        if (not SHADOW_MODE) and sport == "SOCCER" and "direction" in filtered_df.columns:
             _dir = filtered_df["direction"].astype(str).str.upper().str.strip()
             _edge = _edge_magnitude_series(filtered_df).fillna(0.0)
             _over_mask = _dir.eq("OVER")
@@ -13055,29 +13117,37 @@ def main():
             )
             print_positive_ev_gate_report(gated_preview)
         _web_ev = not bool(args.no_web_ev_gate)
+        _web_json_name = (
+            str(args.web_filename or "").strip()
+            or ("shadow_tickets_latest.json" if SHADOW_MODE else "tickets_latest.json")
+        )
+        _merge_web = bool(args.merge_web_latest) and not SHADOW_MODE
         write_web_outputs(
             payload,
             args.web_outdir,
             require_positive_ev=_web_ev,
-            merge_existing_for_date=bool(args.merge_web_latest),
+            merge_existing_for_date=_merge_web,
             apply_template_cap=bool(args.web_template_cap),
             discard_tracker=discard_tracker,
+            json_filename=_web_json_name,
         )
-        write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb)
-        try:
-            ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
-            generate_payout_ladder_examples(payload, ex_out)
-        except Exception as _pex:
-            print(f"[WARN] Could not write payout ladder examples: {_pex}")
-        if args.also_root:
+        if not SHADOW_MODE:
+            write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
+                             wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb)
+            try:
+                ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
+                generate_payout_ladder_examples(payload, ex_out)
+            except Exception as _pex:
+                print(f"[WARN] Could not write payout ladder examples: {_pex}")
+        if args.also_root and not SHADOW_MODE:
             write_web_outputs(
                 payload,
                 outdir=".",
                 require_positive_ev=_web_ev,
-                merge_existing_for_date=bool(args.merge_web_latest),
+                merge_existing_for_date=_merge_web,
                 apply_template_cap=bool(args.web_template_cap),
                 discard_tracker=discard_tracker,
+                json_filename=_web_json_name,
             )
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
