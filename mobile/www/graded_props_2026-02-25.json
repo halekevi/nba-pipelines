@@ -34314,8 +34314,8 @@
       "tier": "A",
       "edge": "12.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "11.5",
+      "actual_value": 9.0,
+      "margin": 5.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34328,7 +34328,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34342,8 +34344,8 @@
       "tier": "A",
       "edge": "13.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "12.5",
+      "actual_value": 9.0,
+      "margin": 6.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34356,7 +34358,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34370,8 +34374,8 @@
       "tier": "A",
       "edge": "17.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "15.5",
+      "actual_value": 9.0,
+      "margin": 3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34384,7 +34388,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34398,8 +34404,8 @@
       "tier": "A",
       "edge": "18.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "16.5",
+      "actual_value": 9.0,
+      "margin": 4.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34412,7 +34418,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34426,8 +34434,8 @@
       "tier": "A",
       "edge": "14.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "22.5",
+      "actual_value": 6.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34440,7 +34448,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34482,8 +34492,8 @@
       "tier": "A",
       "edge": "15.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "23.5",
+      "actual_value": 6.0,
+      "margin": 3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34496,7 +34506,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34538,8 +34550,8 @@
       "tier": "A",
       "edge": "14.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 4.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34550,9 +34562,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34566,8 +34579,8 @@
       "tier": "A",
       "edge": "13.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "25.5",
+      "actual_value": 8.0,
+      "margin": 5.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34580,7 +34593,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34594,8 +34609,8 @@
       "tier": "A",
       "edge": "4.95",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "2.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34608,7 +34623,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34622,8 +34639,8 @@
       "tier": "A",
       "edge": "6.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "11.5",
+      "actual_value": 4.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34636,7 +34653,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -34678,8 +34697,8 @@
       "tier": "A",
       "edge": "16.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "14.5",
+      "actual_value": 9.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -34692,7 +34711,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35070,8 +35091,8 @@
       "tier": "A",
       "edge": "4.55",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35082,9 +35103,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35126,8 +35148,8 @@
       "tier": "A",
       "edge": "12.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "24.5",
+      "actual_value": 8.0,
+      "margin": 4.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35140,7 +35162,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35182,8 +35206,8 @@
       "tier": "A",
       "edge": "11.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "10.5",
+      "actual_value": 9.0,
+      "margin": 4.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35196,7 +35220,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35350,8 +35376,8 @@
       "tier": "A",
       "edge": "13.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 4.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35362,9 +35388,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35378,8 +35405,8 @@
       "tier": "A",
       "edge": "11.65",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "18.5",
+      "actual_value": 8.0,
+      "margin": 5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35392,7 +35419,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35406,8 +35435,8 @@
       "tier": "A",
       "edge": "14.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "10.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35419,8 +35448,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35462,8 +35493,8 @@
       "tier": "A",
       "edge": "2.65",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 3.0,
+      "margin": 2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35476,7 +35507,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35546,8 +35579,8 @@
       "tier": "A",
       "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "2.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35560,7 +35593,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35574,8 +35609,8 @@
       "tier": "A",
       "edge": "5.25",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -35587,8 +35622,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35630,8 +35667,8 @@
       "tier": "A",
       "edge": "2.3",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -35644,7 +35681,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35658,8 +35697,8 @@
       "tier": "A",
       "edge": "11.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "16.5",
+      "actual_value": 5.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -35672,7 +35711,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35770,8 +35811,8 @@
       "tier": "A",
       "edge": "2.35",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "3.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -35784,7 +35825,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -35994,8 +36037,8 @@
       "tier": "A",
       "edge": "6.95",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36007,8 +36050,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36022,8 +36067,8 @@
       "tier": "A",
       "edge": "21.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "7.5",
+      "actual_value": 4.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36035,8 +36080,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36050,8 +36097,8 @@
       "tier": "A",
       "edge": "15.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "16.5",
+      "actual_value": 6.0,
+      "margin": 2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36064,7 +36111,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36078,8 +36127,8 @@
       "tier": "A",
       "edge": "22.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "8.5",
+      "actual_value": 4.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36092,7 +36141,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36106,8 +36157,8 @@
       "tier": "A",
       "edge": "16.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "17.5",
+      "actual_value": 6.0,
+      "margin": 3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36120,7 +36171,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36190,8 +36243,8 @@
       "tier": "A",
       "edge": "3.85",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36204,7 +36257,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36218,8 +36273,8 @@
       "tier": "A",
       "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36232,7 +36287,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36246,8 +36303,8 @@
       "tier": "A",
       "edge": "4.5",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36259,8 +36316,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36526,8 +36585,8 @@
       "tier": "A",
       "edge": "10.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "15.5",
+      "actual_value": 5.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36540,7 +36599,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36778,8 +36839,8 @@
       "tier": "A",
       "edge": "9.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "8.5",
+      "actual_value": 3.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36792,7 +36853,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36834,8 +36897,8 @@
       "tier": "A",
       "edge": "20.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "6.5",
+      "actual_value": 4.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36847,8 +36910,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36862,8 +36927,8 @@
       "tier": "A",
       "edge": "14.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "15.5",
+      "actual_value": 6.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36876,7 +36941,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -36918,8 +36985,8 @@
       "tier": "A",
       "edge": "10.6",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "12.5",
+      "actual_value": 9.0,
+      "margin": 6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -36932,7 +36999,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37198,8 +37267,8 @@
       "tier": "B",
       "edge": "5.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "10.5",
+      "actual_value": 4.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -37212,7 +37281,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37282,8 +37353,8 @@
       "tier": "B",
       "edge": "14.8",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "13.5",
+      "actual_value": 6.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -37295,8 +37366,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37366,8 +37439,8 @@
       "tier": "B",
       "edge": "2.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37380,7 +37453,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37394,8 +37469,8 @@
       "tier": "B",
       "edge": "3.3",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "5.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37408,7 +37483,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37422,8 +37499,8 @@
       "tier": "B",
       "edge": "18.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "23.5",
+      "actual_value": 8.0,
+      "margin": 2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37436,7 +37513,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37450,8 +37529,8 @@
       "tier": "B",
       "edge": "19.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "24.5",
+      "actual_value": 8.0,
+      "margin": 3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37464,7 +37543,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37478,8 +37559,8 @@
       "tier": "B",
       "edge": "20.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "25.5",
+      "actual_value": 8.0,
+      "margin": 4.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37492,7 +37573,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37506,8 +37589,8 @@
       "tier": "B",
       "edge": "7.45",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "12.5",
+      "actual_value": 3.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37520,7 +37603,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37562,8 +37647,8 @@
       "tier": "B",
       "edge": "8.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "7.5",
+      "actual_value": 3.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37576,7 +37661,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37590,8 +37677,8 @@
       "tier": "B",
       "edge": "7.1",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "4.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37603,8 +37690,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -37758,8 +37847,8 @@
       "tier": "B",
       "edge": "11.65",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "14.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -37771,8 +37860,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38290,8 +38381,8 @@
       "tier": "B",
       "edge": "12.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38303,8 +38394,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38318,8 +38411,8 @@
       "tier": "B",
       "edge": "12.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38331,8 +38424,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38346,8 +38441,8 @@
       "tier": "B",
       "edge": "17.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "18.5",
+      "actual_value": 5.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38360,7 +38455,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38374,8 +38471,8 @@
       "tier": "B",
       "edge": "11.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "5.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38387,8 +38484,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38402,8 +38501,8 @@
       "tier": "B",
       "edge": "14.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "21.5",
+      "actual_value": 7.0,
+      "margin": 4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38416,7 +38515,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38542,8 +38643,8 @@
       "tier": "B",
       "edge": "13.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "9.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -38555,8 +38656,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38570,8 +38673,8 @@
       "tier": "B",
       "edge": "18.35",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "23.0",
+      "actual_value": 8.0,
+      "margin": 2.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38584,7 +38687,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38626,8 +38731,8 @@
       "tier": "B",
       "edge": "2.35",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "2.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38639,8 +38744,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38654,8 +38761,8 @@
       "tier": "B",
       "edge": "15.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "16.5",
+      "actual_value": 5.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38667,8 +38774,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38878,8 +38987,8 @@
       "tier": "B",
       "edge": "3.15",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "2.5",
+      "actual_value": 2.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -38892,7 +39001,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38906,8 +39017,8 @@
       "tier": "B",
       "edge": "3.65",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "5.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "LOW",
@@ -38919,8 +39030,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38962,8 +39075,8 @@
       "tier": "B",
       "edge": "7.35",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -38976,7 +39089,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -38990,8 +39105,8 @@
       "tier": "B",
       "edge": "6.8",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "LOW",
@@ -39002,9 +39117,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39102,8 +39218,8 @@
       "tier": "B",
       "edge": "16.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "17.5",
+      "actual_value": 5.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -39116,7 +39232,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39186,8 +39304,8 @@
       "tier": "B",
       "edge": "13.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "20.5",
+      "actual_value": 7.0,
+      "margin": 3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -39200,7 +39318,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39410,8 +39530,8 @@
       "tier": "B",
       "edge": "5.7",
       "ml_prob": "",
-      "actual_value": "9.0",
-      "margin": "7.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -39423,8 +39543,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 9.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39606,8 +39728,8 @@
       "tier": "B",
       "edge": "15.35",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "14.5",
+      "actual_value": 4.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -39620,7 +39742,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39662,8 +39786,8 @@
       "tier": "B",
       "edge": "16.35",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "15.5",
+      "actual_value": 4.0,
+      "margin": 1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -39676,7 +39800,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39718,8 +39844,8 @@
       "tier": "B",
       "edge": "2.25",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -39731,8 +39857,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39746,8 +39874,8 @@
       "tier": "B",
       "edge": "3.4",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -39760,7 +39888,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -39774,8 +39904,8 @@
       "tier": "B",
       "edge": "2.95",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "LOW",
@@ -39786,9 +39916,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40082,8 +40213,8 @@
       "tier": "B",
       "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "0.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40095,8 +40226,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40138,8 +40271,8 @@
       "tier": "C",
       "edge": "8.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "14.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40151,8 +40284,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40166,8 +40301,8 @@
       "tier": "C",
       "edge": "5.8",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "9.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40180,7 +40315,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40194,8 +40331,8 @@
       "tier": "C",
       "edge": "7.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "13.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40207,8 +40344,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40334,8 +40473,8 @@
       "tier": "C",
       "edge": "7.5",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "14.5",
+      "actual_value": 2.0,
+      "margin": 1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40348,7 +40487,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40362,8 +40503,8 @@
       "tier": "C",
       "edge": "6.5",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "13.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40376,7 +40517,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40418,8 +40561,8 @@
       "tier": "C",
       "edge": "9.55",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "14.5",
+      "actual_value": 8.0,
+      "margin": 5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40432,7 +40575,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40558,8 +40703,8 @@
       "tier": "C",
       "edge": "13.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "21.5",
+      "actual_value": 6.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -40572,7 +40717,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40698,8 +40845,8 @@
       "tier": "C",
       "edge": "3.25",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40712,7 +40859,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40726,8 +40875,8 @@
       "tier": "C",
       "edge": "2.25",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -40738,9 +40887,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -40810,8 +40960,8 @@
       "tier": "C",
       "edge": "13.85",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "13.0",
+      "actual_value": 4.0,
+      "margin": -1.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -40823,8 +40973,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41202,8 +41354,8 @@
       "tier": "C",
       "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "1.0",
-      "margin": "0.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41215,8 +41367,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 1.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41398,8 +41552,8 @@
       "tier": "C",
       "edge": "11.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "19.5",
+      "actual_value": 6.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -41411,8 +41565,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41426,8 +41582,8 @@
       "tier": "C",
       "edge": "7.15",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "LOW",
@@ -41440,7 +41596,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41482,8 +41640,8 @@
       "tier": "C",
       "edge": "11.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 4.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -41494,9 +41652,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41510,8 +41669,8 @@
       "tier": "C",
       "edge": "4.85",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41523,8 +41682,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41538,8 +41699,8 @@
       "tier": "C",
       "edge": "11.75",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 3.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41550,9 +41711,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41566,8 +41728,8 @@
       "tier": "C",
       "edge": "5.5",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "12.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41579,8 +41741,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41594,8 +41758,8 @@
       "tier": "C",
       "edge": "14.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "12.5",
+      "actual_value": 9.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -41608,7 +41772,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41650,8 +41816,8 @@
       "tier": "C",
       "edge": "4.1",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "3.5",
+      "actual_value": 2.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41664,7 +41830,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41790,8 +41958,8 @@
       "tier": "C",
       "edge": "9.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "8.5",
+      "actual_value": 9.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -41804,7 +41972,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41930,8 +42100,8 @@
       "tier": "C",
       "edge": "9.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "21.5",
+      "actual_value": 8.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -41944,7 +42114,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -41958,8 +42130,8 @@
       "tier": "C",
       "edge": "2.2",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -41972,7 +42144,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42042,8 +42216,8 @@
       "tier": "C",
       "edge": "13.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "11.5",
+      "actual_value": 9.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42055,8 +42229,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42070,8 +42246,8 @@
       "tier": "C",
       "edge": "10.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "18.5",
+      "actual_value": 6.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42083,8 +42259,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42154,8 +42332,8 @@
       "tier": "C",
       "edge": "10.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 4.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42166,9 +42344,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42210,8 +42389,8 @@
       "tier": "C",
       "edge": "1.65",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -42223,8 +42402,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42294,8 +42475,8 @@
       "tier": "C",
       "edge": "3.95",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42307,8 +42488,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42378,8 +42561,8 @@
       "tier": "C",
       "edge": "8.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "7.5",
+      "actual_value": 9.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42392,7 +42575,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42434,8 +42619,8 @@
       "tier": "C",
       "edge": "12.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "10.5",
+      "actual_value": 9.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42447,8 +42632,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42630,8 +42817,8 @@
       "tier": "C",
       "edge": "13.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "14.5",
+      "actual_value": 6.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -42644,7 +42831,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42686,8 +42875,8 @@
       "tier": "C",
       "edge": "9.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -42699,8 +42888,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42742,8 +42933,8 @@
       "tier": "C",
       "edge": "3.55",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42754,9 +42945,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42798,8 +42990,8 @@
       "tier": "C",
       "edge": "18.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "4.5",
+      "actual_value": 4.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -42811,8 +43003,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42854,8 +43048,8 @@
       "tier": "C",
       "edge": "9.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 4.0,
+      "margin": -3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -42866,9 +43060,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -42882,8 +43077,8 @@
       "tier": "C",
       "edge": "2.55",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -42895,8 +43090,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43050,8 +43247,8 @@
       "tier": "D",
       "edge": "3.85",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "9.5",
+      "actual_value": 4.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43064,7 +43261,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43162,8 +43361,8 @@
       "tier": "D",
       "edge": "8.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "20.5",
+      "actual_value": 8.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43176,7 +43375,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43246,8 +43447,8 @@
       "tier": "D",
       "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43259,8 +43460,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43330,8 +43533,8 @@
       "tier": "D",
       "edge": "10.65",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "13.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43343,8 +43546,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43442,8 +43647,8 @@
       "tier": "D",
       "edge": "3.6",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43454,9 +43659,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43554,8 +43760,8 @@
       "tier": "D",
       "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43567,8 +43773,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43638,8 +43846,8 @@
       "tier": "D",
       "edge": "5.0",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "12.0",
+      "actual_value": 2.0,
+      "margin": -1.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43651,8 +43859,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43694,8 +43904,8 @@
       "tier": "D",
       "edge": "10.3",
       "ml_prob": "",
-      "actual_value": "14.0",
-      "margin": "11.5",
+      "actual_value": 5.0,
+      "margin": 2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43708,7 +43918,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 14.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43750,8 +43962,8 @@
       "tier": "D",
       "edge": "8.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "2.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43763,8 +43975,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43806,8 +44020,8 @@
       "tier": "D",
       "edge": "5.05",
       "ml_prob": "",
-      "actual_value": "9.0",
-      "margin": "7.5",
+      "actual_value": 3.0,
+      "margin": 1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43820,7 +44034,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 9.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43862,8 +44078,8 @@
       "tier": "D",
       "edge": "8.65",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "15.5",
+      "actual_value": 8.0,
+      "margin": 2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43876,7 +44092,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43918,8 +44136,8 @@
       "tier": "D",
       "edge": "3.6",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43931,8 +44149,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43946,8 +44166,8 @@
       "tier": "D",
       "edge": "2.2",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 2.0,
+      "margin": 1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -43960,7 +44180,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -43974,8 +44196,8 @@
       "tier": "D",
       "edge": "4.75",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -43987,8 +44209,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44058,8 +44282,8 @@
       "tier": "D",
       "edge": "16.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "2.5",
+      "actual_value": 4.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44071,8 +44295,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44086,8 +44312,8 @@
       "tier": "D",
       "edge": "7.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "6.5",
+      "actual_value": 9.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -44100,7 +44326,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44170,8 +44398,8 @@
       "tier": "D",
       "edge": "2.45",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44184,7 +44412,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44198,8 +44428,8 @@
       "tier": "D",
       "edge": "3.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44211,8 +44441,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44226,8 +44458,8 @@
       "tier": "D",
       "edge": "11.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "12.5",
+      "actual_value": 6.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44239,8 +44471,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44450,8 +44684,8 @@
       "tier": "D",
       "edge": "4.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "9.5",
+      "actual_value": 4.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -44464,7 +44698,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44478,8 +44714,8 @@
       "tier": "D",
       "edge": "6.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "12.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44491,8 +44727,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44534,8 +44772,8 @@
       "tier": "D",
       "edge": "6.1",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "3.5",
+      "actual_value": 1.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44547,8 +44785,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44646,8 +44886,8 @@
       "tier": "D",
       "edge": "11.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "7.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -44659,8 +44899,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44730,8 +44972,8 @@
       "tier": "D",
       "edge": "3.8",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "6.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44744,7 +44986,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44786,8 +45030,8 @@
       "tier": "D",
       "edge": "7.65",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "14.5",
+      "actual_value": 8.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -44800,7 +45044,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44842,8 +45088,8 @@
       "tier": "D",
       "edge": "9.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-1.5",
+      "actual_value": 0.0,
+      "margin": -4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -44856,7 +45102,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -44898,8 +45146,8 @@
       "tier": "D",
       "edge": "2.45",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -44911,8 +45159,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45038,8 +45288,8 @@
       "tier": "D",
       "edge": "11.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "18.5",
+      "actual_value": 7.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45052,7 +45302,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45066,8 +45318,8 @@
       "tier": "D",
       "edge": "6.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "5.5",
+      "actual_value": 3.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45079,8 +45331,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45178,8 +45432,8 @@
       "tier": "D",
       "edge": "6.15",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45190,9 +45444,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45234,8 +45489,8 @@
       "tier": "D",
       "edge": "1.95",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -45246,9 +45501,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45346,8 +45602,8 @@
       "tier": "D",
       "edge": "2.95",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "0.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -45359,8 +45615,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45430,8 +45688,8 @@
       "tier": "D",
       "edge": "3.45",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "4.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45443,8 +45701,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45486,8 +45746,8 @@
       "tier": "D",
       "edge": "8.55",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "13.5",
+      "actual_value": 8.0,
+      "margin": 4.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45500,7 +45760,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45570,8 +45832,8 @@
       "tier": "D",
       "edge": "4.4",
       "ml_prob": "",
-      "actual_value": "1.0",
-      "margin": "-0.5",
+      "actual_value": 0.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45584,7 +45846,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 1.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45682,8 +45946,8 @@
       "tier": "D",
       "edge": "16.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "21.5",
+      "actual_value": 8.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45696,7 +45960,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45794,8 +46060,8 @@
       "tier": "D",
       "edge": "7.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "19.5",
+      "actual_value": 8.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -45807,8 +46073,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45822,8 +46090,8 @@
       "tier": "D",
       "edge": "2.45",
       "ml_prob": "",
-      "actual_value": "7.0",
-      "margin": "6.5",
+      "actual_value": 3.0,
+      "margin": 2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45836,7 +46104,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 7.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -45962,8 +46232,8 @@
       "tier": "D",
       "edge": "3.0",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -45975,8 +46245,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46074,8 +46346,8 @@
       "tier": "D",
       "edge": "13.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "14.5",
+      "actual_value": 5.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46087,8 +46359,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46102,8 +46376,8 @@
       "tier": "D",
       "edge": "8.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "13.5",
+      "actual_value": 5.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46115,8 +46389,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46158,8 +46434,8 @@
       "tier": "D",
       "edge": "8.65",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "11.5",
+      "actual_value": 2.0,
+      "margin": -3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46171,8 +46447,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46242,8 +46520,8 @@
       "tier": "D",
       "edge": "8.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-2.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46256,7 +46534,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46270,8 +46550,8 @@
       "tier": "D",
       "edge": "10.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "17.5",
+      "actual_value": 7.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46284,7 +46564,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46298,8 +46580,8 @@
       "tier": "D",
       "edge": "5.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46311,8 +46593,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46326,8 +46610,8 @@
       "tier": "D",
       "edge": "14.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "0.5",
+      "actual_value": 4.0,
+      "margin": -7.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46339,8 +46623,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46382,8 +46668,8 @@
       "tier": "D",
       "edge": "8.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "2.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46395,8 +46681,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46466,8 +46754,8 @@
       "tier": "D",
       "edge": "5.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "4.5",
+      "actual_value": 3.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46479,8 +46767,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46662,8 +46952,8 @@
       "tier": "D",
       "edge": "5.1",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46675,8 +46965,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46830,8 +47122,8 @@
       "tier": "D",
       "edge": "12.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "13.5",
+      "actual_value": 5.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46843,8 +47135,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46858,8 +47152,8 @@
       "tier": "D",
       "edge": "2.8",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46871,8 +47165,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -46970,8 +47266,8 @@
       "tier": "D",
       "edge": "9.55",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "10.5",
+      "actual_value": 6.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -46983,8 +47279,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47054,8 +47352,8 @@
       "tier": "D",
       "edge": "7.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-3.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -47068,7 +47366,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47082,8 +47382,8 @@
       "tier": "D",
       "edge": "10.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "6.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47095,8 +47395,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47138,8 +47440,8 @@
       "tier": "D",
       "edge": "1.35",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47151,8 +47453,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47166,8 +47470,8 @@
       "tier": "D",
       "edge": "2.55",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47178,9 +47482,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47194,8 +47499,8 @@
       "tier": "D",
       "edge": "9.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "16.5",
+      "actual_value": 7.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -47207,8 +47512,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47250,8 +47557,8 @@
       "tier": "D",
       "edge": "7.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "12.5",
+      "actual_value": 5.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -47263,8 +47570,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47502,8 +47811,8 @@
       "tier": "D",
       "edge": "11.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "12.5",
+      "actual_value": 5.0,
+      "margin": -4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -47515,8 +47824,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47558,8 +47869,8 @@
       "tier": "D",
       "edge": "3.05",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47571,8 +47882,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47586,8 +47899,8 @@
       "tier": "D",
       "edge": "6.65",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "13.5",
+      "actual_value": 8.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47600,7 +47913,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47614,8 +47929,8 @@
       "tier": "D",
       "edge": "3.75",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47627,8 +47942,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47670,8 +47987,8 @@
       "tier": "D",
       "edge": "14.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "19.5",
+      "actual_value": 8.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -47683,8 +48000,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -47950,8 +48269,8 @@
       "tier": "D",
       "edge": "5.35",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -47963,8 +48282,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48118,8 +48439,8 @@
       "tier": "D",
       "edge": "5.45",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "10.5",
+      "actual_value": 3.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -48131,8 +48452,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48398,8 +48721,8 @@
       "tier": "D",
       "edge": "9.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "5.5",
+      "actual_value": 0.0,
+      "margin": -7.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -48411,8 +48734,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48454,8 +48779,8 @@
       "tier": "D",
       "edge": "11.35",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "10.5",
+      "actual_value": 4.0,
+      "margin": -3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -48467,8 +48792,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48482,8 +48809,8 @@
       "tier": "D",
       "edge": "3.45",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -48494,9 +48821,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48566,8 +48894,8 @@
       "tier": "D",
       "edge": "4.8",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "8.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -48579,8 +48907,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48818,8 +49148,8 @@
       "tier": "D",
       "edge": "2.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "0.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -48831,8 +49161,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -48986,8 +49318,8 @@
       "tier": "D",
       "edge": "1.05",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "4.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49000,7 +49332,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49238,8 +49572,8 @@
       "tier": "D",
       "edge": "1.65",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "3.5",
+      "actual_value": 3.0,
+      "margin": 1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -49252,7 +49586,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49406,8 +49742,8 @@
       "tier": "D",
       "edge": "2.8",
       "ml_prob": "",
-      "actual_value": "7.0",
-      "margin": "5.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49419,8 +49755,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 7.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49462,8 +49800,8 @@
       "tier": "D",
       "edge": "2.8",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "5.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49475,8 +49813,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49490,8 +49830,8 @@
       "tier": "D",
       "edge": "2.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "5.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49503,8 +49843,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49518,8 +49860,8 @@
       "tier": "D",
       "edge": "2.85",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "8.5",
+      "actual_value": 4.0,
+      "margin": 1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -49532,7 +49874,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49602,8 +49946,8 @@
       "tier": "D",
       "edge": "3.4",
       "ml_prob": "",
-      "actual_value": "1.0",
-      "margin": "-1.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49616,7 +49960,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 1.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49882,8 +50228,8 @@
       "tier": "D",
       "edge": "7.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49895,8 +50241,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -49966,8 +50314,8 @@
       "tier": "D",
       "edge": "6.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "11.5",
+      "actual_value": 5.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -49979,8 +50327,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50106,8 +50456,8 @@
       "tier": "D",
       "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-0.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -50120,7 +50470,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50190,8 +50542,8 @@
       "tier": "D",
       "edge": "2.6",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-0.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -50204,7 +50556,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50330,8 +50684,8 @@
       "tier": "D",
       "edge": "1.2",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50343,8 +50697,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50442,8 +50798,8 @@
       "tier": "D",
       "edge": "9.35",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "8.5",
+      "actual_value": 4.0,
+      "margin": -5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -50455,8 +50811,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50554,8 +50912,8 @@
       "tier": "D",
       "edge": "4.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "3.5",
+      "actual_value": 3.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50567,8 +50925,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50722,8 +51082,8 @@
       "tier": "D",
       "edge": "3.85",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50735,8 +51095,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50750,8 +51112,8 @@
       "tier": "D",
       "edge": "2.4",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "5.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50763,8 +51125,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50778,8 +51142,8 @@
       "tier": "D",
       "edge": "1.4",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50791,8 +51155,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50862,8 +51228,8 @@
       "tier": "D",
       "edge": "4.35",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "0.5",
+      "actual_value": 2.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -50875,8 +51241,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -50890,8 +51258,8 @@
       "tier": "D",
       "edge": "3.15",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -50903,8 +51271,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51002,8 +51372,8 @@
       "tier": "D",
       "edge": "4.1",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51015,8 +51385,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51030,8 +51402,8 @@
       "tier": "D",
       "edge": "7.55",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "12.5",
+      "actual_value": 8.0,
+      "margin": 3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51044,7 +51416,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51366,8 +51740,8 @@
       "tier": "D",
       "edge": "1.65",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51379,8 +51753,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51590,8 +51966,8 @@
       "tier": "D",
       "edge": "1.35",
       "ml_prob": "",
-      "actual_value": "1.0",
-      "margin": "0.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51603,8 +51979,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 1.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51618,8 +51996,8 @@
       "tier": "D",
       "edge": "4.45",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "9.5",
+      "actual_value": 3.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51631,8 +52009,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51674,8 +52054,8 @@
       "tier": "D",
       "edge": "2.2",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "4.5",
+      "actual_value": 2.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51688,7 +52068,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51758,8 +52140,8 @@
       "tier": "D",
       "edge": "4.05",
       "ml_prob": "",
-      "actual_value": "9.0",
-      "margin": "6.5",
+      "actual_value": 3.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -51772,7 +52154,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 9.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51926,8 +52310,8 @@
       "tier": "D",
       "edge": "3.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "8.5",
+      "actual_value": 4.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -51939,8 +52323,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -51954,8 +52340,8 @@
       "tier": "D",
       "edge": "6.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "0.5",
+      "actual_value": 0.0,
+      "margin": -4.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -51967,8 +52353,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52038,8 +52426,8 @@
       "tier": "D",
       "edge": "2.75",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-0.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -52052,7 +52440,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52318,8 +52708,8 @@
       "tier": "D",
       "edge": "6.55",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "11.5",
+      "actual_value": 8.0,
+      "margin": 2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -52332,7 +52722,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52402,8 +52794,8 @@
       "tier": "D",
       "edge": "4.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "10.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -52415,8 +52807,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52430,8 +52824,8 @@
       "tier": "D",
       "edge": "1.95",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "-0.5",
+      "actual_value": 2.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -52444,7 +52838,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52458,8 +52854,8 @@
       "tier": "D",
       "edge": "2.45",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "3.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -52471,8 +52867,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52794,8 +53192,8 @@
       "tier": "D",
       "edge": "5.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "-0.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -52808,7 +53206,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52934,8 +53334,8 @@
       "tier": "D",
       "edge": "0.75",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "5.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -52947,8 +53347,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -52990,8 +53392,8 @@
       "tier": "D",
       "edge": "2.05",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -53003,8 +53405,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53018,8 +53422,8 @@
       "tier": "D",
       "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-0.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53032,7 +53436,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53242,8 +53648,8 @@
       "tier": "D",
       "edge": "3.05",
       "ml_prob": "",
-      "actual_value": "9.0",
-      "margin": "5.5",
+      "actual_value": 3.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -53255,8 +53661,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 9.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53326,8 +53734,8 @@
       "tier": "D",
       "edge": "5.55",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "10.5",
+      "actual_value": 8.0,
+      "margin": 1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53340,7 +53748,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53550,8 +53960,8 @@
       "tier": "D",
       "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "10.5",
+      "actual_value": 2.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53563,8 +53973,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53634,8 +54046,8 @@
       "tier": "D",
       "edge": "1.45",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "0.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53647,8 +54059,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53746,8 +54160,8 @@
       "tier": "D",
       "edge": "0.8",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "3.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53759,8 +54173,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53802,8 +54218,8 @@
       "tier": "D",
       "edge": "2.15",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53815,8 +54231,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -53830,8 +54248,8 @@
       "tier": "D",
       "edge": "1.8",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "4.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -53843,8 +54261,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54026,8 +54446,8 @@
       "tier": "D",
       "edge": "1.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-0.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54040,7 +54460,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54138,8 +54560,8 @@
       "tier": "D",
       "edge": "1.8",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-0.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54152,7 +54574,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54194,8 +54618,8 @@
       "tier": "D",
       "edge": "2.85",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54207,8 +54631,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54222,8 +54648,8 @@
       "tier": "D",
       "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "0.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -54235,8 +54661,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54278,8 +54706,8 @@
       "tier": "D",
       "edge": "1.55",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -54290,9 +54718,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54306,8 +54735,8 @@
       "tier": "D",
       "edge": "2.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "7.5",
+      "actual_value": 4.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -54319,8 +54748,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54390,8 +54821,8 @@
       "tier": "D",
       "edge": "1.45",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -54403,8 +54834,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54474,8 +54907,8 @@
       "tier": "D",
       "edge": "1.4",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "4.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54487,8 +54920,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54502,8 +54937,8 @@
       "tier": "D",
       "edge": "4.1",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "-1.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54516,7 +54951,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54698,8 +55135,8 @@
       "tier": "D",
       "edge": "1.0",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "2.5",
+      "actual_value": 1.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -54711,8 +55148,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54810,8 +55249,8 @@
       "tier": "D",
       "edge": "2.8",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "6.5",
+      "actual_value": 2.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54823,8 +55262,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -54838,8 +55279,8 @@
       "tier": "D",
       "edge": "2.4",
       "ml_prob": "",
-      "actual_value": "1.0",
-      "margin": "-2.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -54852,7 +55293,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 1.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55118,8 +55561,8 @@
       "tier": "D",
       "edge": "0.4",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55132,7 +55575,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55146,8 +55591,8 @@
       "tier": "D",
       "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "9.5",
+      "actual_value": 2.0,
+      "margin": -3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55159,8 +55604,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55174,8 +55621,8 @@
       "tier": "D",
       "edge": "1.45",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "2.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55187,8 +55634,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55258,8 +55707,8 @@
       "tier": "D",
       "edge": "2.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "8.5",
+      "actual_value": 0.0,
+      "margin": -7.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55271,8 +55720,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55342,8 +55793,8 @@
       "tier": "D",
       "edge": "1.6",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-1.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -55356,7 +55807,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55482,8 +55935,8 @@
       "tier": "D",
       "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-1.5",
+      "actual_value": 0.0,
+      "margin": -4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55496,7 +55949,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55566,8 +56021,8 @@
       "tier": "D",
       "edge": "1.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "4.5",
+      "actual_value": 0.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55579,8 +56034,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55650,8 +56107,8 @@
       "tier": "D",
       "edge": "0.35",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "2.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55663,8 +56120,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55678,8 +56137,8 @@
       "tier": "D",
       "edge": "1.2",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "3.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55691,8 +56150,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -55930,8 +56391,8 @@
       "tier": "D",
       "edge": "0.75",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "9.5",
+      "actual_value": 0.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -55943,8 +56404,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56070,8 +56533,8 @@
       "tier": "D",
       "edge": "1.85",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "7.5",
+      "actual_value": 4.0,
+      "margin": 0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -56084,7 +56547,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56126,8 +56591,8 @@
       "tier": "D",
       "edge": "0.65",
       "ml_prob": "",
-      "actual_value": "5.0",
-      "margin": "2.5",
+      "actual_value": 3.0,
+      "margin": 0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -56140,7 +56605,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 5.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56266,8 +56733,8 @@
       "tier": "D",
       "edge": "0.35",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -56279,8 +56746,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56350,8 +56819,8 @@
       "tier": "D",
       "edge": "0.8",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-1.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56364,7 +56833,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56518,8 +56989,8 @@
       "tier": "D",
       "edge": "1.15",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "0.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56531,8 +57002,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56546,8 +57019,8 @@
       "tier": "D",
       "edge": "0.4",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56559,8 +57032,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56658,8 +57133,8 @@
       "tier": "D",
       "edge": "0.35",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "3.5",
+      "actual_value": 3.0,
+      "margin": 2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56672,7 +57147,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56686,8 +57163,8 @@
       "tier": "D",
       "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "2.0",
-      "margin": "-1.5",
+      "actual_value": 1.0,
+      "margin": -2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -56700,7 +57177,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 2.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56742,8 +57221,8 @@
       "tier": "D",
       "edge": "0.25",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 2.0,
+      "margin": -0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56755,8 +57234,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56826,8 +57307,8 @@
       "tier": "D",
       "edge": "0.45",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-0.5",
+      "actual_value": 2.0,
+      "margin": -1.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56840,7 +57321,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -56910,8 +57393,8 @@
       "tier": "D",
       "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-2.5",
+      "actual_value": 0.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -56924,7 +57407,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -57078,8 +57563,8 @@
       "tier": "D",
       "edge": "0.0",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "1.5",
+      "actual_value": 1.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57091,8 +57576,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -57190,8 +57677,8 @@
       "tier": "D",
       "edge": "0.05",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "LOW",
@@ -57202,9 +57689,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1Q",
@@ -57274,8 +57762,8 @@
       "tier": "A",
       "edge": "24.81",
       "ml_prob": "",
-      "actual_value": "47.0",
-      "margin": "30.5",
+      "actual_value": 25.9,
+      "margin": 9.4,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57288,7 +57776,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 47.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57302,8 +57792,8 @@
       "tier": "A",
       "edge": "23.12",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 12.9,
+      "margin": -2.6,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57314,9 +57804,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57330,8 +57821,8 @@
       "tier": "A",
       "edge": "27.04",
       "ml_prob": "",
-      "actual_value": "38.0",
-      "margin": "18.5",
+      "actual_value": 22.6,
+      "margin": 3.1,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57344,7 +57835,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 38.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57358,8 +57851,8 @@
       "tier": "A",
       "edge": "26.42",
       "ml_prob": "",
-      "actual_value": "84.8",
-      "margin": "63.8",
+      "actual_value": 41.3,
+      "margin": 20.3,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57372,7 +57865,11 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 84.8,
+      "grading_corrected": true,
+      "grading_suspect": true,
+      "grading_reason": "full_game_stats_used_for_period_prop"
     },
     {
       "sport": "NBA1H",
@@ -57470,8 +57967,8 @@
       "tier": "B",
       "edge": "9.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 6.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57482,9 +57979,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57498,8 +57996,8 @@
       "tier": "B",
       "edge": "30.48",
       "ml_prob": "",
-      "actual_value": "30.2",
-      "margin": "11.7",
+      "actual_value": 11.2,
+      "margin": -7.3,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57511,8 +58009,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 30.2,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57582,8 +58082,8 @@
       "tier": "B",
       "edge": "17.8",
       "ml_prob": "",
-      "actual_value": "40.2",
-      "margin": "27.7",
+      "actual_value": 18.8,
+      "margin": 6.3,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57596,7 +58096,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 40.2,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57666,8 +58168,8 @@
       "tier": "B",
       "edge": "8.25",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 7.0,
+      "margin": 1.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -57678,9 +58180,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "HIT",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57694,8 +58197,8 @@
       "tier": "B",
       "edge": "41.26",
       "ml_prob": "",
-      "actual_value": "42.0",
-      "margin": "14.0",
+      "actual_value": 8.9,
+      "margin": -19.1,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -57707,8 +58210,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 42.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57750,8 +58255,8 @@
       "tier": "B",
       "edge": "26.43",
       "ml_prob": "",
-      "actual_value": "30.0",
-      "margin": "12.5",
+      "actual_value": 11.7,
+      "margin": -5.8,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -57763,8 +58268,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 30.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -57806,8 +58313,8 @@
       "tier": "B",
       "edge": "8.55",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "16.5",
+      "actual_value": 18.0,
+      "margin": 8.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -57820,7 +58327,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58030,8 +58539,8 @@
       "tier": "B",
       "edge": "14.95",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 11.0,
+      "margin": -1.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58042,9 +58551,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58058,8 +58568,8 @@
       "tier": "B",
       "edge": "16.8",
       "ml_prob": "",
-      "actual_value": "33.0",
-      "margin": "21.5",
+      "actual_value": 10.2,
+      "margin": -1.3,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58071,8 +58581,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 33.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58086,8 +58598,8 @@
       "tier": "B",
       "edge": "7.65",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "14.5",
+      "actual_value": 13.0,
+      "margin": 6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58100,7 +58612,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58198,8 +58712,8 @@
       "tier": "C",
       "edge": "12.04",
       "ml_prob": "",
-      "actual_value": "7.8",
-      "margin": "-3.7",
+      "actual_value": 6.5,
+      "margin": -5.0,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58212,7 +58726,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 7.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58282,8 +58798,8 @@
       "tier": "C",
       "edge": "10.8",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "1.5",
+      "actual_value": 5.0,
+      "margin": -5.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58295,8 +58811,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58310,8 +58828,8 @@
       "tier": "C",
       "edge": "18.59",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "-1.0",
+      "actual_value": 5.4,
+      "margin": -6.6,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58324,7 +58842,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58366,8 +58886,8 @@
       "tier": "C",
       "edge": "10.05",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "11.0",
+      "actual_value": 10.0,
+      "margin": 1.0,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58380,7 +58900,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58422,8 +58944,8 @@
       "tier": "C",
       "edge": "15.64",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "6.5",
+      "actual_value": 3.5,
+      "margin": -7.0,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58435,8 +58957,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58450,8 +58974,8 @@
       "tier": "C",
       "edge": "26.17",
       "ml_prob": "",
-      "actual_value": "40.8",
-      "margin": "23.3",
+      "actual_value": 18.4,
+      "margin": 0.9,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58464,7 +58988,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 40.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58478,8 +59004,8 @@
       "tier": "C",
       "edge": "10.8",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "8.5",
+      "actual_value": 16.0,
+      "margin": 3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58492,7 +59018,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58562,8 +59090,8 @@
       "tier": "C",
       "edge": "19.08",
       "ml_prob": "",
-      "actual_value": "46.5",
-      "margin": "32.0",
+      "actual_value": 18.6,
+      "margin": 4.1,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58576,7 +59104,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 46.5,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58730,8 +59260,8 @@
       "tier": "C",
       "edge": "7.05",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "19.5",
+      "actual_value": 20.0,
+      "margin": 11.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58744,7 +59274,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58786,8 +59318,8 @@
       "tier": "C",
       "edge": "5.8",
       "ml_prob": "",
-      "actual_value": "10.0",
-      "margin": "4.5",
+      "actual_value": 3.0,
+      "margin": -2.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58799,8 +59331,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 10.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58814,8 +59348,8 @@
       "tier": "C",
       "edge": "13.65",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 10.0,
+      "margin": 0.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58826,9 +59360,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
+      "void_reason": "PUSH",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58898,8 +59433,8 @@
       "tier": "C",
       "edge": "19.08",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "6.0",
+      "actual_value": 8.0,
+      "margin": -7.0,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -58911,8 +59446,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58926,8 +59463,8 @@
       "tier": "C",
       "edge": "7.6",
       "ml_prob": "",
-      "actual_value": "3.0",
-      "margin": "-3.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58940,7 +59477,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 3.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -58954,8 +59493,8 @@
       "tier": "C",
       "edge": "30.09",
       "ml_prob": "",
-      "actual_value": "63.2",
-      "margin": "41.2",
+      "actual_value": 26.4,
+      "margin": 4.4,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -58968,7 +59507,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 63.2,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59066,8 +59607,8 @@
       "tier": "C",
       "edge": "18.64",
       "ml_prob": "",
-      "actual_value": "17.5",
-      "margin": "3.5",
+      "actual_value": 10.3,
+      "margin": -3.7,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59079,8 +59620,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.5,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59122,8 +59665,8 @@
       "tier": "C",
       "edge": "29.21",
       "ml_prob": "",
-      "actual_value": "38.8",
-      "margin": "19.8",
+      "actual_value": 15.9,
+      "margin": -3.1,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -59135,8 +59678,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 38.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59206,8 +59751,8 @@
       "tier": "C",
       "edge": "8.15",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "11.0",
+      "actual_value": 5.0,
+      "margin": -1.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59219,8 +59764,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59290,8 +59837,8 @@
       "tier": "C",
       "edge": "11.84",
       "ml_prob": "",
-      "actual_value": "16.5",
-      "margin": "4.5",
+      "actual_value": 12.9,
+      "margin": 0.9,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59304,7 +59851,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 16.5,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59346,8 +59895,8 @@
       "tier": "C",
       "edge": "17.01",
       "ml_prob": "",
-      "actual_value": "30.0",
-      "margin": "12.5",
+      "actual_value": 21.0,
+      "margin": 3.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -59360,7 +59909,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 30.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59374,8 +59925,8 @@
       "tier": "C",
       "edge": "7.8",
       "ml_prob": "",
-      "actual_value": "19.0",
-      "margin": "12.5",
+      "actual_value": 9.0,
+      "margin": 2.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59388,7 +59939,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 19.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59654,8 +60207,8 @@
       "tier": "C",
       "edge": "10.1",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "11.5",
+      "actual_value": 10.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59667,8 +60220,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59710,8 +60265,8 @@
       "tier": "C",
       "edge": "17.35",
       "ml_prob": "",
-      "actual_value": "23.0",
-      "margin": "9.0",
+      "actual_value": 12.0,
+      "margin": -2.0,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59723,8 +60278,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 23.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59738,8 +60295,8 @@
       "tier": "D",
       "edge": "12.4",
       "ml_prob": "",
-      "actual_value": "12.0",
-      "margin": "-1.5",
+      "actual_value": 4.0,
+      "margin": -9.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59752,7 +60309,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 12.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59794,8 +60353,8 @@
       "tier": "D",
       "edge": "8.15",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "15.5",
+      "actual_value": 14.0,
+      "margin": 5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -59808,7 +60367,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -59990,8 +60551,8 @@
       "tier": "D",
       "edge": "10.95",
       "ml_prob": "",
-      "actual_value": "28.0",
-      "margin": "17.5",
+      "actual_value": 17.0,
+      "margin": 6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -60004,7 +60565,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60270,8 +60833,8 @@
       "tier": "D",
       "edge": "9.85",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "9.0",
+      "actual_value": 6.0,
+      "margin": -3.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -60283,8 +60846,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60298,8 +60863,8 @@
       "tier": "D",
       "edge": "14.04",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 2.5,
+      "margin": -8.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60310,9 +60875,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60354,8 +60920,8 @@
       "tier": "D",
       "edge": "17.65",
       "ml_prob": "",
-      "actual_value": "30.0",
-      "margin": "15.5",
+      "actual_value": 14.0,
+      "margin": -0.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60367,8 +60933,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 30.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60410,8 +60978,8 @@
       "tier": "D",
       "edge": "11.15",
       "ml_prob": "",
-      "actual_value": "7.0",
-      "margin": "-2.5",
+      "actual_value": 4.0,
+      "margin": -5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60424,7 +60992,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 7.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60438,8 +61008,8 @@
       "tier": "D",
       "edge": "13.38",
       "ml_prob": "",
-      "actual_value": "34.0",
-      "margin": "22.5",
+      "actual_value": 17.0,
+      "margin": 5.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60452,7 +61022,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 34.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60466,8 +61038,8 @@
       "tier": "D",
       "edge": "13.75",
       "ml_prob": "",
-      "actual_value": "31.8",
-      "margin": "20.8",
+      "actual_value": 16.6,
+      "margin": 5.6,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60480,7 +61052,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 31.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60522,8 +61096,8 @@
       "tier": "D",
       "edge": "9.92",
       "ml_prob": "",
-      "actual_value": "6.0",
-      "margin": "-3.5",
+      "actual_value": 5.0,
+      "margin": -4.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60536,7 +61110,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 6.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60634,8 +61210,8 @@
       "tier": "D",
       "edge": "7.2",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "1.5",
+      "actual_value": 0.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60647,8 +61223,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60774,8 +61352,8 @@
       "tier": "D",
       "edge": "14.52",
       "ml_prob": "",
-      "actual_value": "24.0",
-      "margin": "13.0",
+      "actual_value": 10.0,
+      "margin": -1.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60787,8 +61365,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 24.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60802,8 +61382,8 @@
       "tier": "D",
       "edge": "18.05",
       "ml_prob": "",
-      "actual_value": "30.0",
-      "margin": "16.0",
+      "actual_value": 13.0,
+      "margin": -1.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -60815,8 +61395,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 30.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60830,8 +61412,8 @@
       "tier": "D",
       "edge": "11.85",
       "ml_prob": "",
-      "actual_value": "29.0",
-      "margin": "16.5",
+      "actual_value": 18.0,
+      "margin": 5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60844,7 +61426,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 29.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60914,8 +61498,8 @@
       "tier": "D",
       "edge": "8.25",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "4.5",
+      "actual_value": 5.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -60927,8 +61511,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60942,8 +61528,8 @@
       "tier": "D",
       "edge": "21.41",
       "ml_prob": "",
-      "actual_value": "23.0",
-      "margin": "1.5",
+      "actual_value": 7.0,
+      "margin": -14.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -60955,8 +61541,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 23.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -60998,8 +61586,8 @@
       "tier": "D",
       "edge": "16.41",
       "ml_prob": "",
-      "actual_value": "38.5",
-      "margin": "28.0",
+      "actual_value": 14.9,
+      "margin": 4.4,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61012,7 +61600,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 38.5,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61138,8 +61728,8 @@
       "tier": "D",
       "edge": "15.37",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "6.5",
+      "actual_value": 7.0,
+      "margin": -8.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -61151,8 +61741,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61222,8 +61814,8 @@
       "tier": "D",
       "edge": "11.54",
       "ml_prob": "",
-      "actual_value": "34.0",
-      "margin": "20.5",
+      "actual_value": 23.0,
+      "margin": 9.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -61236,7 +61828,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 34.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61390,8 +61984,8 @@
       "tier": "D",
       "edge": "8.35",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 2.0,
+      "margin": -6.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61402,9 +61996,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61558,8 +62153,8 @@
       "tier": "D",
       "edge": "9.55",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "11.5",
+      "actual_value": 6.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61571,8 +62166,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61642,8 +62239,8 @@
       "tier": "D",
       "edge": "7.05",
       "ml_prob": "",
-      "actual_value": "17.0",
-      "margin": "12.0",
+      "actual_value": 8.0,
+      "margin": 3.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61656,7 +62253,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 17.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61726,8 +62325,8 @@
       "tier": "D",
       "edge": "14.61",
       "ml_prob": "",
-      "actual_value": "39.5",
-      "margin": "26.0",
+      "actual_value": 20.6,
+      "margin": 7.1,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61740,7 +62339,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 39.5,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61838,8 +62439,8 @@
       "tier": "D",
       "edge": "15.83",
       "ml_prob": "",
-      "actual_value": "50.0",
-      "margin": "32.5",
+      "actual_value": 34.0,
+      "margin": 16.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -61852,7 +62453,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 50.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61922,8 +62525,8 @@
       "tier": "D",
       "edge": "13.66",
       "ml_prob": "",
-      "actual_value": "21.0",
-      "margin": "5.5",
+      "actual_value": 18.0,
+      "margin": 2.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -61936,7 +62539,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 21.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -61978,8 +62583,8 @@
       "tier": "D",
       "edge": "19.16",
       "ml_prob": "",
-      "actual_value": "46.0",
-      "margin": "27.5",
+      "actual_value": 25.0,
+      "margin": 6.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -61992,7 +62597,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 46.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62034,8 +62641,8 @@
       "tier": "D",
       "edge": "12.5",
       "ml_prob": "",
-      "actual_value": "33.0",
-      "margin": "21.0",
+      "actual_value": 21.0,
+      "margin": 9.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62048,7 +62655,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 33.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62062,8 +62671,8 @@
       "tier": "D",
       "edge": "9.37",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "4.5",
+      "actual_value": 1.0,
+      "margin": -7.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62075,8 +62684,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62146,8 +62757,8 @@
       "tier": "D",
       "edge": "6.2",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "5.5",
+      "actual_value": 13.0,
+      "margin": 3.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -62160,7 +62771,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62174,8 +62787,8 @@
       "tier": "D",
       "edge": "12.17",
       "ml_prob": "",
-      "actual_value": "13.0",
-      "margin": "2.0",
+      "actual_value": 9.0,
+      "margin": -2.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62187,8 +62800,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 13.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62314,8 +62929,8 @@
       "tier": "D",
       "edge": "14.35",
       "ml_prob": "",
-      "actual_value": "7.8",
-      "margin": "-7.2",
+      "actual_value": 2.0,
+      "margin": -13.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62328,7 +62943,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 7.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62342,8 +62959,8 @@
       "tier": "D",
       "edge": "6.55",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "1.5",
+      "actual_value": 9.0,
+      "margin": -0.5,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62355,8 +62972,10 @@
       "actual_source_conflict": "",
       "over_under": "OVER",
       "void_reason": "",
-      "result": "HIT",
-      "pp_projection_id": ""
+      "result": "MISS",
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62398,8 +63017,8 @@
       "tier": "D",
       "edge": "4.85",
       "ml_prob": "",
-      "actual_value": "16.0",
-      "margin": "10.5",
+      "actual_value": 8.0,
+      "margin": 2.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62412,7 +63031,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 16.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62482,8 +63103,8 @@
       "tier": "D",
       "edge": "9.8",
       "ml_prob": "",
-      "actual_value": "20.0",
-      "margin": "8.5",
+      "actual_value": 14.0,
+      "margin": 2.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -62496,7 +63117,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 20.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62594,8 +63217,8 @@
       "tier": "D",
       "edge": "4.15",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "0.0",
+      "actual_value": 1.0,
+      "margin": -3.5,
       "def_tier": "Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62606,9 +63229,10 @@
       "actual_source": "",
       "actual_source_conflict": "",
       "over_under": "OVER",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
-      "pp_projection_id": ""
+      "void_reason": "",
+      "result": "MISS",
+      "pp_projection_id": "",
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62650,8 +63274,8 @@
       "tier": "D",
       "edge": "8.94",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "13.5",
+      "actual_value": 13.0,
+      "margin": 4.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62664,7 +63288,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62678,8 +63304,8 @@
       "tier": "D",
       "edge": "9.72",
       "ml_prob": "",
-      "actual_value": "26.0",
-      "margin": "17.0",
+      "actual_value": 13.0,
+      "margin": 4.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62692,7 +63318,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 26.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -62902,8 +63530,8 @@
       "tier": "D",
       "edge": "8.13",
       "ml_prob": "",
-      "actual_value": "28.8",
-      "margin": "16.3",
+      "actual_value": 15.6,
+      "margin": 3.1,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -62916,7 +63544,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 28.8,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63070,8 +63700,8 @@
       "tier": "D",
       "edge": "13.73",
       "ml_prob": "",
-      "actual_value": "35.0",
-      "margin": "18.5",
+      "actual_value": 21.0,
+      "margin": 4.5,
       "def_tier": "",
       "h2h_bucket": "",
       "minutes_tier": "HIGH",
@@ -63084,7 +63714,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 35.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63126,8 +63758,8 @@
       "tier": "D",
       "edge": "3.0",
       "ml_prob": "",
-      "actual_value": "15.0",
-      "margin": "10.0",
+      "actual_value": 9.0,
+      "margin": 4.0,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63140,7 +63772,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 15.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63266,8 +63900,8 @@
       "tier": "D",
       "edge": "2.0",
       "ml_prob": "",
-      "actual_value": "8.0",
-      "margin": "3.0",
+      "actual_value": 6.0,
+      "margin": 1.0,
       "def_tier": "Weak",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63280,7 +63914,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 8.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63294,8 +63930,8 @@
       "tier": "D",
       "edge": "2.8",
       "ml_prob": "",
-      "actual_value": "11.0",
-      "margin": "6.5",
+      "actual_value": 5.0,
+      "margin": 0.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63308,7 +63944,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 11.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63322,8 +63960,8 @@
       "tier": "D",
       "edge": "5.62",
       "ml_prob": "",
-      "actual_value": "18.0",
-      "margin": "9.5",
+      "actual_value": 12.0,
+      "margin": 3.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63336,7 +63974,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 18.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63350,8 +63990,8 @@
       "tier": "D",
       "edge": "6.44",
       "ml_prob": "",
-      "actual_value": "22.0",
-      "margin": "12.5",
+      "actual_value": 14.0,
+      "margin": 4.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63364,7 +64004,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 22.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63378,8 +64020,8 @@
       "tier": "D",
       "edge": "7.35",
       "ml_prob": "",
-      "actual_value": "7.0",
-      "margin": "-5.5",
+      "actual_value": 2.0,
+      "margin": -10.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63392,7 +64034,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 7.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
@@ -63490,8 +64134,8 @@
       "tier": "D",
       "edge": "2.6",
       "ml_prob": "",
-      "actual_value": "4.0",
-      "margin": "-3.5",
+      "actual_value": 2.0,
+      "margin": -5.5,
       "def_tier": "Above Avg",
       "h2h_bucket": "",
       "minutes_tier": "MEDIUM",
@@ -63504,7 +64148,9 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "actual_value_original": 4.0,
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",

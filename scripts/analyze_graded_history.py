@@ -904,8 +904,9 @@ def main() -> int:
 
     # Step 10 report
     report_min = max(50, min_n)
-    top_bet = slice_table(df, ["sport", "direction", "pick_type", "tier"], min_n=report_min).head(10)
-    avoid = slice_table(df, ["sport", "direction", "pick_type", "tier"], min_n=report_min).tail(10)
+    slice_all = slice_table(df, ["sport", "direction", "pick_type", "tier"], min_n=report_min)
+    top_bet = slice_all.head(10)
+    avoid = slice_all.sort_values("hit_rate", ascending=True).head(10)
     prop_all = slice_table(df, ["prop_type", "direction"], min_n=report_min)
     prop_best = prop_all.head(10)
     prop_worst = prop_all.tail(10)
