@@ -3281,10 +3281,12 @@ def _shrink_l5(l5_rate: float, season_hr: float | None = None) -> float:
 
 
 def _season_hr_for_shrink(row: pd.Series) -> float | None:
-    for key in ("composite_hit_rate", "hit_rate", "intel_season_hit_rate"):
-        v = _prob_band(row.get(key))
-        if v is not None:
-            return v
+    comp = _composite_hr_if_sampled(row)
+    if comp is not None:
+        return comp
+    v = _prob_band(row.get("intel_season_hit_rate"))
+    if v is not None and _hr_sample_n(row) >= float(MIN_HR_SAMPLE):
+        return v
     return None
 
 
@@ -3295,16 +3297,16 @@ def _infer_blended_score(row: pd.Series | dict) -> float | None:
     else:
         get = row.get if hasattr(row, "get") else (lambda k, d=None: getattr(row, k, d))
 
-    direct = _prob_band(get("blended_score"))
-    if direct is not None:
-        return direct
-
-    comp = _prob_band(get("composite_hit_rate") or get("hit_rate"))
+    comp = _composite_hr_if_sampled(row)
     ml = _prob_band(get("ml_prob"))
     if comp is not None and ml is not None:
         mixed = 0.7 * comp + 0.3 * ml
         if 0.30 < mixed < 0.85:
             return float(mixed)
+
+    direct = _prob_band(get("blended_score"))
+    if direct is not None and _hr_sample_n(row) >= float(MIN_HR_SAMPLE):
+        return direct
     return None
 
 
@@ -3346,7 +3348,7 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     l5_hits, l5_gp = _resolve_l5_cols(row, direction)
 
     if "demon" in pick_type and sport in ("NHL", "SOCCER", "SOC"):
-        hr = _to_prob_0_1(row.get("composite_hit_rate") or row.get("hit_rate"))
+        hr = _composite_hr_if_sampled(row)
         ml = _to_prob_0_1(row.get("ml_prob"))
         has_sample = l5_gp >= 3.0
         hr_val = float(hr) if hr is not None else 0.0
@@ -3363,7 +3365,7 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     if blended is not None:
         return blended, "blended_score"
 
-    composite = _prob_band(row.get("composite_hit_rate") or row.get("hit_rate"))
+    composite = _composite_hr_if_sampled(row)
     if composite is not None:
         return composite, "composite_hr"
 
@@ -3403,13 +3405,63 @@ _WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1H", "NBA1Q"})
 _WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
 # Cap per-leg factor in p_win product — l5_over_proxy can return 0.99 on hot streaks (artifact).
 MAX_LEG_PROB_FOR_P_WIN = 0.80
+# Season / composite HR requires enough graded props (avoid 3/3 → 100% artifacts).
+MIN_HR_SAMPLE = 10
+
+
+def _hr_sample_n(row: pd.Series | dict) -> float:
+    """Best available graded-sample count for composite/season hit rate."""
+    if isinstance(row, dict):
+        get = row.get
+    else:
+        get = row.get if hasattr(row, "get") else (lambda k, d=None: getattr(row, k, d))
+    best = 0.0
+    for key in (
+        "composite_hit_rate_n",
+        "sample_n",
+        "n_legs_sample",
+        "N Legs Sample",
+        "intel_season_games",
+        "games_used",
+        "sample_season",
+        "line_games_played_10",
+    ):
+        v = pd.to_numeric(get(key), errors="coerce")
+        if pd.notna(v) and float(v) > best:
+            best = float(v)
+    return best
+
+
+def _composite_hr_if_sampled(row: pd.Series | dict) -> float | None:
+    """composite_hit_rate / hit_rate only when sample_n >= MIN_HR_SAMPLE."""
+    if isinstance(row, dict):
+        get = row.get
+    else:
+        get = row.get if hasattr(row, "get") else (lambda k, d=None: getattr(row, k, d))
+    raw = get("composite_hit_rate") or get("hit_rate")
+    if raw is None or str(raw).strip() in ("", "nan", "None"):
+        return None
+    if _hr_sample_n(row) < float(MIN_HR_SAMPLE):
+        return None
+    return _prob_band(raw)
 
 
 def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
     """P(win) leg factor: leg_prob_used → blended_score → composite_hit_rate → ml_prob → 0.55 (capped)."""
     if isinstance(leg, pd.Series):
         leg = leg.to_dict()
-    for key in ("leg_prob_used", "blended_score", "composite_hit_rate", "hit_rate", "ml_prob"):
+    leg_used = leg.get("leg_prob_used")
+    if leg_used is not None and str(leg_used).strip() not in ("", "nan", "None"):
+        try:
+            v = float(leg_used)
+            if math.isfinite(v):
+                return float(np.clip(v, 0.0, min(1.0, MAX_LEG_PROB_FOR_P_WIN)))
+        except (TypeError, ValueError):
+            pass
+    comp = _composite_hr_if_sampled(leg)
+    if comp is not None:
+        return float(np.clip(comp, 0.0, MAX_LEG_PROB_FOR_P_WIN))
+    for key in ("blended_score", "ml_prob"):
         raw = leg.get(key)
         if raw is None or raw == "":
             continue
@@ -4726,10 +4778,16 @@ def ticket_groups_to_payload(
                 best_book_s = str(gv("best_cross_book") or "")
                 line_f = _safe_float(gv("line"))
                 line_key = f"{float(line_f):.3f}" if line_f is not None else ""
+                _row_snap = row if isinstance(row, dict) else row.to_dict()
+                _hr_n = _hr_sample_n(_row_snap)
                 _comp_hr = _safe_float(
                     gv("composite_hit_rate") or gv("composite_hr") or gv("Composite Hit Rate") or gv("hit_rate")
                 )
+                if _comp_hr is not None and _hr_n < float(MIN_HR_SAMPLE):
+                    _comp_hr = None
                 _blend_sc = _safe_float(gv("blended_score") or gv("Blended Score"))
+                if _blend_sc is not None and _hr_n < float(MIN_HR_SAMPLE):
+                    _blend_sc = None
                 if _blend_sc is None and _comp_hr is not None:
                     _ml_b = _safe_float(gv("ml_prob"))
                     if _ml_b is not None:
