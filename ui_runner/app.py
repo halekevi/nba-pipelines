@@ -435,6 +435,10 @@ if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_ra
     if not _TICKET_EV_JSON_URL:
         _TICKET_EV_JSON_URL = f"{_root_base}/outputs/ticket_ev_latest.json"
 
+_GRADES_HTML_RAW_BASE = ""
+if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_railway():
+    _GRADES_HTML_RAW_BASE = os.environ.get("PROPORACLE_RAW_JSON_BASE", _JSON_BASE_DEFAULT).rstrip("/")
+
 _DATA_FILE_URL_MAP: dict[str, str] = {}
 if _TICKETS_JSON_URL:
     _DATA_FILE_URL_MAP["tickets_latest.json"] = _TICKETS_JSON_URL
@@ -446,6 +450,83 @@ if _TICKET_EVAL_SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["ticket_eval_slate_latest.json"] = _TICKET_EVAL_SLATE_JSON_URL
 if _TICKET_EV_JSON_URL:
     _DATA_FILE_URL_MAP["ticket_ev_latest.json"] = _TICKET_EV_JSON_URL
+if _GRADES_HTML_RAW_BASE:
+    _DATA_FILE_URL_MAP["grades_report_dates.json"] = (
+        f"{_GRADES_HTML_RAW_BASE}/grades_report_dates.json"
+    )
+
+_HTML_BYTES_CACHE: dict[str, dict[str, Any]] = {}
+_HTML_BYTES_CACHE_LOCK = threading.Lock()
+_GRADES_HTML_CACHE_TTL = float(os.environ.get("GRADES_HTML_CACHE_TTL_SEC", "180"))
+
+
+def _fetch_remote_bytes(url: str, timeout: int = 35) -> bytes | None:
+    try:
+        fetch_url = _github_raw_fetch_url(url)
+        req = urllib.request.Request(
+            fetch_url,
+            headers={"Cache-Control": "no-cache", "Pragma": "no-cache"},
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            if getattr(resp, "status", 200) >= 400:
+                return None
+            return resp.read()
+    except Exception:
+        return None
+
+
+def _fetch_remote_bytes_cached(cache_key: str, url: str) -> bytes | None:
+    now = time.time()
+    with _HTML_BYTES_CACHE_LOCK:
+        entry = _HTML_BYTES_CACHE.get(cache_key)
+        if entry is not None and now - float(entry.get("ts", 0)) <= _GRADES_HTML_CACHE_TTL:
+            data = entry.get("data")
+            if isinstance(data, (bytes, bytearray)):
+                return bytes(data)
+    body = _fetch_remote_bytes(url)
+    if body is None:
+        return None
+    with _HTML_BYTES_CACHE_LOCK:
+        _HTML_BYTES_CACHE[cache_key] = {"data": body, "ts": now}
+    return body
+
+
+def _merge_grade_report_date_lists(*lists: Sequence[str]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for lst in lists:
+        for raw in lst:
+            d = str(raw or "").strip()[:10]
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) or d in seen:
+                continue
+            seen.add(d)
+            out.append(d)
+    et_today = _eastern_today_ymd()
+    non_future = [d for d in out if d <= et_today]
+    return sorted(non_future if non_future else out)
+
+
+def _grades_report_dates_payload() -> dict[str, list[str]]:
+    """Disk scan + optional grades_report_dates.json (GitHub on Railway)."""
+    slate_disk = _grade_report_dates_on_disk("slate")
+    ticket_disk = _grade_report_dates_on_disk("ticket")
+    slate_extra: list[str] = []
+    ticket_extra: list[str] = []
+    meta_path = TEMPLATES_DIR / "grades_report_dates.json"
+    if _DATA_FILE_URL_MAP.get("grades_report_dates.json") or meta_path.is_file():
+        try:
+            j = read_json_cached(meta_path)
+            if isinstance(j, dict):
+                if isinstance(j.get("slate_eval_dates"), list):
+                    slate_extra = [str(x) for x in j["slate_eval_dates"]]
+                if isinstance(j.get("ticket_eval_dates"), list):
+                    ticket_extra = [str(x) for x in j["ticket_eval_dates"]]
+        except Exception:
+            pass
+    return {
+        "slate_eval_dates": _merge_grade_report_date_lists(slate_disk, slate_extra),
+        "ticket_eval_dates": _merge_grade_report_date_lists(ticket_disk, ticket_extra),
+    }
 
 
 def _template_json_available(filename: str) -> bool:
@@ -1313,6 +1394,7 @@ def ping():
             ),
             "slate_sport_source": os.environ.get("SLATE_SPORT_SOURCE", "auto").strip() or "auto",
             "tickets_json_remote": bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")),
+            "grades_html_remote": bool(_GRADES_HTML_RAW_BASE),
             "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
         })
         r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
@@ -1332,6 +1414,7 @@ def api_build():
         ),
         "slate_sport_source": os.environ.get("SLATE_SPORT_SOURCE", "auto").strip() or "auto",
         "tickets_json_remote": bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")),
+        "grades_html_remote": bool(_GRADES_HTML_RAW_BASE),
         "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
     })
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
@@ -2430,7 +2513,7 @@ def _grades_html_response(template: str, **kwargs: Any) -> Response:
 
 
 def _send_grades_report_html(fname: str) -> Response | None:
-    """Serve slate_eval_*.html or ticket_eval_*.html from templates or archive dir."""
+    """Serve slate_eval_*.html or ticket_eval_*.html from templates, archive, or GitHub raw."""
     for base in (TEMPLATES_DIR, ARCHIVE_DIR):
         if base.exists() and (base / fname).is_file():
             response = send_from_directory(str(base), fname)
@@ -2439,6 +2522,18 @@ def _send_grades_report_html(fname: str) -> Response | None:
             response.headers["Expires"] = "0"
             # Hub loads these same-origin in iframes; proxies must not force DENY (breaks mobile WebViews).
             response.headers.pop("X-Frame-Options", None)
+            return response
+    if _GRADES_HTML_RAW_BASE and fname.endswith(".html"):
+        url = f"{_GRADES_HTML_RAW_BASE}/{fname}"
+        body = _fetch_remote_bytes_cached(f"grades-html:{fname}", url)
+        if body:
+            response = make_response(body)
+            response.mimetype = "text/html; charset=utf-8"
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+            response.headers.pop("X-Frame-Options", None)
+            response.headers["X-PropOracle-Grades-Source"] = "github-raw"
             return response
     return None
 
@@ -2981,10 +3076,13 @@ def api_grades_report_dates():
     The Grades hub uses this so date pills work even when many parallel HEAD requests
     fail through a CDN/proxy. Deploy must include committed files under ui_runner/templates/.
     """
+    payload = _grades_report_dates_payload()
     r = jsonify(
         {
-            "slate_eval_dates": _grade_report_dates_on_disk("slate"),
-            "ticket_eval_dates": _grade_report_dates_on_disk("ticket"),
+            "ok": True,
+            "slate_eval_dates": payload["slate_eval_dates"],
+            "ticket_eval_dates": payload["ticket_eval_dates"],
+            "grades_html_remote": bool(_GRADES_HTML_RAW_BASE),
         }
     )
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"

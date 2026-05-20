@@ -3119,6 +3119,22 @@ function mergeGradeReportDateLists(j) {
   return out;
 }
 
+const GRADES_REPORT_DATES_GITHUB =
+  'https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/grades_report_dates.json';
+
+async function fetchReportDatesFromGitHub() {
+  try {
+    const res = await fetch(GRADES_REPORT_DATES_GITHUB + '?nocache=' + Date.now(), {
+      cache: 'no-store',
+      signal: gradesFetchSignal(12000),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (_e) {
+    return null;
+  }
+}
+
 // ─── DISCOVER available dates ─────────────────────────────────────────────────
 async function discoverDates(){
   // Prefer server-side listing (one request, works when HEAD is flaky behind CDNs).
@@ -3141,6 +3157,14 @@ async function discoverDates(){
       }
     }
   } catch (_e) {}
+  try {
+    const gh = await fetchReportDatesFromGitHub();
+    if (gh) {
+      cacheGradeReportMeta(gh);
+      const dsGh = mergeGradeReportDateLists(gh);
+      if (dsGh.length) return dsGh;
+    }
+  } catch (_eGh) {}
   // Fallback: probe last 30 calendar days via HEAD
   const found = [];
   const today = new Date();
