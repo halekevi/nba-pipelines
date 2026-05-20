@@ -74,17 +74,18 @@ ENRICHMENT_RAW_COLS = [
     "line_combo_xgf_pct",
     "on_pp1_line",
     # WNBA
+    "star_tier",
+    "is_franchise_star",
+    "foul_trouble_risk",
+    "b2b_flag",
+    "b2b_rest_context",
+    # NBA / WNBA (usage + pace from step4b)
     "usage_pct",
     "usage_tier",
     "team_pace",
     "opp_pace",
     "pace_delta",
     "pace_context",
-    "star_tier",
-    "is_franchise_star",
-    "foul_trouble_risk",
-    "b2b_flag",
-    "b2b_rest_context",
     # NBA
     "reb_pct",
     "ast_pct",
@@ -732,8 +733,11 @@ def main() -> int:
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     print(f"Wrote {out_path}  rows={len(out_df):,}")
 
-    # Feature completeness on joined rows
-    jmask = out_df["blended_score"].notna() if "blended_score" in out_df.columns else pd.Series(False, index=out_df.index)
+    # Feature completeness on rows that successfully joined step8 scores (rank_score or legacy blended_score)
+    jmask = pd.Series(False, index=out_df.index)
+    for c in ("blended_score", "rank_score", "edge_score"):
+        if c in out_df.columns:
+            jmask = jmask | out_df[c].notna()
     if jmask.any():
         sub = out_df.loc[jmask, [c for c in JOIN_FEATURE_COLS if c in out_df.columns]]
         comp = {c: float(sub[c].notna().mean()) for c in sub.columns}

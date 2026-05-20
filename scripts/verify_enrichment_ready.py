@@ -114,25 +114,45 @@ def check_retrain_csv(path: Path, nrows: int) -> bool:
     return ok_all
 
 
-def smoke_test_nba() -> bool:
-    import requests
+def _nba_scripts_dir() -> Path:
+    return _REPO / "Sports" / "NBA" / "scripts"
 
+
+def smoke_test_nba() -> bool:
     print("\n=== NBA stats.nba.com smoke test ===")
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Referer": "https://www.nba.com/",
-        "x-nba-stats-origin": "stats",
-        "x-nba-stats-token": "true",
-    }
+    nba_dir = str(_nba_scripts_dir())
+    if nba_dir not in sys.path:
+        sys.path.insert(0, nba_dir)
+    try:
+        from nba_stats_api import fetch_player_advanced
+
+        df = fetch_player_advanced("2024-25")
+        rows = len(df)
+        ok = rows >= 400
+        print(f"{'200' if ok else 'FAIL'} {rows} rows")
+        return ok
+    except Exception as exc:
+        print(f"FAIL: {exc}")
+        return False
+
+
+def smoke_test_wnba() -> bool:
+    import requests
+    from nba_api.stats.library.http import STATS_HEADERS
+
+    print("\n=== WNBA stats.wnba.com smoke test ===")
+    headers = dict(STATS_HEADERS)
+    headers["Referer"] = "https://www.wnba.com/"
+    headers["Origin"] = "https://www.wnba.com"
     try:
         r = requests.get(
-            "https://stats.nba.com/stats/leaguedashplayerstats",
+            "https://stats.wnba.com/stats/leaguedashplayerstats",
             params={
-                "Season": "2024-25",
+                "Season": "2025",
                 "SeasonType": "Regular Season",
                 "PerMode": "PerGame",
                 "MeasureType": "Advanced",
-                "LeagueID": "00",
+                "LeagueId": "10",
             },
             headers=headers,
             timeout=30,
@@ -141,7 +161,7 @@ def smoke_test_nba() -> bool:
         if r.status_code == 200:
             rows = len(r.json().get("resultSets", [{}])[0].get("rowSet", []))
         print(f"{r.status_code} {rows} rows")
-        return r.status_code == 200 and rows >= 400
+        return r.status_code == 200 and rows >= 50
     except Exception as exc:
         print(f"FAIL: {exc}")
         return False
@@ -157,6 +177,7 @@ def main() -> int:
     ok = True
     if args.smoke_test:
         ok = smoke_test_nba() and ok
+        ok = smoke_test_wnba() and ok
     ok = check_caches() and ok
     ok = check_retrain_csv(Path(args.retrain_csv), args.nrows) and ok
 
