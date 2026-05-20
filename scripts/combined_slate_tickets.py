@@ -14128,7 +14128,7 @@ def _winrate_best_panel_html() -> str:
             '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
             '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
             "</motionless>"
-        ).replace("motionless", "motionless").replace("motionless", "div")
+        ).replace("motionless", "div")
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -14146,8 +14146,11 @@ def _winrate_best_panel_html() -> str:
         for t in g.get("tickets") or []:
             if not isinstance(t, dict):
                 continue
+            pw_raw = t.get("p_win")
+            if pw_raw is None:
+                pw_raw = t.get("est_win_prob") or t.get("ticket_model_p_cash")
             try:
-                pw = float(t.get("p_win") or 0.0)
+                pw = float(pw_raw or 0.0)
             except (TypeError, ValueError):
                 pw = 0.0
             flat.append((pw, t, gn))
@@ -14159,7 +14162,7 @@ def _winrate_best_panel_html() -> str:
             '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST</motionless>'
             '<motionless class="winrate-best-sub">No win-rate tickets yet for this slate.</motionless>'
             "</div>"
-        ).replace("motionless", "motionless")
+        ).replace("motionless", "div")
     rows: list[str] = []
     for i, (pw, t, gn) in enumerate(top, start=1):
         legs = t.get("legs") or []
@@ -14197,9 +14200,9 @@ def _winrate_best_panel_html() -> str:
     return (
         '<div class="winrate-best-panel" id="winrate-best-panel">'
         '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
-        f'<div class="winrate-best-sub">{sub}</motionless>'
+        f'<div class="winrate-best-sub">{sub}</div>'
         f"{body}"
-        "</div>"
+        "</motionless>"
     ).replace("motionless", "div")
 
 
@@ -14424,6 +14427,8 @@ def render_tickets_body_html(
         parts.append('<div class="filter-pill">No tickets generated for this date.</div>')
         parts.append('</div>')
         return "".join(parts), page_title
+
+    parts.append(_winrate_best_panel_html())
 
     # ── Groups ────────────────────────────────────────────────────────────────
     leg_graph_uid = 0
