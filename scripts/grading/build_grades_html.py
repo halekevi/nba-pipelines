@@ -326,6 +326,8 @@ def prop_row_for_api(
     *,
     live_ticket_keys: set[tuple[str, ...]] | None = None,
     shadow_ticket_keys: set[tuple[str, ...]] | None = None,
+    live_id_map: dict[tuple[str, ...], str] | None = None,
+    shadow_id_map: dict[tuple[str, ...], str] | None = None,
 ) -> dict[str, str] | None:
     """One flat dict per prop row for the Prop Evaluation tab."""
     def _pick(*keys: str) -> str:
@@ -425,20 +427,36 @@ def prop_row_for_api(
 
     on_live = False
     on_shadow = False
-    if live_ticket_keys or shadow_ticket_keys:
-        try:
-            import sys
-            _scripts = ROOT_DIR / "scripts"
-            if str(_scripts) not in sys.path:
-                sys.path.insert(0, str(_scripts))
-            from ticket_leg_index import prop_matches_ticket_keys  # noqa: WPS433
+    ticket_id: str | None = None
+    try:
+        import sys
+        _scripts = ROOT_DIR / "scripts"
+        if str(_scripts) not in sys.path:
+            sys.path.insert(0, str(_scripts))
+        from ticket_leg_index import (  # noqa: WPS433
+            prop_matches_ticket_keys,
+            resolve_ticket_id_for_row,
+        )
 
-            if live_ticket_keys:
-                on_live = prop_matches_ticket_keys(row, sport, live_ticket_keys)
-            if shadow_ticket_keys:
-                on_shadow = prop_matches_ticket_keys(row, sport, shadow_ticket_keys)
-        except Exception:
-            on_live = on_shadow = False
+        if live_ticket_keys:
+            on_live = prop_matches_ticket_keys(row, sport, live_ticket_keys)
+        if shadow_ticket_keys:
+            on_shadow = prop_matches_ticket_keys(row, sport, shadow_ticket_keys)
+        ticket_id = resolve_ticket_id_for_row(
+            row,
+            sport,
+            live_id_map=live_id_map,
+            shadow_id_map=shadow_id_map,
+        )
+    except Exception:
+        on_live = on_shadow = False
+        ticket_id = None
+
+    hit_val: int | None = None
+    if result == "HIT":
+        hit_val = 1
+    elif result == "MISS":
+        hit_val = 0
 
     return {
         "sport": sport,
@@ -467,8 +485,11 @@ def prop_row_for_api(
         "void_reason": void_reason or "",
         "result": result,
         "pp_projection_id": proj_id or "",
+        "ticket_id": ticket_id,
         "on_ticket": on_live,
         "on_shadow_ticket": on_shadow,
+        "hit": hit_val,
+        "graded_at": _pick("graded_at", "Graded At", "date", "Date") or "",
     }
 
 
@@ -479,16 +500,23 @@ def export_graded_props_json(
 ) -> Path:
     live_keys: set[tuple[str, ...]] = set()
     shadow_keys: set[tuple[str, ...]] = set()
+    live_id_map: dict[tuple[str, ...], str] = {}
+    shadow_id_map: dict[tuple[str, ...], str] = {}
     try:
         import sys
         _scripts = ROOT_DIR / "scripts"
         if str(_scripts) not in sys.path:
             sys.path.insert(0, str(_scripts))
-        from ticket_leg_index import load_ticket_leg_keys  # noqa: WPS433
+        from ticket_leg_index import (  # noqa: WPS433
+            load_leg_key_to_ticket_id,
+            load_ticket_leg_keys,
+        )
 
         tpl = ROOT_DIR / "ui_runner" / "templates"
         live_keys = load_ticket_leg_keys(tpl / "tickets_latest.json")
         shadow_keys = load_ticket_leg_keys(tpl / "shadow_tickets_latest.json")
+        live_id_map = load_leg_key_to_ticket_id(tpl / "tickets_latest.json")
+        shadow_id_map = load_leg_key_to_ticket_id(tpl / "shadow_tickets_latest.json")
     except Exception:
         pass
 
@@ -500,6 +528,8 @@ def export_graded_props_json(
                 sport,
                 live_ticket_keys=live_keys,
                 shadow_ticket_keys=shadow_keys,
+                live_id_map=live_id_map,
+                shadow_id_map=shadow_id_map,
             )
             if p:
                 props.append(p)

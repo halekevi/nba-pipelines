@@ -3436,6 +3436,77 @@ def api_jobs():
 # Main
 # ──────────────────────────────────────────────────────────────────────────────
 
+@app.get("/api/model-performance")
+def api_model_performance():
+    """Latest per-sport AUC / hit-rate tracking from model_performance_log.jsonl."""
+    log_path = DATA_ROOT / "model_performance_log.jsonl"
+    if not log_path.is_file():
+        return jsonify({"error": "no data yet"})
+    lines = [ln for ln in log_path.read_text(encoding="utf-8").strip().split("\n") if ln.strip()]
+    recent = []
+    for ln in lines[-7:]:
+        try:
+            recent.append(json.loads(ln))
+        except Exception:
+            continue
+    if not recent:
+        return jsonify({"error": "no data"})
+    latest = recent[-1]
+    sports_summary: list[dict[str, Any]] = []
+    for sport, metrics in (latest.get("sports") or {}).items():
+        if not isinstance(metrics, dict):
+            continue
+        auc = metrics.get("auc")
+        if auc is None:
+            continue
+        auc_series = [
+            (r.get("sports") or {}).get(sport, {}).get("auc")
+            for r in recent[-3:]
+        ]
+        auc_series = [float(x) for x in auc_series if x is not None]
+        trend = "stable"
+        if len(auc_series) >= 2:
+            delta = auc_series[-1] - auc_series[0]
+            if delta > 0.02:
+                trend = "improving"
+            elif delta < -0.02:
+                trend = "declining"
+        status = (
+            "OK"
+            if float(auc) >= 0.55
+            else "WARN"
+            if float(auc) >= 0.50
+            else "ALERT"
+        )
+        sports_summary.append(
+            {
+                "sport": sport,
+                "auc": round(float(auc), 4),
+                "hit_rate": round(float(metrics.get("hit_rate") or 0), 4),
+                "calibration_error": round(float(metrics.get("calibration_error") or 0), 4),
+                "n": int(metrics.get("n") or 0),
+                "trend": trend,
+                "status": status,
+            }
+        )
+    sports_summary.sort(key=lambda x: x.get("auc", 0), reverse=True)
+    alerts: list[Any] = []
+    alert_path = DATA_ROOT / "model_alerts.json"
+    if alert_path.is_file():
+        try:
+            alerts = json.loads(alert_path.read_text(encoding="utf-8"))
+        except Exception:
+            alerts = []
+    return jsonify(
+        {
+            "last_updated": latest.get("run_at"),
+            "window_days": latest.get("window_days", 30),
+            "sports": sports_summary,
+            "alerts": alerts,
+        }
+    )
+
+
 @app.get("/api/tickets-latest")
 def api_tickets_latest():
     """Full tickets payload (groups, filters, date) for debugging and clients."""

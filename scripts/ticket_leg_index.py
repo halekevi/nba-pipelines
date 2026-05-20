@@ -8,6 +8,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+
 
 def _norm_player(s: object) -> str:
     return re.sub(r"\s+", " ", str(s or "").strip().lower())
@@ -68,6 +70,63 @@ def load_ticket_leg_keys(path: Path) -> set[tuple[str, ...]]:
     return keys
 
 
+def load_leg_key_to_ticket_id(path: Path) -> dict[tuple[str, ...], str]:
+    """Map leg fingerprint -> parent ticket_id from tickets JSON."""
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: dict[tuple[str, ...], str] = {}
+    groups = data.get("groups") if isinstance(data, dict) else data
+    if not isinstance(groups, list):
+        return out
+    for grp in groups:
+        if not isinstance(grp, dict):
+            continue
+        sport_default = str(grp.get("sport") or "").strip().upper()
+        for ticket in grp.get("tickets") or []:
+            if not isinstance(ticket, dict):
+                continue
+            tid = str(ticket.get("ticket_id") or "").strip()
+            if not tid:
+                continue
+            for leg in ticket.get("legs") or []:
+                if isinstance(leg, dict):
+                    out[leg_key_from_record(leg, sport_default=sport_default)] = tid
+    return out
+
+
+def resolve_ticket_id_for_row(
+    row: dict[str, Any],
+    sport: str,
+    *,
+    live_id_map: dict[tuple[str, ...], str] | None = None,
+    shadow_id_map: dict[tuple[str, ...], str] | None = None,
+) -> str | None:
+    """Prefer explicit row ticket_id; else match live pool then shadow."""
+    raw = row.get("ticket_id") or row.get("Ticket ID") or row.get("ticketId")
+    if raw is not None and str(raw).strip() not in ("", "nan", "none", "null"):
+        return str(raw).strip()
+    key = leg_key_from_record(row, sport_default=sport)
+    live_id_map = live_id_map or {}
+    shadow_id_map = shadow_id_map or {}
+    if key in live_id_map:
+        return live_id_map[key]
+    if key[0] != "id":
+        sp, player, prop, line, direction = key[0], key[1], key[2], key[3], key[4]
+        for m in (live_id_map, shadow_id_map):
+            for kk, tid in m.items():
+                if kk[0] == "id":
+                    continue
+                if kk[:5] == (sp, player, prop, line, direction):
+                    return tid
+    if key in shadow_id_map:
+        return shadow_id_map[key]
+    return None
+
+
 def prop_matches_ticket_keys(row: dict[str, Any], sport: str, keys: set[tuple[str, ...]]) -> bool:
     if not keys:
         return False
@@ -83,3 +142,31 @@ def prop_matches_ticket_keys(row: dict[str, Any], sport: str, keys: set[tuple[st
         if kk[:5] == (sp, player, prop, line, direction):
             return True
     return False
+
+
+def attach_ticket_ids_to_dataframe(
+    df: pd.DataFrame,
+    *,
+    live_json: Path | None = None,
+    shadow_json: Path | None = None,
+) -> pd.DataFrame:
+    """Add ticket_id column from tickets_latest.json leg index (null when not on a ticket)."""
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+    live_map = load_leg_key_to_ticket_id(live_json) if live_json else {}
+    shadow_map = load_leg_key_to_ticket_id(shadow_json) if shadow_json else {}
+    if "ticket_id" not in out.columns:
+        out["ticket_id"] = None
+    for idx, row in out.iterrows():
+        if pd.notna(out.at[idx, "ticket_id"]) and str(out.at[idx, "ticket_id"]).strip():
+            continue
+        sport = str(row.get("sport") or row.get("Sport") or "").strip()
+        tid = resolve_ticket_id_for_row(
+            row.to_dict() if hasattr(row, "to_dict") else dict(row),
+            sport,
+            live_id_map=live_map,
+            shadow_id_map=shadow_map,
+        )
+        out.at[idx, "ticket_id"] = tid
+    return out

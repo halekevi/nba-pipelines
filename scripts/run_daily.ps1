@@ -356,36 +356,6 @@ if (-not $SkipGrader) {
             }
             else {
                 Write-Log "STEP A - Grader ($Yesterday): OK"
-                $trackScript = Join-Path $Root "scripts\track_prediction_accuracy.py"
-                $compareScript = Join-Path $Root "scripts\compare_shadow_vs_live.py"
-                if (Test-Path $trackScript) {
-                    Write-Host "Running prediction accuracy tracker..." -ForegroundColor DarkGray
-                    Push-Location $Root
-                    try {
-                        & py -3.14 -X utf8 $trackScript --days 30
-                        if ($LASTEXITCODE -ne 0) {
-                            Write-Warning "track_prediction_accuracy.py exited $LASTEXITCODE"
-                        }
-                    }
-                    catch {
-                        Write-Warning "track_prediction_accuracy.py failed: $($_.Exception.Message)"
-                    }
-                    finally { Pop-Location }
-                }
-                if (Test-Path $compareScript) {
-                    Write-Host "Running shadow vs live comparison..." -ForegroundColor DarkGray
-                    Push-Location $Root
-                    try {
-                        & py -3.14 -X utf8 $compareScript --days 7
-                        if ($LASTEXITCODE -ne 0) {
-                            Write-Warning "compare_shadow_vs_live.py exited $LASTEXITCODE"
-                        }
-                    }
-                    catch {
-                        Write-Warning "compare_shadow_vs_live.py failed: $($_.Exception.Message)"
-                    }
-                    finally { Pop-Location }
-                }
             }
         }
         catch {
@@ -396,6 +366,40 @@ if (-not $SkipGrader) {
 }
 else {
     Write-Log "STEP A - Grader ($Yesterday): SKIPPED (-SkipGrader)"
+}
+
+# =============================================================================
+# STEP A-track — Model performance + shadow comparison (after grader)
+# =============================================================================
+if (-not $SkipGrader) {
+    Write-Host "=== STEP: Model Performance Tracking ===" -ForegroundColor Cyan
+    Write-Log "STEP A-track - Model performance: START"
+    Push-Location $Root
+    try {
+        $trackAcc = Join-Path $Root "scripts\track_prediction_accuracy.py"
+        $trackPerf = Join-Path $Root "scripts\track_model_performance.py"
+        $compareShadow = Join-Path $Root "scripts\compare_shadow_vs_live.py"
+        if (Test-Path $trackAcc) {
+            & py -3.14 -X utf8 $trackAcc --days 30
+            if ($LASTEXITCODE -ne 0) { Write-Warning "track_prediction_accuracy.py exited $LASTEXITCODE" }
+        }
+        if (Test-Path $trackPerf) {
+            & py -3.14 -X utf8 $trackPerf
+            if ($LASTEXITCODE -ne 0) { Write-Warning "track_model_performance.py exited $LASTEXITCODE" }
+        }
+        if (Test-Path $compareShadow) {
+            & py -3.14 -X utf8 $compareShadow --days 7
+            if ($LASTEXITCODE -ne 0) { Write-Warning "compare_shadow_vs_live.py exited $LASTEXITCODE" }
+        }
+        Write-Log "STEP A-track - Model performance: OK"
+    }
+    catch {
+        Write-Warning "Model performance tracking failed: $($_.Exception.Message)"
+        Write-Log "STEP A-track - Model performance: WARN ($($_.Exception.Message))"
+    }
+    finally {
+        Pop-Location
+    }
 }
 
 # =============================================================================

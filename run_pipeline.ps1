@@ -87,8 +87,6 @@ param(
     # Compatibility flag passed by run_daily combined-only invocation.
     # Intentionally no-op here; ticket quality warnings are handled inside downstream scripts.
     [switch]$DQWarnOnly,
-    # Second combined pass with relaxed gates -> ui_runner/templates/shadow_tickets_latest.json
-    [switch]$Shadow,
     # Chrome CDP URL for WNBA step1 (PrizePicks); parallel WNBA job receives this explicitly (env may not propagate).
     [string]$WNBACdp = ""
 )
@@ -922,65 +920,11 @@ function Run-Combined {
         } catch {
             Write-Host "[PostGrader] WARN: $_" -ForegroundColor Yellow
         }
-        if ($Shadow) {
-            Run-ShadowCombined
-        }
     } else {
         Write-Host "  Combined FAILED" -ForegroundColor Red
     }
     Write-Host ""
     return $okC
-}
-
-function Run-ShadowCombined {
-    if ($SkipCombined) {
-        Write-Host "  [shadow] Skipping shadow pass (-SkipCombined)" -ForegroundColor DarkGray
-        return
-    }
-    Write-Host ""
-    Write-Host "[ SHADOW TICKETS — relaxed gates ]" -ForegroundColor DarkYellow
-    $ShadowOut = Join-Path $Root "shadow_tickets_$Date.xlsx"
-    Push-Location $Root
-    try {
-        $env:PYTHONUTF8 = "1"
-        $env:PYTHONIOENCODING = "utf-8"
-        $pyArgs = @(
-            ".\scripts\combined_slate_tickets.py",
-            "--date", $Date,
-            "--allow-cross-date-fallback",
-            "--output", $ShadowOut,
-            "--tiers", "A,B,C,D",
-            "--min-hit-rate", "0.0",
-            "--min-edge=-99",
-            "--max-tickets", "100",
-            "--ticket-gen-starts", "128",
-            "--nba-structured-variants", "8",
-            "--ticket-candidate-sort", "rule",
-            "--prioritize-ticket-hit",
-            "--write-web",
-            "--web-outdir", $WebOutDir,
-            "--shadow-mode",
-            "--no-web-ev-gate"
-        )
-        Write-Host "        CMD: py -3.14 $($pyArgs -join ' ')" -ForegroundColor DarkGray
-        & py -3.14 @pyArgs
-        $shadowExit = $LASTEXITCODE
-    } catch {
-        Write-Host "  [shadow] EXCEPTION: $_" -ForegroundColor Red
-        $shadowExit = 1
-    } finally {
-        Pop-Location
-    }
-    if ($shadowExit -eq 0) {
-        $shadowJson = Join-Path $WebOutDir "shadow_tickets_latest.json"
-        if (Test-Path $shadowJson) {
-            Write-Host "  [shadow] OK -> $shadowJson" -ForegroundColor Green
-        } else {
-            Write-Host "  [shadow] WARN: shadow_tickets_latest.json not found" -ForegroundColor Yellow
-        }
-    } else {
-        Write-Host "  [shadow] Shadow ticket pass FAILED (exit $shadowExit)" -ForegroundColor Red
-    }
 }
 
 # -- Helper: print elapsed + done banner --------------------------------------
@@ -1176,6 +1120,9 @@ if ($TennisOnly) {
     if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input `"$TennisRunOutDir\step2_tennis_picktypes.csv`" --output `"$TennisRunOutDir\step3_tennis_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input `"$TennisRunOutDir\step3_tennis_with_defense.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`"" }
+    if ($ok) {
+        $ok = Run-Step "Tennis Step 4b - Surface context (Sackmann)" $TennisDir ".\scripts\step4b_attach_surface_context.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --date $TennisDate"
+    }
     if ($ok) { $ok = Run-Step "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
     if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }
@@ -1754,6 +1701,7 @@ $TennisJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input `"$TennisRunOutDir\step2_tennis_picktypes.csv`" --output `"$TennisRunOutDir\step3_tennis_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input `"$TennisRunOutDir\step3_tennis_with_defense.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 4b - Surface context" $TennisDir ".\scripts\step4b_attach_surface_context.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --date $TennisDate" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }

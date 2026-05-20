@@ -1211,14 +1211,14 @@ def write_def_tier_crosstab(wb, df):
 # ── Box Raw sheet ─────────────────────────────────────────────────────────────
 def write_raw(wb,df):
     ws=wb.create_sheet('Box Raw')
-    desired=['pp_projection_id','player','team','opp_team','prop_type_norm','pick_type','line',
+    desired=['pp_projection_id','ticket_id','player','team','opp_team','prop_type_norm','pick_type','line',
              'bet_direction','tier','def_tier','minutes_tier','shot_role','usage_role',
              'edge','abs_edge','last5_hit_rate','last5_avg','season_avg',
              'last5_over','last5_under','projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',
              'actual','result','margin','void_reason_grade']
     cols=[c for c in desired if c in df.columns]
-    widths={'pp_projection_id':14,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
+    widths={'pp_projection_id':14,'ticket_id':28,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
             'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
             'shot_role':10,'usage_role':10,'edge':8,'abs_edge':8,
             'last5_hit_rate':13,'last5_avg':10,'season_avg':12,
@@ -1416,6 +1416,20 @@ def main():
     if args.sport in ("NBA", "WNBA"):
         df = filter_nba_slate_by_grade_date(df, args.date)
     print(f'  {len(df)} props loaded')
+
+    try:
+        tpl = _REPO_ROOT / "ui_runner" / "templates"
+        from ticket_leg_index import attach_ticket_ids_to_dataframe  # noqa: WPS433
+
+        df = attach_ticket_ids_to_dataframe(
+            df,
+            live_json=tpl / "tickets_latest.json",
+            shadow_json=tpl / "shadow_tickets_latest.json",
+        )
+    except Exception as exc:
+        if "ticket_id" not in df.columns:
+            df["ticket_id"] = None
+        print(f"  [ticket_id] attach skipped: {exc}")
 
     if args.actuals:
         print(f'Applying actuals from {args.actuals}...')

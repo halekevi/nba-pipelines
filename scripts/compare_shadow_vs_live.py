@@ -44,19 +44,53 @@ def load_day_rows(root: Path, date_str: str) -> pd.DataFrame:
     for r in chunk:
         if not isinstance(r, dict):
             continue
-        hit = _parse_hit(r.get("result"))
+        hit = r.get("hit")
+        if hit is None:
+            hit = _parse_hit(r.get("result"))
         if hit is None:
             continue
+        tid = r.get("ticket_id")
+        tid_s = str(tid).strip() if tid is not None and str(tid).strip().lower() not in ("", "nan", "none") else None
         rows.append(
             {
                 "date": date_str,
                 "sport": str(r.get("sport", "")).strip().upper(),
                 "hit": int(hit),
+                "ticket_id": tid_s,
                 "on_ticket": _as_bool(r.get("on_ticket")),
                 "on_shadow_ticket": _as_bool(r.get("on_shadow_ticket")),
+                "graded_at": str(r.get("graded_at") or date_str)[:10],
             }
         )
     return pd.DataFrame(rows)
+
+
+def compute_ticket_win_rate(props_df: pd.DataFrame, *, pool: str) -> tuple[float | None, pd.DataFrame]:
+    """Group by ticket_id; ticket wins when all legs hit. pool: live | shadow | any."""
+    if props_df.empty or "ticket_id" not in props_df.columns:
+        return None, pd.DataFrame()
+    sub = props_df.dropna(subset=["ticket_id"]).copy()
+    if sub.empty:
+        return None, pd.DataFrame()
+    if pool == "live":
+        sub = sub.loc[sub["on_ticket"]]
+    elif pool == "shadow":
+        sub = sub.loc[sub["on_shadow_ticket"]]
+    if sub.empty:
+        return None, pd.DataFrame()
+    ticket_results = (
+        sub.groupby("ticket_id")
+        .agg(
+            all_hit=("hit", lambda x: bool((x == 1).all())),
+            n_legs=("hit", "count"),
+            sport=("sport", "first"),
+            date=("graded_at", "first"),
+        )
+        .reset_index()
+    )
+    if ticket_results.empty:
+        return None, ticket_results
+    return float(ticket_results["all_hit"].mean()), ticket_results
 
 
 def summarize(df: pd.DataFrame) -> pd.DataFrame:
@@ -151,6 +185,28 @@ def main() -> int:
             print(f"  {label}: insufficient ticket-tagged rows")
 
     print_sport_breakdown(df)
+
+    live_wr, live_tix = compute_ticket_win_rate(df, pool="live")
+    shadow_wr, shadow_tix = compute_ticket_win_rate(df, pool="shadow")
+    leg_live = df.loc[df["on_ticket"]]
+    leg_shadow = df.loc[df["on_shadow_ticket"]]
+    leg_live_hr = float(leg_live["hit"].mean()) if len(leg_live) else None
+    leg_shadow_hr = float(leg_shadow["hit"].mean()) if len(leg_shadow) else None
+
+    print("\n=== Ticket vs leg hit rates (pooled) ===")
+    if live_wr is not None:
+        print(f"  Ticket win rate (live): {live_wr:.1%} on {len(live_tix)} tickets")
+    else:
+        print("  Ticket win rate (live): — (no ticket_id on live-tagged legs)")
+    if shadow_wr is not None:
+        print(f"  Ticket win rate (shadow): {shadow_wr:.1%} on {len(shadow_tix)} tickets")
+    else:
+        print("  Ticket win rate (shadow): — (no ticket_id on shadow-tagged legs)")
+    if leg_live_hr is not None:
+        print(f"  Leg hit rate (live): {leg_live_hr:.1%} (n={len(leg_live)} legs)")
+    if leg_shadow_hr is not None:
+        print(f"  Leg hit rate (shadow): {leg_shadow_hr:.1%} (n={len(leg_shadow)} legs)")
+
     return 0
 
 

@@ -171,6 +171,16 @@ SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
         "player_shots_per90",
         "xg_tier_encoded",
     ],
+    "Tennis": [
+        "surface_encoded",
+        "aces_per_match_mean",
+        "first_serve_pct",
+        "win_rate_on_surface",
+        "games_won_per_match",
+        "surface_specialist",
+        "surface_struggle",
+        "n_matches_on_surface",
+    ],
     "NBA": [
         "usage_pct",
         "usage_tier_encoded",

@@ -4931,8 +4931,11 @@ def ticket_groups_to_payload(
         for ti, t in enumerate(tickets, start=1):
             enrich_ticket_curve_payouts(t, stake_unit=float(curve_stake_usd))
             rows = t.get("rows", [])
+            _gn_safe = re.sub(r"[|]+", "_", str(group_name).strip())[:80]
+            ticket_id = f"{date_str}|{_gn_safe}|{ti}"
             slip = {
                 "web_group_name": str(group_name),
+                "ticket_id": ticket_id,
                 "ticket_no": ti,
                 "avg_hit_rate": _safe_float(t.get("avg_hit_rate")),
                 "avg_rank_score": _safe_float(t.get("avg_rank_score")),
@@ -4997,6 +5000,7 @@ def ticket_groups_to_payload(
                 )
                 canonical_leg_id = "leg_" + hashlib.sha1(id_material.encode("utf-8")).hexdigest()[:20]
                 leg = {
+                    "ticket_id": ticket_id,
                     "sport": sport_s,
                     "player": player_s,
                     "team": team_s,
