@@ -164,6 +164,7 @@ def load_graded_json(
     *,
     sport: str | None = None,
     days: int | None = None,
+    include_suspect: bool = False,
 ) -> pd.DataFrame:
     paths = sorted(
         p
@@ -187,6 +188,8 @@ def load_graded_json(
                 continue
             sp = _norm_sport(r.get("sport"))
             if sport and sp != _norm_sport(sport):
+                continue
+            if not include_suspect and r.get("grading_suspect"):
                 continue
             hit = _parse_hit(r.get("result"))
             if hit is None:
@@ -763,13 +766,18 @@ def main() -> int:
     ap.add_argument("--min-n", type=int, default=30, help="Minimum slice size to display")
     ap.add_argument("--days", type=int, default=0, help="Only last N daily files (0=all)")
     ap.add_argument("--no-retrain", action="store_true", help="Skip retrain CSV blended_score merge")
+    ap.add_argument(
+        "--include-suspect",
+        action="store_true",
+        help="Include NBA1Q/NBA1H rows flagged grading_suspect (default: exclude)",
+    )
     args = ap.parse_args()
 
     sport_f = args.sport.strip().upper() if args.sport else None
     days = args.days if args.days > 0 else None
 
     print("=== STEP 1: Load graded JSON ===")
-    df = load_graded_json(sport=sport_f, days=days)
+    df = load_graded_json(sport=sport_f, days=days, include_suspect=args.include_suspect)
     if df.empty:
         print("No decided props found.", file=sys.stderr)
         return 1

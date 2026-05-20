@@ -978,8 +978,8 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
             key1 = (player_n, prop_norm)
             if key1 in nba1h_lp:
                 return float(nba1h_lp[key1][0]["actual"])
-        # Fallback to full-game NBA when period actuals are unavailable.
-        sport = "NBA"
+        # Never use full-game NBA for half props — inflates OVER hit rates.
+        return np.nan
 
     if sport == "NBA1Q":
         if nba1q_lpt is not None and nba1q_lp is not None:
@@ -989,8 +989,8 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
             key1 = (player_n, prop_norm)
             if key1 in nba1q_lp:
                 return float(nba1q_lp[key1][0]["actual"])
-        # Fallback to full-game NBA when period actuals are unavailable.
-        sport = "NBA"
+        # Never use full-game NBA for quarter props — inflates OVER hit rates.
+        return np.nan
 
     if sport == "NBA":
         key2 = (player_n, team_n, prop_norm)
