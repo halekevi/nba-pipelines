@@ -164,6 +164,7 @@ def load_graded_json(
     *,
     sport: str | None = None,
     days: int | None = None,
+    min_date: str | None = None,
     include_suspect: bool = False,
 ) -> pd.DataFrame:
     paths = sorted(
@@ -173,6 +174,7 @@ def load_graded_json(
     )
     if days and days > 0:
         paths = paths[-days:]
+    min_d = str(min_date or "").strip()[:10]
     rows: list[dict[str, Any]] = []
     for path in paths:
         try:
@@ -180,6 +182,8 @@ def load_graded_json(
         except Exception:
             continue
         file_date = str(raw.get("date") or path.stem.replace("graded_props_", ""))[:10]
+        if min_d and len(min_d) == 10 and file_date < min_d:
+            continue
         chunk = raw.get("props", raw.get("rows", []))
         if not isinstance(chunk, list):
             continue
@@ -765,6 +769,12 @@ def main() -> int:
     ap.add_argument("--sport", default="", help="Filter to one sport (e.g. NBA)")
     ap.add_argument("--min-n", type=int, default=30, help="Minimum slice size to display")
     ap.add_argument("--days", type=int, default=0, help="Only last N daily files (0=all)")
+    ap.add_argument(
+        "--min-date",
+        default="",
+        metavar="YYYY-MM-DD",
+        help="Only graded_props files on/after this date (e.g. 2026-04-01 for clean NBA1Q)",
+    )
     ap.add_argument("--no-retrain", action="store_true", help="Skip retrain CSV blended_score merge")
     ap.add_argument(
         "--include-suspect",
@@ -777,10 +787,18 @@ def main() -> int:
     days = args.days if args.days > 0 else None
 
     print("=== STEP 1: Load graded JSON ===")
-    df = load_graded_json(sport=sport_f, days=days, include_suspect=args.include_suspect)
+    min_date = str(args.min_date or "").strip()[:10] or None
+    df = load_graded_json(
+        sport=sport_f,
+        days=days,
+        min_date=min_date,
+        include_suspect=args.include_suspect,
+    )
     if df.empty:
         print("No decided props found.", file=sys.stderr)
         return 1
+    if min_date:
+        print(f"[filter] min_date >= {min_date}")
 
     if not args.no_retrain:
         df = enrich_from_retrain(df)

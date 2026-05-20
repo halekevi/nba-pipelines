@@ -99,21 +99,30 @@ def load_graded_json_rows(
     *,
     sport: str | None = None,
     max_files: int | None = None,
+    min_date: str | None = None,
+    include_suspect: bool = False,
 ) -> pd.DataFrame:
     rows: list[dict] = []
     paths = sorted((root / "mobile" / "www").glob("graded_props_*.json"))
+    paths = [p for p in paths if ".bak_" not in p.name]
     if max_files:
         paths = paths[-int(max_files) :]
+    min_d = str(min_date or "").strip()[:10]
     for path in paths:
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
+            continue
+        file_date = str(data.get("date") or path.stem.replace("graded_props_", ""))[:10]
+        if min_d and len(min_d) == 10 and file_date < min_d:
             continue
         chunk = data if isinstance(data, list) else data.get("props", data.get("rows", []))
         if not isinstance(chunk, list):
             continue
         for r in chunk:
             if not isinstance(r, dict):
+                continue
+            if not include_suspect and r.get("grading_suspect"):
                 continue
             sp = _norm_sport(r.get("sport"))
             if sport and sp != _norm_sport(sport):
@@ -260,6 +269,17 @@ def main() -> int:
     )
     ap.add_argument("--min-n", type=int, default=50, help="Min graded rows per slice")
     ap.add_argument("--max-files", type=int, default=None, help="Only use last N graded JSON files")
+    ap.add_argument(
+        "--min-date",
+        default="",
+        metavar="YYYY-MM-DD",
+        help="Only graded_props files on/after this date",
+    )
+    ap.add_argument(
+        "--include-suspect",
+        action="store_true",
+        help="Include NBA1Q/NBA1H rows flagged grading_suspect",
+    )
     ap.add_argument("--use-actual-target", action="store_true", help="Target = slice hit rate (not policy default)")
     ap.add_argument("--apply", action="store_true", help="Patch edge_predict_utils.py scalars in place")
     ap.add_argument(
@@ -272,12 +292,21 @@ def main() -> int:
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-    df = load_graded_json_rows(_REPO, sport=args.sport, max_files=args.max_files)
+    min_date = str(args.min_date or "").strip()[:10] or None
+    df = load_graded_json_rows(
+        _REPO,
+        sport=args.sport,
+        max_files=args.max_files,
+        min_date=min_date,
+        include_suspect=bool(args.include_suspect),
+    )
     if df.empty:
         print("No graded rows with ml_prob + result found.")
         return 1
 
     print(f"Loaded {len(df):,} graded rows from mobile/www/graded_props_*.json")
+    if min_date:
+        print(f"  min_date >= {min_date}")
     df = exclude_unbookable_demon_over(df, include_demon=bool(args.include_demon))
     if df.empty:
         print("No rows left after demon+OVER exclusion.")

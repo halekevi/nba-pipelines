@@ -55,6 +55,9 @@ ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     ("CBB", "goblin", "OVER"): 0.8054,
     ("CBB", "standard", "OVER"): 0.9911,
     ("CBB", "standard", "UNDER"): 0.8652,
+    ("NBA1Q", "goblin", "OVER"): 0.5687,
+    ("NBA1Q", "standard", "OVER"): 0.595,
+    ("NBA1Q", "standard", "UNDER"): 0.6525,
 }
 
 _SLICE_CAL_PATH: Path | None = None
