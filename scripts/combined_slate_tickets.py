@@ -14119,26 +14119,24 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
   </td>
 </tr>"""
 
-def _winrate_best_panel_html() -> str:
+def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     """Pinned panel: top 5 win-rate tickets from tickets_winrate_latest.json."""
-    path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_winrate_latest.json"
-    if not path.is_file():
-        return (
-            '<motionless class="winrate-best-panel" aria-live="polite">'
-            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
-            '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
-            "</motionless>"
-        ).replace("motionless", "div")
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return (
-            '<motionless class="winrate-best-panel">'
-            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST</motionless>'
-            '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
-            "</motionless>"
-        ).replace("motionless", "div")
+    _placeholder = (
+        '<motionless class="winrate-best-panel" id="winrate-best-panel" aria-live="polite">'
+        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
+        '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
+        "</motionless>"
+    ).replace("motionless", "div")
+    data = winrate_payload
+    if data is None:
+        path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_winrate_latest.json"
+        if not path.is_file():
+            return _placeholder
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            return _placeholder
     generated_at = str((data or {}).get("generated_at") or "")
     flat: list[tuple[float, dict, str]] = []
     for g in (data or {}).get("groups") or []:
@@ -14146,11 +14144,8 @@ def _winrate_best_panel_html() -> str:
         for t in g.get("tickets") or []:
             if not isinstance(t, dict):
                 continue
-            pw_raw = t.get("p_win")
-            if pw_raw is None:
-                pw_raw = t.get("est_win_prob") or t.get("ticket_model_p_cash")
             try:
-                pw = float(pw_raw or 0.0)
+                pw = float(t.get("p_win") or 0.0)
             except (TypeError, ValueError):
                 pw = 0.0
             flat.append((pw, t, gn))
@@ -14158,11 +14153,11 @@ def _winrate_best_panel_html() -> str:
     top = flat[:5]
     if not top:
         return (
-            '<div class="winrate-best-panel">'
-            '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST</motionless>'
-            '<motionless class="winrate-best-sub">No win-rate tickets yet for this slate.</motionless>'
+            '<div class="winrate-best-panel" id="winrate-best-panel">'
+            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST</div>'
+            '<div class="winrate-best-sub">No win-rate tickets yet for this slate.</div>'
             "</div>"
-        ).replace("motionless", "div")
+        )
     rows: list[str] = []
     for i, (pw, t, gn) in enumerate(top, start=1):
         legs = t.get("legs") or []
@@ -14188,22 +14183,22 @@ def _winrate_best_panel_html() -> str:
             f'<div class="winrate-best-row" data-winrate-rank="{i}" role="button" tabindex="0">'
             f'<span class="winrate-best-rank">#{i}</span>'
             f'<span class="winrate-best-name">{_h(gn)}'
-            f'<div class="winrate-best-legs">{_h(leg_txt)}</motionless>'
+            f'<div class="winrate-best-legs">{_h(leg_txt)}</div>'
             f'</span>'
             f'<span class="winrate-best-stats">'
             f'<div class="winrate-best-pwin">P(win) {_fmt(pw * 100, 0)}%</div>'
-            f'<motionless>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</motionless>'
+            f'<div>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</div>'
             f"</span></div>"
         )
     sub = f"Updated: {_h(generated_at)}" if generated_at else ""
-    body = "".join(r.replace("motionless", "div") for r in rows)
+    body = "".join(rows)
     return (
         '<div class="winrate-best-panel" id="winrate-best-panel">'
         '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
         f'<div class="winrate-best-sub">{sub}</div>'
         f"{body}"
-        "</motionless>"
-    ).replace("motionless", "div")
+        "</div>"
+    )
 
 
 def _group_max_ev_for_ui_cap(group: dict) -> float:
@@ -14305,6 +14300,7 @@ def render_tickets_body_html(
     payload: dict,
     *,
     _non_ev_slips_removed: int = 0,
+    winrate_payload: dict | None = None,
 ) -> tuple[str, str]:
     """
     Render ticket slips from tickets_latest.json payload.
@@ -14428,7 +14424,7 @@ def render_tickets_body_html(
         parts.append('</div>')
         return "".join(parts), page_title
 
-    parts.append(_winrate_best_panel_html())
+    parts.append(_winrate_best_panel_html(winrate_payload))
 
     # ── Groups ────────────────────────────────────────────────────────────────
     leg_graph_uid = 0

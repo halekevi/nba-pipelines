@@ -19,7 +19,12 @@ def main() -> int:
     winrate_path = _REPO / "ui_runner" / "templates" / "tickets_winrate_latest.json"
 
     payload = json.loads(json_path.read_text(encoding="utf-8"))
-    body, title = render_tickets_body_html(payload, _non_ev_slips_removed=0)
+    winrate_payload = None
+    if winrate_path.is_file():
+        winrate_payload = json.loads(winrate_path.read_text(encoding="utf-8"))
+    body, title = render_tickets_body_html(
+        payload, _non_ev_slips_removed=0, winrate_payload=winrate_payload
+    )
     tpl = tpl_path.read_text(encoding="utf-8")
     html = (
         tpl.replace("{{ tickets_body|safe }}", body)

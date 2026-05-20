@@ -387,6 +387,7 @@ _LARGE_JSON_NAMES = frozenset({"tickets_latest.json", "slate_latest.json"})
 # If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
 # Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
 #   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
+#   TICKETS_WINRATE_JSON_URL = .../tickets_winrate_latest.json  (Today's Best panel on /tickets)
 #   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
 #   PIPELINE_JSON_TTL_SEC = 45   # optional; on Railway default is 60 if unset (fresher slates)
 #   GITHUB_JSON_FETCH_BUST = 0   # set to 0 to disable ?nocache= on raw GitHub fetches (not recommended)
@@ -416,6 +417,7 @@ _TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
 _SLATE_JSON_URL = os.environ.get("SLATE_JSON_URL", "").strip()
 _TICKET_EVAL_SLATE_JSON_URL = os.environ.get("TICKET_EVAL_SLATE_JSON_URL", "").strip()
 _TICKET_EV_JSON_URL = os.environ.get("TICKET_EV_JSON_URL", "").strip()
+_TICKETS_WINRATE_JSON_URL = os.environ.get("TICKETS_WINRATE_JSON_URL", "").strip()
 
 if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_railway():
     _base = os.environ.get("PROPORACLE_RAW_JSON_BASE", _JSON_BASE_DEFAULT).rstrip("/")
@@ -426,6 +428,8 @@ if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_ra
         _SLATE_JSON_URL = f"{_base}/slate_latest.json"
     if not _TICKETS_JSON_URL:
         _TICKETS_JSON_URL = f"{_base}/tickets_latest.json"
+    if not _TICKETS_WINRATE_JSON_URL:
+        _TICKETS_WINRATE_JSON_URL = f"{_base}/tickets_winrate_latest.json"
     if not _TICKET_EVAL_SLATE_JSON_URL:
         _TICKET_EVAL_SLATE_JSON_URL = f"{_base}/ticket_eval_slate_latest.json"
     if not _TICKET_EV_JSON_URL:
@@ -434,6 +438,8 @@ if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_ra
 _DATA_FILE_URL_MAP: dict[str, str] = {}
 if _TICKETS_JSON_URL:
     _DATA_FILE_URL_MAP["tickets_latest.json"] = _TICKETS_JSON_URL
+if _TICKETS_WINRATE_JSON_URL:
+    _DATA_FILE_URL_MAP["tickets_winrate_latest.json"] = _TICKETS_WINRATE_JSON_URL
 if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
 if _TICKET_EVAL_SLATE_JSON_URL:
@@ -1493,9 +1499,21 @@ def page_tickets():
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
             # tickets_latest.json is authoritative (EV gate applied only when combined is built with strict web mode).
+            winrate_payload = None
+            if _template_json_available("tickets_winrate_latest.json"):
+                try:
+                    winrate_payload = read_json_cached(
+                        TEMPLATES_DIR / "tickets_winrate_latest.json"
+                    )
+                except Exception as wr_exc:
+                    current_app.logger.warning(
+                        "/tickets: tickets_winrate_latest.json load failed: %s",
+                        wr_exc,
+                    )
             body, page_title = mod.render_tickets_body_html(
                 payload,
                 _non_ev_slips_removed=0,
+                winrate_payload=winrate_payload,
             )
             return render_template(
                 "tickets_built.html",
@@ -3439,7 +3457,7 @@ def api_tickets_latest():
 def api_tickets_winrate():
     """Win-rate optimized ticket pool (tickets_winrate_latest.json)."""
     json_path = TEMPLATES_DIR / "tickets_winrate_latest.json"
-    if not json_path.is_file():
+    if not _template_json_available("tickets_winrate_latest.json"):
         return jsonify(
             {
                 "error": "tickets_winrate_latest.json not found",
