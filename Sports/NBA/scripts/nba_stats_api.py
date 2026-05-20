@@ -10,23 +10,10 @@ from pathlib import Path
 from typing import Any, Optional
 
 import pandas as pd
-import requests
+from nba_api.stats.endpoints import leaguedashplayerstats, leaguedashteamstats
+from nba_api.stats.static import teams as static_teams
 
-NBA_STATS = "https://stats.nba.com/stats"
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Referer": "https://www.nba.com/",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "x-nba-stats-origin": "stats",
-    "x-nba-stats-token": "true",
-    "Connection": "keep-alive",
-    "Origin": "https://www.nba.com",
-}
-TIMEOUT = 10
+NBA_API_TIMEOUT = 30
 SLEEP_S = 0.5
 
 _DATA_DIR = Path(__file__).resolve().parents[1] / "data"
@@ -52,28 +39,19 @@ def norm_team(abbr: object) -> str:
     return TEAM_ALIAS.get(s, s)
 
 
-def _get(path: str, params: dict) -> Optional[dict]:
-    url = f"{NBA_STATS}/{path.lstrip('/')}"
+def _team_id_to_abbr() -> dict[int, str]:
+    return {int(t["id"]): norm_team(t["abbreviation"]) for t in static_teams.get_teams()}
+
+
+def _team_abbr_from_row(row: pd.Series, id_to_abbr: dict[int, str]) -> str:
+    abbr = norm_team(row.get("TEAM_ABBREVIATION", row.get("TEAM_ABBREV", "")))
+    if abbr:
+        return abbr
+    tid = row.get("TEAM_ID")
     try:
-        time.sleep(SLEEP_S)
-        r = requests.get(url, headers=HEADERS, params=params, timeout=TIMEOUT)
-        if r.status_code != 200:
-            return None
-        return r.json()
-    except Exception:
-        return None
-
-
-def _result_set_to_df(payload: dict, index: int = 0) -> pd.DataFrame:
-    sets = payload.get("resultSets") or payload.get("resultSet") or []
-    if not sets:
-        return pd.DataFrame()
-    block = sets[index] if isinstance(sets, list) else sets
-    headers = block.get("headers") or []
-    rows = block.get("rowSet") or []
-    if not headers or not rows:
-        return pd.DataFrame()
-    return pd.DataFrame(rows, columns=headers)
+        return id_to_abbr.get(int(tid), "")
+    except (TypeError, ValueError):
+        return ""
 
 
 def _cache_stale(entry: dict, hours: float) -> bool:
@@ -108,60 +86,52 @@ def _save_json(path: Path, data: dict) -> None:
     tmp.replace(path)
 
 
+def _dash_player_df(season: str, measure_type: str) -> pd.DataFrame:
+    time.sleep(SLEEP_S)
+    try:
+        ep = leaguedashplayerstats.LeagueDashPlayerStats(
+            season=season,
+            season_type_all_star="Regular Season",
+            per_mode_detailed="PerGame",
+            measure_type_detailed_defense=measure_type,
+            timeout=NBA_API_TIMEOUT,
+        )
+        frames = ep.get_data_frames()
+        return frames[0] if frames else pd.DataFrame()
+    except Exception:
+        return pd.DataFrame()
+
+
+def _dash_team_df(season: str, per_mode: str, measure_type: str) -> pd.DataFrame:
+    time.sleep(SLEEP_S)
+    try:
+        ep = leaguedashteamstats.LeagueDashTeamStats(
+            season=season,
+            season_type_all_star="Regular Season",
+            per_mode_detailed=per_mode,
+            measure_type_detailed_defense=measure_type,
+            timeout=NBA_API_TIMEOUT,
+        )
+        frames = ep.get_data_frames()
+        return frames[0] if frames else pd.DataFrame()
+    except Exception:
+        return pd.DataFrame()
+
+
 def fetch_player_advanced(season: str) -> pd.DataFrame:
-    data = _get(
-        "leaguedashplayerstats",
-        {
-            "Season": season,
-            "SeasonType": "Regular Season",
-            "PerMode": "PerGame",
-            "MeasureType": "Advanced",
-            "LeagueID": "00",
-        },
-    )
-    return _result_set_to_df(data or {}, 0) if data else pd.DataFrame()
+    return _dash_player_df(season, "Advanced")
 
 
 def fetch_player_base(season: str) -> pd.DataFrame:
-    data = _get(
-        "leaguedashplayerstats",
-        {
-            "Season": season,
-            "SeasonType": "Regular Season",
-            "PerMode": "PerGame",
-            "MeasureType": "Base",
-            "LeagueID": "00",
-        },
-    )
-    return _result_set_to_df(data or {}, 0) if data else pd.DataFrame()
+    return _dash_player_df(season, "Base")
 
 
 def fetch_team_pace(season: str) -> pd.DataFrame:
-    data = _get(
-        "leaguedashteamstats",
-        {
-            "Season": season,
-            "SeasonType": "Regular Season",
-            "PerMode": "Per100Possessions",
-            "MeasureType": "Advanced",
-            "LeagueID": "00",
-        },
-    )
-    return _result_set_to_df(data or {}, 0) if data else pd.DataFrame()
+    return _dash_team_df(season, "Per100Possessions", "Advanced")
 
 
 def fetch_team_opponent_base(season: str) -> pd.DataFrame:
-    data = _get(
-        "leaguedashteamstats",
-        {
-            "Season": season,
-            "SeasonType": "Regular Season",
-            "PerMode": "PerGame",
-            "MeasureType": "Opponent",
-            "LeagueID": "00",
-        },
-    )
-    return _result_set_to_df(data or {}, 0) if data else pd.DataFrame()
+    return _dash_team_df(season, "PerGame", "Opponent")
 
 
 def refresh_usage_cache(season: str, path: Path = USAGE_CACHE) -> dict:
@@ -212,9 +182,10 @@ def refresh_pace_cache(season: str, path: Path = PACE_CACHE) -> dict:
     key = f"season_{season}"
     if df.empty:
         return cache
+    id_to_abbr = _team_id_to_abbr()
     teams: dict[str, dict] = {}
     for _, r in df.iterrows():
-        abbr = norm_team(r.get("TEAM_ABBREVIATION", r.get("TEAM_ABBREV", "")))
+        abbr = _team_abbr_from_row(r, id_to_abbr)
         if not abbr:
             continue
         teams[abbr] = {
@@ -236,9 +207,10 @@ def refresh_opp_defense_cache(season: str, path: Path = OPP_DEF_CACHE) -> dict:
     if df.empty:
         return cache
 
+    id_to_abbr = _team_id_to_abbr()
     entries: dict[str, dict] = {}
     for _, r in df.iterrows():
-        abbr = norm_team(r.get("TEAM_ABBREVIATION", r.get("TEAM_ABBREV", "")))
+        abbr = _team_abbr_from_row(r, id_to_abbr)
         if not abbr:
             continue
         pts = _f(r.get("OPP_PTS", r.get("PTS")))
