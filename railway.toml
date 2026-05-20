@@ -35,7 +35,7 @@ startCommand = "sh scripts/railway_gunicorn.sh"
 healthcheckPath = "/ping"
 healthcheckTimeout = 180
 
-# cache-bust: 2026-05-15 22:00 — /grades mobile scroll (parent window, no iframe flex trap)
+# cache-bust: 2026-05-19 18:00 — /grades hub: ET default date, slate-first picker, partial-deploy fallback
 #
 # Income (/income): Daily P&L rows come from grade_history.json, appended by
 #   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
