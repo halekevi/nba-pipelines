@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Train unified XGBoost edge classifier + Platt calibration on graded history.
 
+Three-way split: train-fit (booster), Platt calibration slice, and untouched test for ROC-AUC.
+
 Uses edge_feature_engineering.build_feature_vector() (play-side edge on rows for step7b
 implied_prob only). The raw ``edge`` column is always excluded from the tree inputs
 (see ALWAYS_EXCLUDE_FROM_EDGE_TRAINING). Retrain after feature-list changes.
@@ -35,15 +37,16 @@ from edge_feature_engineering import (
     drop_nba_features_below_fill_threshold,
     drop_wnba_features_below_fill_threshold,
     fill_minutes_cv_median_by_sport,
+    raw_edge_from_projection_line,
 )
 from edge_ml_bundle import EdgeCalibratedModel
 
 SCRIPT_NAME = "train_edge_model"
 
-# Label-adjacent columns: never use these as tree inputs (raw `edge` / abs_edge still exist on
-# rows for step7b implied_prob + edge_score; they are not read from edge_model_features.json).
+# Label-adjacent columns: never use these as tree inputs. Raw `edge` / `abs_edge` / `prop_score`
+# may still exist on rows for step7b implied_prob and ranking; they are not in edge_model_features.json.
 ALWAYS_EXCLUDE_FROM_EDGE_TRAINING: frozenset[str] = frozenset(
-    {"edge", "result_binary", "hit", "outcome"}
+    {"edge", "abs_edge", "prop_score", "result_binary", "hit", "outcome"}
 )
 
 _COMBINED_GRADED_DATE = re.compile(r"combined_tickets_graded_(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -402,7 +405,8 @@ def _adapt_retrain_csv_for_feature_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     `build_feature_vector` reads via `_first_col` / `_direction_series`.
 
     `_prop_type_key` uses ``stat_type``, ``stat_norm``, ``prop_type``, ``prop_norm`` (not ``prop``).
-    ``edge`` is read only from a column named ``edge`` (coalesce ``edge_score`` here).
+    ``edge`` comes from the ``edge`` column and, when missing, ``projection - line`` only
+    (never ``edge_score``, which is ml_prob - implied_prob).
     ``composite_hit_rate`` is filled from ``blended_score`` when present.
     """
     out = df.copy()
@@ -432,10 +436,8 @@ def _adapt_retrain_csv_for_feature_pipeline(df: pd.DataFrame) -> pd.DataFrame:
         out["game_date"] = pd.to_datetime(out["game_date"], errors="coerce")
 
     e = pd.to_numeric(out["edge"], errors="coerce") if "edge" in out.columns else pd.Series(np.nan, index=out.index)
-    if "edge_score" in out.columns:
-        es = pd.to_numeric(out["edge_score"], errors="coerce")
-        e = e.where(e.notna(), es)
-    out["edge"] = e
+    computed = raw_edge_from_projection_line(out)
+    out["edge"] = e.where(e.notna(), computed)
 
     if "blended_score" in out.columns:
         bl = pd.to_numeric(out["blended_score"], errors="coerce")
@@ -532,7 +534,11 @@ MIN_SPORT_ROWS = 200
 MAX_CLASS_DOMINANCE_PCT = 90.0  # skip if dominant hit class > 90%
 MIN_HOLDOUT_ROWS_PER_SPORT = 50
 
-# Slice isotonic: fit on a stratified subset of TRAIN only (disjoint from holdout `te` used for Platt).
+# Platt: fit on a held-out calibration slice; ROC-AUC is reported on `te` only (never seen by Platt).
+TEST_HOLDOUT_FRAC = 0.2
+PLATT_CALIB_FRAC = 0.2  # fraction of the pre-test training pool reserved for Platt fitting
+MIN_PLATT_CALIB_ROWS = 30
+# Slice isotonic: fit on a stratified subset of train-fit rows only (disjoint from calib + test).
 DEFAULT_SLICE_ISOTONIC_MIN_N = 200
 # WNBA uses the same per-sport isotonic path when graded rows >= min_n (default 200).
 WNBA_SLICE_ISOTONIC_MIN_N = 200
@@ -743,16 +749,88 @@ def _stratify_series_for_split(sub: pd.DataFrame) -> pd.Series | None:
     return None
 
 
+def _stratify_series_main_split(df: pd.DataFrame) -> pd.Series:
+    strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
+    vc = strat.value_counts()
+    if strat.nunique() < 2 or int(vc.min()) < 2:
+        return df["sport"].astype(str)
+    return strat
+
+
+def _platt_calib_split_from_train(
+    tr: pd.DataFrame,
+    *,
+    temporal: bool,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Split the pre-test training pool into booster-fit rows and a Platt calibration slice."""
+    if temporal:
+        n = len(tr)
+        n_cal = max(1, int(round(n * PLATT_CALIB_FRAC)))
+        n_fit = max(1, n - n_cal)
+        return tr.iloc[:n_fit].copy(), tr.iloc[n_fit:].copy()
+    strat = _stratify_series_for_split(tr)
+    try:
+        tr_fit, cal = train_test_split(
+            tr,
+            test_size=PLATT_CALIB_FRAC,
+            random_state=43,
+            stratify=strat,
+        )
+    except ValueError:
+        tr_fit, cal = train_test_split(tr, test_size=PLATT_CALIB_FRAC, random_state=43)
+    return tr_fit.copy(), cal.copy()
+
+
+def _split_train_calib_test_holdout(
+    df: pd.DataFrame,
+    *,
+    temporal: bool,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Return (train_fit, platt_calib, test). Test rows are never used for Platt or early stopping."""
+    if temporal:
+        n = len(df)
+        n_te = max(1, int(round(n * TEST_HOLDOUT_FRAC)))
+        n_pool = n - n_te
+        n_cal = max(1, int(round(n_pool * PLATT_CALIB_FRAC)))
+        n_fit = max(1, n_pool - n_cal)
+        return df.iloc[:n_fit].copy(), df.iloc[n_fit : n_fit + n_cal].copy(), df.iloc[n_fit + n_cal :].copy()
+    strat = _stratify_series_main_split(df)
+    tr_pool, te = train_test_split(
+        df,
+        test_size=TEST_HOLDOUT_FRAC,
+        random_state=42,
+        stratify=strat,
+    )
+    tr_fit, cal = _platt_calib_split_from_train(tr_pool, temporal=False)
+    return tr_fit, cal, te
+
+
 def _fit_xgb_platt_auc(
-    X_train: pd.DataFrame,
-    y_train: pd.Series,
-    X_test: pd.DataFrame,
-    y_test: pd.Series,
+    tr: pd.DataFrame,
+    te: pd.DataFrame,
+    features_active: list[str],
     spw: float,
+    *,
+    temporal_calib_split: bool = False,
 ) -> float | None:
-    ytr = y_train.astype(int).to_numpy()
-    yte = y_test.astype(int).to_numpy()
-    if len(np.unique(ytr)) < 2 or len(np.unique(yte)) < 2:
+    tr_fit, cal = _platt_calib_split_from_train(tr, temporal=temporal_calib_split)
+    X_train = tr_fit[features_active].astype(float)
+    X_cal = cal[features_active].astype(float)
+    X_test = te[features_active].astype(float)
+    y_train = tr_fit["y"].astype(int)
+    y_cal = cal["y"].astype(int)
+    y_test = te["y"].astype(int)
+    ytr = y_train.to_numpy()
+    yca = y_cal.to_numpy()
+    yte = y_test.to_numpy()
+    if (
+        len(tr_fit) < 10
+        or len(cal) < MIN_PLATT_CALIB_ROWS
+        or len(te) < 10
+        or len(np.unique(ytr)) < 2
+        or len(np.unique(yca)) < 2
+        or len(np.unique(yte)) < 2
+    ):
         return None
     model = XGBClassifier(
         n_estimators=400,
@@ -766,10 +844,10 @@ def _fit_xgb_platt_auc(
         early_stopping_rounds=30,
         random_state=42,
     )
-    model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
-    p_hold = model.predict_proba(X_test)[:, 1].reshape(-1, 1)
+    model.fit(X_train, y_train, eval_set=[(X_cal, y_cal)], verbose=False)
+    p_cal = model.predict_proba(X_cal)[:, 1].reshape(-1, 1)
     platt_lr = LogisticRegression(C=1e12, max_iter=2000, random_state=42, solver="lbfgs")
-    platt_lr.fit(p_hold, y_test)
+    platt_lr.fit(p_cal, y_cal)
     calibrated = EdgeCalibratedModel(model, platt_lr)
     prob_test = calibrated.predict_proba(X_test)[:, 1]
     return _auc_safe(yte, prob_test)
@@ -875,13 +953,7 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
         else:
             strat = _stratify_series_for_split(sub_d)
             tr_r, te_r = train_test_split(sub_d, test_size=0.2, random_state=42, stratify=strat)
-            auc_rand = _fit_xgb_platt_auc(
-                tr_r[features_active].astype(float),
-                tr_r["y"],
-                te_r[features_active].astype(float),
-                te_r["y"],
-                spw,
-            )
+            auc_rand = _fit_xgb_platt_auc(tr_r, te_r, features_active, spw, temporal_calib_split=False)
 
             sub_sorted = sub_d.sort_values("_stress_event_dt", kind="mergesort")
             n = len(sub_sorted)
@@ -895,11 +967,7 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
                 and len(np.unique(te_t["y"].to_numpy())) >= 2
             ):
                 auc_temp = _fit_xgb_platt_auc(
-                    tr_t[features_active].astype(float),
-                    tr_t["y"],
-                    te_t[features_active].astype(float),
-                    te_t["y"],
-                    spw,
+                    tr_t, te_t, features_active, spw, temporal_calib_split=True
                 )
 
             r_s = "n/a" if auc_rand is None else f"{auc_rand:.4f}"
@@ -935,13 +1003,7 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
                 and len(np.unique(s_tr["y"].to_numpy())) >= 2
                 and len(np.unique(s_te["y"].to_numpy())) >= 2
             ):
-                auc_p = _fit_xgb_platt_auc(
-                    s_tr[features_active].astype(float),
-                    s_tr["y"],
-                    s_te[features_active].astype(float),
-                    s_te["y"],
-                    spw,
-                )
+                auc_p = _fit_xgb_platt_auc(s_tr, s_te, features_active, spw, temporal_calib_split=False)
         p_s = "n/a" if auc_p is None else f"{auc_p:.4f}"
         print(f"Player-holdout ROC-AUC: {sp} = {p_s}")
         if auc_p is not None:
@@ -957,13 +1019,7 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
         baseline_ab: float | None = None
         if len(tr_a) >= 20 and len(te_a) >= 10:
             if len(np.unique(tr_a["y"])) >= 2 and len(np.unique(te_a["y"])) >= 2:
-                baseline_ab = _fit_xgb_platt_auc(
-                    tr_a[features_active].astype(float),
-                    tr_a["y"],
-                    te_a[features_active].astype(float),
-                    te_a["y"],
-                    spw,
-                )
+                baseline_ab = _fit_xgb_platt_auc(tr_a, te_a, features_active, spw, temporal_calib_split=False)
         print(f"  {'Feature':<28} | {'AUC Without':>12} | {'AUC Drop':>10} | Notes")
         print(f"  {'-' * 28}-+-{'-' * 12}-+-{'-' * 10}-+-{'-' * 24}")
         if baseline_ab is None:
@@ -971,13 +1027,7 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
         else:
             for fname in features_active:
                 cols = [c for c in features_active if c != fname]
-                aw = _fit_xgb_platt_auc(
-                    tr_a[cols].astype(float),
-                    tr_a["y"],
-                    te_a[cols].astype(float),
-                    te_a["y"],
-                    spw,
-                )
+                aw = _fit_xgb_platt_auc(tr_a, te_a, cols, spw, temporal_calib_split=False)
                 if aw is None:
                     aw_s = "n/a"
                     drop = 0.0
@@ -1012,7 +1062,7 @@ def _fit_slice_isotonic_calibrators(
 ) -> tuple[list[str], list[str]]:
     """
     Fit per-(sport, pick_type, direction) isotonic regressors on Platt probabilities
-    using ``ISO_CALIB_TRAIN_FRAC`` of **train** rows (never the Platt holdout ``te``).
+    using ``ISO_CALIB_TRAIN_FRAC`` of **train-fit** rows (never the Platt calib slice or test set).
     Sports in ``INACTIVE_SPORTS`` are skipped (no calibrator keys at inference).
     """
     fitted_keys: list[str] = []
@@ -1259,40 +1309,43 @@ def _train_unified_edge_model(
         u = int(df.loc[sub, "direction_encoded"].eq(0.0).sum())
         print(f"  {sp} OVER={o} UNDER={u}")
 
-    if temporal_split:
-        n = len(df)
-        k = max(1, int(n * 0.8))
-        if k < 50 or (n - k) < 50:
-            print("[ERROR] Temporal split: insufficient train or test rows.")
-            return
-        tr, te = df.iloc[:k].copy(), df.iloc[k:].copy()
-        if "_stress_event_dt" in tr.columns and "_stress_event_dt" in te.columns:
-            tr_dt = pd.to_datetime(tr["_stress_event_dt"], errors="coerce")
-            te_dt = pd.to_datetime(te["_stress_event_dt"], errors="coerce")
-            if tr_dt.notna().any() and te_dt.notna().any():
-                print(
-                    "[train_edge_model] temporal holdout: "
-                    f"train n={len(tr)} [{tr_dt.min()} .. {tr_dt.max()}] | "
-                    f"test n={len(te)} [{te_dt.min()} .. {te_dt.max()}]"
-                )
-    else:
-        strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
-        vc = strat.value_counts()
-        if strat.nunique() < 2 or int(vc.min()) < 2:
-            strat = df["sport"].astype(str)
-        tr, te = train_test_split(df, test_size=0.2, random_state=42, stratify=strat)
+    tr_fit, cal, te = _split_train_calib_test_holdout(df, temporal=temporal_split)
+    if len(tr_fit) < 50 or len(cal) < MIN_PLATT_CALIB_ROWS or len(te) < 50:
+        print(
+            "[ERROR] Insufficient rows after train/calib/test split "
+            f"(train={len(tr_fit)}, calib={len(cal)}, test={len(te)})."
+        )
+        return
+    if len(np.unique(cal["y"].astype(int))) < 2:
+        print("[ERROR] Platt calibration slice is single-class; cannot fit Platt scaling.")
+        return
+    print(
+        f"\n[Split] train_fit n={len(tr_fit)} | platt_calib n={len(cal)} | "
+        f"test n={len(te)} (ROC-AUC on test only)"
+    )
+    if temporal_split and "_stress_event_dt" in df.columns:
+        fit_dt = pd.to_datetime(tr_fit["_stress_event_dt"], errors="coerce")
+        cal_dt = pd.to_datetime(cal["_stress_event_dt"], errors="coerce")
+        te_dt = pd.to_datetime(te["_stress_event_dt"], errors="coerce")
+        if fit_dt.notna().any() and cal_dt.notna().any() and te_dt.notna().any():
+            print(
+                "[train_edge_model] temporal split: "
+                f"train [{fit_dt.min()} .. {fit_dt.max()}] | "
+                f"calib [{cal_dt.min()} .. {cal_dt.max()}] | "
+                f"test [{te_dt.min()} .. {te_dt.max()}]"
+            )
 
     # ── NHL / Soccer: feature-target correlation on TRAIN only (leakage suspects) ──
     print("\n--- Feature vs hit correlation (train only; |r|>0.5 = leakage suspect) ---")
     leak_by_corr: set[str] = set()
     for sp_label in ("NHL", "SOCCER"):
-        corrs = _correlations_with_target(tr, sp_label, list(FEATURE_COLUMNS))
+        corrs = _correlations_with_target(tr_fit, sp_label, list(FEATURE_COLUMNS))
         if not corrs:
             print(f"  {sp_label}: insufficient train rows for correlation scan")
             continue
         suspects = [(f, r) for f, r in corrs.items() if abs(r) > 0.5]
         suspects.sort(key=lambda x: -abs(x[1]))
-        print(f"  {sp_label} (n_train={int((tr['sport'].astype(str)==sp_label).sum())}):")
+        print(f"  {sp_label} (n_train={int((tr_fit['sport'].astype(str)==sp_label).sum())}):")
         for f, r in sorted(corrs.items(), key=lambda x: -abs(x[1]))[:15]:
             tag = " *** SUSPECT" if abs(r) > 0.5 else ""
             print(f"    {f}: r={r:+.4f}{tag}")
@@ -1340,25 +1393,27 @@ def _train_unified_edge_model(
         else:
             print("\n[Training] Excluded player-level feature: player_hr_historical")
 
-    if WNBA_FEATURE_COLUMNS and (tr["sport"].astype(str).str.upper() == "WNBA").any():
-        features_active, wnba_dropped = drop_wnba_features_below_fill_threshold(features_active, tr)
+    if WNBA_FEATURE_COLUMNS and (tr_fit["sport"].astype(str).str.upper() == "WNBA").any():
+        features_active, wnba_dropped = drop_wnba_features_below_fill_threshold(features_active, tr_fit)
         if wnba_dropped:
             print(
                 f"\n[WNBA] Dropped low-fill features (<50% non-null on WNBA train rows): "
                 f"{wnba_dropped}"
             )
 
-    if (tr["sport"].astype(str).str.upper() == "NBA").any():
-        features_active, nba_dropped = drop_nba_features_below_fill_threshold(features_active, tr)
+    if (tr_fit["sport"].astype(str).str.upper() == "NBA").any():
+        features_active, nba_dropped = drop_nba_features_below_fill_threshold(features_active, tr_fit)
         if nba_dropped:
             print(
                 f"\n[NBA] Dropped low-fill features (<60% non-null on NBA train rows): "
                 f"{nba_dropped}"
             )
 
-    X_train = tr[features_active].astype(float)
+    X_train = tr_fit[features_active].astype(float)
+    X_cal = cal[features_active].astype(float)
     X_test = te[features_active].astype(float)
-    y_train = tr["y"].astype(int)
+    y_train = tr_fit["y"].astype(int)
+    y_cal = cal["y"].astype(int)
     y_test = te["y"].astype(int)
 
     model = XGBClassifier(
@@ -1373,31 +1428,31 @@ def _train_unified_edge_model(
         early_stopping_rounds=30,
         random_state=42,
     )
-    model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+    model.fit(X_train, y_train, eval_set=[(X_cal, y_cal)], verbose=False)
 
-    p_hold = model.predict_proba(X_test)[:, 1].reshape(-1, 1)
+    p_cal = model.predict_proba(X_cal)[:, 1].reshape(-1, 1)
     platt_lr = LogisticRegression(C=1e12, max_iter=2000, random_state=42, solver="lbfgs")
-    platt_lr.fit(p_hold, y_test)
+    platt_lr.fit(p_cal, y_cal)
     calibrated = EdgeCalibratedModel(model, platt_lr)
 
     iso_fitted, iso_skipped = _fit_slice_isotonic_calibrators(
-        tr, y_train, features_active, calibrated, models_dir, isotonic_min_n=isotonic_min_n
+        tr_fit, y_train, features_active, calibrated, models_dir, isotonic_min_n=isotonic_min_n
     )
 
     prob_test = calibrated.predict_proba(X_test)[:, 1]
     auc_overall = float(roc_auc_score(y_test, prob_test))
-    print(f"\nROC-AUC (holdout, calibrated): {auc_overall:.4f}")
+    print(f"\nROC-AUC (test, calibrated): {auc_overall:.4f}")
 
-    print("\nROC-AUC per sport (holdout):")
+    print("\nROC-AUC per sport (test):")
     meta_auc: dict[str, float | None] = {}
     sport_status: dict[str, str] = {}
     for sp in sorted(df["sport"].unique()):
         m = te["sport"].astype(str).values == str(sp)
         n_te = int(np.sum(m))
         if n_te < MIN_HOLDOUT_ROWS_PER_SPORT:
-            print(f"  {sp}: insufficient holdout (test n={n_te} < {MIN_HOLDOUT_ROWS_PER_SPORT}) — excluded from per-sport ROC")
+            print(f"  {sp}: insufficient test rows (n={n_te} < {MIN_HOLDOUT_ROWS_PER_SPORT}) — excluded from per-sport ROC")
             meta_auc[str(sp)] = None
-            sport_status[str(sp)] = "insufficient holdout"
+            sport_status[str(sp)] = "insufficient test"
             continue
         if n_te < 5:
             print(f"  {sp}: n/a (too few test rows)")
@@ -1429,7 +1484,7 @@ def _train_unified_edge_model(
         a = meta_auc.get(sp)
         if a is not None and float(a) > 0.85 and not leak_confirmed:
             print(
-                f"\n[Findings] {sp} holdout ROC-AUC={a:.4f} with no feature |r|>0.5 vs hit on train — "
+                f"\n[Findings] {sp} test ROC-AUC={a:.4f} with no feature |r|>0.5 vs hit on train — "
                 "not treated as confirmed column leakage. High AUC may reflect strong separable signals "
                 "(e.g. edge × sport slice) or slice-specific structure; consider time-based CV or ablation."
             )
@@ -1480,6 +1535,12 @@ def _train_unified_edge_model(
         "training_rows_total": int(len(df)),
         "rows_per_sport": rows_per_sport,
         "roc_auc_overall": auc_overall,
+        "roc_auc_eval_set": "test",
+        "train_fit_rows": int(len(tr_fit)),
+        "platt_calib_rows": int(len(cal)),
+        "test_rows": int(len(te)),
+        "test_holdout_frac": TEST_HOLDOUT_FRAC,
+        "platt_calib_frac_of_train_pool": PLATT_CALIB_FRAC,
         "roc_auc_per_sport": {k: v for k, v in meta_auc.items() if v is not None},
         "roc_auc_per_sport_with_nulls": {k: (float(v) if v is not None else None) for k, v in meta_auc.items()},
         "per_sport_holdout_status": sport_status,
@@ -1524,7 +1585,7 @@ def _train_unified_edge_model(
         else:
             auc_str = f"{auc_s:.4f}"
         print(f"{sp:<8} | {n_tot:6d} | {n_te:6d} | {auc_str:>10} | {st:<22}")
-    print(f"{'OVERALL':<8} | {len(df):6d} | {len(te):6d} | {auc_overall:10.4f} | {'holdout':<22}")
+    print(f"{'OVERALL':<8} | {len(df):6d} | {len(te):6d} | {auc_overall:10.4f} | {'test':<22}")
 
 
 def main() -> None:
@@ -1557,7 +1618,7 @@ def main() -> None:
         "--temporal-split",
         action="store_true",
         help=(
-            "Train on oldest 80%% of rows by event date, test on newest 20%% (full unified model). "
+            "Temporal three-way split (~64%% train / ~16%% Platt calib / ~20%% test by event date). "
             "Works with graded discovery and with --input-csv when dates are parseable "
             "(game_date from retrain CSVs, or columns coalesced in _adapt_retrain_csv_for_feature_pipeline). "
             "Override detection with --temporal-date-column."

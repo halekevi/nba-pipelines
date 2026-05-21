@@ -49,6 +49,7 @@ STEP8_FEATURE_COLS = [
     "ml_edge",
     "deviation_level",
     "pp_projection_id",
+    "projection",
 ]
 
 # Raw step4b/c/d enrichment columns (joined from step8 when pipeline has run them).
@@ -281,6 +282,7 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Pick Type": "pick_type",
         "Player": "player",
         "Line": "line",
+        "Projection": "projection",
         "Game Date": "game_date",
         "Opp": "opp_team",
         "Team": "team",
@@ -305,10 +307,19 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
     """Load canonical step8 table for a sport (single snapshot file on disk)."""
     sport_u = sport.upper()
     if sport_u == "NBA":
-        p = root / "NBA" / "data" / "outputs" / "step8_all_direction.csv"
-        if not p.is_file():
-            return None
-        return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        for p in (
+            root / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction.csv",
+            root / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+            root / "Sports" / "NBA" / "step8_all_direction_clean.xlsx",
+            root / "NBA" / "data" / "outputs" / "step8_all_direction.csv",
+            root / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl")
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        return None
     if sport_u == "MLB":
         for p in (
             root / "Sports" / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
@@ -374,7 +385,12 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> pd.Data
         # Prefer dated pipeline step8 (has game_date / start_time). Avoid
         # outputs/<d>/step8_all_direction_clean.xlsx when it is a Grades/UI export
         # without calendar columns (would make date filter drop all rows).
-        for name in (f"step8_nba_direction_clean_{d}.xlsx", f"step8_all_direction_{d}.xlsx"):
+        # Prefer nba/ subfolder enriched xlsx (step4b usage_pct) over parent copy.
+        for name in (
+            f"nba/step8_nba_direction_clean_{d}.xlsx",
+            f"step8_nba_direction_clean_{d}.xlsx",
+            f"step8_all_direction_{d}.xlsx",
+        ):
             p = root / "outputs" / d / name
             if p.is_file():
                 return (
@@ -420,6 +436,43 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> pd.Data
                 return pd.read_excel(p, engine="openpyxl")
         return load_step8_sport(root, sport)
     return None
+
+
+def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
+    """True when outputs/<file_date>/ holds a sport step8 artifact for that slate folder.
+
+    Used to skip ±1d game_date filtering when file_date is the pipeline folder date but
+    step8 rows carry an older game_date (legacy snapshot recovery).
+    """
+    d = (file_date or "")[:10]
+    if len(d) != 10:
+        return False
+    sport_u = sport.upper()
+    candidates: list[Path] = []
+    if sport_u == "NBA":
+        candidates = [
+            root / "outputs" / d / f"step8_nba_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "nba" / f"step8_nba_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "nba" / "step8_all_direction_clean.xlsx",
+        ]
+    elif sport_u == "MLB":
+        candidates = [
+            root / "outputs" / d / f"step8_mlb_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "mlb" / "step8_mlb_direction_clean.xlsx",
+        ]
+    elif sport_u == "NHL":
+        candidates = [
+            root / "outputs" / d / f"step8_nhl_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.xlsx",
+        ]
+    elif sport_u in ("SOCCER",):
+        candidates = [
+            root / "outputs" / d / f"step8_soccer_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "soccer" / "step8_soccer_direction_clean.xlsx",
+        ]
+    elif sport_u == "WNBA":
+        candidates = [root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx"]
+    return any(p.is_file() for p in candidates)
 
 
 def prop_join_key(s: Any) -> str:
@@ -654,10 +707,18 @@ def main() -> int:
             continue
 
         s8 = _prepare_step8(s8_raw, anchor_file_date=str(file_date))
-        fd = pd.to_datetime(file_date, errors="coerce").normalize()
-        _dd = (s8["_game_d"] - fd).abs()
-        date_mask = s8["_game_d"].notna() & (_dd <= pd.Timedelta(days=1))
-        s8 = s8.loc[date_mask]
+        skip_date_filter = has_dated_step8_snapshot(root, sk, str(file_date))
+        if skip_date_filter:
+            if args.verbose:
+                print(
+                    f"  [{sport} {file_date}] dated step8 snapshot — "
+                    f"using all {len(s8):,} rows (no ±1d game_date filter)"
+                )
+        else:
+            fd = pd.to_datetime(file_date, errors="coerce").normalize()
+            _dd = (s8["_game_d"] - fd).abs()
+            date_mask = s8["_game_d"].notna() & (_dd <= pd.Timedelta(days=1))
+            s8 = s8.loc[date_mask]
         if len(s8) == 0:
             if args.verbose:
                 print(f"  [{sport} {file_date}] step8 has no rows within ±1d of file_date — skipped {n_grad:,} rows")
@@ -710,9 +771,12 @@ def main() -> int:
         for c in JOIN_FEATURE_COLS:
             if c not in m.columns:
                 m[c] = np.nan
-        _tol_d = (m["_file_d"] - m["_game_d"]).abs()
-        tol = _tol_d <= pd.Timedelta(days=1)
-        m["_tol"] = m["_game_d"].notna() & tol
+        if skip_date_filter:
+            m["_tol"] = True
+        else:
+            _tol_d = (m["_file_d"] - m["_game_d"]).abs()
+            tol = _tol_d <= pd.Timedelta(days=1)
+            m["_tol"] = m["_game_d"].notna() & tol
         feat_present = pd.Series(False, index=m.index)
         for c in ("blended_score", "edge_score", "rank_score"):
             if c in m.columns:
@@ -739,6 +803,19 @@ def main() -> int:
         m["ml_edge"] = pd.to_numeric(m["ml_edge"], errors="coerce")
         m["ml_edge"] = m["ml_edge"].where(m["ml_edge"].notna(), mp - 0.5)
         m = m.drop(columns=["_s8_ml_prob"], errors="ignore")
+
+        # Fill graded edge from step8 projection - line only where graded edge is null.
+        # Never overwrite a graded edge with a step8 value.
+        if "projection" in m.columns and "line" in m.columns:
+            s8_computed_edge = (
+                pd.to_numeric(m["projection"], errors="coerce")
+                - pd.to_numeric(m["line"], errors="coerce")
+            )
+            if "edge" in m.columns:
+                graded_edge = pd.to_numeric(m["edge"], errors="coerce")
+                m["edge"] = graded_edge.where(graded_edge.notna(), s8_computed_edge)
+            else:
+                m["edge"] = s8_computed_edge
 
         joined_n = int(m["_joined"].sum()) if "_joined" in m.columns else 0
         pct = 100.0 * (n_grad - joined_n) / n_grad if n_grad else 0.0

@@ -367,6 +367,19 @@ def _first_col(df: pd.DataFrame, names: tuple[str, ...]) -> pd.Series:
     return pd.Series(np.nan, index=idx)
 
 
+def raw_edge_from_projection_line(df: pd.DataFrame) -> pd.Series:
+    """Raw slate edge (projection - line). NaN when projection or line is missing.
+
+    ``edge_score`` (ml_prob - implied_prob) is intentionally not used here.
+    """
+    proj = _to_num(
+        _first_col(df, ("projection", "Projection", "proj", "model_line", "consensus_line"))
+    )
+    line = _to_num(_first_col(df, ("line", "line_score", "Line")))
+    ok = proj.notna() & line.notna()
+    return (proj - line).where(ok, np.nan)
+
+
 def _norm_sport(sport: str) -> str:
     x = str(sport or "").strip().upper()
     if x == "FOOTBALL" or x == "SOC":
