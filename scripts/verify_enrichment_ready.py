@@ -136,32 +136,23 @@ def smoke_test_nba() -> bool:
         return False
 
 
-def smoke_test_wnba() -> bool:
-    import requests
-    from nba_api.stats.library.http import STATS_HEADERS
+def _wnba_scripts_dir() -> Path:
+    return _REPO / "Sports" / "WNBA" / "scripts"
 
+
+def smoke_test_wnba() -> bool:
     print("\n=== WNBA stats.wnba.com smoke test ===")
-    headers = dict(STATS_HEADERS)
-    headers["Referer"] = "https://www.wnba.com/"
-    headers["Origin"] = "https://www.wnba.com"
+    wnba_dir = str(_wnba_scripts_dir())
+    if wnba_dir not in sys.path:
+        sys.path.insert(0, wnba_dir)
     try:
-        r = requests.get(
-            "https://stats.wnba.com/stats/leaguedashplayerstats",
-            params={
-                "Season": "2025",
-                "SeasonType": "Regular Season",
-                "PerMode": "PerGame",
-                "MeasureType": "Advanced",
-                "LeagueId": "10",
-            },
-            headers=headers,
-            timeout=30,
-        )
-        rows = 0
-        if r.status_code == 200:
-            rows = len(r.json().get("resultSets", [{}])[0].get("rowSet", []))
-        print(f"{r.status_code} {rows} rows")
-        return r.status_code == 200 and rows >= 50
+        from wnba_stats_api import fetch_player_advanced
+
+        df = fetch_player_advanced("2025")
+        rows = len(df)
+        ok = rows >= 50
+        print(f"{'200' if ok else 'FAIL'} {rows} rows")
+        return ok
     except Exception as exc:
         print(f"FAIL: {exc}")
         return False

@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""WNBA Stats API client (stats.wnba.com) — usage, pace, fouls."""
+"""WNBA Stats API client — usage, pace, fouls via nba_api (LeagueId=10).
+
+Direct requests to stats.wnba.com return Akamai 403/500 from typical server IPs.
+The NBA fix uses nba_api's shared STATS_HEADERS session against stats.nba.com;
+WNBA uses the same endpoints with league_id_nullable='10' (same JSON shape as before).
+"""
 
 from __future__ import annotations
 
@@ -7,24 +12,14 @@ import json
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import pandas as pd
-import requests
+from nba_api.stats.endpoints import leaguedashplayerstats, leaguedashteamstats
+from nba_api.stats.static import teams as static_teams
 
-WNBA_STATS = "https://stats.wnba.com/stats"
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Referer": "https://www.wnba.com/",
-    "Accept": "application/json",
-    "x-nba-stats-origin": "stats",
-    "x-nba-stats-token": "true",
-    "Origin": "https://www.wnba.com",
-}
-TIMEOUT = 10
+WNBA_LEAGUE_ID = "10"
+TIMEOUT = 45
 SLEEP_S = 0.5
 
 _DATA_DIR = Path(__file__).resolve().parents[1] / "data"
@@ -33,28 +28,52 @@ PACE_CACHE = _DATA_DIR / "wnba_team_pace_cache.json"
 FOUL_CACHE = _DATA_DIR / "wnba_foul_cache.json"
 
 
-def _get(path: str, params: dict) -> Optional[dict]:
-    url = f"{WNBA_STATS}/{path.lstrip('/')}"
+def _wnba_team_id_to_abbr() -> dict[int, str]:
+    return {int(t["id"]): str(t["abbreviation"]).strip().upper() for t in static_teams.get_wnba_teams()}
+
+
+def _team_abbr_from_row(row: pd.Series, id_to_abbr: dict[int, str]) -> str:
+    abbr = str(row.get("TEAM_ABBREVIATION", row.get("TEAM_ABBREV", ""))).strip().upper()
+    if abbr:
+        return abbr
     try:
-        time.sleep(SLEEP_S)
-        r = requests.get(url, headers=HEADERS, params=params, timeout=TIMEOUT)
-        if r.status_code != 200:
-            return None
-        return r.json()
+        return id_to_abbr.get(int(row.get("TEAM_ID")), "")
+    except (TypeError, ValueError):
+        return ""
+
+
+def _dash_player_df(season: str, measure_type: str) -> pd.DataFrame:
+    time.sleep(SLEEP_S)
+    try:
+        ep = leaguedashplayerstats.LeagueDashPlayerStats(
+            season=season,
+            season_type_all_star="Regular Season",
+            per_mode_detailed="PerGame",
+            measure_type_detailed_defense=measure_type,
+            league_id_nullable=WNBA_LEAGUE_ID,
+            timeout=TIMEOUT,
+        )
+        frames = ep.get_data_frames()
+        return frames[0] if frames else pd.DataFrame()
     except Exception:
-        return None
+        return pd.DataFrame()
 
 
-def _result_set_to_df(payload: dict, index: int = 0) -> pd.DataFrame:
-    sets = payload.get("resultSets") or payload.get("resultSet") or []
-    if not sets:
+def _dash_team_df(season: str, per_mode: str, measure_type: str) -> pd.DataFrame:
+    time.sleep(SLEEP_S)
+    try:
+        ep = leaguedashteamstats.LeagueDashTeamStats(
+            season=season,
+            season_type_all_star="Regular Season",
+            per_mode_detailed=per_mode,
+            measure_type_detailed_defense=measure_type,
+            league_id_nullable=WNBA_LEAGUE_ID,
+            timeout=TIMEOUT,
+        )
+        frames = ep.get_data_frames()
+        return frames[0] if frames else pd.DataFrame()
+    except Exception:
         return pd.DataFrame()
-    block = sets[index] if isinstance(sets, list) else sets
-    headers = block.get("headers") or []
-    rows = block.get("rowSet") or []
-    if not headers or not rows:
-        return pd.DataFrame()
-    return pd.DataFrame(rows, columns=headers)
 
 
 def _cache_stale(entry: dict, hours: float) -> bool:
@@ -90,45 +109,15 @@ def _save_json(path: Path, data: dict) -> None:
 
 
 def fetch_player_advanced(season: str) -> pd.DataFrame:
-    params = {
-        "Season": season,
-        "SeasonType": "Regular Season",
-        "PerMode": "PerGame",
-        "MeasureType": "Advanced",
-        "LeagueId": "10",
-    }
-    data = _get("leaguedashplayerstats", params)
-    if not data:
-        return pd.DataFrame()
-    return _result_set_to_df(data, 0)
+    return _dash_player_df(season, "Advanced")
 
 
 def fetch_player_base(season: str) -> pd.DataFrame:
-    params = {
-        "Season": season,
-        "SeasonType": "Regular Season",
-        "PerMode": "PerGame",
-        "MeasureType": "Base",
-        "LeagueId": "10",
-    }
-    data = _get("leaguedashplayerstats", params)
-    if not data:
-        return pd.DataFrame()
-    return _result_set_to_df(data, 0)
+    return _dash_player_df(season, "Base")
 
 
 def fetch_team_pace(season: str) -> pd.DataFrame:
-    params = {
-        "Season": season,
-        "SeasonType": "Regular Season",
-        "PerMode": "Per40",
-        "MeasureType": "Advanced",
-        "LeagueId": "10",
-    }
-    data = _get("leaguedashteamstats", params)
-    if not data:
-        return pd.DataFrame()
-    return _result_set_to_df(data, 0)
+    return _dash_team_df(season, "Per40", "Advanced")
 
 
 def refresh_usage_cache(season: str, path: Path = USAGE_CACHE) -> dict:
@@ -166,8 +155,9 @@ def refresh_pace_cache(season: str, path: Path = PACE_CACHE) -> dict:
     if df.empty:
         return cache
     teams: dict[str, dict] = {}
+    id_to_abbr = _wnba_team_id_to_abbr()
     for _, r in df.iterrows():
-        abbr = str(r.get("TEAM_ABBREVIATION", r.get("TEAM_ABBREV", ""))).strip().upper()
+        abbr = _team_abbr_from_row(r, id_to_abbr)
         if not abbr:
             continue
         teams[abbr] = {
