@@ -1,0 +1,18 @@
+﻿player,opponent,prop_type,hit_rate,games,avg_edge,recommendation
+Alexandre Carrier,BUF,blocked_shots,1.0,3,1.5,STRONG BUY
+Alexandre Texier,BUF,shots_on_goal,1.0,2,1.0,STRONG BUY
+Beckett Sennecke,VGK,shots_on_goal,1.0,3,1.5,STRONG BUY
+Ivan Demidov,BUF,shots_on_goal,1.0,2,2.0,STRONG BUY
+Josh Norris,MTL,shots_on_goal,1.0,2,2.0,STRONG BUY
+Lane Hutson,BUF,points,1.0,2,1.0,STRONG BUY
+Lane Hutson,BUF,assists,1.0,2,1.0,STRONG BUY
+Mike Matheson,BUF,blocked_shots,1.0,2,2.0,STRONG BUY
+Mikael Granlund,VGK,shots_on_goal,1.0,2,1.0,STRONG BUY
+Pavel Mintyukov,VGK,blocked_shots,1.0,3,1.5,STRONG BUY
+Pavel Dorofeyev,ANA,points,1.0,2,1.0,STRONG BUY
+Nick Suzuki,BUF,points,1.0,3,1.5,STRONG BUY
+Pavel Dorofeyev,ANA,goals,1.0,2,1.0,STRONG BUY
+Shea Theodore,ANA,points,1.0,2,1.0,STRONG BUY
+Jackson LaCombe,VGK,blocked_shots,0.6666666666666666,3,-0.16666666666666666,BUY
+Jakub Dobes,BUF,goalie_saves,0.6666666666666666,6,2.3333333333333335,BUY
+Mitch Marner,ANA,points,0.6666666666666666,3,0.5,BUY

@@ -1,0 +1,12 @@
+date,sport,event_id,team,player,injury_status,injury_type,injury_type_desc,injury_detail,injury_side,rank_penalty
+2026-05-14,NHL,401871408,BUF,Noah Ostlund,Out,O,out,,Left,-0.45
+2026-05-14,NHL,401871408,BUF,Jiri Kulich,Injured Reserve,IR,Injured Reserve,Not Specified,Not Specified,-0.1
+2026-05-14,NHL,401871408,BUF,Justin Danforth,Injured Reserve,IR,Injured Reserve,Fracture,Not Specified,-0.1
+2026-05-14,NHL,401871408,MTL,Patrik Laine,Injured Reserve,IR,Injured Reserve,,,-0.1
+2026-05-14,NHL,401871428,ANA,Radko Gudas,Out,O,out,,,-0.45
+2026-05-14,NHL,401871428,ANA,Drew Helleson,Out,O,out,,,-0.45
+2026-05-14,NHL,401871428,ANA,Ryan Poehling,Out,O,out,,,-0.45
+2026-05-14,NHL,401871428,ANA,Petr Mrazek,Injured Reserve,IR,Injured Reserve,Surgery,,-0.1
+2026-05-14,NHL,401871428,VGK,Mark Stone,Day-To-Day,DD,day-to-day,,,-0.15
+2026-05-14,NHL,401871428,VGK,Jeremy Lauzon,Day-To-Day,DD,day-to-day,,,-0.15
+2026-05-14,NHL,401871428,VGK,Brayden McNabb,Suspension,SUSP,Suspension,,,-0.1

@@ -1,0 +1,817 @@
+player,team,prop_type,actual,source,SOG,G,A,PTS,HIT,BS,PIM,PM,PPP,FOW,TOI,source_conflict
+Jakub Dobes,MTL,Goalie Saves,33.0,nhl_api,,,,,,,,,,,,1
+Carter Hart,VGK,Goalie Saves,31.0,nhl_api,,,,,,,,,,,,1
+Jackson LaCombe,ANA,Time On Ice,29.6,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Time On Ice,27.5,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Time On Ice,26.3,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Time On Ice,26.1,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Time On Ice,25.9,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Time On Ice,25.4,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Time On Ice,24.6,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Time On Ice,24.1,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Time On Ice,23.4,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Time On Ice,23.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Time On Ice,22.1,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Time On Ice,21.9,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Time On Ice,21.8,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Time On Ice,21.5,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Time On Ice,21.2,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Time On Ice,21.1,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Time On Ice,20.8,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Time On Ice,20.6,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Time On Ice,20.6,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Time On Ice,20.5,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Time On Ice,20.4,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Time On Ice,20.4,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Time On Ice,20.3,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Time On Ice,20.1,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Time On Ice,20.1,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Time On Ice,19.5,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Time On Ice,19.3,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Time On Ice,18.2,nhl_api,,,,,,,,,,,,0
+Ukko-Pekka Luukkonen,BUF,Goalie Saves,18.0,nhl_api,,,,,,,,,,,,1
+Jake Evans,MTL,Time On Ice,17.8,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Time On Ice,17.6,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Time On Ice,17.5,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Time On Ice,17.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Time On Ice,17.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Time On Ice,16.8,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Time On Ice,16.8,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Time On Ice,16.7,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Time On Ice,16.2,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Time On Ice,16.2,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Time On Ice,16.2,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Time On Ice,16.0,nhl_api,,,,,,,,,,,,0
+Lukas Dostal,ANA,Goalie Saves,16.0,nhl_api,,,,,,,,,,,,1
+Chris Kreider,ANA,Time On Ice,15.8,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Time On Ice,15.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Time On Ice,14.8,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Time On Ice,14.7,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Time On Ice,14.5,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Time On Ice,14.3,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Time On Ice,13.7,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Time On Ice,13.6,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Time On Ice,13.5,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Time On Ice,13.4,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Time On Ice,12.4,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Time On Ice,12.4,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Time On Ice,12.3,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Time On Ice,11.8,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Time On Ice,11.6,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Time On Ice,11.4,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Time On Ice,10.9,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Time On Ice,10.9,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Time On Ice,10.7,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Time On Ice,10.4,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Time On Ice,10.1,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Time On Ice,9.9,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Time On Ice,9.9,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Time On Ice,9.5,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Time On Ice,9.3,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Time On Ice,9.1,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Time On Ice,9.1,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Time On Ice,8.8,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Time On Ice,8.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Time On Ice,7.3,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Time On Ice,7.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Time On Ice,6.1,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Shots On Goal,5.0,nhl_api,,,,,,,,,,,,1
+Mattias Samuelsson,BUF,Shots On Goal,5.0,nhl_api,,,,,,,,,,,,1
+Beckett Sennecke,ANA,Shots On Goal,5.0,nhl_api,,,,,,,,,,,,1
+Kirby Dach,MTL,Shots On Goal,4.0,nhl_api,,,,,,,,,,,,1
+Josh Norris,BUF,Shots On Goal,4.0,nhl_api,,,,,,,,,,,,1
+Bowen Byram,BUF,Shots On Goal,4.0,nhl_api,,,,,,,,,,,,1
+Jack Eichel,VGK,Shots On Goal,4.0,nhl_api,,,,,,,,,,,,1
+Mikael Granlund,ANA,Shots On Goal,4.0,nhl_api,,,,,,,,,,,,1
+Cole Caufield,MTL,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Alexandre Texier,MTL,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Jack Quinn,BUF,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Tage Thompson,BUF,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Josh Doan,BUF,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Rasmus Dahlin,BUF,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Pavel Dorofeyev,VGK,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Brett Howden,VGK,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Jackson LaCombe,ANA,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+Jacob Trouba,ANA,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+John Carlson,ANA,Shots On Goal,3.0,nhl_api,,,,,,,,,,,,1
+J. Slafkovský,MTL,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Alex Tuch,BUF,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Konsta Helenius,BUF,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Alex Lyon,BUF,Goalie Saves,2.0,nhl_api,,,,,,,,,,,,1
+Noah Hanifin,VGK,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Dylan Coghlan,VGK,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Troy Terry,ANA,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Mason McTavish,ANA,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Cutter Gauthier,ANA,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Olen Zellweger,ANA,Shots On Goal,2.0,nhl_api,,,,,,,,,,,,1
+Nick Suzuki,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Josh Anderson,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Jake Evans,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Joe Veleno,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Mike Matheson,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Kaiden Guhle,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Alexandre Carrier,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Lane Hutson,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Noah Dobson,MTL,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Zach Benson,BUF,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Jordan Greenway,BUF,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Peyton Krebs,BUF,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Ryan McLeod,BUF,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Conor Timmins,BUF,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Brandon Saad,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Nic Dowd,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Tomas Hertl,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Mitch Marner,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Rasmus Andersson,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Ben Hutton,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Shea Theodore,VGK,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Chris Kreider,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Jansen Harkins,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Tim Washe,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Ross Johnston,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Ian Moore,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Pavel Mintyukov,ANA,Shots On Goal,1.0,nhl_api,,,,,,,,,,,,1
+Alex Newhook,MTL,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+J. Fowler,MTL,Goalie Saves,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+A. Hill,VGK,Goalie Saves,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Shots On Goal,0.0,nhl_api,,,,,,,,,,,,0
+V. Husso,ANA,Goalie Saves,0.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,PIM,10.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,PIM,10.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Hits,6.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Hits,6.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Blocked Shots,5.0,nhl_api,,,,,,,,,,,,0
+Ukko-Pekka Luukkonen,BUF,Goals Allowed,5.0,nhl_api,,,,,,,,,,,,0
+Lukas Dostal,ANA,Goals Allowed,5.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Blocked Shots,4.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Blocked Shots,4.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,PIM,4.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Blocked Shots,4.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Hits,4.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Points,3.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Assists,3.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Points,3.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Hits,3.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Blocked Shots,3.0,nhl_api,,,,,,,,,,,,0
+Jakub Dobes,MTL,Goals Allowed,3.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Hits,3.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Blocked Shots,3.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Hits,3.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Blocked Shots,3.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Hits,3.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Plus/Minus,3.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Plus/Minus,3.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Blocked Shots,3.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Assists,2.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Blocked Shots,2.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Assists,2.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Points,2.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Points,2.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Assists,2.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Points,2.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Blocked Shots,2.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Blocked Shots,2.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Goals,2.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Points,2.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Points,2.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Plus/Minus,2.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Points,2.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Blocked Shots,2.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Blocked Shots,2.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Hits,2.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,PIM,2.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Power Play Points,1.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Power Play Points,1.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Points,1.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Points,1.0,nhl_api,,,,,,,,,,,,0
+Alex Lyon,BUF,Goals Allowed,1.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Points,1.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Plus/Minus,1.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Power Play Points,1.0,nhl_api,,,,,,,,,,,,0
+Carter Hart,VGK,Goals Allowed,1.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Points,1.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Goals,1.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Points,1.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Power Play Points,1.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Assists,1.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Points,1.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Blocked Shots,1.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Hits,1.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Cole Caufield,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Nick Suzuki,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Alex Newhook,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Josh Anderson,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Phillip Danault,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jake Evans,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Kirby Dach,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Demidov,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Kaiden Guhle,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Alexandre Carrier,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Lane Hutson,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Noah Dobson,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Points,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Arber Xhekaj,MTL,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+J. Fowler,MTL,Goals Allowed,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Zach Benson,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Josh Norris,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jason Zucker,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jack Quinn,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Beck Malenstyn,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Ryan McLeod,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Josh Doan,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Konsta Helenius,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Bowen Byram,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Points,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Mattias Samuelsson,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Owen Power,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Dahlin,BUF,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jack Eichel,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Colton Sissons,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Dorofeyev,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Brandon Saad,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Brett Howden,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Cole Smith,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Nic Dowd,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Tomas Hertl,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ivan Barbashev,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Keegan Kolesar,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+William Karlsson,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Mitch Marner,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Rasmus Andersson,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Kaedan Korczak,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Noah Hanifin,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Ben Hutton,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Shea Theodore,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Points,0.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Dylan Coghlan,VGK,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+A. Hill,VGK,Goals Allowed,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Troy Terry,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Chris Kreider,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Jeffrey Viel,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Leo Carlsson,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Ian Moore,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Hits,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Blocked Shots,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Olen Zellweger,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Goals,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Assists,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Points,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,PIM,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Plus/Minus,0.0,nhl_api,,,,,,,,,,,,0
+Pavel Mintyukov,ANA,Power Play Points,0.0,nhl_api,,,,,,,,,,,,0
+V. Husso,ANA,Goals Allowed,0.0,nhl_api,,,,,,,,,,,,0
+J. Slafkovský,MTL,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Zack Bolduc,MTL,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Joe Veleno,MTL,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Mike Matheson,MTL,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Jordan Greenway,BUF,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Luke Schenn,BUF,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Conor Timmins,BUF,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Mason McTavish,ANA,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Jansen Harkins,ANA,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Tim Washe,ANA,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Ross Johnston,ANA,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+John Carlson,ANA,Plus/Minus,-1.0,nhl_api,,,,,,,,,,,,0
+Peyton Krebs,BUF,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Tage Thompson,BUF,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Alex Tuch,BUF,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Beckett Sennecke,ANA,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Cutter Gauthier,ANA,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Mikael Granlund,ANA,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Jacob Trouba,ANA,Plus/Minus,-2.0,nhl_api,,,,,,,,,,,,0
+Alex Killorn,ANA,Plus/Minus,-3.0,nhl_api,,,,,,,,,,,,0
+Jackson LaCombe,ANA,Plus/Minus,-4.0,nhl_api,,,,,,,,,,,,0
+Alexandre Texier,MTL,Faceoffs Won,100.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,1.0,,100.0,12.4,0
+Cutter Gauthier,ANA,Faceoffs Won,100.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-2.0,,100.0,17.6,0
+Ivan Barbashev,VGK,Faceoffs Won,100.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,2.0,,100.0,17.0,0
+Jordan Greenway,BUF,Faceoffs Won,100.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,-1.0,,100.0,10.1,0
+Josh Anderson,MTL,Faceoffs Won,100.0,espn,0.0,1.0,0.0,1.0,,1.0,2.0,2.0,,100.0,14.5,0
+Alex Tuch,BUF,Faceoffs Won,100.0,espn,0.0,0.0,0.0,0.0,,2.0,0.0,-2.0,,100.0,17.0,0
+Brett Howden,VGK,Faceoffs Won,100.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,2.0,,100.0,16.2,0
+Keegan Kolesar,VGK,Faceoffs Won,100.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,100.0,10.9,0
+Phillip Danault,MTL,Faceoffs Won,77.8,espn,0.0,0.0,2.0,2.0,,1.0,0.0,1.0,,77.8,16.0,0
+Ryan McLeod,BUF,Faceoffs Won,75.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,75.0,13.4,0
+Tim Washe,ANA,Faceoffs Won,63.2,espn,0.0,0.0,0.0,0.0,,1.0,0.0,-1.0,,63.2,14.3,0
+Tomas Hertl,VGK,Faceoffs Won,60.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,0.0,,60.0,9.1,0
+Leo Carlsson,ANA,Faceoffs Won,60.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,0.0,,60.0,16.8,0
+Joe Veleno,MTL,Faceoffs Won,60.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,60.0,9.9,0
+William Karlsson,VGK,Faceoffs Won,58.8,espn,0.0,0.0,1.0,1.0,,0.0,2.0,1.0,,58.8,17.5,0
+Nic Dowd,VGK,Faceoffs Won,56.3,espn,0.0,0.0,0.0,0.0,,3.0,4.0,0.0,,56.3,15.0,0
+Jake Evans,MTL,Faceoffs Won,53.8,espn,0.0,1.0,0.0,1.0,,1.0,0.0,1.0,,53.8,17.8,0
+Josh Norris,BUF,Faceoffs Won,52.6,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,52.6,20.5,0
+Kirby Dach,MTL,Faceoffs Won,50.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,50.0,9.1,0
+Jansen Harkins,ANA,Faceoffs Won,50.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,50.0,6.1,0
+Nick Suzuki,MTL,Faceoffs Won,37.5,espn,0.0,1.0,2.0,3.0,,2.0,0.0,0.0,,37.5,20.8,0
+Jack Eichel,VGK,Faceoffs Won,36.8,espn,0.0,0.0,0.0,0.0,,1.0,0.0,2.0,,36.8,20.4,0
+Colton Sissons,VGK,Faceoffs Won,33.3,espn,0.0,0.0,0.0,0.0,,1.0,0.0,0.0,,33.3,11.4,0
+Mikael Granlund,ANA,Faceoffs Won,31.6,espn,0.0,1.0,0.0,1.0,,0.0,2.0,-2.0,,31.6,24.1,0
+Mason McTavish,ANA,Faceoffs Won,28.6,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,28.6,12.3,0
+Peyton Krebs,BUF,Faceoffs Won,25.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-2.0,,25.0,14.8,0
+Konsta Helenius,BUF,Faceoffs Won,20.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,1.0,,20.0,11.8,0
+Juraj Slafkovsky,MTL,Time On Ice,19.3,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Tage Thompson,BUF,Faceoffs Won,18.2,espn,0.0,0.0,0.0,0.0,,0.0,2.0,-2.0,,18.2,20.1,0
+Juraj Slafkovsky,MTL,Points,3.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Juraj Slafkovsky,MTL,Assists,3.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Juraj Slafkovsky,MTL,PIM,2.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Juraj Slafkovsky,MTL,Blocked Shots,1.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Cole Caufield,MTL,Faceoffs Won,0.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,0.0,,0.0,16.8,0
+Ian Moore,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,9.5,0
+Pavel Mintyukov,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,3.0,0.0,0.0,,0.0,13.7,0
+Olen Zellweger,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,13.5,0
+Jason Zucker,BUF,Faceoffs Won,0.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,1.0,,0.0,13.6,0
+Rasmus Dahlin,BUF,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,0.0,2.0,0.0,,0.0,27.5,0
+Bowen Byram,BUF,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,2.0,2.0,0.0,,0.0,21.8,0
+Beck Malenstyn,BUF,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,0.0,,0.0,9.3,0
+Owen Power,BUF,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,1.0,0.0,0.0,,0.0,21.9,0
+Luke Schenn,BUF,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,0.0,8.0,0
+Mattias Samuelsson,BUF,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,3.0,0.0,0.0,,0.0,25.4,0
+Conor Timmins,BUF,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,-1.0,,0.0,10.9,0
+Josh Doan,BUF,Faceoffs Won,0.0,espn,0.0,1.0,0.0,1.0,,0.0,0.0,0.0,,0.0,21.5,0
+Pavel Dorofeyev,VGK,Faceoffs Won,0.0,espn,0.0,2.0,0.0,2.0,,0.0,0.0,2.0,,0.0,16.7,0
+Zach Benson,BUF,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,10.0,0.0,,0.0,21.1,0
+Mitch Marner,VGK,Faceoffs Won,0.0,espn,0.0,1.0,1.0,2.0,,0.0,0.0,2.0,,0.0,18.2,0
+Arber Xhekaj,MTL,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,0.0,,0.0,7.3,0
+Mike Matheson,MTL,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,4.0,0.0,-1.0,,0.0,26.3,0
+Kaiden Guhle,MTL,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,5.0,0.0,1.0,,0.0,20.6,0
+Brandon Saad,VGK,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,7.0,0
+Rasmus Andersson,VGK,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,1.0,,0.0,26.1,0
+Cole Smith,VGK,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,2.0,0.0,,0.0,10.7,0
+Lane Hutson,MTL,Faceoffs Won,0.0,espn,0.0,0.0,2.0,2.0,,0.0,2.0,1.0,,0.0,20.6,0
+Noah Dobson,MTL,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,3.0,0.0,1.0,,0.0,20.3,0
+Alexandre Carrier,MTL,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,4.0,0.0,0.0,,0.0,23.4,0
+Noah Hanifin,VGK,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,1.0,2.0,1.0,,0.0,25.9,0
+Dylan Coghlan,VGK,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,2.0,0.0,3.0,,0.0,19.5,0
+Ben Hutton,VGK,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,0.0,,0.0,12.4,0
+Shea Theodore,VGK,Faceoffs Won,0.0,espn,0.0,1.0,1.0,2.0,,2.0,0.0,3.0,,0.0,24.6,0
+Kaedan Korczak,VGK,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,0.0,,0.0,10.4,0
+Juraj Slafkovsky,MTL,Shots On Goal,0.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Alex Newhook,MTL,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,1.0,10.0,1.0,,0.0,16.2,0
+Juraj Slafkovsky,MTL,Faceoffs Won,0.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Juraj Slafkovsky,MTL,Goals,0.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0
+Alex Killorn,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,2.0,-3.0,,0.0,21.2,0
+Ross Johnston,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,0.0,8.8,0
+Ivan Demidov,MTL,Faceoffs Won,0.0,espn,0.0,1.0,1.0,2.0,,1.0,0.0,0.0,,0.0,14.7,0
+Chris Kreider,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,15.8,0
+Beckett Sennecke,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-2.0,,0.0,20.1,0
+John Carlson,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,0.0,-1.0,,0.0,23.0,0
+Jeffrey Viel,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,11.6,0
+Troy Terry,ANA,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,1.0,0.0,0.0,,0.0,20.4,0
+Jacob Trouba,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,1.0,2.0,-2.0,,0.0,22.1,0
+Zack Bolduc,MTL,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,0.0,0.0,-1.0,,0.0,9.9,0
+Jackson LaCombe,ANA,Faceoffs Won,0.0,espn,0.0,0.0,0.0,0.0,,4.0,0.0,-4.0,,0.0,29.6,0
+Jack Quinn,BUF,Faceoffs Won,0.0,espn,0.0,0.0,1.0,1.0,,0.0,0.0,2.0,,0.0,16.2,0
+Juraj Slafkovsky,MTL,Plus/Minus,-1.0,espn,0.0,0.0,3.0,3.0,,1.0,2.0,-1.0,,0.0,19.3,0

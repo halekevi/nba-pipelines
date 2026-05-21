@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+  <meta name="proporacle-build" content=""/>
+  <title>PropORACLE - P&L Log</title>
+  <link rel="stylesheet" href="static/proporacle-page-shell.css?v=20260430schemapage"/>
+  <link rel="stylesheet" href="static/light-theme-dim-overrides.css?v=20260416perf"/>
+  <link rel="stylesheet" href="static/site-nav-unified.css?v=20260408"/>
+  <link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
+  <link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260418nav"/>
+  <link rel="stylesheet" href="static/mobile-content-width.css?v=20260422ticketscv"/>
+  <style>
+    body.page-income {
+      font-family: "Inter", sans-serif;
+      color: var(--text, rgba(255, 255, 255, 0.92));
+    }
+    .income-wrap {
+      max-width: min(1920px, 98vw);
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px clamp(14px, 2.4vw, 28px) 28px;
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box;
+    }
+    .hero {
+      margin: 6px 0 18px;
+      padding: 18px clamp(14px, 2vw, 24px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px) saturate(170%);
+      -webkit-backdrop-filter: blur(16px) saturate(170%);
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(28px, 4.2vw, 44px);
+      letter-spacing: 0.02em;
+      color: var(--accent, #d4af37);
+      font-family: "Bebas Neue", sans-serif;
+    }
+    .hero p {
+      margin: 6px 0 0;
+      color: var(--muted, rgba(255, 255, 255, 0.72));
+      font-size: 13px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .sum-card {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      padding: 12px 12px 10px;
+      min-height: 76px;
+    }
+    .sum-label {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted, rgba(255, 255, 255, 0.7));
+      margin-bottom: 6px;
+    }
+    .sum-value {
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .sum-pos { color: #45d388; }
+    .sum-neg { color: #ff7f7f; }
+    .panel {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: var(--text, rgba(255, 255, 255, 0.9));
+      letter-spacing: 0.02em;
+    }
+    .chart-host {
+      width: 100%;
+      min-height: 280px;
+    }
+    table.tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .tbl th,
+    .tbl td {
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .tbl th {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted, rgba(255, 255, 255, 0.68));
+    }
+    .tbl td:first-child,
+    .tbl th:first-child {
+      text-align: left;
+    }
+    .num-pos { color: #45d388; }
+    .num-neg { color: #ff7f7f; }
+    .empty-note {
+      color: var(--muted, rgba(255, 255, 255, 0.72));
+      font-size: 13px;
+      padding: 8px 2px;
+    }
+    @media (max-width: 1020px) {
+      .summary-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+    }
+  </style>
+</head>
+<body class="page-income">
+  <div class="mesh-bg" aria-hidden="true"></div>
+  <div class="grain-layer" aria-hidden="true"></div>
+  
+  
+
+
+<nav class="snav glass-card">
+  <div class="nav-accent"></div>
+  <a class="snav-brand" href="index.html">
+    <div class="hybrid-logo">
+      <img src="static/proporacle-logo-v3.png?v=20260404b" alt="PropOracle" class="logo-icon" loading="lazy">
+      <span class="nav-brand brand-wordmark"><span class="wb-first">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+    </div>
+  </a>
+  <ul class="snav-links nav-links" id="nav-links">
+    <li><a href="index.html" class=""><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
+    <li><a href="tickets.html" class=""><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
+    <li><a href="grades.html" class="" title="Ticket evaluation hub"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
+    <li><a href="income.html" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
+    <li><a href="payout.html" class=""><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
+  </ul>
+  <div class="snav-right">
+    <button class="theme-toggle theme-switch" type="button" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
+      <span class="tt-icon tt-moon">🌙</span>
+      <span class="tt-icon tt-sun" style="display:none">☀️</span>
+    </button>
+    <div class="nav-live-cluster">
+      <div class="live-pill"><div class="live-dot"></div><span class="live-pill-brand">PropOracle</span> &nbsp;·&nbsp; </div>
+      <div class="nav-datetime-block" title="Slate date (top) and your device date & time (updates every second)">
+        <div class="nav-slate-date" id="slate-date">—</div>
+        <div class="nav-sync-line">
+          <span id="nav-local-datetime" class="nav-local-datetime">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="hamburger" type="button" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" class="">🏠 Home</a>
+  <a href="tickets.html" class="">🎟 Tickets</a>
+  <a href="grades.html" class="" title="Ticket evaluation hub">✏️ Grades</a>
+  <a href="income.html" class="">📈 Income</a>
+  <a href="payout.html" class="">💰 Payouts</a>
+</div>
+
+
+  <main class="income-wrap">
+    <section class="hero">
+      <h1>P&L Log</h1>
+      <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
+    </section>
+
+    <section class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-label">Total Tickets</div>
+        <div class="sum-value"></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">Win Rate (Paid / Decided)</div>
+        <div class="sum-value"></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">Net P&amp;L</div>
+        <div class="sum-value ">$</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">ROI</div>
+        <div class="sum-value "></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">Current Streak</div>
+        <div class="sum-value"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Cumulative P&amp;L ($)</h2>
+      <div id="cum-chart" class="chart-host"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Daily P&amp;L</h2>
+      
+      <table class="tbl" aria-label="Daily P and L table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Tickets</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Guarantees</th>
+            <th>Net $</th>
+            <th>Day ROI%</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="">$</td>
+            <td class=""></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      
+      <div class="empty-note">No rows found in <code>grade_history.json</code> (check DATA_ROOT, <code>data/</code>, or bundled templates).</div>
+      
+    </section>
+
+    <section class="panel">
+      <h2>Sport Breakdown</h2>
+      <table class="tbl" aria-label="Sport breakdown table">
+        <thead>
+          <tr>
+            <th>Sport</th>
+            <th>Decided</th>
+            <th>Paid</th>
+            <th>Win%</th>
+            <th>Net $</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="">$</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Plotly was previously in <head> without defer: it blocked HTML/body parsing until the CDN
+       responded, so a slow or blocked CDN looked like a blank page in the Android WebView. -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="static/site-nav-chrome.js?v=20260412" defer></script>
+  <script>
+    const points = [];
+    function drawChart() {
+      const host = document.getElementById('cum-chart');
+      if (!host) return;
+      if (typeof Plotly === 'undefined') {
+        host.innerHTML = '<div class="empty-note">Chart could not load (network or CDN blocked). Daily table and sport breakdown below still work.</div>';
+        return;
+      }
+      if (!points || !points.length) {
+        host.innerHTML = '<div class="empty-note">No cumulative data available yet.</div>';
+        return;
+      }
+      const x = points.map(p => p.date);
+      const y = points.map(p => p.cum_net);
+      Plotly.newPlot('cum-chart', [{
+        x,
+        y,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#7fc7d9', width: 3 },
+        marker: { size: 6, color: '#d4af37' },
+        hovertemplate: '%{x}<br>$%{y:.2f}<extra></extra>',
+      }], {
+        autosize: true,
+        margin: { t: 14, r: 20, b: 42, l: 58 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(255,255,255,0.02)',
+        font: { color: 'rgba(255,255,255,0.85)' },
+        xaxis: { title: '', gridcolor: 'rgba(255,255,255,0.06)' },
+        yaxis: { title: '$', tickprefix: '$', gridcolor: 'rgba(255,255,255,0.06)', zerolinecolor: 'rgba(255,255,255,0.15)' },
+      }, { displayModeBar: false, responsive: true });
+    }
+    drawChart();
+    window.addEventListener('resize', () => {
+      const el = document.getElementById('cum-chart');
+      if (typeof Plotly !== 'undefined' && el && el.querySelector('.js-plotly-plot')) Plotly.Plots.resize(el);
+    });
+  </script>
+
+  <script>
+    (function () {
+      const HISTORY_URL = 'data/grade_history.json';
+      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json';
+      const fmtMoney = (n) => (Number.isFinite(n) ? `$${n.toFixed(2)}` : '$0.00');
+      const fmtPct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
+      const clsFor = (n, pos = 'num-pos', neg = 'num-neg') => (n > 0 ? pos : (n < 0 ? neg : ''));
+
+      function parseRows(raw) {
+        const rows = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.runs) ? raw.runs : []);
+        return rows
+          .map((r) => {
+            const tickets = Number(r.n_tickets ?? r.tickets ?? 0);
+            const wins = Number(r.wins ?? 0);
+            const guarantees = Number(r.guarantees ?? 0);
+            const losses = Number(r.losses ?? 0);
+            const decided = Math.max(0, wins + losses);
+            const paid = Math.max(0, wins + guarantees);
+            // net_per_10 is per-ticket avg ($-per-$10-stake). Multiply by tickets to get day total.
+            const net = (r.net_dollars != null)
+              ? Number(r.net_dollars)
+              : (r.net_per_10 != null ? tickets * Number(r.net_per_10) : 0);
+            const roi = Number(r.roi_pct ?? ((tickets > 0) ? (net / (tickets * 10) * 100) : 0));
+            return {
+              date: String(r.date || ''),
+              tickets, wins, guarantees, losses, decided, paid,
+              net, roi
+            };
+          })
+          .filter((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.date))
+          .sort((a, b) => a.date.localeCompare(b.date));
+      }
+
+      function render(rowsAsc) {
+        const rowsDesc = [...rowsAsc].reverse();
+        const totalTickets = rowsAsc.reduce((s, r) => s + r.tickets, 0);
+        const totalDecided = rowsAsc.reduce((s, r) => s + r.decided, 0);
+        const totalPaid = rowsAsc.reduce((s, r) => s + r.paid, 0);
+        const totalNet = rowsAsc.reduce((s, r) => s + r.net, 0);
+        const winRate = totalDecided > 0 ? (totalPaid / totalDecided) * 100 : 0;
+        const roi = totalTickets > 0 ? (totalNet / (totalTickets * 10)) * 100 : 0;
+
+        let streak = '—';
+        let streakLen = 0;
+        let streakSign = 0;
+        for (let i = rowsAsc.length - 1; i >= 0; i--) {
+          const sign = rowsAsc[i].net > 0 ? 1 : (rowsAsc[i].net < 0 ? -1 : 0);
+          if (sign === 0) continue;
+          if (streakSign === 0) { streakSign = sign; streakLen = 1; continue; }
+          if (sign === streakSign) streakLen += 1; else break;
+        }
+        if (streakLen > 0) streak = `${streakSign > 0 ? 'W' : 'L'}${streakLen}`;
+
+        const sumVals = document.querySelectorAll('.summary-grid .sum-value');
+        if (sumVals.length >= 5) {
+          sumVals[0].textContent = String(totalTickets);
+          sumVals[1].textContent = `${winRate.toFixed(1)}% (${totalPaid}/${totalDecided})`;
+          sumVals[2].textContent = fmtMoney(totalNet);
+          sumVals[2].className = `sum-value ${clsFor(totalNet, 'sum-pos', 'sum-neg')}`;
+          sumVals[3].textContent = fmtPct(roi);
+          sumVals[3].className = `sum-value ${clsFor(roi, 'sum-pos', 'sum-neg')}`;
+          sumVals[4].textContent = streak;
+        }
+
+        const dailyBody = document.querySelectorAll('.panel .tbl tbody')[0];
+        if (dailyBody) {
+          dailyBody.innerHTML = rowsDesc.map((r) => `
+            <tr>
+              <td>${r.date}</td>
+              <td>${r.tickets}</td>
+              <td>${r.wins}</td>
+              <td>${r.losses}</td>
+              <td>${r.guarantees}</td>
+              <td class="${clsFor(r.net)}">${fmtMoney(r.net)}</td>
+              <td class="${clsFor(r.roi)}">${fmtPct(r.roi)}</td>
+            </tr>
+          `).join('');
+        }
+
+        const emptyNote = document.querySelector('.empty-note');
+        if (emptyNote) emptyNote.style.display = rowsAsc.length ? 'none' : '';
+
+        const pts = [];
+        let cum = 0;
+        for (const r of rowsAsc) { cum += r.net; pts.push({ date: r.date, cum_net: Number(cum.toFixed(2)) }); }
+        const host = document.getElementById('cum-chart');
+        if (!host) return;
+        if (!pts.length) {
+          host.innerHTML = '<div class="empty-note">No cumulative data available yet.</div>';
+          return;
+        }
+        if (typeof Plotly !== 'undefined') {
+          Plotly.newPlot('cum-chart', [{
+            x: pts.map(p => p.date),
+            y: pts.map(p => p.cum_net),
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#7fc7d9', width: 3 },
+            marker: { size: 6, color: '#d4af37' },
+            hovertemplate: '%{x}<br>$%{y:.2f}<extra></extra>'
+          }], {
+            autosize: true,
+            margin: { t: 14, r: 20, b: 42, l: 58 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(255,255,255,0.02)',
+            font: { color: 'rgba(255,255,255,0.85)' },
+            xaxis: { title: '', gridcolor: 'rgba(255,255,255,0.06)' },
+            yaxis: { title: '$', tickprefix: '$', gridcolor: 'rgba(255,255,255,0.06)', zerolinecolor: 'rgba(255,255,255,0.15)' }
+          }, { displayModeBar: false, responsive: true });
+        } else {
+          host.innerHTML = '<div class="empty-note">Chart could not load (network or CDN blocked). Daily table still works.</div>';
+        }
+      }
+
+      function renderSportBreakdown(rows) {
+        const body = document.querySelectorAll('.panel .tbl tbody')[1];
+        if (!body) return;
+        const safe = Array.isArray(rows) ? rows : [];
+        body.innerHTML = safe.map((r) => {
+          const decided = Number(r.decided || 0);
+          const paid = Number(r.paid || 0);
+          const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+          const net = Number(r.net_dollars || 0);
+          const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+          return `
+            <tr>
+              <td>${String(r.sport || '')}</td>
+              <td>${decided}</td>
+              <td>${paid}</td>
+              <td>${winText}</td>
+              <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      fetch(HISTORY_URL, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((raw) => render(parseRows(raw)))
+        .catch(() => render([]));
+
+      fetch(SPORT_BREAKDOWN_URL, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : { rows: [] }))
+        .then((j) => renderSportBreakdown(j && j.rows))
+        .catch(() => renderSportBreakdown([]));
+    })();
+  </script>
+
+</body>
+</html>
