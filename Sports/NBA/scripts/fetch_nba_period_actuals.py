@@ -12,20 +12,22 @@ Outputs use the same schema as fetch_actuals.py:
   player, team, prop_type, actual (+ raw stat columns)
 
 Examples:
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1Q --output outputs/2026-03-25/actuals_nba1q_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 2Q --output outputs/2026-03-25/actuals_nba2q_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 3Q --output outputs/2026-03-25/actuals_nba3q_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 4Q --output outputs/2026-03-25/actuals_nba4q_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_nba1h_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 2H --output outputs/2026-03-25/actuals_nba2h_2026-03-25.csv
-  py -3.14 scripts/fetch_nba_period_actuals.py --sport CBB --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_cbb1h_2026-03-25.csv
+  py -3.14 Sports/NBA/scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1Q --output outputs/2026-03-25/actuals_nba1q_2026-03-25.csv
+  py -3.14 Sports/NBA/scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_nba1h_2026-03-25.csv
+  py -3.14 Sports/NBA/scripts/fetch_nba_period_actuals.py --sport CBB --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_cbb1h_2026-03-25.csv
 """
 
 from __future__ import annotations
 
 import argparse
+import sys
 from datetime import date, timedelta
 from pathlib import Path
+
+_REPO = Path(__file__).resolve().parents[3]
+_SCRIPTS = _REPO / "scripts"
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
 
 import pandas as pd
 import requests
