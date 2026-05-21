@@ -375,11 +375,16 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
     return None
 
 
-def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> pd.DataFrame | None:
-    """Prefer outputs/<date>/step8_* for historical slates; else fall back to repo snapshot."""
+def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[pd.DataFrame | None, bool]:
+    """Prefer outputs/<date>/step8_* for historical slates; else fall back to repo snapshot.
+
+    Returns ``(dataframe, used_static_fallback)``. When the second value is True, callers
+    should skip ±1d ``game_date`` filtering (static file dates won't match historical
+    ``file_date`` values).
+    """
     d = (file_date or "")[:10]
     if len(d) != 10:
-        return None
+        return None, False
     sport_u = sport.upper()
     if sport_u == "NBA":
         # Prefer dated pipeline step8 (has game_date / start_time). Avoid
@@ -393,49 +398,53 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> pd.Data
         ):
             p = root / "outputs" / d / name
             if p.is_file():
-                return (
+                df = (
                     pd.read_excel(p, engine="openpyxl")
                     if p.suffix.lower() == ".xlsx"
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
-        return load_step8_sport(root, sport)
+                return df, False
+        return load_step8_sport(root, sport), True
     if sport_u == "MLB":
         for name in (f"step8_mlb_direction_clean_{d}.xlsx", f"step8_mlb_direction_{d}.xlsx"):
             p = root / "outputs" / d / name
             if p.is_file():
-                return (
+                df = (
                     pd.read_excel(p, engine="openpyxl")
                     if p.suffix.lower() == ".xlsx"
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
-        return load_step8_sport(root, sport)
+                return df, False
+        return load_step8_sport(root, sport), True
     if sport_u == "NHL":
         for name in (f"step8_nhl_direction_clean_{d}.xlsx", f"step8_nhl_direction_{d}.xlsx"):
             p = root / "outputs" / d / name
             if p.is_file():
-                return (
+                df = (
                     pd.read_excel(p, engine="openpyxl")
                     if p.suffix.lower() == ".xlsx"
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
-        return load_step8_sport(root, sport)
+                return df, False
+        return load_step8_sport(root, sport), True
     if sport_u == "SOCCER" or sport == "Soccer":
         for name in (f"step8_soccer_direction_clean_{d}.xlsx", f"step8_soccer_direction_{d}.xlsx"):
             p = root / "outputs" / d / name
             if p.is_file():
-                return (
+                df = (
                     pd.read_excel(p, engine="openpyxl")
                     if p.suffix.lower() == ".xlsx"
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
-        return load_step8_sport(root, "Soccer")
+                return df, False
+        return load_step8_sport(root, "Soccer"), True
     if sport_u == "WNBA":
         for name in (f"step8_wnba_direction_clean_{d}.xlsx",):
             p = root / "outputs" / d / name
             if p.is_file():
-                return pd.read_excel(p, engine="openpyxl")
-        return load_step8_sport(root, sport)
-    return None
+                return pd.read_excel(p, engine="openpyxl"), False
+        return load_step8_sport(root, sport), True
+    return None, False
 
 
 def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
@@ -677,9 +686,9 @@ def main() -> int:
     # --- per (sport, file_date) step8 join ---
     sport_stats_map: dict[str, dict[str, int]] = {}
     joined_parts: list[pd.DataFrame] = []
-    raw_cache: dict[tuple[str, str], pd.DataFrame | None] = {}
+    raw_cache: dict[tuple[str, str], tuple[pd.DataFrame | None, bool]] = {}
 
-    def _cached_raw(sp: str, fd: str) -> pd.DataFrame | None:
+    def _cached_raw(sp: str, fd: str) -> tuple[pd.DataFrame | None, bool]:
         k = (str(sp), str(fd)[:10])
         if k not in raw_cache:
             raw_cache[k] = load_step8_dated_snapshot(root, sp, str(fd))
@@ -692,7 +701,7 @@ def main() -> int:
             continue
 
         sk = "Soccer" if sport == "Soccer" else sport
-        s8_raw = _cached_raw(sk, str(file_date))
+        s8_raw, used_static = _cached_raw(sk, str(file_date))
         if s8_raw is None or len(s8_raw) == 0:
             if args.verbose:
                 print(f"  [{sport} {file_date}] no step8 rows on disk — join skipped for {n_grad:,} rows")
@@ -707,11 +716,16 @@ def main() -> int:
             continue
 
         s8 = _prepare_step8(s8_raw, anchor_file_date=str(file_date))
-        skip_date_filter = has_dated_step8_snapshot(root, sk, str(file_date))
+        skip_date_filter = has_dated_step8_snapshot(root, sk, str(file_date)) or used_static
         if skip_date_filter:
             if args.verbose:
+                snap_label = (
+                    "static step8 fallback"
+                    if used_static and not has_dated_step8_snapshot(root, sk, str(file_date))
+                    else "dated step8 snapshot"
+                )
                 print(
-                    f"  [{sport} {file_date}] dated step8 snapshot — "
+                    f"  [{sport} {file_date}] {snap_label} — "
                     f"using all {len(s8):,} rows (no ±1d game_date filter)"
                 )
         else:

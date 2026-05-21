@@ -86,7 +86,7 @@ def _build_joined_dataset(root: Path, sports: list[str]) -> pd.DataFrame:
     parts: list[pd.DataFrame] = []
     for (sport, file_date), g in graded.groupby(["sport", "file_date"], sort=True):
         g = g.copy()
-        s8_raw = load_step8_dated_snapshot(root, sport, file_date)
+        s8_raw, _used_static = load_step8_dated_snapshot(root, sport, file_date)
         if s8_raw is None or len(s8_raw) == 0:
             print(f"[warn] No step8 snapshot for {sport} {file_date}; rows will have NaN score/signal fields.")
             parts.append(g)
