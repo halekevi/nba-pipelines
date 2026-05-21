@@ -29,6 +29,7 @@ _TEMPLATES_DIR = _REPO / "ui_runner" / "templates"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 from grading.slate_grader import (  # noqa: E402
+    ActualsLookup,
     _build_actuals_lookup,
     _resolve_actual,
     grade,
@@ -61,16 +62,16 @@ def _fetch_actuals(date_str: str, sport: str) -> Path:
     return out
 
 
-def _load_lookup(date_str: str, sport: str, *, fetch_missing: bool) -> dict[str, float]:
+def _load_lookup(date_str: str, sport: str, *, fetch_missing: bool) -> ActualsLookup:
     path = _actuals_path(date_str, sport)
     if not path.is_file():
         if not fetch_missing:
-            return {}
+            return ActualsLookup()
         _fetch_actuals(date_str, sport)
     if not path.is_file():
-        return {}
+        return ActualsLookup()
     act = pd.read_csv(path)
-    return _build_actuals_lookup(act)
+    return _build_actuals_lookup(act, str(path))
 
 
 def _row_series(prop: dict) -> pd.Series:
@@ -88,10 +89,10 @@ def _row_series(prop: dict) -> pd.Series:
     )
 
 
-def _regrade_prop(prop: dict, act_map: dict[str, float]) -> bool:
+def _regrade_prop(prop: dict, lookup: ActualsLookup) -> bool:
     row = _row_series(prop)
     row["player_key"] = norm_player_key(row["player"]) + "|" + norm_prop_key(row["prop_type_norm"])
-    new_actual = _resolve_actual(act_map, row)
+    new_actual = _resolve_actual(lookup, row)
     if pd.isna(new_actual):
         return False
 
@@ -132,7 +133,7 @@ def regrade_file(path: Path, *, fetch_missing: bool, dry_run: bool) -> tuple[int
     if not isinstance(props, list):
         return 0, 0
 
-    lookups: dict[str, dict[str, float]] = {}
+    lookups: dict[str, ActualsLookup] = {}
     changed = 0
     touched = 0
     for p in props:
