@@ -991,6 +991,21 @@ def main() -> None:
 
     df = filtered_df
 
+    if len(df) == 0:
+        print(
+            f"\n[ERROR] NBA step1 has 0 rows for date={args.date}; "
+            "not writing line_history or overwriting a healthy step1 file."
+        )
+        if out_path.is_file():
+            try:
+                prev = pd.read_csv(out_path, encoding="utf-8-sig")
+                if len(prev) == 0:
+                    out_path.unlink(missing_ok=True)
+                    print(f"  Removed empty step1 placeholder: {args.output}")
+            except Exception:
+                pass
+        sys.exit(1)
+
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     try:
@@ -998,12 +1013,10 @@ def main() -> None:
         if str(_root) not in sys.path:
             sys.path.insert(0, str(_root))
         from scripts.line_history_archive import archive_lines
+
         archive_lines(df, sport="NBA")
     except Exception as _arch_exc:
         print(f"  [WARN] line_history archive skipped: {_arch_exc}")
-    if len(df) == 0:
-        print(f"\n[INFO] Saved empty date-filtered NBA step1 CSV -> {args.output}")
-        sys.exit(0)
     print(f"\n✅ Saved → {args.output}")
 
     # Optional history snapshot
