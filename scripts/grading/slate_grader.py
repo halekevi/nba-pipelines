@@ -198,7 +198,7 @@ def grade(row, actual):
 
     direction = _row_bet_direction(row)
     if actual_f == line:
-        return "VOID", "PUSH", 0.0
+        return "PUSH", None, 0.0
     if direction == "OVER":
         result = "HIT" if actual_f > line else "MISS"
     else:
@@ -306,6 +306,73 @@ def norm_prop_key(p) -> str:
 
 def norm_player_key(p) -> str:
     return fold_player_name(p)
+
+
+def norm_team_key(team) -> str:
+    return str(team or "").strip().upper()
+
+
+def _norm_game_date(v) -> str:
+    s = str(v or "").strip()[:10]
+    if s.lower() in ("", "nan", "none", "<na>"):
+        return ""
+    return s
+
+
+def _prop_key_variants(canon: str) -> set[str]:
+    """Canonical prop plus PROP_NORM_MAP aliases that normalize to the same stat."""
+    keys: set[str] = {canon}
+    for short, mapped in PROP_NORM_MAP.items():
+        ns = norm_prop_key(short)
+        nl = norm_prop_key(mapped)
+        if nl == canon or ns == canon:
+            keys.add(ns)
+            keys.add(nl)
+    return keys
+
+
+def _expand_lookup_keys(
+    player: str,
+    prop: str,
+    *,
+    team: str = "",
+    game_date: str = "",
+) -> tuple[list[str], list[str]]:
+    """Return (team_scoped_keys, player_prop_keys) for actuals resolution."""
+    p0 = norm_player_key(player)
+    canon = norm_prop_key(prop)
+    if not p0 or not canon:
+        return [], []
+    t0 = norm_team_key(team)
+    d0 = _norm_game_date(game_date)
+    team_keys: list[str] = []
+    player_keys: list[str] = []
+    for pv in sorted(_prop_key_variants(canon)):
+        if t0:
+            if d0:
+                team_keys.append(f"{p0}|{t0}|{pv}|{d0}")
+            team_keys.append(f"{p0}|{t0}|{pv}")
+        if d0:
+            player_keys.append(f"{p0}|{pv}|{d0}")
+        player_keys.append(f"{p0}|{pv}")
+    return team_keys, player_keys
+
+
+class ActualsLookup:
+    """NBA/CBB actuals indexes: prefer player|team|prop; player|prop only when unique."""
+
+    __slots__ = (
+        "by_player_team_prop",
+        "by_player_prop",
+        "ambiguous_player_prop",
+        "actuals_date",
+    )
+
+    def __init__(self) -> None:
+        self.by_player_team_prop: dict[str, float] = {}
+        self.by_player_prop: dict[str, float] = {}
+        self.ambiguous_player_prop: set[str] = set()
+        self.actuals_date: str = ""
 
 
 # Columns used to build ``player|prop`` keys when joining slate rows to actuals.
@@ -424,13 +491,24 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     # Hard fail if player still missing
     if "player" not in df.columns:
         raise KeyError(f"NBA slate missing 'player' column. Found columns: {list(df.columns)}")
-    # Match CBB/apply_actuals: suffix-stripped, punctuation-normalized keys reduce false NO_ACTUAL.
-    df["player_key"] = (
-        df["player"].astype(str).apply(norm_player_key)
-        + "|"
-        + df["prop_type_norm"].apply(norm_prop_key)
-    )
+    # Diagnostic key (apply_actuals rebuilds with team/date for resolution).
+    df["player_key"] = _slate_player_key_series(df)
     return df
+
+
+def _slate_player_key_series(df: pd.DataFrame) -> pd.Series:
+    pk = df["player"].astype(str).apply(norm_player_key)
+    pp = df["prop_type_norm"].fillna("").astype(str).apply(norm_prop_key)
+    if "team" in df.columns:
+        tk = df["team"].map(norm_team_key)
+        base = pk + "|" + tk + "|" + pp
+    else:
+        base = pk + "|" + pp
+    if "game_date" in df.columns:
+        gd = df["game_date"].map(_norm_game_date)
+        has_d = gd.astype(str).str.len() > 0
+        return base.where(~has_d, base + "|" + gd)
+    return base
 
 
 def _strict_slate_date_env_exit(message: str) -> None:
@@ -593,27 +671,42 @@ def load_cbb(path: str) -> pd.DataFrame:
     _coalesce_line_from_line_score(df)
     _coalesce_line_from_projection(df)
 
-    # Standardized key used to join actuals
-    df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
+    df["player_key"] = _slate_player_key_series(df)
     return df
 
-def _build_actuals_lookup(act: pd.DataFrame) -> dict[str, float]:
-    """Map ``norm_player|norm_prop`` -> actual, plus alias keys from PROP_NORM_MAP.
+
+def _actuals_row_game_date(arow, file_date: str) -> str:
+    for col in ("game_date", "date", "Game Date"):
+        if col not in arow.index:
+            continue
+        d = _norm_game_date(arow.get(col))
+        if d:
+            return d
+    return file_date
+
+
+def _build_actuals_lookup(act: pd.DataFrame, actuals_path: str = "") -> ActualsLookup:
+    """Index actuals by player|team|prop; player|prop only when unambiguous.
 
     Period and full-game actuals CSVs use PrizePicks-style labels (``Points``,
     ``3-PT Made``) while some slates use short codes (``pts``, ``fg3m``). Register
     every alias that normalizes to the same canonical prop so rows are not voided
     as ``NO_ACTUAL`` when the game was played and the stat exists under a variant
     label.
+
+    When the same player|prop appears under multiple teams or dates, the
+    player|prop fallback is dropped so grading does not silently pick the wrong box score.
     """
-    out: dict[str, float] = {}
+    lookup = ActualsLookup()
+    lookup.actuals_date = _extract_date_from_actuals_filename(actuals_path)
     if act is None or len(act) == 0:
-        return out
+        return lookup
     if "player" not in act.columns or "actual" not in act.columns:
-        return out
+        return lookup
     prop_col = "prop_type" if "prop_type" in act.columns else ("Prop" if "Prop" in act.columns else None)
     if not prop_col:
-        return out
+        return lookup
+
     for _, arow in act.iterrows():
         val = pd.to_numeric(arow.get("actual"), errors="coerce")
         if pd.isna(val):
@@ -624,58 +717,96 @@ def _build_actuals_lookup(act: pd.DataFrame) -> dict[str, float]:
         raw_prop = str(arow.get(prop_col, "") or "").strip()
         if not raw_prop or raw_prop.lower() in ("nan", "none"):
             continue
-        canon = norm_prop_key(raw_prop)
-        keys: set[str] = {f"{p0}|{canon}"}
-        for short, mapped in PROP_NORM_MAP.items():
-            ns = norm_prop_key(short)
-            nl = norm_prop_key(mapped)
-            if nl == canon or ns == canon:
-                keys.add(f"{p0}|{ns}")
-                keys.add(f"{p0}|{nl}")
-        for k in keys:
-            if not k.endswith("|") and "|" in k:
-                out[k] = float(val)
-    return out
+        t0 = norm_team_key(arow.get("team", ""))
+        row_date = _actuals_row_game_date(arow, lookup.actuals_date)
+        team_keys, player_keys = _expand_lookup_keys(
+            p0, raw_prop, team=t0, game_date=row_date
+        )
+        fval = float(val)
+        for k in team_keys:
+            lookup.by_player_team_prop[k] = fval
+        for k in player_keys:
+            if k in lookup.by_player_prop and lookup.by_player_prop[k] != fval:
+                lookup.ambiguous_player_prop.add(k)
+            else:
+                lookup.by_player_prop[k] = fval
+
+    for k in lookup.ambiguous_player_prop:
+        lookup.by_player_prop.pop(k, None)
+
+    return lookup
 
 
-def _resolve_actual(act_map: dict[str, float], row) -> float:
-    """Primary player_key on row, then alternate stat columns, then combo sum."""
-    key = row.get("player_key", "")
-    if isinstance(key, str) and key.strip() and key.strip().lower() not in ("nan", "none"):
-        a = act_map.get(key, np.nan)
-        if pd.notna(a):
-            return float(a)
-    player = str(row.get("player", "") or "")
-    p0 = norm_player_key(player)
-    if p0:
-        for col in _PROP_RESOLVE_COLS:
-            if col not in row.index:
-                continue
-            cell = row.get(col)
-            if cell is None or (isinstance(cell, float) and pd.isna(cell)):
-                continue
-            nk = f"{p0}|{norm_prop_key(str(cell))}"
-            a = act_map.get(nk, np.nan)
-            if pd.notna(a):
-                return float(a)
-    return np.nan
-
-
-def _resolve_actual_for_player(act_map: dict[str, float], player_str: str, row) -> float:
-    """Resolve actual for one combo leg using the same prop columns as ``_resolve_actual``."""
-    p0 = norm_player_key(str(player_str or ""))
-    if not p0:
-        return np.nan
+def _props_from_row(row) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
     for col in _PROP_RESOLVE_COLS:
         if col not in row.index:
             continue
         cell = row.get(col)
         if cell is None or (isinstance(cell, float) and pd.isna(cell)):
             continue
-        nk = f"{p0}|{norm_prop_key(str(cell))}"
-        a = act_map.get(nk, np.nan)
-        if pd.notna(a):
-            return float(a)
+        raw = str(cell).strip()
+        if not raw or raw.lower() in ("nan", "none"):
+            continue
+        nk = norm_prop_key(raw)
+        if nk and nk not in seen:
+            seen.add(nk)
+            out.append(nk)
+    return out
+
+
+def _resolve_actual(lookup: ActualsLookup, row) -> float:
+    """Resolve actual: team+prop first, then unique player+prop; respect game_date."""
+    row_date = _norm_game_date(row.get("game_date", ""))
+    if lookup.actuals_date and row_date and row_date != lookup.actuals_date:
+        return np.nan
+
+    player = str(row.get("player", "") or "")
+    team = norm_team_key(row.get("team", ""))
+    game_date = row_date or lookup.actuals_date
+
+    for prop_label in _props_from_row(row):
+        team_keys, player_keys = _expand_lookup_keys(
+            player, prop_label, team=team, game_date=game_date
+        )
+        for k in team_keys:
+            a = lookup.by_player_team_prop.get(k, np.nan)
+            if pd.notna(a):
+                return float(a)
+        for k in player_keys:
+            if k in lookup.ambiguous_player_prop:
+                continue
+            a = lookup.by_player_prop.get(k, np.nan)
+            if pd.notna(a):
+                return float(a)
+    return np.nan
+
+
+def _resolve_actual_for_player(
+    lookup: ActualsLookup, player_str: str, row
+) -> float:
+    """Resolve actual for one combo leg using the same prop columns as ``_resolve_actual``."""
+    row_date = _norm_game_date(row.get("game_date", ""))
+    if lookup.actuals_date and row_date and row_date != lookup.actuals_date:
+        return np.nan
+
+    team = norm_team_key(row.get("team", ""))
+    game_date = row_date or lookup.actuals_date
+    for prop_label in _props_from_row(row):
+        team_keys, player_keys = _expand_lookup_keys(
+            player_str, prop_label, team=team, game_date=game_date
+        )
+        for k in team_keys:
+            a = lookup.by_player_team_prop.get(k, np.nan)
+            if pd.notna(a):
+                return float(a)
+        for k in player_keys:
+            if k in lookup.ambiguous_player_prop:
+                continue
+            a = lookup.by_player_prop.get(k, np.nan)
+            if pd.notna(a):
+                return float(a)
     return np.nan
 
 
@@ -703,7 +834,9 @@ def _injury_status_marks_dnp(st: object) -> bool:
 
 
 def _extract_date_from_actuals_filename(name: str) -> str:
-    m = re.search(r"(\d{4}-\d{2}-\d{2})", str(name))
+    """Parse YYYY-MM-DD from the actuals file basename (not parent folders)."""
+    base = Path(name).name
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", base)
     return m.group(1) if m else ""
 
 
@@ -758,27 +891,54 @@ def _injury_confirms_dnp_for_row(
 
 def apply_actuals(df, actuals_path):
     act = pd.read_csv(actuals_path)
-    act_map = _build_actuals_lookup(act)
     apath = str(actuals_path or "")
+    lookup = _build_actuals_lookup(act, apath)
     dnp_keys: frozenset[tuple[str, str]] = frozenset()
     if "nba" in apath.lower() and "actuals" in apath.lower():
         dnp_keys = _load_nba_injury_dnp_keys(apath)
 
-    df["player_key"] = (
-        df["player"].astype(str).apply(norm_player_key)
-        + "|"
-        + df["prop_type_norm"].fillna("").astype(str).apply(norm_prop_key)
-    )
+    df["player_key"] = _slate_player_key_series(df)
+
+    if lookup.actuals_date and "game_date" in df.columns:
+        gd = df["game_date"].map(_norm_game_date)
+        nonempty = gd.astype(str).str.len() > 0
+        if nonempty.any():
+            mismatch = nonempty & (gd != lookup.actuals_date)
+            n_mm = int(mismatch.sum())
+            if n_mm:
+                print(
+                    f"  WARN: {n_mm} slate row(s) have game_date != actuals file date "
+                    f"({lookup.actuals_date}); those rows will not match actuals."
+                )
+
+    if lookup.ambiguous_player_prop:
+        print(
+            f"  INFO: {len(lookup.ambiguous_player_prop)} player|prop key(s) omitted from "
+            "fallback (multiple team/date actuals); use team on slate rows."
+        )
 
     # Diagnostic: surface any slate prop types with zero actuals matches so mismatches are visible
-    act_props = {str(k).split("|", 1)[-1] for k in act_map.keys()}
+    act_props = {
+        k.rsplit("|", 1)[-1]
+        for k in lookup.by_player_team_prop.keys() | lookup.by_player_prop.keys()
+    }
     unmatched_props = set()
-    for key in df["player_key"]:
-        key = str(key) if key is not None else ""
-        if not key or key in ("nan", "none"): continue
-        prop_part = key.split("|", 1)[-1]
-        if key not in act_map and prop_part not in act_props:
-            unmatched_props.add(prop_part)
+    for _, srow in df.iterrows():
+        for prop_label in _props_from_row(srow):
+            team_keys, player_keys = _expand_lookup_keys(
+                str(srow.get("player", "") or ""),
+                prop_label,
+                team=norm_team_key(srow.get("team", "")),
+                game_date=_norm_game_date(srow.get("game_date", "")) or lookup.actuals_date,
+            )
+            if any(k in lookup.by_player_team_prop for k in team_keys):
+                continue
+            if any(
+                k in lookup.by_player_prop and k not in lookup.ambiguous_player_prop
+                for k in player_keys
+            ):
+                continue
+            unmatched_props.add(norm_prop_key(prop_label))
     if unmatched_props:
         print(f"  ⚠️  Prop types in slate with NO actuals matches: {sorted(unmatched_props)}")
 
@@ -789,10 +949,7 @@ def apply_actuals(df, actuals_path):
 
     results, void_reasons, margins, actuals_out = [], [], [], []
     for _, row in df.iterrows():
-        key = row.get("player_key", "")
-        if not isinstance(key, str) or key.strip() in ("", "nan", "none"):
-            key = ""
-        actual = _resolve_actual(act_map, row)
+        actual = _resolve_actual(lookup, row)
 
         # If this is a combo prop (Points (Combo), etc.), try to compute combined actual
         if pd.isna(actual):
@@ -801,7 +958,7 @@ def apply_actuals(df, actuals_path):
                 vals = []
                 ok = True
                 for p in parts:
-                    v = _resolve_actual_for_player(act_map, p, row)
+                    v = _resolve_actual_for_player(lookup, p, row)
                     if pd.isna(v):
                         ok = False
                         break
@@ -816,9 +973,7 @@ def apply_actuals(df, actuals_path):
         upstream = void_r_str if void_r_str not in ("", "nan") else ""
 
         r, vr, m = grade(row, actual)
-        decided = r in ("HIT", "MISS") or (
-            r == "VOID" and str(vr or "").upper() == "PUSH"
-        )
+        decided = r in ("HIT", "MISS", "PUSH")
 
         if decided:
             results.append(r)

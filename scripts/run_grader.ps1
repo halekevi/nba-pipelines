@@ -836,8 +836,7 @@ if (Test-Path $VoidValidatorScript) {
         "--accepted-void-token", "NO_DATA",
         "--accepted-void-token", "DNP",
         "--accepted-void-token", "NO_ACTUAL",
-        "--accepted-void-token", "NO_LINE",
-        "--accepted-void-token", "PUSH"
+        "--accepted-void-token", "NO_LINE"
     )
     foreach ($gf in @(
         $NBAGradedFile,

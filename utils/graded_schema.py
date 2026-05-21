@@ -112,6 +112,48 @@ FIELD_ALIASES: dict[str, list[str]] = {
 }
 
 
+def _strip_push_void_reason(reason: object) -> str:
+    parts = [
+        p.strip()
+        for p in str(reason or "").replace(",", ";").split(";")
+        if p.strip() and p.strip().upper() != "PUSH"
+    ]
+    return "; ".join(parts)
+
+
+def normalize_push_results(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Upgrade legacy rows where slate_grader used result=VOID + void_reason=PUSH
+    to canonical result=PUSH. Clears PUSH from void-reason columns.
+    """
+    if "result" not in df.columns:
+        return df
+    out = df.copy()
+    res = out["result"].astype(str).str.strip().str.upper()
+    reason_col = None
+    for c in ("void_reason_grade", "void_reason", "reason"):
+        if c in out.columns:
+            reason_col = c
+            break
+    mask = res == "VOID"
+    if reason_col:
+        vr = out[reason_col].astype(str).str.strip().str.upper()
+        mask = mask & vr.str.contains("PUSH", regex=False)
+    elif "actual" in out.columns and "line" in out.columns:
+        actual = pd.to_numeric(out["actual"], errors="coerce")
+        line = pd.to_numeric(out["line"], errors="coerce")
+        mask = mask & actual.notna() & line.notna() & (actual == line)
+    else:
+        return out
+    if not mask.any():
+        return out
+    out.loc[mask, "result"] = "PUSH"
+    for c in ("void_reason_grade", "void_reason", "reason"):
+        if c in out.columns:
+            out.loc[mask, c] = out.loc[mask, c].map(_strip_push_void_reason)
+    return out
+
+
 def normalize_graded_df(df: pd.DataFrame) -> pd.DataFrame:
     """
     Rename columns in a graded workbook DataFrame to canonical names.
@@ -126,7 +168,7 @@ def normalize_graded_df(df: pd.DataFrame) -> pd.DataFrame:
             if alias in out.columns:
                 out = out.rename(columns={alias: canonical})
                 break
-    return out
+    return normalize_push_results(out)
 
 
 def _known_mask(series: pd.Series) -> pd.Series:

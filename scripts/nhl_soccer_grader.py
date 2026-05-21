@@ -721,7 +721,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         # Grade
         if margin == 0:
             slate.at[idx, "result"] = "PUSH"
-            slate.at[idx, "void_reason_grade"] = "PUSH"
+            slate.at[idx, "void_reason_grade"] = ""
             pushes += 1
         elif (sdir == "OVER" and margin > 0) or (sdir == "UNDER" and margin < 0):
             slate.at[idx, "result"] = "HIT"

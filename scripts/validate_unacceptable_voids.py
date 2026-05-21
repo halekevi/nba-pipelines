@@ -4,7 +4,9 @@ Validate unacceptable VOID rows in graded workbooks.
 
 Accepted void classes (configurable defaults):
 - NO_DATA, DNP — NHL/Soccer/Tennis style
-- NO_ACTUAL, NO_LINE, PUSH — ``slate_grader.py`` / NBA+MLB Box Raw (missing box score, missing line, push)
+- NO_ACTUAL, NO_LINE — ``slate_grader.py`` / NBA+MLB Box Raw (missing box score, missing line)
+
+Pushes use ``result=PUSH`` (not ``result=VOID`` with ``void_reason=PUSH``).
 
 Anything else under result=VOID is reported as potentially unacceptable.
 """
@@ -18,7 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 
-DEFAULT_ACCEPTABLE_VOID_TOKENS = ["NO_DATA", "DNP", "NO_ACTUAL", "NO_LINE", "PUSH"]
+DEFAULT_ACCEPTABLE_VOID_TOKENS = ["NO_DATA", "DNP", "NO_ACTUAL", "NO_LINE"]
 
 
 def _resolve_result_col(df: pd.DataFrame) -> str | None:
@@ -73,7 +75,7 @@ def main() -> None:
         "--accepted-void-token",
         action="append",
         default=[],
-        help="Accepted VOID reason token (repeatable). Defaults: NO_DATA, DNP, NO_ACTUAL, NO_LINE, PUSH.",
+        help="Accepted VOID reason token (repeatable). Defaults: NO_DATA, DNP, NO_ACTUAL, NO_LINE.",
     )
     ap.add_argument(
         "--fail-on-unacceptable",

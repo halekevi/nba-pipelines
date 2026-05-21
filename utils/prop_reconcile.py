@@ -62,6 +62,14 @@ def reconcile_props_history_dict(row: dict[str, Any]) -> dict[str, Any]:
         res = "HIT"
     elif res == "LOSS":
         res = "MISS"
+    vr = str(out.get("void_reason") or out.get("void_reason_grade") or "").strip().upper()
+    if res == "VOID" and vr == "PUSH":
+        res = "PUSH"
+        out["void_reason"] = ""
+        if "void_reason_grade" in out:
+            out["void_reason_grade"] = ""
+        out["result"] = res
+        out["margin"] = 0.0 if out.get("margin") in (None, "") else out.get("margin")
     d = str(out.get("direction") or "").strip().upper()
     if d not in ("OVER", "UNDER"):
         return out
