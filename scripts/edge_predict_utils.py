@@ -27,37 +27,41 @@ from edge_feature_engineering import (  # type: ignore
 # Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
 ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
-    ("NBA", "standard", "OVER"): 0.7917,
-    ("NBA", "goblin", "OVER"): 0.8591,
+    ("NBA", "standard", "OVER"): 0.7999,
+    ("NBA", "goblin", "OVER"): 0.8624,
     # Demon+OVER excluded from calibration — unbookable (drop_demon_over_rows).
-    ("NBA", "standard", "UNDER"): 1.0308,
+    ("NBA", "standard", "UNDER"): 1.029,
     # NHL — provisional (thin samples; isotonic pass needed)
-    ("NHL", "standard", "OVER"): 1.6422,
-    ("NHL", "standard", "UNDER"): 0.7299,
+    ("NHL", "standard", "OVER"): 1.6485,
+    ("NHL", "standard", "UNDER"): 0.7309,
     ("NHL", "goblin", "OVER"): 2.2124,
     ("NHL", "demon", "OVER"): 1.8855,
     # MLB
-    ("MLB", "standard", "OVER"): 1.2028,
-    ("MLB", "goblin", "OVER"): 1.2398,
+    ("MLB", "standard", "OVER"): 1.2019,
+    ("MLB", "goblin", "OVER"): 1.2258,
     ("MLB", "demon", "OVER"): 1.4152,
     # Soccer — step7b sport key is SOCCER (not report label "Soccer")
-    ("SOCCER", "standard", "OVER"): 2.5,
+    ("SOCCER", "standard", "OVER"): 2.778,
     ("SOCCER", "goblin", "OVER"): 0.6942,
     ("SOCCER", "demon", "OVER"): 2.121,
     # WNBA — recalibrated from graded archive (scripts/recalibrate_ml_prob_scalars.py --sport WNBA)
-    ("WNBA", "standard", "OVER"): 1.4452,
-    ("WNBA", "standard", "UNDER"): 0.7829,
-    ("WNBA", "goblin", "OVER"): 1.3802,
+    ("WNBA", "standard", "OVER"): 1.0906,
+    ("WNBA", "standard", "UNDER"): 0.7745,
+    ("WNBA", "goblin", "OVER"): 1.2207,
     ("WNBA", "demon", "OVER"): 2.2358,
-    ("MLB", "standard", "UNDER"): 0.9615,
+    ("MLB", "standard", "UNDER"): 0.9687,
     ("SOCCER", "goblin", "UNDER"): 1.0811,
-    ("SOCCER", "standard", "UNDER"): 1.6993,
+    ("SOCCER", "standard", "UNDER"): 1.751,
     ("CBB", "goblin", "OVER"): 0.8054,
     ("CBB", "standard", "OVER"): 0.9911,
     ("CBB", "standard", "UNDER"): 0.8652,
-    ("NBA1Q", "goblin", "OVER"): 0.5687,
-    ("NBA1Q", "standard", "OVER"): 0.595,
-    ("NBA1Q", "standard", "UNDER"): 0.6525,
+    ("NBA1Q", "goblin", "OVER"): 0.5677,
+    ("NBA1Q", "standard", "OVER"): 0.5943,
+    ("NBA1Q", "standard", "UNDER"): 0.6676,
+    ("NBA1H", "standard", "OVER"): 0.5539,
+    ("NBA1H", "standard", "UNDER"): 0.6046,
+    ("TENNIS", "goblin", "OVER"): 0.9648,
+    ("TENNIS", "standard", "OVER"): 0.9827,
 }
 
 _SLICE_CAL_PATH: Path | None = None
@@ -97,8 +101,8 @@ def apply_ml_prob_post_calibration(
     Order: ``p_platt`` → per-slice isotonic (if key in ``edge_slice_calibrators.pkl``)
     → linear ``ML_PROB_CALIBRATION_SCALARS`` (default 1.0) → clip [0, 1].
 
-    Isotonic regressors are fit on a stratified **train-only** subset (disjoint from the
-    holdout rows used to fit Platt in ``train_edge_model.py``).
+    Isotonic regressors are fit on a stratified **train-fit** subset (disjoint from the
+    Platt calibration slice and the untouched test set in ``train_edge_model.py``).
     """
     p = np.asarray(p_platt, dtype=float).copy()
     n = len(p)
