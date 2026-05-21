@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -89,6 +90,77 @@ def _empty_graded() -> pd.DataFrame:
     return pd.DataFrame(columns=_DEF_GRADED_COLS)
 
 
+def _parse_iso_date(value: str) -> date | None:
+    s = str(value).strip()[:10]
+    try:
+        return date.fromisoformat(s)
+    except ValueError:
+        return None
+
+
+def _step8_bundle_date(target: str) -> str:
+    """Pipeline bundle folder for match day ``target`` (props fetched on target - 1)."""
+    d = _parse_iso_date(target)
+    if d is None:
+        return target
+    return (d - timedelta(days=1)).isoformat()
+
+
+def _bundle_step8_candidates(bundle_root: Path, match_date: str, bundle_date: str) -> list[Path]:
+    """Step8 paths under one ``outputs/<bundle_date>/`` folder."""
+    tennis_dir = bundle_root / "tennis"
+    out: list[Path] = [
+        tennis_dir / "step8_tennis_direction_clean.xlsx",
+        tennis_dir / "step8_tennis_direction.csv",
+        bundle_root / f"step8_tennis_direction_clean_{match_date}.xlsx",
+        bundle_root / f"step8_tennis_direction_clean_{bundle_date}.xlsx",
+    ]
+    if tennis_dir.is_dir():
+        out.extend(sorted(tennis_dir.glob("step8_*.csv")))
+        out.extend(sorted(tennis_dir.glob("step8_*.xlsx")))
+    return out
+
+
+def _default_slate_candidates(target: str) -> list[Path]:
+    offset_date = _step8_bundle_date(target)
+    cands: list[Path] = []
+    for bundle in (offset_date, target):
+        root = _REPO_ROOT / "outputs" / bundle
+        cands.extend(_bundle_step8_candidates(root, target, bundle))
+    cands.extend(
+        [
+            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction.csv",
+            _REPO_ROOT / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            _REPO_ROOT / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction.csv",
+        ]
+    )
+    seen: set[Path] = set()
+    ordered: list[Path] = []
+    for p in cands:
+        if p in seen:
+            continue
+        seen.add(p)
+        ordered.append(p)
+    return ordered
+
+
+def _resolve_step8_slate(target: str) -> tuple[Path | None, str | None, bool]:
+    """Return (path, bundle_date_used, used_prior_day_bundle)."""
+    offset_date = _step8_bundle_date(target)
+    for p in _default_slate_candidates(target):
+        if not p.is_file():
+            continue
+        try:
+            rel = p.resolve().relative_to((_REPO_ROOT / "outputs").resolve())
+            bundle_used = rel.parts[0] if rel.parts else None
+        except ValueError:
+            bundle_used = None
+        used_offset = bundle_used == offset_date
+        return p, bundle_used, used_offset
+    return None, None, False
+
+
 def _slate_field(row: pd.Series, *keys: str) -> str:
     for key in keys:
         if key not in row.index:
@@ -122,12 +194,21 @@ def main() -> None:
         if not slate_path.is_absolute():
             slate_path = _REPO_ROOT / slate_path
     else:
-        default_cands = [
-            _REPO_ROOT / "outputs" / target / f"step8_tennis_direction_clean_{target}.xlsx",
-            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
-            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction.csv",
-        ]
-        slate_path = next((c for c in default_cands if c.is_file()), Path())
+        offset_date = _step8_bundle_date(target)
+        default_cands = _default_slate_candidates(target)
+        resolved, bundle_used, used_offset = _resolve_step8_slate(target)
+        slate_path = resolved if resolved is not None else Path()
+        if slate_path.is_file():
+            if used_offset:
+                print(
+                    f"Tennis: using step8 from {bundle_used or offset_date} "
+                    f"(tomorrow-fetch offset)"
+                )
+            elif bundle_used == target:
+                print(
+                    f"Tennis: no X-1 step8 found, falling back to grade date "
+                    f"({target})"
+                )
 
     if not slate_path.is_file():
         print("[Tennis grader] ERROR: no tennis step8 slate file found.")

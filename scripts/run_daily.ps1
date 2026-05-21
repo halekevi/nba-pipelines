@@ -347,20 +347,22 @@ if (-not $SkipGrader) {
             Write-Log "STEP A - Grader ($Yesterday): START"
         }
         $graderScript = Join-Path $Root "scripts\run_grader.ps1"
+        # Grader -Date is the slate/match day; run_grader.ps1 resolves step8 from outputs/(Date - 1) for Tennis.
+        $graderDate = $Yesterday
         try {
-            & pwsh -NoProfile -File $graderScript -Date $Yesterday
+            & pwsh -NoProfile -File $graderScript -Date $graderDate
             $graderExit = $LASTEXITCODE
             if ($graderExit -ne 0) {
-                Write-Warning "Grader failed for $Yesterday — check logs (exit $graderExit)"
-                Write-Log "STEP A - Grader ($Yesterday): FAILED (exit $graderExit)"
+                Write-Warning "Grader failed for $graderDate — check logs (exit $graderExit)"
+                Write-Log "STEP A - Grader ($graderDate): FAILED (exit $graderExit)"
             }
             else {
-                Write-Log "STEP A - Grader ($Yesterday): OK"
+                Write-Log "STEP A - Grader ($graderDate): OK"
             }
         }
         catch {
-            Write-Warning "Grader failed for $Yesterday — check logs"
-            Write-Log "STEP A - Grader ($Yesterday): FAILED (exception: $($_.Exception.Message))"
+            Write-Warning "Grader failed for $graderDate — check logs"
+            Write-Log "STEP A - Grader ($graderDate): FAILED (exception: $($_.Exception.Message))"
         }
     }
 }
