@@ -200,6 +200,16 @@ def _repo_root(arg: Path | None) -> Path:
     return Path(arg).resolve() if arg else Path(__file__).resolve().parent.parent
 
 
+def _first_column_series(df: pd.DataFrame, name: str) -> pd.Series | None:
+    """Return a single Series when Excel/CSV has duplicate header names."""
+    if name not in df.columns:
+        return None
+    col = df[name]
+    if isinstance(col, pd.DataFrame):
+        col = col.iloc[:, 0]
+    return col
+
+
 def _game_date_series(df: pd.DataFrame, anchor_file_date: str | None = None) -> pd.Series:
     """Normalize calendar day for step8 rows.
 
@@ -208,14 +218,11 @@ def _game_date_series(df: pd.DataFrame, anchor_file_date: str | None = None) -> 
     those implausible years to the anchor year so the ±1d slate filter matches ``file_date``.
     """
     ts = None
-    if "game_date" in df.columns:
-        ts = pd.to_datetime(df["game_date"], errors="coerce")
-    elif "start_time" in df.columns:
-        ts = pd.to_datetime(df["start_time"], errors="coerce")
-    elif "game_start" in df.columns:
-        ts = pd.to_datetime(df["game_start"], errors="coerce")
-    elif "Game Time" in df.columns:
-        ts = pd.to_datetime(df["Game Time"], errors="coerce")
+    for col_name in ("game_date", "start_time", "game_start", "Game Date", "Game Time"):
+        ser = _first_column_series(df, col_name)
+        if ser is not None:
+            ts = pd.to_datetime(ser, errors="coerce")
+            break
     if ts is None:
         return pd.Series(pd.NaT, index=df.index)
     if getattr(ts.dt, "tz", None) is not None:
@@ -274,8 +281,12 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Pick Type": "pick_type",
         "Player": "player",
         "Line": "line",
+        "Game Date": "game_date",
+        "Opp": "opp_team",
+        "Team": "team",
     }
     out = df.rename(columns={k: v for k, v in ren.items() if k in df.columns})
+    out = out.loc[:, ~out.columns.duplicated()]
     return out
 
 
@@ -325,6 +336,14 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
             if p.suffix.lower() == ".xlsx":
                 return pd.read_excel(p, engine="openpyxl")
             return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        return None
+    if sport_u == "WNBA":
+        for p in (
+            root / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
+            root / "Sports" / "WNBA" / "data" / "outputs" / "step8_wnba_direction_clean.xlsx",
+        ):
+            if p.is_file():
+                return pd.read_excel(p, engine="openpyxl")
         return None
     if sport_u == "SOCCER" or sport == "Soccer":
         for p in (
@@ -394,6 +413,12 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> pd.Data
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
         return load_step8_sport(root, "Soccer")
+    if sport_u == "WNBA":
+        for name in (f"step8_wnba_direction_clean_{d}.xlsx",):
+            p = root / "outputs" / d / name
+            if p.is_file():
+                return pd.read_excel(p, engine="openpyxl")
+        return load_step8_sport(root, sport)
     return None
 
 
@@ -694,8 +719,14 @@ def main() -> int:
                 feat_present = feat_present | m[c].notna()
         m["_joined"] = m["_tol"] & feat_present
         for c in JOIN_FEATURE_COLS:
-            if c in m.columns:
-                m.loc[~m["_joined"], c] = np.nan
+            if c not in m.columns:
+                continue
+            col = m[c]
+            # bool / nullable-bool enrichment (NBA injury flags, MLB top_of_order) cannot take np.nan
+            if pd.api.types.is_bool_dtype(col) or str(getattr(col, "dtype", "")) == "boolean":
+                col = col.astype("float64")
+            m[c] = col
+            m.loc[~m["_joined"], c] = np.nan
         m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
         m = m.sort_values(["_joined", "_date_diff"], ascending=[False, True])
         dedupe_keys = ["file_date", "sport", "player", "prop", "line", "pick_type", "direction", "result_binary"]
