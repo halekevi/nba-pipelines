@@ -895,7 +895,7 @@ body::before{
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422ticketscv"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260522gradesframe"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 </head>
@@ -1504,7 +1504,7 @@ async function loadSlateTicketOptions(){
   try{
     setCalcSlateMsg('Loading slate tickets...',false);
     setLogSlateMsg('Loading slate tickets...',false);
-    const r=await fetch('/api/slate-legs',{cache:'no-store'});
+    const r=await fetch('/api/slate-legs',{cache:'default'});
     const j=await r.json();
     if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
     const list=Array.isArray(j.tickets)?j.tickets:[];
