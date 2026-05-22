@@ -168,7 +168,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "line_hit_rate_over_ou_10",
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
-        "OVERALL_DEF_RANK", "DEF_TIER",
+        "OVERALL_DEF_RANK", "DEF_TIER", "def_tier",
+        "deviation_level", "opp_pace",
         "minutes_tier", "starter_tier", "shot_role", "usage_role",
         "void_reason",
         # ── Game log ─────────────────────────────────────────────────────────
@@ -224,7 +225,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "line_hit_rate_over_ou_10": "Hit Rate (10g)",
         "stat_last5_avg": "Last 5 Avg", "stat_season_avg": "Season Avg",
         "last5_over": "L5 Over", "last5_under": "L5 Under",
-        "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier",
+        "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier", "def_tier": "Def Tier",
+        "deviation_level": "Deviation Level", "opp_pace": "Opp Pace",
         "minutes_tier": "Min Tier", "starter_tier": "Starter Tier", "shot_role": "Shot Role", "usage_role": "Usage Role",
         "void_reason": "Void Reason",
         # Game log

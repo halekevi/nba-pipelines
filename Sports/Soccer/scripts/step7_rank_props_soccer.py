@@ -1122,6 +1122,18 @@ def main() -> None:
         _pen_soc = penalty_series_for_slate(out, _p_soc_col, _t_soc_col, "SOCCER", _inj_soc_path)
         out["final_score"] = _to_num(out["final_score"]).astype(float) + _pen_soc.values
 
+    # Opponent pace proxy for retrain (pre-game opp attacking rate from step3 defense attach).
+    for _opp_pace_src in ("opp_gf_per_game", "OPP_PPG", "opp_gaa"):
+        if _opp_pace_src in out.columns:
+            out["opp_pace"] = pd.to_numeric(out[_opp_pace_src], errors="coerce")
+            break
+    else:
+        out["opp_pace"] = np.nan
+    if "DEF_TIER" in out.columns:
+        out["def_tier"] = out["DEF_TIER"].astype(str).str.strip()
+    elif "def_tier" not in out.columns:
+        out["def_tier"] = ""
+
     out["rank_score"] = out["final_score"]
     out = apply_starter_tier_penalty(out)
     out["tier"] = assign_tier_column(out, sport="soccer")
