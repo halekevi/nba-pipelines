@@ -1359,3 +1359,69 @@ nav.snav .mobile-menu a {
     letter-spacing: 0.12em !important;
   }
 }
+
+}
+
+/* ── Fix 1: Landscape mode — collapse top bar to save vertical space (v20260522landscape) ── */
+@media (max-height: 450px) and (orientation: landscape) {
+    nav.snav,
+    nav.snav.glass-card {
+          min-height: 40px !important;
+          padding-top: 4px !important;
+          padding-bottom: 4px !important;
+    }
+    nav.snav .snav-brand .logo-icon {
+          width: 28px !important;
+          height: 28px !important;
+    }
+    nav.snav .nav-datetime-block {
+          display: none !important;
+    }
+    nav.snav .nav-slate-date,
+    nav.snav .nav-sync-line,
+    nav.snav .nav-local-datetime {
+          display: none !important;
+    }
+}
+
+/* ── Fix 2: Income KPI cards — 2-column grid on tablet/mobile (v20260522income) ── */
+@media (max-width: 900px) {
+    body.page-income .summary-grid {
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+          gap: 10px !important;
+          padding-left: max(0.5rem, env(safe-area-inset-left, 0px)) !important;
+          padding-right: max(0.5rem, env(safe-area-inset-right, 0px)) !important;
+    }
+    body.page-income .income-hero-desc {
+          font-size: 11px !important;
+          line-height: 1.4 !important;
+    }
+}
+
+/* ── Fix 4: Tickets filter pills — horizontal scroll instead of 3-row wrap (v20260522tickets) ── */
+@media (max-width: 900px) {
+    .ticket-filter-bar,
+    .filter-bar,
+    .ticket-filter-pills,
+    [class*="filter-pill-row"] {
+          flex-wrap: nowrap !important;
+          overflow-x: auto !important;
+          -webkit-overflow-scrolling: touch !important;
+          overscroll-behavior-x: contain !important;
+          padding-bottom: 4px !important;
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+          gap: 6px !important;
+    }
+    .ticket-filter-bar::-webkit-scrollbar,
+    .filter-bar::-webkit-scrollbar,
+    .ticket-filter-pills::-webkit-scrollbar {
+          display: none !important;
+    }
+    .ticket-filter-bar::after,
+    .filter-bar::after,
+    .ticket-filter-pills::after {
+          content: '' !important;
+          flex: 0 0 8px !important;
+    }
+}
