@@ -943,9 +943,10 @@ function Print-Done {
 #  COMBINED ONLY  -- picks up every sport already on disk
 # =============================================================================
 if ($CombinedOnly) {
-    Run-Combined "from existing outputs"
+    $okCombined = Run-Combined "from existing outputs"
     Print-Done
-    exit
+    if (-not $okCombined) { exit 1 }
+    exit 0
 }
 
 # =============================================================================
@@ -1990,6 +1991,12 @@ foreach ($job in $allJobs) {
     }
 }
 
+$failedJobs = $allJobs | Where-Object { $_.State -eq 'Failed' }
+foreach ($job in $failedJobs) {
+    $jobErr = $job.ChildJobs[0].JobStateInfo.Reason.Message
+    Write-Host "  [JOB FAILED] $($job.Name): $jobErr" -ForegroundColor Red
+}
+
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
 $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
@@ -2072,3 +2079,13 @@ if ($wnbaParallel) {
 
 Run-Combined "full parallel run"
 Print-Done
+
+$sportsFailed = @($NBASuccess, $MLBSuccess, $NHLSuccess, $SoccerSuccess) | Where-Object { $_ -eq $false }
+if ($wnbaParallel -and -not $WNBASuccess) {
+    $sportsFailed = @($sportsFailed) + @($false)
+}
+if ($sportsFailed.Count -gt 0) {
+    Write-Host "  [$($sportsFailed.Count) sport(s) failed — see above]" -ForegroundColor Red
+    exit 1
+}
+exit 0

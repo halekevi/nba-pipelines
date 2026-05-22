@@ -355,6 +355,7 @@ if (-not $SkipGrader) {
             if ($graderExit -ne 0) {
                 Write-Warning "Grader failed for $graderDate — check logs (exit $graderExit)"
                 Write-Log "STEP A - Grader ($graderDate): FAILED (exit $graderExit)"
+                $script:PipelineFailed = $true
             }
             else {
                 Write-Log "STEP A - Grader ($graderDate): OK"
@@ -363,6 +364,7 @@ if (-not $SkipGrader) {
         catch {
             Write-Warning "Grader failed for $graderDate — check logs"
             Write-Log "STEP A - Grader ($graderDate): FAILED (exception: $($_.Exception.Message))"
+            $script:PipelineFailed = $true
         }
     }
 }
@@ -817,11 +819,17 @@ if ($script:PipelineFailed) {
         $ce = $LASTEXITCODE
         # Success = combined Excel exists; exit code may be non-zero if only ticket_eval HTML failed (non-fatal)
         if (Test-Path $combinedOut) {
-            Write-Log "STEP D - Combined slate: OK$(if ($ce -ne 0) { " (ticket_eval warning, exit $ce)" })"
-            if ($ce -ne 0) { Write-Warning "Combined slate saved OK but ticket_eval step returned exit $ce (non-fatal)" }
+            if ($ce -ne 0) {
+                Write-Log "STEP D - Combined slate: OK (workbook written, ticket_eval exit $ce — check graded HTML)"
+                Write-Warning "Combined slate saved OK but ticket_eval returned exit $ce"
+                # Do NOT set PipelineFailed — artifacts are usable
+            } else {
+                Write-Log "STEP D - Combined slate: OK"
+            }
         } elseif ($ce -ne 0) {
-            Write-Log "STEP D - Combined slate: FAILED (pwsh exit $ce)"
+            Write-Log "STEP D - Combined slate: FAILED (pwsh exit $ce, output missing)"
             Write-Warning "Combined slate failed (exit $ce)"
+            $script:PipelineFailed = $true
         } else {
             Write-Log "STEP D - Combined slate: FAILED (output missing)"
             Write-Warning "Combined output missing — expected $combinedOut"
