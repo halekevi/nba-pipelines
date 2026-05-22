@@ -13661,6 +13661,8 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .winrate-best-rank { color: #ffd54f; font-weight: 700; min-width: 28px; }
 .tickets-built .winrate-best-name { color: var(--text); font-weight: 600; flex: 1; }
 .tickets-built .winrate-best-legs { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.tickets-built .winrate-best-leg { line-height: 1.35; }
+.tickets-built .winrate-best-leg + .winrate-best-leg { margin-top: 2px; }
 .tickets-built .winrate-best-stats { text-align: right; font-size: 12px; white-space: nowrap; }
 .tickets-built .winrate-best-pwin { color: #00ff88; font-weight: 700; font-size: 14px; }
 .tickets-built .ticket-pwin-ev-badge {
@@ -14211,6 +14213,35 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
   </td>
 </tr>"""
 
+def _winrate_best_leg_label(leg: dict) -> str:
+    """One-line leg summary for Today's Best panel: player, prop, direction, line."""
+    player = str(leg.get("player") or "").strip()
+    prop = str(leg.get("prop_type") or leg.get("prop") or "").strip()
+    direction = str(leg.get("direction") or "").strip().upper()
+    if direction == "LOWER":
+        direction = "UNDER"
+    line_s = _tickets_fmt_line_plain(leg.get("line"))
+
+    detail: list[str] = []
+    if prop:
+        detail.append(prop)
+    if direction and line_s != "—":
+        dir_short = "O" if direction in ("OVER", "O") else ("U" if direction in ("UNDER", "U") else direction)
+        detail.append(f"{dir_short} {line_s}")
+    elif line_s != "—":
+        detail.append(line_s)
+    elif direction:
+        detail.append(direction)
+
+    if player and detail:
+        return f"{player} — {' · '.join(detail)}"
+    if player:
+        return player
+    if detail:
+        return " · ".join(detail)
+    return "—"
+
+
 def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     """Pinned panel: top 5 win-rate tickets from tickets_winrate_latest.json."""
     _placeholder = (
@@ -14253,11 +14284,13 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     rows: list[str] = []
     for i, (pw, t, gn) in enumerate(top, start=1):
         legs = t.get("legs") or []
-        leg_labels = []
-        for leg in legs[:3]:
+        leg_lines: list[str] = []
+        for leg in legs:
             if isinstance(leg, dict):
-                leg_labels.append(str(leg.get("player") or "")[:18])
-        leg_txt = " · ".join(leg_labels) if leg_labels else "—"
+                lbl = _winrate_best_leg_label(leg)
+                if lbl and lbl != "—":
+                    leg_lines.append(f'<div class="winrate-best-leg">{_h(lbl)}</div>')
+        legs_html = "".join(leg_lines) if leg_lines else '<div class="winrate-best-leg">—</div>'
         n_legs = len(legs) or t.get("n_legs") or 0
         ev_v = t.get("ev_power")
         if ev_v is None and isinstance(t.get("payout"), dict):
@@ -14275,7 +14308,7 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             f'<div class="winrate-best-row" data-winrate-rank="{i}" role="button" tabindex="0">'
             f'<span class="winrate-best-rank">#{i}</span>'
             f'<span class="winrate-best-name">{_h(gn)}'
-            f'<div class="winrate-best-legs">{_h(leg_txt)}</div>'
+            f'<div class="winrate-best-legs">{legs_html}</div>'
             f'</span>'
             f'<span class="winrate-best-stats">'
             f'<div class="winrate-best-pwin">P(win) {_fmt(pw * 100, 0)}%</div>'
