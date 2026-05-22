@@ -1425,3 +1425,17 @@ nav.snav .mobile-menu a {
           flex: 0 0 8px !important;
     }
 }
+
+
+/* ── Fix: Grades iframe min-height on mobile (v20260522gradesframe) ── */
+@media (max-width: 900px) {
+    body.page-grades #grade-frame,
+    body.page-grades #ticket-frame,
+    body.page-grades iframe.grade-frame {
+          min-height: 80vh !important;
+          height: auto !important;
+    }
+    body.page-grades .iframe-shell-stage {
+          min-height: 80vh !important;
+    }
+}
