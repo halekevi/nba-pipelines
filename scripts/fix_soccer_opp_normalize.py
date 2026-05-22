@@ -191,11 +191,10 @@ def _load_defense_lookup(repo: Path) -> tuple[dict[str, dict], list[str]]:
         except Exception:
             pass
 
-    if not rows:
-        csv_path = repo / "Sports" / "Soccer" / "cache" / "soccer_defense_summary.csv"
-        if csv_path.is_file():
-            d = pd.read_csv(csv_path, encoding="utf-8-sig", low_memory=False)
-            rows.extend(d.to_dict("records"))
+    csv_path = repo / "Sports" / "Soccer" / "cache" / "soccer_defense_summary.csv"
+    if csv_path.is_file():
+        d = pd.read_csv(csv_path, encoding="utf-8-sig", low_memory=False)
+        rows.extend(d.to_dict("records"))
 
     if not rows:
         raise SystemExit("No soccer defense data found (db/json/csv)")
@@ -204,7 +203,7 @@ def _load_defense_lookup(repo: Path) -> tuple[dict[str, dict], list[str]]:
     for row in rows:
         name = row.get("pp_name") or row.get("team_name") or row.get("team") or row.get("TEAM_NAME")
         norm = normalize_opp(name)
-        if not norm or norm in lookup:
+        if not norm:
             continue
         tier = row.get("DEF_TIER") or row.get("def_tier") or ""
         pace = None

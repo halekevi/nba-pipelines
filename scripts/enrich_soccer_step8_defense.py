@@ -137,12 +137,15 @@ def _load_defense() -> pd.DataFrame:
     from defense_db import load_defense_from_db  # type: ignore
 
     d = load_defense_from_db("soccer")
-    if not isinstance(d, pd.DataFrame) or d.empty:
-        cache = _REPO / "Sports" / "Soccer" / "cache" / "soccer_defense_summary.csv"
-        if cache.is_file():
-            d = pd.read_csv(cache, encoding="utf-8-sig", low_memory=False)
+    cache = _REPO / "Sports" / "Soccer" / "cache" / "soccer_defense_summary.csv"
+    if cache.is_file():
+        dc = pd.read_csv(cache, encoding="utf-8-sig", low_memory=False)
+        if isinstance(d, pd.DataFrame) and not d.empty:
+            d = pd.concat([d, dc], ignore_index=True)
         else:
-            raise SystemExit("No soccer defense DB or cache available")
+            d = dc
+    elif not isinstance(d, pd.DataFrame) or d.empty:
+        raise SystemExit("No soccer defense DB or cache available")
     key = "pp_name" if "pp_name" in d.columns else ("team_name" if "team_name" in d.columns else None)
     if not key:
         raise SystemExit("Defense table missing pp_name / team_name")
