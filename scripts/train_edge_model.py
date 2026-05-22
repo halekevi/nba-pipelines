@@ -45,6 +45,15 @@ SCRIPT_NAME = "train_edge_model"
 
 # Label-adjacent columns: never use these as tree inputs. Raw `edge` / `abs_edge` / `prop_score`
 # may still exist on rows for step7b implied_prob and ranking; they are not in edge_model_features.json.
+#
+# pick_type_encoded ablation (2026-05-22, temporal test on data/retrain_dataset.csv):
+#   - Source: edge_feature_engineering._pick_type_encoded_series — goblin=2, standard=1, demon=0
+#     from pre-game pick_type only (not outcome-derived).
+#   - Graded hit rates by pick_type: Goblin ~0.62, Standard ~0.41, Demon ~0.23 (PP line difficulty).
+#   - --ablate-feature pick_type_encoded: test ROC-AUC 0.7261 vs full model 0.7454 (delta ~0.02).
+# Verdict: not leaky; high booster importance (~0.64) is largely redundant with sport/direction/
+# composite_hit_rate slices. Do not add pick_type_encoded to this frozenset unless a future ablation
+# shows a suspicious post-game derivation path.
 ALWAYS_EXCLUDE_FROM_EDGE_TRAINING: frozenset[str] = frozenset(
     {"edge", "abs_edge", "prop_score", "result_binary", "hit", "outcome"}
 )
@@ -1162,6 +1171,7 @@ def _train_unified_edge_model(
     dry_run: bool = False,
     temporal_date_column: str | None = None,
     isotonic_min_n: int = DEFAULT_SLICE_ISOTONIC_MIN_N,
+    ablate_features: tuple[str, ...] = (),
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
@@ -1172,6 +1182,8 @@ def _train_unified_edge_model(
     )
     if temporal_date_column:
         print(f"  [config] temporal_date_column={temporal_date_column!r}")
+    if ablate_features:
+        print(f"  [config] ablate_features={list(ablate_features)} (diagnostic — no .pkl write)")
     if input_csv is not None:
         print(f"  [config] input_csv={input_csv} sport_filter={sport_filter!r} dry_run={dry_run}")
     n_combined_files_omitted = 0
@@ -1409,6 +1421,17 @@ def _train_unified_edge_model(
                 f"{nba_dropped}"
             )
 
+    if ablate_features:
+        unknown = [f for f in ablate_features if f not in FEATURE_COLUMNS]
+        if unknown:
+            print(f"\n[WARN] --ablate-feature not in FEATURE_COLUMNS (ignored): {unknown}")
+        held = [f for f in ablate_features if f in features_active]
+        features_active = [f for f in features_active if f not in ablate_features]
+        if len(features_active) < 8:
+            print("[ERROR] Too few features after --ablate-feature; aborting.")
+            return
+        print(f"\n[Ablation] Held out: {held}; active_features={len(features_active)}")
+
     X_train = tr_fit[features_active].astype(float)
     X_cal = cal[features_active].astype(float)
     X_test = te[features_active].astype(float)
@@ -1435,9 +1458,12 @@ def _train_unified_edge_model(
     platt_lr.fit(p_cal, y_cal)
     calibrated = EdgeCalibratedModel(model, platt_lr)
 
-    iso_fitted, iso_skipped = _fit_slice_isotonic_calibrators(
-        tr_fit, y_train, features_active, calibrated, models_dir, isotonic_min_n=isotonic_min_n
-    )
+    if ablate_features:
+        iso_fitted, iso_skipped = [], ["ablation_run"]
+    else:
+        iso_fitted, iso_skipped = _fit_slice_isotonic_calibrators(
+            tr_fit, y_train, features_active, calibrated, models_dir, isotonic_min_n=isotonic_min_n
+        )
 
     prob_test = calibrated.predict_proba(X_test)[:, 1]
     auc_overall = float(roc_auc_score(y_test, prob_test))
@@ -1524,6 +1550,13 @@ def _train_unified_edge_model(
         ar = float(np.mean(y_te[bm]))
         print(f"  bin {i + 1}: mean_p={mp:.3f} actual={ar:.3f} n={int(np.sum(bm))}")
 
+    if ablate_features:
+        print(
+            "\n[Ablation] Skipping edge_model_unified.pkl / metadata / slice calibrators write "
+            "(compare ROC-AUC above to full-feature baseline)."
+        )
+        return
+
     joblib.dump(calibrated, models_dir / "edge_model_unified.pkl", compress=3)
     (models_dir / "edge_model_features.json").write_text(
         json.dumps(features_active, indent=2), encoding="utf-8"
@@ -1535,6 +1568,8 @@ def _train_unified_edge_model(
         "training_rows_total": int(len(df)),
         "rows_per_sport": rows_per_sport,
         "roc_auc_overall": auc_overall,
+        "roc_auc_test": auc_overall,
+        "roc_auc_calibrated": auc_overall,
         "roc_auc_eval_set": "test",
         "train_fit_rows": int(len(tr_fit)),
         "platt_calib_rows": int(len(cal)),
@@ -1546,6 +1581,7 @@ def _train_unified_edge_model(
         "per_sport_holdout_status": sport_status,
         "scale_pos_weight": spw,
         "feature_columns": features_active,
+        "features_active": features_active,
         "always_excluded_from_tree_training": sorted(ALWAYS_EXCLUDE_FROM_EDGE_TRAINING & set(FEATURE_COLUMNS)),
         "features_removed_leakage": sorted(leak_by_corr | leak_by_name) if leak_confirmed else [],
         "sports_skipped_quality": {k: quality_skipped_rows[k] for k in sorted(quality_skipped_rows)},
@@ -1639,6 +1675,17 @@ def main() -> None:
         help="Drop player_hr_historical from training (full unified model).",
     )
     ap.add_argument(
+        "--ablate-feature",
+        action="append",
+        default=[],
+        dest="ablate_features",
+        metavar="NAME",
+        help=(
+            "Hold out feature(s) from training (repeatable). Diagnostic only: prints test ROC-AUC "
+            "but does not overwrite edge_model_unified.pkl or slice calibrators."
+        ),
+    )
+    ap.add_argument(
         "--input-csv",
         type=Path,
         default=None,
@@ -1718,6 +1765,7 @@ def main() -> None:
             )
         return
 
+    ablate = tuple(dict.fromkeys(str(f).strip() for f in (args.ablate_features or []) if str(f).strip()))
     _train_unified_edge_model(
         root,
         recursive_outputs=not args.no_recursive_outputs,
@@ -1730,6 +1778,7 @@ def main() -> None:
         dry_run=args.dry_run,
         temporal_date_column=str(args.temporal_date_column).strip() if args.temporal_date_column else None,
         isotonic_min_n=int(args.isotonic_min_n),
+        ablate_features=ablate,
     )
 
 
