@@ -100,3 +100,28 @@ nav.snav .live-pill,
   border-color: rgba(26, 140, 69, 0.3) !important;
   color: var(--green, #9fd8a7) !important;
 }
+
+
+/* ── Fix 5: Nav overflow at tablet — tighten link padding so all 5 tabs fit (v20260522navfit) ── */
+@media (min-width: 769px) and (max-width: 860px) {
+    .snav-links li a,
+    nav.snav .snav-links li a {
+          padding: 0 10px !important;
+          font-size: 12px !important;
+          gap: 6px !important;
+    }
+    .snav-brand {
+          margin-right: 8px !important;
+    }
+    .snav .hybrid-logo .logo-icon,
+    .snav-brand .logo-icon {
+          width: 34px !important;
+          height: 34px !important;
+    }
+    .nav-datetime-block {
+          font-size: 11px !important;
+    }
+    .nav-slate-date {
+          font-size: 13px !important;
+    }
+}
