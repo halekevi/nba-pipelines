@@ -48,6 +48,7 @@ STEP8_FEATURE_COLS = [
     "rank_score",
     "ml_edge",
     "deviation_level",
+    "opp_pace",
     "pp_projection_id",
     "projection",
 ]
@@ -271,6 +272,8 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Align dated step8 Excel headers with pipeline CSV names."""
     ren = {
         "Rank Score": "rank_score",
+        "rank": "rank_score",
+        "Rank": "rank_score",
         "Blended Score": "blended_score",
         "Edge Score": "edge_score",
         "ML Edge": "ml_edge",
@@ -279,6 +282,12 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Deviation": "deviation_level",
         "Dev Level": "deviation_level",
         "Def Tier": "def_tier",
+        "DEF_TIER": "def_tier",
+        "def_tier": "def_tier",
+        "Deviation Level": "deviation_level",
+        "deviation_level": "deviation_level",
+        "Opp Pace": "opp_pace",
+        "opp_pace": "opp_pace",
         "Pick Type": "pick_type",
         "Player": "player",
         "Line": "line",
@@ -417,15 +426,19 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
                 return df, False
         return load_step8_sport(root, sport), True
     if sport_u == "NHL":
-        for name in (f"step8_nhl_direction_clean_{d}.xlsx", f"step8_nhl_direction_{d}.xlsx"):
-            p = root / "outputs" / d / name
-            if p.is_file():
-                df = (
-                    pd.read_excel(p, engine="openpyxl")
-                    if p.suffix.lower() == ".xlsx"
-                    else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
-                )
-                return df, False
+        # Prefer pipeline subfolder CSV (has rank_score, blended_score) over parent grader xlsx (often `rank` only).
+        for p in (
+            root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.csv",
+            root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.xlsx",
+            root / "outputs" / d / f"step8_nhl_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_nhl_direction_{d}.xlsx",
+            root / "outputs" / d / "step8_nhl_direction_clean.csv",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl"), False
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
         return load_step8_sport(root, sport), True
     if sport_u == "SOCCER" or sport == "Soccer":
         for name in (f"step8_soccer_direction_clean_{d}.xlsx", f"step8_soccer_direction_{d}.xlsx"):
@@ -471,8 +484,10 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
         ]
     elif sport_u == "NHL":
         candidates = [
-            root / "outputs" / d / f"step8_nhl_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.csv",
             root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.xlsx",
+            root / "outputs" / d / f"step8_nhl_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_nhl_direction_{d}.xlsx",
         ]
     elif sport_u in ("SOCCER",):
         candidates = [
