@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
@@ -3984,10 +3984,10 @@ window.addEventListener('resize', () => {
       .then(function(html) {
         var div = document.createElement('div');
         div.id = frameId + '-inline';
-        div.style.cssText = 'width:100%;display:block;';
+        div.style.cssText = 'width:100%;display:block;min-height:80vh;';
         var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         div.innerHTML = m ? m[1] : html;
-        frame.parentNode.replaceChild(div, frame);
+        frame.parentNode.replaceChild(div, frame);      div.querySelectorAll('script').forEach(function(s){var n=document.createElement('script');if(s.src){n.src=s.src;n.async=false;}else{n.textContent=s.textContent;}document.head.appendChild(n);});      var stage=frame.closest ? frame.closest('.iframe-shell-stage') : frame.parentNode;      if(stage&&window.ResizeObserver){new ResizeObserver(function(){var h=div.offsetHeight;if(h>200)stage.style.minHeight=h+'px';}).observe(div);}      div.querySelectorAll('script').forEach(function(s){var n=document.createElement('script');if(s.src){n.src=s.src;n.async=false;}else{n.textContent=s.textContent;}document.head.appendChild(n);});
       })
       .catch(function() {
         frame.style.height = (window.innerHeight * 4) + 'px';
