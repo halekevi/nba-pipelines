@@ -1,4 +1,9 @@
 # Backfill Soccer step7b + step8 for dates missing blended_score (post May-1 wiring bug).
+# Superseded by _backfill_soccer_defense.ps1 (step3-8 + legacy step8 defense enrich).
+& (Join-Path $PSScriptRoot "_backfill_soccer_defense.ps1")
+exit $LASTEXITCODE
+
+# --- legacy inline backfill (kept for reference) ---
 $ErrorActionPreference = "Continue"
 $Root = "H:\halek\ProfileFromC\Desktop\PropORACLE"
 $SoccerDir = Join-Path $Root "Sports\Soccer"

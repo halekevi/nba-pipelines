@@ -446,15 +446,17 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
                 return pd.read_excel(p, engine="openpyxl"), False
         return load_step8_sport(root, sport), True
     if sport_u == "SOCCER" or sport == "Soccer":
-        for name in (f"step8_soccer_direction_clean_{d}.xlsx", f"step8_soccer_direction_{d}.xlsx"):
-            p = root / "outputs" / d / name
-            if p.is_file():
-                df = (
-                    pd.read_excel(p, engine="openpyxl")
-                    if p.suffix.lower() == ".xlsx"
-                    else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
-                )
-                return df, False
+        for p in (
+            root / "outputs" / d / "soccer" / "step8_soccer_direction_clean.xlsx",
+            root / "outputs" / d / "soccer" / "step8_soccer_direction_clean.csv",
+            root / "outputs" / d / f"step8_soccer_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_soccer_direction_{d}.xlsx",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl"), False
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
         return load_step8_sport(root, "Soccer"), True
     if sport_u == "WNBA":
         for name in (f"step8_wnba_direction_clean_{d}.xlsx",):
@@ -498,8 +500,10 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
         ]
     elif sport_u in ("SOCCER",):
         candidates = [
-            root / "outputs" / d / f"step8_soccer_direction_clean_{d}.xlsx",
             root / "outputs" / d / "soccer" / "step8_soccer_direction_clean.xlsx",
+            root / "outputs" / d / "soccer" / "step8_soccer_direction_clean.csv",
+            root / "outputs" / d / f"step8_soccer_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_soccer_direction_{d}.xlsx",
         ]
     elif sport_u == "WNBA":
         candidates = [root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx"]
@@ -789,6 +793,8 @@ def main() -> int:
         g["_n_pick"] = g["pick_type"].map(normalize_pick_type)
         g["_n_dir"] = g["direction"].map(normalize_direction)
         g["_file_d"] = pd.to_datetime(g["file_date"], errors="coerce").dt.normalize()
+        # Graded JSON often carries empty def_tier / opp_pace placeholders; prefer step8 values.
+        g = g.drop(columns=[c for c in JOIN_FEATURE_COLS if c in g.columns], errors="ignore")
 
         merge_on = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"]
         if loose_pick:
@@ -805,6 +811,12 @@ def main() -> int:
             how="left",
         )
         for c in JOIN_FEATURE_COLS:
+            if f"{c}_y" in m.columns:
+                m[c] = m[f"{c}_y"]
+                m = m.drop(columns=[f"{c}_x", f"{c}_y"], errors="ignore")
+            elif f"{c}_x" in m.columns and c not in m.columns:
+                m[c] = m[f"{c}_x"]
+                m = m.drop(columns=[f"{c}_x"], errors="ignore")
             if c not in m.columns:
                 m[c] = np.nan
         if skip_date_filter:
