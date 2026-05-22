@@ -27,18 +27,18 @@ from edge_feature_engineering import (  # type: ignore
 # Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
 ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
-    ("NBA", "standard", "OVER"): 0.7999,
-    ("NBA", "goblin", "OVER"): 0.8624,
+    ("NBA", "standard", "OVER"): 0.7965,
+    ("NBA", "goblin", "OVER"): 0.8609,
     # Demon+OVER excluded from calibration — unbookable (drop_demon_over_rows).
-    ("NBA", "standard", "UNDER"): 1.029,
+    ("NBA", "standard", "UNDER"): 1.0255,
     # NHL — provisional (thin samples; isotonic pass needed)
     ("NHL", "standard", "OVER"): 1.6485,
     ("NHL", "standard", "UNDER"): 0.7309,
     ("NHL", "goblin", "OVER"): 2.2124,
     ("NHL", "demon", "OVER"): 1.8855,
     # MLB
-    ("MLB", "standard", "OVER"): 1.2019,
-    ("MLB", "goblin", "OVER"): 1.2258,
+    ("MLB", "standard", "OVER"): 1.2015,
+    ("MLB", "goblin", "OVER"): 1.225,
     ("MLB", "demon", "OVER"): 1.4152,
     # Soccer — step7b sport key is SOCCER (not report label "Soccer")
     ("SOCCER", "standard", "OVER"): 2.778,
@@ -49,7 +49,7 @@ ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
     ("WNBA", "standard", "UNDER"): 0.7745,
     ("WNBA", "goblin", "OVER"): 1.2207,
     ("WNBA", "demon", "OVER"): 2.2358,
-    ("MLB", "standard", "UNDER"): 0.9687,
+    ("MLB", "standard", "UNDER"): 0.9697,
     ("SOCCER", "goblin", "UNDER"): 1.0811,
     ("SOCCER", "standard", "UNDER"): 1.751,
     ("CBB", "goblin", "OVER"): 0.8054,
