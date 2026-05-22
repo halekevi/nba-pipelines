@@ -13206,7 +13206,7 @@ def main():
         write_slate_sheet(wb, nfl, "NFL Slate", C["hdr_nfl"], "NFL")
 
     _prio_hit = False
-    _ticket_sort = "edge"
+    _ticket_sort = str(args.ticket_candidate_sort)
     long_leg_sizes = [n for n in leg_sizes_runtime if n >= 4]
     _run_long_leg_supplement = bool(long_leg_sizes) and (
         bool(getattr(args, "long_leg_supplement", False)) or not bool(args.write_web)

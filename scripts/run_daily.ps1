@@ -1321,7 +1321,8 @@ else {
             }
         }
 
-        git -C $Root add -- "outputs/$Today/" "ui_runner/templates/"
+        # mobile/www: grader copies graded_props + slate_eval here; many scripts read mobile/www not templates
+        git -C $Root add -- "outputs/$Today/" "ui_runner/templates/" "mobile/www/"
         $optionalAdds = @(
             "NBA\step8_all_direction_clean.xlsx",
             "NBA\step8_nba1h_direction_clean.xlsx",
