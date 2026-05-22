@@ -57,9 +57,15 @@ def test_same_game_bench_stack():
     assert cst._winrate_ticket_same_game_bench_stack(ticket) is True
 
 
-def test_rank_score_prefers_model_pcash():
-    ticket = {"p_win": 0.64, "ticket_model_p_cash": 0.49, "est_win_prob": 0.49}
-    assert cst._winrate_ticket_rank_score(ticket) == pytest.approx(0.49, rel=1e-3)
+def test_win_prob_prefers_est_win_prob_over_pcash():
+    ticket = {"p_win": 0.64, "ticket_model_p_cash": 0.41, "est_win_prob": 0.58}
+    assert cst._winrate_ticket_win_prob(ticket) == pytest.approx(0.58, rel=1e-3)
+    assert cst._winrate_ticket_rank_score(ticket) == pytest.approx(0.58, rel=1e-3)
+
+
+def test_rank_score_not_driven_by_ticket_model_p_cash():
+    ticket = {"p_win": 0.50, "ticket_model_p_cash": 0.90, "est_win_prob": 0.52}
+    assert cst._winrate_ticket_win_prob(ticket) == pytest.approx(0.52, rel=1e-3)
 
 
 def test_leg_prob_cap_lower_for_bench():

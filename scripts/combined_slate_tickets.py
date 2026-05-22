@@ -3824,29 +3824,9 @@ def _winrate_ticket_same_game_bench_stack(ticket: dict) -> bool:
     return False
 
 
-def _winrate_ticket_rank_score(ticket: dict) -> float:
-    """Panel/build sort: prefer calibrated ticket P(cash), not inflated leg-product p_win."""
-    for key in ("ticket_model_p_cash", "est_win_prob", "combined_hit_prob_curve"):
-        raw = ticket.get(key)
-        if raw is None or raw == "":
-            continue
-        try:
-            v = float(raw)
-            if math.isfinite(v) and v > 0:
-                if _winrate_ticket_same_game_bench_stack(ticket):
-                    v *= 0.85
-                return v
-        except (TypeError, ValueError):
-            continue
-    pw = float(ticket.get("p_win") or 0.0)
-    if _winrate_ticket_same_game_bench_stack(ticket):
-        pw *= 0.75
-    return pw
-
-
-def _winrate_ticket_panel_pcash(ticket: dict) -> float:
-    """Displayed win % on Today's Best (model ticket cash prob when present)."""
-    for key in ("ticket_model_p_cash", "est_win_prob"):
+def _winrate_ticket_win_prob(ticket: dict) -> float:
+    """Modeled probability ticket wins (power = all legs hit), not payout/cash EV."""
+    for key in ("est_win_prob", "p_win", "combined_hit_prob_curve"):
         raw = ticket.get(key)
         if raw is None or raw == "":
             continue
@@ -3856,7 +3836,33 @@ def _winrate_ticket_panel_pcash(ticket: dict) -> float:
                 return float(np.clip(v, 0.0, 1.0))
         except (TypeError, ValueError):
             continue
-    return float(np.clip(float(ticket.get("p_win") or 0.0), 0.0, 1.0))
+    return 0.0
+
+
+def _winrate_ticket_rank_score(ticket: dict) -> float:
+    """Panel/build sort: highest modeled win probability (not ticket_model_p_cash)."""
+    v = _winrate_ticket_win_prob(ticket)
+    if _winrate_ticket_same_game_bench_stack(ticket):
+        v *= 0.85
+    return v
+
+
+def _winrate_ticket_panel_pcash_optional(ticket: dict) -> float | None:
+    """P(cash) only shown when it differs from win prob (secondary line)."""
+    pwin = _winrate_ticket_win_prob(ticket)
+    raw = ticket.get("ticket_model_p_cash")
+    if raw is None or raw == "":
+        return None
+    try:
+        pcash = float(raw)
+        if not math.isfinite(pcash) or pcash <= 0:
+            return None
+        pcash = float(np.clip(pcash, 0.0, 1.0))
+        if abs(pcash - pwin) < 0.05:
+            return None
+        return pcash
+    except (TypeError, ValueError):
+        return None
 
 
 def _filter_win_rate_pool(
@@ -3948,8 +3954,8 @@ def build_win_rate_ticket_groups(
 
     candidates.sort(
         key=lambda x: (
+            -_winrate_ticket_win_prob(x),
             -_winrate_ticket_rank_score(x),
-            -float(x.get("p_win") or 0.0),
             -float(x.get("win_rate_score") or 0.0),
         )
     )
@@ -14335,10 +14341,10 @@ def _winrate_best_leg_label(leg: dict) -> str:
 
 
 def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
-    """Pinned panel: top 5 win-rate tickets (sorted by model P(cash), bench legs filtered)."""
+    """Pinned panel: top 5 win-rate tickets (sorted by est_win_prob, bench legs filtered)."""
     _placeholder = (
         '<motionless class="winrate-best-panel" id="winrate-best-panel" aria-live="polite">'
-        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</motionless>'
+        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
         '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
         "</motionless>"
     ).replace("motionless", "div")
@@ -14369,7 +14375,7 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     if not top:
         return (
             '<div class="winrate-best-panel" id="winrate-best-panel">'
-            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</div>'
+            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
             '<div class="winrate-best-sub">No qualifying tickets for this slate '
             '(deep-bench SUPPORT legs and same-game bench stacks are excluded). '
             'Rebuild win-rate JSON after the next ticket run.</div>'
@@ -14398,12 +14404,12 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             pay_f = float(pay) if pay is not None else 0.0
         except (TypeError, ValueError):
             pay_f = 0.0
-        pcash = _winrate_ticket_panel_pcash(t)
-        leg_prod = float(t.get("p_win") or 0.0)
+        pwin = _winrate_ticket_win_prob(t)
+        pcash_opt = _winrate_ticket_panel_pcash_optional(t)
         pwin_sub = ""
-        if leg_prod > 0 and abs(leg_prod - pcash) >= 0.08:
+        if pcash_opt is not None:
             pwin_sub = (
-                f'<div class="winrate-best-pwin-sub">Leg product {_fmt(leg_prod * 100, 0)}%</div>'
+                f'<div class="winrate-best-pwin-sub">P(cash) {_fmt(pcash_opt * 100, 0)}%</div>'
             )
         rows.append(
             f'<div class="winrate-best-row" data-winrate-rank="{i}" role="button" tabindex="0">'
@@ -14412,19 +14418,19 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             f'<div class="winrate-best-legs">{legs_html}</div>'
             f'</span>'
             f'<span class="winrate-best-stats">'
-            f'<div class="winrate-best-pwin">P(cash) {_fmt(pcash * 100, 0)}%</div>'
+            f'<div class="winrate-best-pwin">P(win) {_fmt(pwin * 100, 0)}%</div>'
             f'{pwin_sub}'
             f'<div>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</div>'
             f"</span></div>"
         )
-    sub_parts = ["Sorted by model ticket P(cash); deep-bench SUPPORT legs excluded"]
+    sub_parts = ["Sorted by modeled win probability (est_win_prob); deep-bench SUPPORT legs excluded"]
     if generated_at:
         sub_parts.append(f"Updated: {generated_at}")
     sub = _h(" · ".join(sub_parts))
     body = "".join(rows)
     return (
         '<div class="winrate-best-panel" id="winrate-best-panel">'
-        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</div>'
+        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
         f'<div class="winrate-best-sub">{sub}</div>'
         f"{body}"
         "</div>"
