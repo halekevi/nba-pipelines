@@ -1,4 +1,9 @@
 # Backfill NHL step7b + step8 for dated outputs/<date>/nhl/ slates (and copy parent dated xlsx).
+# Superseded by _backfill_nhl_defense.ps1 (step3-8 + step4b + legacy step7-only path).
+& (Join-Path $PSScriptRoot "_backfill_nhl_defense.ps1")
+exit $LASTEXITCODE
+
+# --- legacy inline backfill (kept for reference) ---
 $ErrorActionPreference = "Continue"
 $Root = "H:\halek\ProfileFromC\Desktop\PropORACLE"
 $NHLScripts = Join-Path $Root "Sports\NHL\scripts"
