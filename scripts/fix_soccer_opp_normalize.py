@@ -69,6 +69,24 @@ _ALIASES: dict[str, str] = {
     "celta de vigo": "celta vigo",
     "betis": "real betis",
     "sociedad": "real sociedad",
+    # Unmatched dry-run (2026-05) — only teams present in soccer_defense_summary
+    "boca": "boca juniors",
+    "bragantino": "red bull bragantino",
+    "cordoba sde": "central cordoba",
+    "central cordoba sde": "central cordoba",
+    "santa fe": "union",
+    "union santa fe": "union",
+    "chivas": "guadalajara",
+    "cd guadalajara": "guadalajara",
+    "earthquakes": "san jose",
+    "san jose earthquakes": "san jose",
+    "santos laguna": "santos",
+    "pride": "orlando pride",
+    "reign": "seattle reign",
+    "seattle reign fc": "seattle reign",
+    "stoke": "stoke city",
+    "racing club de lens": "lens",
+    "rc lens": "lens",
 }
 
 
@@ -205,7 +223,9 @@ def _resolve(raw_opp: str, lookup: dict[str, dict], db_keys: list[str]) -> dict 
     hits = get_close_matches(norm, db_keys, n=1, cutoff=0.72)
     if hits:
         return lookup[hits[0]]
-    print(f"  [Soccer enrich] unmatched: {raw_opp!r}")
+    raw_s = str(raw_opp or "").strip()
+    if raw_s and raw_s.lower() not in ("nan", "unknown_opp", "none"):
+        print(f"  [Soccer enrich] unmatched: {raw_opp!r}")
     return None
 
 
