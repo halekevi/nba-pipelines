@@ -14350,7 +14350,7 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     ).replace("motionless", "div")
     data = winrate_payload
     if data is None:
-        path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_winrate_latest.json"
+        path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_latest.json"
         if not path.is_file():
             return _placeholder
         try:
