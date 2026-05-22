@@ -78,7 +78,7 @@ function Run-Step {
 }
 
 function Invoke-NFLStep7b {
-    param([string]$RepoRoot)
+    param([string]$RepoRoot, [string]$Step7Xlsx = "")
     $p = Join-Path $RepoRoot "scripts\step7b_edge_score.py"
     if (-not (Test-Path $p)) {
         Write-Host "  [NFL] step7b: WARN missing step7b_edge_score.py" -ForegroundColor Yellow
@@ -87,7 +87,9 @@ function Invoke-NFLStep7b {
     Write-Host "  --> NFL step7b (edge model)" -ForegroundColor Yellow
     Push-Location $RepoRoot
     try {
-        $output = & py -3.14 $p --sport NFL 2>&1
+        $step7Args = @("--sport", "NFL")
+        if ($Step7Xlsx -ne "") { $step7Args += @("--step7-xlsx", $Step7Xlsx) }
+        $output = & py -3.14 $p @step7Args 2>&1
         $exit = $LASTEXITCODE
         $output | ForEach-Object { Write-Host "      | $_" -ForegroundColor DarkGray }
         if ($exit -ne 0) {
@@ -134,7 +136,7 @@ if ($ok) {
 }
 if ($ok) { $ok = Run-Step "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "--input $s3 --output $s6" }
 if ($ok) { $ok = Run-Step "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--input $s6 --output $s7" }
-if ($ok) { Invoke-NFLStep7b $Root }
+if ($ok) { Invoke-NFLStep7b $Root $s7 }
 if ($ok) {
     $ok = Run-Step "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--input $s7 --output $s8 --date $Date"
 }
