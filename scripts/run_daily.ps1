@@ -62,6 +62,24 @@ if (!(Test-Path $CacheDir)) {
       -ForegroundColor DarkGray
 }
 
+# C: drive preflight — xlsx writes and Python temp fail when disk is full.
+$cFree = [math]::Round((Get-PSDrive -Name C).Free / 1GB, 1)
+if ($cFree -lt 10) {
+    Write-Warning "C: drive has only ${cFree} GB free — daily run may fail on xlsx writes"
+    Write-Warning "Run scripts/cleanup_c_drive.ps1 before proceeding"
+}
+if ($cFree -lt 2) {
+    Write-Error "C: drive critically low (${cFree} GB) — aborting daily run"
+    exit 1
+}
+if ($cFree -lt 5) {
+    $tmpPath = Join-Path $Root ".tmp"
+    New-Item -ItemType Directory -Force -Path $tmpPath | Out-Null
+    $env:TEMP = $tmpPath
+    $env:TMP  = $tmpPath
+    Write-Warning "C: low — Python temp redirected to $tmpPath"
+}
+
 $script:DailyStart = Get-Date
 $script:PipelineFailed = $false
 $script:WeeklyAnalysisReport = ""
