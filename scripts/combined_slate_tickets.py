@@ -3374,7 +3374,7 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
             hit_prob = float(hr_raw)
             if hit_prob > 1.0:
                 hit_prob = hit_prob / 100.0
-            hit_prob = max(0.50, min(0.99, hit_prob))
+            hit_prob = max(0.50, min(_leg_l5_hit_prob_cap(row), hit_prob))
             return hit_prob, hr_source
         except (TypeError, ValueError):
             pass
@@ -3436,13 +3436,37 @@ def win_prob(leg_probs_with_source, _n_legs: int) -> float:
 _WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1Q"})
 _WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
 # Cap per-leg factor in p_win product — l5_over_proxy can return 0.99 on hot streaks (artifact).
-MAX_LEG_PROB_FOR_P_WIN = 0.80
+MAX_LEG_PROB_FOR_P_WIN = 0.72
+# Deep bench legs: L5 "5/5 over" on 0.5 Goblin lines is not a trustworthy parlay factor.
+MAX_LEG_PROB_BENCH_SUPPORT = 0.62
+MAX_L5_HIT_PROB_BENCH = 0.68
+MAX_L5_HIT_PROB_DEFAULT = 0.85
+
+
+def _winrate_leg_bench_risk(leg: dict) -> bool:
+    """True for low-minute support bench (e.g. 0-pt DNP-risk legs in playoff rotations)."""
+    su = str(leg.get("sport") or "").strip().upper()
+    if su not in ("NBA", "WNBA", "NBA1H"):
+        return False
+    mt = str(leg.get("min_tier") or leg.get("minutes_tier") or "").strip().upper()
+    ur = str(leg.get("usage_role") or "").strip().upper()
+    sr = str(leg.get("shot_role") or "").strip().upper()
+    return mt == "LOW" and ur == "SUPPORT" and sr in ("LOW_VOL", "", "LOW")
+
+
+def _leg_l5_hit_prob_cap(row: pd.Series | dict) -> float:
+    if isinstance(row, pd.Series):
+        row = row.to_dict()
+    if _winrate_leg_bench_risk(row):
+        return MAX_L5_HIT_PROB_BENCH
+    return MAX_L5_HIT_PROB_DEFAULT
 
 
 def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
     """P(win) leg factor: leg_prob_used → composite_hit_rate/hit_rate → ml_prob → 0.55 (capped)."""
     if isinstance(leg, pd.Series):
         leg = leg.to_dict()
+    cap = MAX_LEG_PROB_BENCH_SUPPORT if _winrate_leg_bench_risk(leg) else MAX_LEG_PROB_FOR_P_WIN
     for key in ("leg_prob_used", "composite_hit_rate", "hit_rate", "ml_prob"):
         raw = leg.get(key)
         if raw is None or raw == "":
@@ -3450,10 +3474,10 @@ def _leg_prob_for_p_win_from_mapping(leg: dict | pd.Series) -> float:
         try:
             v = float(raw)
             if math.isfinite(v):
-                return float(np.clip(v, 0.0, min(1.0, MAX_LEG_PROB_FOR_P_WIN)))
+                return float(np.clip(v, 0.0, min(1.0, cap)))
         except (TypeError, ValueError):
             continue
-    return min(0.55, MAX_LEG_PROB_FOR_P_WIN)
+    return min(0.55, cap)
 
 
 def _compute_p_win_from_rows(rows: list) -> float:
@@ -3774,7 +3798,65 @@ def _row_win_rate_eligible(
     if comp_f < float(min_composite_hr):
         return False
     sport = str(row_d.get("sport") or "").strip().upper()
-    return _win_rate_sport_allowed(sport, leg_prob)
+    if not _win_rate_sport_allowed(sport, leg_prob):
+        return False
+    if _winrate_leg_bench_risk(row_d):
+        return False
+    return True
+
+
+def _winrate_ticket_same_game_bench_stack(ticket: dict) -> bool:
+    """Two+ legs from the same game where every leg is deep-bench SUPPORT (high DNP risk)."""
+    legs = [leg for leg in (ticket.get("legs") or []) if isinstance(leg, dict)]
+    if len(legs) < 2:
+        return False
+    by_game: dict[tuple[str, str, str], list[dict]] = {}
+    for leg in legs:
+        key = (
+            str(leg.get("sport") or "").strip().upper(),
+            str(leg.get("team") or "").strip().upper(),
+            str(leg.get("opp") or "").strip().upper(),
+        )
+        by_game.setdefault(key, []).append(leg)
+    for grp in by_game.values():
+        if len(grp) >= 2 and all(_winrate_leg_bench_risk(leg) for leg in grp):
+            return True
+    return False
+
+
+def _winrate_ticket_rank_score(ticket: dict) -> float:
+    """Panel/build sort: prefer calibrated ticket P(cash), not inflated leg-product p_win."""
+    for key in ("ticket_model_p_cash", "est_win_prob", "combined_hit_prob_curve"):
+        raw = ticket.get(key)
+        if raw is None or raw == "":
+            continue
+        try:
+            v = float(raw)
+            if math.isfinite(v) and v > 0:
+                if _winrate_ticket_same_game_bench_stack(ticket):
+                    v *= 0.85
+                return v
+        except (TypeError, ValueError):
+            continue
+    pw = float(ticket.get("p_win") or 0.0)
+    if _winrate_ticket_same_game_bench_stack(ticket):
+        pw *= 0.75
+    return pw
+
+
+def _winrate_ticket_panel_pcash(ticket: dict) -> float:
+    """Displayed win % on Today's Best (model ticket cash prob when present)."""
+    for key in ("ticket_model_p_cash", "est_win_prob"):
+        raw = ticket.get(key)
+        if raw is None or raw == "":
+            continue
+        try:
+            v = float(raw)
+            if math.isfinite(v) and v > 0:
+                return float(np.clip(v, 0.0, 1.0))
+        except (TypeError, ValueError):
+            continue
+    return float(np.clip(float(ticket.get("p_win") or 0.0), 0.0, 1.0))
 
 
 def _filter_win_rate_pool(
@@ -3864,10 +3946,18 @@ def build_win_rate_ticket_groups(
                 t["_sport_label"] = label
                 candidates.append(t)
 
-    candidates.sort(key=lambda x: (-float(x.get("p_win") or 0.0), -float(x.get("win_rate_score") or 0.0)))
+    candidates.sort(
+        key=lambda x: (
+            -_winrate_ticket_rank_score(x),
+            -float(x.get("p_win") or 0.0),
+            -float(x.get("win_rate_score") or 0.0),
+        )
+    )
     seen: set[frozenset] = set()
     picked: list[dict] = []
     for t in candidates:
+        if _winrate_ticket_same_game_bench_stack(t):
+            continue
         rows = [dict(r) for r in (t.get("rows") or [])]
         key = _ticket_row_dedup_key(rows)
         if key in seen:
@@ -13665,6 +13755,8 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .winrate-best-leg + .winrate-best-leg { margin-top: 2px; }
 .tickets-built .winrate-best-stats { text-align: right; font-size: 12px; white-space: nowrap; }
 .tickets-built .winrate-best-pwin { color: #00ff88; font-weight: 700; font-size: 14px; }
+.tickets-built .winrate-best-pwin-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.tickets-built .winrate-best-warn { font-size: 10px; color: #f0a500; margin-top: 4px; }
 .tickets-built .ticket-pwin-ev-badge {
   font-size: 12px;
   color: #00ff88;
@@ -14243,10 +14335,10 @@ def _winrate_best_leg_label(leg: dict) -> str:
 
 
 def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
-    """Pinned panel: top 5 win-rate tickets from tickets_winrate_latest.json."""
+    """Pinned panel: top 5 win-rate tickets (sorted by model P(cash), bench legs filtered)."""
     _placeholder = (
         '<motionless class="winrate-best-panel" id="winrate-best-panel" aria-live="polite">'
-        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
+        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</motionless>'
         '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
         "</motionless>"
     ).replace("motionless", "div")
@@ -14267,22 +14359,24 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
         for t in g.get("tickets") or []:
             if not isinstance(t, dict):
                 continue
-            try:
-                pw = float(t.get("p_win") or 0.0)
-            except (TypeError, ValueError):
-                pw = 0.0
-            flat.append((pw, t, gn))
+            if _winrate_ticket_same_game_bench_stack(t):
+                continue
+            if any(_winrate_leg_bench_risk(leg) for leg in (t.get("legs") or []) if isinstance(leg, dict)):
+                continue
+            flat.append((_winrate_ticket_rank_score(t), t, gn))
     flat.sort(key=lambda x: -x[0])
     top = flat[:5]
     if not top:
         return (
             '<div class="winrate-best-panel" id="winrate-best-panel">'
-            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST</div>'
-            '<div class="winrate-best-sub">No win-rate tickets yet for this slate.</div>'
+            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</div>'
+            '<div class="winrate-best-sub">No qualifying tickets for this slate '
+            '(deep-bench SUPPORT legs and same-game bench stacks are excluded). '
+            'Rebuild win-rate JSON after the next ticket run.</div>'
             "</div>"
         )
     rows: list[str] = []
-    for i, (pw, t, gn) in enumerate(top, start=1):
+    for i, (rank_score, t, gn) in enumerate(top, start=1):
         legs = t.get("legs") or []
         leg_lines: list[str] = []
         for leg in legs:
@@ -14304,6 +14398,13 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             pay_f = float(pay) if pay is not None else 0.0
         except (TypeError, ValueError):
             pay_f = 0.0
+        pcash = _winrate_ticket_panel_pcash(t)
+        leg_prod = float(t.get("p_win") or 0.0)
+        pwin_sub = ""
+        if leg_prod > 0 and abs(leg_prod - pcash) >= 0.08:
+            pwin_sub = (
+                f'<div class="winrate-best-pwin-sub">Leg product {_fmt(leg_prod * 100, 0)}%</div>'
+            )
         rows.append(
             f'<div class="winrate-best-row" data-winrate-rank="{i}" role="button" tabindex="0">'
             f'<span class="winrate-best-rank">#{i}</span>'
@@ -14311,15 +14412,19 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             f'<div class="winrate-best-legs">{legs_html}</div>'
             f'</span>'
             f'<span class="winrate-best-stats">'
-            f'<div class="winrate-best-pwin">P(win) {_fmt(pw * 100, 0)}%</div>'
+            f'<div class="winrate-best-pwin">P(cash) {_fmt(pcash * 100, 0)}%</div>'
+            f'{pwin_sub}'
             f'<div>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</div>'
             f"</span></div>"
         )
-    sub = f"Updated: {_h(generated_at)}" if generated_at else ""
+    sub_parts = ["Sorted by model ticket P(cash); deep-bench SUPPORT legs excluded"]
+    if generated_at:
+        sub_parts.append(f"Updated: {generated_at}")
+    sub = _h(" · ".join(sub_parts))
     body = "".join(rows)
     return (
         '<div class="winrate-best-panel" id="winrate-best-panel">'
-        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
+        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Model P(cash)</div>'
         f'<div class="winrate-best-sub">{sub}</div>'
         f"{body}"
         "</div>"
