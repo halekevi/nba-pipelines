@@ -2770,7 +2770,7 @@ NHL_LEG_MIN_HIT_RATE = {
 }
 # Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
 # TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
-SOCCER_OVER_MIN_EDGE = 0.60
+SOCCER_OVER_MIN_EDGE = 0.0  # Edge is leaky for Soccer; gate disabled until replacement signal exists
 
 # ── Model-performance ticket gates (Track A + auto-gate from tracker) ─────────
 # REVERT NBA1H WHEN: track_model_performance.py shows NBA1H AUC >= 0.52 for 3
@@ -2826,10 +2826,10 @@ DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
     "NBA": {"over": 0.70, "under": 0.30, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
     "NBA1Q": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
     "NBA1H": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
-    "NHL": {"over": 0.65, "under": 0.35},
-    "MLB": {"over": 0.60, "under": 0.40},
+    "NHL": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 0.5, "standard_under_min_edge": 0.5},
+    "MLB": {"over": 0.60, "under": 0.40, "standard_over_min_edge": 0.5, "standard_under_min_edge": 0.5},
     "TENNIS": {"over": 0.60, "under": 0.40},
-    "SOCCER": {"over": 0.60, "under": 0.40},
+    "SOCCER": {"over": 0.60, "under": 0.40, "standard_over_min_rank_score": 0.25},
     "CBB": {"over": 0.65, "under": 0.35},
     "WCBB": {"over": 0.65, "under": 0.35},
 }
@@ -8942,6 +8942,19 @@ def filter_eligible(
         )
         _apply_gate(cond_std_over, "standard_over_edge_below_floor", "after_standard_over_edge_floor")
 
+        # Soccer rank_score gate — applied to STANDARD OVER when rank_score is present
+        if "rank_score" in df.columns:
+            rs_floor = sport_s.map(
+                lambda sp: DIRECTIONAL_HR_THRESHOLDS.get(str(sp).upper(), {}).get("standard_over_min_rank_score")
+            )
+            rs_val = pd.to_numeric(df["rank_score"], errors="coerce")
+            cond_rs_over = pd.Series([True] * len(df), index=df.index)
+            rs_over_mask = pick_s.eq("STANDARD") & dir_s.isin({"OVER", "HIGHER"}) & rs_floor.notna() & rs_val.notna()
+            cond_rs_over.loc[rs_over_mask] = rs_val.loc[rs_over_mask] >= pd.to_numeric(
+                rs_floor.loc[rs_over_mask], errors="coerce"
+            )
+            _apply_gate(cond_rs_over, "standard_over_rank_score_below_floor", "after_standard_over_rank_score_floor")
+
         under_floor = sport_s.map(
             lambda sp: DIRECTIONAL_HR_THRESHOLDS.get(str(sp).upper(), {}).get("standard_under_min_edge")
         )
@@ -13375,7 +13388,7 @@ def main():
                 tennis_pool=tennis_pool_web,
                 mlb_pool=mlb_pool_web,
                 min_hit_rate=thresholds.get("min_hit_rate", 0.65),
-                min_edge=thresholds.get("min_edge", 2.0),
+                min_edge=thresholds.get("min_edge", 0.5),
                 min_rank=thresholds.get("min_rank", 5.0),
                 ticket_leg_sizes=leg_sizes_runtime,
                 leg_min_hit_by_n=leg_min_hit_by_n,
