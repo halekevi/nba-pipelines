@@ -182,9 +182,12 @@ def main() -> None:
     args = ap.parse_args()
     root = Path(args.repo_root).resolve() if args.repo_root else _repo_root()
     sp = _norm_sport(args.sport)
-    # WNBA shares basketball feature geometry + NBA calibration tables with NBA.
-    # NFL uses MLB surrogate encoding until a dedicated bundle exists.
-    feat_sp = "NBA" if sp == "WNBA" else ("MLB" if sp == "NFL" else sp)
+    # feat_sp: feature encoding + sport_encoded must match training labels.
+    #   WNBA=7 in SPORT_ENCODING — do not collapse to NBA=0.
+    #   NFL uses MLB surrogate encoding until a dedicated bundle exists.
+    feat_sp = "MLB" if sp == "NFL" else sp
+    # cal_sp: post-Platt scalar / isotonic lookup key — always use real sport.
+    cal_sp = sp
     if sp not in SPORT_ALIASES and sp != "SOCCER":
         print(f"[WARN] Unknown sport {args.sport!r}, proceeding with key {sp!r}")
 
@@ -251,7 +254,7 @@ def main() -> None:
     dirs_u = _direction_series(df2).astype(str).str.strip().str.upper()
     pt_l = df2.get("pick_type", pd.Series("", index=df2.index)).astype(str).str.strip().str.lower()
     mdir = root / "models"
-    ml_prob = apply_ml_prob_post_calibration(p_platt, feat_sp, pt_l, dirs_u, mdir)
+    ml_prob = apply_ml_prob_post_calibration(p_platt, cal_sp, pt_l, dirs_u, mdir)
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     abs_edge_col = pd.to_numeric(df2.get("abs_edge", pd.Series(np.nan, index=df2.index)), errors="coerce")
     # For UNDER legs, edge is negative (projection < line) — flip sign so
@@ -267,7 +270,7 @@ def main() -> None:
     ).fillna(0.5)
     # Playoff uplift: emphasize short-window same-opponent trend where available.
     # step7 populates l5_vs_same_opp_hit_rate direction-aware (high = supports pick side).
-    if feat_sp == "NBA" and "l5_vs_same_opp_hit_rate" in df2.columns:
+    if sp in ("NBA", "WNBA") and "l5_vs_same_opp_hit_rate" in df2.columns:
         opp_l5 = pd.to_numeric(df2["l5_vs_same_opp_hit_rate"], errors="coerce")
         opp_l5 = pd.Series(np.where(opp_l5 > 1.0, opp_l5 / 100.0, opp_l5), index=df2.index)
         playoff = (
@@ -294,7 +297,7 @@ def main() -> None:
     # Maps opp_vs_league_pct to a 0–1 matchup score:
     #   +20% generous → ~0.67  |  0% neutral → 0.50  |  −20% tight → ~0.33
     # Capped at ±30% to prevent extreme single-game outliers dominating.
-    if feat_sp == "NBA":
+    if sp in ("NBA", "WNBA"):
         _def_pos = pd.to_numeric(
             df2.get("intel_opp_vs_league_pct_pos", pd.Series(np.nan, index=df2.index)),
             errors="coerce",
@@ -317,7 +320,7 @@ def main() -> None:
     edge_score = ml_s - implied_prob
     if sp in ("NHL", "SOCCER", "NFL"):
         blended = 0.15 * ml_s + 0.85 * comp
-    elif feat_sp == "NBA":
+    elif sp in ("NBA", "WNBA"):
         blended = 0.15 * ml_s + 0.85 * comp
     else:
         blended = 0.3 * ml_s + 0.7 * comp
