@@ -438,7 +438,12 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
                 continue
             if p.suffix.lower() == ".xlsx":
                 return pd.read_excel(p, engine="openpyxl"), False
-            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
+        # Grader export for this slate (rank / def context) when pipeline step8 was never archived.
+        for name in (f"graded_nhl_{d}.xlsx", f"graded_nhl_{d}_mlbackfill.xlsx"):
+            p = root / "outputs" / d / name
+            if p.is_file():
+                return pd.read_excel(p, engine="openpyxl"), False
         return load_step8_sport(root, sport), True
     if sport_u == "SOCCER" or sport == "Soccer":
         for name in (f"step8_soccer_direction_clean_{d}.xlsx", f"step8_soccer_direction_{d}.xlsx"):
@@ -488,6 +493,8 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
             root / "outputs" / d / "nhl" / "step8_nhl_direction_clean.xlsx",
             root / "outputs" / d / f"step8_nhl_direction_clean_{d}.xlsx",
             root / "outputs" / d / f"step8_nhl_direction_{d}.xlsx",
+            root / "outputs" / d / f"graded_nhl_{d}.xlsx",
+            root / "outputs" / d / f"graded_nhl_{d}_mlbackfill.xlsx",
         ]
     elif sport_u in ("SOCCER",):
         candidates = [
