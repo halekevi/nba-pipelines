@@ -66,17 +66,12 @@ foreach ($dir in $datedDirs) {
 }
 
 # --- Part B: enrich legacy parent step8 (Mar/Apr slates without soccer/ subfolder) ---
-foreach ($dir in $datedDirs) {
-    $d = $dir.Name
-    $parent = Join-Path $dir.FullName "step8_soccer_direction_clean_$d.xlsx"
-    if (-not (Test-Path $parent)) { continue }
-    $socDir = Join-Path $dir.FullName "soccer"
-    if (-not (Test-Path $socDir)) { New-Item -ItemType Directory -Force -Path $socDir | Out-Null }
-    $enriched = Join-Path $socDir "step8_soccer_direction_clean.xlsx"
-    & py -3.14 $Enrich --input $parent --output $enriched 2>&1
-    if (Test-Path $enriched) {
-        Copy-Item -LiteralPath $enriched -Destination $parent -Force
-    }
-}
+# Opp normalisation (strip FC/SC, alias dict, difflib fuzzy) handled by
+# fix_soccer_opp_normalize.py — edit aliases there, not here.
+Write-Host "[Soccer] Part B — legacy parent xlsx Opp normalize..." -ForegroundColor Cyan
+& py -3.14 (Join-Path $Root "scripts\fix_soccer_opp_normalize.py") `
+    --repo-root $Root `
+    --fill-threshold 0.50 2>&1 |
+    Select-String -Pattern "improved|def_tier|unmatched|ERROR|Summary"
 
 Write-Host "[Soccer] Backfill complete." -ForegroundColor Green
