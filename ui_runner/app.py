@@ -65,6 +65,11 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
+from utils.income_sport_breakdown import (
+    graded_props_signature,
+    read_cached_rows,
+    refresh_cache as refresh_income_sport_breakdown_cache,
+)
 from utils.proporacle_data_root import grade_history_read_paths, persistent_data_dir
 from scripts.payout_leg_resolver import PayoutLegResolver
 
@@ -5102,7 +5107,7 @@ def _read_grade_history_runs() -> list[dict[str, Any]]:
         if not path.is_file():
             continue
         try:
-            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw = read_json_cached(path, ttl=120.0)
         except (OSError, json.JSONDecodeError):
             continue
         if isinstance(raw, list):
@@ -5320,6 +5325,37 @@ def _current_streak_label(rows_asc: list[dict[str, Any]]) -> str:
     return f"{'W' if streak_sign > 0 else 'L'}{streak_len}"
 
 
+_SPORT_BREAKDOWN_MEM: dict[str, Any] = {}
+
+
+def _load_sport_breakdown_rows(*, stake_per_pick: float = 10.0) -> list[dict[str, Any]]:
+    """Fast path for /income: read sport_breakdown.json; avoid per-request xlsx/props scans."""
+    sig = graded_props_signature(TEMPLATES_DIR)
+    force = os.environ.get("INCOME_REBUILD_SPORT", "").strip().lower() in ("1", "true", "yes", "on")
+    if force:
+        rows = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
+        _SPORT_BREAKDOWN_MEM["sig"] = sig
+        _SPORT_BREAKDOWN_MEM["rows"] = rows
+        return rows
+
+    mem_rows = _SPORT_BREAKDOWN_MEM.get("rows")
+    if _SPORT_BREAKDOWN_MEM.get("sig") == sig and mem_rows:
+        return mem_rows
+
+    cached = read_cached_rows(BASE_DIR, TEMPLATES_DIR, expected_signature=sig)
+    if cached is None:
+        cached = read_cached_rows(BASE_DIR, TEMPLATES_DIR)
+    if cached:
+        _SPORT_BREAKDOWN_MEM["sig"] = sig
+        _SPORT_BREAKDOWN_MEM["rows"] = cached
+        return cached
+
+    rows = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
+    _SPORT_BREAKDOWN_MEM["sig"] = sig
+    _SPORT_BREAKDOWN_MEM["rows"] = rows
+    return rows
+
+
 @app.get("/income")
 def page_income():
     rows_asc = _load_grade_history_rows()
@@ -5338,7 +5374,7 @@ def page_income():
         cum_points.append({"date": r.get("date"), "cum_net": round(cum, 2)})
 
     rows_desc = list(reversed(rows_asc))
-    sport_rows = _sport_breakdown_from_graded_workbooks(stake_per_ticket=10.0)
+    sport_rows = _load_sport_breakdown_rows(stake_per_pick=10.0)
     return render_template(
         "dashboard_income.html",
         ui_build_id=_UI_BUILD_ID,

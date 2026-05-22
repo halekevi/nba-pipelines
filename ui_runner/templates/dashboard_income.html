@@ -228,9 +228,9 @@
 
   <!-- Plotly was previously in <head> without defer: it blocked HTML/body parsing until the CDN
        responded, so a slow or blocked CDN looked like a blank page in the Android WebView. -->
-  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
   <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
-  <script>
+  <script defer>
     const points = {{ chart_points | safe }};
     function drawChart() {
       const host = document.getElementById('cum-chart');
@@ -263,7 +263,18 @@
         yaxis: { title: '$', tickprefix: '$', gridcolor: 'rgba(255,255,255,0.06)', zerolinecolor: 'rgba(255,255,255,0.15)' },
       }, { displayModeBar: false, responsive: true });
     }
-    drawChart();
+    function whenPlotlyReady(fn) {
+      if (typeof Plotly !== 'undefined') { fn(); return; }
+      var tries = 0;
+      var timer = setInterval(function () {
+        tries += 1;
+        if (typeof Plotly !== 'undefined') { clearInterval(timer); fn(); }
+        else if (tries > 240) { clearInterval(timer); fn(); }
+      }, 25);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      whenPlotlyReady(drawChart);
+    });
     window.addEventListener('resize', () => {
       const el = document.getElementById('cum-chart');
       if (typeof Plotly !== 'undefined' && el && el.querySelector('.js-plotly-plot')) Plotly.Plots.resize(el);

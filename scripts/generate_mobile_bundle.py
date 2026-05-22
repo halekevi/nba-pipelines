@@ -106,44 +106,15 @@ def _merged_combined_rows_for_mobile(sports_payload: dict) -> list:
 
 
 def _build_mobile_sport_breakdown(templates_dir):
-    stats = {s: {"decided": 0, "paid": 0, "net_dollars": 0.0} for s in SPORT_BREAKDOWN_ORDER}
-    for gp in sorted(templates_dir.glob("graded_props_*.json")):
-        try:
-            payload = json.loads(gp.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        props = payload.get("props") if isinstance(payload, dict) else None
-        if not isinstance(props, list):
-            continue
-        for row in props:
-            if not isinstance(row, dict):
-                continue
-            sport = _normalize_sport_label(row.get("sport"))
-            if sport not in stats:
-                continue
-            result = str(row.get("result") or "").strip().upper()
-            if result == "HIT":
-                stats[sport]["decided"] += 1
-                stats[sport]["paid"] += 1
-                stats[sport]["net_dollars"] += 10.0
-            elif result == "MISS":
-                stats[sport]["decided"] += 1
-                stats[sport]["net_dollars"] -= 10.0
-    rows = []
-    for sport in SPORT_BREAKDOWN_ORDER:
-        decided = int(stats[sport]["decided"])
-        paid = int(stats[sport]["paid"])
-        win_rate = (paid / decided) if decided > 0 else None
-        rows.append(
-            {
-                "sport": sport,
-                "decided": decided,
-                "paid": paid,
-                "win_rate": win_rate,
-                "net_dollars": round(float(stats[sport]["net_dollars"]), 2),
-            }
-        )
-    return {"ok": True, "rows": rows, "source": "graded_props_json"}
+    from utils.income_sport_breakdown import build_from_graded_props, graded_props_signature
+
+    rows = build_from_graded_props(templates_dir, stake_per_pick=10.0)
+    return {
+        "ok": True,
+        "rows": rows,
+        "source": "graded_props_json",
+        "signature": graded_props_signature(templates_dir),
+    }
 
 
 def _extract_series_from_row(row):

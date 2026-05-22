@@ -4350,6 +4350,14 @@ def main() -> int:
         except OSError as e:
             print(f"  WARN: could not append grade_history.json: {e}")
 
+    try:
+        from utils.income_sport_breakdown import refresh_cache as refresh_income_sport_cache
+
+        refresh_income_sport_cache(REPO_ROOT, TEMPLATES_DIR)
+        print(f"  Refreshed sport breakdown -> {TEMPLATES_DIR / 'sport_breakdown.json'}")
+    except Exception as e:
+        print(f"  WARN: could not refresh sport_breakdown.json: {e}")
+
     print(f"Wrote {out_dated}")
     print("  (Serve /tickets from tickets_latest.json; graded view: Grades → Ticket evaluation.)")
 
