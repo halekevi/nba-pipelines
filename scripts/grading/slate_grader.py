@@ -756,6 +756,39 @@ def _props_from_row(row) -> list[str]:
     return out
 
 
+def _primary_prop_from_row(row) -> str:
+    """First non-empty prop column (same priority order as _resolve_actual)."""
+    for col in _PROP_RESOLVE_COLS:
+        if col not in row.index:
+            continue
+        cell = row.get(col)
+        if cell is None or (isinstance(cell, float) and pd.isna(cell)):
+            continue
+        raw = str(cell).strip()
+        if not raw or raw.lower() in ("nan", "none"):
+            continue
+        nk = norm_prop_key(raw)
+        if nk:
+            return nk
+    return ""
+
+
+def _row_prop_matches_lookup(lookup: ActualsLookup, srow, prop_label: str) -> bool:
+    """True when team- or player-scoped keys for this prop resolve in the lookup."""
+    team_keys, player_keys = _expand_lookup_keys(
+        str(srow.get("player", "") or ""),
+        prop_label,
+        team=norm_team_key(srow.get("team", "")),
+        game_date=_norm_game_date(srow.get("game_date", "")) or lookup.actuals_date,
+    )
+    if any(k in lookup.by_player_team_prop for k in team_keys):
+        return True
+    return any(
+        k in lookup.by_player_prop and k not in lookup.ambiguous_player_prop
+        for k in player_keys
+    )
+
+
 def _resolve_actual(lookup: ActualsLookup, row) -> float:
     """Resolve actual: team+prop first, then unique player+prop; respect game_date."""
     row_date = _norm_game_date(row.get("game_date", ""))
@@ -917,28 +950,19 @@ def apply_actuals(df, actuals_path):
             "fallback (multiple team/date actuals); use team on slate rows."
         )
 
-    # Diagnostic: surface any slate prop types with zero actuals matches so mismatches are visible
-    act_props = {
-        k.rsplit("|", 1)[-1]
-        for k in lookup.by_player_team_prop.keys() | lookup.by_player_prop.keys()
-    }
-    unmatched_props = set()
+    # Diagnostic: prop types with no actuals match on any slate row (primary prop column only).
+    # Do not scan every alias column per row — secondary labels (stat_norm, prop_norm, …)
+    # often differ in spelling while grading still resolves via the primary column.
+    canon_seen: set[str] = set()
+    canon_matched: set[str] = set()
     for _, srow in df.iterrows():
-        for prop_label in _props_from_row(srow):
-            team_keys, player_keys = _expand_lookup_keys(
-                str(srow.get("player", "") or ""),
-                prop_label,
-                team=norm_team_key(srow.get("team", "")),
-                game_date=_norm_game_date(srow.get("game_date", "")) or lookup.actuals_date,
-            )
-            if any(k in lookup.by_player_team_prop for k in team_keys):
-                continue
-            if any(
-                k in lookup.by_player_prop and k not in lookup.ambiguous_player_prop
-                for k in player_keys
-            ):
-                continue
-            unmatched_props.add(norm_prop_key(prop_label))
+        prop_label = _primary_prop_from_row(srow)
+        if not prop_label:
+            continue
+        canon_seen.add(prop_label)
+        if _row_prop_matches_lookup(lookup, srow, prop_label):
+            canon_matched.add(prop_label)
+    unmatched_props = canon_seen - canon_matched
     if unmatched_props:
         print(f"  ⚠️  Prop types in slate with NO actuals matches: {sorted(unmatched_props)}")
 
