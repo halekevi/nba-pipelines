@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
@@ -3011,7 +3011,7 @@ async function loadTicketEval(dateStr) {
   if (!ok) {
     tf.style.display = 'none';
     tEmpty.hidden = false;
-    document.getElementById('ticket-empty-date').textContent = dateStr;
+    syncEmptyStateDateHints(dateStr);
     tf.src = 'about:blank';
     return;
   }
@@ -3093,6 +3093,9 @@ let currentDateIdx = -1;
 let currentDateStr = '';
 let slateReportMissing = false;
 const MIN_REPORT_DATE_PILLS = 6;
+const GRADES_REPORT_TZ = 'America/New_York';
+/** Last /api/grades/report_dates payload (slate vs ticket lists differ on partial deploys). */
+let gradeReportMeta = { slate: [], ticket: [] };
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 function toDateStr(d){
@@ -3101,18 +3104,62 @@ function toDateStr(d){
   const dd = String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${dd}`;
 }
+function easternYmdFromUtcParts(y, m, d) {
+  const u = new Date(Date.UTC(y, m - 1, d));
+  return toDateStr(u);
+}
+function easternTodayStr() {
+  return new Date().toLocaleDateString('en-CA', { timeZone: GRADES_REPORT_TZ });
+}
+function easternYesterdayStr() {
+  const t = easternTodayStr();
+  const parts = t.split('-').map(function (x) { return parseInt(x, 10); });
+  if (parts.length !== 3 || parts.some(function (n) { return isNaN(n); })) {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return toDateStr(d);
+  }
+  const u = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  u.setUTCDate(u.getUTCDate() - 1);
+  return easternYmdFromUtcParts(u.getUTCFullYear(), u.getUTCMonth() + 1, u.getUTCDate());
+}
 function formatLabel(dateStr){
   const [y,m,d] = dateStr.split('-');
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   return `${months[parseInt(m)-1]} ${parseInt(d)}`;
 }
 function yesterdayStr(){
-  const d = new Date();
-  d.setDate(d.getDate()-1);
-  return toDateStr(d);
+  return easternYesterdayStr();
 }
 function todayStr(){
-  return toDateStr(new Date());
+  return easternTodayStr();
+}
+function cacheGradeReportMeta(j) {
+  if (!j || typeof j !== 'object') return;
+  gradeReportMeta.slate = Array.isArray(j.slate_eval_dates) ? j.slate_eval_dates.slice() : [];
+  gradeReportMeta.ticket = Array.isArray(j.ticket_eval_dates) ? j.ticket_eval_dates.slice() : [];
+}
+/** Keep empty-state hints in sync (avoids blank slate_eval_.html before async probe finishes). */
+function syncEmptyStateDateHints(dateStr) {
+  const d =
+    dateStr && /^\d{4}-\d{2}-\d{2}$/.test(String(dateStr))
+      ? String(dateStr)
+      : currentDateStr ||
+        gradesEl('date-jump')?.value ||
+        easternYesterdayStr();
+  const ed = document.querySelector('.grades-page #empty-date');
+  const ted = document.querySelector('.grades-page #ticket-empty-date');
+  if (ed) ed.textContent = d;
+  if (ted) ted.textContent = d;
+}
+/** Newest slate_eval date on disk that is <= cap (defaults to ET yesterday). */
+function latestSlateReportDateOnOrBefore(capYmd) {
+  const cap = capYmd && /^\d{4}-\d{2}-\d{2}$/.test(capYmd) ? capYmd : easternYesterdayStr();
+  const pool = (gradeReportMeta.slate.length ? gradeReportMeta.slate : availableDates).filter(function (ds) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= cap;
+  });
+  pool.sort();
+  return pool.length ? pool[pool.length - 1] : null;
 }
 
 function estimateDatePillWidth(dateStr){
@@ -3184,6 +3231,22 @@ function mergeGradeReportDateLists(j) {
   return out;
 }
 
+const GRADES_REPORT_DATES_GITHUB =
+  'https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/grades_report_dates.json';
+
+async function fetchReportDatesFromGitHub() {
+  try {
+    const res = await fetch(GRADES_REPORT_DATES_GITHUB + '?nocache=' + Date.now(), {
+      cache: 'no-store',
+      signal: gradesFetchSignal(12000),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (_e) {
+    return null;
+  }
+}
+
 // ─── DISCOVER available dates ─────────────────────────────────────────────────
 async function discoverDates(){
   // Prefer server-side listing (one request, works when HEAD is flaky behind CDNs).
@@ -3199,12 +3262,21 @@ async function discoverDates(){
       } catch (_jsonErr) {
         j = null;
       }
+      cacheGradeReportMeta(j);
       const ds = mergeGradeReportDateLists(j);
       if (ds.length) {
         return ds;
       }
     }
   } catch (_e) {}
+  try {
+    const gh = await fetchReportDatesFromGitHub();
+    if (gh) {
+      cacheGradeReportMeta(gh);
+      const dsGh = mergeGradeReportDateLists(gh);
+      if (dsGh.length) return dsGh;
+    }
+  } catch (_eGh) {}
   // Fallback: probe last 30 calendar days via HEAD
   const found = [];
   const today = new Date();
@@ -3248,7 +3320,7 @@ async function _decidedPropsCountForDate(dateStr) {
 
 async function pickBestDefaultGradesDate(found, yest) {
   if (!Array.isArray(found) || !found.length) return yest;
-  // Next best: newest ticket_eval date on disk (<= yesterday), even if props archive is sparse.
+  // Slate tab is default — prefer newest slate_eval date (ticket-only dates 404 in iframe).
   try {
     const rr = await fetch('/api/grades/report_dates', {
       cache: 'no-store',
@@ -3256,11 +3328,15 @@ async function pickBestDefaultGradesDate(found, yest) {
     });
     if (rr.ok) {
       const rj = await rr.json();
-      const tds = Array.isArray(rj?.ticket_eval_dates) ? rj.ticket_eval_dates : [];
-      const eligible = tds
+      cacheGradeReportMeta(rj);
+      const sds = gradeReportMeta.slate
         .filter(function (ds) { return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= yest && found.includes(ds); })
         .sort();
-      if (eligible.length) return eligible[eligible.length - 1];
+      if (sds.length) return sds[sds.length - 1];
+      const tds = gradeReportMeta.ticket
+        .filter(function (ds) { return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= yest && found.includes(ds); })
+        .sort();
+      if (tds.length) return tds[tds.length - 1];
     }
   } catch (_e0) {}
   // First, prefer the newest date with a recorded ticket-eval payout summary.
@@ -3561,6 +3637,7 @@ function loadDate(dateStr){
   }
   currentDateIdx = idx;
   currentDateStr = dateStr;
+  syncEmptyStateDateHints(dateStr);
 
   const frame = document.getElementById('grade-frame');
   const overlay = document.getElementById('load-overlay');
@@ -3628,19 +3705,22 @@ function loadDate(dateStr){
   frame.onerror = function(){
     finishGradesSlateLoadUI();
     if (emptyState) emptyState.hidden = false;
-    const ed = document.getElementById('empty-date');
-    if (ed) ed.textContent = dateStr;
+    syncEmptyStateDateHints(dateStr);
   };
 
   // Use a short timeout to detect 404s via probe
   probeDate(dateStr).then(exists => {
     if(!exists){
+      const slateFb = latestSlateReportDateOnOrBefore(dateStr);
+      if (slateFb && slateFb !== dateStr) {
+        loadDate(slateFb);
+        return;
+      }
       slateReportMissing = true;
       frame.src = 'about:blank';
       finishGradesSlateLoadUI();
       if (emptyState) emptyState.hidden = false;
-      const ed2 = document.getElementById('empty-date');
-      if (ed2) ed2.textContent = dateStr;
+      syncEmptyStateDateHints(dateStr);
     } else {
       slateReportMissing = false;
       let sameDoc = false;
@@ -3779,7 +3859,9 @@ window.addEventListener('pageshow', function (ev) {
   try {
     restoreGradesToolbarToParent();
   } catch (_e0) {}
-  const yest = yesterdayStr();
+  const yest = easternYesterdayStr();
+  currentDateStr = yest;
+  syncEmptyStateDateHints(yest);
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
   // Optimistic load so the hub is not blank while report_dates is scanned.
@@ -4014,10 +4096,25 @@ window.addEventListener('resize', () => {
       .then(function(html) {
         var div = document.createElement('div');
         div.id = frameId + '-inline';
-        div.style.cssText = 'width:100%;display:block;';
+        div.style.cssText = 'width:100%;display:block;min-height:80vh;';
         var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         div.innerHTML = m ? m[1] : html;
         frame.parentNode.replaceChild(div, frame);
+        // Re-execute scripts that innerHTML won't run (v20260522grades)
+        div.querySelectorAll('script').forEach(function(s) {
+          var n = document.createElement('script');
+          if (s.src) { n.src = s.src; n.async = false; }
+          else { n.textContent = s.textContent; }
+          document.head.appendChild(n);
+        });
+        // Keep stage height in sync with inlined content via ResizeObserver
+        var stage = frame.closest('.iframe-shell-stage') || frame.parentNode;
+        if (stage && window.ResizeObserver) {
+          new ResizeObserver(function() {
+            var h = div.offsetHeight;
+            if (h > 200) stage.style.minHeight = h + 'px';
+          }).observe(div);
+        }
       })
       .catch(function() {
         frame.style.height = (window.innerHeight * 4) + 'px';
