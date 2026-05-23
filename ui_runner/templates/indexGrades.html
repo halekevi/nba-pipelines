@@ -404,6 +404,26 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   border-radius:14px;padding:14px 16px;border:1px solid var(--glass-panel-border);
   background:rgba(255,255,255,0.035);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
   box-shadow:var(--glass-shadow);text-align:left;transition:border-color .15s,transform .15s;
+  content-visibility:auto;
+  contain-intrinsic-size:auto 132px;
+}
+.props-eval-sentinel{
+  grid-column:1 / -1;
+  height:1px;
+  margin:0;
+  padding:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.props-eval-load-more{
+  grid-column:1 / -1;
+  font-family:'Inter',sans-serif;
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted2);
+  text-align:center;
+  padding:8px 0 16px;
 }
 .prop-eval-card:hover{border-color:rgba(212,160,23,0.22);transform:translateY(-1px);}
 .prop-eval-card.hit{border-left:4px solid var(--green);background:rgba(57,255,110,0.05);}
@@ -509,7 +529,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   min-height:min(45vh,520px) !important;
   max-height:none !important;
   overflow-x:hidden !important;
-  overflow-y:auto !important;
+  overflow-y:visible !important;
   opacity:1 !important;
   z-index:6;
 }
@@ -557,13 +577,35 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .props-filter-pill{padding:8px 12px;font-size:12px;}
   .props-eval-search-row{width:100%;}
   .props-eval-search-row input[type="search"]{width:100%;flex:1 1 100%;}
+  html.page-grades-root #props-eval-panel,
+  .iframe-shell-stage[data-grades-tab="props"] #props-eval-panel{
+    overflow:visible !important;
+    -webkit-overflow-scrolling:auto !important;
+    height:auto !important;
+    max-height:none !important;
+    position:relative !important;
+    touch-action:pan-y;
+  }
+  .grades-props-wrap .grades-props-inner{overflow:visible;}
   .props-eval-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px 14px;
+    gap:10px 12px;
     align-content:start;
+    padding-bottom:24px;
   }
-  .prop-eval-card{min-width:0;}
+  .prop-eval-card{
+    min-width:0;
+    padding:10px 11px;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(255,255,255,0.05);
+  }
+  .prop-eval-card:hover{transform:none;}
+  .prop-eval-player{font-size:13px;line-height:1.2;}
+  .prop-eval-meta{font-size:10px;line-height:1.35;}
+  .prop-eval-line{font-size:11px;margin-top:6px;}
+  .prop-eval-result{font-size:14px;margin-bottom:6px;}
   /* Only style the overlay while loading — do not target .hidden or WebView keeps painting a solid slab */
   .load-overlay:not(.hidden){
     z-index:10;
@@ -581,10 +623,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   [data-theme="light"] .load-overlay:not(.hidden){background:rgba(235,240,250,0.96)!important;}
   [data-theme="light"] .empty-state{background:rgba(245,248,255,0.96)!important;}
 }
-@media (max-width:760px){
-  .props-eval-grid{grid-template-columns:1fr;}
-}
-
 /* tabs — glass, gold active */
 .tabs-bar{
   flex-shrink:0;margin:4px 1rem 0;padding:6px 10px;display:flex;gap:8px;align-items:center;min-height:40px;z-index:90;position:relative;
@@ -2597,52 +2635,112 @@ function formatPropEvalMatchup(r) {
   if (o) return o;
   return '—';
 }
+var PROPS_EVAL_RENDER_GEN = 0;
+var PROPS_EVAL_IO = null;
+var PROPS_EVAL_BATCH_MOBILE = 48;
+var PROPS_EVAL_BATCH_DESKTOP = 96;
+
+function buildPropEvalCardElement(r) {
+  const ru = String(r.result || '').toUpperCase();
+  var cls = 'other';
+  var rlbl = ru || '—';
+  if (ru === 'HIT' || ru === 'WIN' || ru === 'WIN_NO_MULT') { cls = 'hit'; rlbl = 'HIT'; }
+  else if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') { cls = 'miss'; rlbl = 'MISS'; }
+  else if (ru === 'VOID') { cls = 'other'; rlbl = 'VOID'; }
+  else if (ru === 'PUSH') { cls = 'other'; rlbl = 'PUSH'; }
+  const dir = String(r.direction || '').toUpperCase();
+  const linePart = (r.line != null && r.line !== '') ? (' · Line ' + fmtPropsNum(r.line)) : '';
+  const edgeS = (r.edge != null && r.edge !== '') ? fmtPropsNum(r.edge) : '—';
+  var mlS = '—';
+  if (r.ml_prob != null && r.ml_prob !== '') {
+    var mln = Number(r.ml_prob);
+    if (Number.isFinite(mln)) {
+      mlS = (mln <= 1 ? (mln * 100).toFixed(1) + '%' : fmtPropsNum(r.ml_prob));
+    }
+  }
+  const card = document.createElement('div');
+  card.className = 'prop-eval-card ' + cls;
+  card.innerHTML =
+    '<div class="prop-eval-result ' + cls + '">' + escProps(rlbl) + '</div>' +
+    '<div class="prop-eval-player">' + escProps(formatPlayerDisplay(r.player_name)) + '</div>' +
+    '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
+    '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
+    '<div class="prop-eval-meta" style="margin-top:8px;">' + escProps(formatPropEvalMatchup(r)) + '</div>' +
+    '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
+    ((r.void_reason && String(r.void_reason).trim() && !(ru === 'HIT' || ru === 'MISS' || ru === 'PUSH')) ?
+      ('<div class="prop-eval-meta" style="opacity:0.88;">Eligibility: ' + escProps(String(r.void_reason).trim()) + '</div>') : '') +
+    '<div class="prop-eval-meta">Actual <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.actual_value) + '</span>' +
+    ' · Margin <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.margin) + '</span></div>';
+  return card;
+}
+
+function teardownPropsEvalInfiniteScroll() {
+  if (PROPS_EVAL_IO) {
+    try { PROPS_EVAL_IO.disconnect(); } catch (_e) {}
+    PROPS_EVAL_IO = null;
+  }
+}
+
 function renderPropsEvalCards(rows) {
   const grid = document.getElementById('props-eval-grid');
   if (!grid) return;
+  teardownPropsEvalInfiniteScroll();
+  PROPS_EVAL_RENDER_GEN += 1;
+  const gen = PROPS_EVAL_RENDER_GEN;
+  window._propsEvalFilteredRows = rows;
   if (!rows.length) {
     grid.innerHTML = '<p class="insights-card-sub">No props match filters.</p>';
+    scheduleSyncPropsEvalHeight();
     return;
   }
-  const frag = document.createDocumentFragment();
-  rows.forEach(function (r) {
-    const ru = String(r.result || '').toUpperCase();
-    var cls = 'other';
-    var rlbl = ru || '—';
-    if (ru === 'HIT' || ru === 'WIN' || ru === 'WIN_NO_MULT') { cls = 'hit'; rlbl = 'HIT'; }
-    else if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') { cls = 'miss'; rlbl = 'MISS'; }
-    else if (ru === 'VOID') { cls = 'other'; rlbl = 'VOID'; }
-    else if (ru === 'PUSH') { cls = 'other'; rlbl = 'PUSH'; }
-    const dir = String(r.direction || '').toUpperCase();
-    const linePart = (r.line != null && r.line !== '') ? (' · Line ' + fmtPropsNum(r.line)) : '';
-    const edgeS = (r.edge != null && r.edge !== '') ? fmtPropsNum(r.edge) : '—';
-    var mlS = '—';
-    if (r.ml_prob != null && r.ml_prob !== '') {
-      var mln = Number(r.ml_prob);
-      if (Number.isFinite(mln)) {
-        mlS = (mln <= 1 ? (mln * 100).toFixed(1) + '%' : fmtPropsNum(r.ml_prob));
-      }
-    }
-    const card = document.createElement('div');
-    card.className = 'prop-eval-card ' + cls;
-    card.innerHTML =
-      '<div class="prop-eval-result ' + cls + '">' + escProps(rlbl) + '</div>' +
-      '<div class="prop-eval-player">' + escProps(formatPlayerDisplay(r.player_name)) + '</div>' +
-      '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
-      '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
-      '<div class="prop-eval-meta" style="margin-top:10px;">' +
-        escProps(formatPropEvalMatchup(r)) +
-      '</div>' +
-      '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
-      ((r.void_reason && String(r.void_reason).trim() && !(ru === 'HIT' || ru === 'MISS' || ru === 'PUSH')) ?
-        ('<div class="prop-eval-meta" style="opacity:0.88;font-size:17px;letter-spacing:0.02em;">Eligibility: ' +
-          escProps(String(r.void_reason).trim()) + '</div>') : '') +
-      '<div class="prop-eval-meta">Actual <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.actual_value) + '</span>' +
-      ' · Margin <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.margin) + '</span></div>';
-    frag.appendChild(card);
-  });
+  const batchSize = gradesFrameMobileLayout() ? PROPS_EVAL_BATCH_MOBILE : PROPS_EVAL_BATCH_DESKTOP;
+  let rendered = 0;
   grid.innerHTML = '';
-  grid.appendChild(frag);
+  const sentinel = document.createElement('div');
+  sentinel.className = 'props-eval-sentinel';
+  sentinel.setAttribute('aria-hidden', 'true');
+  grid.appendChild(sentinel);
+
+  function appendBatch() {
+    if (gen !== PROPS_EVAL_RENDER_GEN) return false;
+    const end = Math.min(rendered + batchSize, rows.length);
+    if (end <= rendered) return false;
+    const frag = document.createDocumentFragment();
+    for (let i = rendered; i < end; i++) {
+      frag.appendChild(buildPropEvalCardElement(rows[i]));
+    }
+    grid.insertBefore(frag, sentinel);
+    rendered = end;
+    scheduleSyncPropsEvalHeight();
+    return rendered < rows.length;
+  }
+
+  appendBatch();
+  if (rendered >= rows.length) return;
+
+  const hint = document.createElement('div');
+  hint.className = 'props-eval-load-more';
+  hint.textContent = 'Loading more…';
+  grid.insertBefore(hint, sentinel);
+
+  const scrollRoot = gradesFrameMobileLayout()
+    ? (document.scrollingElement || document.documentElement)
+    : (document.getElementById('props-eval-panel') || grid);
+
+  PROPS_EVAL_IO = new IntersectionObserver(
+    function (entries) {
+      if (gen !== PROPS_EVAL_RENDER_GEN) return;
+      if (!entries.some(function (e) { return e.isIntersecting; })) return;
+      const hasMore = appendBatch();
+      if (!hasMore) {
+        teardownPropsEvalInfiniteScroll();
+        if (hint.parentNode) hint.remove();
+        scheduleSyncPropsEvalHeight();
+      }
+    },
+    { root: scrollRoot === document.documentElement || scrollRoot === document.body ? null : scrollRoot, rootMargin: '280px 0px', threshold: 0 }
+  );
+  PROPS_EVAL_IO.observe(sentinel);
 }
 function applyPropsEvalFilters() {
   const sport = getPropsFilterGroupValue('props-filter-sport-group');
@@ -2877,6 +2975,9 @@ function switchTab(tab) {
   const ticketFrame = document.getElementById('ticket-frame');
   if (tab !== 'tickets') {
     tearDownTicketFrameResizeObservers();
+  }
+  if (tab !== 'props') {
+    teardownPropsEvalInfiniteScroll();
   }
   if (tab !== 'props') {
     try {
@@ -3480,12 +3581,18 @@ function tearDownTicketFrameResizeObservers() {
 }
 
 /** Prop tab uses #props-eval-panel in the hub (not the slate iframe); grow stage/shell/page from its content. */
+var propsEvalHeightSyncTimer = null;
+
 function syncPropsEvalHeight() {
   if (activeTab !== 'props') return;
   try {
+    const gp = document.querySelector('.grades-page');
+    if (gradesFrameMobileLayout()) {
+      if (gp) gp.style.removeProperty('min-height');
+      return;
+    }
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
-    const gp = document.querySelector('.grades-page');
     const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
     if (gp) gp.style.minHeight = hPx;
@@ -3495,8 +3602,12 @@ function syncPropsEvalHeight() {
 window.syncPropsEvalHeight = syncPropsEvalHeight;
 
 function scheduleSyncPropsEvalHeight() {
-  requestAnimationFrame(function () {
-    requestAnimationFrame(syncPropsEvalHeight);
+  if (propsEvalHeightSyncTimer != null) {
+    cancelAnimationFrame(propsEvalHeightSyncTimer);
+  }
+  propsEvalHeightSyncTimer = requestAnimationFrame(function () {
+    propsEvalHeightSyncTimer = null;
+    syncPropsEvalHeight();
   });
 }
 
