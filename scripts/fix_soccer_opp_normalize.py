@@ -92,6 +92,8 @@ _ALIASES: dict[str, str] = {
 
 def normalize_opp(raw: str) -> str:
     """Normalize opponent team text for defense DB lookup."""
+    if not isinstance(raw, str) or raw.strip().lower() in ("nan", "unknown_opp", ""):
+        return ""
     s = unicodedata.normalize("NFKD", str(raw or ""))
     s = s.encode("ascii", "ignore").decode("ascii")
     s = s.lower().strip()
