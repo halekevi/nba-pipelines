@@ -129,6 +129,7 @@ SOCCER_LEAGUES = [
     ("ita.1",          "Serie A"),
     ("fra.1",          "Ligue 1"),
     ("usa.1",          "MLS"),
+    ("usa.nwsl",       "NWSL"),
     ("uefa.champions", "UCL"),
     ("uefa.nations",   "UEFA Nations League"),
     ("fifa.worldq.uefa", "FIFA World Cup Qualifying - UEFA"),

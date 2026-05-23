@@ -31,6 +31,7 @@ Soccer also adds:
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from pathlib import Path
 from typing import List, Optional
@@ -162,6 +163,19 @@ _NHL_PROP_MAP = {
 }
 
 # ── Soccer prop → DB column ────────────────────────────────────────────────────
+# ESPN summary rosters do not expose per-player values for these; DB columns stay
+# NULL. Resolve as unsupported so step4 emits UNSUPPORTED_PROP, not NO_DATA.
+_SOCCER_ESPN_UNSUPPORTED = frozenset({
+    "passes",
+    "pa",
+    "tackles",
+    "tk",
+    "clearances",
+    "attempted dribbles",
+    "attempteddribbles",
+    "attempted_dribbles",
+})
+
 _SOCCER_PROP_MAP = {
     "shots on target":         "sog",
     "shots_on_target":         "sog",
@@ -177,12 +191,8 @@ _SOCCER_PROP_MAP = {
     "goalie saves":            "sv",
     "saves":                   "sv",
     "sv":                      "sv",
-    "passes":                  "pa",
-    "pa":                      "pa",
     "key passes":              "kp",
     "kp":                      "kp",
-    "tackles":                 "tk",
-    "tk":                      "tk",
     "fouls":                   "fc",
     "fc":                      "fc",
     "yellow cards":            "yc",
@@ -192,10 +202,6 @@ _SOCCER_PROP_MAP = {
     "shots assisted":          "kp",
     "minutes":                 "minutes_played",
     "minutes played":          "minutes_played",
-    "clearances":              "clearances",
-    "attempted dribbles":      "dribble_attempts",
-    "attempteddribbles":       "dribble_attempts",
-    "attempted_dribbles":      "dribble_attempts",
 }
 
 
@@ -209,6 +215,8 @@ def _resolve_prop(prop_norm: str, sport: str) -> Optional[str]:
     if sport == "nhl":
         return _NHL_PROP_MAP.get(p)
     if sport == "soccer":
+        if p in _SOCCER_ESPN_UNSUPPORTED:
+            return None
         return _SOCCER_PROP_MAP.get(p)
     return None
 
@@ -597,7 +605,7 @@ def _attach_role_stability(
 
     sport = sport.lower()
     if "minutes_L10_list" not in slate.columns:
-        slate["minutes_L10_list"] = [[] for _ in range(len(slate))]
+        slate["minutes_L10_list"] = "[]"
     slate["role_stability_score"] = np.nan
     slate["high_variance_role"] = False
 
@@ -618,7 +626,7 @@ def _attach_role_stability(
 
         if len(mins) < 3:
             continue
-        slate.at[idx, "minutes_L10_list"] = mins
+        slate.at[idx, "minutes_L10_list"] = json.dumps(mins)
         score = role_stability(mins)
         if score is not None:
             slate.at[idx, "role_stability_score"] = score
