@@ -881,47 +881,21 @@ def main() -> int:
 
     out_df = pd.concat(joined_parts, ignore_index=True) if joined_parts else decided
 
-    # Soccer rows without def_tier are overwhelmingly from leagues not in
-    # the defense DB (Saudi SPL, Peru, Paraguay, Bolivia, nations fixtures).
-    # Including them adds noise — they train on median-imputed def_tier which
-    # degrades Soccer AUC. Drop until DB coverage expands.
-    n_total_before = len(out_df)
-    sport_col = out_df.get("sport", pd.Series("", index=out_df.index)).astype(str)
-    is_soccer = sport_col.str.strip().str.lower().eq("soccer")
-    n_soccer_total = int(is_soccer.sum())
-    dt = out_df.get("def_tier", pd.Series("", index=out_df.index))
-    dt_missing = dt.isna() | dt.astype(str).str.strip().eq("") | dt.astype(str).str.strip().str.lower().eq("nan")
-    soccer_no_dt = is_soccer & dt_missing
-    n_dropped = int(soccer_no_dt.sum())
-    print(f"[build_retrain] Soccer rows dropped (no def_tier): {n_dropped} / {n_soccer_total}")
-    out_df = out_df.loc[~soccer_no_dt].copy()
-    n_total_after = len(out_df)
-    print(f"[build_retrain] Total rows: {n_total_before:,} → {n_total_after:,}")
-
-    def _join_mask(frame: pd.DataFrame) -> pd.Series:
-        jm = pd.Series(False, index=frame.index)
-        for c in ("blended_score", "rank_score", "edge_score"):
-            if c in frame.columns:
-                jm = jm | frame[c].notna()
-        return jm
-
-    soccer_rem = out_df.loc[
-        out_df.get("sport", pd.Series("", index=out_df.index)).astype(str).str.strip().str.lower().eq("soccer")
-    ]
-    if len(soccer_rem):
-        sj = _join_mask(soccer_rem)
-        s_dt = soccer_rem.get("def_tier", pd.Series("", index=soccer_rem.index))
-        s_dt_ok = s_dt.notna() & s_dt.astype(str).str.strip().ne("") & s_dt.astype(str).str.strip().str.lower().ne("nan")
-        print(
-            f"[build_retrain] Soccer remaining: {len(soccer_rem):,} rows | "
-            f"join%={100.0 * sj.mean():.1f} | def_tier fill%={100.0 * s_dt_ok.mean():.1f}"
-        )
-
-    jmask_all = _join_mask(out_df)
-    if jmask_all.any():
-        dt_all = out_df.loc[jmask_all].get("def_tier", pd.Series("", index=out_df.index))
-        dt_all_ok = dt_all.notna() & dt_all.astype(str).str.strip().ne("") & dt_all.astype(str).str.strip().str.lower().ne("nan")
-        print(f"[build_retrain] Overall, def_tier fill%={100.0 * dt_all_ok.mean():.1f} ({int(dt_all_ok.sum()):,}/{len(dt_all):,} joined rows)")
+    # TEMPORARILY REVERTED — see fix(train) 4a558392
+    # Filtering hurt Soccer AUC (0.7029 → 0.6836); leakage fix needed first
+    # if sport == 'Soccer' and def_tier null: drop row
+    # n_total_before = len(out_df)
+    # sport_col = out_df.get("sport", pd.Series("", index=out_df.index)).astype(str)
+    # is_soccer = sport_col.str.strip().str.lower().eq("soccer")
+    # n_soccer_total = int(is_soccer.sum())
+    # dt = out_df.get("def_tier", pd.Series("", index=out_df.index))
+    # dt_missing = dt.isna() | dt.astype(str).str.strip().eq("") | dt.astype(str).str.strip().str.lower().eq("nan")
+    # soccer_no_dt = is_soccer & dt_missing
+    # n_dropped = int(soccer_no_dt.sum())
+    # print(f"[build_retrain] Soccer rows dropped (no def_tier): {n_dropped} / {n_soccer_total}")
+    # out_df = out_df.loc[~soccer_no_dt].copy()
+    # n_total_after = len(out_df)
+    # print(f"[build_retrain] Total rows: {n_total_before:,} → {n_total_after:,}")
 
     _pt_out = out_df.get("pick_type", pd.Series("", index=out_df.index))
     _dir_out = out_df.get("direction", pd.Series("", index=out_df.index))

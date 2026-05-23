@@ -633,6 +633,70 @@ def _feature_name_leakage_matches(name: str) -> bool:
     return any(x in n for x in needles)
 
 
+# Raw / step8 columns that may leak into engineered features (not always in FEATURE_COLUMNS).
+_SOCCER_LEAKAGE_SCAN_EXTRA = (
+    "edge",
+    "abs_edge",
+    "prop_score",
+    "blended_score",
+    "rank_score",
+    "edge_score",
+    "ml_edge",
+    "composite_hit_rate",
+)
+
+
+def _print_soccer_train_correlation_top10(tr_fit: pd.DataFrame) -> None:
+    """Top |r| vs label on Soccer train rows — tree inputs + raw edge-derived suspects."""
+    m = tr_fit["sport"].astype(str).str.strip().str.upper().eq("SOCCER")
+    n = int(m.sum())
+    if n < 30:
+        print(f"\n[Soccer corr] insufficient train rows (n={n})")
+        return
+    sub = tr_fit.loc[m]
+    y = pd.to_numeric(sub["y"], errors="coerce")
+    scan: list[str] = []
+    for c in list(FEATURE_COLUMNS) + list(_SOCCER_LEAKAGE_SCAN_EXTRA):
+        if c in sub.columns and c not in scan:
+            scan.append(c)
+    rows: list[tuple[str, float]] = []
+    for f in scan:
+        x = pd.to_numeric(sub[f], errors="coerce")
+        ok = x.notna() & y.notna()
+        if int(ok.sum()) < 30:
+            continue
+        xv = x[ok].to_numpy(dtype=float)
+        yv = y[ok].to_numpy(dtype=float)
+        if np.std(xv) < 1e-12 or np.std(yv) < 1e-12:
+            continue
+        r = float(np.corrcoef(xv, yv)[0, 1])
+        if np.isfinite(r):
+            rows.append((f, r))
+    if not rows:
+        print("\n[Soccer corr] no finite correlations")
+        return
+    rows.sort(key=lambda t: -abs(t[1]))
+    in_tree = set(FEATURE_COLUMNS) - ALWAYS_EXCLUDE_FROM_EDGE_TRAINING
+    print(f"\n--- Soccer train: top 10 |correlation| with label (n_train={n}) ---")
+    print(f"  (FEATURE_COLUMNS in tree today: {sorted(in_tree & {f for f, _ in rows})})")
+    for f, r in rows[:10]:
+        tags: list[str] = []
+        if f in ALWAYS_EXCLUDE_FROM_EDGE_TRAINING:
+            tags.append("always_excluded")
+        elif f not in FEATURE_COLUMNS:
+            tags.append("raw_not_in_FEATURE_COLUMNS")
+        if abs(r) > 0.4:
+            tags.append("HIGH")
+        if abs(r) > 0.5:
+            tags.append("SUSPECT")
+        tag_s = f" [{', '.join(tags)}]" if tags else ""
+        print(f"  {f}: |r|={abs(r):.4f} (r={r:+.4f}){tag_s}")
+    for name in ("blended_score", "rank_score"):
+        hit = next((r for f, r in rows if f == name), None)
+        if hit is not None and abs(hit) > 0.4:
+            print(f"  >> {name} |r|={abs(hit):.4f} > 0.4 — downstream of edge; consider excluding from Soccer/all sports")
+
+
 def _correlations_with_target(
     tr: pd.DataFrame, sport: str, feature_cols: list[str], y_col: str = "y"
 ) -> dict[str, float]:
@@ -1172,6 +1236,7 @@ def _train_unified_edge_model(
     temporal_date_column: str | None = None,
     isotonic_min_n: int = DEFAULT_SLICE_ISOTONIC_MIN_N,
     ablate_features: tuple[str, ...] = (),
+    soccer_corr_diag: bool = False,
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
@@ -1363,6 +1428,11 @@ def _train_unified_edge_model(
             print(f"    {f}: r={r:+.4f}{tag}")
         for f, _r in suspects:
             leak_by_corr.add(f)
+
+    _print_soccer_train_correlation_top10(tr_fit)
+    if soccer_corr_diag:
+        print("\n[Soccer corr] Diagnostic only — no model training or .pkl write.")
+        return
 
     leak_by_name = {f for f in FEATURE_COLUMNS if _feature_name_leakage_matches(f)}
     if leak_by_name:
@@ -1703,6 +1773,14 @@ def main() -> None:
         help="With --input-csv only: print row counts, class balance, and feature completeness; do not train or write models.",
     )
     ap.add_argument(
+        "--soccer-corr-diag",
+        action="store_true",
+        help=(
+            "With --input-csv: temporal split + Soccer train feature|label correlation top-10; "
+            "no model training or .pkl write."
+        ),
+    )
+    ap.add_argument(
         "--isotonic-min-n",
         type=int,
         default=DEFAULT_SLICE_ISOTONIC_MIN_N,
@@ -1723,6 +1801,13 @@ def main() -> None:
     if args.dry_run and input_csv_resolved is None:
         print("[ERROR] --dry-run requires --input-csv.")
         raise SystemExit(1)
+    if args.soccer_corr_diag:
+        if input_csv_resolved is None:
+            print("[ERROR] --soccer-corr-diag requires --input-csv.")
+            raise SystemExit(1)
+        if not args.temporal_split:
+            print("[ERROR] --soccer-corr-diag requires --temporal-split.")
+            raise SystemExit(1)
     if args.sport and input_csv_resolved is None:
         print("[WARN] --sport is ignored without --input-csv (graded file discovery unchanged).")
 
@@ -1779,6 +1864,7 @@ def main() -> None:
         temporal_date_column=str(args.temporal_date_column).strip() if args.temporal_date_column else None,
         isotonic_min_n=int(args.isotonic_min_n),
         ablate_features=ablate,
+        soccer_corr_diag=args.soccer_corr_diag,
     )
 
 
