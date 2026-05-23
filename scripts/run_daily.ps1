@@ -4,7 +4,7 @@
   Daily PropOracle run: grade yesterday, archive dated outputs, run today's full pipeline, combined slate, git push.
 
 .NOTES
-  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A1c) optional CLV Excel columns → (A2) consistency
+  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A1b-sync) grade_history → templates → (A1c) optional CLV Excel columns → (A2) consistency
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
          → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (E1) optional payout hand CSV pull from Railway
          → (F) optional night poll of historical actuals.
@@ -461,6 +461,35 @@ if ($yesterdayHasTickets) {
 }
 else {
     Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx or .json)"
+}
+
+# =============================================================================
+# STEP A1b-sync — grade_history.json → ui_runner/templates (Railway /income fallback)
+# build_ticket_eval appends to data/ only; git push (STEP E) must include templates copy.
+# =============================================================================
+$syncGradeHistoryScript = Join-Path $Root "scripts\sync_grade_history_to_templates.py"
+if (Test-Path $syncGradeHistoryScript) {
+    Write-Log "STEP A1b-sync - grade_history → templates: START"
+    Push-Location $Root
+    try {
+        & py -3.14 -X utf8 $syncGradeHistoryScript
+        $sg = $LASTEXITCODE
+        if ($sg -ne 0) {
+            Write-Log "STEP A1b-sync - grade_history → templates: WARN (exit $sg; run build_ticket_eval first)"
+        }
+        else {
+            Write-Log "STEP A1b-sync - grade_history → templates: OK"
+        }
+    }
+    catch {
+        Write-Log "STEP A1b-sync - grade_history → templates: WARN ($($_.Exception.Message))"
+    }
+    finally {
+        Pop-Location
+    }
+}
+else {
+    Write-Log "STEP A1b-sync - grade_history → templates: SKIP (sync_grade_history_to_templates.py missing)"
 }
 
 # =============================================================================

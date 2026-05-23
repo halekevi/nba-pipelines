@@ -9,7 +9,7 @@ falls back to the bundled template (no persistent volume).
 """
 from __future__ import annotations
 
-import shutil
+import json
 import sys
 from pathlib import Path
 
@@ -17,35 +17,25 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from utils.proporacle_data_root import grade_history_read_paths  # noqa: E402
+from utils.proporacle_data_root import load_best_grade_history_runs  # noqa: E402
 
 
 def main() -> int:
     td = ROOT / "ui_runner" / "templates"
     td.mkdir(parents=True, exist_ok=True)
     dest = td / "grade_history.json"
-    candidates = grade_history_read_paths(ROOT, templates_dir=td)
-    best: Path | None = None
-    best_mtime = -1.0
-    for p in candidates:
-        if not p.is_file():
-            continue
-        try:
-            mt = p.stat().st_mtime
-        except OSError:
-            continue
-        if mt > best_mtime:
-            best_mtime = mt
-            best = p
-    if best is None:
+    runs = load_best_grade_history_runs(ROOT, templates_dir=td)
+    if not runs:
         print("[sync_grade_history] no grade_history.json found (run build_ticket_eval.py first)")
         return 1
+    payload = json.dumps(runs, indent=2, ensure_ascii=False) + "\n"
     try:
-        shutil.copy2(best, dest)
+        dest.write_text(payload, encoding="utf-8")
     except OSError:
-        # Windows: destination may be locked (IDE preview); atomic write still updates content.
-        dest.write_text(best.read_text(encoding="utf-8"), encoding="utf-8")
-    print(f"[sync_grade_history] {best} -> {dest}")
+        print(f"[sync_grade_history] could not write {dest}")
+        return 1
+    last = str(runs[-1].get("date") or "") if runs else ""
+    print(f"[sync_grade_history] wrote {len(runs)} rows (last={last}) -> {dest}")
     return 0
 
 
