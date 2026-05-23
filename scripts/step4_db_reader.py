@@ -131,6 +131,18 @@ _NBA_PROP_MAP = {
 }
 
 # ── NHL prop → DB column ───────────────────────────────────────────────────────
+# ESPN skater boxscores expose PPTOI but not PPP/PPG/PPA — pp_points is always NULL.
+_NHL_ESPN_UNSUPPORTED = frozenset({
+    "power play points",
+    "power_play_points",
+    "pp_points",
+})
+
+# Slate / PP name variants → canonical name in proporacle_ref.nhl
+_NHL_NAME_ALIASES: dict[str, str] = {
+    "zachary bolduc": "Zack Bolduc",
+}
+
 _NHL_PROP_MAP = {
     "shots on goal":           "shots_on_goal",
     "shots_on_goal":           "shots_on_goal",
@@ -145,19 +157,16 @@ _NHL_PROP_MAP = {
     "pim":                     "pim",
     "plus/minus":              "plus_minus",
     "plus_minus":              "plus_minus",
-    "power play points":       "pp_points",
-    "power_play_points":       "pp_points",
-    "pp_points":               "pp_points",
     "faceoffs won":            "faceoffs_won",
     "faceoffs_won":            "faceoffs_won",
     "time on ice":             "toi",
     "time_on_ice":             "toi",
     "toi":                     "toi",
-    "goalie saves":            "shots_on_goal",   # GK: shots_on_goal = saves in NHL context
-    "goalie_saves":            "shots_on_goal",
-    "saves":                   "shots_on_goal",
-    "goals allowed":           "goals",           # for opposing team context — rare
-    "goals_allowed":           "goals",
+    "goalie saves":            "saves",
+    "goalie_saves":            "saves",
+    "saves":                   "saves",
+    "goals allowed":           "goals_allowed",
+    "goals_allowed":           "goals_allowed",
     "fantasy score":           "goals * 8 + assists * 5 + shots_on_goal * 1.5 + hits * 1.3 + blocked_shots * 1.3",
     "fantasy_score":           "goals * 8 + assists * 5 + shots_on_goal * 1.5 + hits * 1.3 + blocked_shots * 1.3",
 }
@@ -213,6 +222,8 @@ def _resolve_prop(prop_norm: str, sport: str) -> Optional[str]:
     if sport in ("nba", "cbb"):
         return _NBA_PROP_MAP.get(p)
     if sport == "nhl":
+        if p in _NHL_ESPN_UNSUPPORTED:
+            return None
         return _NHL_PROP_MAP.get(p)
     if sport == "soccer":
         if p in _SOCCER_ESPN_UNSUPPORTED:
@@ -301,20 +312,58 @@ def get_vals_cbb(con: sqlite3.Connection, espn_id: str,
                        "ESPN_ATHLETE_ID = ?", expr, (str(espn_id),), n)
 
 
+def _nhl_lookup_name(player: str) -> str:
+    p = str(player or "").strip()
+    if not p:
+        return p
+    key = _nfkd_norm(p)
+    return _NHL_NAME_ALIASES.get(key, p)
+
+
 def get_vals_nhl(con: sqlite3.Connection, player: str,
                   prop_norm: str, n: int = 10) -> List[float]:
     """
     NHL lookup by player name (no ESPN ID in NHL pipeline).
-    Exact match first, then case-insensitive fallback.
+    Exact match first, then case-insensitive / NFKD / alias fallback.
     """
     expr = _resolve_prop(prop_norm, "nhl")
     if not expr:
         return []
+    lookup = _nhl_lookup_name(player)
     vals = _query_vals(con, "nhl",
-                       "player = ?", expr, (str(player),), n)
+                       "player = ?", expr, (lookup,), n)
     if not vals:
         vals = _query_vals(con, "nhl",
-                           "lower(player) = lower(?)", expr, (str(player),), n)
+                           "lower(player) = lower(?)", expr, (lookup,), n)
+    if not vals and lookup != player:
+        vals = _query_vals(con, "nhl",
+                           "player = ?", expr, (str(player),), n)
+        if not vals:
+            vals = _query_vals(con, "nhl",
+                               "lower(player) = lower(?)", expr, (str(player),), n)
+    if not vals:
+        norm_ascii = _nfkd_norm(player)
+        if norm_ascii:
+            parts = norm_ascii.split()
+            if len(parts) >= 2:
+                first, last = parts[0], parts[-1]
+                try:
+                    sql = f"""
+                        SELECT player, {expr} AS val
+                        FROM nhl
+                        WHERE lower(player) LIKE ?
+                          AND lower(player) LIKE ?
+                          AND {expr} IS NOT NULL
+                        ORDER BY game_date DESC
+                        LIMIT {n * 5}
+                    """
+                    rows = con.execute(sql, (f"{first}%", f"%{last}")).fetchall()
+                    vals = [
+                        float(r[1]) for r in rows
+                        if r[1] is not None and _nfkd_norm(r[0]) == norm_ascii
+                    ][:n]
+                except Exception:
+                    pass
     return vals
 
 

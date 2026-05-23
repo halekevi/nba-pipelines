@@ -194,6 +194,8 @@ CREATE TABLE IF NOT EXISTS nhl (
     pim             REAL, plus_minus    REAL,
     pp_points       REAL, faceoffs_won  REAL,
     toi             REAL,
+    saves           REAL,
+    goals_allowed   REAL,
     PRIMARY KEY (event_id, player, team)
 );
 """
@@ -321,6 +323,10 @@ def _migrate_columns(con: sqlite3.Connection) -> None:
         "soccer": [
             ("clearances", "REAL"),
             ("dribble_attempts", "REAL"),
+        ],
+        "nhl": [
+            ("saves", "REAL"),
+            ("goals_allowed", "REAL"),
         ],
     }
     for table, cols in migrations.items():
@@ -737,6 +743,8 @@ NHL_STAT_MAP = {
     "pp_assists":    ["PPA", "POWERPLAYASSISTS"],
     "faceoffs_won":  ["FOW", "FW"],               # ESPN returns "FW"
     "toi":           ["TOI"],
+    "saves":         ["SV", "SAVES"],
+    "goals_allowed": ["GA", "GOALSALLOWED"],
 }
 
 
@@ -773,29 +781,64 @@ def _nhl_stat(lmap, key):
 def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                          home: str, away: str) -> list[dict]:
     rows = []
+    base = {
+        "game_date": game_date, "event_id": event_id,
+        "home_team": home, "away_team": away,
+    }
+
     for tb in box.get("boxscore", {}).get("players", []):
         t_abbr = tb.get("team", {}).get("abbreviation", "")
         for sg in tb.get("statistics", []):
             labels = sg.get("labels") or sg.get("keys") or []
-            norm_labels = [re.sub(r"[^A-Z0-9]", "", str(l).upper()) for l in labels]
+            norm_labels = []
+            for lbl in labels:
+                raw = str(lbl).upper().strip()
+                if raw == "SV%":
+                    norm_labels.append("SVPCT")
+                else:
+                    norm_labels.append(re.sub(r"[^A-Z0-9]", "", raw))
+            sg_name = str(sg.get("name", "")).strip().lower()
+            is_goalie_group = sg_name == "goalies" or (
+                "SV" in norm_labels and "SOG" not in norm_labels
+            )
+
             for a in sg.get("athletes") or []:
                 ath = a.get("athlete", {}) if isinstance(a, dict) else {}
                 name = str(ath.get("displayName", "")).strip()
-                pos  = ath.get("position", {})
-                pos  = pos.get("abbreviation", "") if isinstance(pos, dict) else ""
+                if not name:
+                    continue
+                pos = ath.get("position", {})
+                pos = pos.get("abbreviation", "") if isinstance(pos, dict) else ""
                 stats = a.get("stats") or []
                 if not stats or all(s in ("--", "", None) for s in stats):
                     continue
                 lmap = {lbl: stats[i] for i, lbl in enumerate(norm_labels) if i < len(stats)}
 
-                g   = _nhl_stat(lmap, "goals")
+                if is_goalie_group:
+                    sv = _nhl_stat(lmap, "saves")
+                    ga = _nhl_stat(lmap, "goals_allowed")
+                    toi = _nhl_stat(lmap, "toi")
+                    if all(x is None for x in [sv, ga, toi]):
+                        continue
+                    rows.append({
+                        **base,
+                        "player": name, "team": t_abbr, "position": "G",
+                        "goals": None, "assists": None, "points": None,
+                        "shots_on_goal": None, "hits": None, "blocked_shots": None,
+                        "pim": _nhl_stat(lmap, "pim"), "plus_minus": None,
+                        "pp_points": None, "faceoffs_won": None, "toi": toi,
+                        "saves": sv, "goals_allowed": ga,
+                    })
+                    continue
+
+                g = _nhl_stat(lmap, "goals")
                 ast = _nhl_stat(lmap, "assists")
                 pts = (g + ast) if g is not None and ast is not None else _nhl_stat(lmap, "points")
                 sog = _nhl_stat(lmap, "shots_on_goal")
                 hits = _nhl_stat(lmap, "hits")
-                bs  = _nhl_stat(lmap, "blocked_shots")
+                bs = _nhl_stat(lmap, "blocked_shots")
                 pim = _nhl_stat(lmap, "pim")
-                pm  = _nhl_stat(lmap, "plus_minus")
+                pm = _nhl_stat(lmap, "plus_minus")
                 ppp = _nhl_stat(lmap, "pp_points")
                 if ppp is None:
                     ppg = _nhl_stat(lmap, "pp_goals")
@@ -809,13 +852,13 @@ def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                     continue
 
                 rows.append({
-                    "game_date": game_date, "event_id": event_id,
-                    "home_team": home, "away_team": away,
+                    **base,
                     "player": name, "team": t_abbr, "position": pos,
                     "goals": g, "assists": ast, "points": pts,
                     "shots_on_goal": sog, "hits": hits, "blocked_shots": bs,
                     "pim": pim, "plus_minus": pm, "pp_points": ppp,
                     "faceoffs_won": fow, "toi": toi,
+                    "saves": None, "goals_allowed": None,
                 })
     return rows
 
