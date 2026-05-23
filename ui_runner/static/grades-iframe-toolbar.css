@@ -341,7 +341,7 @@ body {
 @media (max-width: 900px) {
   .tabs-bar {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto auto;
     gap: 8px;
     overflow-x: visible;
@@ -405,7 +405,7 @@ body {
 
   .tabs-bar {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     padding: 6px 8px;
     gap: 6px;
     overflow-x: visible;
