@@ -520,6 +520,9 @@ function Run-NBAPeriodPipeline {
     if ($ok) { $ok = Run-Step "${tagLower} Step 3 - Attach Defense"         $NBADir ".\scripts\step3_attach_defense.py"                 "--input $step2 --defense data\cache\defense_team_summary.csv --output $step3" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 4 - Player Stats (ESPN)"    $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate $step3 --out $step4 --date $Date" }
     if ($ok -and $tagLower -eq "nba1h") {
+        $ok = Run-Step "${tagLower} Step 4b - Usage/Pace Context" $NBADir ".\scripts\step4b_attach_nba_context.py" "--input `"$step4`" --output `"$step4`" --season 2024-25"
+    }
+    if ($ok -and $tagLower -eq "nba1h") {
         $ok = Run-Step "${tagLower} Step 4e - NBA1H context" $NBADir ".\scripts\step4e_attach_nba1h_context.py" "--input `"$step4`" --output `"$step4`""
     }
     if ($ok) { $ok = Run-Step "${tagLower} Step 5 - Line Hit Rates"         $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input $step4 --output $step5 --compute10" }
