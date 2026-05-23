@@ -341,7 +341,7 @@ body {
 @media (max-width: 900px) {
   .tabs-bar {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto auto;
     gap: 8px;
     overflow-x: visible;
@@ -405,15 +405,30 @@ body {
 
   .tabs-bar {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 6px 8px;
     gap: 6px;
     overflow-x: visible;
   }
 
   .dpill {
+    flex: 0 0 auto;
     font-size: 10px;
     padding: 6px 9px;
+  }
+
+  .date-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    gap: 8px;
+    min-height: 32px;
+  }
+
+  .date-pills .dpill {
+    scroll-snap-align: start;
   }
 
   .tabs-bar .tab-btn {

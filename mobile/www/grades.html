@@ -12,7 +12,7 @@ h<!DOCTYPE html>
 <link rel="stylesheet" href="static/global-scrollbar.css?v=20260517platform"/>
 <link rel="stylesheet" href="static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="static/proporacle-mobile-schema.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="static/uniform-tickets-panel.css?v=20260509utp1"/>
+<link rel="stylesheet" href="static/uniform-tickets-panel.css?v=20260523utp2"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -168,9 +168,13 @@ html.page-grades-root #props-eval-panel{
   max-width:100%!important;
 }
 html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
-  overflow-y:scroll!important;
-  scrollbar-gutter:stable;
-  -webkit-overflow-scrolling:touch!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:auto!important;
+  position:relative!important;
+  inset:auto!important;
+  height:auto!important;
+  touch-action:pan-y;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
@@ -540,7 +544,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   height:auto !important;
   min-height:min(45vh,520px) !important;
   max-height:none !important;
-  overflow:auto !important;
+  overflow-x:hidden !important;
+  overflow-y:visible !important;
   opacity:1 !important;
   z-index:6;
 }
@@ -613,6 +618,35 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     background:rgba(6,8,18,0.94) !important;
+  }
+  html.page-grades-root #uniform-tickets-panel,
+  .iframe-shell-stage[data-grades-tab="uniform"] #uniform-tickets-panel{
+    overflow:visible !important;
+    height:auto !important;
+    max-height:none !important;
+    position:relative !important;
+    touch-action:pan-y;
+  }
+  #uniform-tickets-panel .utp-root{
+    max-width:100%;
+    padding:0 4px;
+  }
+  .date-pills .dpill{
+    flex:0 0 auto;
+    max-width:none;
+  }
+  .date-pills{
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+    gap:8px;
+    min-height:34px;
+    align-items:center;
+  }
+  .date-pills .dpill.active{
+    scroll-snap-align:center;
   }
   .empty-state{
     z-index:8;
@@ -1572,10 +1606,8 @@ select option,
   <section class="utp-panel" hidden>
     <div class="utp-panel-head">
       <h3 class="utp-panel-title" data-utp="title">Uniform Tickets</h3>
-      <div class="utp-panel-sub">
-        Multi-leg slips assembled from <code>strict_mode</code> picks where every leg lives in
-        the same hit-rate band (Elite / Premium / Strong / Value). Backtest tab shows realized
-        joint hit rates and EV across all graded dates.
+      <div class="utp-panel-sub utp-panel-sub--grades">
+        Uniform-bucket slips (Elite / Premium / Strong / Value). Use <strong>Backtest</strong> for rolling joint hit rate and EV.
       </div>
       <div class="utp-tabs">
         <button type="button" class="active" data-utp-tab="today">Today</button>
@@ -1617,14 +1649,10 @@ select option,
     </div>
 
     <div data-utp="backtest-wrap" hidden>
-      <p class="utp-panel-sub" style="margin-bottom:10px;">
-        Rolling per-(size, bucket) joint hit rate and EV on $1 stakes, computed from all
-        graded slates the assembler has touched. <strong>PrizePicks void rule:</strong>
-        when ≥1 leg voids (DNP / no action), the slip drops that leg and pays at the
-        next-smaller tier when remaining legs all hit (e.g., 5-leg with 1 void → 4-leg
-        all-hit payout). The <em>Eff Pay</em> column is the average realized multiplier
-        after that adjustment; <em>Wilson Low</em> is the 95% confidence floor on the
-        realized hit rate.
+      <p class="utp-panel-sub utp-backtest-intro">
+        Per size and bucket: joint hit rate and EV on $1 stakes across graded slates.
+        <strong>Void rule:</strong> DNP legs drop off; remaining all-hit pays the next-smaller tier.
+        <em>Eff Pay</em> = average realized multiplier after voids; <em>Wilson Low</em> = 95% confidence floor on hit rate.
       </p>
       <div data-utp="backtest-host"></div>
     </div>
@@ -2011,7 +2039,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href='static/grades-iframe-toolbar.css?v=20260523tabrow';
+    link.href='static/grades-iframe-toolbar.css?v=20260523utp2';
   doc.head.appendChild(link);
 }
 
@@ -4417,7 +4445,7 @@ window.addEventListener('resize', () => {
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
-<script src="static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
+<script src="static/uniform-tickets-panel.js?v=20260523utp2" defer></script>
 
 <script>
 (function() {

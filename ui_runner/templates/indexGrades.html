@@ -12,7 +12,7 @@ h<!DOCTYPE html>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260509utp1"/>
+<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260523utp2"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -168,9 +168,13 @@ html.page-grades-root #props-eval-panel{
   max-width:100%!important;
 }
 html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
-  overflow-y:scroll!important;
-  scrollbar-gutter:stable;
-  -webkit-overflow-scrolling:touch!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:auto!important;
+  position:relative!important;
+  inset:auto!important;
+  height:auto!important;
+  touch-action:pan-y;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
@@ -540,7 +544,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   height:auto !important;
   min-height:min(45vh,520px) !important;
   max-height:none !important;
-  overflow:auto !important;
+  overflow-x:hidden !important;
+  overflow-y:visible !important;
   opacity:1 !important;
   z-index:6;
 }
@@ -613,6 +618,35 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     background:rgba(6,8,18,0.94) !important;
+  }
+  html.page-grades-root #uniform-tickets-panel,
+  .iframe-shell-stage[data-grades-tab="uniform"] #uniform-tickets-panel{
+    overflow:visible !important;
+    height:auto !important;
+    max-height:none !important;
+    position:relative !important;
+    touch-action:pan-y;
+  }
+  #uniform-tickets-panel .utp-root{
+    max-width:100%;
+    padding:0 4px;
+  }
+  .date-pills .dpill{
+    flex:0 0 auto;
+    max-width:none;
+  }
+  .date-pills{
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+    gap:8px;
+    min-height:34px;
+    align-items:center;
+  }
+  .date-pills .dpill.active{
+    scroll-snap-align:center;
   }
   .empty-state{
     z-index:8;
@@ -1899,7 +1933,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260523tabrow';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260523utp2';
   doc.head.appendChild(link);
 }
 
@@ -4305,7 +4339,7 @@ window.addEventListener('resize', () => {
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
-<script src="/static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
+<script src="/static/uniform-tickets-panel.js?v=20260523utp2" defer></script>
 
 <script>
 (function() {

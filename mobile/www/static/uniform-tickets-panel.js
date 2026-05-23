@@ -128,21 +128,29 @@
     rows.forEach((r) => {
       body.appendChild(
         el('tr', null, [
-          el('td', null, [String(r.size)]),
-          el('td', null, [
+          el('td', { 'data-label': 'Size' }, [String(r.size)]),
+          el('td', { 'data-label': 'Bucket' }, [
             el('span', { class: `utp-bucket-pill ${r.bucket}` }, [String(r.bucket || '—').toUpperCase()]),
           ]),
-          el('td', null, [String(r.n_tickets || 0)]),
-          el('td', null, [fmtPct(r.avg_joint_p_hit)]),
-          el('td', null, [`${fmt2(r.avg_payout)}×`]),
-          el('td', { class: evClass(r.avg_expected_profit_per_$1) }, [fmtMoney(r.avg_expected_profit_per_$1)]),
-          el('td', null, [String(r.decided || 0)]),
-          el('td', null, [String(r.all_hit_count || 0)]),
-          el('td', null, [r.realized_all_hit_rate == null ? '—' : fmtPct(r.realized_all_hit_rate)]),
+          el('td', { 'data-label': '# Tickets' }, [String(r.n_tickets || 0)]),
+          el('td', { 'data-label': 'Pred joint' }, [fmtPct(r.avg_joint_p_hit)]),
+          el('td', { 'data-label': 'Avg payout' }, [`${fmt2(r.avg_payout)}×`]),
+          el('td', { class: evClass(r.avg_expected_profit_per_$1), 'data-label': 'Pred EV' }, [fmtMoney(r.avg_expected_profit_per_$1)]),
+          el('td', { 'data-label': 'Decided' }, [String(r.decided || 0)]),
+          el('td', { 'data-label': 'All-hit' }, [String(r.all_hit_count || 0)]),
+          el('td', { 'data-label': 'Realized' }, [r.realized_all_hit_rate == null ? '—' : fmtPct(r.realized_all_hit_rate)]),
         ])
       );
     });
-    return el('table', { class: 'utp-summary-table' }, [head, body]);
+    return wrapUtpTable(el('table', { class: 'utp-summary-table' }, [head, body]));
+  }
+
+  function wrapUtpTable(table) {
+    return el('div', { class: 'utp-table-scroll', role: 'region', 'aria-label': 'Summary table' }, [table]);
+  }
+
+  function wrapUtpTableBacktest(table) {
+    return el('div', { class: 'utp-table-scroll utp-table-scroll--wide', role: 'region', 'aria-label': 'Backtest table' }, [table]);
   }
 
   function renderBacktest(rows) {
@@ -167,22 +175,22 @@
     rows.forEach((r) => {
       body.appendChild(
         el('tr', null, [
-          el('td', null, [String(r.size)]),
-          el('td', null, [
+          el('td', { 'data-label': 'Size' }, [String(r.size)]),
+          el('td', { 'data-label': 'Bucket' }, [
             el('span', { class: `utp-bucket-pill ${r.bucket}` }, [String(r.bucket || '—').toUpperCase()]),
           ]),
-          el('td', null, [String(r.n_tickets || 0)]),
-          el('td', null, [String(r.n_void_tickets || 0)]),
-          el('td', null, [fmtPct(r.avg_joint_pred)]),
-          el('td', null, [`${fmt2(r.avg_payout)}×`]),
-          el('td', null, [`${fmt2(r.avg_effective_payout)}×`]),
-          el('td', null, [fmtPct(r.realized_all_hit_rate)]),
-          el('td', null, [fmtPct(r.wilson_low)]),
-          el('td', { class: evClass(r['realized_ev_per_$1']) }, [fmtMoney(r['realized_ev_per_$1'])]),
+          el('td', { 'data-label': '# Tickets' }, [String(r.n_tickets || 0)]),
+          el('td', { 'data-label': 'Voided' }, [String(r.n_void_tickets || 0)]),
+          el('td', { 'data-label': 'Pred joint' }, [fmtPct(r.avg_joint_pred)]),
+          el('td', { 'data-label': 'Banner pay' }, [`${fmt2(r.avg_payout)}×`]),
+          el('td', { 'data-label': 'Eff pay' }, [`${fmt2(r.avg_effective_payout)}×`]),
+          el('td', { 'data-label': 'Realized' }, [fmtPct(r.realized_all_hit_rate)]),
+          el('td', { 'data-label': 'Wilson low' }, [fmtPct(r.wilson_low)]),
+          el('td', { class: evClass(r['realized_ev_per_$1']), 'data-label': 'EV / $1' }, [fmtMoney(r['realized_ev_per_$1'])]),
         ])
       );
     });
-    return el('table', { class: 'utp-backtest-table' }, [head, body]);
+    return wrapUtpTableBacktest(el('table', { class: 'utp-backtest-table' }, [head, body]));
   }
 
   function renderLeg(leg) {
