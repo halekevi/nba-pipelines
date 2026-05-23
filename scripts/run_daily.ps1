@@ -322,7 +322,8 @@ if (-not $EffectiveOddsKey -and $env:ODDS_API_KEY) {
 # =============================================================================
 $yesterdayCombinedXlsx = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx"
 $yesterdayCombinedJson = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.json"
-$yesterdayHasTickets = (Test-Path $yesterdayCombinedXlsx) -or (Test-Path $yesterdayCombinedJson)
+$yesterdayCombinedXlsxRoot = Join-Path $Root "combined_slate_tickets_$Yesterday.xlsx"
+$yesterdayHasTickets = (Test-Path $yesterdayCombinedXlsx) -or (Test-Path $yesterdayCombinedJson) -or (Test-Path $yesterdayCombinedXlsxRoot)
 $yesterdayTixGraded = Join-Path $Root "outputs\$Yesterday\combined_tickets_graded_$Yesterday.xlsx"
 if (-not $SkipGrader) {
     $gradedExpected = @(
@@ -460,7 +461,7 @@ if ($yesterdayHasTickets) {
     }
 }
 else {
-    Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx or .json)"
+    Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no combined_slate under outputs\$Yesterday\ or repo root)"
 }
 
 # =============================================================================
