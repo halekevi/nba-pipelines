@@ -2704,16 +2704,21 @@ function refreshControlsSummary() {
   else if (activeTab === 'props') tab = 'Props';
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
+/** Toggle iframe and Capacitor-inlined replacement (#grade-frame-inline). */
+function setGradesHubFrameDisplay(frameId, visible) {
+  const show = visible ? 'block' : 'none';
+  const frame = document.getElementById(frameId);
+  if (frame) frame.style.display = show;
+  const inlined = document.getElementById(frameId + '-inline');
+  if (inlined) inlined.style.display = show;
+}
 function switchTab(tab) {
+  activeTab = tab;
+  try {
+    window.__gradesActiveTab = tab;
+  } catch (_eTab) {}
   const gradeFrame = document.getElementById('grade-frame');
   const ticketFrame = document.getElementById('ticket-frame');
-  if (!gradeFrame || !ticketFrame) {
-    try {
-      refreshControlsSummary();
-    } catch (_e) {}
-    return;
-  }
-  activeTab = tab;
   if (tab !== 'tickets') {
     tearDownTicketFrameResizeObservers();
   }
@@ -2746,8 +2751,8 @@ function switchTab(tab) {
   if (tu) tu.classList.toggle('active', tab === 'uniform');
   const pe = document.getElementById('props-eval-panel');
   const utp = document.getElementById('uniform-tickets-panel');
-  gradeFrame.style.display = tab === 'slate' ? 'block' : 'none';
-  ticketFrame.style.display = tab === 'tickets' ? 'block' : 'none';
+  setGradesHubFrameDisplay('grade-frame', tab === 'slate');
+  setGradesHubFrameDisplay('ticket-frame', tab === 'tickets');
   if (pe) pe.hidden = tab !== 'props';
   if (utp) utp.hidden = tab !== 'uniform';
   const tEmpty = document.getElementById('ticket-empty-state');
@@ -3988,6 +3993,11 @@ window.addEventListener('resize', () => {
         var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         div.innerHTML = m ? m[1] : html;
         frame.parentNode.replaceChild(div, frame);
+        try {
+          if (typeof window.switchTab === 'function') {
+            window.switchTab(window.__gradesActiveTab || 'slate');
+          }
+        } catch (_eSync) {}
         // Re-execute scripts that innerHTML won't run (v20260522grades)
         div.querySelectorAll('script').forEach(function(s) {
           var n = document.createElement('script');
