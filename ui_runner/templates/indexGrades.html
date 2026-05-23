@@ -2018,9 +2018,52 @@ function ensureFrameCollapseCss(doc) {
       box-sizing:border-box;
       min-width:0;
     }
-    /* Summary row already shows sport + counts — hide duplicate .sport-header inside bucket */
+    /* Summary row already shows sport + counts — hide duplicate header inside bucket */
     .grades-sport-bucket-body > .sport-section > .sport-header{
       display:none !important;
+    }
+    /* Legacy double-wrap: native collapsible nested inside hub bucket */
+    .grades-sport-bucket-body > details.sport-collapsible{
+      border:none;
+      background:transparent;
+      box-shadow:none;
+      padding:0;
+      margin:0;
+    }
+    .grades-sport-bucket-body > details.sport-collapsible > summary{
+      display:none !important;
+    }
+    .grades-sport-bucket-body > details.sport-collapsible > .sport-section-body{
+      display:block !important;
+      padding-top:0;
+    }
+    @media (max-width:900px),(pointer:coarse){
+      details.sport-collapsible > summary{
+        list-style:none;
+      }
+      details.sport-collapsible > summary .sport-header{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:4px;
+        margin-bottom:0;
+      }
+      details.sport-collapsible > summary .sport-header-line{
+        display:none;
+      }
+      details.sport-collapsible > summary .sport-label{
+        font-size:clamp(17px,4.8vw,22px);
+        line-height:1.15;
+        word-break:break-word;
+      }
+      details.sport-collapsible > summary .sport-meta-count{
+        font-size:clamp(10px,2.6vw,12px);
+        opacity:0.78;
+        white-space:normal;
+      }
+      details.sport-collapsible > summary .sport-label::before{
+        margin-right:4px;
+      }
     }
     .grades-sport-bucket-body .two-col,
     .grades-sport-bucket-body .three-col{
@@ -2196,10 +2239,60 @@ function collapseAllSlateDetails(doc) {
   });
 }
 
+/** Undo hub double-wrap when native <details.sport-collapsible> was nested inside grades-sport-bucket. */
+function unwrapDoubleWrappedNativeSports(doc) {
+  if (!doc) return;
+  doc.querySelectorAll('details.grades-sport-bucket').forEach((bucket) => {
+    const body = bucket.querySelector(':scope > .grades-sport-bucket-body');
+    if (!body) return;
+    const kids = Array.from(body.children);
+    if (!kids.length) return;
+    const allNative = kids.every(
+      (el) => el.tagName === 'DETAILS' && el.classList.contains('sport-collapsible')
+    );
+    if (!allNative) return;
+    const parent = bucket.parentNode;
+    if (!parent) return;
+    kids.forEach((el) => parent.insertBefore(el, bucket));
+    bucket.remove();
+  });
+}
+
+function wrapSlateSportSectionInBucket(doc, sec, idx) {
+  let sportLabel =
+    sec.querySelector('.sport-label')?.textContent?.trim() ||
+    sec.querySelector('.sport-header')?.textContent?.trim() ||
+    `Sport ${idx + 1}`;
+  if (/^MLB\s+MLB$/i.test(sportLabel)) sportLabel = '⚾ MLB';
+  const meta = sec.querySelector('.sport-meta-count')?.textContent?.trim() || '';
+
+  const details = doc.createElement('details');
+  details.className = 'grades-sport-bucket';
+  details.open = false;
+
+  const summary = doc.createElement('summary');
+  const title = doc.createElement('span');
+  title.textContent = sportLabel;
+  summary.appendChild(title);
+  const metaEl = doc.createElement('span');
+  metaEl.className = 'grades-sport-meta';
+  metaEl.textContent = meta;
+  summary.appendChild(metaEl);
+  details.appendChild(summary);
+
+  const body = doc.createElement('div');
+  body.className = 'grades-sport-bucket-body';
+  details.appendChild(body);
+
+  sec.parentNode.insertBefore(details, sec);
+  body.appendChild(sec);
+}
+
 function collapseSportsInSlateFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
   ensureFrameCollapseCss(doc);
+  unwrapDoubleWrappedNativeSports(doc);
   const sections = Array.from(doc.querySelectorAll('.sport-section')).filter(
     el => !el.closest('.grades-sport-bucket')
   );
@@ -2207,45 +2300,20 @@ function collapseSportsInSlateFrame(frame) {
   const firstMain = doc.querySelector('.main');
   if (!firstMain) return;
 
-  // If report already ships as native <details> sport collapsibles,
-  // keep that structure and only enforce collapsed default state.
-  const nativeSportDetails = sections.filter(
-    sec => sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible')
-  );
-  if (nativeSportDetails.length === sections.length) {
+  const isNativeCollapsible = (sec) =>
+    sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible');
+  const nativeSportDetails = sections.filter(isNativeCollapsible);
+  const legacySections = sections.filter((sec) => !isNativeCollapsible(sec));
+
+  // Modern slate_eval HTML ships <details class="sport-collapsible"> per sport.
+  // Only wrap plain .sport-section blocks (e.g. TAKEAWAYS) — never double-wrap natives.
+  if (nativeSportDetails.length > 0) {
+    legacySections.forEach((sec, idx) => wrapSlateSportSectionInBucket(doc, sec, idx));
     collapseAllSlateDetails(doc);
     return;
   }
 
-  sections.forEach((sec, idx) => {
-    let sportLabel =
-      sec.querySelector('.sport-label')?.textContent?.trim() ||
-      sec.querySelector('.sport-header')?.textContent?.trim() ||
-      `Sport ${idx + 1}`;
-    if (/^MLB\s+MLB$/i.test(sportLabel)) sportLabel = '⚾ MLB';
-    const meta = sec.querySelector('.sport-meta-count')?.textContent?.trim() || '';
-
-    const details = doc.createElement('details');
-    details.className = 'grades-sport-bucket';
-    details.open = false;
-
-    const summary = doc.createElement('summary');
-    const title = doc.createElement('span');
-    title.textContent = sportLabel;
-    summary.appendChild(title);
-    const metaEl = doc.createElement('span');
-    metaEl.className = 'grades-sport-meta';
-    metaEl.textContent = meta;
-    summary.appendChild(metaEl);
-    details.appendChild(summary);
-
-    const body = doc.createElement('div');
-    body.className = 'grades-sport-bucket-body';
-    details.appendChild(body);
-
-    sec.parentNode.insertBefore(details, sec);
-    body.appendChild(sec);
-  });
+  sections.forEach((sec, idx) => wrapSlateSportSectionInBucket(doc, sec, idx));
   collapseAllSlateDetails(doc);
 }
 
