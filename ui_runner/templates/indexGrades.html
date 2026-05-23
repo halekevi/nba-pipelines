@@ -3987,7 +3987,22 @@ window.addEventListener('resize', () => {
         div.style.cssText = 'width:100%;display:block;min-height:80vh;';
         var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         div.innerHTML = m ? m[1] : html;
-        frame.parentNode.replaceChild(div, frame);      div.querySelectorAll('script').forEach(function(s){var n=document.createElement('script');if(s.src){n.src=s.src;n.async=false;}else{n.textContent=s.textContent;}document.head.appendChild(n);});      var stage=frame.closest ? frame.closest('.iframe-shell-stage') : frame.parentNode;      if(stage&&window.ResizeObserver){new ResizeObserver(function(){var h=div.offsetHeight;if(h>200)stage.style.minHeight=h+'px';}).observe(div);}      div.querySelectorAll('script').forEach(function(s){var n=document.createElement('script');if(s.src){n.src=s.src;n.async=false;}else{n.textContent=s.textContent;}document.head.appendChild(n);});
+        frame.parentNode.replaceChild(div, frame);
+        // Re-execute scripts that innerHTML won't run (v20260522grades)
+        div.querySelectorAll('script').forEach(function(s) {
+          var n = document.createElement('script');
+          if (s.src) { n.src = s.src; n.async = false; }
+          else { n.textContent = s.textContent; }
+          document.head.appendChild(n);
+        });
+        // Keep stage height in sync with inlined content via ResizeObserver
+        var stage = frame.closest('.iframe-shell-stage') || frame.parentNode;
+        if (stage && window.ResizeObserver) {
+          new ResizeObserver(function() {
+            var h = div.offsetHeight;
+            if (h > 200) stage.style.minHeight = h + 'px';
+          }).observe(div);
+        }
       })
       .catch(function() {
         frame.style.height = (window.innerHeight * 4) + 'px';

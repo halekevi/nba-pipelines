@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-19T20:51:39.685057+00:00",
+  "generated_at": "2026-05-20T02:31:46.230037+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -16,14 +16,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -42,14 +42,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -68,14 +68,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -94,14 +94,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -120,14 +120,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -146,14 +146,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -172,14 +172,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -208,14 +208,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -244,14 +244,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -280,14 +280,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -316,14 +316,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -352,14 +352,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -388,14 +388,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -414,24 +414,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -450,24 +450,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -496,14 +496,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -542,14 +542,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -588,14 +588,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -634,14 +634,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -680,14 +680,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -726,14 +726,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -772,14 +772,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -808,24 +808,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -854,24 +854,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -910,14 +910,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -966,14 +966,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1022,14 +1022,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1078,14 +1078,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1134,14 +1134,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1190,14 +1190,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1246,14 +1246,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1292,24 +1292,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1348,24 +1348,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1414,14 +1414,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1480,14 +1480,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1546,14 +1546,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1612,14 +1612,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1678,14 +1678,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1744,14 +1744,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1810,14 +1810,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1866,24 +1866,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1932,24 +1932,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
-          "line": 0.5,
+          "line": 1.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -2008,14 +2008,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Joel Embiid",
+          "player": "Jovana Nogic",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 7.0,
+          "line": 7.5,
+          "standard_line": 12.0,
           "pick_type": "Demon",
-          "delta": 3.5,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     }

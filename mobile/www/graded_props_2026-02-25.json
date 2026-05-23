@@ -57867,9 +57867,7 @@
       "result": "HIT",
       "pp_projection_id": "",
       "actual_value_original": 84.8,
-      "grading_corrected": true,
-      "grading_suspect": true,
-      "grading_reason": "full_game_stats_used_for_period_prop"
+      "grading_corrected": true
     },
     {
       "sport": "NBA1H",
