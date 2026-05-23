@@ -10,7 +10,10 @@ import combined_slate_tickets
 _ROOT_FOR_UTILS = Path(__file__).resolve().parent.parent
 if str(_ROOT_FOR_UTILS) not in sys.path:
     sys.path.insert(0, str(_ROOT_FOR_UTILS))
-from utils.proporacle_data_root import grade_history_read_paths  # noqa: E402
+from utils.proporacle_data_root import (  # noqa: E402
+    grade_history_read_paths,
+    load_best_grade_history_runs,
+)
 
 
 def _write_ota_config(mobile_www: Path) -> None:
@@ -434,8 +437,8 @@ async function fetch_smart(localPath) {
                 mobile_income_bootstrap = """
   <script>
     (function () {
-      const HISTORY_URL = 'data/grade_history.json';
-      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json';
+      const HISTORY_URL = 'data/grade_history.json?v=20260522pnl';
+      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json?v=20260522pnl';
       const fmtMoney = (n) => (Number.isFinite(n) ? `$${n.toFixed(2)}` : '$0.00');
       const fmtPct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
       const clsFor = (n, pos = 'num-pos', neg = 'num-neg') => (n > 0 ? pos : (n < 0 ? neg : ''));
@@ -975,10 +978,12 @@ async function fetch_smart(localPath) {
     # Copy grade history for offline/mobile P&L (same resolution as Flask /income).
     mobile_data_dir = MOBILE_WWW_DIR / "data"
     mobile_data_dir.mkdir(parents=True, exist_ok=True)
-    _gh_candidates = grade_history_read_paths(ROOT_DIR, templates_dir=TEMPLATES_DIR)
-    _gh_src = _first_existing_path(_gh_candidates)
-    if _gh_src is not None:
-        shutil.copy2(_gh_src, mobile_data_dir / "grade_history.json")
+    _gh_runs = load_best_grade_history_runs(ROOT_DIR, templates_dir=TEMPLATES_DIR)
+    if _gh_runs:
+        (mobile_data_dir / "grade_history.json").write_text(
+            json.dumps(_gh_runs, ensure_ascii=True, indent=2),
+            encoding="utf-8",
+        )
 
     # WNBA step8 clean workbook for mobile/offline consumers.
     src_wnba_step8 = ROOT_DIR / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx"

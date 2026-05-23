@@ -271,9 +271,9 @@
 
   <!-- Plotly was previously in <head> without defer: it blocked HTML/body parsing until the CDN
        responded, so a slow or blocked CDN looked like a blank page in the Android WebView. -->
-  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
   <script src="static/site-nav-chrome.js?v=20260412" defer></script>
-  <script>
+  <script defer>
     const points = [];
     function drawChart() {
       const host = document.getElementById('cum-chart');
@@ -306,17 +306,146 @@
         yaxis: { title: '$', tickprefix: '$', gridcolor: 'rgba(255,255,255,0.06)', zerolinecolor: 'rgba(255,255,255,0.15)' },
       }, { displayModeBar: false, responsive: true });
     }
-    drawChart();
+    function whenPlotlyReady(fn) {
+      if (typeof Plotly !== 'undefined') { fn(); return; }
+      var tries = 0;
+      var timer = setInterval(function () {
+        tries += 1;
+        if (typeof Plotly !== 'undefined') { clearInterval(timer); fn(); }
+        else if (tries > 240) { clearInterval(timer); fn(); }
+      }, 25);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      whenPlotlyReady(drawChart);
+    });
     window.addEventListener('resize', () => {
       const el = document.getElementById('cum-chart');
       if (typeof Plotly !== 'undefined' && el && el.querySelector('.js-plotly-plot')) Plotly.Plots.resize(el);
     });
   </script>
+  <script>
+    (function () {
+      const fmtMoney = (n) => (Number.isFinite(n) ? `$${n.toFixed(2)}` : '$0.00');
+      const fmtPct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
+      const clsFor = (n, pos = 'sum-pos', neg = 'sum-neg') => (n > 0 ? pos : (n < 0 ? neg : ''));
+
+      function parseRows(raw) {
+        const rows = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.runs) ? raw.runs : []);
+        return rows
+          .map((r) => {
+            const tickets = Number(r.n_tickets ?? r.tickets ?? 0);
+            const wins = Number(r.wins ?? 0);
+            const guarantees = Number(r.guarantees ?? 0);
+            const losses = Number(r.losses ?? 0);
+            const decided = Math.max(0, wins + losses);
+            const paid = Math.max(0, wins + guarantees);
+            const net = (r.net_dollars != null)
+              ? Number(r.net_dollars)
+              : (r.net_per_10 != null ? tickets * Number(r.net_per_10) : 0);
+            const roi = Number(r.roi_pct ?? ((tickets > 0) ? (net / (tickets * 10) * 100) : 0));
+            return { date: String(r.date || ''), tickets, wins, guarantees, losses, decided, paid, net, roi };
+          })
+          .filter((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.date))
+          .sort((a, b) => a.date.localeCompare(b.date));
+      }
+
+      function render(rowsAsc) {
+        const rowsDesc = [...rowsAsc].reverse();
+        const totalTickets = rowsAsc.reduce((s, r) => s + r.tickets, 0);
+        const totalDecided = rowsAsc.reduce((s, r) => s + r.decided, 0);
+        const totalPaid = rowsAsc.reduce((s, r) => s + r.paid, 0);
+        const totalNet = rowsAsc.reduce((s, r) => s + r.net, 0);
+        const winRate = totalDecided > 0 ? (totalPaid / totalDecided) * 100 : 0;
+        const roi = totalTickets > 0 ? (totalNet / (totalTickets * 10)) * 100 : 0;
+
+        let streak = '—';
+        let streakLen = 0;
+        let streakSign = 0;
+        for (let i = rowsAsc.length - 1; i >= 0; i--) {
+          const sign = rowsAsc[i].net > 0 ? 1 : (rowsAsc[i].net < 0 ? -1 : 0);
+          if (sign === 0) continue;
+          if (streakSign === 0) { streakSign = sign; streakLen = 1; continue; }
+          if (sign === streakSign) streakLen += 1; else break;
+        }
+        if (streakLen > 0) streak = `${streakSign > 0 ? 'W' : 'L'}${streakLen}`;
+
+        const sumVals = document.querySelectorAll('.summary-grid .sum-value');
+        if (sumVals.length >= 5) {
+          sumVals[0].textContent = String(totalTickets);
+          sumVals[1].textContent = `${winRate.toFixed(1)}% (${totalPaid}/${totalDecided})`;
+          sumVals[2].textContent = fmtMoney(totalNet);
+          sumVals[2].className = `sum-value ${clsFor(totalNet, 'sum-pos', 'sum-neg')}`;
+          sumVals[3].textContent = fmtPct(roi);
+          sumVals[3].className = `sum-value ${clsFor(roi, 'sum-pos', 'sum-neg')}`;
+          sumVals[4].textContent = streak;
+        }
+
+        const dailyPanel = document.querySelectorAll('.panel')[1];
+        if (dailyPanel) {
+          let tbl = dailyPanel.querySelector('table.tbl');
+          if (!tbl && rowsAsc.length) {
+            dailyPanel.innerHTML = '<h2>Daily P&amp;L</h2><table class="tbl" aria-label="Daily P and L table"><thead><tr><th>Date</th><th>Tickets</th><th>Wins</th><th>Losses</th><th>Guarantees</th><th>Net $</th><th>Day ROI%</th></tr></thead><tbody></tbody></table>';
+            tbl = dailyPanel.querySelector('table.tbl');
+          }
+          const dailyBody = tbl && tbl.querySelector('tbody');
+          if (dailyBody) {
+            dailyBody.innerHTML = rowsDesc.map((r) => `
+              <tr>
+                <td>${r.date}</td>
+                <td>${r.tickets}</td>
+                <td>${r.wins}</td>
+                <td>${r.losses}</td>
+                <td>${r.guarantees}</td>
+                <td class="${clsFor(r.net, 'num-pos', 'num-neg')}">${fmtMoney(r.net)}</td>
+                <td class="${clsFor(r.roi, 'num-pos', 'num-neg')}">${fmtPct(r.roi)}</td>
+              </tr>
+            `).join('');
+          }
+          const emptyNote = dailyPanel.querySelector('.empty-note');
+          if (emptyNote) emptyNote.style.display = rowsAsc.length ? 'none' : '';
+        }
+
+        const pts = [];
+        let cum = 0;
+        for (const r of rowsAsc) { cum += r.net; pts.push({ date: r.date, cum_net: Number(cum.toFixed(2)) }); }
+        const host = document.getElementById('cum-chart');
+        if (!host) return;
+        if (!pts.length) {
+          host.innerHTML = '<div class="empty-note">No cumulative data available yet.</div>';
+          return;
+        }
+        if (typeof Plotly !== 'undefined') {
+          Plotly.newPlot('cum-chart', [{
+            x: pts.map(p => p.date),
+            y: pts.map(p => p.cum_net),
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#7fc7d9', width: 3 },
+            marker: { size: 6, color: '#d4af37' },
+            hovertemplate: '%{x}<br>$%{y:.2f}<extra></extra>'
+          }], {
+            autosize: true,
+            margin: { t: 14, r: 20, b: 42, l: 58 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(255,255,255,0.02)',
+            font: { color: 'rgba(255,255,255,0.85)' },
+            xaxis: { title: '', gridcolor: 'rgba(255,255,255,0.06)' },
+            yaxis: { title: '$', tickprefix: '$', gridcolor: 'rgba(255,255,255,0.06)', zerolinecolor: 'rgba(255,255,255,0.15)' }
+          }, { displayModeBar: false, responsive: true });
+        }
+      }
+
+      fetch('/api/grade-history', { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((raw) => render(parseRows(raw)))
+        .catch(() => {});
+    })();
+  </script>
 
   <script>
     (function () {
-      const HISTORY_URL = 'data/grade_history.json';
-      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json';
+      const HISTORY_URL = 'data/grade_history.json?v=20260522pnl';
+      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json?v=20260522pnl';
       const fmtMoney = (n) => (Number.isFinite(n) ? `$${n.toFixed(2)}` : '$0.00');
       const fmtPct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
       const clsFor = (n, pos = 'num-pos', neg = 'num-neg') => (n > 0 ? pos : (n < 0 ? neg : ''));

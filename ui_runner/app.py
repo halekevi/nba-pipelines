@@ -70,7 +70,11 @@ from utils.income_sport_breakdown import (
     read_cached_rows,
     refresh_cache as refresh_income_sport_breakdown_cache,
 )
-from utils.proporacle_data_root import grade_history_read_paths, persistent_data_dir
+from utils.proporacle_data_root import (
+    grade_history_read_paths,
+    load_best_grade_history_runs,
+    persistent_data_dir,
+)
 from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
@@ -5103,18 +5107,7 @@ def _grade_history_candidate_paths() -> list[Path]:
 
 
 def _read_grade_history_runs() -> list[dict[str, Any]]:
-    for path in _grade_history_candidate_paths():
-        if not path.is_file():
-            continue
-        try:
-            raw = read_json_cached(path, ttl=120.0)
-        except (OSError, json.JSONDecodeError):
-            continue
-        if isinstance(raw, list):
-            return [x for x in raw if isinstance(x, dict)]
-        if isinstance(raw, dict) and isinstance(raw.get("runs"), list):
-            return [x for x in (raw.get("runs") or []) if isinstance(x, dict)]
-    return []
+    return load_best_grade_history_runs(BASE_DIR, templates_dir=TEMPLATES_DIR)
 
 
 def _load_grade_history_rows() -> list[dict[str, Any]]:
