@@ -1471,9 +1471,8 @@ select option,
   </div>
   <div class="empty-state" id="ticket-empty-state" hidden>
     <div class="empty-icon">🎟</div>
-    <div class="empty-title">No Ticket Evaluation</div>
-    <div class="empty-sub">No ticket evaluation page exists for this date <strong>on the deployed site</strong>. Run <code>scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after the pipeline, then <strong>commit and push</strong> <code>ui_runner/templates/ticket_eval_YYYY-MM-DD.html</code> so Railway (or any host) can serve it—or pick a date that already has that file in git.</div>
-    <div class="empty-hint">Expected: ticket_eval_<span id="ticket-empty-date"></span>.html</div>
+    <div class="empty-title">No ticket evaluation</div>
+    <div class="empty-sub">Nothing is available for <strong><span id="ticket-empty-date-label"></span></strong> yet. Use the report date pills or <strong>Jump to date</strong> to pick a day that already has graded tickets.</div>
   </div>
   <iframe class="grade-frame" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
@@ -2936,7 +2935,23 @@ function refreshControlsSummary() {
   let tab = 'Slate';
   if (activeTab === 'tickets') tab = 'Tickets';
   else if (activeTab === 'props') tab = 'Props';
-  el.textContent = ds ? `${ds} · ${tab}` : tab;
+  if (
+    activeTab === 'tickets' &&
+    ticketEvalFallbackNotice &&
+    ticketEvalFallbackNotice.requested &&
+    ticketEvalFallbackNotice.showing &&
+    ticketEvalFallbackNotice.requested !== ticketEvalFallbackNotice.showing
+  ) {
+    el.textContent =
+      ds +
+      ' · ' +
+      tab +
+      ' (showing ' +
+      formatLabel(ticketEvalFallbackNotice.showing) +
+      ')';
+  } else {
+    el.textContent = ds ? `${ds} · ${tab}` : tab;
+  }
 }
 /** Toggle iframe and Capacitor-inlined replacement (#grade-frame-inline). */
 function setGradesHubFrameDisplay(frameId, visible) {
@@ -3161,20 +3176,45 @@ async function probeTicketEval(dateStr) {
   }
 }
 
+async function resolveTicketEvalLoadDate(dateStr) {
+  if (!dateStr) return { load: null, fallback: null };
+  if (await probeTicketEval(dateStr)) {
+    return { load: dateStr, fallback: null };
+  }
+  const metaFb = latestTicketReportDateOnOrBefore(dateStr);
+  if (metaFb && metaFb !== dateStr && (await probeTicketEval(metaFb))) {
+    return { load: metaFb, fallback: { requested: dateStr, showing: metaFb } };
+  }
+  const caps = availableDates.filter(function (ds) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds < dateStr;
+  });
+  caps.sort().reverse();
+  for (let i = 0; i < caps.length; i++) {
+    const ds = caps[i];
+    if (await probeTicketEval(ds)) {
+      return { load: ds, fallback: { requested: dateStr, showing: ds } };
+    }
+  }
+  return { load: null, fallback: null };
+}
+
 async function loadTicketEval(dateStr) {
   if (!dateStr) return;
   const tf = document.getElementById('ticket-frame');
   const tEmpty = document.getElementById('ticket-empty-state');
   if (!tf || !tEmpty) return;
-  const url = ticketEvalUrl(dateStr);
-  const ok = await probeTicketEval(dateStr);
-  if (!ok) {
+  const resolved = await resolveTicketEvalLoadDate(dateStr);
+  ticketEvalFallbackNotice = resolved.fallback;
+  refreshControlsSummary();
+  if (!resolved.load) {
     tf.style.display = 'none';
     tEmpty.hidden = false;
     syncEmptyStateDateHints(dateStr);
     tf.src = 'about:blank';
     return;
   }
+  const loadDate = resolved.load;
+  const url = ticketEvalUrl(loadDate);
   tEmpty.hidden = true;
   tf.style.display = 'block';
   tf.onload = function(){
@@ -3229,7 +3269,7 @@ async function loadTicketEval(dateStr) {
     const abs = new URL(url, window.location.href).href;
     const cur = String(tf.getAttribute('src') || tf.src || '');
     sameDoc =
-      (cur === abs || cur.includes('/grades/ticket_eval_' + dateStr + '.html')) &&
+      (cur === abs || cur.includes('/grades/ticket_eval_' + loadDate + '.html')) &&
       ticketIframeDocLooksReady(tf.contentDocument);
   } catch (_e6) {
     sameDoc = false;
@@ -3252,6 +3292,8 @@ let availableDates = [];  // sorted ascending
 let currentDateIdx = -1;
 let currentDateStr = '';
 let slateReportMissing = false;
+/** When the hub date has no ticket_eval HTML but an older report exists (e.g. slate 05-21, tickets 05-20). */
+let ticketEvalFallbackNotice = null;
 const MIN_REPORT_DATE_PILLS = 6;
 const GRADES_REPORT_TZ = 'America/New_York';
 /** Last /api/grades/report_dates payload (slate vs ticket lists differ on partial deploys). */
@@ -3308,9 +3350,18 @@ function syncEmptyStateDateHints(dateStr) {
         gradesEl('date-jump')?.value ||
         easternYesterdayStr();
   const ed = document.querySelector('.grades-page #empty-date');
-  const ted = document.querySelector('.grades-page #ticket-empty-date');
+  const ted = document.querySelector('.grades-page #ticket-empty-date-label');
   if (ed) ed.textContent = d;
-  if (ted) ted.textContent = d;
+  if (ted) ted.textContent = formatLabel(d) + ', ' + d.slice(0, 4);
+}
+/** Newest ticket_eval date known to the server that is <= cap (defaults to ET yesterday). */
+function latestTicketReportDateOnOrBefore(capYmd) {
+  const cap = capYmd && /^\d{4}-\d{2}-\d{2}$/.test(capYmd) ? capYmd : easternYesterdayStr();
+  const pool = gradeReportMeta.ticket.filter(function (ds) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= cap;
+  });
+  pool.sort();
+  return pool.length ? pool[pool.length - 1] : null;
 }
 /** Newest slate_eval date on disk that is <= cap (defaults to ET yesterday). */
 function latestSlateReportDateOnOrBefore(capYmd) {
