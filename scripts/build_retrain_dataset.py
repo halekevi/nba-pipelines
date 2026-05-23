@@ -337,6 +337,30 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
                 return pd.read_excel(p, engine="openpyxl")
             return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
         return None
+    if sport_u == "NBA1H":
+        for p in (
+            root / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+            root / "Sports" / "NBA" / "step8_nba1h_direction_clean_fixed.xlsx",
+            root / "Sports" / "NBA" / "step8_nba1h_direction.csv",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl")
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        return None
+    if sport_u == "NBA1Q":
+        for p in (
+            root / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            root / "Sports" / "NBA" / "step8_nba1q_direction_clean_fixed.xlsx",
+            root / "Sports" / "NBA" / "step8_nba1q_direction.csv",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl")
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        return None
     if sport_u == "MLB":
         for p in (
             root / "Sports" / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
@@ -414,6 +438,34 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
             "nba/step8_all_direction_clean.xlsx",
             f"step8_all_direction_clean_{d}.xlsx",
             f"step8_all_direction_{d}.xlsx",
+        ):
+            p = root / "outputs" / d / name
+            if p.is_file():
+                df = (
+                    pd.read_excel(p, engine="openpyxl")
+                    if p.suffix.lower() == ".xlsx"
+                    else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+                )
+                return df, False
+        return load_step8_sport(root, sport), True
+    if sport_u == "NBA1H":
+        for name in (
+            f"nba/step8_nba1h_direction_clean_{d}.xlsx",
+            f"step8_nba1h_direction_clean_{d}.xlsx",
+        ):
+            p = root / "outputs" / d / name
+            if p.is_file():
+                df = (
+                    pd.read_excel(p, engine="openpyxl")
+                    if p.suffix.lower() == ".xlsx"
+                    else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+                )
+                return df, False
+        return load_step8_sport(root, sport), True
+    if sport_u == "NBA1Q":
+        for name in (
+            f"nba/step8_nba1q_direction_clean_{d}.xlsx",
+            f"step8_nba1q_direction_clean_{d}.xlsx",
         ):
             p = root / "outputs" / d / name
             if p.is_file():
