@@ -51,6 +51,8 @@ STEP8_FEATURE_COLS = [
     "opp_pace",
     "pp_projection_id",
     "projection",
+    "composite_hit_rate",
+    "line_hit_rate",
 ]
 
 # Raw step4b/c/d enrichment columns (joined from step8 when pipeline has run them).
@@ -293,6 +295,9 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Line": "line",
         "Projection": "projection",
         "Game Date": "game_date",
+        "Composite Hit Rate": "composite_hit_rate",
+        "composite_hr": "composite_hit_rate",
+        "Line Hit Rate": "line_hit_rate",
         "Opp": "opp_team",
         "Team": "team",
     }
