@@ -298,6 +298,8 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Composite Hit Rate": "composite_hit_rate",
         "composite_hr": "composite_hit_rate",
         "Line Hit Rate": "line_hit_rate",
+        "Hit Rate (5g)": "hit_rate_L5",
+        "Hit Rate (10g)": "hit_rate_L10",
         "Opp": "opp_team",
         "Team": "team",
     }
@@ -408,6 +410,8 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
         for name in (
             f"nba/step8_nba_direction_clean_{d}.xlsx",
             f"step8_nba_direction_clean_{d}.xlsx",
+            "nba/step8_all_direction_clean.xlsx",
+            f"step8_all_direction_clean_{d}.xlsx",
             f"step8_all_direction_{d}.xlsx",
         ):
             p = root / "outputs" / d / name
@@ -485,9 +489,11 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
     candidates: list[Path] = []
     if sport_u == "NBA":
         candidates = [
-            root / "outputs" / d / f"step8_nba_direction_clean_{d}.xlsx",
             root / "outputs" / d / "nba" / f"step8_nba_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_nba_direction_clean_{d}.xlsx",
             root / "outputs" / d / "nba" / "step8_all_direction_clean.xlsx",
+            root / "outputs" / d / f"step8_all_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_all_direction_{d}.xlsx",
         ]
     elif sport_u == "MLB":
         candidates = [
@@ -525,8 +531,37 @@ def player_join_key(s: Any) -> str:
     return str(norm_player_key(s) or "").casefold().strip()
 
 
+def _derive_step8_hit_rate_columns(out: pd.DataFrame) -> pd.DataFrame:
+    """Derive composite_hit_rate / line_hit_rate when dated clean xlsx only has Hit Rate (5g/10g)."""
+    comp = pd.to_numeric(_pick_col(out, ("composite_hit_rate", "composite_hr")), errors="coerce")
+    lhr = pd.to_numeric(_pick_col(out, ("line_hit_rate",)), errors="coerce")
+    hr5 = pd.to_numeric(
+        _pick_col(out, ("hit_rate_L5", "line_hit_rate_over_5", "line_hit_rate_over_ou_5", "last5_hit_rate")),
+        errors="coerce",
+    )
+    hr10 = pd.to_numeric(
+        _pick_col(out, ("hit_rate_L10", "line_hit_rate_over_10", "line_hit_rate_over_ou_10")),
+        errors="coerce",
+    )
+    if comp.isna().all():
+        derived = pd.Series(np.nan, index=out.index, dtype=float)
+        both = hr5.notna() & hr10.notna()
+        derived.loc[both] = 0.5 * hr5[both] + 0.5 * hr10[both]
+        derived.loc[hr5.notna() & ~both] = hr5[hr5.notna() & ~both]
+        derived.loc[hr10.notna() & hr5.isna()] = hr10[hr10.notna() & hr5.isna()]
+        dirs = _step8_direction_series(out).astype(str).str.strip().str.upper()
+        derived = derived.where(~dirs.eq("UNDER"), 1.0 - derived)
+        comp = derived
+    out["composite_hit_rate"] = comp
+    if lhr.isna().all():
+        lhr = comp
+    out["line_hit_rate"] = lhr
+    return out
+
+
 def _prepare_step8(df: pd.DataFrame, anchor_file_date: str | None = None) -> pd.DataFrame:
     out = _canonicalize_step8_columns(df.copy())
+    out = _derive_step8_hit_rate_columns(out)
     out["_n_player"] = out["player"].map(player_join_key) if "player" in out.columns else ""
     out["_n_prop"] = _step8_prop_series(out).map(prop_join_key)
     out["_n_line"] = out["line"].map(normalize_line) if "line" in out.columns else ""
@@ -832,6 +867,9 @@ def main() -> int:
             m["_tol"] = m["_game_d"].notna() & tol
         feat_present = pd.Series(False, index=m.index)
         for c in ("blended_score", "edge_score", "rank_score"):
+            if c in m.columns:
+                feat_present = feat_present | m[c].notna()
+        for c in ENRICHMENT_RAW_COLS:
             if c in m.columns:
                 feat_present = feat_present | m[c].notna()
         m["_joined"] = m["_tol"] & feat_present
