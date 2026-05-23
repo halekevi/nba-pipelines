@@ -475,6 +475,74 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 #empty-state[hidden],
 #ticket-empty-state[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;z-index:-1 !important;}
 #props-eval-panel[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;}
+/* Tab layer visibility — data-grades-tab on .iframe-shell-stage (set by switchTab) */
+.iframe-shell-stage[data-grades-tab="props"] #grade-frame,
+.iframe-shell-stage[data-grades-tab="props"] #grade-frame-inline,
+.iframe-shell-stage[data-grades-tab="props"] #ticket-frame,
+.iframe-shell-stage[data-grades-tab="props"] #ticket-frame-inline,
+.iframe-shell-stage[data-grades-tab="tickets"] #grade-frame,
+.iframe-shell-stage[data-grades-tab="tickets"] #grade-frame-inline,
+.iframe-shell-stage[data-grades-tab="uniform"] #grade-frame,
+.iframe-shell-stage[data-grades-tab="uniform"] #grade-frame-inline,
+.iframe-shell-stage[data-grades-tab="uniform"] #ticket-frame,
+.iframe-shell-stage[data-grades-tab="uniform"] #ticket-frame-inline,
+.iframe-shell-stage[data-grades-tab="slate"] #props-eval-panel,
+.iframe-shell-stage[data-grades-tab="slate"] #uniform-tickets-panel,
+.iframe-shell-stage[data-grades-tab="props"] #uniform-tickets-panel,
+.iframe-shell-stage[data-grades-tab="tickets"] #props-eval-panel,
+.iframe-shell-stage[data-grades-tab="tickets"] #uniform-tickets-panel,
+.iframe-shell-stage[data-grades-tab="uniform"] #props-eval-panel{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  overflow:hidden !important;
+  opacity:0 !important;
+}
+.iframe-shell-stage[data-grades-tab="props"] #props-eval-panel{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  height:auto !important;
+  min-height:min(45vh,520px) !important;
+  max-height:none !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  opacity:1 !important;
+  z-index:6;
+}
+.iframe-shell-stage[data-grades-tab="uniform"] #uniform-tickets-panel{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  height:auto !important;
+  min-height:min(45vh,520px) !important;
+  max-height:none !important;
+  overflow:auto !important;
+  opacity:1 !important;
+  z-index:6;
+}
+.iframe-shell-stage[data-grades-tab="tickets"] #ticket-frame,
+.iframe-shell-stage[data-grades-tab="tickets"] #ticket-frame-inline{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  height:auto !important;
+  min-height:min(45vh,520px) !important;
+  max-height:none !important;
+  opacity:1 !important;
+  z-index:2;
+}
+.iframe-shell-stage[data-grades-tab="slate"] #grade-frame,
+.iframe-shell-stage[data-grades-tab="slate"] #grade-frame-inline{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  opacity:1 !important;
+  z-index:2;
+}
 .empty-icon{font-size:56px;opacity:.45;filter:drop-shadow(0 0 12px rgba(0,229,255,0.15));}
 .empty-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--text-primary);text-shadow:0 0 40px rgba(212,160,23,0.12);}
 .empty-sub{font-family:'Inter',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--muted);text-align:center;line-height:1.85;max-width:440px;}
@@ -1351,7 +1419,7 @@ select option,
       </div>
     </div>
   </div>
-  <div class="iframe-shell-stage">
+  <div class="iframe-shell-stage" data-grades-tab="slate">
   <div class="load-overlay hidden" id="load-overlay" aria-hidden="true">
     <div class="load-spinner"></div>
     <div class="load-text">LOADING GRADE REPORT</div>
@@ -2776,15 +2844,35 @@ function refreshControlsSummary() {
 function setGradesHubFrameDisplay(frameId, visible) {
   const show = visible ? 'block' : 'none';
   const frame = document.getElementById(frameId);
-  if (frame) frame.style.display = show;
+  if (frame) {
+    frame.style.setProperty('display', show, 'important');
+    frame.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+  }
   const inlined = document.getElementById(frameId + '-inline');
-  if (inlined) inlined.style.display = show;
+  if (inlined) {
+    inlined.style.setProperty('display', show, 'important');
+    inlined.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+    if (!visible) {
+      inlined.style.setProperty('height', '0', 'important');
+      inlined.style.setProperty('min-height', '0', 'important');
+      inlined.style.setProperty('overflow', 'hidden', 'important');
+    } else {
+      inlined.style.removeProperty('height');
+      inlined.style.removeProperty('min-height');
+      inlined.style.removeProperty('overflow');
+    }
+  }
+}
+function syncGradesTabStage(tab) {
+  const stage = document.querySelector('.iframe-shell-stage');
+  if (stage) stage.setAttribute('data-grades-tab', tab || 'slate');
 }
 function switchTab(tab) {
   activeTab = tab;
   try {
     window.__gradesActiveTab = tab;
   } catch (_eTab) {}
+  syncGradesTabStage(tab);
   const gradeFrame = document.getElementById('grade-frame');
   const ticketFrame = document.getElementById('ticket-frame');
   if (tab !== 'tickets') {
@@ -2821,8 +2909,18 @@ function switchTab(tab) {
   const utp = document.getElementById('uniform-tickets-panel');
   setGradesHubFrameDisplay('grade-frame', tab === 'slate');
   setGradesHubFrameDisplay('ticket-frame', tab === 'tickets');
-  if (pe) pe.hidden = tab !== 'props';
-  if (utp) utp.hidden = tab !== 'uniform';
+  if (pe) {
+    pe.hidden = tab !== 'props';
+    if (tab === 'props') {
+      pe.removeAttribute('hidden');
+    }
+  }
+  if (utp) {
+    utp.hidden = tab !== 'uniform';
+    if (tab === 'uniform') {
+      utp.removeAttribute('hidden');
+    }
+  }
   const tEmpty = document.getElementById('ticket-empty-state');
   if (tEmpty) tEmpty.hidden = true;
 
@@ -3788,6 +3886,7 @@ function jumpToDate(){
 window.stepDate = stepDate;
 window.jumpToDate = jumpToDate;
 window.switchTab = switchTab;
+window.syncGradesTabStage = syncGradesTabStage;
 window.loadDate = loadDate;
 /** Debug / recovery: if Promise.race ever rejects, callers can still invoke these. */
 window.__gradesHub = {
@@ -4048,10 +4147,14 @@ window.addEventListener('resize', () => {
 
 <script>
 (function() {
-  // Always inline slate/ticket HTML (iframes + Capacitor timing: DOMContentLoaded can run before window.Capacitor exists).
+  /* Do NOT inline #grade-frame into #grade-frame-inline on the hub page.
+     Inlined slate HTML stays visible on PROP/TICKET tabs (switchTab cannot hide it reliably in WebView).
+     Slate/ticket reports load in <iframe> so setGradesHubFrameDisplay + data-grades-tab CSS work. */
   function inlineFrame(frameId) {
+    if (frameId === 'grade-frame') return;
     var frame = document.getElementById(frameId);
-    if (!frame || !frame.src) return;
+    if (!frame || !frame.src || String(frame.src).indexOf('about:blank') >= 0) return;
+    var parent = frame.parentNode;
     fetch(frame.src, {cache: 'no-store'})
       .then(function(r) { return r.text(); })
       .then(function(html) {
@@ -4060,21 +4163,19 @@ window.addEventListener('resize', () => {
         div.style.cssText = 'width:100%;display:block;min-height:80vh;';
         var m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         div.innerHTML = m ? m[1] : html;
-        frame.parentNode.replaceChild(div, frame);
+        if (parent) parent.replaceChild(div, frame);
         try {
           if (typeof window.switchTab === 'function') {
             window.switchTab(window.__gradesActiveTab || 'slate');
           }
         } catch (_eSync) {}
-        // Re-execute scripts that innerHTML won't run (v20260522grades)
         div.querySelectorAll('script').forEach(function(s) {
           var n = document.createElement('script');
           if (s.src) { n.src = s.src; n.async = false; }
           else { n.textContent = s.textContent; }
           document.head.appendChild(n);
         });
-        // Keep stage height in sync with inlined content via ResizeObserver
-        var stage = frame.closest('.iframe-shell-stage') || frame.parentNode;
+        var stage = parent || div.parentNode;
         if (stage && window.ResizeObserver) {
           new ResizeObserver(function() {
             var h = div.offsetHeight;
@@ -4083,14 +4184,19 @@ window.addEventListener('resize', () => {
         }
       })
       .catch(function() {
-        frame.style.height = (window.innerHeight * 4) + 'px';
-        frame.style.overflow = 'visible';
+        if (frame && frame.style) {
+          frame.style.height = (window.innerHeight * 4) + 'px';
+          frame.style.overflow = 'visible';
+        }
       });
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    inlineFrame('grade-frame');
-    inlineFrame('ticket-frame');
+    try {
+      if (typeof window.syncGradesTabStage === 'function') {
+        window.syncGradesTabStage(window.__gradesActiveTab || 'slate');
+      }
+    } catch (_e0) {}
   });
 })();
 </script>
