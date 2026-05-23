@@ -447,8 +447,8 @@ def main():
     ap.add_argument(
         "--min-minutes-rolling",
         type=float,
-        default=20.0,
-        help="Only count games with at least this many minutes in stat_g*/L5/L10 (0=disable). Default 20.",
+        default=15.0,
+        help="Only count games with at least this many minutes in stat_g*/L5/L10 (0=disable). Default 15.",
     )
     ap.add_argument("--sleep",    type=float, default=0.8)
     ap.add_argument("--retries",  type=int,   default=4)
