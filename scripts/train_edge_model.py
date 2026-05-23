@@ -448,13 +448,24 @@ def _adapt_retrain_csv_for_feature_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     computed = raw_edge_from_projection_line(out)
     out["edge"] = e.where(e.notna(), computed)
 
-    if "blended_score" in out.columns:
-        bl = pd.to_numeric(out["blended_score"], errors="coerce")
-        if "composite_hit_rate" in out.columns:
-            ch = pd.to_numeric(out["composite_hit_rate"], errors="coerce")
+    # CHR priority: (1) historical step7 line hit rate joined from step8,
+    # (2) blended_score fallback only when historical is null,
+    # (3) 0.5 prior in feature engineering if both missing.
+    # Do NOT overwrite real historical CHR with blended_score proxy.
+    if "composite_hit_rate" in out.columns:
+        ch = pd.to_numeric(out["composite_hit_rate"], errors="coerce")
+        # Only fill null CHR from blended_score as last resort —
+        # prefer historical hit rate; do NOT overwrite real values.
+        if "blended_score" in out.columns:
+            bl = pd.to_numeric(out["blended_score"], errors="coerce")
             out["composite_hit_rate"] = ch.where(ch.notna(), bl)
         else:
-            out["composite_hit_rate"] = bl
+            out["composite_hit_rate"] = ch
+    elif "blended_score" in out.columns:
+        # No historical CHR at all — blended only (legacy path)
+        out["composite_hit_rate"] = pd.to_numeric(
+            out["blended_score"], errors="coerce"
+        )
     return out
 
 
