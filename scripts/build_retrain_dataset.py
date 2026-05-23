@@ -53,6 +53,7 @@ STEP8_FEATURE_COLS = [
     "projection",
     "composite_hit_rate",
     "line_hit_rate",
+    "chr_source",
 ]
 
 # Raw step4b/c/d enrichment columns (joined from step8 when pipeline has run them).
@@ -533,7 +534,7 @@ def player_join_key(s: Any) -> str:
 
 def _derive_step8_hit_rate_columns(out: pd.DataFrame) -> pd.DataFrame:
     """Derive composite_hit_rate / line_hit_rate when dated clean xlsx only has Hit Rate (5g/10g)."""
-    comp = pd.to_numeric(_pick_col(out, ("composite_hit_rate", "composite_hr")), errors="coerce")
+    native_comp = pd.to_numeric(_pick_col(out, ("composite_hit_rate", "composite_hr")), errors="coerce")
     lhr = pd.to_numeric(_pick_col(out, ("line_hit_rate",)), errors="coerce")
     hr5 = pd.to_numeric(
         _pick_col(out, ("hit_rate_L5", "line_hit_rate_over_5", "line_hit_rate_over_ou_5", "last5_hit_rate")),
@@ -543,6 +544,8 @@ def _derive_step8_hit_rate_columns(out: pd.DataFrame) -> pd.DataFrame:
         _pick_col(out, ("hit_rate_L10", "line_hit_rate_over_10", "line_hit_rate_over_ou_10")),
         errors="coerce",
     )
+    comp = native_comp
+    historical = native_comp.notna()
     if comp.isna().all():
         derived = pd.Series(np.nan, index=out.index, dtype=float)
         both = hr5.notna() & hr10.notna()
@@ -552,10 +555,12 @@ def _derive_step8_hit_rate_columns(out: pd.DataFrame) -> pd.DataFrame:
         dirs = _step8_direction_series(out).astype(str).str.strip().str.upper()
         derived = derived.where(~dirs.eq("UNDER"), 1.0 - derived)
         comp = derived
+        historical = derived.notna()
     out["composite_hit_rate"] = comp
     if lhr.isna().all():
         lhr = comp
     out["line_hit_rate"] = lhr
+    out["chr_source"] = np.where(historical, "historical", "")
     return out
 
 
