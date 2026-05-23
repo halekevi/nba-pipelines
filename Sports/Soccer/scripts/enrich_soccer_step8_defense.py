@@ -89,6 +89,48 @@ _ALIASES: dict[str, str] = {
     "stoke": "stoke city",
     "racing club de lens": "lens",
     "rc lens": "lens",
+    # Libertadores / South America — PP slate → pp_name key in soccer_defense_summary
+    "cerro porteo": "cerro porteno",  # Ñ stripped from PORTEÑO
+    "pearol": "penarol",  # Ñ stripped from PEÑAROL
+    "bolivar": "bolivar",
+    "coquimbo": "coquimbo",
+    "cristal": "cristal",
+    "always ready": "always ready",
+    "ind del valle": "ind del valle",
+    "ldu quito": "ldu quito",
+    "libertad": "libertad",
+    "medellin": "medellin",
+    "tolima": "tolima",
+    "ucv": "ucv",
+    "univ catolica": "univ catolica",
+    "universitario": "universitario",
+    "la guaira": "la guaira",
+    "cusco": "cusco",
+    # Saudi Pro League — PP abbrev matches pp_name once cache CSV loads
+    "ahli": "ahli",
+    "ettifaq": "ettifaq",
+    "fateh": "fateh",
+    "fayha": "fayha",
+    "hazem": "hazem",
+    "hilal": "hilal",
+    "ittihad": "ittihad",
+    "khaleej": "khaleej",
+    "neom": "neom",
+    "okhdood": "okhdood",
+    "qadsiah": "qadsiah",
+    "riyadh": "riyadh",
+    "shabab": "shabab",
+    "taawoun": "taawoun",
+    "damac": "damac",
+    # UEFA Nations League — national teams
+    "czechia": "czechia",
+    "denmark": "denmark",
+    "gibraltar": "gibraltar",
+    "latvia": "latvia",
+    "luxembourg": "luxembourg",
+    "malta": "malta",
+    "n macedonia": "n macedonia",
+    "sweden": "sweden",
 }
 
 
@@ -133,17 +175,25 @@ def normalize_opp(raw: str) -> str:
 
 
 def _load_defense() -> pd.DataFrame:
-    soc_scripts = _REPO / "Sports" / "Soccer" / "scripts"
-    if str(soc_scripts) not in sys.path:
-        sys.path.insert(0, str(soc_scripts))
+    _here = Path(__file__).resolve()
+    for _ in range(8):
+        if (_here / "scripts" / "defense_db.py").is_file():
+            scripts_dir = str(_here / "scripts")
+            if scripts_dir not in sys.path:
+                sys.path.insert(0, scripts_dir)
+            break
+        _here = _here.parent
+    else:
+        raise SystemExit("defense_db.py not found under repo scripts/")
     from defense_db import load_defense_from_db  # type: ignore
 
     d = load_defense_from_db("soccer")
-    cache = _REPO / "Sports" / "Soccer" / "cache" / "soccer_defense_summary.csv"
+    cache = _REPO / "cache" / "soccer_defense_summary.csv"
     if cache.is_file():
         dc = pd.read_csv(cache, encoding="utf-8-sig", low_memory=False)
         if isinstance(d, pd.DataFrame) and not d.empty:
-            d = pd.concat([d, dc], ignore_index=True)
+            # Cache first so pp_name abbrev rows win over SQLite duplicates in lookup.
+            d = pd.concat([dc, d], ignore_index=True)
         else:
             d = dc
     elif not isinstance(d, pd.DataFrame) or d.empty:
