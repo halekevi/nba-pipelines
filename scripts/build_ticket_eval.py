@@ -50,6 +50,7 @@ if str(REPO_ROOT) not in sys.path:
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 from player_name_norm import fold_player_name as _fold_player_name  # noqa: E402
+from espn_injuries import canon_team_abbr  # noqa: E402
 from utils.proporacle_data_root import persistent_data_dir  # noqa: E402
 
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
@@ -465,33 +466,9 @@ def _leg_grade(
     Prefer numeric grading (same margin rules as scripts/nhl_soccer_grader) when actual+line exist,
     so stale VOID from pre-grade slates does not mask a real box score.
     """
-    g = (grade_col or "").strip().upper()
-    d = str(direction or "").strip().upper()
+    from grading.leg_grade_utils import leg_grade_for_ticket_eval
 
-    if _finite_line_actual(actual, line) and d in ("OVER", "UNDER"):
-        a = float(actual)  # type: ignore[arg-type]
-        ln = float(line)  # type: ignore[arg-type]
-        margin = a - ln
-        if margin == 0:
-            return "VOID"
-        if (d == "OVER" and margin > 0) or (d == "UNDER" and margin < 0):
-            return "HIT"
-        return "MISS"
-
-    if g in ("HIT", "WIN", "W", "1", "TRUE", "YES"):
-        return "HIT"
-    if g in ("MISS", "LOSS", "L", "0", "FALSE", "NO"):
-        return "MISS"
-    if g in ("VOID", "PUSH", "N/A", "NA"):
-        # Stale pre-grade rows often mark VOID while no actual has landed yet.
-        # Keep true voids (postponed/cancelled), otherwise treat as pending/ungraded.
-        vn = str(void_note or "").strip().upper()
-        if not _finite_line_actual(actual, line) and (
-            not vn or vn in ("NO_ACTUAL", "MISSING_ACTUAL", "PENDING", "TBD", "UNKNOWN")
-        ):
-            return "UNGRADED"
-        return "VOID"
-    return "UNGRADED"
+    return leg_grade_for_ticket_eval(actual, line, direction, grade_col, void_note)
 
 
 _INJURY_STATUSES_DNP: frozenset[str] = frozenset(("Out", "Day-To-Day", "Injured Reserve"))
@@ -534,7 +511,9 @@ def _load_injury_dnp_keys(sport: str, merge_dates: Sequence[str]) -> frozenset[t
             if typ != "DNP" and not _injury_status_marks_dnp(st):
                 continue
             pl = _norm_player_name(str(r.get("player", "") or ""))
-            tm = str(r.get("team", "") or "").strip().upper()
+            tm = canon_team_abbr(sport_u, r.get("team", "")) or str(
+                r.get("team", "") or ""
+            ).strip().upper()
             if pl and tm:
                 keys.add((pl, tm))
     return frozenset(keys)
@@ -603,7 +582,9 @@ def _resolve_void_pending_if_injury_dnp(
     pl = _norm_player_name(str(leg.get("player") or ""))
     if not pl:
         return grade
-    tm = str(leg.get("team") or "").strip().upper()
+    tm = canon_team_abbr(sport_u, leg.get("team") or "") or str(
+        leg.get("team") or ""
+    ).strip().upper()
     if (pl, tm) in dnp_keys:
         return "VOID"
     hits = [k for k in dnp_keys if k[0] == pl]
@@ -1133,6 +1114,16 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
         pred_ev = _safe_float_ticket(ticket.get("flat_ev"))
     pred_p = _safe_float_ticket(payd.get("p_all_win"))
     rec = str(payd.get("recommendation") or "").strip()
+    if not rec:
+        rec = str(ticket.get("empirical_recommendation") or "").strip()
+    if not rec and pred_ev is not None:
+        ev = float(pred_ev)
+        rec = (
+            "STRONG" if ev >= 1.40 else
+            "OK" if ev >= 1.15 else
+            "MARGINAL" if ev >= 1.0 else
+            "SKIP"
+        )
 
     gross_10 = round(10.0 * actual, 2)
     net_10 = round(gross_10 - 10.0, 2)
@@ -2500,6 +2491,111 @@ def _load_tickets_from_xlsx(path: Path, arg_date: str) -> dict[str, Any]:
     return {"date": arg_date, "groups": groups}
 
 
+def _ticket_json_sidecar_paths(arg_date: str) -> list[Path]:
+    return [
+        REPO_ROOT / "ui_runner" / "data" / f"combined_slate_tickets_{arg_date}.json",
+        REPO_ROOT / "outputs" / arg_date / f"combined_slate_tickets_{arg_date}.json",
+        REPO_ROOT / f"combined_slate_tickets_{arg_date}.json",
+    ]
+
+
+def _enrich_payload_ticket_payouts(payload: dict[str, Any], arg_date: str) -> None:
+    """
+    Attach empirical payout + recommendation to tickets loaded from XLSX only.
+
+    Order: JSON sidecar merge by (group_name, ticket_no), then compute from leg hit_rates.
+    """
+    sidecar: dict[str, Any] | None = None
+    for p in _ticket_json_sidecar_paths(arg_date):
+        if not p.is_file():
+            continue
+        try:
+            sidecar = json.loads(p.read_text(encoding="utf-8"))
+            break
+        except (OSError, json.JSONDecodeError):
+            continue
+
+    side_map: dict[tuple[str, int], dict[str, Any]] = {}
+    if sidecar:
+        for g in sidecar.get("groups") or []:
+            gname = str(g.get("group_name") or "")
+            for t in g.get("tickets") or []:
+                try:
+                    tno = int(t.get("ticket_no"))
+                except (TypeError, ValueError):
+                    continue
+                side_map[(gname, tno)] = t
+
+    build_ticket_payout_json = None
+    try:
+        from combined_slate_tickets import build_ticket_payout_json as _btpj  # noqa: WPS433
+
+        build_ticket_payout_json = _btpj
+    except ImportError:
+        pass
+
+    for g in payload.get("groups") or []:
+        gname = str(g.get("group_name") or "")
+        for t in g.get("tickets") or []:
+            pay = t.get("payout")
+            if isinstance(pay, dict) and str(pay.get("recommendation") or "").strip():
+                continue
+            try:
+                tno = int(t.get("ticket_no"))
+            except (TypeError, ValueError):
+                tno = 0
+            src = side_map.get((gname, tno))
+            if src:
+                if isinstance(src.get("payout"), dict):
+                    t["payout"] = dict(src["payout"])
+                for k in ("est_ev", "flat_ev", "est_win_prob", "empirical_recommendation"):
+                    if src.get(k) is not None and t.get(k) is None:
+                        t[k] = src[k]
+            if build_ticket_payout_json and (
+                not isinstance(t.get("payout"), dict)
+                or not str((t.get("payout") or {}).get("recommendation") or "").strip()
+            ):
+                computed = build_ticket_payout_json(gname, t.get("legs") or [])
+                if computed:
+                    t["payout"] = computed
+
+
+def _print_ml_prob_diagnostics(payload: dict[str, Any], arg_date: str) -> None:
+    """Report how many tickets carry ml_prob / payout EV for grade_history tiering."""
+    n_tickets = 0
+    n_with_payout_rec = 0
+    n_with_payout_ev = 0
+    n_with_est_ev = 0
+    n_legs = 0
+    n_legs_ml = 0
+    n_legs_hr = 0
+    sidecar_used = any(p.is_file() for p in _ticket_json_sidecar_paths(arg_date))
+
+    for g in payload.get("groups") or []:
+        for t in g.get("tickets") or []:
+            n_tickets += 1
+            pay = t.get("payout") if isinstance(t.get("payout"), dict) else {}
+            if str(pay.get("recommendation") or "").strip():
+                n_with_payout_rec += 1
+            if pay.get("ev") is not None:
+                n_with_payout_ev += 1
+            if t.get("est_ev") is not None or t.get("flat_ev") is not None:
+                n_with_est_ev += 1
+            for leg in t.get("legs") or []:
+                n_legs += 1
+                if leg.get("ml_prob") is not None:
+                    n_legs_ml += 1
+                if leg.get("hit_rate") is not None:
+                    n_legs_hr += 1
+
+    print(
+        f"[ticket_eval] ml_prob diagnostics {arg_date}: tickets={n_tickets} "
+        f"payout.recommendation={n_with_payout_rec} payout.ev={n_with_payout_ev} "
+        f"est_ev={n_with_est_ev} legs={n_legs} legs.ml_prob={n_legs_ml} "
+        f"legs.hit_rate={n_legs_hr} json_sidecar_present={sidecar_used}"
+    )
+
+
 def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
     if path.suffix.lower() == ".xlsx":
         return _load_tickets_from_xlsx(path, arg_date)
@@ -2953,6 +3049,13 @@ def _build_html(
             "marginal_tickets": dict(buck["MARGINAL"]),
             "skip_tickets": dict(buck["SKIP"]),
         }
+        hist_date = history_record["date"]
+        print(
+            f"[grade_history] {hist_date}: Strong={buck['STRONG']['count']}, "
+            f"OK={buck['OK']['count']}, Marginal={buck['MARGINAL']['count']}, "
+            f"Skip={buck['SKIP']['count']}, EV_avg="
+            f"{history_record['avg_ev_predicted'] if history_record['avg_ev_predicted'] is not None else 'null'}"
+        )
     else:
         history_record = None
 
@@ -4311,6 +4414,8 @@ def main() -> int:
 
     try:
         payload = _load_tickets(tpath, arg_date)
+        _enrich_payload_ticket_payouts(payload, arg_date)
+        _print_ml_prob_diagnostics(payload, arg_date)
         payload = _filter_payload_groups(payload, debug=bool(args.debug))
     except Exception as e:
         print(f"ERROR: Failed to read ticket file: {e}")
