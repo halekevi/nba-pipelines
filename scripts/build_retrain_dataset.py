@@ -1028,19 +1028,11 @@ def main() -> int:
             continue
 
         # graded_props JSON often omits PP pick type (em dash → ``standard``) while step8 has
-        # goblin/demon. Join without pick_type for NHL/Soccer/WNBA so step8 scores attach.
+        # goblin/demon. Join without pick_type for NHL/Soccer so step8 scores attach.
         sk_u = str(sk).upper()
-        loose_pick = sk_u in ("NHL", "SOCCER", "WNBA")
-        if loose_pick:
-            sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
-            if sort_col:
-                s8 = s8.sort_values(sort_col, ascending=False, na_position="last")
-            s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_dir"], keep="first")
-        else:
-            s8 = s8.drop_duplicates(
-                subset=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir", "_game_d"],
-                keep="first",
-            )
+        sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
+        if sort_col:
+            s8 = s8.sort_values(sort_col, ascending=False, na_position="last")
 
         g["_n_player"] = g["player"].map(player_join_key)
         g["_n_prop"] = g["prop"].map(prop_join_key)
@@ -1051,53 +1043,107 @@ def main() -> int:
         # Graded JSON often carries empty def_tier / opp_pace placeholders; prefer step8 values.
         g = g.drop(columns=[c for c in JOIN_FEATURE_COLS if c in g.columns], errors="ignore")
 
-        merge_on = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"]
-        if loose_pick:
-            merge_on = ["_n_player", "_n_prop", "_n_line", "_n_dir"]
-        feat_cols = merge_on + ["_game_d"] + [c for c in JOIN_FEATURE_COLS if c in s8.columns]
-        feat_cols = list(dict.fromkeys(feat_cols))
-        feat = s8[[c for c in feat_cols if c in s8.columns]].copy()
-        if "ml_prob" in s8.columns and "ml_prob" not in feat.columns:
-            feat["_s8_ml_prob"] = pd.to_numeric(s8["ml_prob"], errors="coerce")
+        def _merge_step8(g_in: pd.DataFrame, merge_on_keys: list[str], dedupe_keys: list[str]) -> pd.DataFrame:
+            s8m = s8.drop_duplicates(subset=dedupe_keys, keep="first")
+            feat_cols = list(
+                dict.fromkeys(merge_on_keys + ["_game_d"] + [c for c in JOIN_FEATURE_COLS if c in s8m.columns])
+            )
+            feat = s8m[[c for c in feat_cols if c in s8m.columns]].copy()
+            if "ml_prob" in s8m.columns and "ml_prob" not in feat.columns:
+                feat["_s8_ml_prob"] = pd.to_numeric(s8m["ml_prob"], errors="coerce")
+            m = g_in.merge(feat, on=merge_on_keys, how="left")
+            for c in JOIN_FEATURE_COLS:
+                if f"{c}_y" in m.columns:
+                    m[c] = m[f"{c}_y"]
+                    m = m.drop(columns=[f"{c}_x", f"{c}_y"], errors="ignore")
+                elif f"{c}_x" in m.columns and c not in m.columns:
+                    m[c] = m[f"{c}_x"]
+                    m = m.drop(columns=[f"{c}_x"], errors="ignore")
+                if c not in m.columns:
+                    m[c] = np.nan
+            if skip_date_filter:
+                m["_tol"] = True
+            else:
+                _tol_d = (m["_file_d"] - m["_game_d"]).abs()
+                tol = _tol_d <= pd.Timedelta(days=1)
+                m["_tol"] = m["_game_d"].notna() & tol
+            feat_present = pd.Series(False, index=m.index)
+            for c in ("blended_score", "edge_score", "rank_score"):
+                if c in m.columns:
+                    feat_present = feat_present | m[c].notna()
+            for c in ENRICHMENT_RAW_COLS:
+                if c in m.columns:
+                    feat_present = feat_present | m[c].notna()
+            m["_joined"] = m["_tol"] & feat_present
+            for c in JOIN_FEATURE_COLS:
+                if c not in m.columns:
+                    continue
+                col = m[c]
+                if pd.api.types.is_bool_dtype(col) or str(getattr(col, "dtype", "")) == "boolean":
+                    col = col.astype("float64")
+                m[c] = col
+                m.loc[~m["_joined"], c] = np.nan
+            return m
 
-        m = g.merge(
-            feat,
-            on=merge_on,
-            how="left",
-        )
-        for c in JOIN_FEATURE_COLS:
-            if f"{c}_y" in m.columns:
-                m[c] = m[f"{c}_y"]
-                m = m.drop(columns=[f"{c}_x", f"{c}_y"], errors="ignore")
-            elif f"{c}_x" in m.columns and c not in m.columns:
-                m[c] = m[f"{c}_x"]
-                m = m.drop(columns=[f"{c}_x"], errors="ignore")
-            if c not in m.columns:
-                m[c] = np.nan
-        if skip_date_filter:
-            m["_tol"] = True
+        if sk_u == "WNBA":
+            m = g.copy()
+            m["_joined"] = False
+            m["_tol"] = False
+            wnba_levels: list[tuple[list[str], list[str]]] = [
+                (
+                    ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"],
+                    ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"],
+                ),
+                (
+                    ["_n_player", "_n_prop", "_n_line", "_n_dir"],
+                    ["_n_player", "_n_prop", "_n_line", "_n_dir"],
+                ),
+                # WNBA level-3: Demon lines differ from Standard step8 lines.
+                # Join on player+prop+date only — attaches def_tier/usage context
+                # without line-match. Acceptable for tree features, not for EV calc.
+                (["_n_player", "_n_prop"], ["_n_player", "_n_prop"]),
+            ]
+            for merge_on_keys, dedupe_keys in wnba_levels:
+                need = ~m["_joined"]
+                if not need.any():
+                    break
+                sub_idx = g.index[need]
+                partial = _merge_step8(g.loc[sub_idx], merge_on_keys, dedupe_keys)
+                partial.index = sub_idx
+                for idx in partial.index:
+                    if not bool(partial.at[idx, "_joined"]):
+                        continue
+                    for col in JOIN_FEATURE_COLS + ["_joined", "_tol", "_game_d"]:
+                        if col in partial.columns:
+                            val = partial.at[idx, col]
+                            if col in m.columns and m[col].dtype != object and isinstance(val, str):
+                                m[col] = m[col].astype(object)
+                            m.at[idx, col] = val
+            for c in JOIN_FEATURE_COLS:
+                if c not in m.columns:
+                    m[c] = np.nan
+                m.loc[~m["_joined"], c] = np.nan
+            if "_file_d" in m.columns and "_game_d" in m.columns:
+                m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
         else:
-            _tol_d = (m["_file_d"] - m["_game_d"]).abs()
-            tol = _tol_d <= pd.Timedelta(days=1)
-            m["_tol"] = m["_game_d"].notna() & tol
-        feat_present = pd.Series(False, index=m.index)
-        for c in ("blended_score", "edge_score", "rank_score"):
-            if c in m.columns:
-                feat_present = feat_present | m[c].notna()
-        for c in ENRICHMENT_RAW_COLS:
-            if c in m.columns:
-                feat_present = feat_present | m[c].notna()
-        m["_joined"] = m["_tol"] & feat_present
-        for c in JOIN_FEATURE_COLS:
-            if c not in m.columns:
-                continue
-            col = m[c]
-            # bool / nullable-bool enrichment (NBA injury flags, MLB top_of_order) cannot take np.nan
-            if pd.api.types.is_bool_dtype(col) or str(getattr(col, "dtype", "")) == "boolean":
-                col = col.astype("float64")
-            m[c] = col
-            m.loc[~m["_joined"], c] = np.nan
-        m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
+            loose_pick = sk_u in ("NHL", "SOCCER")
+            if loose_pick:
+                s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_dir"], keep="first")
+            else:
+                s8 = s8.drop_duplicates(
+                    subset=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir", "_game_d"],
+                    keep="first",
+                )
+
+            merge_on = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"]
+            if loose_pick:
+                merge_on = ["_n_player", "_n_prop", "_n_line", "_n_dir"]
+                dedupe_keys = ["_n_player", "_n_prop", "_n_line", "_n_dir"]
+            else:
+                dedupe_keys = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir", "_game_d"]
+            m = _merge_step8(g, merge_on, dedupe_keys)
+            m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
+
         m = m.sort_values(["_joined", "_date_diff"], ascending=[False, True])
         dedupe_keys = ["file_date", "sport", "player", "prop", "line", "pick_type", "direction", "result_binary"]
         dedupe_keys = [k for k in dedupe_keys if k in m.columns]
