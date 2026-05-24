@@ -551,7 +551,17 @@ def prep_actuals(csv_path: Path, sport_label: str) -> pd.DataFrame:
     df = df.dropna(subset=["actual"]).copy()
 
     df["player_norm"] = df["player"].map(player_norm)
-    df["team_norm"] = df["team"].map(strip_norm)
+    sl = (sport_label or "").upper()
+    if sl in ("NBA", "NBA1H", "NBA1Q"):
+        from espn_injuries import canon_team_abbr
+
+        df["team_norm"] = df["team"].map(lambda t: canon_team_abbr("NBA", t) or strip_norm(t))
+    elif sl in ("CBB", "WCBB", "NHL", "SOCCER"):
+        from espn_injuries import canon_team_abbr
+
+        df["team_norm"] = df["team"].map(lambda t: canon_team_abbr(sl, t) or strip_norm(t))
+    else:
+        df["team_norm"] = df["team"].map(strip_norm)
     df["prop_norm"] = df["prop_type"].map(prop_norm_from_actual)
     return df
 
@@ -969,6 +979,14 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
         sport = "CBB"
     player_n = player_norm(player)
     team_n = strip_norm(team)
+    if sport in ("NBA", "NBA1H", "NBA1Q"):
+        from espn_injuries import canon_team_abbr
+
+        team_n = canon_team_abbr("NBA", team) or team_n
+    elif sport in ("CBB", "NHL", "SOCCER"):
+        from espn_injuries import canon_team_abbr
+
+        team_n = canon_team_abbr(sport, team) or team_n
 
     if sport == "NBA1H":
         if nba1h_lpt is not None and nba1h_lp is not None:
@@ -1063,10 +1081,74 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
     return np.nan
 
 
+def _lookup_actual_with_combo_fallback(
+    sport: str,
+    player: str,
+    team: str,
+    prop_norm: str,
+    act_df: pd.DataFrame | None,
+    *,
+    nba_lpt,
+    nba_lp,
+    cbb_lpt,
+    cbb_lp,
+    nba1h_lpt=None,
+    nba1h_lp=None,
+    nba1q_lpt=None,
+    nba1q_lp=None,
+    nhl_lpt=None,
+    nhl_lp=None,
+    soccer_lpt=None,
+    soccer_lp=None,
+    tennis_lpt=None,
+    tennis_lp=None,
+    mlb_lpt=None,
+    mlb_lp=None,
+) -> float:
+    val = lookup_actual(
+        sport,
+        player,
+        team,
+        prop_norm,
+        nba_lpt,
+        nba_lp,
+        cbb_lpt,
+        cbb_lp,
+        nba1h_lpt=nba1h_lpt,
+        nba1h_lp=nba1h_lp,
+        nba1q_lpt=nba1q_lpt,
+        nba1q_lp=nba1q_lp,
+        nhl_lpt=nhl_lpt,
+        nhl_lp=nhl_lp,
+        soccer_lpt=soccer_lpt,
+        soccer_lp=soccer_lp,
+        tennis_lpt=tennis_lpt,
+        tennis_lp=tennis_lp,
+        mlb_lpt=mlb_lpt,
+        mlb_lp=mlb_lp,
+    )
+    if not pd.isna(val):
+        return val
+    from grading.leg_grade_utils import is_nba_combo_prop, sum_nba_combo_from_actuals_df
+
+    if act_df is not None and not act_df.empty and is_nba_combo_prop(prop_norm):
+        combo = sum_nba_combo_from_actuals_df(act_df, player, team, prop_norm)
+        if combo is not None:
+            return float(combo)
+    return np.nan
+
+
 # -----------------------------
 # Grading + payout modifiers
 # -----------------------------
 def grade_leg(dir_: str, line: float, actual: float) -> str:
+    from grading.leg_grade_utils import grade_leg_strict
+
+    return grade_leg_strict(dir_, line, actual)
+
+
+def _grade_leg_legacy(dir_: str, line: float, actual: float) -> str:
+    """Pre-fix comparison (for audit diff only)."""
     if pd.isna(actual):
         return "NO_ACTUAL"
     if abs(actual - line) < 1e-9:
@@ -1863,20 +1945,42 @@ def main():
 
     # grade legs
     legs_df["actual"] = legs_df.apply(
-        lambda r: lookup_actual(
-            r["sport"], r["player"], r["team"], r["prop_norm"],
-            nba_lpt, nba_lp,
-            cbb_lpt, cbb_lp,
-            nba1h_lpt=nba1h_lpt, nba1h_lp=nba1h_lp,
-            nba1q_lpt=nba1q_lpt, nba1q_lp=nba1q_lp,
-            nhl_lpt=nhl_lpt, nhl_lp=nhl_lp,
-            soccer_lpt=soccer_lpt, soccer_lp=soccer_lp,
-            tennis_lpt=tennis_lpt, tennis_lp=tennis_lp,
-            mlb_lpt=mlb_lpt, mlb_lp=mlb_lp,
+        lambda r: _lookup_actual_with_combo_fallback(
+            r["sport"],
+            r["player"],
+            r["team"],
+            r["prop_norm"],
+            nba_act if str(r["sport"] or "").upper() in ("NBA", "NBA1H", "NBA1Q") else None,
+            nba_lpt=nba_lpt,
+            nba_lp=nba_lp,
+            cbb_lpt=cbb_lpt,
+            cbb_lp=cbb_lp,
+            nba1h_lpt=nba1h_lpt,
+            nba1h_lp=nba1h_lp,
+            nba1q_lpt=nba1q_lpt,
+            nba1q_lp=nba1q_lp,
+            nhl_lpt=nhl_lpt,
+            nhl_lp=nhl_lp,
+            soccer_lpt=soccer_lpt,
+            soccer_lp=soccer_lp,
+            tennis_lpt=tennis_lpt,
+            tennis_lp=tennis_lp,
+            mlb_lpt=mlb_lpt,
+            mlb_lp=mlb_lp,
         ),
         axis=1,
     )
+    from grading.leg_grade_utils import LegGradeAudit
+
+    _grade_audit = LegGradeAudit()
+    legs_df["leg_result_legacy"] = legs_df.apply(
+        lambda r: _grade_leg_legacy(r["dir"], r["line"], r["actual"]), axis=1
+    )
     legs_df["leg_result"] = legs_df.apply(lambda r: grade_leg(r["dir"], r["line"], r["actual"]), axis=1)
+    for old, new in zip(legs_df["leg_result_legacy"], legs_df["leg_result"], strict=False):
+        _grade_audit.record(str(old), str(new))
+    _grade_audit.print_summary(prefix="[combined_ticket_grader]")
+    legs_df = legs_df.drop(columns=["leg_result_legacy"], errors="ignore")
 
     def _injury_void_leg(row: pd.Series) -> str:
         if row["leg_result"] != "NO_ACTUAL":

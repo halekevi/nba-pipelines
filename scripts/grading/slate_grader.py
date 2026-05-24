@@ -186,25 +186,9 @@ def _row_bet_direction(row) -> str:
 
 def grade(row, actual):
     """Return (result, void_reason_or_None, margin). Margin is NaN when ungraded."""
-    act = pd.to_numeric(actual, errors="coerce")
-    if pd.isna(act):
-        return "VOID", "NO_ACTUAL", np.nan
-    actual_f = float(act)
+    from grading.leg_grade_utils import slate_grade_row
 
-    line = _row_first_numeric(row, ("line", "Line", "line_score", "LINE", "main_line"))
-    if pd.isna(line):
-        return "VOID", "NO_LINE", np.nan
-    line = float(line)
-
-    direction = _row_bet_direction(row)
-    if actual_f == line:
-        return "PUSH", None, 0.0
-    if direction == "OVER":
-        result = "HIT" if actual_f > line else "MISS"
-    else:
-        result = "HIT" if actual_f < line else "MISS"
-    m = round(actual_f - line if direction == "OVER" else line - actual_f, 2)
-    return result, None, m
+    return slate_grade_row(actual, row)
 
 # Quarter milestone props: actuals come from ESPN PBP in fetch_actuals.parse_nba_quarter_milestone_rows.
 PROP_NORM_MAP={
@@ -718,6 +702,11 @@ def _build_actuals_lookup(act: pd.DataFrame, actuals_path: str = "") -> ActualsL
         if not raw_prop or raw_prop.lower() in ("nan", "none"):
             continue
         t0 = norm_team_key(arow.get("team", ""))
+        apath_l = str(actuals_path or "").lower()
+        if "nba" in apath_l and "actuals" in apath_l:
+            from espn_injuries import canon_team_abbr
+
+            t0 = canon_team_abbr("NBA", arow.get("team", "")) or t0
         row_date = _actuals_row_game_date(arow, lookup.actuals_date)
         team_keys, player_keys = _expand_lookup_keys(
             p0, raw_prop, team=t0, game_date=row_date
@@ -895,7 +884,11 @@ def _load_nba_injury_dnp_keys(actuals_path: str) -> frozenset[tuple[str, str]]:
         if typ != "DNP" and not _injury_status_marks_dnp(st):
             continue
         pl = norm_player_key(str(r.get("player", "") or ""))
-        tm = str(r.get("team", "") or "").strip().upper()
+        from espn_injuries import canon_team_abbr
+
+        tm = canon_team_abbr("NBA", r.get("team", "")) or str(
+            r.get("team", "") or ""
+        ).strip().upper()
         if pl and tm:
             keys.add((pl, tm))
     return frozenset(keys)
@@ -975,7 +968,22 @@ def apply_actuals(df, actuals_path):
     for _, row in df.iterrows():
         actual = _resolve_actual(lookup, row)
 
-        # If this is a combo prop (Points (Combo), etc.), try to compute combined actual
+        # Single-player combo props: sum final component box-score rows (same game snapshot).
+        if pd.isna(actual):
+            from grading.leg_grade_utils import is_nba_combo_prop, sum_nba_combo_from_actuals_df
+
+            prop_label = _primary_prop_from_row(row)
+            if prop_label and is_nba_combo_prop(prop_label):
+                combo_val = sum_nba_combo_from_actuals_df(
+                    act,
+                    str(row.get("player", "") or ""),
+                    str(row.get("team", "") or ""),
+                    prop_label,
+                )
+                if combo_val is not None:
+                    actual = float(combo_val)
+
+        # Multi-player combo props (PlayerA + PlayerB): sum each player's stat.
         if pd.isna(actual):
             parts = _split_combo_players(row.get("player", ""))
             if parts:
@@ -997,7 +1005,7 @@ def apply_actuals(df, actuals_path):
         upstream = void_r_str if void_r_str not in ("", "nan") else ""
 
         r, vr, m = grade(row, actual)
-        decided = r in ("HIT", "MISS", "PUSH")
+        decided = r in ("HIT", "MISS", "PUSH", "NEAR_LINE")
 
         if decided:
             results.append(r)
@@ -1011,6 +1019,10 @@ def apply_actuals(df, actuals_path):
             margins.append(np.nan)
             tail = str(vr or "").strip()
             team_u = str(row.get("team", "") or "").strip().upper()
+            if "nba" in apath.lower() and "actuals" in apath.lower():
+                from espn_injuries import canon_team_abbr
+
+                team_u = canon_team_abbr("NBA", row.get("team", "")) or team_u
             if tail == "NO_ACTUAL" and dnp_keys and _injury_confirms_dnp_for_row(
                 row.get("player", ""), team_u, dnp_keys
             ):
