@@ -537,10 +537,17 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
             return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
         return load_step8_sport(root, "Soccer"), True
     if sport_u == "WNBA":
-        for name in (f"step8_wnba_direction_clean_{d}.xlsx",):
-            p = root / "outputs" / d / name
-            if p.is_file():
+        for p in (
+            root / "outputs" / d / "wnba" / "step8_wnba_direction_clean.xlsx",
+            root / "outputs" / d / "wnba" / "step8_wnba_direction.csv",
+            root / "outputs" / d / "wnba" / f"step8_wnba_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
                 return pd.read_excel(p, engine="openpyxl"), False
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
         return load_step8_sport(root, sport), True
     if sport_u == "TENNIS":
         for p in (
@@ -599,7 +606,12 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
             root / "outputs" / d / f"step8_soccer_direction_{d}.xlsx",
         ]
     elif sport_u == "WNBA":
-        candidates = [root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx"]
+        candidates = [
+            root / "outputs" / d / "wnba" / "step8_wnba_direction_clean.xlsx",
+            root / "outputs" / d / "wnba" / "step8_wnba_direction.csv",
+            root / "outputs" / d / "wnba" / f"step8_wnba_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx",
+        ]
     elif sport_u == "TENNIS":
         candidates = [
             root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.xlsx",
