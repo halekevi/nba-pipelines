@@ -12,8 +12,28 @@ from flask import Blueprint, jsonify, request
 
 consistency_bp = Blueprint("consistency", __name__)
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-CACHE_PATH = REPO_ROOT / "data" / "cache" / "player_consistency.json"
+def _repo_root() -> Path:
+    """Repo root whether loaded as ui_runner.routes or routes (cwd = ui_runner)."""
+    here = Path(__file__).resolve()
+    if here.parent.name == "routes" and here.parent.parent.name == "ui_runner":
+        return here.parents[2]
+    if here.parent.name == "routes":
+        return here.parents[1]
+    return here.parents[2]
+
+
+REPO_ROOT = _repo_root()
+_CACHE_CANDIDATES = (
+    REPO_ROOT / "data" / "cache" / "player_consistency.json",
+    Path(__file__).resolve().parents[1] / "data" / "player_consistency.json",
+)
+
+
+def _cache_path() -> Path:
+    for p in _CACHE_CANDIDATES:
+        if p.is_file():
+            return p
+    return _CACHE_CANDIDATES[0]
 
 _cache: dict | None = None
 _cache_mtime: float = 0.0
@@ -21,14 +41,19 @@ _cache_mtime: float = 0.0
 
 def load_consistency_cache() -> dict:
     global _cache, _cache_mtime
+    path = _cache_path()
     try:
-        mtime = CACHE_PATH.stat().st_mtime
+        mtime = path.stat().st_mtime
         if _cache is None or mtime != _cache_mtime:
-            with open(CACHE_PATH, encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 _cache = json.load(f)
             _cache_mtime = mtime
     except FileNotFoundError:
         _cache = {"players": [], "generated_at": None}
+        _cache_mtime = 0.0
+    except (json.JSONDecodeError, OSError):
+        _cache = {"players": [], "generated_at": None}
+        _cache_mtime = 0.0
     return _cache
 
 

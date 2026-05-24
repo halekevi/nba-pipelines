@@ -215,12 +215,27 @@ app = Flask(
     static_folder=str(STATIC_DIR),
 )
 
-try:
-    from routes.consistency import consistency_bp
+def _register_consistency_blueprint() -> None:
+    """Register /api/hot-players and /api/player-consistency (repo-root vs ui_runner cwd)."""
+    log = logging.getLogger(__name__)
+    last_err: Exception | None = None
+    for import_path in (
+        "ui_runner.routes.consistency",
+        "routes.consistency",
+    ):
+        try:
+            import importlib
 
-    app.register_blueprint(consistency_bp)
-except ImportError:
-    logging.getLogger(__name__).warning("Player consistency API routes not loaded")
+            mod = importlib.import_module(import_path)
+            app.register_blueprint(mod.consistency_bp)
+            log.info("Player consistency API routes loaded from %s", import_path)
+            return
+        except Exception as exc:
+            last_err = exc
+    log.warning("Player consistency API routes not loaded: %s", last_err)
+
+
+_register_consistency_blueprint()
 
 try:
     DATA_ROOT.mkdir(parents=True, exist_ok=True)

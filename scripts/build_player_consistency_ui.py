@@ -21,6 +21,7 @@ RETRAIN_CSV = REPO_ROOT / "data" / "retrain_dataset.csv"
 TRAINING_DIR = REPO_ROOT / "data" / "training"
 CACHE_DIR = REPO_ROOT / "data" / "cache"
 OUTPUT_PATH = CACHE_DIR / "player_consistency.json"
+UI_DEPLOY_PATH = REPO_ROOT / "ui_runner" / "data" / "player_consistency.json"
 
 SPORT_ALIASES = {
     "nba": "NBA",
@@ -290,8 +291,12 @@ def main() -> int:
         "total_players": len(top_records),
         "players": top_records,
     }
-    out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    text = json.dumps(payload, indent=2)
+    out_path.write_text(text, encoding="utf-8")
     print(f"[consistency-ui] Wrote {len(top_records)} players -> {out_path}")
+    UI_DEPLOY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    UI_DEPLOY_PATH.write_text(text, encoding="utf-8")
+    print(f"[consistency-ui] Mirrored deploy copy -> {UI_DEPLOY_PATH}")
     return 0
 
 
