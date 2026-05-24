@@ -1023,6 +1023,33 @@ def main() -> int:
         up = round(100.0 * (ng - jn) / ng, 2) if ng else 0.0
         jr = round(100.0 * jn / ng, 2) if ng else 0.0
         print(f"  sport={sp}  decided={ng:,}  joined={jn:,}  join_rate%={jr}  unjoined%={up}")
+
+    sport_labels = ["NBA", "NHL", "MLB", "Soccer", "WNBA", "Tennis"]
+    sport_norm = out_df.get("sport", pd.Series("", index=out_df.index)).astype(str).str.strip().str.upper()
+    for sport in sport_labels:
+        key = "SOCCER" if sport == "Soccer" else sport.upper()
+        rows = out_df[sport_norm.eq(key)]
+        total = len(rows)
+        if total == 0:
+            continue
+        joined = int(rows["rank_score"].notna().sum()) if "rank_score" in rows.columns else 0
+        def_filled = int(rows["def_tier"].notna().sum()) if "def_tier" in rows.columns else 0
+        print(
+            f"[dataset] {sport}: {joined}/{total} joined ({joined / total * 100:.1f}%), "
+            f"def_tier={def_filled / total * 100:.1f}%"
+        )
+
+    nhl = out_df[sport_norm.eq("NHL")].copy()
+    if not nhl.empty and "file_date" in nhl.columns:
+        nhl["joined"] = nhl["rank_score"].notna() if "rank_score" in nhl.columns else False
+        worst = (
+            nhl.groupby("file_date")["joined"]
+            .mean()
+            .sort_values()
+            .head(5)
+        )
+        print("[dataset] NHL worst join dates:", worst.to_dict())
+
     return 0
 
 
