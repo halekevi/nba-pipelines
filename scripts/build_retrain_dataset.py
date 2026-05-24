@@ -717,6 +717,91 @@ def _print_field_coverage(prefix: str, report: dict[str, dict[str, Any]]) -> Non
         print(f"  {f:12}: {r['known']:,} / {r['total']:,} ({r['pct']:.1f}%)")
 
 
+def diagnose_tennis_zero_join(root: Path, dataset_path: Path | None = None) -> int:
+    """
+    Explain why Tennis rows never join step8 (rank_score / def_tier always null).
+
+    Root cause when step8 loaders omit Tennis: ``load_step8_sport`` and
+    ``load_step8_dated_snapshot`` return ``(None, False)`` for sport Tennis, so every
+    (Tennis, file_date) group logs "no step8 rows on disk" and leaves JOIN_FEATURE_COLS NaN.
+  """
+    data_dir = root / "data"
+    p = dataset_path or (data_dir / "retrain_dataset.csv")
+    if not p.is_file():
+        print(f"[diagnose-tennis] Missing dataset: {p}")
+        return 1
+
+    df = pd.read_csv(p, low_memory=False)
+    tennis = df[df["sport"].astype(str).str.strip().str.upper() == "TENNIS"].copy()
+    print(f"\n=== Tennis zero-join diagnostic ({p.name}) ===\n")
+    print(f"Tennis rows in dataset: {len(tennis):,}")
+
+    show_cols = [
+        c
+        for c in (
+            "file_date",
+            "rank_score",
+            "def_tier",
+            "pick_type_encoded",
+            "line_score",
+            "tier_encoded",
+            "pick_type",
+            "line",
+            "tier",
+            "pick_type_group",
+            "player",
+            "prop",
+        )
+        if c in tennis.columns
+    ]
+    missing_enc = [c for c in ("pick_type_encoded", "line_score", "tier_encoded") if c not in tennis.columns]
+    if missing_enc:
+        print(f"(Note: not in retrain CSV — {missing_enc}; use pick_type / line / tier instead.)\n")
+    print(tennis[show_cols].head(20).to_string())
+    print()
+    print(
+        "Tennis step8 columns present:",
+        [c for c in tennis.columns if c in STEP8_FEATURE_COLS],
+    )
+    if "rank_score" in tennis.columns:
+        print(f"rank_score non-null: {int(tennis['rank_score'].notna().sum())} / {len(tennis)}")
+    if "def_tier" in tennis.columns:
+        print(f"def_tier non-null: {int(tennis['def_tier'].notna().sum())} / {len(tennis)}")
+    print("\nTennis file_date sample:")
+    print(tennis["file_date"].value_counts().head(5).to_string())
+
+    print("\n--- step8 loader coverage (build_retrain_dataset) ---")
+    print("load_step8_sport('Tennis'):", "implemented" if load_step8_sport(root, "Tennis") is not None else "NOT IMPLEMENTED → always None")
+    print("load_step8_dated_snapshot('Tennis', sample date):", load_step8_dated_snapshot(root, "Tennis", "2026-05-11"))
+
+    print("\n--- Tennis step8 files on disk ---")
+    candidates = [
+        root / "Sports" / "Tennis" / "step8_tennis_direction_clean.xlsx",
+        root / "Sports" / "Tennis" / "step8_tennis_direction.csv",
+        root / "Sports" / "Tennis" / "step8_tennis_direction_clean_filled.xlsx",
+    ]
+    for fp in candidates:
+        if not fp.is_file():
+            print(f"  missing: {fp.relative_to(root)}")
+            continue
+        if fp.suffix.lower() == ".xlsx":
+            head = pd.read_excel(fp, nrows=5, engine="openpyxl")
+        else:
+            head = pd.read_csv(fp, nrows=5, encoding="utf-8-sig")
+        canon = _canonicalize_step8_columns(head)
+        print(f"  {fp.relative_to(root)}: rows_sample={len(head)}, rank_score col={'rank_score' in canon.columns}")
+        if "rank_score" in canon.columns:
+            print(f"    rank_score sample: {canon['rank_score'].head(3).tolist()}")
+
+    dated = root / "outputs" / "2026-05-11" / "tennis"
+    print(f"\noutputs/<date>/tennis/ exists: {dated.is_dir()}")
+    print(
+        "\nRecommendation before retrain: add Tennis to load_step8_sport / load_step8_dated_snapshot "
+        "(join from Sports/Tennis/step8_*) OR add Tennis to EXCLUDE_SPORTS — 0% join trains on NaN features."
+    )
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo-root", type=Path, default=None, help="PropORACLE repo root (default: parent of scripts/)")
@@ -727,6 +812,11 @@ def main() -> int:
         default="",
         metavar="YYYY-MM-DD",
         help="Minimum graded_props file_date (inclusive). Empty = all dates.",
+    )
+    ap.add_argument(
+        "--diagnose-tennis",
+        action="store_true",
+        help="Print Tennis zero-join diagnostic and exit (no dataset rebuild).",
     )
     ap.add_argument(
         "--output",
@@ -740,6 +830,9 @@ def main() -> int:
     templates = root / "ui_runner" / "templates"
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.diagnose_tennis:
+        return diagnose_tennis_zero_join(root)
 
     before_cov_df, after_cov_df = _load_graded_workbook_rows(root)
     before_cov = coverage_report(before_cov_df)

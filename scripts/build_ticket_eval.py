@@ -37,6 +37,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Sequence
 
+import numpy as np
 import pandas as pd
 from dateutil.parser import parse as _parse_datetime_guess
 
@@ -2560,6 +2561,31 @@ def _enrich_payload_ticket_payouts(payload: dict[str, Any], arg_date: str) -> No
                     t["payout"] = computed
 
 
+def _print_ticket_ev_percentiles(tickets: list[dict[str, Any]]) -> None:
+    """Log payout EV distribution across tickets (for tier threshold tuning)."""
+    evs: list[float] = []
+    for t in tickets:
+        pay = t.get("payout")
+        if not isinstance(pay, dict):
+            continue
+        raw = pay.get("ev")
+        if raw is None:
+            continue
+        try:
+            evs.append(float(raw))
+        except (TypeError, ValueError):
+            continue
+    if not evs:
+        print("[ticket_eval] EV percentiles: no tickets with payout.ev")
+        return
+    arr = np.array(evs, dtype=float)
+    pct = {p: round(float(np.percentile(arr, p)), 3) for p in (10, 25, 50, 75, 90, 95, 99)}
+    print(f"[ticket_eval] EV percentiles (n={len(evs)}): {pct}")
+    print(f"[ticket_eval] EV > 1.0: {int((arr > 1.0).sum())}")
+    print(f"[ticket_eval] EV > 1.1: {int((arr > 1.1).sum())}")
+    print(f"[ticket_eval] EV > 1.4: {int((arr > 1.4).sum())}")
+
+
 def _print_ml_prob_diagnostics(payload: dict[str, Any], arg_date: str) -> None:
     """Report how many tickets carry ml_prob / payout EV for grade_history tiering."""
     n_tickets = 0
@@ -2984,6 +3010,8 @@ def _build_html(
         )
         for sport in TICKET_EVAL_SPORT_ORDER
     ]
+
+    _print_ticket_ev_percentiles(tickets_flat)
 
     pay_summary_rows: list[dict[str, Any]] = []
     for t in tickets_flat:
