@@ -123,12 +123,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", default="step4_with_stats.csv")
     ap.add_argument("--output", default="step4_with_stats.csv")
-    ap.add_argument("--season", default="2024-25")
+    ap.add_argument("--season", default="2025-26")
     ap.add_argument("--refresh", action="store_true")
     args = ap.parse_args()
 
     df = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig")
-    season = str(args.season).strip() or "2024-25"
+    season = str(args.season).strip() or "2025-26"
 
     if args.refresh:
         from nba_stats_api import refresh_usage_cache, refresh_pace_cache, refresh_opp_defense_cache
