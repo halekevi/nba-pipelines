@@ -41,6 +41,16 @@ from utils.graded_schema import coverage_report, normalize_graded_df, recover_di
 # Per-group tier overhaul (commit a1b24e77). Graded `file_date` on/after this uses new tier semantics.
 TIER_OVERHAUL_DATE = "2026-05-02"
 
+# Sports omitted from retrain_dataset.csv (and graded_only export).
+EXCLUDE_SPORTS: frozenset[str] = frozenset(
+    {
+        # Tennis: 0% join rate — load_step8_sport not implemented.
+        # Files exist at Sports/Tennis/step8_tennis_direction_clean.xlsx
+        # but loader returns None. Re-include after wiring the loader.
+        "Tennis",
+    }
+)
+
 STEP8_FEATURE_COLS = [
     "blended_score",
     "edge_score",
@@ -857,6 +867,23 @@ def main() -> int:
         print(f"[filter] --from {from_s}: kept {len(decided):,}/{before:,} decided rows")
         if decided.empty:
             print("No rows left after --from filter.", file=sys.stderr)
+            return 1
+
+    if EXCLUDE_SPORTS:
+        before = len(decided)
+        sport_s = decided["sport"].astype(str).str.strip()
+        drop_mask = sport_s.isin(EXCLUDE_SPORTS)
+        if drop_mask.any():
+            for sp in sorted(sport_s.loc[drop_mask].unique()):
+                n = int((sport_s == sp).sum())
+                print(f"[filter] EXCLUDE_SPORTS: dropping {n:,} {sp} rows")
+        decided = decided.loc[~drop_mask].copy()
+        print(
+            f"[filter] EXCLUDE_SPORTS {sorted(EXCLUDE_SPORTS)}: "
+            f"kept {len(decided):,}/{before:,} decided rows"
+        )
+        if decided.empty:
+            print("No rows left after EXCLUDE_SPORTS filter.", file=sys.stderr)
             return 1
 
     graded_only_cols = [
