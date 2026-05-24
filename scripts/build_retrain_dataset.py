@@ -1016,9 +1016,9 @@ def main() -> int:
             continue
 
         # graded_props JSON often omits PP pick type (em dash → ``standard``) while step8 has
-        # goblin/demon. Join without pick_type for NHL/Soccer so step8 scores attach.
+        # goblin/demon. Join without pick_type for NHL/Soccer/WNBA so step8 scores attach.
         sk_u = str(sk).upper()
-        loose_pick = sk_u in ("NHL", "SOCCER")
+        loose_pick = sk_u in ("NHL", "SOCCER", "WNBA")
         if loose_pick:
             sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
             if sort_col:
