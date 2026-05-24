@@ -42,14 +42,7 @@ from utils.graded_schema import coverage_report, normalize_graded_df, recover_di
 TIER_OVERHAUL_DATE = "2026-05-02"
 
 # Sports omitted from retrain_dataset.csv (and graded_only export).
-EXCLUDE_SPORTS: frozenset[str] = frozenset(
-    {
-        # Tennis: 0% join rate — load_step8_sport not implemented.
-        # Files exist at Sports/Tennis/step8_tennis_direction_clean.xlsx
-        # but loader returns None. Re-include after wiring the loader.
-        "Tennis",
-    }
-)
+EXCLUDE_SPORTS: frozenset[str] = frozenset()
 
 STEP8_FEATURE_COLS = [
     "blended_score",
@@ -423,6 +416,19 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
             if len(df) > 0:
                 return df
         return None
+    if sport_u == "TENNIS":
+        for p in (
+            root / "Sports" / "Tennis" / "step8_tennis_direction_clean.xlsx",
+            root / "Sports" / "Tennis" / "step8_tennis_direction.csv",
+            root / "Sports" / "Tennis" / "step8_tennis_direction_clean_filled.xlsx",
+            root / "Sports" / "Tennis" / "step8_tennis_direction_filled.csv",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl")
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+        return None
     return None
 
 
@@ -536,6 +542,19 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
             if p.is_file():
                 return pd.read_excel(p, engine="openpyxl"), False
         return load_step8_sport(root, sport), True
+    if sport_u == "TENNIS":
+        for p in (
+            root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.xlsx",
+            root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.csv",
+            root / "outputs" / d / f"step8_tennis_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_tennis_direction_{d}.xlsx",
+        ):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl"), False
+            return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
+        return load_step8_sport(root, "Tennis"), True
     return None, False
 
 
@@ -581,6 +600,13 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
         ]
     elif sport_u == "WNBA":
         candidates = [root / "outputs" / d / f"step8_wnba_direction_clean_{d}.xlsx"]
+    elif sport_u == "TENNIS":
+        candidates = [
+            root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.xlsx",
+            root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.csv",
+            root / "outputs" / d / f"step8_tennis_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_tennis_direction_{d}.xlsx",
+        ]
     return any(p.is_file() for p in candidates)
 
 
