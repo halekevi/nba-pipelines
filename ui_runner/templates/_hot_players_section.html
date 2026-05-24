@@ -1,0 +1,111 @@
+<section class="hot-players-section" id="hot-players-section" style="display:none" aria-label="Hot players on today's slate">
+  <div class="hot-players-header">
+    <span class="hot-players-title">Hot <span>Players</span></span>
+    <span class="hot-players-badge">TODAY</span>
+    <span class="hot-players-updated" id="hot-players-updated"></span>
+  </div>
+  <div id="hot-sport-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+  <div class="hot-players-scroll" id="hot-players-scroll"></div>
+  <div class="hot-players-empty" id="hot-players-empty" style="display:none">
+    No players on today's slate yet — check back after the daily pipeline runs.
+  </div>
+</section>
+
+<script>
+(function () {
+  const API = '/api/hot-players?limit=8';
+  const SECTION = document.getElementById('hot-players-section');
+  const SCROLL = document.getElementById('hot-players-scroll');
+  const FILTERS = document.getElementById('hot-sport-filters');
+  const EMPTY = document.getElementById('hot-players-empty');
+  const UPDATED = document.getElementById('hot-players-updated');
+  if (!SECTION || !SCROLL) return;
+
+  let allCardsBySport = {};
+  let activeSport = 'ALL';
+
+  function dirClass(d) {
+    return d === 'OVER' ? 'over' : d === 'UNDER' ? 'under' : 'both';
+  }
+  function fmtPct(v) {
+    return v != null ? (v * 100).toFixed(1) + '%' : '—';
+  }
+  function tierDot(tier) {
+    const colors = { high: 'var(--green,#9fd8a7)', medium: 'var(--amber,#c89a4a)', low: 'var(--muted2,#8b8b99)' };
+    return '<span title="Confidence: ' + tier + '" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + (colors[tier] || colors.low) + ';margin-right:3px;vertical-align:middle"></span>';
+  }
+
+  function buildCard(p) {
+    const dir = p.direction || 'BOTH';
+    const slate = p.on_today_slate ? '<span class="card-on-slate" title="On today\'s slate"></span>' : '';
+    const overUnder = (p.over_total >= 10 && p.under_total >= 10)
+      ? '<div style="font-size:9px;color:var(--muted2);margin-top:3px">O:' + fmtPct(p.over_rate) + ' · U:' + fmtPct(p.under_rate) + '</div>'
+      : '';
+    return '<div class="hot-player-card" data-sport="' + (p.sport || '') + '" title="' + (p.player || '') + ' — ' + (p.sport || '') + '">' +
+      slate +
+      '<div class="card-sport">' + (p.sport || '') + '</div>' +
+      '<div class="card-name">' + (p.player || '') + '</div>' +
+      '<div class="card-rate">' + fmtPct(p.hit_rate) + '</div>' +
+      '<div class="card-rate-label">' + tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props</div>' +
+      '<span class="card-dir-badge ' + dirClass(dir) + '">' + dir + '</span>' +
+      overUnder +
+      '</div>';
+  }
+
+  function renderCards(sport) {
+    SCROLL.innerHTML = '';
+    const list = sport === 'ALL' ? Object.values(allCardsBySport).flat() : (allCardsBySport[sport] || []);
+    if (!list.length) {
+      EMPTY.style.display = '';
+      SCROLL.style.display = 'none';
+      return;
+    }
+    EMPTY.style.display = 'none';
+    SCROLL.style.display = 'flex';
+    SCROLL.innerHTML = list.map(buildCard).join('');
+  }
+
+  function buildFilters(sports) {
+    const allSports = ['ALL'].concat(sports);
+    FILTERS.innerHTML = allSports.map(function (s) {
+      return '<button type="button" class="hot-sport-pill' + (s === activeSport ? ' active' : '') + '" data-s="' + s + '">' + s + '</button>';
+    }).join('');
+    FILTERS.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeSport = btn.dataset.s;
+        FILTERS.querySelectorAll('button').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.s === activeSport);
+        });
+        renderCards(activeSport);
+      });
+    });
+  }
+
+  function initHotPlayers() {
+    fetch(API)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        allCardsBySport = data.sports || {};
+        const sports = Object.keys(allCardsBySport).sort();
+        if (!sports.length) {
+          SECTION.style.display = '';
+          EMPTY.style.display = '';
+          return;
+        }
+        SECTION.style.display = '';
+        if (data.date) UPDATED.textContent = data.date;
+        buildFilters(sports);
+        renderCards('ALL');
+      })
+      .catch(function (err) {
+        console.warn('[HotPlayers]', err);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHotPlayers);
+  } else {
+    initHotPlayers();
+  }
+})();
+</script>

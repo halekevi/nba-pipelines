@@ -216,6 +216,13 @@ app = Flask(
 )
 
 try:
+    from routes.consistency import consistency_bp
+
+    app.register_blueprint(consistency_bp)
+except ImportError:
+    logging.getLogger(__name__).warning("Player consistency API routes not loaded")
+
+try:
     DATA_ROOT.mkdir(parents=True, exist_ok=True)
     PAYOUT_SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
 except OSError:

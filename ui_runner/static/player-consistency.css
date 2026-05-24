@@ -1,0 +1,440 @@
+/* Hot Players (homepage) + Player Evaluator (grades) — PropORACLE glass/gold theme */
+
+.hot-players-section {
+  margin: 0 0 14px;
+  padding: clamp(12px, 2.5vw, 18px);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  background: var(--glass-bg, rgba(20, 20, 20, 0.6));
+  backdrop-filter: blur(16px) saturate(170%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24);
+}
+
+.hot-players-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.hot-players-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(22px, 4vw, 28px);
+  letter-spacing: 2px;
+  color: var(--text, #f5f5f5);
+}
+
+.hot-players-title span {
+  color: var(--accent-gold, #d4af37);
+}
+
+.hot-players-badge {
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  color: var(--accent-gold, #d4af37);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.hot-players-updated {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--muted2, #8b8b99);
+  font-family: "Inter", sans-serif;
+}
+
+.hot-players-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hot-player-card {
+  flex: 0 0 min(168px, 42vw);
+  scroll-snap-align: start;
+  position: relative;
+  padding: 14px 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.hot-player-card:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+  transform: translateY(-2px);
+}
+
+.hot-player-card .card-on-slate {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green, #9fd8a7);
+  box-shadow: 0 0 8px rgba(159, 216, 167, 0.55);
+}
+
+.hot-player-card .card-sport {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted, #a0a0a8);
+  text-transform: uppercase;
+}
+
+.hot-player-card .card-name {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #f5f5f5);
+  margin: 6px 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hot-player-card .card-rate {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--accent-gold, #d4af37);
+}
+
+.hot-player-card .card-rate-label {
+  font-size: 9px;
+  color: var(--muted2, #8b8b99);
+  margin-bottom: 8px;
+}
+
+.hot-player-card .card-dir-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.hot-player-card .card-dir-badge.over {
+  background: rgba(159, 216, 167, 0.12);
+  color: var(--green, #9fd8a7);
+  border: 1px solid rgba(159, 216, 167, 0.25);
+}
+
+.hot-player-card .card-dir-badge.under {
+  background: rgba(127, 199, 217, 0.12);
+  color: var(--blue, #7fc7d9);
+  border: 1px solid rgba(127, 199, 217, 0.25);
+}
+
+.hot-player-card .card-dir-badge.both {
+  background: rgba(200, 154, 74, 0.12);
+  color: var(--amber, #c89a4a);
+  border: 1px solid rgba(200, 154, 74, 0.25);
+}
+
+.hot-sport-pill {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  background: transparent;
+  color: var(--muted, #a0a0a8);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hot-sport-pill.active,
+.hot-sport-pill:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.45);
+  color: var(--accent-gold, #d4af37);
+}
+
+.hot-players-empty {
+  font-size: 12px;
+  color: var(--muted, #a0a0a8);
+  padding: 8px 0;
+  font-family: "Inter", sans-serif;
+}
+
+/* ── Player Evaluator (grades tab) ── */
+
+#player-evaluator-panel {
+  display: none;
+}
+
+.iframe-shell-stage[data-grades-tab="players"] #player-evaluator-panel {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  min-height: min(45vh, 520px) !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  opacity: 1 !important;
+  z-index: 6;
+}
+
+.iframe-shell-stage[data-grades-tab="players"] #grade-frame,
+.iframe-shell-stage[data-grades-tab="players"] #ticket-frame,
+.iframe-shell-stage[data-grades-tab="players"] #props-eval-panel,
+.iframe-shell-stage[data-grades-tab="players"] #uniform-tickets-panel {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  opacity: 0 !important;
+}
+
+.pe-wrap {
+  padding: 0 4px 24px;
+}
+
+.pe-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.pe-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--text-primary, #f5f5f5);
+  margin: 0 0 4px;
+}
+
+.pe-subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--muted, #a0a0a8);
+  margin: 0;
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.pe-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pe-select {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--glass-bg, rgba(20, 20, 20, 0.6));
+  color: var(--text-primary, #f5f5f5);
+  border: 1px solid var(--glass-panel-border, rgba(255, 255, 255, 0.12));
+}
+
+.pe-toggle-label {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: var(--muted, #a0a0a8);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.pe-refresh-btn {
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-panel-border, rgba(255, 255, 255, 0.12));
+  color: var(--muted, #a0a0a8);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.pe-refresh-btn:hover {
+  color: var(--accent-gold, #d4af37);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.pe-stats-bar {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: var(--glass-bg, rgba(20, 20, 20, 0.55));
+  border-radius: 12px;
+  border: 1px solid var(--glass-panel-border, rgba(255, 255, 255, 0.08));
+}
+
+.pe-stat-val {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 22px;
+  color: var(--accent-gold, #d4af37);
+  line-height: 1;
+}
+
+.pe-stat-lbl {
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted2, #8b8b99);
+}
+
+.pe-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--glass-panel-border, rgba(255, 255, 255, 0.08));
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.pe-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+}
+
+.pe-table thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted2, #8b8b99);
+  border-bottom: 1px solid var(--glass-panel-border, rgba(255, 255, 255, 0.08));
+  white-space: nowrap;
+}
+
+.pe-table thead th.sortable {
+  cursor: pointer;
+}
+
+.pe-table thead th.sortable:hover,
+.pe-table thead th.active {
+  color: var(--accent-gold, #d4af37);
+}
+
+.pe-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pe-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pe-table tbody tr.on-slate {
+  background: rgba(159, 216, 167, 0.05);
+}
+
+.pe-table td {
+  padding: 9px 12px;
+  color: var(--text-primary, #f5f5f5);
+  white-space: nowrap;
+}
+
+.pe-hit-rate.great {
+  color: var(--green, #9fd8a7);
+}
+
+.pe-hit-rate.good {
+  color: #b8d4a8;
+}
+
+.pe-hit-rate.ok {
+  color: var(--amber, #c89a4a);
+}
+
+.pe-hit-rate.poor {
+  color: var(--red, #d07a78);
+}
+
+.pe-dir-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.pe-dir-badge.over {
+  background: rgba(159, 216, 167, 0.12);
+  color: var(--green, #9fd8a7);
+}
+
+.pe-dir-badge.under {
+  background: rgba(127, 199, 217, 0.12);
+  color: var(--blue, #7fc7d9);
+}
+
+.pe-dir-badge.both {
+  background: rgba(200, 154, 74, 0.12);
+  color: var(--amber, #c89a4a);
+}
+
+.pe-balance-bar {
+  width: 60px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.pe-balance-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue, #7fc7d9), var(--green, #9fd8a7));
+  border-radius: 3px;
+}
+
+.pe-slate-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green, #9fd8a7);
+  box-shadow: 0 0 0 2px rgba(159, 216, 167, 0.35);
+}
+
+.pe-loading,
+.pe-empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--muted, #a0a0a8);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+}
+
+.pe-legend {
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--muted2, #8b8b99);
+  font-family: "Inter", sans-serif;
+}
+
+[data-theme="light"] .hot-player-card,
+[data-theme="light"] .pe-table-wrap {
+  background: rgba(255, 255, 255, 0.65);
+}

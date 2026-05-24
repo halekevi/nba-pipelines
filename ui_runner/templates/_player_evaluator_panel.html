@@ -1,0 +1,223 @@
+<div id="player-evaluator-panel" class="grades-analytics-wrap" hidden aria-label="Player consistency evaluator">
+  <div class="pe-wrap glass-insights">
+    <div class="pe-header">
+      <div>
+        <h3 class="pe-title">Player Evaluator</h3>
+        <p class="pe-subtitle">Ranked hit rates from graded history. Green dot = on today's slate. Balance = how even OVER vs UNDER performance is.</p>
+      </div>
+      <div class="pe-controls">
+        <select id="pe-sport-select" class="pe-select" aria-label="Sport filter">
+          <option value="">All Sports</option>
+          <option value="NBA">NBA</option>
+          <option value="MLB">MLB</option>
+          <option value="NHL">NHL</option>
+          <option value="WNBA">WNBA</option>
+          <option value="Soccer">Soccer</option>
+          <option value="Tennis">Tennis</option>
+          <option value="CBB">CBB</option>
+        </select>
+        <select id="pe-direction-select" class="pe-select" aria-label="Direction filter">
+          <option value="">All Directions</option>
+          <option value="OVER">OVER</option>
+          <option value="UNDER">UNDER</option>
+          <option value="BOTH">BOTH</option>
+        </select>
+        <select id="pe-sort-select" class="pe-select" aria-label="Sort by">
+          <option value="hit_rate">Hit Rate</option>
+          <option value="balance_score">Balance</option>
+          <option value="total">Sample Size</option>
+        </select>
+        <select id="pe-tier-select" class="pe-select" aria-label="Confidence tier">
+          <option value="">All Tiers</option>
+          <option value="high">High (50+)</option>
+          <option value="medium">Medium (25+)</option>
+          <option value="low">Low</option>
+        </select>
+        <label class="pe-toggle-label">
+          <input type="checkbox" id="pe-today-toggle" /> Today only
+        </label>
+        <button type="button" class="pe-refresh-btn" id="pe-refresh-btn" title="Refresh">↻</button>
+      </div>
+    </div>
+
+    <div class="pe-stats-bar" id="pe-stats-bar"></div>
+
+    <div class="pe-table-wrap">
+      <div class="pe-loading" id="pe-loading">Loading player data…</div>
+      <div class="pe-empty" id="pe-empty" style="display:none">No players match your filters.</div>
+      <table class="pe-table" id="pe-table" style="display:none">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Sport</th>
+            <th>Tier</th>
+            <th class="sortable" data-sort="hit_rate">Hit Rate</th>
+            <th>Record</th>
+            <th>Direction</th>
+            <th>OVER %</th>
+            <th>UNDER %</th>
+            <th class="sortable" data-sort="balance_score">Balance</th>
+            <th>Slate</th>
+          </tr>
+        </thead>
+        <tbody id="pe-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="pe-legend">
+      <span><span class="pe-slate-dot" style="vertical-align:middle"></span> On today's slate</span>
+      <span style="margin-left:14px">Tier: high = 50+ props · medium = 25–49 · low &lt;25</span>
+      <span id="pe-cache-date" style="margin-left:auto;float:right"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const API_BASE = '/api/player-consistency';
+  const sportSel = document.getElementById('pe-sport-select');
+  const dirSel = document.getElementById('pe-direction-select');
+  const sortSel = document.getElementById('pe-sort-select');
+  const tierSel = document.getElementById('pe-tier-select');
+  const todayToggle = document.getElementById('pe-today-toggle');
+  const tbody = document.getElementById('pe-tbody');
+  const table = document.getElementById('pe-table');
+  const loading = document.getElementById('pe-loading');
+  const empty = document.getElementById('pe-empty');
+  const statsBar = document.getElementById('pe-stats-bar');
+  const cacheDate = document.getElementById('pe-cache-date');
+  const refreshBtn = document.getElementById('pe-refresh-btn');
+  const panel = document.getElementById('player-evaluator-panel');
+  if (!panel || !tbody) return;
+
+  function buildURL() {
+    const params = new URLSearchParams();
+    if (sportSel && sportSel.value) params.set('sport', sportSel.value);
+    if (dirSel && dirSel.value) params.set('direction', dirSel.value);
+    if (sortSel && sortSel.value) params.set('sort', sortSel.value);
+    if (tierSel && tierSel.value) params.set('tier', tierSel.value);
+    if (todayToggle && todayToggle.checked) params.set('today_only', '1');
+    params.set('limit', '50');
+    return API_BASE + '?' + params.toString();
+  }
+
+  function fmtPct(v) {
+    return v != null ? (v * 100).toFixed(1) + '%' : '—';
+  }
+  function rateClass(r) {
+    if (r >= 0.75) return 'great';
+    if (r >= 0.65) return 'good';
+    if (r >= 0.55) return 'ok';
+    return 'poor';
+  }
+  function tierColor(t) {
+    return t === 'high' ? 'var(--green,#9fd8a7)' : t === 'medium' ? 'var(--amber,#c89a4a)' : 'var(--muted2,#8b8b99)';
+  }
+  function dirClass(d) {
+    return d === 'OVER' ? 'over' : d === 'UNDER' ? 'under' : 'both';
+  }
+
+  function renderStats(players) {
+    if (!statsBar) return;
+    if (!players.length) {
+      statsBar.innerHTML = '';
+      return;
+    }
+    const avg = players.reduce(function (s, p) { return s + p.hit_rate; }, 0) / players.length;
+    const high = players.filter(function (p) { return p.tier === 'high'; }).length;
+    const onSlate = players.filter(function (p) { return p.on_today_slate; }).length;
+    const totalProps = players.reduce(function (s, p) { return s + p.total; }, 0);
+    statsBar.innerHTML =
+      '<div class="pe-stat"><div class="pe-stat-val">' + players.length + '</div><div class="pe-stat-lbl">Players</div></div>' +
+      '<div class="pe-stat"><div class="pe-stat-val">' + (avg * 100).toFixed(1) + '%</div><div class="pe-stat-lbl">Avg Hit Rate</div></div>' +
+      '<div class="pe-stat"><div class="pe-stat-val">' + high + '</div><div class="pe-stat-lbl">High Conf.</div></div>' +
+      '<div class="pe-stat"><div class="pe-stat-val">' + onSlate + '</div><div class="pe-stat-lbl">On Today</div></div>' +
+      '<div class="pe-stat"><div class="pe-stat-val">' + totalProps.toLocaleString() + '</div><div class="pe-stat-lbl">Total Props</div></div>';
+  }
+
+  function renderTable(players) {
+    if (!players.length) {
+      table.style.display = 'none';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+    table.style.display = '';
+    tbody.innerHTML = players.map(function (p, i) {
+      const balancePct = p.balance_score != null ? Math.round(p.balance_score * 100) : null;
+      const slateCell = p.on_today_slate
+        ? '<span class="pe-slate-dot" title="On today\'s slate"></span>'
+        : '<span style="color:var(--muted2)">—</span>';
+      const balanceCell = balancePct != null
+        ? '<span title="Balance: ' + balancePct + '%"><span class="pe-balance-bar"><span class="pe-balance-fill" style="width:' + balancePct + '%"></span></span> <span style="font-size:10px;color:var(--muted2);margin-left:4px">' + balancePct + '%</span></span>'
+        : '—';
+      return '<tr class="' + (p.on_today_slate ? 'on-slate' : '') + '">' +
+        '<td>' + (i + 1) + '</td>' +
+        '<td style="font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis">' + (p.player || '') + '</td>' +
+        '<td>' + (p.sport || '') + '</td>' +
+        '<td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + tierColor(p.tier) + ';margin-right:4px;vertical-align:middle"></span>' + (p.tier || '') + '</td>' +
+        '<td><span class="pe-hit-rate ' + rateClass(p.hit_rate) + '" style="font-weight:700">' + fmtPct(p.hit_rate) + '</span></td>' +
+        '<td style="color:var(--muted)">' + p.hits + '/' + p.total + '</td>' +
+        '<td><span class="pe-dir-badge ' + dirClass(p.direction) + '">' + (p.direction || '') + '</span></td>' +
+        '<td>' + fmtPct(p.over_rate) + '</td>' +
+        '<td>' + fmtPct(p.under_rate) + '</td>' +
+        '<td>' + balanceCell + '</td>' +
+        '<td>' + slateCell + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function fetchAndRender() {
+    loading.style.display = '';
+    table.style.display = 'none';
+    empty.style.display = 'none';
+    if (statsBar) statsBar.innerHTML = '';
+    fetch(buildURL())
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        loading.style.display = 'none';
+        const players = data.players || [];
+        if (data.generated_at && cacheDate) {
+          cacheDate.textContent = 'Updated: ' + String(data.generated_at).slice(0, 10);
+        }
+        renderStats(players);
+        renderTable(players);
+      })
+      .catch(function () {
+        loading.style.display = 'none';
+        empty.style.display = '';
+        empty.textContent = 'Failed to load player data. Run the daily pipeline or refresh.';
+      });
+  }
+
+  [sportSel, dirSel, sortSel, tierSel].forEach(function (el) {
+    if (el) el.addEventListener('change', fetchAndRender);
+  });
+  if (todayToggle) todayToggle.addEventListener('change', fetchAndRender);
+  if (refreshBtn) refreshBtn.addEventListener('click', fetchAndRender);
+  document.querySelectorAll('.pe-table .sortable').forEach(function (th) {
+    th.addEventListener('click', function () {
+      document.querySelectorAll('.pe-table .sortable').forEach(function (t) { t.classList.remove('active'); });
+      th.classList.add('active');
+      if (sortSel) sortSel.value = th.dataset.sort || 'hit_rate';
+      fetchAndRender();
+    });
+  });
+
+  window.PlayerEvaluator = {
+    show: function (sport) {
+      panel.removeAttribute('hidden');
+      if (sport && sport !== 'all' && sportSel) sportSel.value = sport;
+      fetchAndRender();
+    },
+    hide: function () {
+      panel.setAttribute('hidden', '');
+    },
+    setSport: function (sport) {
+      if (sportSel) sportSel.value = sport || '';
+      fetchAndRender();
+    },
+  };
+})();
+</script>

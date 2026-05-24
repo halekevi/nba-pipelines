@@ -13,6 +13,7 @@ h<!DOCTYPE html>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260523utp2"/>
+<link rel="stylesheet" href="/static/player-consistency.css?v=20260523pc"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -499,6 +500,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 #empty-state[hidden],
 #ticket-empty-state[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;z-index:-1 !important;}
 #props-eval-panel[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;}
+#player-evaluator-panel[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;}
 /* Tab layer visibility — data-grades-tab on .iframe-shell-stage (set by switchTab) */
 .iframe-shell-stage[data-grades-tab="props"] #grade-frame,
 .iframe-shell-stage[data-grades-tab="props"] #grade-frame-inline,
@@ -512,10 +514,14 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell-stage[data-grades-tab="uniform"] #ticket-frame-inline,
 .iframe-shell-stage[data-grades-tab="slate"] #props-eval-panel,
 .iframe-shell-stage[data-grades-tab="slate"] #uniform-tickets-panel,
+.iframe-shell-stage[data-grades-tab="slate"] #player-evaluator-panel,
 .iframe-shell-stage[data-grades-tab="props"] #uniform-tickets-panel,
+.iframe-shell-stage[data-grades-tab="props"] #player-evaluator-panel,
 .iframe-shell-stage[data-grades-tab="tickets"] #props-eval-panel,
 .iframe-shell-stage[data-grades-tab="tickets"] #uniform-tickets-panel,
-.iframe-shell-stage[data-grades-tab="uniform"] #props-eval-panel{
+.iframe-shell-stage[data-grades-tab="tickets"] #player-evaluator-panel,
+.iframe-shell-stage[data-grades-tab="uniform"] #props-eval-panel,
+.iframe-shell-stage[data-grades-tab="uniform"] #player-evaluator-panel{
   display:none !important;
   visibility:hidden !important;
   pointer-events:none !important;
@@ -1486,6 +1492,9 @@ select option,
             <button type="button" class="tab-btn" id="tab-uniform" onclick="switchTab('uniform')">
               <span class="tab-icon">🎫</span>UNIFORM TICKETS
             </button>
+            <button type="button" class="tab-btn" id="tab-players" onclick="switchTab('players')">
+              <span class="tab-icon">📊</span>PLAYERS
+            </button>
           </div>
         </div>
       </div>
@@ -1555,6 +1564,7 @@ select option,
   <div id="uniform-tickets-panel" class="grades-analytics-wrap" hidden aria-label="Uniform-bucket tickets for the report date">
     {% include '_uniform_tickets_panel.html' %}
   </div>
+  {% include '_player_evaluator_panel.html' %}
   </div><!-- /.iframe-shell-stage -->
 </div>
 </div><!-- /.grades-body -->
@@ -3051,10 +3061,12 @@ function switchTab(tab) {
   const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
   const tu = gradesEl('tab-uniform');
+  const tpl = gradesEl('tab-players');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
   if (tu) tu.classList.toggle('active', tab === 'uniform');
+  if (tpl) tpl.classList.toggle('active', tab === 'players');
   const pe = document.getElementById('props-eval-panel');
   const utp = document.getElementById('uniform-tickets-panel');
   setGradesHubFrameDisplay('grade-frame', tab === 'slate');
@@ -3070,6 +3082,18 @@ function switchTab(tab) {
     if (tab === 'uniform') {
       utp.removeAttribute('hidden');
     }
+  }
+  const pep = document.getElementById('player-evaluator-panel');
+  if (pep) {
+    pep.hidden = tab !== 'players';
+    if (tab === 'players') {
+      pep.removeAttribute('hidden');
+    }
+  }
+  if (tab === 'players' && typeof window.PlayerEvaluator !== 'undefined') {
+    window.PlayerEvaluator.show();
+  } else if (typeof window.PlayerEvaluator !== 'undefined') {
+    window.PlayerEvaluator.hide();
   }
   const tEmpty = document.getElementById('ticket-empty-state');
   if (tEmpty) tEmpty.hidden = true;
@@ -3098,6 +3122,10 @@ function switchTab(tab) {
         window.setupGradesBarsScrollHide();
       } catch (_e) {}
     }, 0);
+  } else if (tab === 'players') {
+    hideGradesHubLoadOverlay();
+    const esP = document.getElementById('empty-state');
+    if (esP) esP.hidden = true;
   } else if (tab === 'tickets') {
     hideGradesHubLoadOverlay();
     const es1 = document.getElementById('empty-state');

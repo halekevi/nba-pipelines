@@ -581,6 +581,18 @@ else {
         else {
             Write-Log "STEP A2 - Player consistency build: OK"
         }
+        $uiConsistencyScript = Join-Path $Root "scripts\build_player_consistency_ui.py"
+        if (Test-Path $uiConsistencyScript) {
+            & py -3.14 $uiConsistencyScript --min-props 10 --top-n 50
+            $cue = $LASTEXITCODE
+            if ($cue -ne 0) {
+                Write-Warning "Player consistency UI JSON build failed (non-fatal)"
+                Write-Log "STEP A2b - Player consistency UI JSON: FAILED (py exit $cue)"
+            }
+            else {
+                Write-Log "STEP A2b - Player consistency UI JSON: OK"
+            }
+        }
     }
     catch {
         Write-Warning "Player consistency build failed — grades may be stale"
@@ -1657,7 +1669,6 @@ if ($NowHour -ge 10) {
         "--jitter_seconds", "14.0",
         "--append",
         "--date", $Today,
-        "--allow-nearest-future",
         "--output", (Join-Path $Root "outputs\$Today\nba\step1_pp_props_today.csv")
     )
     Push-Location $NBADir

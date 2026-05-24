@@ -984,6 +984,7 @@ body::before{
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430schemapage"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260522gradesframe"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
+<link rel="stylesheet" href="/static/player-consistency.css?v=20260523pc"/>
 </head>
 <body>
 
@@ -1988,6 +1989,14 @@ body::before{
     </div>
 
   </div><!-- /slate-panel-wrap -->
+    </div>
+  </details>
+
+  <!-- HOT PLAYERS — consistency leaders on today's slate -->
+  <details class="home-cat" open id="hot-players-cat">
+    <summary><span class="home-cat-title">Hot <span>Players</span></span></summary>
+    <div class="home-cat-body">
+      {% include '_hot_players_section.html' %}
     </div>
   </details>
 
