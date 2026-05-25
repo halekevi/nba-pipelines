@@ -46,6 +46,11 @@ for _efe_anc in Path(__file__).resolve().parents:
             sys.path.insert(0, _efe_sd)
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+from nba_enrichment_carry import (
+    is_nba1h_pipeline,
+    reattach_enrichment_carry,
+    snapshot_enrichment_carry,
+)
 
 _repo_nba7 = Path(__file__).resolve().parents[3]
 if str(_repo_nba7) not in sys.path:
@@ -1074,6 +1079,11 @@ def main() -> None:
         sport_for_usage = "NBA1H"
     df = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig", 
                      engine='python').fillna("")
+
+    carry_cols: list[str] = []
+    carry_df = None
+    if is_nba1h_pipeline(args.input, df):
+        carry_cols, carry_df = snapshot_enrichment_carry(df)
     
     # Explicitly ensure all string columns are str type (not object with mixed types)
     for col in df.select_dtypes(include=['object']).columns:
@@ -1655,6 +1665,9 @@ def main() -> None:
         kind="mergesort",
     )
     out = out.drop(columns=["_cohort_sort"], errors="ignore")
+
+    if carry_df is not None:
+        out = reattach_enrichment_carry(out, carry_df, carry_cols, label=args.input)
 
     # Split here — after all scoring/tier columns are populated
     dropped_df = out.loc[drop_mask].copy()

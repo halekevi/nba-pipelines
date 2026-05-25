@@ -50,6 +50,12 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from nba_enrichment_carry import (
+    ENRICHMENT_CARRY_COLS,
+    is_nba1h_pipeline,
+    reattach_enrichment_carry,
+    snapshot_enrichment_carry,
+)
 
 _ET = ZoneInfo("America/New_York")
 
@@ -417,6 +423,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'is_playoff_game',
         'game_script_mult', 'game_script_note',
     ]
+    if is_period_slate:
+        for c in ENRICHMENT_CARRY_COLS:
+            if c not in keep:
+                keep.append(c)
     # Force full schema so NBA1Q/NBA1H clean outputs match NBA Step 8 columns.
     for c in keep:
         if c not in df2.columns:
@@ -517,6 +527,11 @@ def main() -> None:
     print(f"→ Loading: {args.input} (sheet={args.sheet})")
     df = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
 
+    carry_cols: list[str] = []
+    carry_df = None
+    if is_nba1h_pipeline(args.input, df):
+        carry_cols, carry_df = snapshot_enrichment_carry(df)
+
     out = df.copy()
 
     # Backfill opponent labels when opp_team is missing.
@@ -602,6 +617,9 @@ def main() -> None:
 
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"] = reason
+
+    if carry_df is not None:
+        out = reattach_enrichment_carry(out, carry_df, carry_cols, label=args.input)
 
     # Save full CSV
     out.to_csv(args.output, index=False, encoding="utf-8-sig")

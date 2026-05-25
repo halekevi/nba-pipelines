@@ -30,6 +30,12 @@ import argparse
 import pandas as pd
 import numpy as np
 
+from nba_enrichment_carry import (
+    is_nba1h_pipeline,
+    reattach_enrichment_carry,
+    snapshot_enrichment_carry,
+)
+
 
 # ----------------------------
 # Tier functions
@@ -96,6 +102,11 @@ def main():
     print(f"→ Loading: {args.input}")
     df = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig")
 
+    carry_cols: list[str] = []
+    carry_df = None
+    if is_nba1h_pipeline(args.input, df):
+        carry_cols, carry_df = snapshot_enrichment_carry(df)
+
     stat_last5 = pd.to_numeric(df.get("stat_last5_avg"), errors="coerce")
     min_last5  = pd.to_numeric(df.get("min_last5_avg"),  errors="coerce")
     prop_norm  = df.get("prop_norm", pd.Series([""] * len(df), index=df.index)).astype(str).str.lower().str.strip()
@@ -154,6 +165,8 @@ def main():
             df.rename(columns={"OVERALL_DEF_RANK":"OPP_OVERALL_DEF_RANK","DEF_TIER":"OPP_DEF_TIER"}, inplace=True)
             df.drop(columns=["espn_team_id"], inplace=True, errors="ignore")
 
+    if carry_df is not None:
+        df = reattach_enrichment_carry(df, carry_df, carry_cols, label=args.input)
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}")
     print(f"Rows: {len(df)} | Cols: {len(df.columns)}")

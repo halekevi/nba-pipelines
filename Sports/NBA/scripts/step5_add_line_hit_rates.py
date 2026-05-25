@@ -43,6 +43,12 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
 
+from nba_enrichment_carry import (
+    is_nba1h_pipeline,
+    reattach_enrichment_carry,
+    snapshot_enrichment_carry,
+)
+
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
     """Return the list of stat_g1..stat_gN that exist."""
@@ -98,6 +104,11 @@ def main() -> None:
 
     print(f"→ Loading: {args.input}")
     df = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig").copy()
+
+    carry_cols: list[str] = []
+    carry_df = None
+    if is_nba1h_pipeline(args.input, df):
+        carry_cols, carry_df = snapshot_enrichment_carry(df)
 
     if args.line_col not in df.columns:
         raise RuntimeError(f"❌ Missing required column: {args.line_col}")
@@ -185,6 +196,8 @@ def main() -> None:
             print("ℹ️ --compute10 requested, but stat_g6..stat_g10 not present. Skipping 10-game metrics.")
 
     df = finalize_l10_ui_columns(df, line_col=args.line_col)
+    if carry_df is not None:
+        df = reattach_enrichment_carry(df, carry_df, carry_cols, label=args.input)
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}")
     print(f"Rows: {len(df)}")
