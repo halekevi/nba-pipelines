@@ -8,7 +8,9 @@ Outputs:
 
   With ``--output PATH``, writes the joined CSV to PATH and graded-only to
   ``<stem>_graded_only<suffix>`` beside it. Use ``--from YYYY-MM-DD`` to keep only
-  graded_props rows whose file_date is on/after that day (e.g. post tier overhaul).
+  graded_props rows whose file_date is on/after that day (additional global filter).
+
+  Rows before ``TRAINING_FROM_DATE`` (2026-05-06) are excluded by default via ``--from``.
 
 Usage:
   py -3.14 scripts/build_retrain_dataset.py
@@ -40,6 +42,12 @@ from utils.graded_schema import coverage_report, normalize_graded_df, recover_di
 
 # Per-group tier overhaul (commit a1b24e77). Graded `file_date` on/after this uses new tier semantics.
 TIER_OVERHAUL_DATE = "2026-05-02"
+
+# Default minimum graded_props file_date (inclusive) for retrain builds.
+# Soccer before 2026-05-06: step8 has UNKNOWN_OPP with no recovery (April ceiling).
+# Global filter to this date clears Soccer ROC-AUC gate (~0.74); soccer-only drop does not (~0.69).
+# Remove or set to "" when historical opp backfill exists. Override: --from YYYY-MM-DD or --from "".
+TRAINING_FROM_DATE = "2026-05-06"
 
 # Sports omitted from retrain_dataset.csv (and graded_only export).
 EXCLUDE_SPORTS: frozenset[str] = frozenset()
@@ -857,9 +865,9 @@ def main() -> int:
     ap.add_argument(
         "--from",
         dest="from_date",
-        default="",
+        default=TRAINING_FROM_DATE,
         metavar="YYYY-MM-DD",
-        help="Minimum graded_props file_date (inclusive). Empty = all dates.",
+        help=f"Minimum graded_props file_date (inclusive). Default: {TRAINING_FROM_DATE}. Use '' for all dates.",
     )
     ap.add_argument(
         "--diagnose-tennis",
@@ -1061,6 +1069,79 @@ def main() -> int:
                     m = m.drop(columns=[f"{c}_x"], errors="ignore")
                 if c not in m.columns:
                     m[c] = np.nan
+
+            # Soccer cascade: backfill team/opp_team/def_tier from step8 when graded JSON is blank.
+            if sk_u == "SOCCER":
+                _unk = frozenset(
+                    {"", "nan", "none", "null", "unknown", "unknown_opp", "—", "-", "n/a", "na"}
+                )
+                _s8_team_col = next(
+                    (c for c in ("team", "Team") if c in s8m.columns),
+                    None,
+                )
+                _s8_opp_col = next(
+                    (c for c in ("opp_team", "Opp", "opp") if c in s8m.columns),
+                    None,
+                )
+                if _s8_team_col and _s8_opp_col:
+                    ref_cols = list(merge_on_keys) + [_s8_team_col, _s8_opp_col]
+                    if "def_tier" in s8m.columns:
+                        ref_cols.append("def_tier")
+                    elif "Def Tier" in s8m.columns:
+                        ref_cols.append("Def Tier")
+                    s8_ref = s8m[ref_cols].copy().drop_duplicates(subset=merge_on_keys)
+                    s8_ref = s8_ref.rename(
+                        columns={
+                            _s8_team_col: "_s8_team",
+                            _s8_opp_col: "_s8_opp",
+                            "def_tier": "_s8_def_tier",
+                            "Def Tier": "_s8_def_tier",
+                        }
+                    )
+                    m = m.merge(s8_ref, on=merge_on_keys, how="left")
+                    for graded_col, s8_col in (("team", "_s8_team"), ("opp_team", "_s8_opp")):
+                        if graded_col not in m.columns or s8_col not in m.columns:
+                            continue
+                        if m[graded_col].dtype != object:
+                            m[graded_col] = m[graded_col].astype(object)
+                        mask = (
+                            m[graded_col]
+                            .astype(str)
+                            .str.strip()
+                            .str.lower()
+                            .isin(_unk)
+                        )
+                        if mask.any():
+                            s8_vals = m.loc[mask, s8_col].astype(str).str.strip()
+                            good = ~s8_vals.str.lower().isin(_unk)
+                            if good.any():
+                                fill_idx = s8_vals.index[good]
+                                m.loc[fill_idx, graded_col] = s8_vals.loc[good].values
+                    if "_s8_def_tier" in m.columns and "def_tier" in m.columns:
+                        if m["def_tier"].dtype != object:
+                            m["def_tier"] = m["def_tier"].astype(object)
+                        mask_dt = (
+                            m["def_tier"]
+                            .astype(str)
+                            .str.strip()
+                            .str.lower()
+                            .isin(_unk)
+                        )
+                        if mask_dt.any():
+                            s8_dt = m.loc[mask_dt, "_s8_def_tier"].astype(str).str.strip()
+                            good_dt = ~s8_dt.str.lower().isin(_unk)
+                            if good_dt.any():
+                                fill_idx = s8_dt.index[good_dt]
+                                m.loc[fill_idx, "def_tier"] = s8_dt.loc[good_dt].values
+                    m = m.drop(
+                        columns=[
+                            c
+                            for c in ("_s8_team", "_s8_opp", "_s8_def_tier")
+                            if c in m.columns
+                        ],
+                        errors="ignore",
+                    )
+
             if skip_date_filter:
                 m["_tol"] = True
             else:
