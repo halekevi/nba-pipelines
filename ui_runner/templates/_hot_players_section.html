@@ -5,7 +5,7 @@
     <span class="hot-players-updated" id="hot-players-updated"></span>
   </div>
   <div id="hot-sport-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
-  <div class="hot-players-scroll" id="hot-players-scroll"></div>
+  <div class="hot-players-scroll hot-players-grid" id="hot-players-scroll"></div>
   <div class="hot-players-empty" id="hot-players-empty" style="display:none">
     No players on today's slate yet — check back after the daily pipeline runs.
   </div>
@@ -61,7 +61,7 @@
       return;
     }
     EMPTY.style.display = 'none';
-    SCROLL.style.display = 'flex';
+    SCROLL.style.display = 'grid';
     SCROLL.innerHTML = list.map(buildCard).join('');
   }
 

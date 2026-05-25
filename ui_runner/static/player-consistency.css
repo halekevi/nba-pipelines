@@ -50,18 +50,16 @@
 }
 
 .hot-players-scroll {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  overflow: visible;
 }
 
 .hot-player-card {
-  flex: 0 0 min(168px, 42vw);
-  scroll-snap-align: start;
   position: relative;
+  min-width: 0;
   padding: 14px 12px 12px;
   border-radius: 14px;
   border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
@@ -169,6 +167,18 @@
   color: var(--muted, #a0a0a8);
   padding: 8px 0;
   font-family: "Inter", sans-serif;
+}
+
+/* Hot Players grid: 8 cols desktop → 2 cols portrait / narrow mobile */
+@media (max-width: 900px), (pointer: coarse) and (max-width: 1200px) {
+  .hot-players-scroll {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hot-player-card .card-rate {
+    font-size: 24px;
+  }
 }
 
 /* ── Player Evaluator (grades tab) ── */
