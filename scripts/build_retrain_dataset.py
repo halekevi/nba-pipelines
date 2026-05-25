@@ -444,6 +444,148 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
     return None
 
 
+# Dated outputs/<YYYY-MM-DD>/ pipeline CSVs for NBA1H (not full-game step8_all_direction).
+_NBA1H_PIPELINE_ENRICH_STEPS: list[tuple[str, tuple[str, ...]]] = [
+    (
+        "step4_nba1h_with_stats.csv",
+        (
+            "usage_pct",
+            "usage_tier",
+            "usage_role_type",
+            "ast_pct",
+            "reb_pct",
+            "pp_projection_id",
+            "team_pace",
+            "opp_pace",
+            "game_pace",
+            "pace_delta",
+            "pace_context",
+            "opp_def_rating",
+            "opp_pts_allowed_vs_position",
+            "opp_reb_allowed_vs_position",
+            "opp_ast_allowed_vs_position",
+            "positional_matchup_tier",
+            "minutes_floor_L10",
+            "minutes_ceil_L10",
+            "minutes_cv_L10",
+        ),
+    ),
+    (
+        "step5_nba1h_with_hit_rates.csv",
+        (
+            "line_hit_rate_over_ou_10",
+            "line_hit_rate_under_ou_10",
+            "line_hits_over_5",
+            "line_hits_under_5",
+            "last5_over",
+            "last5_under",
+            "last5_hit_rate",
+        ),
+    ),
+    (
+        "step6_nba1h_with_team_role_context.csv",
+        (
+            "minutes_tier",
+            "shot_role",
+            "usage_role",
+            "min_player_avg",
+            "pts_player_avg",
+        ),
+    ),
+]
+
+
+def _enrich_keys(frame: pd.DataFrame) -> pd.DataFrame | None:
+    """Add ``_enrich_player`` / ``_enrich_prop`` for left-joining dated pipeline CSVs."""
+    player_col = next((c for c in ("player", "Player") if c in frame.columns), None)
+    prop_col = next(
+        (c for c in ("prop_norm", "prop_type", "Prop", "prop") if c in frame.columns),
+        None,
+    )
+    if not player_col or not prop_col:
+        return None
+    out = frame.copy()
+    out["_enrich_player"] = out[player_col].map(player_join_key)
+    out["_enrich_prop"] = out[prop_col].map(prop_join_key)
+    return out
+
+
+def _enrich_nba1h_from_dated_pipeline(
+    root: Path, file_date: str, df: pd.DataFrame
+) -> pd.DataFrame:
+    """Left-join step4/5/6 NBA1H pipeline CSVs from ``outputs/<file_date>/`` when present."""
+    d = (file_date or "")[:10]
+    if len(d) != 10 or df is None or len(df) == 0:
+        return df
+
+    base = _enrich_keys(df)
+    if base is None:
+        return df
+
+    rel_dirs = ("", "nba1h/")
+    for step_name, payload_cols in _NBA1H_PIPELINE_ENRICH_STEPS:
+        step_path: Path | None = None
+        for rel in rel_dirs:
+            candidate = root / "outputs" / d / rel / step_name
+            if candidate.is_file():
+                step_path = candidate
+                break
+        if step_path is None:
+            continue
+        try:
+            enrich = pd.read_csv(step_path, encoding="utf-8-sig", low_memory=False)
+        except Exception as exc:
+            print(f"[NBA1H enrich] {step_name} failed: {exc}")
+            continue
+
+        ek = _enrich_keys(enrich)
+        if ek is None:
+            print(f"[NBA1H enrich] {step_name}: skip (no player/prop columns)")
+            continue
+
+        merge_cols = [c for c in payload_cols if c in ek.columns]
+        if not merge_cols:
+            continue
+
+        drop = [c for c in merge_cols if c in base.columns]
+        if drop:
+            base = base.drop(columns=drop, errors="ignore")
+
+        feat = ek[["_enrich_player", "_enrich_prop"] + merge_cols].drop_duplicates(
+            subset=["_enrich_player", "_enrich_prop"], keep="first"
+        )
+        base = base.merge(feat, on=["_enrich_player", "_enrich_prop"], how="left")
+
+        # Step8 Prop labels (e.g. ``Points``) often differ from step4 ``prop_norm``
+        # (e.g. ``fantasyscore``). Backfill remaining nulls from the same player row.
+        if step_name.startswith("step4") or step_name.startswith("step6"):
+            player_feat = ek[["_enrich_player"] + merge_cols].drop_duplicates(
+                subset=["_enrich_player"], keep="first"
+            )
+            for col in merge_cols:
+                if col not in base.columns:
+                    continue
+                miss = base[col].isna()
+                if not miss.any():
+                    continue
+                back = base.loc[miss, ["_enrich_player"]].merge(
+                    player_feat, on="_enrich_player", how="left"
+                )
+                base.loc[miss, col] = back[col].to_numpy()
+
+        print(f"[NBA1H enrich] {step_path.relative_to(root)}: +{len(merge_cols)} cols")
+
+    # Map step5 hit-rate columns into ENRICHMENT_RAW_COLS names when absent.
+    if "l10_over_pct" not in base.columns and "line_hit_rate_over_ou_10" in base.columns:
+        base["l10_over_pct"] = pd.to_numeric(base["line_hit_rate_over_ou_10"], errors="coerce")
+    if "l10_under" not in base.columns and "line_hit_rate_under_ou_10" in base.columns:
+        base["l10_under"] = pd.to_numeric(base["line_hit_rate_under_ou_10"], errors="coerce")
+    if "l10_over" not in base.columns and "line_hits_over_5" in base.columns:
+        base["l10_over"] = pd.to_numeric(base["line_hits_over_5"], errors="coerce")
+
+    return base.drop(columns=["_enrich_player", "_enrich_prop"], errors="ignore")
+
+
 def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[pd.DataFrame | None, bool]:
     """Prefer outputs/<date>/step8_* for historical slates; else fall back to repo snapshot.
 
@@ -480,6 +622,9 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
         for name in (
             f"nba/step8_nba1h_direction_clean_{d}.xlsx",
             f"step8_nba1h_direction_clean_{d}.xlsx",
+            "step8_nba1h_direction_clean.xlsx",
+            f"step8_nba1h_direction_{d}.xlsx",
+            f"step8_nba1h_direction_{d}.csv",
         ):
             p = root / "outputs" / d / name
             if p.is_file():
@@ -488,8 +633,11 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
                     if p.suffix.lower() == ".xlsx"
                     else pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
                 )
-                return df, False
-        return load_step8_sport(root, sport), True
+                return _enrich_nba1h_from_dated_pipeline(root, d, df), False
+        df = load_step8_sport(root, sport)
+        if df is not None:
+            df = _enrich_nba1h_from_dated_pipeline(root, d, df)
+        return df, True
     if sport_u == "NBA1Q":
         for name in (
             f"nba/step8_nba1q_direction_clean_{d}.xlsx",
@@ -630,6 +778,22 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
             root / "outputs" / d / "tennis" / "step8_tennis_direction_clean.csv",
             root / "outputs" / d / f"step8_tennis_direction_clean_{d}.xlsx",
             root / "outputs" / d / f"step8_tennis_direction_{d}.xlsx",
+        ]
+    elif sport_u == "NBA1H":
+        candidates = [
+            root / "outputs" / d / "nba" / f"step8_nba1h_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_nba1h_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "step8_nba1h_direction_clean.xlsx",
+            root / "outputs" / d / f"step8_nba1h_direction_{d}.xlsx",
+            root / "outputs" / d / f"step8_nba1h_direction_{d}.csv",
+        ]
+    elif sport_u == "NBA1Q":
+        candidates = [
+            root / "outputs" / d / "nba" / f"step8_nba1q_direction_clean_{d}.xlsx",
+            root / "outputs" / d / f"step8_nba1q_direction_clean_{d}.xlsx",
+            root / "outputs" / d / "step8_nba1q_direction_clean.xlsx",
+            root / "outputs" / d / f"step8_nba1q_direction_{d}.xlsx",
+            root / "outputs" / d / f"step8_nba1q_direction_{d}.csv",
         ]
     return any(p.is_file() for p in candidates)
 
