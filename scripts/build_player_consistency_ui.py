@@ -55,6 +55,8 @@ _DYNAMIC_SPORTS = frozenset({"NBA1H"})
 # Shallow pools: include every qualifying player (avoids top_n cutting e.g. WNBA rank 51).
 _SPORT_INCLUDE_ALL = frozenset({"WNBA", "NBA1H", "NBA1Q"})
 TOP_BEST_PROPS = 3
+# Hot-player cards: show a prop title even when no slice meets sport min_n (e.g. 20).
+MIN_DISPLAY_PROPS = 3
 
 # Volume/process props: deprioritized when ranking (weight 0.75 vs 1.0 for outcome props).
 VOLUME_PROPS: frozenset[str] = frozenset(
@@ -189,13 +191,13 @@ def _min_for_sport(sport: str, total: int) -> int:
     return min_val if min_val is not None else 20
 
 
-def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, list[dict]]:
+def _prop_slices_for_group(
+    grp: pd.DataFrame,
+    sport: str,
+    min_n: int,
+) -> list[dict]:
     if "prop" not in grp.columns:
-        return None, []
-
-    player_total = len(grp)
-    min_n = _min_for_sport(sport, player_total)
-
+        return []
     slices: list[dict] = []
     for (prop_raw, direction), sub in grp.groupby(["prop", "direction"], sort=False):
         direction = str(direction).upper().strip()
@@ -218,17 +220,26 @@ def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, lis
                 "_sort_score": hit_rate * weight,
             }
         )
-
     slices.sort(
         key=lambda x: (-float(x["_sort_score"]), -int(x["total"]), x["prop_type"]),
     )
-    best_props = [
-        {k: v for k, v in s.items() if k != "_sort_score"}
-        for s in slices[:TOP_BEST_PROPS]
-    ]
-    best_prop = (
-        {k: v for k, v in slices[0].items() if k != "_sort_score"} if slices else None
-    )
+    return slices
+
+
+def _strip_slice(s: dict) -> dict:
+    return {k: v for k, v in s.items() if k != "_sort_score"}
+
+
+def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, list[dict]]:
+    player_total = len(grp)
+    min_n = _min_for_sport(sport, player_total)
+    strict = _prop_slices_for_group(grp, sport, min_n)
+    display_min = min(min_n, max(MIN_DISPLAY_PROPS, 3))
+    relaxed = _prop_slices_for_group(grp, sport, display_min) if display_min < min_n else strict
+
+    best_props = [_strip_slice(s) for s in strict[:TOP_BEST_PROPS]]
+    pick = strict[0] if strict else (relaxed[0] if relaxed else None)
+    best_prop = _strip_slice(pick) if pick else None
     return best_prop, best_props
 
 
@@ -279,6 +290,7 @@ def compute_consistency(df: pd.DataFrame, min_props: int = 10) -> list[dict]:
         tier = "high" if total >= 50 else "medium" if total >= 25 else "low"
 
         best_prop, best_props = _compute_best_props(grp, str(sport))
+        display_prop = best_prop
         card_direction = (
             str(best_prop["direction"])
             if best_prop and best_prop.get("direction")
@@ -302,6 +314,7 @@ def compute_consistency(df: pd.DataFrame, min_props: int = 10) -> list[dict]:
             "tier": tier,
             "balance_score": balance_score,
             "best_prop": best_prop,
+            "display_prop": display_prop,
             "best_props": best_props,
             "last_updated": str(date.today()),
         }

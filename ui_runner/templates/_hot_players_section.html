@@ -13,7 +13,7 @@
 
 <script>
 (function () {
-  const API = '/api/hot-players?limit=8';
+  const API = '/api/hot-players?limit=8&_v=2';
   const SECTION = document.getElementById('hot-players-section');
   const SCROLL = document.getElementById('hot-players-scroll');
   const FILTERS = document.getElementById('hot-sport-filters');
@@ -35,10 +35,25 @@
     return '<span title="Confidence: ' + tier + '" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + (colors[tier] || colors.low) + ';margin-right:3px;vertical-align:middle"></span>';
   }
 
-  function bestPropBlock(p) {
+  function resolveBestProp(p) {
+    const dp = p.display_prop;
+    if (dp && dp.prop_type) return dp;
     const bp = p.best_prop;
+    if (bp && bp.prop_type) return bp;
+    const list = p.best_props;
+    if (Array.isArray(list) && list.length && list[0].prop_type) return list[0];
+    return null;
+  }
+
+  function bestPropBlock(p) {
+    const bp = resolveBestProp(p);
     if (!bp || !bp.prop_type) {
-      return '';
+      const dir = (p.direction || 'BOTH').toString().toUpperCase();
+      return '<div class="card-best-prop card-best-prop--empty">' +
+        '<div class="card-prop-name card-prop-muted">Mixed props</div>' +
+        '<div class="card-best-prop-row">' +
+        '<span class="card-dir-badge ' + dirClass(dir) + '">' + (dir === 'BOTH' ? '—' : dir) + '</span>' +
+        '</div></div>';
     }
     const dir = bp.direction || '';
     const tip = (bp.prop_type || '') + ' ' + dir + ' — ' + fmtPct(bp.hit_rate) + ' (' + (bp.total || 0) + ' props)';
@@ -54,7 +69,7 @@
 
   function buildCard(p) {
     const slate = p.on_today_slate ? '<span class="card-on-slate" title="On today\'s slate"></span>' : '';
-    const bp = p.best_prop;
+    const bp = resolveBestProp(p);
     const rateLabel = bp && bp.prop_type
       ? tierDot(p.tier) + 'overall · ' + (p.total || 0) + ' props'
       : tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props';

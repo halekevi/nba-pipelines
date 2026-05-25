@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-25T12:26:54.543157Z",
+  "generated_at": "2026-05-25T18:54:07.494248Z",
   "source_csv": "retrain_dataset.csv",
-  "total_players": 409,
+  "total_players": 359,
   "players": [
     {
       "player": "Kyle Leahy",
@@ -20,6 +20,13 @@
       "tier": "high",
       "balance_score": 0.7184,
       "best_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 24,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
         "prop_type": "Pitcher Strikeouts",
         "direction": "OVER",
         "hits": 16,
@@ -61,6 +68,13 @@
         "total": 23,
         "hit_rate": 0.6957
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 23,
+        "hit_rate": 0.6957
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -90,6 +104,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 23,
+        "hit_rate": 0.8261
+      },
+      "display_prop": {
         "prop_type": "Pitcher Strikeouts",
         "direction": "OVER",
         "hits": 19,
@@ -138,6 +159,13 @@
         "total": 20,
         "hit_rate": 0.45
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 20,
+        "hit_rate": 0.45
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -167,6 +195,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 27,
+        "hit_rate": 0.5926
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 16,
@@ -211,11 +246,24 @@
       "under_hits": 5,
       "under_total": 8,
       "under_rate": 0.625,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.8365,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pitches Thrown",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pitches Thrown",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -237,6 +285,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 23,
+        "hit_rate": 0.6522
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 15,
@@ -278,7 +333,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Singles",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Singles",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -300,6 +368,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 26,
+        "hit_rate": 0.4231
+      },
+      "display_prop": {
         "prop_type": "Pitcher Strikeouts",
         "direction": "OVER",
         "hits": 11,
@@ -335,6 +410,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 28,
+        "hit_rate": 0.5357
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 15,
@@ -379,11 +461,24 @@
       "under_hits": 4,
       "under_total": 7,
       "under_rate": 0.5714,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.873,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pitching Outs",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pitching Outs",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -405,6 +500,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 37,
+        "hit_rate": 0.5405
+      },
+      "display_prop": {
         "prop_type": "Hitter Strikeouts",
         "direction": "OVER",
         "hits": 20,
@@ -460,6 +562,13 @@
         "total": 23,
         "hit_rate": 0.5217
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 23,
+        "hit_rate": 0.5217
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -488,7 +597,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.9556,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Walks Allowed",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "Walks Allowed",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -510,6 +632,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 20,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 10,
@@ -552,6 +681,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 27,
+        "total": 44,
+        "hit_rate": 0.6136
+      },
+      "display_prop": {
         "prop_type": "Total Bases",
         "direction": "OVER",
         "hits": 27,
@@ -607,6 +743,13 @@
         "total": 34,
         "hit_rate": 0.5882
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 34,
+        "hit_rate": 0.5882
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -656,6 +799,13 @@
         "total": 32,
         "hit_rate": 0.5
       },
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 32,
+        "hit_rate": 0.5
+      },
       "best_props": [
         {
           "prop_type": "Total Bases",
@@ -685,6 +835,13 @@
       "tier": "high",
       "balance_score": 0.5065,
       "best_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 20,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Pitcher Strikeouts",
         "direction": "OVER",
         "hits": 10,
@@ -727,6 +884,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 23,
+        "total": 36,
+        "hit_rate": 0.6389
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 23,
@@ -782,6 +946,13 @@
         "total": 33,
         "hit_rate": 0.5758
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 33,
+        "hit_rate": 0.5758
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -825,6 +996,13 @@
       "tier": "high",
       "balance_score": 0.8272,
       "best_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 22,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Hitter Strikeouts",
         "direction": "OVER",
         "hits": 11,
@@ -880,6 +1058,13 @@
         "total": 42,
         "hit_rate": 0.5476
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 23,
+        "total": 42,
+        "hit_rate": 0.5476
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -929,6 +1114,13 @@
         "total": 39,
         "hit_rate": 0.4103
       },
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 39,
+        "hit_rate": 0.4103
+      },
       "best_props": [
         {
           "prop_type": "Total Bases",
@@ -964,6 +1156,13 @@
         "total": 22,
         "hit_rate": 0.6818
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 22,
+        "hit_rate": 0.6818
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -993,6 +1192,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 21,
+        "total": 33,
+        "hit_rate": 0.6364
+      },
+      "display_prop": {
         "prop_type": "Hitter Strikeouts",
         "direction": "OVER",
         "hits": 21,
@@ -1048,6 +1254,13 @@
         "total": 25,
         "hit_rate": 0.32
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 25,
+        "hit_rate": 0.32
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -1077,6 +1290,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 32,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Hitter Strikeouts",
         "direction": "OVER",
         "hits": 16,
@@ -1132,6 +1352,13 @@
         "total": 29,
         "hit_rate": 0.5172
       },
+      "display_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 29,
+        "hit_rate": 0.5172
+      },
       "best_props": [
         {
           "prop_type": "Hitter Strikeouts",
@@ -1175,6 +1402,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 30,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 15,
@@ -1230,6 +1464,13 @@
         "total": 37,
         "hit_rate": 0.5405
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 37,
+        "hit_rate": 0.5405
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -1279,6 +1520,13 @@
         "total": 20,
         "hit_rate": 0.45
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 20,
+        "hit_rate": 0.45
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -1314,6 +1562,13 @@
         "total": 24,
         "hit_rate": 0.3333
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 24,
+        "hit_rate": 0.3333
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -1343,6 +1598,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 33,
+        "hit_rate": 0.5455
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 18,
@@ -1391,7 +1653,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pitching Outs",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pitching Outs",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -1413,6 +1688,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Runs",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 24,
+        "hit_rate": 0.4583
+      },
+      "display_prop": {
         "prop_type": "Runs",
         "direction": "OVER",
         "hits": 11,
@@ -1468,6 +1750,13 @@
         "total": 29,
         "hit_rate": 0.5172
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 29,
+        "hit_rate": 0.5172
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -1511,6 +1800,13 @@
       "tier": "high",
       "balance_score": 0.869,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 34,
+        "hit_rate": 0.5294
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 18,
@@ -1566,6 +1862,13 @@
         "total": 33,
         "hit_rate": 0.6364
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 21,
+        "total": 33,
+        "hit_rate": 0.6364
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -1615,6 +1918,13 @@
         "total": 21,
         "hit_rate": 0.2381
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 21,
+        "hit_rate": 0.2381
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -1644,6 +1954,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 32,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 16,
@@ -1699,6 +2016,13 @@
         "total": 32,
         "hit_rate": 0.5938
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 32,
+        "hit_rate": 0.5938
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -1748,6 +2072,13 @@
         "total": 40,
         "hit_rate": 0.375
       },
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 40,
+        "hit_rate": 0.375
+      },
       "best_props": [
         {
           "prop_type": "Total Bases",
@@ -1783,6 +2114,13 @@
         "total": 23,
         "hit_rate": 0.1304
       },
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 23,
+        "hit_rate": 0.1304
+      },
       "best_props": [
         {
           "prop_type": "Pitcher Strikeouts",
@@ -1812,6 +2150,13 @@
       "tier": "high",
       "balance_score": 0.7493,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 37,
+        "hit_rate": 0.4595
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 17,
@@ -1867,6 +2212,13 @@
         "total": 25,
         "hit_rate": 0.6
       },
+      "display_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 25,
+        "hit_rate": 0.6
+      },
       "best_props": [
         {
           "prop_type": "Hitter Strikeouts",
@@ -1910,6 +2262,13 @@
       "tier": "high",
       "balance_score": 0.6017,
       "best_prop": {
+        "prop_type": "Hitter Strikeouts",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 32,
+        "hit_rate": 0.5312
+      },
+      "display_prop": {
         "prop_type": "Hitter Strikeouts",
         "direction": "OVER",
         "hits": 17,
@@ -1965,6 +2324,13 @@
         "total": 40,
         "hit_rate": 0.5
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 40,
+        "hit_rate": 0.5
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -2008,6 +2374,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 32,
+        "hit_rate": 0.4062
+      },
+      "display_prop": {
         "prop_type": "Hits",
         "direction": "OVER",
         "hits": 13,
@@ -2063,6 +2436,13 @@
         "total": 33,
         "hit_rate": 0.5455
       },
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 33,
+        "hit_rate": 0.5455
+      },
       "best_props": [
         {
           "prop_type": "Hits",
@@ -2112,6 +2492,13 @@
         "total": 20,
         "hit_rate": 1.0
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 20,
+        "hit_rate": 1.0
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -2147,6 +2534,13 @@
         "total": 24,
         "hit_rate": 0.9583
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 23,
+        "total": 24,
+        "hit_rate": 0.9583
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -2175,7 +2569,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.775,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 15,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 15,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -2197,6 +2604,13 @@
       "tier": "high",
       "balance_score": 0.6114,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 23,
+        "hit_rate": 0.8696
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 20,
@@ -2231,7 +2645,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -2253,6 +2680,13 @@
       "tier": "high",
       "balance_score": 0.9449,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 35,
+        "total": 40,
+        "hit_rate": 0.875
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 35,
@@ -2308,6 +2742,13 @@
         "total": 33,
         "hit_rate": 0.8788
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 29,
+        "total": 33,
+        "hit_rate": 0.8788
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -2350,7 +2791,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 14,
+        "hit_rate": 0.7857
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 14,
+        "hit_rate": 0.7857
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -2372,6 +2826,13 @@
       "tier": "high",
       "balance_score": 0.9167,
       "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 23,
+        "total": 28,
+        "hit_rate": 0.8214
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs",
         "direction": "OVER",
         "hits": 23,
@@ -2427,6 +2888,13 @@
         "total": 30,
         "hit_rate": 0.9333
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 28,
+        "total": 30,
+        "hit_rate": 0.9333
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -2465,11 +2933,24 @@
       "under_hits": 23,
       "under_total": 39,
       "under_rate": 0.5897,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.8743,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -2491,6 +2972,13 @@
       "tier": "high",
       "balance_score": 0.9056,
       "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 25,
+        "hit_rate": 0.76
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs+Asts",
         "direction": "OVER",
         "hits": 19,
@@ -2539,6 +3027,13 @@
         "total": 32,
         "hit_rate": 0.8438
       },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 27,
+        "total": 32,
+        "hit_rate": 0.8438
+      },
       "best_props": [
         {
           "prop_type": "Pts+Rebs+Asts",
@@ -2581,7 +3076,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.5853,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -2603,6 +3111,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 22,
+        "total": 27,
+        "hit_rate": 0.8148
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 22,
@@ -2658,6 +3173,13 @@
         "total": 33,
         "hit_rate": 0.7879
       },
+      "display_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 26,
+        "total": 33,
+        "hit_rate": 0.7879
+      },
       "best_props": [
         {
           "prop_type": "Pts+Rebs",
@@ -2701,6 +3223,13 @@
       "tier": "high",
       "balance_score": 0.5845,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 24,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 20,
@@ -2756,6 +3285,13 @@
         "total": 34,
         "hit_rate": 0.6765
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 23,
+        "total": 34,
+        "hit_rate": 0.6765
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -2805,6 +3341,13 @@
         "total": 23,
         "hit_rate": 0.6957
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 23,
+        "hit_rate": 0.6957
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -2847,7 +3390,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.8445,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 11,
+        "hit_rate": 0.9091
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 11,
+        "hit_rate": 0.9091
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -2869,6 +3425,13 @@
       "tier": "high",
       "balance_score": 0.8829,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 24,
+        "total": 32,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 24,
@@ -2917,7 +3480,20 @@
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.7792,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -2938,7 +3514,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.619,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -2960,6 +3549,13 @@
       "tier": "high",
       "balance_score": 0.8134,
       "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 29,
+        "total": 34,
+        "hit_rate": 0.8529
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs",
         "direction": "OVER",
         "hits": 29,
@@ -3015,6 +3611,13 @@
         "total": 43,
         "hit_rate": 0.7674
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 33,
+        "total": 43,
+        "hit_rate": 0.7674
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -3058,6 +3661,13 @@
       "tier": "high",
       "balance_score": 0.7389,
       "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 26,
+        "hit_rate": 0.7692
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs+Asts",
         "direction": "OVER",
         "hits": 20,
@@ -3113,6 +3723,13 @@
         "total": 22,
         "hit_rate": 1.0
       },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 22,
+        "total": 22,
+        "hit_rate": 1.0
+      },
       "best_props": [
         {
           "prop_type": "Assists",
@@ -3148,7 +3765,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.5699,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -3170,6 +3800,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 26,
+        "total": 39,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 26,
@@ -3214,11 +3851,24 @@
       "under_hits": 5,
       "under_total": 8,
       "under_rate": 0.625,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.9502,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -3240,6 +3890,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 21,
+        "total": 36,
+        "hit_rate": 0.5833
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs",
         "direction": "OVER",
         "hits": 21,
@@ -3295,6 +3952,13 @@
         "total": 29,
         "hit_rate": 0.6552
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 29,
+        "hit_rate": 0.6552
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -3338,6 +4002,13 @@
       "tier": "high",
       "balance_score": 0.7413,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 23,
+        "hit_rate": 0.6522
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 15,
@@ -3393,6 +4064,13 @@
         "total": 26,
         "hit_rate": 0.6538
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 26,
+        "hit_rate": 0.6538
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -3442,6 +4120,13 @@
         "total": 21,
         "hit_rate": 0.6667
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 21,
+        "hit_rate": 0.6667
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -3470,7 +4155,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Two Pointers Attempted",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Two Pointers Attempted",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -3492,6 +4190,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 23,
+        "hit_rate": 0.5217
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs+Asts",
         "direction": "OVER",
         "hits": 12,
@@ -3534,6 +4239,13 @@
       "tier": "high",
       "balance_score": 0.87,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 24,
+        "total": 30,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 24,
@@ -3589,6 +4301,13 @@
         "total": 30,
         "hit_rate": 0.6
       },
+      "display_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 30,
+        "hit_rate": 0.6
+      },
       "best_props": [
         {
           "prop_type": "Pts+Rebs",
@@ -3631,7 +4350,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -3652,7 +4384,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -3674,6 +4419,13 @@
       "tier": "high",
       "balance_score": 0.8831,
       "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 24,
+        "hit_rate": 0.5417
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs",
         "direction": "OVER",
         "hits": 13,
@@ -3729,6 +4481,13 @@
         "total": 21,
         "hit_rate": 0.6667
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 21,
+        "hit_rate": 0.6667
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -3778,6 +4537,13 @@
         "total": 26,
         "hit_rate": 0.6538
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 26,
+        "hit_rate": 0.6538
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -3820,7 +4586,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 12,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 12,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -3842,6 +4621,13 @@
       "tier": "high",
       "balance_score": 0.9169,
       "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 23,
+        "hit_rate": 0.7391
+      },
+      "display_prop": {
         "prop_type": "Assists",
         "direction": "OVER",
         "hits": 17,
@@ -3890,7 +4676,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.4464,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -3912,6 +4711,13 @@
       "tier": "high",
       "balance_score": 0.6535,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 20,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 8,
@@ -3954,6 +4760,13 @@
       "tier": "high",
       "balance_score": 0.537,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 26,
+        "total": 40,
+        "hit_rate": 0.65
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 26,
@@ -4009,6 +4822,13 @@
         "total": 48,
         "hit_rate": 0.5208
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 25,
+        "total": 48,
+        "hit_rate": 0.5208
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -4058,6 +4878,13 @@
         "total": 26,
         "hit_rate": 0.4615
       },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 26,
+        "hit_rate": 0.4615
+      },
       "best_props": [
         {
           "prop_type": "Pts+Asts",
@@ -4100,7 +4927,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4121,7 +4961,20 @@
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.6044,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4142,7 +4995,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4163,7 +5029,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4184,7 +5063,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4201,11 +5093,24 @@
       "under_hits": 0,
       "under_total": 1,
       "under_rate": 0.0,
-      "direction": "BOTH",
+      "direction": "OVER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4227,6 +5132,13 @@
       "tier": "low",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 7,
+        "hit_rate": 0.7143
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 5,
@@ -4275,6 +5187,13 @@
         "total": 7,
         "hit_rate": 0.8571
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -4306,11 +5225,58 @@
       "under_hits": 2,
       "under_total": 4,
       "under_rate": 0.5,
-      "direction": "BOTH",
+      "direction": "OVER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "best_props": [],
+      "last_updated": "2026-05-25",
+      "on_today_slate": true
+    },
+    {
+      "player": "Josh Hart",
+      "sport": "NBA1H",
+      "total": 14,
+      "hits": 10,
+      "hit_rate": 0.7143,
+      "over_hits": 8,
+      "over_total": 10,
+      "over_rate": 0.8,
+      "under_hits": 2,
+      "under_total": 4,
+      "under_rate": 0.5,
+      "direction": "OVER",
+      "direction_pooled": "OVER",
+      "tier": "low",
+      "balance_score": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4338,6 +5304,13 @@
         "total": 6,
         "hit_rate": 0.6667
       },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [
         {
           "prop_type": "Pts+Rebs+Asts",
@@ -4358,27 +5331,6 @@
       "on_today_slate": true
     },
     {
-      "player": "Josh Hart",
-      "sport": "NBA1H",
-      "total": 14,
-      "hits": 10,
-      "hit_rate": 0.7143,
-      "over_hits": 8,
-      "over_total": 10,
-      "over_rate": 0.8,
-      "under_hits": 2,
-      "under_total": 4,
-      "under_rate": 0.5,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "low",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
       "player": "Jarrett Allen",
       "sport": "NBA1H",
       "total": 21,
@@ -4395,6 +5347,13 @@
       "tier": "low",
       "balance_score": 0.6058,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 6,
@@ -4443,7 +5402,20 @@
       "direction_pooled": "UNDER",
       "tier": "low",
       "balance_score": 0.7301,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4465,6 +5437,13 @@
       "tier": "low",
       "balance_score": 0.2,
       "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
         "prop_type": "Fantasy Score",
         "direction": "UNDER",
         "hits": 5,
@@ -4495,11 +5474,24 @@
       "under_hits": 3,
       "under_total": 4,
       "under_rate": 0.75,
-      "direction": "BOTH",
+      "direction": "OVER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4521,6 +5513,13 @@
       "tier": "low",
       "balance_score": 0.5834,
       "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
         "prop_type": "Fantasy Score",
         "direction": "UNDER",
         "hits": 5,
@@ -4565,11 +5564,24 @@
       "under_hits": 4,
       "under_total": 4,
       "under_rate": 1.0,
-      "direction": "BOTH",
+      "direction": "UNDER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4591,6 +5603,13 @@
       "tier": "low",
       "balance_score": 1.0,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 3,
@@ -4626,6 +5645,13 @@
       "tier": "low",
       "balance_score": 0.7619,
       "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
         "prop_type": "Fantasy Score",
         "direction": "UNDER",
         "hits": 4,
@@ -4681,6 +5707,13 @@
         "total": 6,
         "hit_rate": 0.6667
       },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [
         {
           "prop_type": "Fantasy Score",
@@ -4723,6 +5756,13 @@
         "total": 7,
         "hit_rate": 0.5714
       },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 7,
+        "hit_rate": 0.5714
+      },
       "best_props": [
         {
           "prop_type": "Fantasy Score",
@@ -4754,11 +5794,24 @@
       "under_hits": 3,
       "under_total": 4,
       "under_rate": 0.75,
-      "direction": "BOTH",
+      "direction": "UNDER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4780,6 +5833,13 @@
       "tier": "low",
       "balance_score": 0.875,
       "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 7,
+        "hit_rate": 0.5714
+      },
+      "display_prop": {
         "prop_type": "Pts+Rebs+Asts",
         "direction": "OVER",
         "hits": 4,
@@ -4815,6 +5875,13 @@
       "tier": "low",
       "balance_score": 0.6666,
       "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
         "prop_type": "Fantasy Score",
         "direction": "UNDER",
         "hits": 4,
@@ -4870,6 +5937,13 @@
         "total": 6,
         "hit_rate": 0.6667
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -4890,27 +5964,6 @@
       "on_today_slate": false
     },
     {
-      "player": "Anthony Edwards",
-      "sport": "NBA1H",
-      "total": 10,
-      "hits": 4,
-      "hit_rate": 0.4,
-      "over_hits": 4,
-      "over_total": 5,
-      "over_rate": 0.8,
-      "under_hits": 0,
-      "under_total": 5,
-      "under_rate": 0.0,
-      "direction": "BOTH",
-      "direction_pooled": "BOTH",
-      "tier": "low",
-      "balance_score": 0.2,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
       "player": "Karl-Anthony Towns",
       "sport": "NBA1H",
       "total": 15,
@@ -4926,7 +5979,54 @@
       "direction_pooled": "UNDER",
       "tier": "low",
       "balance_score": 1.0,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "best_props": [],
+      "last_updated": "2026-05-25",
+      "on_today_slate": true
+    },
+    {
+      "player": "Anthony Edwards",
+      "sport": "NBA1H",
+      "total": 10,
+      "hits": 4,
+      "hit_rate": 0.4,
+      "over_hits": 4,
+      "over_total": 5,
+      "over_rate": 0.8,
+      "under_hits": 0,
+      "under_total": 5,
+      "under_rate": 0.0,
+      "direction": "OVER",
+      "direction_pooled": "BOTH",
+      "tier": "low",
+      "balance_score": 0.2,
+      "best_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -4948,6 +6048,13 @@
       "tier": "low",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 5,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 2,
@@ -4996,6 +6103,13 @@
         "total": 7,
         "hit_rate": 0.5714
       },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 7,
+        "hit_rate": 0.5714
+      },
       "best_props": [
         {
           "prop_type": "Fantasy Score",
@@ -5025,6 +6139,13 @@
       "tier": "low",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 5,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 2,
@@ -5073,6 +6194,13 @@
         "total": 33,
         "hit_rate": 0.7879
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 26,
+        "total": 33,
+        "hit_rate": 0.7879
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -5101,7 +6229,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 17,
+        "hit_rate": 0.9412
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 17,
+        "hit_rate": 0.9412
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5122,7 +6263,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 10,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 10,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5143,7 +6297,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5164,7 +6331,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.75,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 8,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 8,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5181,11 +6361,24 @@
       "under_hits": 5,
       "under_total": 5,
       "under_rate": 1.0,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.641,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5207,6 +6400,13 @@
       "tier": "medium",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 22,
+        "total": 25,
+        "hit_rate": 0.88
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 22,
@@ -5248,6 +6448,13 @@
         "total": 21,
         "hit_rate": 0.619
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 21,
+        "hit_rate": 0.619
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -5276,7 +6483,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5298,6 +6518,13 @@
       "tier": "medium",
       "balance_score": 0.9523,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 24,
+        "hit_rate": 0.7083
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 17,
@@ -5332,7 +6559,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 16,
+        "hit_rate": 0.8125
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 16,
+        "hit_rate": 0.8125
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5354,6 +6594,13 @@
       "tier": "medium",
       "balance_score": 0.9503,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 22,
+        "hit_rate": 0.6818
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 15,
@@ -5388,7 +6635,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5409,7 +6669,20 @@
       "direction_pooled": "UNDER",
       "tier": "medium",
       "balance_score": 0.7185,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5431,6 +6704,13 @@
       "tier": "medium",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 20,
+        "hit_rate": 0.7
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 14,
@@ -5472,6 +6752,13 @@
         "total": 25,
         "hit_rate": 0.52
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 25,
+        "hit_rate": 0.52
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -5500,7 +6787,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 7,
+        "hit_rate": 0.7143
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 7,
+        "hit_rate": 0.7143
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5521,7 +6821,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5543,6 +6856,13 @@
       "tier": "medium",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 24,
+        "hit_rate": 0.5417
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 13,
@@ -5577,7 +6897,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 7,
+        "hit_rate": 0.7143
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 7,
+        "hit_rate": 0.7143
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5598,7 +6931,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5619,7 +6965,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 17,
+        "hit_rate": 0.4706
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 17,
+        "hit_rate": 0.4706
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5640,7 +6999,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5657,11 +7029,24 @@
       "under_hits": 3,
       "under_total": 7,
       "under_rate": 0.4286,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.8492,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5682,7 +7067,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5703,7 +7101,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 14,
+        "hit_rate": 0.9286
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 14,
+        "hit_rate": 0.9286
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5724,7 +7135,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 11,
+        "hit_rate": 0.8182
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 11,
+        "hit_rate": 0.8182
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5745,7 +7169,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 15,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 15,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5766,7 +7203,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5787,7 +7237,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5808,7 +7271,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5829,7 +7305,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 8,
+        "hit_rate": 0.875
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 8,
+        "hit_rate": 0.875
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5850,7 +7339,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5871,7 +7373,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5892,7 +7407,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5913,7 +7441,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 10,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 10,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5934,7 +7475,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 5,
+        "hit_rate": 0.8
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5955,7 +7509,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -5976,7 +7543,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 11,
+        "hit_rate": 0.7273
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 11,
+        "hit_rate": 0.7273
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -5997,7 +7577,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6018,7 +7611,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 14,
+        "hit_rate": 0.6429
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 14,
+        "hit_rate": 0.6429
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6039,7 +7645,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6060,7 +7679,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6081,7 +7713,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6102,7 +7747,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6123,7 +7781,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6144,7 +7815,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 10,
+        "hit_rate": 0.7
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 10,
+        "hit_rate": 0.7
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6165,7 +7849,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 11,
+        "hit_rate": 0.5455
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 11,
+        "hit_rate": 0.5455
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6186,7 +7883,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -6207,7 +7917,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6228,7 +7951,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6249,7 +7985,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6270,7 +8019,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6291,7 +8053,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6312,7 +8087,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6329,11 +8117,24 @@
       "under_hits": 4,
       "under_total": 5,
       "under_rate": 0.8,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.5478,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6355,6 +8156,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 20,
+        "hit_rate": 0.55
+      },
+      "display_prop": {
         "prop_type": "points",
         "direction": "OVER",
         "hits": 11,
@@ -6389,7 +8197,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.9371,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 8,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6410,7 +8231,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 16,
+        "hit_rate": 0.625
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 16,
+        "hit_rate": 0.625
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6432,6 +8266,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 20,
+        "hit_rate": 0.2
+      },
+      "display_prop": {
         "prop_type": "Shots on Goal",
         "direction": "OVER",
         "hits": 4,
@@ -6473,6 +8314,13 @@
         "total": 23,
         "hit_rate": 0.4783
       },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 23,
+        "hit_rate": 0.4783
+      },
       "best_props": [
         {
           "prop_type": "points",
@@ -6508,6 +8356,13 @@
         "total": 21,
         "hit_rate": 0.3333
       },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 21,
+        "hit_rate": 0.3333
+      },
       "best_props": [
         {
           "prop_type": "points",
@@ -6536,7 +8391,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.9269,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6557,7 +8425,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.7917,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6578,7 +8459,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 14,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 14,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6600,6 +8494,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 20,
+        "hit_rate": 0.45
+      },
+      "display_prop": {
         "prop_type": "points",
         "direction": "OVER",
         "hits": 9,
@@ -6641,7 +8542,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6662,7 +8576,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6683,7 +8610,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 14,
+        "hit_rate": 0.5714
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 14,
+        "hit_rate": 0.5714
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6704,7 +8644,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 16,
+        "hit_rate": 0.375
+      },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 16,
+        "hit_rate": 0.375
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6726,6 +8679,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 21,
+        "hit_rate": 0.0952
+      },
+      "display_prop": {
         "prop_type": "Shots on Goal",
         "direction": "OVER",
         "hits": 2,
@@ -6760,7 +8720,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6777,11 +8750,24 @@
       "under_hits": 9,
       "under_total": 13,
       "under_rate": 0.6923,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.5182,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6802,7 +8788,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.9741,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 9,
+        "hit_rate": 0.4444
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6824,6 +8823,13 @@
       "tier": "high",
       "balance_score": 0.9894,
       "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 27,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
         "prop_type": "points",
         "direction": "OVER",
         "hits": 9,
@@ -6865,7 +8871,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 7,
+        "hit_rate": 0.5714
+      },
+      "display_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 7,
+        "hit_rate": 0.5714
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6886,7 +8905,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 10,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 10,
+        "hit_rate": 0.4
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6907,7 +8939,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6928,7 +8973,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6949,7 +9007,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -6971,6 +9042,13 @@
       "tier": "high",
       "balance_score": 0.1358,
       "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 27,
+        "hit_rate": 0.0
+      },
+      "display_prop": {
         "prop_type": "Shots on Goal",
         "direction": "OVER",
         "hits": 0,
@@ -7001,11 +9079,24 @@
       "under_hits": 4,
       "under_total": 6,
       "under_rate": 0.6667,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.5028,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7027,6 +9118,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 24,
+        "hit_rate": 0.1667
+      },
+      "display_prop": {
         "prop_type": "Shots on Goal",
         "direction": "OVER",
         "hits": 4,
@@ -7061,7 +9159,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "hits",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 7,
+        "hit_rate": 0.4286
+      },
+      "display_prop": {
+        "prop_type": "hits",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 7,
+        "hit_rate": 0.4286
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7078,11 +9189,24 @@
       "under_hits": 3,
       "under_total": 6,
       "under_rate": 0.5,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.6711,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 5,
+        "hit_rate": 0.6
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7103,7 +9227,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7124,7 +9261,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 7,
+        "hit_rate": 0.4286
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 7,
+        "hit_rate": 0.4286
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7145,7 +9295,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7167,6 +9330,13 @@
       "tier": "medium",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 25,
+        "hit_rate": 0.52
+      },
+      "display_prop": {
         "prop_type": "Blocked Shots",
         "direction": "OVER",
         "hits": 13,
@@ -7201,7 +9371,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7222,7 +9405,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7243,7 +9439,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7264,7 +9473,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Shots on Goal",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7286,6 +9508,13 @@
       "tier": "medium",
       "balance_score": 0.7315,
       "best_prop": {
+        "prop_type": "Goalie Saves",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 25,
+        "hit_rate": 0.56
+      },
+      "display_prop": {
         "prop_type": "Goalie Saves",
         "direction": "OVER",
         "hits": 14,
@@ -7320,7 +9549,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7341,7 +9583,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Faceoffs Won",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7362,7 +9617,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "hits",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "hits",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7383,7 +9651,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7404,7 +9685,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 9,
+        "hit_rate": 0.5556
+      },
+      "display_prop": {
+        "prop_type": "Blocked Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 9,
+        "hit_rate": 0.5556
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7426,6 +9720,13 @@
       "tier": "medium",
       "balance_score": 0.9216,
       "best_prop": {
+        "prop_type": "Goalie Saves",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 36,
+        "hit_rate": 0.3889
+      },
+      "display_prop": {
         "prop_type": "Goalie Saves",
         "direction": "OVER",
         "hits": 14,
@@ -7460,7 +9761,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7481,7 +9795,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7502,7 +9829,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7523,7 +9863,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 4,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7544,7 +9897,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 4,
+        "hit_rate": 0.75
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7565,7 +9931,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 10,
+        "hit_rate": 0.9
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7586,7 +9965,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 8,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7607,7 +9999,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 12,
+        "hit_rate": 0.5833
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 12,
+        "hit_rate": 0.5833
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7628,7 +10033,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 14,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 14,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7649,7 +10067,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7670,7 +10101,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7691,7 +10135,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 13,
+        "hit_rate": 0.6154
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 13,
+        "hit_rate": 0.6154
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7712,7 +10169,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7733,7 +10203,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7754,7 +10237,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7775,7 +10271,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7796,7 +10305,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7817,7 +10339,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 13,
+        "hit_rate": 0.3846
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 13,
+        "hit_rate": 0.3846
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7838,7 +10373,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7859,7 +10407,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 12,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 12,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7880,7 +10441,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 11,
+        "hit_rate": 0.7273
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 11,
+        "hit_rate": 0.7273
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7901,7 +10475,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -7922,7 +10509,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7943,7 +10543,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7964,7 +10577,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -7985,7 +10611,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fouls",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Fouls",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8006,7 +10645,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8027,7 +10679,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8044,11 +10709,24 @@
       "under_hits": 3,
       "under_total": 3,
       "under_rate": 1.0,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "UNDER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8069,7 +10747,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8090,7 +10781,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 12,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 12,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8111,7 +10815,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8132,7 +10849,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 16,
+        "hit_rate": 0.3125
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 16,
+        "hit_rate": 0.3125
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8153,7 +10883,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 13,
+        "hit_rate": 0.3077
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 13,
+        "hit_rate": 0.3077
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8174,7 +10917,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8195,7 +10951,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8216,7 +10985,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 12,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 12,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8237,7 +11019,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 5,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 5,
+        "hit_rate": 0.4
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8258,7 +11053,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fouls",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Fouls",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8279,7 +11087,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 10,
+        "hit_rate": 0.3
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 10,
+        "hit_rate": 0.3
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8300,7 +11121,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8321,7 +11155,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 6,
+        "hit_rate": 0.1667
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 6,
+        "hit_rate": 0.1667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8342,7 +11189,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 12,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 12,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8363,7 +11223,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8384,7 +11257,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8405,7 +11291,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8426,7 +11325,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8447,7 +11359,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 5,
+        "hit_rate": 0.2
+      },
+      "display_prop": {
+        "prop_type": "Goals",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 5,
+        "hit_rate": 0.2
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8468,7 +11393,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 10,
+        "hit_rate": 0.3
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 10,
+        "hit_rate": 0.3
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8489,7 +11427,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
+      "display_prop": {
+        "prop_type": "Goal + Assist",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8510,7 +11461,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 11,
+        "hit_rate": 0.1818
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 11,
+        "hit_rate": 0.1818
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8531,7 +11495,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 11,
+        "hit_rate": 0.2727
+      },
+      "display_prop": {
+        "prop_type": "Shots",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 11,
+        "hit_rate": 0.2727
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -8552,1085 +11529,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Hamad Medjedovic",
-      "sport": "Tennis",
-      "total": 61,
-      "hits": 25,
-      "hit_rate": 0.4098,
-      "over_hits": 24,
-      "over_total": 58,
-      "over_rate": 0.4138,
-      "under_hits": 1,
-      "under_total": 3,
-      "under_rate": 0.3333,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Mirra Andreeva",
-      "sport": "Tennis",
-      "total": 52,
-      "hits": 15,
-      "hit_rate": 0.2885,
-      "over_hits": 14,
-      "over_total": 51,
-      "over_rate": 0.2745,
-      "under_hits": 1,
-      "under_total": 1,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Alejandro Davidovich Fokina",
-      "sport": "Tennis",
-      "total": 63,
-      "hits": 18,
-      "hit_rate": 0.2857,
-      "over_hits": 18,
-      "over_total": 63,
-      "over_rate": 0.2857,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
       "best_prop": {
-        "prop_type": "Total Games Won",
+        "prop_type": "Fouls",
         "direction": "OVER",
-        "hits": 11,
-        "total": 24,
-        "hit_rate": 0.4583
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
       },
-      "best_props": [
-        {
-          "prop_type": "Total Games Won",
-          "direction": "OVER",
-          "hits": 11,
-          "total": 24,
-          "hit_rate": 0.4583
-        }
-      ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Jil Teichmann",
-      "sport": "Tennis",
-      "total": 54,
-      "hits": 14,
-      "hit_rate": 0.2593,
-      "over_hits": 14,
-      "over_total": 54,
-      "over_rate": 0.2593,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Mariano Navone",
-      "sport": "Tennis",
-      "total": 50,
-      "hits": 12,
-      "hit_rate": 0.24,
-      "over_hits": 12,
-      "over_total": 50,
-      "over_rate": 0.24,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Thiago Agustin Tirante",
-      "sport": "Tennis",
-      "total": 52,
-      "hits": 4,
-      "hit_rate": 0.0769,
-      "over_hits": 4,
-      "over_total": 52,
-      "over_rate": 0.0769,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "high",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Francesca Jones",
-      "sport": "Tennis",
-      "total": 32,
-      "hits": 18,
-      "hit_rate": 0.5625,
-      "over_hits": 18,
-      "over_total": 32,
-      "over_rate": 0.5625,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Coco Gauff",
-      "sport": "Tennis",
-      "total": 28,
-      "hits": 15,
-      "hit_rate": 0.5357,
-      "over_hits": 15,
-      "over_total": 28,
-      "over_rate": 0.5357,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Alexander Bublik",
-      "sport": "Tennis",
-      "total": 40,
-      "hits": 19,
-      "hit_rate": 0.475,
-      "over_hits": 18,
-      "over_total": 37,
-      "over_rate": 0.4865,
-      "under_hits": 1,
-      "under_total": 3,
-      "under_rate": 0.3333,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Learner Tien",
-      "sport": "Tennis",
-      "total": 28,
-      "hits": 13,
-      "hit_rate": 0.4643,
-      "over_hits": 13,
-      "over_total": 28,
-      "over_rate": 0.4643,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Andrey Rublev",
-      "sport": "Tennis",
-      "total": 37,
-      "hits": 17,
-      "hit_rate": 0.4595,
-      "over_hits": 14,
-      "over_total": 33,
-      "over_rate": 0.4242,
-      "under_hits": 3,
-      "under_total": 4,
-      "under_rate": 0.75,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Andrea Pellegrino",
-      "sport": "Tennis",
-      "total": 27,
-      "hits": 12,
-      "hit_rate": 0.4444,
-      "over_hits": 12,
-      "over_total": 27,
-      "over_rate": 0.4444,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Luciano Darderi",
-      "sport": "Tennis",
-      "total": 49,
-      "hits": 21,
-      "hit_rate": 0.4286,
-      "over_hits": 20,
-      "over_total": 48,
-      "over_rate": 0.4167,
-      "under_hits": 1,
-      "under_total": 1,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Karen Khachanov",
-      "sport": "Tennis",
-      "total": 43,
-      "hits": 18,
-      "hit_rate": 0.4186,
-      "over_hits": 16,
-      "over_total": 39,
-      "over_rate": 0.4103,
-      "under_hits": 2,
-      "under_total": 4,
-      "under_rate": 0.5,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Alex de Minaur",
-      "sport": "Tennis",
-      "total": 41,
-      "hits": 17,
-      "hit_rate": 0.4146,
-      "over_hits": 16,
-      "over_total": 40,
-      "over_rate": 0.4,
-      "under_hits": 1,
-      "under_total": 1,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": {
-        "prop_type": "Total Games Won",
+      "display_prop": {
+        "prop_type": "Fouls",
         "direction": "OVER",
-        "hits": 16,
-        "total": 20,
-        "hit_rate": 0.8
+        "hits": 1,
+        "total": 4,
+        "hit_rate": 0.25
       },
-      "best_props": [
-        {
-          "prop_type": "Total Games Won",
-          "direction": "OVER",
-          "hits": 16,
-          "total": 20,
-          "hit_rate": 0.8
-        }
-      ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Jaqueline Cristian",
-      "sport": "Tennis",
-      "total": 27,
-      "hits": 11,
-      "hit_rate": 0.4074,
-      "over_hits": 11,
-      "over_total": 27,
-      "over_rate": 0.4074,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Ajla Tomljanovic",
-      "sport": "Tennis",
-      "total": 28,
-      "hits": 11,
-      "hit_rate": 0.3929,
-      "over_hits": 11,
-      "over_total": 28,
-      "over_rate": 0.3929,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Hugo Dellien",
-      "sport": "Tennis",
-      "total": 27,
-      "hits": 10,
-      "hit_rate": 0.3704,
-      "over_hits": 10,
-      "over_total": 27,
-      "over_rate": 0.3704,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Lilli Tagger",
-      "sport": "Tennis",
-      "total": 25,
-      "hits": 9,
-      "hit_rate": 0.36,
-      "over_hits": 9,
-      "over_total": 24,
-      "over_rate": 0.375,
-      "under_hits": 0,
-      "under_total": 1,
-      "under_rate": 0.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Daniil Medvedev",
-      "sport": "Tennis",
-      "total": 39,
-      "hits": 14,
-      "hit_rate": 0.359,
-      "over_hits": 10,
-      "over_total": 33,
-      "over_rate": 0.303,
-      "under_hits": 4,
-      "under_total": 6,
-      "under_rate": 0.6667,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": 0.6363,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Tommy Paul",
-      "sport": "Tennis",
-      "total": 32,
-      "hits": 11,
-      "hit_rate": 0.3438,
-      "over_hits": 11,
-      "over_total": 32,
-      "over_rate": 0.3438,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Camilo Ugo Carabelli",
-      "sport": "Tennis",
-      "total": 35,
-      "hits": 12,
-      "hit_rate": 0.3429,
-      "over_hits": 12,
-      "over_total": 35,
-      "over_rate": 0.3429,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Emma Navarro",
-      "sport": "Tennis",
-      "total": 27,
-      "hits": 9,
-      "hit_rate": 0.3333,
-      "over_hits": 9,
-      "over_total": 27,
-      "over_rate": 0.3333,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Clara Tauson",
-      "sport": "Tennis",
-      "total": 37,
-      "hits": 12,
-      "hit_rate": 0.3243,
-      "over_hits": 12,
-      "over_total": 37,
-      "over_rate": 0.3243,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Ann Li",
-      "sport": "Tennis",
-      "total": 41,
-      "hits": 13,
-      "hit_rate": 0.3171,
-      "over_hits": 13,
-      "over_total": 41,
-      "over_rate": 0.3171,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Stefanos Tsitsipas",
-      "sport": "Tennis",
-      "total": 38,
-      "hits": 12,
-      "hit_rate": 0.3158,
-      "over_hits": 10,
-      "over_total": 35,
-      "over_rate": 0.2857,
-      "under_hits": 2,
-      "under_total": 3,
-      "under_rate": 0.6667,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Nikoloz Basilashvili",
-      "sport": "Tennis",
-      "total": 26,
-      "hits": 8,
-      "hit_rate": 0.3077,
-      "over_hits": 8,
-      "over_total": 26,
-      "over_rate": 0.3077,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Karolina Pliskova",
-      "sport": "Tennis",
-      "total": 42,
-      "hits": 12,
-      "hit_rate": 0.2857,
-      "over_hits": 9,
-      "over_total": 39,
-      "over_rate": 0.2308,
-      "under_hits": 3,
-      "under_total": 3,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Frances Tiafoe",
-      "sport": "Tennis",
-      "total": 39,
-      "hits": 11,
-      "hit_rate": 0.2821,
-      "over_hits": 11,
-      "over_total": 39,
-      "over_rate": 0.2821,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Alexei Popyrin",
-      "sport": "Tennis",
-      "total": 32,
-      "hits": 9,
-      "hit_rate": 0.2812,
-      "over_hits": 9,
-      "over_total": 31,
-      "over_rate": 0.2903,
-      "under_hits": 0,
-      "under_total": 1,
-      "under_rate": 0.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Iva Jovic",
-      "sport": "Tennis",
-      "total": 25,
-      "hits": 7,
-      "hit_rate": 0.28,
-      "over_hits": 7,
-      "over_total": 25,
-      "over_rate": 0.28,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Victoria Mboko",
-      "sport": "Tennis",
-      "total": 33,
-      "hits": 9,
-      "hit_rate": 0.2727,
-      "over_hits": 9,
-      "over_total": 33,
-      "over_rate": 0.2727,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Emiliana Arango",
-      "sport": "Tennis",
-      "total": 26,
-      "hits": 7,
-      "hit_rate": 0.2692,
-      "over_hits": 7,
-      "over_total": 26,
-      "over_rate": 0.2692,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Casper Ruud",
-      "sport": "Tennis",
-      "total": 36,
-      "hits": 9,
-      "hit_rate": 0.25,
-      "over_hits": 7,
-      "over_total": 34,
-      "over_rate": 0.2059,
-      "under_hits": 2,
-      "under_total": 2,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Alexander Zverev",
-      "sport": "Tennis",
-      "total": 37,
-      "hits": 9,
-      "hit_rate": 0.2432,
-      "over_hits": 7,
-      "over_total": 35,
-      "over_rate": 0.2,
-      "under_hits": 2,
-      "under_total": 2,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Nishesh Basavareddy",
-      "sport": "Tennis",
-      "total": 28,
-      "hits": 6,
-      "hit_rate": 0.2143,
-      "over_hits": 6,
-      "over_total": 28,
-      "over_rate": 0.2143,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Marie Bouzkova",
-      "sport": "Tennis",
-      "total": 34,
-      "hits": 7,
-      "hit_rate": 0.2059,
-      "over_hits": 7,
-      "over_total": 34,
-      "over_rate": 0.2059,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Giovanni Mpetshi Perricard",
-      "sport": "Tennis",
-      "total": 30,
-      "hits": 6,
-      "hit_rate": 0.2,
-      "over_hits": 6,
-      "over_total": 30,
-      "over_rate": 0.2,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Pablo Llamas Ruiz",
-      "sport": "Tennis",
-      "total": 41,
-      "hits": 8,
-      "hit_rate": 0.1951,
-      "over_hits": 8,
-      "over_total": 41,
-      "over_rate": 0.1951,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Emma Raducanu",
-      "sport": "Tennis",
-      "total": 36,
-      "hits": 7,
-      "hit_rate": 0.1944,
-      "over_hits": 7,
-      "over_total": 36,
-      "over_rate": 0.1944,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Tomas Martin Etcheverry",
-      "sport": "Tennis",
-      "total": 43,
-      "hits": 8,
-      "hit_rate": 0.186,
-      "over_hits": 6,
-      "over_total": 41,
-      "over_rate": 0.1463,
-      "under_hits": 2,
-      "under_total": 2,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Jessica Bouzas Maneiro",
-      "sport": "Tennis",
-      "total": 29,
-      "hits": 5,
-      "hit_rate": 0.1724,
-      "over_hits": 5,
-      "over_total": 29,
-      "over_rate": 0.1724,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Ignacio Buse",
-      "sport": "Tennis",
-      "total": 29,
-      "hits": 5,
-      "hit_rate": 0.1724,
-      "over_hits": 3,
-      "over_total": 27,
-      "over_rate": 0.1111,
-      "under_hits": 2,
-      "under_total": 2,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Anhelina Kalinina",
-      "sport": "Tennis",
-      "total": 41,
-      "hits": 7,
-      "hit_rate": 0.1707,
-      "over_hits": 7,
-      "over_total": 41,
-      "over_rate": 0.1707,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Hanne Vandewinkel",
-      "sport": "Tennis",
-      "total": 26,
-      "hits": 4,
-      "hit_rate": 0.1538,
-      "over_hits": 4,
-      "over_total": 26,
-      "over_rate": 0.1538,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Moyuka Uchijima",
-      "sport": "Tennis",
-      "total": 27,
-      "hits": 4,
-      "hit_rate": 0.1481,
-      "over_hits": 4,
-      "over_total": 27,
-      "over_rate": 0.1481,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Sorana Cirstea",
-      "sport": "Tennis",
-      "total": 28,
-      "hits": 4,
-      "hit_rate": 0.1429,
-      "over_hits": 4,
-      "over_total": 28,
-      "over_rate": 0.1429,
-      "under_hits": 0,
-      "under_total": 0,
-      "under_rate": null,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Panna Udvardy",
-      "sport": "Tennis",
-      "total": 29,
-      "hits": 4,
-      "hit_rate": 0.1379,
-      "over_hits": 3,
-      "over_total": 28,
-      "over_rate": 0.1071,
-      "under_hits": 1,
-      "under_total": 1,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
-    },
-    {
-      "player": "Alycia Parks",
-      "sport": "Tennis",
-      "total": 37,
-      "hits": 5,
-      "hit_rate": 0.1351,
-      "over_hits": 5,
-      "over_total": 36,
-      "over_rate": 0.1389,
-      "under_hits": 0,
-      "under_total": 1,
-      "under_rate": 0.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
-      "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
-    },
-    {
-      "player": "Jannik Sinner",
-      "sport": "Tennis",
-      "total": 30,
-      "hits": 3,
-      "hit_rate": 0.1,
-      "over_hits": 2,
-      "over_total": 29,
-      "over_rate": 0.069,
-      "under_hits": 1,
-      "under_total": 1,
-      "under_rate": 1.0,
-      "direction": "OVER",
-      "direction_pooled": "OVER",
-      "tier": "medium",
-      "balance_score": null,
-      "best_prop": null,
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -9651,7 +11563,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -9673,6 +11598,13 @@
       "tier": "high",
       "balance_score": 0.6363,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 21,
+        "hit_rate": 0.7143
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 15,
@@ -9714,7 +11646,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.7368,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -9735,7 +11680,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.7676,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 9,
+        "hit_rate": 0.7778
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 9,
+        "hit_rate": 0.7778
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -9757,6 +11715,13 @@
       "tier": "high",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 25,
+        "hit_rate": 0.6
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 15,
@@ -9799,6 +11764,13 @@
       "tier": "high",
       "balance_score": 0.909,
       "best_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 15,
+        "hit_rate": 0.7333
+      },
+      "display_prop": {
         "prop_type": "Pts+Asts",
         "direction": "OVER",
         "hits": 11,
@@ -9854,6 +11826,13 @@
         "total": 18,
         "hit_rate": 0.3889
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 18,
+        "hit_rate": 0.3889
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -9883,6 +11862,13 @@
       "tier": "high",
       "balance_score": 0.8044,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 29,
+        "hit_rate": 0.6207
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 18,
@@ -9927,11 +11913,24 @@
       "under_hits": 7,
       "under_total": 10,
       "under_rate": 0.7,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.7909,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -9953,6 +11952,13 @@
       "tier": "high",
       "balance_score": 0.8636,
       "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 15,
+        "hit_rate": 0.8667
+      },
+      "display_prop": {
         "prop_type": "3-PT Made",
         "direction": "OVER",
         "hits": 13,
@@ -10008,6 +12014,13 @@
         "total": 22,
         "hit_rate": 0.6364
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 22,
+        "hit_rate": 0.6364
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10051,6 +12064,13 @@
       "tier": "high",
       "balance_score": 0.7463,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 28,
+        "hit_rate": 0.7143
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 20,
@@ -10106,6 +12126,13 @@
         "total": 20,
         "hit_rate": 0.45
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 20,
+        "hit_rate": 0.45
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10142,6 +12169,13 @@
       "tier": "high",
       "balance_score": 0.9557,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 34,
+        "hit_rate": 0.4706
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 16,
@@ -10197,6 +12231,13 @@
         "total": 15,
         "hit_rate": 0.7333
       },
+      "display_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 15,
+        "hit_rate": 0.7333
+      },
       "best_props": [
         {
           "prop_type": "Pts+Rebs",
@@ -10246,6 +12287,13 @@
         "total": 17,
         "hit_rate": 0.4118
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 17,
+        "hit_rate": 0.4118
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10275,6 +12323,13 @@
       "tier": "high",
       "balance_score": 0.8036,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 19,
+        "hit_rate": 0.5789
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 11,
@@ -10323,6 +12378,13 @@
         "total": 18,
         "hit_rate": 0.4444
       },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 18,
+        "hit_rate": 0.4444
+      },
       "best_props": [
         {
           "prop_type": "Assists",
@@ -10361,11 +12423,24 @@
       "under_hits": 11,
       "under_total": 22,
       "under_rate": 0.5,
-      "direction": "BOTH",
+      "direction": "OVER",
       "direction_pooled": "BOTH",
       "tier": "high",
       "balance_score": 0.9167,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -10386,7 +12461,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.8652,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 11,
+        "hit_rate": 0.6364
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -10408,6 +12496,13 @@
       "tier": "high",
       "balance_score": 0.7241,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 21,
+        "hit_rate": 0.5714
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 12,
@@ -10463,6 +12558,13 @@
         "total": 28,
         "hit_rate": 0.5
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 28,
+        "hit_rate": 0.5
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10512,6 +12614,13 @@
         "total": 21,
         "hit_rate": 0.5238
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 21,
+        "hit_rate": 0.5238
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10554,6 +12663,13 @@
         "total": 16,
         "hit_rate": 0.5
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 16,
+        "hit_rate": 0.5
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10583,6 +12699,13 @@
       "tier": "high",
       "balance_score": 0.7029,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 16,
+        "hit_rate": 0.375
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 6,
@@ -10638,6 +12761,13 @@
         "total": 18,
         "hit_rate": 0.5556
       },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 18,
+        "hit_rate": 0.5556
+      },
       "best_props": [
         {
           "prop_type": "Assists",
@@ -10667,6 +12797,13 @@
       "tier": "high",
       "balance_score": 0.7419,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 16,
+        "hit_rate": 0.4375
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 7,
@@ -10709,6 +12846,13 @@
       "tier": "high",
       "balance_score": 0.9124,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 24,
+        "hit_rate": 0.625
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 15,
@@ -10764,6 +12908,13 @@
         "total": 21,
         "hit_rate": 0.4286
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 21,
+        "hit_rate": 0.4286
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -10800,6 +12951,13 @@
       "tier": "high",
       "balance_score": 0.7696,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 19,
+        "hit_rate": 0.4737
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 9,
@@ -10848,6 +13006,13 @@
         "total": 16,
         "hit_rate": 0.3125
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 16,
+        "hit_rate": 0.3125
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -10872,11 +13037,24 @@
       "under_hits": 7,
       "under_total": 14,
       "under_rate": 0.5,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.85,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -10898,6 +13076,13 @@
       "tier": "high",
       "balance_score": 0.8186,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 30,
+        "hit_rate": 0.4333
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 13,
@@ -10953,6 +13138,13 @@
         "total": 16,
         "hit_rate": 0.4375
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 16,
+        "hit_rate": 0.4375
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -10982,6 +13174,13 @@
       "tier": "high",
       "balance_score": 0.7914,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 21,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 7,
@@ -11023,6 +13222,13 @@
         "total": 15,
         "hit_rate": 0.1333
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 15,
+        "hit_rate": 0.1333
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -11058,6 +13264,13 @@
         "total": 17,
         "hit_rate": 0.7647
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 17,
+        "hit_rate": 0.7647
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -11087,6 +13300,13 @@
       "tier": "high",
       "balance_score": 0.9021,
       "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 20,
+        "hit_rate": 0.45
+      },
+      "display_prop": {
         "prop_type": "Rebounds",
         "direction": "OVER",
         "hits": 9,
@@ -11142,6 +13362,13 @@
         "total": 34,
         "hit_rate": 0.2647
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 34,
+        "hit_rate": 0.2647
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -11191,6 +13418,13 @@
         "total": 15,
         "hit_rate": 0.3333
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 15,
+        "hit_rate": 0.3333
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -11220,6 +13454,13 @@
       "tier": "high",
       "balance_score": 0.699,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 24,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 12,
@@ -11268,6 +13509,13 @@
         "total": 17,
         "hit_rate": 0.2353
       },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 17,
+        "hit_rate": 0.2353
+      },
       "best_props": [
         {
           "prop_type": "Rebounds",
@@ -11303,6 +13551,13 @@
         "total": 16,
         "hit_rate": 0.125
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 16,
+        "hit_rate": 0.125
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -11327,11 +13582,24 @@
       "under_hits": 6,
       "under_total": 10,
       "under_rate": 0.6,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.6609,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 11,
+        "hit_rate": 0.4545
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 11,
+        "hit_rate": 0.4545
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11348,11 +13616,24 @@
       "under_hits": 13,
       "under_total": 13,
       "under_rate": 1.0,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "high",
       "balance_score": 0.1515,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 6,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 6,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11374,6 +13655,13 @@
       "tier": "high",
       "balance_score": 0.748,
       "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 20,
+        "hit_rate": 0.4
+      },
+      "display_prop": {
         "prop_type": "Assists",
         "direction": "OVER",
         "hits": 8,
@@ -11429,6 +13717,13 @@
         "total": 23,
         "hit_rate": 0.3043
       },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 23,
+        "hit_rate": 0.3043
+      },
       "best_props": [
         {
           "prop_type": "Points",
@@ -11464,7 +13759,20 @@
       "direction_pooled": "OVER",
       "tier": "high",
       "balance_score": 0.4022,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 6,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Pts+Rebs",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 6,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11486,6 +13794,13 @@
       "tier": "medium",
       "balance_score": null,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 20,
+        "hit_rate": 0.9
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 18,
@@ -11520,7 +13835,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.5083,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11541,7 +13869,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.641,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11562,7 +13903,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.5983,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 13,
+        "hit_rate": 0.7692
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11583,10 +13937,23 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.9682,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "on_today_slate": true
     },
     {
       "player": "Cameron Brink",
@@ -11604,7 +13971,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.7571,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 12,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11625,7 +14005,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11646,7 +14039,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.5846,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11668,6 +14074,13 @@
       "tier": "medium",
       "balance_score": 0.6694,
       "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 16,
+        "hit_rate": 0.3125
+      },
+      "display_prop": {
         "prop_type": "Points",
         "direction": "OVER",
         "hits": 5,
@@ -11698,11 +14111,24 @@
       "under_hits": 6,
       "under_total": 10,
       "under_rate": 0.6,
-      "direction": "UNDER",
+      "direction": "OVER",
       "direction_pooled": "UNDER",
       "tier": "medium",
       "balance_score": 0.8194,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 8,
+        "hit_rate": 0.875
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 8,
+        "hit_rate": 0.875
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11723,7 +14149,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.7947,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11744,7 +14183,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11761,11 +14213,24 @@
       "under_hits": 3,
       "under_total": 7,
       "under_rate": 0.4286,
-      "direction": "OVER",
+      "direction": "UNDER",
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.9047,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "UNDER",
+        "hits": 2,
+        "total": 3,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11786,10 +14251,23 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.0556,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 6,
+        "hit_rate": 0.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 6,
+        "hit_rate": 0.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "on_today_slate": true
     },
     {
       "player": "Nyara Sabally",
@@ -11807,7 +14285,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.8,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 9,
+        "hit_rate": 0.5556
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 9,
+        "hit_rate": 0.5556
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11828,7 +14319,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.05,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 5,
+        "hit_rate": 0.2
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 5,
+        "hit_rate": 0.2
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11849,7 +14353,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": 0.5562,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 4,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11870,7 +14387,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 9,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 9,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11891,7 +14421,20 @@
       "direction_pooled": "OVER",
       "tier": "medium",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 14,
+        "hit_rate": 0.1429
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 2,
+        "total": 14,
+        "hit_rate": 0.1429
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11912,7 +14455,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 6,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11933,7 +14489,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11954,7 +14523,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -11975,7 +14557,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": 0.3529,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": true
@@ -11996,7 +14591,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": 0.375,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false
@@ -12017,10 +14625,23 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 1,
+        "total": 3,
+        "hit_rate": 0.3333
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "on_today_slate": true
     },
     {
       "player": "Tiffany Hayes",
@@ -12034,14 +14655,27 @@
       "under_hits": 3,
       "under_total": 3,
       "under_rate": 1.0,
-      "direction": "BOTH",
+      "direction": "OVER",
       "direction_pooled": "BOTH",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 4,
+        "hit_rate": 0.0
+      },
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 4,
+        "hit_rate": 0.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "on_today_slate": true
     },
     {
       "player": "Nia Coffey",
@@ -12059,7 +14693,20 @@
       "direction_pooled": "OVER",
       "tier": "low",
       "balance_score": null,
-      "best_prop": null,
+      "best_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 6,
+        "hit_rate": 0.0
+      },
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 0,
+        "total": 6,
+        "hit_rate": 0.0
+      },
       "best_props": [],
       "last_updated": "2026-05-25",
       "on_today_slate": false

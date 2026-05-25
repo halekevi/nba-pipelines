@@ -30,21 +30,22 @@ _CACHE_CANDIDATES = (
 
 
 def _cache_path() -> Path:
-    for p in _CACHE_CANDIDATES:
-        if p.is_file():
-            return p
-    return _CACHE_CANDIDATES[0]
+    """Use the newest on-disk cache (avoids stale data/cache shadowing ui_runner/data on deploy)."""
+    existing = [p for p in _CACHE_CANDIDATES if p.is_file()]
+    if not existing:
+        return _CACHE_CANDIDATES[0]
+    return max(existing, key=lambda p: p.stat().st_mtime)
 
 _cache: dict | None = None
 _cache_mtime: float = 0.0
 
 
-def load_consistency_cache() -> dict:
+def load_consistency_cache(*, force_reload: bool = False) -> dict:
     global _cache, _cache_mtime
     path = _cache_path()
     try:
         mtime = path.stat().st_mtime
-        if _cache is None or mtime != _cache_mtime:
+        if force_reload or _cache is None or mtime != _cache_mtime:
             with open(path, encoding="utf-8") as f:
                 _cache = json.load(f)
             _cache_mtime = mtime
@@ -55,6 +56,27 @@ def load_consistency_cache() -> dict:
         _cache = {"players": [], "generated_at": None}
         _cache_mtime = 0.0
     return _cache
+
+
+def _resolve_display_prop(player: dict) -> dict | None:
+    """Best (prop, direction) slice for Hot Player cards — never rely on client-only logic."""
+    bp = player.get("display_prop")
+    if isinstance(bp, dict) and bp.get("prop_type"):
+        return bp
+    bp = player.get("best_prop")
+    if isinstance(bp, dict) and bp.get("prop_type"):
+        return bp
+    for alt in player.get("best_props") or []:
+        if isinstance(alt, dict) and alt.get("prop_type"):
+            return alt
+    return None
+
+
+def _enrich_hot_player(player: dict) -> dict:
+    out = dict(player)
+    dp = _resolve_display_prop(out)
+    out["display_prop"] = dp
+    return out
 
 
 def _player_direction(p: dict) -> str:
@@ -134,7 +156,7 @@ def hot_players():
     sport = request.args.get("sport")
     limit = min(int(request.args.get("limit", 5)), 20)
 
-    data = load_consistency_cache()
+    data = load_consistency_cache(force_reload=True)
     players = data.get("players", [])
 
     today = [p for p in players if p.get("on_today_slate") and p.get("tier") in ("high", "medium")]
@@ -150,12 +172,13 @@ def hot_players():
         if s not in by_sport:
             by_sport[s] = []
         if len(by_sport[s]) < limit:
-            by_sport[s].append(p)
+            by_sport[s].append(_enrich_hot_player(p))
 
     return jsonify(
         {
             "date": str(date.today()),
             "generated_at": data.get("generated_at"),
+            "cache_path": str(_cache_path()),
             "sports": by_sport,
             "total_featured": sum(len(v) for v in by_sport.values()),
         }
