@@ -1,42 +1,42 @@
 {
   "MLB": {
     "gate": false,
-    "auc": 0.6320941003967906,
+    "auc": 0.6236881889474841,
     "reason": "OK (ALWAYS_ALLOW_SPORTS)"
   },
   "NBA": {
     "gate": false,
-    "auc": 0.6407723730946301,
+    "auc": 0.6297638129465065,
     "reason": "OK (ALWAYS_ALLOW_SPORTS)"
   },
   "NBA1H": {
-    "gate": true,
-    "auc": 0.46498842592592593,
-    "reason": "AUC 0.4650 < 0.5"
+    "gate": false,
+    "auc": 0.5456823877876509,
+    "reason": "OK (temporal test AUC 0.5457 >= 0.50, retrain 2026-05-25)"
   },
   "NBA1Q": {
     "gate": false,
-    "auc": 0.6603320659298951,
+    "auc": 0.6563756381580418,
     "reason": "OK"
   },
   "NHL": {
     "gate": false,
-    "auc": 0.5587237382763778,
+    "auc": 0.5531104604374673,
     "reason": "OK"
   },
   "SOCCER": {
     "gate": false,
-    "auc": 0.6356958964409803,
+    "auc": 0.6471272853346227,
     "reason": "OK"
   },
   "TENNIS": {
     "gate": false,
-    "auc": null,
-    "reason": "insufficient data"
+    "auc": 0.5415913296471718,
+    "reason": "OK"
   },
   "WNBA": {
     "gate": false,
-    "auc": 0.6158720871789224,
+    "auc": 0.5703335354520127,
     "reason": "OK"
   }
 }
