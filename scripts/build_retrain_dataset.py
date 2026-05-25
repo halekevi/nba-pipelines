@@ -1036,7 +1036,7 @@ def main() -> int:
             continue
 
         # graded_props JSON often omits PP pick type (em dash → ``standard``) while step8 has
-        # goblin/demon. Join without pick_type for NHL/Soccer so step8 scores attach.
+        # goblin/demon. Join without pick_type for NHL/Soccer/Tennis so step8 scores attach.
         sk_u = str(sk).upper()
         sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
         if sort_col:
@@ -1207,7 +1207,7 @@ def main() -> int:
             if "_file_d" in m.columns and "_game_d" in m.columns:
                 m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
         else:
-            loose_pick = sk_u in ("NHL", "SOCCER")
+            loose_pick = sk_u in ("NHL", "SOCCER", "TENNIS")
             if loose_pick:
                 s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_dir"], keep="first")
             else:
