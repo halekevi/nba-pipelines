@@ -14,6 +14,24 @@
   --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
 }
 
+/* Home only uses .shell — 90% band on all viewports (loads after index.html inline CSS) */
+.shell {
+  width: 90% !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+nav.snav,
+nav.snav.glass-card {
+  width: 90% !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
 /* Payouts nav glyph: path reads as a reversed “p” until flipped vertically. */
 .ni-pay svg {
   transform: scaleY(-1);
@@ -95,10 +113,10 @@
     font-size: max(16px, 1rem) !important;
   }
 
-  /* Home — shell: 90% centered (~5% gutter each side) */
+  /* Home — shell: reinforce 90% / 1680px; no width:100% or side padding */
   .shell {
     width: 90% !important;
-    max-width: min(1680px, 90%) !important;
+    max-width: 1680px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;
@@ -111,7 +129,7 @@
   nav.snav,
   nav.snav.glass-card {
     width: 90% !important;
-    max-width: min(1680px, 90%) !important;
+    max-width: 1680px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;
