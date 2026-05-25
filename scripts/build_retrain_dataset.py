@@ -50,7 +50,11 @@ TIER_OVERHAUL_DATE = "2026-05-02"
 TRAINING_FROM_DATE = "2026-05-06"
 
 # Sports omitted from retrain_dataset.csv (and graded_only export).
-EXCLUDE_SPORTS: frozenset[str] = frozenset()
+# Tennis: 29.6% join rate overall, Goblin/Demon at ~3%.
+# Missing step8 player coverage on high-volume dates (May 19, May 24).
+# def_tier 0% on all joined rows.
+# Re-include after Tennis pipeline step8 coverage is fixed.
+EXCLUDE_SPORTS: frozenset[str] = frozenset({"Tennis"})
 
 STEP8_FEATURE_COLS = [
     "blended_score",
