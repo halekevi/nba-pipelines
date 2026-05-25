@@ -1036,7 +1036,8 @@ def main() -> int:
             continue
 
         # graded_props JSON often omits PP pick type (em dash → ``standard``) while step8 has
-        # goblin/demon. Join without pick_type for NHL/Soccer/Tennis so step8 scores attach.
+        # goblin/demon. Join without pick_type for NHL/Soccer so step8 scores attach.
+        # Tennis uses a 3-level cascade (see below) including player+prop fallback.
         sk_u = str(sk).upper()
         sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
         if sort_col:
@@ -1206,8 +1207,49 @@ def main() -> int:
                 m.loc[~m["_joined"], c] = np.nan
             if "_file_d" in m.columns and "_game_d" in m.columns:
                 m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
+        elif sk_u == "TENNIS":
+            m = g.copy()
+            m["_joined"] = False
+            m["_tol"] = False
+            tennis_levels: list[tuple[list[str], list[str]]] = [
+                (
+                    ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"],
+                    ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"],
+                ),
+                (
+                    ["_n_player", "_n_prop", "_n_line", "_n_dir"],
+                    ["_n_player", "_n_prop", "_n_line", "_n_dir"],
+                ),
+                # Tennis level-3: Goblin/Demon lines differ from Standard step8
+                # lines. Join on player+prop only — attaches rank_score/def_tier
+                # context without line-match. Same approach as WNBA Demon rows.
+                (["_n_player", "_n_prop"], ["_n_player", "_n_prop"]),
+            ]
+            for merge_on_keys, dedupe_keys in tennis_levels:
+                need = ~m["_joined"]
+                if not need.any():
+                    break
+                sub_idx = g.index[need]
+                partial = _merge_step8(g.loc[sub_idx], merge_on_keys, dedupe_keys)
+                partial.index = sub_idx
+                for idx in partial.index:
+                    if not bool(partial.at[idx, "_joined"]):
+                        continue
+                    for col in JOIN_FEATURE_COLS + ["_joined", "_tol", "_game_d"]:
+                        if col in partial.columns:
+                            val = partial.at[idx, col]
+                            if col in m.columns and m[col].dtype != object and isinstance(val, str):
+                                m[col] = m[col].astype(object)
+                            m.at[idx, col] = val
+            for c in JOIN_FEATURE_COLS:
+                if c not in m.columns:
+                    m[c] = np.nan
+                m.loc[~m["_joined"], c] = np.nan
+            if "_game_d" not in m.columns:
+                m["_game_d"] = pd.NaT
+            m["_date_diff"] = (m["_file_d"] - m["_game_d"]).abs().dt.days
         else:
-            loose_pick = sk_u in ("NHL", "SOCCER", "TENNIS")
+            loose_pick = sk_u in ("NHL", "SOCCER")
             if loose_pick:
                 s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_dir"], keep="first")
             else:
