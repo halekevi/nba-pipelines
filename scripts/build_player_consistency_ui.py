@@ -40,8 +40,20 @@ SLATE_PATHS = (
     REPO_ROOT / "mobile" / "www" / "slate_latest.json",
 )
 
-# Minimum graded props for a (player, sport, prop, direction) slice to surface in UI.
-MIN_BEST_PROP = 20
+# Per-sport minimum graded props for a (prop, direction) slice to surface in UI.
+_SPORT_MIN: dict[str, int | None] = {
+    "NBA1H": None,  # use dynamic rule instead
+    "NBA1Q": 20,
+    "NBA": 20,
+    "WNBA": 15,
+    "MLB": 20,
+    "NHL": 20,
+    "SOCCER": 20,
+    "TENNIS": 20,
+}
+_DYNAMIC_SPORTS = frozenset({"NBA1H"})
+# Shallow pools: include every qualifying player (avoids top_n cutting e.g. WNBA rank 51).
+_SPORT_INCLUDE_ALL = frozenset({"WNBA", "NBA1H", "NBA1Q"})
 TOP_BEST_PROPS = 3
 
 # Volume/process props: deprioritized when ranking (weight 0.75 vs 1.0 for outcome props).
@@ -169,9 +181,20 @@ def _prop_quality_weight(prop_type: str, prop_raw: str = "") -> float:
     return VOLUME_PROP_WEIGHT if _is_volume_prop(prop_type, prop_raw) else OUTCOME_PROP_WEIGHT
 
 
+def _min_for_sport(sport: str, total: int) -> int:
+    sport_u = str(sport).upper()
+    if sport_u in _DYNAMIC_SPORTS:
+        return max(5, round(total * 0.30))
+    min_val = _SPORT_MIN.get(sport_u, 20)
+    return min_val if min_val is not None else 20
+
+
 def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, list[dict]]:
     if "prop" not in grp.columns:
         return None, []
+
+    player_total = len(grp)
+    min_n = _min_for_sport(sport, player_total)
 
     slices: list[dict] = []
     for (prop_raw, direction), sub in grp.groupby(["prop", "direction"], sort=False):
@@ -179,7 +202,7 @@ def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, lis
         if direction not in ("OVER", "UNDER"):
             continue
         n = len(sub)
-        if n < MIN_BEST_PROP:
+        if n < min_n:
             continue
         hits = int((sub["outcome"] == "HIT").sum())
         hit_rate = round(hits / n, 4)
@@ -289,27 +312,40 @@ def compute_consistency(df: pd.DataFrame, min_props: int = 10) -> list[dict]:
     return results
 
 
-def _players_from_slate_json(data: dict) -> set[str]:
+def _normalize_slate_sport(raw: str) -> str:
+    key = str(raw or "").strip().lower()
+    return SPORT_ALIASES.get(key, str(raw or "").strip().upper())
+
+
+def _players_from_slate_json(data: dict) -> tuple[set[str], set[tuple[str, str]]]:
     players: set[str] = set()
+    pairs: set[tuple[str, str]] = set()
     sports = data.get("sports") or {}
     if not isinstance(sports, dict):
-        return players
-    for rows in sports.values():
+        return players, pairs
+    for sport_key, rows in sports.items():
         if not isinstance(rows, list):
             continue
+        sport_norm = _normalize_slate_sport(str(sport_key))
         for row in rows:
             if not isinstance(row, dict):
                 continue
             name = row.get("player") or row.get("player_name") or ""
-            if name:
-                players.add(str(name).strip())
-    return players
+            if not name:
+                continue
+            clean = str(name).strip()
+            players.add(clean)
+            row_sport = row.get("sport") or sport_key
+            pairs.add((_norm_name(clean), _normalize_slate_sport(str(row_sport))))
+    return players, pairs
 
 
-def load_today_slate() -> set[str]:
+def load_today_slate() -> tuple[set[str], set[tuple[str, str]]]:
     players: set[str] = set()
+    pairs: set[tuple[str, str]] = set()
     today_str = str(date.today())
-    fallback: set[str] = set()
+    fallback_names: set[str] = set()
+    fallback_pairs: set[tuple[str, str]] = set()
 
     for path in SLATE_PATHS:
         if not path.is_file():
@@ -319,16 +355,19 @@ def load_today_slate() -> set[str]:
         except Exception:
             continue
         file_date = str(data.get("date", ""))[:10]
-        names = _players_from_slate_json(data)
+        names, slate_pairs = _players_from_slate_json(data)
         if not names:
             continue
         if file_date == today_str:
             players.update(names)
-        elif not fallback:
-            fallback = names
+            pairs.update(slate_pairs)
+        elif not fallback_names:
+            fallback_names = names
+            fallback_pairs = slate_pairs
 
-    if not players and fallback:
-        players = fallback
+    if not players and fallback_names:
+        players = fallback_names
+        pairs = fallback_pairs
         print(f"[consistency-ui] Using slate_latest ({len(players)} players; date not today)")
 
     step8_dir = CACHE_DIR
@@ -345,17 +384,63 @@ def load_today_slate() -> set[str]:
             if gd and str(gd)[:10] != today_str:
                 continue
             name = pick.get("player") or pick.get("player_name") or ""
-            if name:
-                players.add(str(name).strip())
+            if not name:
+                continue
+            clean = str(name).strip()
+            players.add(clean)
+            pairs.add(
+                (
+                    _norm_name(clean),
+                    _normalize_slate_sport(str(pick.get("sport") or sport_file.stem.replace("step8_", ""))),
+                )
+            )
 
-    return players
+    return players, pairs
 
 
-def tag_today_slate(records: list[dict], today_players: set[str]) -> list[dict]:
+def tag_today_slate(
+    records: list[dict],
+    today_players: set[str],
+    slate_pairs: set[tuple[str, str]] | None = None,
+) -> list[dict]:
     today_norm = {_norm_name(p) for p in today_players}
+    pair_set = slate_pairs or set()
     for r in records:
-        r["on_today_slate"] = _norm_name(r["player"]) in today_norm
+        norm = _norm_name(r["player"])
+        sport_u = str(r.get("sport", "")).upper()
+        on_pair = (norm, sport_u) in pair_set if pair_set else False
+        r["on_today_slate"] = norm in today_norm or on_pair
     return records
+
+
+def select_top_records(
+    records: list[dict],
+    top_n: int,
+    slate_pairs: set[tuple[str, str]],
+) -> list[dict]:
+    """Top N per sport, plus slate (player, sport) pairs; shallow sports include all."""
+    tier_order = {"high": 0, "medium": 1, "low": 2}
+    sorted_recs = sorted(
+        records,
+        key=lambda r: (r["sport"], tier_order.get(r["tier"], 2), -float(r["hit_rate"])),
+    )
+    selected: list[dict] = []
+    for _sport, group in groupby(sorted_recs, key=lambda r: r["sport"]):
+        group_list = list(group)
+        sport_u = str(_sport).upper()
+        if sport_u in _SPORT_INCLUDE_ALL:
+            selected.extend(group_list)
+            continue
+
+        chosen = group_list[:top_n]
+        chosen_keys = {(r["player"], r["sport"]) for r in chosen}
+        for r in group_list[top_n:]:
+            pair = (_norm_name(r["player"]), sport_u)
+            if pair in slate_pairs and (r["player"], r["sport"]) not in chosen_keys:
+                chosen.append(r)
+                chosen_keys.add((r["player"], r["sport"]))
+        selected.extend(chosen)
+    return selected
 
 
 def parse_args() -> argparse.Namespace:
@@ -400,14 +485,14 @@ def main() -> int:
     print(f"[consistency-ui] Computing from {source_name} ({len(df):,} rows) ...")
     records = compute_consistency(df, min_props=args.min_props)
 
-    today_players = load_today_slate()
+    today_players, slate_pairs = load_today_slate()
     if today_players:
-        print(f"[consistency-ui] Today's slate: {len(today_players)} players")
-    records = tag_today_slate(records, today_players)
-
-    top_records: list[dict] = []
-    for _sport, group in groupby(sorted(records, key=lambda r: r["sport"]), key=lambda r: r["sport"]):
-        top_records.extend(list(group)[: args.top_n])
+        print(
+            f"[consistency-ui] Today's slate: {len(today_players)} players, "
+            f"{len(slate_pairs)} (name, sport) pairs"
+        )
+    records = tag_today_slate(records, today_players, slate_pairs)
+    top_records = select_top_records(records, args.top_n, slate_pairs)
 
     if args.today_only:
         top_records = [r for r in top_records if r.get("on_today_slate")]
