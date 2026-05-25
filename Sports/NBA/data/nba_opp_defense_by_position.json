@@ -1,1 +1,638 @@
-{}
+{
+  "season_2025-26": {
+    "entries": {
+      "ATL_Center_2025-26": {
+        "ast_allowed": 26.6,
+        "position_group": "Center",
+        "pts_allowed": 116.0,
+        "reb_allowed": 45.2,
+        "team": "ATL"
+      },
+      "ATL_Forward_2025-26": {
+        "ast_allowed": 26.6,
+        "position_group": "Forward",
+        "pts_allowed": 116.0,
+        "reb_allowed": 45.2,
+        "team": "ATL"
+      },
+      "ATL_Guard_2025-26": {
+        "ast_allowed": 26.6,
+        "position_group": "Guard",
+        "pts_allowed": 116.0,
+        "reb_allowed": 45.2,
+        "team": "ATL"
+      },
+      "BKN_Center_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Center",
+        "pts_allowed": 115.9,
+        "reb_allowed": 43.6,
+        "team": "BKN"
+      },
+      "BKN_Forward_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Forward",
+        "pts_allowed": 115.9,
+        "reb_allowed": 43.6,
+        "team": "BKN"
+      },
+      "BKN_Guard_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Guard",
+        "pts_allowed": 115.9,
+        "reb_allowed": 43.6,
+        "team": "BKN"
+      },
+      "BOS_Center_2025-26": {
+        "ast_allowed": 24.7,
+        "position_group": "Center",
+        "pts_allowed": 107.2,
+        "reb_allowed": 41.2,
+        "team": "BOS"
+      },
+      "BOS_Forward_2025-26": {
+        "ast_allowed": 24.7,
+        "position_group": "Forward",
+        "pts_allowed": 107.2,
+        "reb_allowed": 41.2,
+        "team": "BOS"
+      },
+      "BOS_Guard_2025-26": {
+        "ast_allowed": 24.7,
+        "position_group": "Guard",
+        "pts_allowed": 107.2,
+        "reb_allowed": 41.2,
+        "team": "BOS"
+      },
+      "CHA_Center_2025-26": {
+        "ast_allowed": 25.9,
+        "position_group": "Center",
+        "pts_allowed": 111.2,
+        "reb_allowed": 39.3,
+        "team": "CHA"
+      },
+      "CHA_Forward_2025-26": {
+        "ast_allowed": 25.9,
+        "position_group": "Forward",
+        "pts_allowed": 111.2,
+        "reb_allowed": 39.3,
+        "team": "CHA"
+      },
+      "CHA_Guard_2025-26": {
+        "ast_allowed": 25.9,
+        "position_group": "Guard",
+        "pts_allowed": 111.2,
+        "reb_allowed": 39.3,
+        "team": "CHA"
+      },
+      "CHI_Center_2025-26": {
+        "ast_allowed": 28.8,
+        "position_group": "Center",
+        "pts_allowed": 121.5,
+        "reb_allowed": 45.7,
+        "team": "CHI"
+      },
+      "CHI_Forward_2025-26": {
+        "ast_allowed": 28.8,
+        "position_group": "Forward",
+        "pts_allowed": 121.5,
+        "reb_allowed": 45.7,
+        "team": "CHI"
+      },
+      "CHI_Guard_2025-26": {
+        "ast_allowed": 28.8,
+        "position_group": "Guard",
+        "pts_allowed": 121.5,
+        "reb_allowed": 45.7,
+        "team": "CHI"
+      },
+      "CLE_Center_2025-26": {
+        "ast_allowed": 26.9,
+        "position_group": "Center",
+        "pts_allowed": 115.4,
+        "reb_allowed": 43.2,
+        "team": "CLE"
+      },
+      "CLE_Forward_2025-26": {
+        "ast_allowed": 26.9,
+        "position_group": "Forward",
+        "pts_allowed": 115.4,
+        "reb_allowed": 43.2,
+        "team": "CLE"
+      },
+      "CLE_Guard_2025-26": {
+        "ast_allowed": 26.9,
+        "position_group": "Guard",
+        "pts_allowed": 115.4,
+        "reb_allowed": 43.2,
+        "team": "CLE"
+      },
+      "DAL_Center_2025-26": {
+        "ast_allowed": 28.4,
+        "position_group": "Center",
+        "pts_allowed": 119.6,
+        "reb_allowed": 46.8,
+        "team": "DAL"
+      },
+      "DAL_Forward_2025-26": {
+        "ast_allowed": 28.4,
+        "position_group": "Forward",
+        "pts_allowed": 119.6,
+        "reb_allowed": 46.8,
+        "team": "DAL"
+      },
+      "DAL_Guard_2025-26": {
+        "ast_allowed": 28.4,
+        "position_group": "Guard",
+        "pts_allowed": 119.6,
+        "reb_allowed": 46.8,
+        "team": "DAL"
+      },
+      "DEN_Center_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Center",
+        "pts_allowed": 116.9,
+        "reb_allowed": 42.8,
+        "team": "DEN"
+      },
+      "DEN_Forward_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Forward",
+        "pts_allowed": 116.9,
+        "reb_allowed": 42.8,
+        "team": "DEN"
+      },
+      "DEN_Guard_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Guard",
+        "pts_allowed": 116.9,
+        "reb_allowed": 42.8,
+        "team": "DEN"
+      },
+      "DET_Center_2025-26": {
+        "ast_allowed": 23.5,
+        "position_group": "Center",
+        "pts_allowed": 109.6,
+        "reb_allowed": 40.5,
+        "team": "DET"
+      },
+      "DET_Forward_2025-26": {
+        "ast_allowed": 23.5,
+        "position_group": "Forward",
+        "pts_allowed": 109.6,
+        "reb_allowed": 40.5,
+        "team": "DET"
+      },
+      "DET_Guard_2025-26": {
+        "ast_allowed": 23.5,
+        "position_group": "Guard",
+        "pts_allowed": 109.6,
+        "reb_allowed": 40.5,
+        "team": "DET"
+      },
+      "GSW_Center_2025-26": {
+        "ast_allowed": 27.1,
+        "position_group": "Center",
+        "pts_allowed": 115.2,
+        "reb_allowed": 44.2,
+        "team": "GSW"
+      },
+      "GSW_Forward_2025-26": {
+        "ast_allowed": 27.1,
+        "position_group": "Forward",
+        "pts_allowed": 115.2,
+        "reb_allowed": 44.2,
+        "team": "GSW"
+      },
+      "GSW_Guard_2025-26": {
+        "ast_allowed": 27.1,
+        "position_group": "Guard",
+        "pts_allowed": 115.2,
+        "reb_allowed": 44.2,
+        "team": "GSW"
+      },
+      "HOU_Center_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Center",
+        "pts_allowed": 110.0,
+        "reb_allowed": 39.5,
+        "team": "HOU"
+      },
+      "HOU_Forward_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Forward",
+        "pts_allowed": 110.0,
+        "reb_allowed": 39.5,
+        "team": "HOU"
+      },
+      "HOU_Guard_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Guard",
+        "pts_allowed": 110.0,
+        "reb_allowed": 39.5,
+        "team": "HOU"
+      },
+      "IND_Center_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Center",
+        "pts_allowed": 120.4,
+        "reb_allowed": 46.7,
+        "team": "IND"
+      },
+      "IND_Forward_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Forward",
+        "pts_allowed": 120.4,
+        "reb_allowed": 46.7,
+        "team": "IND"
+      },
+      "IND_Guard_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Guard",
+        "pts_allowed": 120.4,
+        "reb_allowed": 46.7,
+        "team": "IND"
+      },
+      "LAC_Center_2025-26": {
+        "ast_allowed": 26.1,
+        "position_group": "Center",
+        "pts_allowed": 112.6,
+        "reb_allowed": 42.4,
+        "team": "LAC"
+      },
+      "LAC_Forward_2025-26": {
+        "ast_allowed": 26.1,
+        "position_group": "Forward",
+        "pts_allowed": 112.6,
+        "reb_allowed": 42.4,
+        "team": "LAC"
+      },
+      "LAC_Guard_2025-26": {
+        "ast_allowed": 26.1,
+        "position_group": "Guard",
+        "pts_allowed": 112.6,
+        "reb_allowed": 42.4,
+        "team": "LAC"
+      },
+      "LAL_Center_2025-26": {
+        "ast_allowed": 27.4,
+        "position_group": "Center",
+        "pts_allowed": 114.6,
+        "reb_allowed": 41.0,
+        "team": "LAL"
+      },
+      "LAL_Forward_2025-26": {
+        "ast_allowed": 27.4,
+        "position_group": "Forward",
+        "pts_allowed": 114.6,
+        "reb_allowed": 41.0,
+        "team": "LAL"
+      },
+      "LAL_Guard_2025-26": {
+        "ast_allowed": 27.4,
+        "position_group": "Guard",
+        "pts_allowed": 114.6,
+        "reb_allowed": 41.0,
+        "team": "LAL"
+      },
+      "MEM_Center_2025-26": {
+        "ast_allowed": 28.2,
+        "position_group": "Center",
+        "pts_allowed": 120.7,
+        "reb_allowed": 46.8,
+        "team": "MEM"
+      },
+      "MEM_Forward_2025-26": {
+        "ast_allowed": 28.2,
+        "position_group": "Forward",
+        "pts_allowed": 120.7,
+        "reb_allowed": 46.8,
+        "team": "MEM"
+      },
+      "MEM_Guard_2025-26": {
+        "ast_allowed": 28.2,
+        "position_group": "Guard",
+        "pts_allowed": 120.7,
+        "reb_allowed": 46.8,
+        "team": "MEM"
+      },
+      "MIA_Center_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Center",
+        "pts_allowed": 118.5,
+        "reb_allowed": 46.4,
+        "team": "MIA"
+      },
+      "MIA_Forward_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Forward",
+        "pts_allowed": 118.5,
+        "reb_allowed": 46.4,
+        "team": "MIA"
+      },
+      "MIA_Guard_2025-26": {
+        "ast_allowed": 27.5,
+        "position_group": "Guard",
+        "pts_allowed": 118.5,
+        "reb_allowed": 46.4,
+        "team": "MIA"
+      },
+      "MIL_Center_2025-26": {
+        "ast_allowed": 27.9,
+        "position_group": "Center",
+        "pts_allowed": 116.8,
+        "reb_allowed": 44.5,
+        "team": "MIL"
+      },
+      "MIL_Forward_2025-26": {
+        "ast_allowed": 27.9,
+        "position_group": "Forward",
+        "pts_allowed": 116.8,
+        "reb_allowed": 44.5,
+        "team": "MIL"
+      },
+      "MIL_Guard_2025-26": {
+        "ast_allowed": 27.9,
+        "position_group": "Guard",
+        "pts_allowed": 116.8,
+        "reb_allowed": 44.5,
+        "team": "MIL"
+      },
+      "MIN_Center_2025-26": {
+        "ast_allowed": 26.0,
+        "position_group": "Center",
+        "pts_allowed": 114.6,
+        "reb_allowed": 43.7,
+        "team": "MIN"
+      },
+      "MIN_Forward_2025-26": {
+        "ast_allowed": 26.0,
+        "position_group": "Forward",
+        "pts_allowed": 114.6,
+        "reb_allowed": 43.7,
+        "team": "MIN"
+      },
+      "MIN_Guard_2025-26": {
+        "ast_allowed": 26.0,
+        "position_group": "Guard",
+        "pts_allowed": 114.6,
+        "reb_allowed": 43.7,
+        "team": "MIN"
+      },
+      "NOP_Center_2025-26": {
+        "ast_allowed": 28.1,
+        "position_group": "Center",
+        "pts_allowed": 120.0,
+        "reb_allowed": 45.8,
+        "team": "NOP"
+      },
+      "NOP_Forward_2025-26": {
+        "ast_allowed": 28.1,
+        "position_group": "Forward",
+        "pts_allowed": 120.0,
+        "reb_allowed": 45.8,
+        "team": "NOP"
+      },
+      "NOP_Guard_2025-26": {
+        "ast_allowed": 28.1,
+        "position_group": "Guard",
+        "pts_allowed": 120.0,
+        "reb_allowed": 45.8,
+        "team": "NOP"
+      },
+      "NYK_Center_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Center",
+        "pts_allowed": 110.1,
+        "reb_allowed": 40.5,
+        "team": "NYK"
+      },
+      "NYK_Forward_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Forward",
+        "pts_allowed": 110.1,
+        "reb_allowed": 40.5,
+        "team": "NYK"
+      },
+      "NYK_Guard_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Guard",
+        "pts_allowed": 110.1,
+        "reb_allowed": 40.5,
+        "team": "NYK"
+      },
+      "OKC_Center_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Center",
+        "pts_allowed": 107.9,
+        "reb_allowed": 45.2,
+        "team": "OKC"
+      },
+      "OKC_Forward_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Forward",
+        "pts_allowed": 107.9,
+        "reb_allowed": 45.2,
+        "team": "OKC"
+      },
+      "OKC_Guard_2025-26": {
+        "ast_allowed": 25.0,
+        "position_group": "Guard",
+        "pts_allowed": 107.9,
+        "reb_allowed": 45.2,
+        "team": "OKC"
+      },
+      "ORL_Center_2025-26": {
+        "ast_allowed": 25.3,
+        "position_group": "Center",
+        "pts_allowed": 115.1,
+        "reb_allowed": 43.3,
+        "team": "ORL"
+      },
+      "ORL_Forward_2025-26": {
+        "ast_allowed": 25.3,
+        "position_group": "Forward",
+        "pts_allowed": 115.1,
+        "reb_allowed": 43.3,
+        "team": "ORL"
+      },
+      "ORL_Guard_2025-26": {
+        "ast_allowed": 25.3,
+        "position_group": "Guard",
+        "pts_allowed": 115.1,
+        "reb_allowed": 43.3,
+        "team": "ORL"
+      },
+      "PHI_Center_2025-26": {
+        "ast_allowed": 27.6,
+        "position_group": "Center",
+        "pts_allowed": 116.1,
+        "reb_allowed": 45.3,
+        "team": "PHI"
+      },
+      "PHI_Forward_2025-26": {
+        "ast_allowed": 27.6,
+        "position_group": "Forward",
+        "pts_allowed": 116.1,
+        "reb_allowed": 45.3,
+        "team": "PHI"
+      },
+      "PHI_Guard_2025-26": {
+        "ast_allowed": 27.6,
+        "position_group": "Guard",
+        "pts_allowed": 116.1,
+        "reb_allowed": 45.3,
+        "team": "PHI"
+      },
+      "PHX_Center_2025-26": {
+        "ast_allowed": 25.1,
+        "position_group": "Center",
+        "pts_allowed": 111.1,
+        "reb_allowed": 43.7,
+        "team": "PHX"
+      },
+      "PHX_Forward_2025-26": {
+        "ast_allowed": 25.1,
+        "position_group": "Forward",
+        "pts_allowed": 111.1,
+        "reb_allowed": 43.7,
+        "team": "PHX"
+      },
+      "PHX_Guard_2025-26": {
+        "ast_allowed": 25.1,
+        "position_group": "Guard",
+        "pts_allowed": 111.1,
+        "reb_allowed": 43.7,
+        "team": "PHX"
+      },
+      "POR_Center_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Center",
+        "pts_allowed": 115.8,
+        "reb_allowed": 43.0,
+        "team": "POR"
+      },
+      "POR_Forward_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Forward",
+        "pts_allowed": 115.8,
+        "reb_allowed": 43.0,
+        "team": "POR"
+      },
+      "POR_Guard_2025-26": {
+        "ast_allowed": 26.4,
+        "position_group": "Guard",
+        "pts_allowed": 115.8,
+        "reb_allowed": 43.0,
+        "team": "POR"
+      },
+      "SAC_Center_2025-26": {
+        "ast_allowed": 28.0,
+        "position_group": "Center",
+        "pts_allowed": 121.0,
+        "reb_allowed": 43.9,
+        "team": "SAC"
+      },
+      "SAC_Forward_2025-26": {
+        "ast_allowed": 28.0,
+        "position_group": "Forward",
+        "pts_allowed": 121.0,
+        "reb_allowed": 43.9,
+        "team": "SAC"
+      },
+      "SAC_Guard_2025-26": {
+        "ast_allowed": 28.0,
+        "position_group": "Guard",
+        "pts_allowed": 121.0,
+        "reb_allowed": 43.9,
+        "team": "SAC"
+      },
+      "SAS_Center_2025-26": {
+        "ast_allowed": 26.2,
+        "position_group": "Center",
+        "pts_allowed": 111.5,
+        "reb_allowed": 42.6,
+        "team": "SAS"
+      },
+      "SAS_Forward_2025-26": {
+        "ast_allowed": 26.2,
+        "position_group": "Forward",
+        "pts_allowed": 111.5,
+        "reb_allowed": 42.6,
+        "team": "SAS"
+      },
+      "SAS_Guard_2025-26": {
+        "ast_allowed": 26.2,
+        "position_group": "Guard",
+        "pts_allowed": 111.5,
+        "reb_allowed": 42.6,
+        "team": "SAS"
+      },
+      "TOR_Center_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Center",
+        "pts_allowed": 111.8,
+        "reb_allowed": 42.9,
+        "team": "TOR"
+      },
+      "TOR_Forward_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Forward",
+        "pts_allowed": 111.8,
+        "reb_allowed": 42.9,
+        "team": "TOR"
+      },
+      "TOR_Guard_2025-26": {
+        "ast_allowed": 24.5,
+        "position_group": "Guard",
+        "pts_allowed": 111.8,
+        "reb_allowed": 42.9,
+        "team": "TOR"
+      },
+      "UTA_Center_2025-26": {
+        "ast_allowed": 30.7,
+        "position_group": "Center",
+        "pts_allowed": 126.0,
+        "reb_allowed": 45.7,
+        "team": "UTA"
+      },
+      "UTA_Forward_2025-26": {
+        "ast_allowed": 30.7,
+        "position_group": "Forward",
+        "pts_allowed": 126.0,
+        "reb_allowed": 45.7,
+        "team": "UTA"
+      },
+      "UTA_Guard_2025-26": {
+        "ast_allowed": 30.7,
+        "position_group": "Guard",
+        "pts_allowed": 126.0,
+        "reb_allowed": 45.7,
+        "team": "UTA"
+      },
+      "WAS_Center_2025-26": {
+        "ast_allowed": 29.4,
+        "position_group": "Center",
+        "pts_allowed": 124.9,
+        "reb_allowed": 47.8,
+        "team": "WAS"
+      },
+      "WAS_Forward_2025-26": {
+        "ast_allowed": 29.4,
+        "position_group": "Forward",
+        "pts_allowed": 124.9,
+        "reb_allowed": 47.8,
+        "team": "WAS"
+      },
+      "WAS_Guard_2025-26": {
+        "ast_allowed": 29.4,
+        "position_group": "Guard",
+        "pts_allowed": 124.9,
+        "reb_allowed": 47.8,
+        "team": "WAS"
+      }
+    },
+    "fetched_at": "2026-05-25T03:42:42.793724+00:00",
+    "source": "leaguedashteamstats_opponent"
+  }
+}

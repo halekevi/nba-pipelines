@@ -1,0 +1,15 @@
+
+Folder                     GB
+------                     --
+C:\Users               108.95
+C:\Windows              41.89
+C:\Program Files        20.44
+C:\Program Files (x86)   8.76
+C:\AMD                   1.55
+C:\Temp                  0.44
+C:\dev                   0.42
+C:\chrome_debug          0.28
+C:\xampp                 0.27
+C:\ChromeCDP             0.17
+
+

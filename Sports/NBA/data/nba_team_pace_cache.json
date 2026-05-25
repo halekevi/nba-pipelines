@@ -1,1 +1,187 @@
-{}
+{
+  "season_2025-26": {
+    "fetched_at": "2026-05-25T03:42:42.090374+00:00",
+    "teams": {
+      "ATL": {
+        "def_rating": 112.9,
+        "off_rating": 115.0,
+        "pace": 102.5,
+        "team_name": "Atlanta Hawks"
+      },
+      "BKN": {
+        "def_rating": 118.2,
+        "off_rating": 108.2,
+        "pace": 97.6,
+        "team_name": "Brooklyn Nets"
+      },
+      "BOS": {
+        "def_rating": 111.7,
+        "off_rating": 120.0,
+        "pace": 95.58,
+        "team_name": "Boston Celtics"
+      },
+      "CHA": {
+        "def_rating": 113.5,
+        "off_rating": 118.4,
+        "pace": 97.59,
+        "team_name": "Charlotte Hornets"
+      },
+      "CHI": {
+        "def_rating": 117.4,
+        "off_rating": 112.1,
+        "pace": 103.22,
+        "team_name": "Chicago Bulls"
+      },
+      "CLE": {
+        "def_rating": 114.1,
+        "off_rating": 118.3,
+        "pace": 100.7,
+        "team_name": "Cleveland Cavaliers"
+      },
+      "DAL": {
+        "def_rating": 115.5,
+        "off_rating": 110.3,
+        "pace": 102.62,
+        "team_name": "Dallas Mavericks"
+      },
+      "DEN": {
+        "def_rating": 116.0,
+        "off_rating": 121.2,
+        "pace": 99.49,
+        "team_name": "Denver Nuggets"
+      },
+      "DET": {
+        "def_rating": 108.9,
+        "off_rating": 117.3,
+        "pace": 99.88,
+        "team_name": "Detroit Pistons"
+      },
+      "GSW": {
+        "def_rating": 114.4,
+        "off_rating": 113.8,
+        "pace": 100.05,
+        "team_name": "Golden State Warriors"
+      },
+      "HOU": {
+        "def_rating": 112.1,
+        "off_rating": 117.5,
+        "pace": 96.98,
+        "team_name": "Houston Rockets"
+      },
+      "IND": {
+        "def_rating": 117.9,
+        "off_rating": 110.1,
+        "pace": 101.78,
+        "team_name": "Indiana Pacers"
+      },
+      "LAC": {
+        "def_rating": 115.2,
+        "off_rating": 116.3,
+        "pace": 97.29,
+        "team_name": "LA Clippers"
+      },
+      "LAL": {
+        "def_rating": 115.5,
+        "off_rating": 117.0,
+        "pace": 99.22,
+        "team_name": "Los Angeles Lakers"
+      },
+      "MEM": {
+        "def_rating": 118.4,
+        "off_rating": 112.4,
+        "pace": 101.69,
+        "team_name": "Memphis Grizzlies"
+      },
+      "MIA": {
+        "def_rating": 113.6,
+        "off_rating": 115.8,
+        "pace": 104.22,
+        "team_name": "Miami Heat"
+      },
+      "MIL": {
+        "def_rating": 118.3,
+        "off_rating": 112.2,
+        "pace": 98.33,
+        "team_name": "Milwaukee Bucks"
+      },
+      "MIN": {
+        "def_rating": 112.5,
+        "off_rating": 115.6,
+        "pace": 101.5,
+        "team_name": "Minnesota Timberwolves"
+      },
+      "NOP": {
+        "def_rating": 117.6,
+        "off_rating": 113.3,
+        "pace": 101.37,
+        "team_name": "New Orleans Pelicans"
+      },
+      "NYK": {
+        "def_rating": 112.3,
+        "off_rating": 118.7,
+        "pace": 97.71,
+        "team_name": "New York Knicks"
+      },
+      "OKC": {
+        "def_rating": 106.5,
+        "off_rating": 117.6,
+        "pace": 100.37,
+        "team_name": "Oklahoma City Thunder"
+      },
+      "ORL": {
+        "def_rating": 113.6,
+        "off_rating": 114.2,
+        "pace": 100.56,
+        "team_name": "Orlando Magic"
+      },
+      "PHI": {
+        "def_rating": 114.4,
+        "off_rating": 114.3,
+        "pace": 100.39,
+        "team_name": "Philadelphia 76ers"
+      },
+      "PHX": {
+        "def_rating": 112.9,
+        "off_rating": 114.2,
+        "pace": 98.14,
+        "team_name": "Phoenix Suns"
+      },
+      "POR": {
+        "def_rating": 113.5,
+        "off_rating": 113.1,
+        "pace": 101.63,
+        "team_name": "Portland Trail Blazers"
+      },
+      "SAC": {
+        "def_rating": 120.3,
+        "off_rating": 110.6,
+        "pace": 100.12,
+        "team_name": "Sacramento Kings"
+      },
+      "SAS": {
+        "def_rating": 110.4,
+        "off_rating": 118.7,
+        "pace": 100.72,
+        "team_name": "San Antonio Spurs"
+      },
+      "TOR": {
+        "def_rating": 112.1,
+        "off_rating": 115.0,
+        "pace": 99.22,
+        "team_name": "Toronto Raptors"
+      },
+      "UTA": {
+        "def_rating": 120.8,
+        "off_rating": 112.7,
+        "pace": 103.54,
+        "team_name": "Utah Jazz"
+      },
+      "WAS": {
+        "def_rating": 121.5,
+        "off_rating": 109.7,
+        "pace": 102.49,
+        "team_name": "Washington Wizards"
+      }
+    }
+  }
+}

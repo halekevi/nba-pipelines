@@ -1,0 +1,68 @@
+{
+  "date": "2026-05-22",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_nba_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 727,
+      "void_rows": 58,
+      "acceptable_void_rows": 58,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_nhl_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 263,
+      "void_rows": 263,
+      "acceptable_void_rows": 263,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_mlb_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 7462,
+      "void_rows": 3359,
+      "acceptable_void_rows": 3143,
+      "unacceptable_void_rows": 216
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_soccer_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 386,
+      "void_rows": 167,
+      "acceptable_void_rows": 167,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_nba1h_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_tennis_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 342,
+      "void_rows": 16,
+      "acceptable_void_rows": 16,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-22\\graded_wnba_2026-05-22.xlsx",
+      "status": "ok",
+      "rows": 138,
+      "void_rows": 15,
+      "acceptable_void_rows": 15,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 216
+}

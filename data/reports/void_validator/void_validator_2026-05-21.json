@@ -1,0 +1,60 @@
+{
+  "date": "2026-05-21",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_nba_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_nhl_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 257,
+      "void_rows": 257,
+      "acceptable_void_rows": 257,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_mlb_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 7462,
+      "void_rows": 4131,
+      "acceptable_void_rows": 4131,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_nba1h_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_tennis_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 28,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-21\\graded_wnba_2026-05-21.xlsx",
+      "status": "ok",
+      "rows": 662,
+      "void_rows": 284,
+      "acceptable_void_rows": 284,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}
