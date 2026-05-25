@@ -35,20 +35,38 @@
     return '<span title="Confidence: ' + tier + '" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + (colors[tier] || colors.low) + ';margin-right:3px;vertical-align:middle"></span>';
   }
 
+  function bestPropBlock(p) {
+    const bp = p.best_prop;
+    if (!bp || !bp.prop_type) {
+      return '';
+    }
+    const dir = bp.direction || '';
+    const tip = (bp.prop_type || '') + ' ' + dir + ' — ' + fmtPct(bp.hit_rate) + ' (' + (bp.total || 0) + ' props)';
+    return '<div class="card-best-prop" title="' + tip + '">' +
+      '<div class="card-prop-name">' + (bp.prop_type || '') + '</div>' +
+      '<div class="card-best-prop-row">' +
+      '<span class="card-dir-badge ' + dirClass(dir) + '">' + dir + '</span>' +
+      '<span class="card-slice-rate">' + fmtPct(bp.hit_rate) + '</span>' +
+      '</div>' +
+      '<div class="card-slice-meta">' + (bp.hits || 0) + '/' + (bp.total || 0) + ' on this prop</div>' +
+      '</div>';
+  }
+
   function buildCard(p) {
-    const dir = p.direction || 'BOTH';
     const slate = p.on_today_slate ? '<span class="card-on-slate" title="On today\'s slate"></span>' : '';
-    const overUnder = (p.over_total >= 10 && p.under_total >= 10)
-      ? '<div style="font-size:9px;color:var(--muted2);margin-top:3px">O:' + fmtPct(p.over_rate) + ' · U:' + fmtPct(p.under_rate) + '</div>'
-      : '';
-    return '<div class="hot-player-card" data-sport="' + (p.sport || '') + '" title="' + (p.player || '') + ' — ' + (p.sport || '') + '">' +
+    const bp = p.best_prop;
+    const rateLabel = bp && bp.prop_type
+      ? tierDot(p.tier) + 'overall · ' + (p.total || 0) + ' props'
+      : tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props';
+    const tip = (p.player || '') + ' — ' + (p.sport || '') +
+      (bp && bp.prop_type ? ' · best: ' + bp.prop_type + ' ' + (bp.direction || '') : '');
+    return '<div class="hot-player-card" data-sport="' + (p.sport || '') + '" title="' + tip + '">' +
       slate +
       '<div class="card-sport">' + (p.sport || '') + '</div>' +
       '<div class="card-name">' + (p.player || '') + '</div>' +
       '<div class="card-rate">' + fmtPct(p.hit_rate) + '</div>' +
-      '<div class="card-rate-label">' + tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props</div>' +
-      '<span class="card-dir-badge ' + dirClass(dir) + '">' + dir + '</span>' +
-      overUnder +
+      '<div class="card-rate-label">' + rateLabel + '</div>' +
+      bestPropBlock(p) +
       '</div>';
   }
 

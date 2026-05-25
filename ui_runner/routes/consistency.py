@@ -57,6 +57,13 @@ def load_consistency_cache() -> dict:
     return _cache
 
 
+def _player_direction(p: dict) -> str:
+    best = p.get("best_prop")
+    if isinstance(best, dict) and best.get("direction"):
+        return str(best["direction"]).upper().strip()
+    return str(p.get("direction", "")).upper().strip()
+
+
 def _filter_players(
     players: list[dict],
     sport: str | None,
@@ -74,7 +81,7 @@ def _filter_players(
         out = [p for p in out if p.get("on_today_slate")]
     if direction:
         d = direction.upper()
-        out = [p for p in out if p.get("direction") == d or p.get("direction") == "BOTH"]
+        out = [p for p in out if _player_direction(p) == d]
     return out[:limit]
 
 

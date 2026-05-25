@@ -40,6 +40,51 @@ SLATE_PATHS = (
     REPO_ROOT / "mobile" / "www" / "slate_latest.json",
 )
 
+# Minimum graded props for a (player, sport, prop, direction) slice to surface in UI.
+MIN_BEST_PROP = 20
+TOP_BEST_PROPS = 3
+
+# Volume/process props: deprioritized when ranking (weight 0.75 vs 1.0 for outcome props).
+VOLUME_PROPS: frozenset[str] = frozenset(
+    {
+        "3-pt attempted",
+        "3 pt attempted",
+        "fga",
+        "fg attempted",
+        "fta",
+        "free throws attempted",
+        "shots attempted",
+        "passes attempted",
+        "fouls",
+        "turnovers",
+        "to",
+        "minutes",
+        "time on ice",
+        "total games",
+        "total games won",
+        "walks allowed",
+        "pitches thrown",
+        "batters faced",
+        "hits allowed",
+        "personal fouls",
+        "plus/minus",
+    }
+)
+VOLUME_PROP_WEIGHT = 0.75
+OUTCOME_PROP_WEIGHT = 1.0
+
+# NHL graded rows often use snake_case; map to display labels used on PrizePicks cards.
+NHL_PROP_DISPLAY: dict[str, str] = {
+    "shots_on_goal": "Shots on Goal",
+    "power_play_points": "PP Points",
+    "blocked_shots": "Blocked Shots",
+    "goalie_saves": "Goalie Saves",
+    "goalie_fantasy_score": "Goalie Fantasy Score",
+    "faceoffs_won": "Faceoffs Won",
+    "time_on_ice": "Time on Ice",
+    "plus/minus": "Plus/Minus",
+}
+
 
 def find_latest_graded_csv() -> Path | None:
     pattern = sorted(TRAINING_DIR.glob("graded_export_*.csv"), reverse=True)
@@ -67,6 +112,8 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
         "name": "player",
         "pick_direction": "direction",
         "side": "direction",
+        "prop_type": "prop",
+        "stat_type": "prop",
         "result": "outcome",
         "grade": "outcome",
         "date": "game_date",
@@ -90,6 +137,76 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     elif "hit" in df.columns:
         df["outcome"] = df["hit"].map({1: "HIT", 0: "MISS", True: "HIT", False: "MISS"})
     return df
+
+
+def normalize_prop_display(raw: str, sport: str) -> str:
+    s = str(raw or "").strip()
+    if not s:
+        return "Unknown"
+    if sport == "NHL":
+        key = s.lower().replace(" ", "_")
+        if key in NHL_PROP_DISPLAY:
+            return NHL_PROP_DISPLAY[key]
+        if "_" in key:
+            return key.replace("_", " ").title()
+    if s.islower() and "_" in s:
+        return s.replace("_", " ").title()
+    return s
+
+
+def _prop_match_key(label: str) -> str:
+    return str(label or "").strip().lower().replace("_", " ").replace("-", " ")
+
+
+def _is_volume_prop(prop_type: str, prop_raw: str = "") -> bool:
+    for label in (prop_type, prop_raw):
+        if _prop_match_key(label) in VOLUME_PROPS:
+            return True
+    return False
+
+
+def _prop_quality_weight(prop_type: str, prop_raw: str = "") -> float:
+    return VOLUME_PROP_WEIGHT if _is_volume_prop(prop_type, prop_raw) else OUTCOME_PROP_WEIGHT
+
+
+def _compute_best_props(grp: pd.DataFrame, sport: str) -> tuple[dict | None, list[dict]]:
+    if "prop" not in grp.columns:
+        return None, []
+
+    slices: list[dict] = []
+    for (prop_raw, direction), sub in grp.groupby(["prop", "direction"], sort=False):
+        direction = str(direction).upper().strip()
+        if direction not in ("OVER", "UNDER"):
+            continue
+        n = len(sub)
+        if n < MIN_BEST_PROP:
+            continue
+        hits = int((sub["outcome"] == "HIT").sum())
+        hit_rate = round(hits / n, 4)
+        prop_type = normalize_prop_display(str(prop_raw), sport)
+        weight = _prop_quality_weight(prop_type, str(prop_raw))
+        slices.append(
+            {
+                "prop_type": prop_type,
+                "direction": direction,
+                "hits": hits,
+                "total": int(n),
+                "hit_rate": hit_rate,
+                "_sort_score": hit_rate * weight,
+            }
+        )
+
+    slices.sort(
+        key=lambda x: (-float(x["_sort_score"]), -int(x["total"]), x["prop_type"]),
+    )
+    best_props = [
+        {k: v for k, v in s.items() if k != "_sort_score"}
+        for s in slices[:TOP_BEST_PROPS]
+    ]
+    best_prop = (
+        {k: v for k, v in slices[0].items() if k != "_sort_score"} if slices else None
+    )
+    return best_prop, best_props
 
 
 def compute_consistency(df: pd.DataFrame, min_props: int = 10) -> list[dict]:
@@ -138,25 +255,34 @@ def compute_consistency(df: pd.DataFrame, min_props: int = 10) -> list[dict]:
 
         tier = "high" if total >= 50 else "medium" if total >= 25 else "low"
 
-        results.append(
-            {
-                "player": str(player),
-                "sport": str(sport),
-                "total": int(total),
-                "hits": hits,
-                "hit_rate": hit_rate,
-                "over_hits": over_hits,
-                "over_total": int(over_total),
-                "over_rate": over_rate,
-                "under_hits": under_hits,
-                "under_total": int(under_total),
-                "under_rate": under_rate,
-                "direction": direction,
-                "tier": tier,
-                "balance_score": balance_score,
-                "last_updated": str(date.today()),
-            }
-        )
+        best_prop, best_props = _compute_best_props(grp, str(sport))
+        card_direction = (
+            str(best_prop["direction"])
+            if best_prop and best_prop.get("direction")
+            else direction
+        )  # direction_pooled retained for filters when no qualifying slice
+
+        row: dict = {
+            "player": str(player),
+            "sport": str(sport),
+            "total": int(total),
+            "hits": hits,
+            "hit_rate": hit_rate,
+            "over_hits": over_hits,
+            "over_total": int(over_total),
+            "over_rate": over_rate,
+            "under_hits": under_hits,
+            "under_total": int(under_total),
+            "under_rate": under_rate,
+            "direction": card_direction,
+            "direction_pooled": direction,
+            "tier": tier,
+            "balance_score": balance_score,
+            "best_prop": best_prop,
+            "best_props": best_props,
+            "last_updated": str(date.today()),
+        }
+        results.append(row)
 
     tier_order = {"high": 0, "medium": 1, "low": 2}
     results.sort(key=lambda r: (r["sport"], tier_order[r["tier"]], -r["hit_rate"]))
@@ -253,11 +379,14 @@ def main() -> int:
         return 1
 
     df = normalize_columns(df)
-    required = ["player", "sport", "direction", "outcome"]
+    required = ["player", "sport", "direction", "outcome", "prop"]
     missing = [c for c in required if c not in df.columns]
     if missing:
         print(f"[consistency-ui] ERROR: missing columns {missing}", file=sys.stderr)
         return 1
+
+    df["prop"] = df["prop"].astype(str).str.strip()
+    df = df[df["prop"].str.len() > 0]
 
     if args.days and "game_date" in df.columns:
         cutoff = date.today() - timedelta(days=args.days)

@@ -3,7 +3,7 @@
     <div class="pe-header">
       <div>
         <h3 class="pe-title">Player Evaluator</h3>
-        <p class="pe-subtitle">Ranked hit rates from graded history. Green dot = on today's slate. Balance = how even OVER vs UNDER performance is.</p>
+        <p class="pe-subtitle">Ranked hit rates from graded history. Green dot = on today's slate. Best prop = top (prop, direction) slice with 20+ graded props (volume props deprioritized).</p>
       </div>
       <div class="pe-controls">
         <select id="pe-sport-select" class="pe-select" aria-label="Sport filter">
@@ -20,7 +20,6 @@
           <option value="">All Directions</option>
           <option value="OVER">OVER</option>
           <option value="UNDER">UNDER</option>
-          <option value="BOTH">BOTH</option>
         </select>
         <select id="pe-sort-select" class="pe-select" aria-label="Sort by">
           <option value="hit_rate">Hit Rate</option>
@@ -54,7 +53,8 @@
             <th>Tier</th>
             <th class="sortable" data-sort="hit_rate">Hit Rate</th>
             <th>Record</th>
-            <th>Direction</th>
+            <th>Best prop</th>
+            <th>More slices</th>
             <th>OVER %</th>
             <th>UNDER %</th>
             <th class="sortable" data-sort="balance_score">Balance</th>
@@ -117,6 +117,24 @@
   function dirClass(d) {
     return d === 'OVER' ? 'over' : d === 'UNDER' ? 'under' : 'both';
   }
+  function bestPropCell(p) {
+    const bp = p.best_prop;
+    if (!bp || !bp.prop_type) return '<span style="color:var(--muted2)">—</span>';
+    return '<span class="pe-best-prop">' +
+      '<span class="pe-best-prop-name">' + (bp.prop_type || '') + '</span> ' +
+      '<span class="pe-dir-badge ' + dirClass(bp.direction) + '">' + (bp.direction || '') + '</span> ' +
+      '<span class="pe-hit-rate ' + rateClass(bp.hit_rate) + '" style="font-weight:600">' + fmtPct(bp.hit_rate) + '</span> ' +
+      '<span style="color:var(--muted2);font-size:10px">(' + (bp.hits || 0) + '/' + (bp.total || 0) + ')</span>' +
+      '</span>';
+  }
+  function moreSlicesCell(p) {
+    const list = (p.best_props || []).slice(1, 3);
+    if (!list.length) return '—';
+    return list.map(function (s) {
+      return '<span style="display:block;font-size:10px;color:var(--muted);white-space:nowrap">' +
+        (s.prop_type || '') + ' ' + (s.direction || '') + ' ' + fmtPct(s.hit_rate) + ' (' + (s.total || 0) + ')</span>';
+    }).join('');
+  }
 
   function renderStats(players) {
     if (!statsBar) return;
@@ -159,7 +177,8 @@
         '<td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + tierColor(p.tier) + ';margin-right:4px;vertical-align:middle"></span>' + (p.tier || '') + '</td>' +
         '<td><span class="pe-hit-rate ' + rateClass(p.hit_rate) + '" style="font-weight:700">' + fmtPct(p.hit_rate) + '</span></td>' +
         '<td style="color:var(--muted)">' + p.hits + '/' + p.total + '</td>' +
-        '<td><span class="pe-dir-badge ' + dirClass(p.direction) + '">' + (p.direction || '') + '</span></td>' +
+        '<td>' + bestPropCell(p) + '</td>' +
+        '<td style="max-width:140px">' + moreSlicesCell(p) + '</td>' +
         '<td>' + fmtPct(p.over_rate) + '</td>' +
         '<td>' + fmtPct(p.under_rate) + '</td>' +
         '<td>' + balanceCell + '</td>' +

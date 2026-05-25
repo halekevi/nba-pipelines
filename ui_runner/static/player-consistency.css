@@ -142,6 +142,67 @@
   border: 1px solid rgba(200, 154, 74, 0.25);
 }
 
+.hot-player-card .card-best-prop {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hot-player-card .card-best-prop--empty {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 4px;
+}
+
+.hot-player-card .card-prop-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text, #f5f5f5);
+  line-height: 1.25;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hot-player-card .card-prop-muted {
+  font-size: 9px;
+  color: var(--muted2, #8b8b99);
+}
+
+.hot-player-card .card-best-prop-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hot-player-card .card-slice-rate {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--green, #9fd8a7);
+}
+
+.hot-player-card .card-slice-meta {
+  font-size: 9px;
+  color: var(--muted2, #8b8b99);
+  margin-top: 4px;
+}
+
+.pe-best-prop {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: 220px;
+}
+
+.pe-best-prop-name {
+  font-weight: 600;
+  font-size: 11px;
+}
+
 .hot-sport-pill {
   font-family: "Inter", sans-serif;
   font-size: 10px;
