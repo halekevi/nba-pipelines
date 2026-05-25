@@ -565,6 +565,37 @@ function Copy-DatedSlateOutput {
     }
 }
 
+# -- NHL step4b NST/PP context (non-fatal; step5 runs on unenriched step4 if this fails) ---
+function Invoke-NHLStep4b {
+    param(
+        [string]$NHLDir,
+        [string]$Step4Path
+    )
+    Push-Location $NHLDir
+    try {
+        $sp = ".\scripts\step4b_attach_nst_context_nhl.py"
+        if (-not (Test-Path $sp)) {
+            Write-Host "[NHL] step4b NST: WARN (missing step4b_attach_nst_context_nhl.py)" -ForegroundColor Yellow
+            return
+        }
+        $cmd = "py -3.14 `"$sp`" --input `"$Step4Path`" --output `"$Step4Path`" --season 20252026"
+        Write-Host "  --> NHL Step 4b - NST Context" -ForegroundColor Yellow
+        Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
+        $output = Invoke-Expression $cmd 2>&1
+        $exit   = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "[NHL] step4b NST: WARN (exit $exit)" -ForegroundColor Yellow
+        } else {
+            Write-Host "[NHL] step4b NST: OK" -ForegroundColor Green
+        }
+    } catch {
+        Write-Host "[NHL] step4b NST: WARN (exit 1)" -ForegroundColor Yellow
+    } finally {
+        Pop-Location
+    }
+}
+
 # -- step7b edge model scoring (non-fatal if model missing or script errors) ---
 function Invoke-PropOracleStep7b {
     param([string]$SportLabel, [string]$Step7Xlsx = "")
@@ -1014,6 +1045,7 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { Invoke-NHLStep4b $NHLDir "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }
@@ -1601,11 +1633,30 @@ $NHLJob = Start-Job -ScriptBlock {
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    function Invoke-NHLStep4b-Job {
+        param([string]$Step4Path)
+        Push-Location $NHLDir
+        try {
+            $sp = ".\scripts\step4b_attach_nst_context_nhl.py"
+            if (-not (Test-Path $sp)) {
+                Write-Output "[NHL] step4b NST: WARN (missing step4b_attach_nst_context_nhl.py)"
+                return
+            }
+            $cmd = "py -3.14 `"$sp`" --input `"$Step4Path`" --output `"$Step4Path`" --season 20252026"
+            Write-Output "[NHL] --> NHL Step 4b - NST Context"
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[NHL] step4b NST: WARN (exit $exit)" } else { Write-Output "[NHL] step4b NST: OK" }
+        } catch { Write-Output "[NHL] step4b NST: WARN (exit 1)" }
+        finally { Pop-Location }
+    }
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$NHLRunOutDir\step1_nhl_props.csv`"" } } else { Write-Output "[NHL] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { Invoke-NHLStep4b-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }

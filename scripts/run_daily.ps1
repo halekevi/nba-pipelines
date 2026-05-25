@@ -49,6 +49,14 @@ param(
 
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
+$envFile = Join-Path $Root ".env"
+if (Test-Path $envFile) {
+    Get-Content $envFile | ForEach-Object {
+        if ($_ -match '^\s*([^#][^=]+)=(.*)$') {
+            [System.Environment]::SetEnvironmentVariable($Matches[1].Trim(), $Matches[2].Trim())
+        }
+    }
+}
 $SportsRoot = Join-Path $Root "Sports"
 # WNBA: must match $WNBA_SEASON_START in repo-root run_pipeline.ps1 (parallel job + dated step8 gate).
 $WNBA_SEASON_START = "2026-05-01"
@@ -775,6 +783,34 @@ if (-not $SkipPipeline) {
             Preserve-ExistingFile -Path $pt -Reason "pre-STEP C pipeline snapshot"
         }
     }
+    $nstKey = $env:NST_ACCESS_KEY
+    if ($nstKey) {
+        Write-Host "[NHL] Refreshing NST cache..." -ForegroundColor Cyan
+        Write-Log "[NHL] NST cache refresh: START"
+        Push-Location $Root
+        try {
+            & py -3.14 Sports\NHL\scripts\refresh_nst_cache.py --season 20252026 --refresh-nst
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "[NHL] WARN: NST cache refresh failed (exit $LASTEXITCODE) — continuing with stale cache" -ForegroundColor Yellow
+                Write-Log "[NHL] NST cache refresh: WARN (exit $LASTEXITCODE)"
+            }
+            else {
+                Write-Log "[NHL] NST cache refresh: OK"
+            }
+        }
+        catch {
+            Write-Host "[NHL] WARN: NST cache refresh failed — continuing with stale cache" -ForegroundColor Yellow
+            Write-Log "[NHL] NST cache refresh: WARN ($($_.Exception.Message))"
+        }
+        finally {
+            Pop-Location
+        }
+    }
+    else {
+        Write-Host "[NHL] WARN: NST_ACCESS_KEY not set — skipping NST refresh" -ForegroundColor Yellow
+        Write-Log "[NHL] NST cache refresh: SKIP (NST_ACCESS_KEY not set)"
+    }
+
     Write-Log "STEP C - Pipeline ($Today): START"
     $pipeScript = Join-Path $Root "run_pipeline.ps1"
     $pipeArgs = @("-File", $pipeScript, "-Date", $Today, "-TennisDate", $TennisDate)
