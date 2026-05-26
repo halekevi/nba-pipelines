@@ -178,6 +178,9 @@ COLUMN_ALIASES = {
     "game_start":       ["game_start", "start_time", "Game Time"],
     "game_script_mult": ["game_script_mult"],
     "game_script_note": ["game_script_note"],
+    "open_line":            ["open_line"],
+    "line_movement":        ["line_movement"],
+    "line_direction_shift": ["line_direction_shift"],
 }
 
 # Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
@@ -394,6 +397,13 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
             else ""
         ),
         "game_script_note": str(raw.get("game_script_note", "") or ""),
+        "open_line": (
+            fmt_num(r("open_line"), 2)
+            if r("open_line") not in (None, "")
+            else ""
+        ),
+        "line_movement": fmt_num(r("line_movement"), 3),
+        "line_direction_shift": str(r("line_direction_shift") or "stable"),
     }
 
 
