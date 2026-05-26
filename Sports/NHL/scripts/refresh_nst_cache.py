@@ -12,7 +12,22 @@ if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
 from nhl_pp_api import current_season_id, refresh_pp_cache, season_id_from_year
-from nst_client import nst_key, refresh_line_cache, refresh_player_pp_cache
+from nst_client import (
+    LINE_CACHE,
+    import_line_csv,
+    nst_key,
+    refresh_line_cache,
+    refresh_player_pp_cache,
+)
+
+
+def _resolve_season_id(raw: str) -> int:
+    raw = str(raw).strip()
+    if raw.isdigit() and len(raw) == 8:
+        return int(raw)
+    if raw.isdigit() and len(raw) == 4:
+        return season_id_from_year(int(raw))
+    return current_season_id()
 
 
 def main() -> None:
@@ -21,20 +36,31 @@ def main() -> None:
     ap.add_argument("--refresh-pp", action="store_true", help="Refresh NHL API PP skater cache")
     ap.add_argument("--refresh-nst", action="store_true", help="Refresh NST line + player PP tables")
     ap.add_argument("--team", default="all", help="NST team filter (default all)")
+    ap.add_argument(
+        "--import-csv",
+        metavar="PATH",
+        default="",
+        help="Import manually downloaded NST line stats CSV into line combos cache",
+    )
+    ap.add_argument("--sit", default="5v5", help="Situation filter for --import-csv (default: 5v5)")
+    ap.add_argument("--skip-pp", action="store_true", help="Skip NHL API PP cache refresh")
     args = ap.parse_args()
 
-    raw = str(args.season).strip()
-    if raw.isdigit() and len(raw) == 8:
-        season_id = int(raw)
-    elif raw.isdigit() and len(raw) == 4:
-        season_id = season_id_from_year(int(raw))
-    else:
-        season_id = current_season_id()
+    season_id = _resolve_season_id(args.season)
+
+    if args.import_csv:
+        import_path = str(args.import_csv).strip()
+        n = import_line_csv(import_path, season_id, sit=args.sit, team_filter=args.team)
+        print(f"[NST] Imported {n} rows from {import_path} → {LINE_CACHE}")
+        if not args.skip_pp:
+            df = refresh_pp_cache(season_id)
+            print(f"✅ NHL PP cache: {len(df)} rows (season_id={season_id})")
+        sys.exit(0)
 
     do_pp = args.refresh_pp or not args.refresh_nst
     do_nst = args.refresh_nst or not args.refresh_pp
 
-    if do_pp:
+    if do_pp and not args.skip_pp:
         df = refresh_pp_cache(season_id)
         print(f"✅ NHL PP cache: {len(df)} rows (season_id={season_id})")
 

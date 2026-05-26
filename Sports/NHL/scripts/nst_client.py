@@ -4,6 +4,11 @@ Natural Stat Trick client (data.naturalstattrick.com).
 
 Requires free NST access key: set NST_ACCESS_KEY or NST_KEY in the environment.
 Caches parsed tables under Sports/NHL/data/ — never deletes prior seasons.
+
+NST playerteams.php returns a server-rendered <table> when stdoi/toi/gpfilt/tgp
+(and related filters) are set. linestats.php currently returns only the filter
+shell (no <table>) to automated clients — line combo cache may stay empty until
+NST serves that markup or we add a browser fetch path.
 """
 
 from __future__ import annotations
@@ -23,7 +28,7 @@ log = logging.getLogger("nhl.nst")
 
 NST_DATA = "https://data.naturalstattrick.com"
 HEADERS = {"User-Agent": "Mozilla/5.0 (PropORACLE/1.0)"}
-TIMEOUT = 20
+TIMEOUT = 30
 SLEEP_S = 0.4
 
 _DATA_DIR = Path(__file__).resolve().parents[1] / "data"
@@ -36,8 +41,72 @@ def nst_key() -> str:
 
 
 def _season_param(season_id: int) -> str:
-    """NHL seasonId 20242025 -> NST fromseason 20242025."""
+    """NHL seasonId 20242025 -> NST fromseason/thruseason 20242025."""
     return str(int(season_id))
+
+
+def _nst_team(team: str) -> str:
+    t = str(team or "all").strip().upper()
+    return "ALL" if t in ("ALL", "A", "") else t
+
+
+def _season_block(season_id: int) -> dict[str, str]:
+    s = _season_param(season_id)
+    return {"fromseason": s, "thruseason": s, "stype": "2"}
+
+
+def _playerteams_params(
+    season_id: int,
+    *,
+    sit: str,
+    team: str,
+    lines: str = "single",
+) -> dict:
+    """Query params that produce a populated playerteams.php table."""
+    return {
+        **_season_block(season_id),
+        "sit": sit,
+        "score": "all",
+        "stdoi": "std",
+        "rate": "n",
+        "toi": "0",
+        "gpfilt": "none",
+        "tgp": "410",
+        "loc": "B",
+        "team": _nst_team(team),
+        "pos": "S",
+        "lines": lines,
+        "draftteam": "ALL",
+    }
+
+
+def _linestats_params(
+    season_id: int,
+    *,
+    sit: str,
+    team: str,
+    lines: str = "2",
+) -> dict:
+    """
+    Query params for NST linestats.php line-pairs table (not WOWY).
+
+    Use lines=2 for 2-man lines. Do not pass view= (view=log / view=wowy are WOWY UI).
+  """
+    return {
+        **_season_block(season_id),
+        "sit": sit,
+        "score": "all",
+        "rate": "n",
+        "team": _nst_team(team),
+        "vteam": "ALL",
+        "loc": "B",
+        "gpfilt": "none",
+        "tgp": "410",
+        "lines": lines,
+        "draftteam": "ALL",
+        "fd": "",
+        "td": "",
+    }
 
 
 def fetch_html(path: str, params: dict) -> Optional[str]:
@@ -63,45 +132,41 @@ def fetch_html(path: str, params: dict) -> Optional[str]:
         return None
 
 
-def parse_tables(html: str) -> list[pd.DataFrame]:
+def parse_tables(html: str, *, label: str = "") -> list[pd.DataFrame]:
     if not html:
+        return []
+    if "<table" not in html.lower():
+        if label:
+            log.warning(
+                "NST %s: response has no <table> markup (len=%s) — cannot parse rows",
+                label,
+                len(html),
+            )
         return []
     try:
         return pd.read_html(io.StringIO(html))
     except Exception as exc:
-        log.warning("NST table parse failed: %s", exc)
+        log.warning("NST table parse failed%s: %s", f" ({label})" if label else "", exc)
         return []
 
 
 def fetch_line_combos(season_id: int, team: str = "all", sit: str = "5v5") -> pd.DataFrame:
     """
-  sit: 5v5 | pp | etc. (NST sit codes)
-  lines: pair | trio | all
+    Line combo stats (2-man / 3-man lines). sit: 5v5 | pp | etc.
+    lines: 2 | 3 | … (NST linestats.php; not WOWY view=log)
     """
-    params = {
-        "fromseason": _season_param(season_id),
-        "thruseason": _season_param(season_id),
-        "stype": "2",
-        "sit": sit,
-        "score": "all",
-        "rate": "n",
-        "team": team,
-        "pos": "S",
-        "loc": ["B", "7", "0"],
-        "lines": "pair",
-        "draftteam": "all",
-    }
+    params = _linestats_params(season_id, sit=sit, team=team, lines="2")
     html = fetch_html("linestats.php", params)
-    tables = parse_tables(html or "")
+    tables = parse_tables(html or "", label=f"linestats {sit}")
     if not tables:
         return pd.DataFrame()
     df = tables[0].copy()
     df.columns = [str(c).strip() for c in df.columns]
     df["season_id"] = season_id
     df["sit"] = sit
-    df["team_filter"] = team
+    df["team_filter"] = _nst_team(team)
     df["fetched_at"] = datetime.now(timezone.utc).isoformat()
-    if "Line" not in df.columns and "line" not in str(df.columns[0]).lower():
+    if "Line" not in df.columns:
         for c in df.columns:
             if "line" in str(c).lower():
                 df = df.rename(columns={c: "Line"})
@@ -110,27 +175,15 @@ def fetch_line_combos(season_id: int, team: str = "all", sit: str = "5v5") -> pd
 
 
 def fetch_player_pp(season_id: int, team: str = "all") -> pd.DataFrame:
-    params = {
-        "fromseason": _season_param(season_id),
-        "thruseason": _season_param(season_id),
-        "stype": "2",
-        "sit": "pp",
-        "score": "all",
-        "rate": "n",
-        "team": team,
-        "pos": "S",
-        "loc": ["B", "7", "0"],
-        "lines": "single",
-        "draftteam": "all",
-    }
+    params = _playerteams_params(season_id, sit="pp", team=team, lines="single")
     html = fetch_html("playerteams.php", params)
-    tables = parse_tables(html or "")
+    tables = parse_tables(html or "", label="playerteams pp")
     if not tables:
         return pd.DataFrame()
     df = tables[0].copy()
     df.columns = [str(c).strip() for c in df.columns]
     df["season_id"] = season_id
-    df["team_filter"] = team
+    df["team_filter"] = _nst_team(team)
     df["fetched_at"] = datetime.now(timezone.utc).isoformat()
     return df
 
@@ -159,6 +212,110 @@ def load_cache(path: Path) -> pd.DataFrame:
     return pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
 
 
+# NST export / linestats column names (Game Log shares schema with line pairs table).
+_NST_LINE_CSV_ALIASES: dict[str, str] = {
+    "Player": "Line",
+    "Players": "Line",
+    "Name": "Line",
+    "Line": "Line",
+    # Pass-through stats (canonical names unchanged)
+    "Game": "Game",
+    "TOI": "TOI",
+    "CF": "CF",
+    "CA": "CA",
+    "CF%": "CF%",
+    "FF": "FF",
+    "FA": "FA",
+    "FF%": "FF%",
+    "SF": "SF",
+    "SA": "SA",
+    "SF%": "SF%",
+    "GF": "GF",
+    "GA": "GA",
+    "GF%": "GF%",
+    "xGF": "xGF",
+    "xGA": "xGA",
+    "xGF%": "xGF%",
+    "SCF": "SCF",
+    "SCA": "SCA",
+    "SCF%": "SCF%",
+    "HDCF": "HDCF",
+    "HDCA": "HDCA",
+    "HDCF%": "HDCF%",
+    "HDGF": "HDGF",
+    "HDGA": "HDGA",
+    "HDGF%": "HDGF%",
+    "On-Ice SH%": "On-Ice SH%",
+    "On-Ice SV%": "On-Ice SV%",
+    "PDO": "PDO",
+    "Off. Zone Faceoffs": "Off. Zone Faceoffs",
+    "Neu. Zone Faceoffs": "Neu. Zone Faceoffs",
+    "Def. Zone Faceoffs": "Def. Zone Faceoffs",
+    "Off. Zone Faceoff %": "Off. Zone Faceoff %",
+}
+
+
+def import_line_csv(
+    csv_path: str,
+    season_id: int,
+    sit: str = "5v5",
+    team_filter: str = "ALL",
+) -> int:
+    """
+    Load a manually exported NST line stats CSV, normalize columns,
+    inject metadata (season_id, sit, team_filter, fetched_at),
+    and write to the line combos cache. Returns row count imported.
+    """
+    path = Path(csv_path)
+    if not path.is_file():
+        raise FileNotFoundError(f"NST import CSV not found: {path}")
+
+    df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+    df.columns = [str(c).strip() for c in df.columns]
+
+    rename = {
+        src: dst
+        for src, dst in _NST_LINE_CSV_ALIASES.items()
+        if src in df.columns and src != dst
+    }
+    if rename:
+        df = df.rename(columns=rename)
+
+    if "Line" not in df.columns:
+        df["Line"] = ""
+
+    team_norm = _nst_team(team_filter)
+    df["season_id"] = int(season_id)
+    df["sit"] = str(sit).strip()
+    df["team_filter"] = team_norm
+    df["fetched_at"] = datetime.now(timezone.utc).isoformat()
+
+    old = load_cache(LINE_CACHE)
+    if not old.empty:
+        for col in ("season_id", "sit", "team_filter"):
+            if col not in old.columns:
+                old[col] = ""
+        keep = ~(
+            (old["season_id"].astype(int) == int(season_id))
+            & (old["sit"].astype(str) == str(sit).strip())
+            & (old["team_filter"].astype(str).str.upper() == team_norm)
+        )
+        combined = pd.concat([old.loc[keep], df], ignore_index=True)
+    else:
+        combined = df
+
+    key_cols = ["season_id", "sit", "team_filter", "Line"]
+    subset = [c for c in key_cols if c in combined.columns]
+    if subset:
+        combined = combined.drop_duplicates(subset=subset, keep="last")
+
+    LINE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = LINE_CACHE.with_suffix(".tmp.csv")
+    combined.to_csv(tmp, index=False, encoding="utf-8-sig")
+    tmp.replace(LINE_CACHE)
+    return len(df)
+
+
 def refresh_line_cache(
     season_id: int,
     teams: Optional[list[str]] = None,
@@ -171,7 +328,13 @@ def refresh_line_cache(
             if not df.empty:
                 parts.append(df)
     if not parts:
-        return load_cache(LINE_CACHE)
+        cached = load_cache(LINE_CACHE)
+        if cached.empty:
+            log.warning(
+                "NST line combos: 0 rows (linestats.php returned no table HTML — "
+                "PP cache may still refresh via playerteams.php)"
+            )
+        return cached
     fresh = pd.concat(parts, ignore_index=True)
     return _append_cache(
         LINE_CACHE,

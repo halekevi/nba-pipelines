@@ -567,6 +567,8 @@ function Copy-DatedSlateOutput {
 }
 
 # -- NHL step4b NST/PP context (non-fatal; step5 runs on unenriched step4 if this fails) ---
+# To import manual NST line export (Option B — no live fetch / Cloudflare):
+#   py Sports/NHL/scripts/refresh_nst_cache.py --import-csv path\to\export.csv --sit 5v5 --team VGK
 function Invoke-NHLStep4b {
     param(
         [string]$NHLDir,
