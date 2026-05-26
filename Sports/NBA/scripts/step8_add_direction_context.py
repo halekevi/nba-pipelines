@@ -153,7 +153,7 @@ def write_sheet(wb, name, data):
 
     col_widths = {
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
-        'Team': 6, 'Opp': 6, 'Game Date': 12, 'Game Time': 10,
+        'Team': 6, 'Opp': 6, 'Days Rest': 9, 'B2B': 6, 'Opp Rest': 9, 'Opp B2B': 8, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7, 'Standard Line': 12,
         'Direction': 9, 'Edge': 7, 'Abs Edge': 8, 'Projection': 10,
         'Hit Rate (5g)': 12, 'Last 5 Avg': 10, 'Season Avg': 10,
@@ -162,6 +162,9 @@ def write_sheet(wb, name, data):
         'Min Tier': 9, 'Shot Role': 10, 'Usage Role': 10,
         'ML Prob': 9,
         'Void Reason': 20,
+        'Open Line': 8,
+        'Line Movement': 12,
+        'Line Shift': 10,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -393,7 +396,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
 
     keep = [
         'tier', 'rank_score',
-        'player', 'pos', 'team', 'opp_team', 'game_date', 'game_time',
+        'player', 'pos', 'team', 'opp_team', 'opp_days_rest', 'opp_b2b', 'game_date', 'game_time',
         'prop_type', 'pick_type', 'line', 'standard_line',
         'final_bet_direction',
         'edge', 'abs_edge', 'projection',
@@ -422,6 +425,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'b2b_flag', 'days_rest', 'game_total', 'spread',
         'is_playoff_game',
         'game_script_mult', 'game_script_note',
+        'open_line', 'line_movement', 'line_direction_shift',
     ]
     if is_period_slate:
         for c in ENRICHMENT_CARRY_COLS:
@@ -436,6 +440,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     for col in ['rank_score', 'edge', 'abs_edge', 'projection', 'ml_prob', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
             rnd = 4 if col == 'ml_prob' else 2
+            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
+    for col in ['open_line', 'line_movement']:
+        if col in clean.columns:
+            rnd = 2 if col == 'open_line' else 3
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
     if 'standard_line' in clean.columns:
         clean['standard_line'] = pd.to_numeric(clean['standard_line'], errors='coerce').round(2)
@@ -455,6 +463,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     rename = {
         'tier': 'Tier', 'rank_score': 'Rank Score',
         'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp',
+        'opp_days_rest': 'Opp Rest',
+        'opp_b2b': 'Opp B2B',
         'game_date': 'Game Date', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'standard_line': 'Standard Line',
@@ -501,6 +511,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'is_playoff_game': 'Playoff Game',
         'game_script_mult': 'Game Script Mult',
         'game_script_note': 'Game Script Note',
+        'open_line': 'Open Line',
+        'line_movement': 'Line Movement',
+        'line_direction_shift': 'Line Shift',
     }
     clean = clean.rename(columns=rename)
 

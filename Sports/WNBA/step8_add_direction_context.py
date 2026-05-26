@@ -117,7 +117,7 @@ def write_sheet(wb, name, data):
 
     col_widths = {
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
-        'Team': 6, 'Opp': 6, 'Game Date': 12, 'Game Time': 10,
+        'Team': 6, 'Opp': 6, 'Days Rest': 9, 'B2B': 6, 'Opp Rest': 9, 'Opp B2B': 8, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7,
         'Direction': 9, 'Edge': 7, 'Abs Edge': 7, 'Projection': 10,
         'ML Prob': 9, 'Edge Score': 10, 'Blended Score': 12,
@@ -129,6 +129,7 @@ def write_sheet(wb, name, data):
         'G1': 6, 'G2': 6, 'G3': 6, 'G4': 6, 'G5': 6,
         'G6': 6, 'G7': 6, 'G8': 6, 'G9': 6, 'G10': 6,
         'Void Reason': 20,
+        'Open Line': 8, 'Line Movement': 12, 'Line Shift': 10,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -182,7 +183,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
 
     keep = [
         'tier', 'rank_score',
-        'player', 'pos', 'team', 'opp_team', 'game_date', 'game_time',
+        'player', 'pos', 'team', 'opp_team', 'days_rest', 'is_back_to_back', 'opp_days_rest', 'opp_b2b', 'game_date', 'game_time',
         'prop_type', 'pick_type', 'line',
         'final_bet_direction',
         'edge', 'projection',
@@ -200,6 +201,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'OVERALL_DEF_RANK', 'DEF_TIER',
         'minutes_tier', 'shot_role', 'usage_role',
         'void_reason',
+        'open_line', 'line_movement', 'line_direction_shift',
     ]
     # only keep cols that exist
     keep = [c for c in keep if c in df2.columns]
@@ -208,6 +210,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'edge_score', 'blended_score', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
             rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
+            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
+    for col in ['open_line', 'line_movement']:
+        if col in clean.columns:
+            rnd = 2 if col == 'open_line' else 3
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
     for col in ['stat_last5_avg', 'stat_season_avg', 'stat_last10_avg']:
         if col in clean.columns:
@@ -226,6 +232,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     rename = {
         'tier': 'Tier', 'rank_score': 'Rank Score',
         'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp',
+        'days_rest': 'Days Rest',
+        'is_back_to_back': 'B2B',
+        'opp_days_rest': 'Opp Rest',
+        'opp_b2b': 'Opp B2B',
         'game_date': 'Game Date', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'final_bet_direction': 'Direction',
@@ -246,6 +256,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'OVERALL_DEF_RANK': 'Def Rank', 'DEF_TIER': 'Def Tier',
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
         'void_reason': 'Void Reason',
+        'open_line': 'Open Line',
+        'line_movement': 'Line Movement',
+        'line_direction_shift': 'Line Shift',
     }
     clean = clean.rename(columns=rename)
 

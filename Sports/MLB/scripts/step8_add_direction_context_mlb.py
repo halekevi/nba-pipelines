@@ -144,7 +144,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
 
     col_widths = {
         "Tier": 6, "Rank Score": 10, "Player": 22, "Pos": 6, "Player Type": 10,
-        "Team": 10, "Opp": 10, "Game Time": 10, "Game Date": 11,
+        "Team": 10, "Opp": 10, "Days Rest": 9, "B2B": 6, "Opp Rest": 9, "Opp B2B": 8, "Game Time": 10, "Game Date": 11,
         "Prop": 20, "Pick Type": 10, "Line": 7,
         "Direction": 9, "Edge": 7, "Projection": 10,
         "ML Prob": 9, "Edge Score": 10, "Blended Score": 12,
@@ -185,7 +185,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     keep = [
         "tier", "rank_score",
-        "player", "pos", "player_type_norm", "team", "opp_team", "game_time", "slate_game_date",
+        "player", "pos", "player_type_norm", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b", "game_time", "slate_game_date",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
         "edge", "projection",
@@ -246,6 +246,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "tier": "Tier", "rank_score": "Rank Score",
         "player": "Player", "pos": "Pos", "player_type_norm": "Player Type",
         "team": "Team", "opp_team": "Opp", "game_time": "Game Time",
+        "days_rest": "Days Rest",
+        "is_back_to_back": "B2B",
+        "opp_days_rest": "Opp Rest",
+        "opp_b2b": "Opp B2B",
         "slate_game_date": "Game Date",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
