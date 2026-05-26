@@ -353,6 +353,7 @@ function Invoke-MLBStep1Fetch {
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
+        $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"   # match WNBA — chrome120 hits DataDome 403
         # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
         $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 2 ..."
         Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
