@@ -93,30 +93,49 @@ def rank_series(s: pd.Series, ascending: bool) -> pd.Series:
     return s.rank(method="min", ascending=ascending).astype("Int64")
 
 
+def _name_to_abbrev_from_standings() -> dict[str, str]:
+    data = fetch_json(f"{NHL_WEB}/standings/now")
+    out: dict[str, str] = {"utah hockey club": "UTA"}
+    for entry in data.get("standings", []):
+        abbrev = (entry.get("teamAbbrev") or {}).get("default", "")
+        name = (entry.get("teamName") or {}).get("default", "")
+        if abbrev and name:
+            out[name.strip().lower()] = norm_team_abbr(abbrev)
+    return out
+
+
 def pull_team_stats(season: str) -> pd.DataFrame:
     """
-    Pull per-game team stats from NHL Stats REST API.
-    Returns one row per team with both offensive and defensive metrics.
+    Pull per-game team stats from NHL Stats REST API (/team/summary).
+    Bulk /team + gameTypeId cayenne returns 400; summary has SAA/PK%.
     """
     url = (
-        f"{NHL_API}/team"
-        f"?isAggregate=false&isGame=false"
+        f"{NHL_API}/team/summary?isAggregate=false&isGame=false"
         f"&sort=%5B%7B%22property%22%3A%22gamesPlayed%22%2C%22direction%22%3A%22DESC%22%7D%5D"
-        f"&start=0&limit=50"
-        f"&factCayenneExp=gamesPlayed%3E%3D1"
+        f"&start=0&limit=50&factCayenneExp=gamesPlayed%3E%3D1"
         f"&cayenneExp=gameTypeId%3D2%20and%20seasonId%3E%3D{season}%20and%20seasonId%3C%3D{season}"
     )
-    print(f"📡 Fetching NHL team stats (season {season})...")
+    print(f"📡 Fetching NHL team stats from /team/summary (season {season})...")
+    name_to_abbr = _name_to_abbrev_from_standings()
     data = fetch_json(url)
     records = data.get("data", [])
 
     if not records:
-        print("  ⚠️  Primary endpoint returned no data — trying standings fallback...")
+        print("  ⚠️  /team/summary empty — retrying once...")
+        time.sleep(0.3)
+        data = fetch_json(url)
+        records = data.get("data", [])
+
+    if not records:
+        print("  ⚠️  /team/summary returned no data — trying standings fallback...")
         return pull_from_standings(season)
 
     rows = []
     for rec in records:
         abbrev = norm_team_abbr(rec.get("teamAbbrev", ""))
+        if not abbrev or abbrev == "UNK":
+            full = str(rec.get("teamFullName", "") or "").strip().lower()
+            abbrev = name_to_abbr.get(full, "UNK")
         if not abbrev or abbrev == "UNK":
             continue
 
@@ -129,7 +148,6 @@ def pull_team_stats(season: str) -> pd.DataFrame:
         pp  = float(rec.get("powerPlayPct", 0.0) or 0.0)
         w   = int(rec.get("wins", 0) or 0)
 
-        # Derived: shots-to-goals ratio allowed (lower = stingier defense)
         sa_ratio = round(saa / max(gaa, 0.01), 2) if gaa > 0 else 0.0
 
         rows.append({
