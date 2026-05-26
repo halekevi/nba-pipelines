@@ -29,10 +29,19 @@ _REPO_ROOT = Path(__file__).resolve().parents[1]
 _CACHE_DIR = _REPO_ROOT / "cache"
 
 # Sport presets (Tennis omitted — no player props on Odds API)
+# Player props require per-event /events/{id}/odds (bulk /odds returns 422 for NHL).
 SPORT_LINE_MOVEMENT_PRESETS: dict[str, dict[str, Any]] = {
     "NHL": {
         "sport_key": "icehockey_nhl",
-        "markets": ["player_shots_on_goal", "player_goal_scorer"],
+        "markets": [
+            "player_shots_on_goal",
+            "player_goals",
+            "player_assists",
+            "player_points",
+            "player_power_play_points",
+            "player_goal_scorer_anytime",
+            "player_blocked_shots",
+        ],
     },
     "NBA": {
         "sport_key": "basketball_nba",
@@ -57,10 +66,14 @@ PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
     "shots_on_goal": "player_shots_on_goal",
     "shots": "player_shots_on_goal",
     "sog": "player_shots_on_goal",
-    "goal_scorer": "player_goal_scorer",
-    "anytime_goal": "player_goal_scorer",
-    "anytime_goal_scorer": "player_goal_scorer",
-    "goals": "player_goal_scorer",
+    "goals": "player_goals",
+    "goal_scorer": "player_goal_scorer_anytime",
+    "anytime_goal": "player_goal_scorer_anytime",
+    "anytime_goal_scorer": "player_goal_scorer_anytime",
+    "assists": "player_assists",
+    "points": "player_points",
+    "power_play_points": "player_power_play_points",
+    "blocked_shots": "player_blocked_shots",
 }
 
 BM_PRIORITY = ("draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
@@ -201,40 +214,40 @@ def _fetch_events(sport_key: str, api_key: str) -> list[dict]:
     return data if isinstance(data, list) else []
 
 
-def _fetch_odds(
+def _fetch_event_odds(
     sport_key: str,
-    api_key: str,
+    event_id: str,
     markets: list[str],
-    event_ids: list[str],
-) -> list[dict]:
-    if not markets:
-        return []
+    api_key: str,
+) -> dict:
+    """Per-event player props: GET /sports/{sport}/events/{event_id}/odds."""
+    if not markets or not (event_id or "").strip():
+        return {}
     params: dict[str, str] = {
         "apiKey": api_key,
         "regions": "us",
-        "markets": ",".join(markets),
+        "markets": ",".join(m.strip() for m in markets if m.strip()),
         "oddsFormat": "american",
         "dateFormat": "iso",
     }
-    if event_ids:
-        params["eventIds"] = ",".join(event_ids[:50])
     qs = urllib.parse.urlencode(params)
-    url = f"{ODDS_API_BASE}/sports/{sport_key}/odds?{qs}"
+    url = f"{ODDS_API_BASE}/sports/{sport_key}/events/{event_id.strip()}/odds?{qs}"
     data = _http_get_json(url)
-    return data if isinstance(data, list) else []
+    return data if isinstance(data, dict) else {}
 
 
-def _parse_odds_games(games: list[dict], markets: list[str]) -> dict[tuple[str, str, float], dict[str, Any]]:
+def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str, str, float], dict[str, Any]]:
     """
     Build snapshot keyed by (player_lower, odds_market_key, line).
-    open_line = first priority bookmaker; current_line = best priority book available.
+    Outcomes use description=player, point=line (per-event odds shape).
+    open_line = first priority bookmaker; current_line = last priority book with data.
     """
     wanted = {m.strip() for m in markets if m.strip()}
     # (player, market) -> list of (bm_rank, point) in encounter order
     acc: dict[tuple[str, str], list[tuple[int, float]]] = {}
 
-    for game in games:
-        for bm in sorted(game.get("bookmakers") or [], key=_bm_sort_key):
+    for event in events:
+        for bm in sorted(event.get("bookmakers") or [], key=_bm_sort_key):
             rank = _bm_sort_key(bm)
             for market in bm.get("markets") or []:
                 mkey = str(market.get("key", "")).strip()
@@ -243,13 +256,15 @@ def _parse_odds_games(games: list[dict], markets: list[str]) -> dict[tuple[str, 
                 for outcome in market.get("outcomes") or []:
                     if str(outcome.get("name", "")).strip().lower() != "over":
                         continue
-                    player_raw = outcome.get("description") or outcome.get("name") or ""
-                    player = normalize_player_name(player_raw).lower()
+                    player_raw = outcome.get("description")
+                    if player_raw is None or not str(player_raw).strip():
+                        continue
+                    player = normalize_player_name(str(player_raw)).lower()
                     if not player:
                         continue
                     try:
-                        point = float(outcome.get("point"))
-                    except (TypeError, ValueError):
+                        point = float(outcome["point"])
+                    except (KeyError, TypeError, ValueError):
                         continue
                     line = round(point, 2)
                     pk = (player, mkey)
@@ -295,18 +310,46 @@ def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, s
     try:
         events = _fetch_events(sport_key, api_key)
         today_events = [e for e in events if _is_commence_today(e.get("commence_time", ""), today)]
-        event_ids = [str(e.get("id", "")).strip() for e in today_events if e.get("id")]
         _log.info(
             "line_movement: %s events=%d (today=%d)",
             sport_key,
             len(events),
-            len(event_ids),
+            len(today_events),
         )
-        time.sleep(0.3)
-        games = _fetch_odds(sport_key, api_key, markets, event_ids)
-        snapshot = _parse_odds_games(games, markets)
+        event_payloads: list[dict] = []
+        for idx, ev in enumerate(today_events):
+            event_id = str(ev.get("id", "")).strip()
+            if not event_id:
+                continue
+            if idx > 0:
+                time.sleep(0.3)
+            try:
+                payload = _fetch_event_odds(sport_key, event_id, markets, api_key)
+                if payload.get("bookmakers"):
+                    event_payloads.append(payload)
+            except urllib.error.HTTPError as exc:
+                body = ""
+                try:
+                    body = exc.read().decode("utf-8", errors="replace")[:200]
+                except Exception:
+                    pass
+                _log.warning(
+                    "line_movement: HTTP %s event %s — %s",
+                    exc.code,
+                    event_id[:12],
+                    body,
+                )
+            except Exception as exc:
+                _log.warning("line_movement: event %s failed — %s", event_id[:12], exc)
+
+        snapshot = _parse_odds_events(event_payloads, markets)
         _save_cache(sport_key, today, snapshot)
-        _log.info("line_movement: parsed %d prop lines for %s", len(snapshot), sport_key)
+        _log.info(
+            "line_movement: parsed %d prop lines for %s (%d events)",
+            len(snapshot),
+            sport_key,
+            len(event_payloads),
+        )
         return snapshot
     except urllib.error.HTTPError as exc:
         body = ""
