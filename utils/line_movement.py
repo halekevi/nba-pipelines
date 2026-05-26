@@ -14,7 +14,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -178,14 +178,18 @@ def _http_get_json(url: str, timeout: int = 25) -> Any:
         return json.loads(resp.read().decode("utf-8"))
 
 
-def _is_commence_today(commence_time: str, today: str) -> bool:
+def _is_target_event(event: dict) -> bool:
+    """True if commence_time is within the next 48 hours (UTC), inclusive of now."""
+    commence_time = event.get("commence_time", "")
     if not commence_time:
         return True
     try:
         ts = datetime.fromisoformat(str(commence_time).replace("Z", "+00:00"))
         if ts.tzinfo is None:
             ts = ts.replace(tzinfo=timezone.utc)
-        return ts.astimezone(timezone.utc).date().isoformat() == today
+        ts = ts.astimezone(timezone.utc)
+        now = datetime.now(timezone.utc)
+        return now <= ts <= now + timedelta(hours=48)
     except (ValueError, TypeError):
         return True
 
@@ -291,7 +295,7 @@ def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str
 
 def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, str, float], dict[str, Any]]:
     """
-    Fetch (or load cached) line movement snapshot for today's slate.
+    Fetch (or load cached) line movement snapshot for events in the next 48h (UTC).
 
     Returns dict keyed by (player_name_lower, prop_type_odds_market, line).
     Empty dict if API key missing, quota/error, or no data.
@@ -309,15 +313,15 @@ def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, s
 
     try:
         events = _fetch_events(sport_key, api_key)
-        today_events = [e for e in events if _is_commence_today(e.get("commence_time", ""), today)]
+        target_events = [e for e in events if _is_target_event(e)]
         _log.info(
-            "line_movement: %s events=%d (today=%d)",
+            "line_movement: %s events=%d (target_48h=%d)",
             sport_key,
             len(events),
-            len(today_events),
+            len(target_events),
         )
         event_payloads: list[dict] = []
-        for idx, ev in enumerate(today_events):
+        for idx, ev in enumerate(target_events):
             event_id = str(ev.get("id", "")).strip()
             if not event_id:
                 continue

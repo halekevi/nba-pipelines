@@ -365,7 +365,15 @@ def main():
     df_out = enrich_with_line_movement(
         df_out,
         sport_key="icehockey_nhl",
-        markets=["player_shots_on_goal", "player_goal_scorer"],
+        markets=[
+            "player_shots_on_goal",
+            "player_goals",
+            "player_assists",
+            "player_points",
+            "player_power_play_points",
+            "player_goal_scorer_anytime",
+            "player_blocked_shots",
+        ],
     )
     df_out.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
