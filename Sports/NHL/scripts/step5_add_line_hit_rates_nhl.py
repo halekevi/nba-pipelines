@@ -26,7 +26,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
-from utils.line_movement import enrich_with_line_movement
+from utils.line_movement import enrich_with_game_totals, enrich_with_line_movement
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 try:
     from tqdm import tqdm as _tqdm
@@ -417,6 +417,7 @@ def main():
             "player_blocked_shots",
         ],
     )
+    df_out = enrich_with_game_totals(df_out, sport_key="icehockey_nhl")
     df_out.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.output,

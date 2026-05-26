@@ -79,6 +79,44 @@ PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
 BM_PRIORITY = ("draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
 _LINE_EPS = 0.05
 
+NHL_TEAM_ABBREV: dict[str, str] = {
+    "anaheim ducks": "ANA",
+    "arizona coyotes": "ARI",
+    "boston bruins": "BOS",
+    "buffalo sabres": "BUF",
+    "calgary flames": "CGY",
+    "carolina hurricanes": "CAR",
+    "chicago blackhawks": "CHI",
+    "colorado avalanche": "COL",
+    "columbus blue jackets": "CBJ",
+    "dallas stars": "DAL",
+    "detroit red wings": "DET",
+    "edmonton oilers": "EDM",
+    "florida panthers": "FLA",
+    "los angeles kings": "LAK",
+    "minnesota wild": "MIN",
+    "montreal canadiens": "MTL",
+    "montréal canadiens": "MTL",
+    "nashville predators": "NSH",
+    "new jersey devils": "NJD",
+    "new york islanders": "NYI",
+    "new york rangers": "NYR",
+    "ottawa senators": "OTT",
+    "philadelphia flyers": "PHI",
+    "pittsburgh penguins": "PIT",
+    "san jose sharks": "SJS",
+    "seattle kraken": "SEA",
+    "st louis blues": "STL",
+    "st. louis blues": "STL",
+    "tampa bay lightning": "TBL",
+    "toronto maple leafs": "TOR",
+    "utah hockey club": "UTA",
+    "vancouver canucks": "VAN",
+    "vegas golden knights": "VGK",
+    "washington capitals": "WSH",
+    "winnipeg jets": "WPG",
+}
+
 
 def _bootstrap_env_from_dotenv() -> None:
     """Load repo-root .env into os.environ when ODDS_API_KEY is not already set."""
@@ -109,6 +147,11 @@ def _odds_api_key() -> str:
 def _cache_path(sport_key: str, day: str) -> Path:
     safe = sport_key.replace("/", "_")
     return _CACHE_DIR / f"line_movement_{safe}_{day}.json"
+
+
+def _totals_cache_path(sport_key: str, day: str) -> Path:
+    safe = sport_key.replace("/", "_")
+    return _CACHE_DIR / f"game_totals_{safe}_{day}.json"
 
 
 def _snapshot_cache_key(player: str, market: str, line: float) -> str:
@@ -209,6 +252,204 @@ def _line_direction(open_line: float, current_line: float) -> str:
     if delta < -_LINE_EPS:
         return "moved_down"
     return "stable"
+
+
+def _norm_name(x: str) -> str:
+    import unicodedata
+
+    s = str(x or "").strip().lower()
+    if not s:
+        return ""
+    n = unicodedata.normalize("NFKD", s)
+    return "".join(ch for ch in n if not unicodedata.combining(ch))
+
+
+def _team_to_abbrev(name: str) -> str:
+    raw = str(name or "").strip()
+    if not raw:
+        return ""
+    norm = _norm_name(raw)
+    if norm in NHL_TEAM_ABBREV:
+        return NHL_TEAM_ABBREV[norm]
+    parts = [p for p in raw.replace(".", "").split() if p]
+    if not parts:
+        return ""
+    return parts[-1][:3].upper()
+
+
+def _american_to_prob(price: Any) -> float | None:
+    try:
+        p = float(price)
+    except (TypeError, ValueError):
+        return None
+    if p > 0:
+        return 100.0 / (p + 100.0)
+    if p < 0:
+        return abs(p) / (abs(p) + 100.0)
+    return None
+
+
+def fetch_game_totals(sport_key: str) -> dict[tuple[str, str], dict[str, float]]:
+    """
+    Fetch implied team totals from bulk odds endpoint (markets=totals,h2h).
+    Returns {(home_abbrev, away_abbrev): {"game_total": x, "home_implied": y, "away_implied": z}}
+    """
+    api_key = _odds_api_key()
+    today = date.today().isoformat()
+    if not api_key:
+        return {}
+
+    path = _totals_cache_path(sport_key, today)
+    if path.is_file():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if str(payload.get("date", ""))[:10] == today and isinstance(payload.get("totals"), dict):
+                out: dict[tuple[str, str], dict[str, float]] = {}
+                for k, v in payload["totals"].items():
+                    if not isinstance(v, dict) or "|" not in k:
+                        continue
+                    h, a = k.split("|", 1)
+                    out[(h, a)] = v
+                return out
+        except Exception:
+            pass
+
+    params = urllib.parse.urlencode(
+        {
+            "apiKey": api_key,
+            "regions": "us",
+            "markets": "totals,h2h",
+            "oddsFormat": "american",
+            "dateFormat": "iso",
+        }
+    )
+    url = f"{ODDS_API_BASE}/sports/{sport_key}/odds?{params}"
+    try:
+        events = _http_get_json(url)
+        if not isinstance(events, list):
+            return {}
+        out: dict[tuple[str, str], dict[str, float]] = {}
+
+        for ev in events:
+            home_name = str(ev.get("home_team", "") or "").strip()
+            away_name = str(ev.get("away_team", "") or "").strip()
+            home_ab = _team_to_abbrev(home_name)
+            away_ab = _team_to_abbrev(away_name)
+            if not (home_ab and away_ab):
+                continue
+
+            bookmakers = sorted(ev.get("bookmakers") or [], key=_bm_sort_key)
+            picked = None
+            for bm in bookmakers:
+                markets = bm.get("markets") or []
+                h2h = next((m for m in markets if str(m.get("key", "")) == "h2h"), None)
+                totals = next((m for m in markets if str(m.get("key", "")) == "totals"), None)
+                if h2h and totals:
+                    picked = (h2h, totals)
+                    break
+            if not picked:
+                continue
+            h2h, totals = picked
+
+            over = next(
+                (o for o in (totals.get("outcomes") or []) if str(o.get("name", "")).strip().lower() == "over"),
+                None,
+            )
+            try:
+                game_total = float(over.get("point")) if over else None
+            except (TypeError, ValueError):
+                game_total = None
+            if game_total is None:
+                continue
+
+            home_o = next(
+                (
+                    o
+                    for o in (h2h.get("outcomes") or [])
+                    if _norm_name(o.get("name", "")) == _norm_name(home_name)
+                ),
+                None,
+            )
+            away_o = next(
+                (
+                    o
+                    for o in (h2h.get("outcomes") or [])
+                    if _norm_name(o.get("name", "")) == _norm_name(away_name)
+                ),
+                None,
+            )
+            if not home_o or not away_o:
+                continue
+
+            hp = _american_to_prob(home_o.get("price"))
+            ap = _american_to_prob(away_o.get("price"))
+            if hp is None or ap is None or (hp + ap) <= 0:
+                continue
+
+            share = hp / (hp + ap)
+            home_implied = round(game_total * share, 2)
+            away_implied = round(game_total * (1.0 - share), 2)
+            out[(home_ab, away_ab)] = {
+                "game_total": round(game_total, 2),
+                "home_implied": home_implied,
+                "away_implied": away_implied,
+            }
+
+        try:
+            _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            serial = {"date": today, "sport_key": sport_key, "totals": {}}
+            for (h, a), v in out.items():
+                serial["totals"][f"{h}|{a}"] = v
+            path.write_text(json.dumps(serial, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+        return out
+    except Exception as exc:
+        _log.warning("line_movement: game totals fetch failed for %s — %s", sport_key, exc)
+        return {}
+
+
+def enrich_with_game_totals(df: pd.DataFrame, sport_key: str) -> pd.DataFrame:
+    """
+    Add implied_team_total (player's team) and game_total by matching home/away teams.
+    """
+    out = df.copy()
+    totals = fetch_game_totals(sport_key)
+    out["implied_team_total"] = None
+    out["game_total"] = None
+    if not len(out):
+        return out
+
+    for idx, row in out.iterrows():
+        team = str(row.get("team", "") or "").strip().upper()
+        opp = str(row.get("opponent", "") or "").strip().upper()
+        home_team = str(row.get("home_team", "") or "").strip().upper()
+        away_team = str(row.get("away_team", "") or "").strip().upper()
+        is_home = str(row.get("is_home", "") or "").strip().lower()
+
+        # Resolve orientation for lookup.
+        if home_team and away_team:
+            home_ab, away_ab = home_team, away_team
+        elif team and opp:
+            if is_home in ("1", "true", "yes"):
+                home_ab, away_ab = team, opp
+            else:
+                home_ab, away_ab = opp, team
+        else:
+            continue
+
+        game = totals.get((home_ab, away_ab))
+        if not game:
+            continue
+
+        player_team_is_home = (
+            team == home_ab if team else (is_home in ("1", "true", "yes"))
+        )
+        implied = game.get("home_implied") if player_team_is_home else game.get("away_implied")
+        out.at[idx, "implied_team_total"] = implied
+        out.at[idx, "game_total"] = game.get("game_total")
+
+    return out
 
 
 def _fetch_events(sport_key: str, api_key: str) -> list[dict]:
