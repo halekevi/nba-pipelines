@@ -155,6 +155,9 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "Min Tier": 9, "Bat Order": 10, "Pitcher Role": 12,
         "Series HR": 9,
         "Void Reason": 20,
+        "Open Line": 8,
+        "Line Movement": 12,
+        "Line Shift": 10,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -197,6 +200,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "minutes_tier", "batting_order_tier", "pitcher_role",
         "same_series_hit_rate",
         "void_reason",
+        "open_line",
+        "line_movement",
+        "line_direction_shift",
     ]
     keep = [c for c in keep if c in df2.columns]
     # Rolling game values (step4): required so combined slate / UI L5 Over|Under match game logs.
@@ -219,9 +225,11 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "blended_score",
         "line_hit_rate_over_ou_5",
         "same_series_hit_rate",
+        "open_line",
+        "line_movement",
     ]:
         if col in clean.columns:
-            rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else 2
+            rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else (3 if col == "line_movement" else 2)
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(rnd)
     for col in ["stat_last5_avg", "stat_season_avg"]:
         if col in clean.columns:
@@ -255,6 +263,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "pitcher_role": "Pitcher Role",
         "same_series_hit_rate": "Series HR",
         "void_reason": "Void Reason",
+        "open_line": "Open Line",
+        "line_movement": "Line Movement",
+        "line_direction_shift": "Line Shift",
     }
     clean = clean.rename(columns=rename)
     clean = clean.where(pd.notna(clean), None)

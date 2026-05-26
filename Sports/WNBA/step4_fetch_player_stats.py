@@ -45,7 +45,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 
 import numpy as np
 import pandas as pd
@@ -76,6 +76,116 @@ ALLSTAR_BREAKS: List[Tuple[str,str]] = [
     # Add WNBA All-Star break dates each season here
     # ("2026-07-18", "2026-07-20"),
 ]
+
+
+def _parse_slate_game_date(row: pd.Series) -> str:
+    for col in ("game_date", "game_start", "start_time", "fetched_at"):
+        raw = str(row.get(col, "") or "").strip()
+        if not raw:
+            continue
+        ts = pd.to_datetime(raw, utc=True, errors="coerce")
+        if pd.notna(ts):
+            return ts.strftime("%Y-%m-%d")
+        if len(raw) >= 10 and raw[4] == "-" and raw[7] == "-":
+            return raw[:10]
+    return ""
+
+
+def compute_rest_days(con, team: str, game_date: str, table: str = "wnba") -> int:
+    team = str(team or "").strip().upper()
+    game_date = str(game_date or "").strip()
+    if len(game_date) >= 10:
+        game_date = game_date[:10]
+    if not team or len(game_date) < 10:
+        return -1
+    try:
+        prev = con.execute(
+            f"SELECT MAX(game_date) FROM {table} WHERE team = ? AND game_date < ?",
+            (team, game_date),
+        ).fetchone()
+        prev_date = prev[0] if prev and prev[0] else None
+        if not prev_date:
+            return -1
+        days = (
+            datetime.strptime(game_date, "%Y-%m-%d")
+            - datetime.strptime(str(prev_date)[:10], "%Y-%m-%d")
+        ).days
+        return int(days)
+    except Exception:
+        return -1
+
+
+def _wnba_team_keys_align(con, slate: pd.DataFrame) -> bool:
+    if "team" not in slate.columns:
+        return False
+    slate_teams: Set[str] = set()
+    for t in slate["team"].astype(str).str.strip().str.upper().unique():
+        if not t or "/" in t:
+            continue
+        slate_teams.add(t)
+    try:
+        rows = con.execute(
+            "SELECT DISTINCT team FROM wnba WHERE team IS NOT NULL AND team != '' "
+            "ORDER BY team LIMIT 20"
+        ).fetchall()
+        db_sample = [str(r[0]).strip().upper() for r in rows if r and r[0]]
+    except Exception:
+        db_sample = []
+    print(f"[B2B] WNBA DB teams (first 20): {db_sample}")
+    print(f"[B2B] WNBA slate teams (sample): {sorted(slate_teams)[:20]}")
+    try:
+        db_all = {
+            str(r[0]).strip().upper()
+            for r in con.execute(
+                "SELECT DISTINCT team FROM wnba WHERE team IS NOT NULL AND team != ''"
+            ).fetchall()
+            if r and r[0]
+        }
+    except Exception:
+        db_all = set()
+    if not slate_teams:
+        return False
+    for t in slate_teams:
+        if t not in db_all:
+            return False
+    return True
+
+
+def attach_b2b_columns(
+    df: pd.DataFrame, con, table: str = "wnba", sport_label: str = "WNBA", enabled: bool = True
+) -> pd.DataFrame:
+    out = df.copy()
+    out["days_rest"] = -1
+    out["is_back_to_back"] = 0
+    out["opp_days_rest"] = -1
+    out["opp_b2b"] = 0
+    if not enabled:
+        # TODO: WNBA team key mismatch — verify wnba DB table contains club-level rows matching slate abbreviations.
+        print(f"[B2B] {sport_label}: {len(out)} rows, 0 back-to-backs found (team key mismatch; days_rest=-1)")
+        return out
+    if "team" not in out.columns:
+        print(f"[B2B] {sport_label}: 0 rows, 0 back-to-backs found (no team column)")
+        return out
+
+    game_dates = out.apply(_parse_slate_game_date, axis=1)
+    rest_cache: dict[tuple[str, str], int] = {}
+
+    def _lookup(team_val: str, gd: str) -> int:
+        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
+        if not key[0] or len(key[1]) < 10 or "/" in key[0]:
+            return -1
+        if key not in rest_cache:
+            rest_cache[key] = compute_rest_days(con, key[0], key[1], table=table)
+        return rest_cache[key]
+
+    out["days_rest"] = [_lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index]
+    out["is_back_to_back"] = (pd.to_numeric(out["days_rest"], errors="coerce") == 1).astype(int)
+    if "opp_team" in out.columns:
+        out["opp_days_rest"] = [_lookup(out.at[i, "opp_team"], game_dates.at[i]) for i in out.index]
+        out["opp_b2b"] = (pd.to_numeric(out["opp_days_rest"], errors="coerce") == 1).astype(int)
+    b2b_n = int((out["is_back_to_back"] == 1).sum())
+    print(f"[B2B] {sport_label}: {len(out)} rows, {b2b_n} back-to-backs found")
+    return out
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -765,6 +875,9 @@ def main():
         out["high_variance_role"] = pd.to_numeric(out["role_stability_score"], errors="coerce").lt(0.35)
     except Exception as _rs_exc:
         print(f"  [WARN] role_stability_score skipped: {_rs_exc}")
+
+    wnba_b2b_ok = _wnba_team_keys_align(con, out)
+    out = attach_b2b_columns(out, con, table="wnba", sport_label="WNBA", enabled=wnba_b2b_ok)
 
     out.to_csv(args.out, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(

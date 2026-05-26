@@ -20,6 +20,7 @@ import argparse
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Set
 
 import pandas as pd
 
@@ -36,6 +37,101 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
+
+
+def _parse_slate_game_date(row: pd.Series) -> str:
+    for col in ("game_date", "game_start", "start_time", "fetched_at"):
+        raw = str(row.get(col, "") or "").strip()
+        if not raw:
+            continue
+        ts = pd.to_datetime(raw, utc=True, errors="coerce")
+        if pd.notna(ts):
+            return ts.strftime("%Y-%m-%d")
+        if len(raw) >= 10 and raw[4] == "-" and raw[7] == "-":
+            return raw[:10]
+    return ""
+
+
+def compute_rest_days(con, team: str, game_date: str, table: str = "soccer") -> int:
+    team = str(team or "").strip().upper()
+    game_date = str(game_date or "").strip()
+    if len(game_date) >= 10:
+        game_date = game_date[:10]
+    if not team or len(game_date) < 10:
+        return -1
+    try:
+        prev = con.execute(
+            f"SELECT MAX(game_date) FROM {table} WHERE team = ? AND game_date < ?",
+            (team, game_date),
+        ).fetchone()
+        prev_date = prev[0] if prev and prev[0] else None
+        if not prev_date:
+            return -1
+        days = (
+            datetime.strptime(game_date, "%Y-%m-%d")
+            - datetime.strptime(str(prev_date)[:10], "%Y-%m-%d")
+        ).days
+        return int(days)
+    except Exception:
+        return -1
+
+
+def _soccer_db_slate_team_overlap(con, slate_teams: Set[str]) -> bool:
+    try:
+        rows = con.execute(
+            "SELECT DISTINCT team FROM soccer WHERE team IS NOT NULL AND team != '' "
+            "ORDER BY team LIMIT 20"
+        ).fetchall()
+        db_sample = [str(r[0]).strip().upper() for r in rows if r and r[0]]
+    except Exception:
+        db_sample = []
+    print(f"[B2B] Soccer DB teams (first 20): {db_sample}")
+    slate_list = sorted(t for t in slate_teams if t)[:20]
+    print(f"[B2B] Soccer slate teams (first 20): {slate_list}")
+    if not slate_list or not db_sample:
+        return False
+    overlap = slate_teams & set(db_sample)
+    # Slate uses full club names; DB uses short codes (e.g. FLA vs FLAMENGO).
+    if len(overlap) == 0:
+        return False
+    return len(overlap) >= max(1, int(0.25 * len(slate_list)))
+
+
+def attach_b2b_columns(
+    df: pd.DataFrame, con, table: str = "soccer", sport_label: str = "Soccer", enabled: bool = True
+) -> pd.DataFrame:
+    out = df.copy()
+    out["days_rest"] = -1
+    out["is_back_to_back"] = 0
+    out["opp_days_rest"] = -1
+    out["opp_b2b"] = 0
+    if not enabled:
+        # TODO: Soccer team key mismatch — verify soccer DB table uses same team keys as step3 slate.
+        print(f"[B2B] {sport_label}: {len(out)} rows, 0 back-to-backs found (team key mismatch; days_rest=-1)")
+        return out
+    if "team" not in out.columns:
+        print(f"[B2B] {sport_label}: 0 rows, 0 back-to-backs found (no team column)")
+        return out
+
+    game_dates = out.apply(_parse_slate_game_date, axis=1)
+    rest_cache: dict[tuple[str, str], int] = {}
+
+    def _lookup(team_val: str, gd: str) -> int:
+        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
+        if not key[0] or len(key[1]) < 10:
+            return -1
+        if key not in rest_cache:
+            rest_cache[key] = compute_rest_days(con, key[0], key[1], table=table)
+        return rest_cache[key]
+
+    out["days_rest"] = [_lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index]
+    out["is_back_to_back"] = (pd.to_numeric(out["days_rest"], errors="coerce") == 1).astype(int)
+    if "opp_team" in out.columns:
+        out["opp_days_rest"] = [_lookup(out.at[i, "opp_team"], game_dates.at[i]) for i in out.index]
+        out["opp_b2b"] = (pd.to_numeric(out["opp_days_rest"], errors="coerce") == 1).astype(int)
+    b2b_n = int((out["is_back_to_back"] == 1).sum())
+    print(f"[B2B] {sport_label}: {len(out)} rows, {b2b_n} back-to-backs found")
+    return out
 
 
 def main():
@@ -103,6 +199,10 @@ def main():
         if args.debug_misses and not bad.empty:
             bad.to_csv(args.debug_misses, index=False, encoding="utf-8-sig")
             print(f"Wrote misses → {args.debug_misses}")
+
+    slate_teams = set(slate["team"].astype(str).str.strip().str.upper().unique()) if "team" in slate.columns else set()
+    soccer_b2b_ok = _soccer_db_slate_team_overlap(con, slate_teams)
+    slate = attach_b2b_columns(slate, con, table="soccer", sport_label="Soccer", enabled=soccer_b2b_ok)
 
     slate.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(

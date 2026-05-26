@@ -30,6 +30,7 @@ import argparse
 import random
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from functools import lru_cache
@@ -38,10 +39,12 @@ import numpy as np
 import pandas as pd
 import requests
 
-# Ensure repo root is on sys.path so top-level helpers import from any cwd.
+# Ensure repo root + scripts/ are on sys.path (role_stability lives under scripts/).
 _PROPORACLE_ROOT = Path(__file__).resolve().parents[3]
-if str(_PROPORACLE_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROPORACLE_ROOT))
+_SCRIPTS_ROOT = _PROPORACLE_ROOT / "scripts"
+for _p in (_PROPORACLE_ROOT, _SCRIPTS_ROOT):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 from scripts.db_utils import ensure_mlb_schema, log_pipeline_health, open_db, upsert_rows
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
@@ -69,6 +72,143 @@ PITCHER_PROPS = {
     "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
     "pitches_thrown",
 }
+
+# MLB Stats API teamId values (regular season). Common slate abbreviations included.
+MLB_TEAM_ID_MAP: Dict[str, int] = {
+    "ARI": 109, "AZ": 109,
+    "ATL": 144,
+    "BAL": 110,
+    "BOS": 111,
+    "CHC": 112,
+    "CIN": 113,
+    "CLE": 114,
+    "COL": 115,
+    "CWS": 145, "CHW": 145,
+    "DET": 116,
+    "HOU": 117,
+    "KC": 118, "KCR": 118,
+    "LAA": 108,
+    "LAD": 119,
+    "MIA": 146,
+    "MIL": 158,
+    "MIN": 142,
+    "NYM": 121,
+    "NYY": 147,
+    "ATH": 133, "OAK": 133,
+    "PHI": 143,
+    "PIT": 134,
+    "SD": 135, "SDP": 135,
+    "SF": 137, "SFG": 137,
+    "SEA": 136,
+    "STL": 138,
+    "TB": 139, "TBR": 139,
+    "TEX": 140,
+    "TOR": 141,
+    "WSH": 120, "WSN": 120, "WAS": 120,
+}
+
+_MLB_SCHEDULE_CACHE: Dict[Tuple[str, int], List[str]] = {}
+
+
+def _parse_slate_game_date(row: pd.Series) -> str:
+    for col in ("game_date", "game_start", "start_time", "fetched_at"):
+        raw = str(row.get(col, "") or "").strip()
+        if not raw:
+            continue
+        ts = pd.to_datetime(raw, utc=True, errors="coerce")
+        if pd.notna(ts):
+            return ts.strftime("%Y-%m-%d")
+        if len(raw) >= 10 and raw[4] == "-" and raw[7] == "-":
+            return raw[:10]
+    return ""
+
+
+def fetch_mlb_team_schedule(team_abbrev: str, season: int) -> List[str]:
+    """Regular-season game dates for team from MLB Stats API schedule endpoint."""
+    team_abbrev = str(team_abbrev or "").strip().upper()
+    season = int(season)
+    cache_key = (team_abbrev, season)
+    if cache_key in _MLB_SCHEDULE_CACHE:
+        return _MLB_SCHEDULE_CACHE[cache_key]
+
+    team_id = MLB_TEAM_ID_MAP.get(team_abbrev)
+    if not team_id:
+        print(f"[WARN] MLB schedule: unknown team abbreviation '{team_abbrev}'")
+        _MLB_SCHEDULE_CACHE[cache_key] = []
+        return []
+
+    url = (
+        f"https://statsapi.mlb.com/api/v1/schedule"
+        f"?sportId=1&season={season}&teamId={team_id}&gameType=R"
+    )
+    try:
+        resp = requests.get(url, headers=MLB_HEADERS, timeout=20)
+        resp.raise_for_status()
+        payload = resp.json()
+    except Exception as exc:
+        print(f"[WARN] MLB schedule fetch failed for {team_abbrev} (season {season}): {exc}")
+        _MLB_SCHEDULE_CACHE[cache_key] = []
+        return []
+
+    dates: List[str] = []
+    for block in payload.get("dates", []) or []:
+        gd = str(block.get("date", "") or "").strip()[:10]
+        if len(gd) >= 10:
+            dates.append(gd)
+    dates = sorted(set(dates))
+    _MLB_SCHEDULE_CACHE[cache_key] = dates
+    return dates
+
+
+def compute_mlb_rest_days(team_abbrev: str, game_date: str, season: int) -> int:
+    team_abbrev = str(team_abbrev or "").strip().upper()
+    game_date = str(game_date or "").strip()[:10]
+    if not team_abbrev or len(game_date) < 10:
+        return -1
+    schedule = fetch_mlb_team_schedule(team_abbrev, season)
+    if not schedule:
+        return -1
+    prior = [d for d in schedule if d < game_date]
+    if not prior:
+        return -1
+    try:
+        return (
+            datetime.strptime(game_date, "%Y-%m-%d")
+            - datetime.strptime(prior[-1], "%Y-%m-%d")
+        ).days
+    except Exception:
+        return -1
+
+
+def attach_mlb_b2b_columns(df: pd.DataFrame, season: int, sport_label: str = "MLB") -> pd.DataFrame:
+    out = df.copy()
+    out["days_rest"] = -1
+    out["is_back_to_back"] = 0
+    out["opp_days_rest"] = -1
+    out["opp_b2b"] = 0
+    if "team" not in out.columns:
+        print(f"[B2B] {sport_label}: 0 rows, 0 back-to-backs found (no team column)")
+        return out
+
+    game_dates = out.apply(_parse_slate_game_date, axis=1)
+    rest_cache: Dict[Tuple[str, str], int] = {}
+
+    def _lookup(team_val: str, gd: str) -> int:
+        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
+        if not key[0] or len(key[1]) < 10:
+            return -1
+        if key not in rest_cache:
+            rest_cache[key] = compute_mlb_rest_days(key[0], key[1], season)
+        return rest_cache[key]
+
+    out["days_rest"] = [_lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index]
+    out["is_back_to_back"] = (pd.to_numeric(out["days_rest"], errors="coerce") == 1).astype(int)
+    if "opp_team" in out.columns:
+        out["opp_days_rest"] = [_lookup(out.at[i, "opp_team"], game_dates.at[i]) for i in out.index]
+        out["opp_b2b"] = (pd.to_numeric(out["opp_days_rest"], errors="coerce") == 1).astype(int)
+    b2b_n = int((out["is_back_to_back"] == 1).sum())
+    print(f"[B2B] {sport_label}: {len(out)} rows, {b2b_n} back-to-backs found")
+    return out
 
 
 def _sleep(base: float = 0.4) -> None:
@@ -873,6 +1013,12 @@ def main() -> None:
     slate["minutes_L10_list"] = slate.apply(_usage_l10, axis=1)
     slate["role_stability_score"] = slate["minutes_L10_list"].apply(role_stability)
     slate["high_variance_role"] = pd.to_numeric(slate["role_stability_score"], errors="coerce").lt(0.35)
+
+    try:
+        season_year = int(str(args.season).strip()[:4])
+    except (TypeError, ValueError):
+        season_year = datetime.now().year
+    slate = attach_mlb_b2b_columns(slate, season=season_year, sport_label="MLB")
 
     slate.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(

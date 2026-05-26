@@ -99,6 +99,10 @@ from utils.goblin_demon_multiplier import (
     multiplier_summary as gd_multiplier_summary,
 )
 from utils.ticket_diversity import apply_diversity_filter
+from utils.ticket_ev_tiers import (
+    apply_slate_ev_tier_recommendations,
+    recommendation_from_ev,
+)
 
 _log_slate = logging.getLogger("combined_slate_tickets")
 
@@ -951,12 +955,7 @@ def compute_ticket_ev(
         "ev_formula": ev_formula,
         "ticket_type": tt,
         "n_legs": n,
-        "recommendation": (
-            "STRONG" if ev >= 1.40 else
-            "OK" if ev >= 1.15 else
-            "MARGINAL" if ev >= 1.0 else
-            "SKIP"
-        ),
+        "recommendation": recommendation_from_ev(ev),
     }
 
 
@@ -5270,6 +5269,7 @@ def ticket_groups_to_payload(
 
         payload["groups"].append(group)
 
+    apply_slate_ev_tier_recommendations(payload)
     return payload
 
 
@@ -6364,11 +6364,13 @@ def write_web_outputs(
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, json_filename)
     if skip_ui_filters:
+        apply_slate_ev_tier_recommendations(payload)
         payload = _sanitize_for_json(payload)
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
         print(f"[OK] Web JSON  -> {json_path}")
         return
+    apply_slate_ev_tier_recommendations(payload)
     payload = filter_web_tickets_for_ui(
         payload,
         require_positive_ev=require_positive_ev,

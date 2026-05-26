@@ -18,6 +18,7 @@ and ensure it maps to ESPN IDs via the idmap (or use step5a to pre-attach).
 
 import argparse
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -31,6 +32,84 @@ for _ in range(6):
         break
     _here = _here.parent
 from step4_db_reader import open_db, attach_stats, db_summary, DB_PATH
+
+
+def _parse_slate_game_date(row: pd.Series) -> str:
+    for col in ("game_date", "game_start", "start_time", "fetched_at"):
+        raw = str(row.get(col, "") or "").strip()
+        if not raw:
+            continue
+        ts = pd.to_datetime(raw, utc=True, errors="coerce")
+        if pd.notna(ts):
+            return ts.strftime("%Y-%m-%d")
+        if len(raw) >= 10 and raw[4] == "-" and raw[7] == "-":
+            return raw[:10]
+    return ""
+
+
+def compute_rest_days(con, team: str, game_date: str, table: str = "nba") -> int:
+    """
+    Days since team's prior game in proporacle_ref.db (table: nba).
+    Returns -1 when unknown (no prior game or lookup failure).
+    """
+    team = str(team or "").strip().upper()
+    game_date = str(game_date or "").strip()
+    if len(game_date) >= 10:
+        game_date = game_date[:10]
+    if not team or len(game_date) < 10:
+        return -1
+    try:
+        prev = con.execute(
+            f"SELECT MAX(game_date) FROM {table} WHERE team = ? AND game_date < ?",
+            (team, game_date),
+        ).fetchone()
+        prev_date = prev[0] if prev and prev[0] else None
+        if not prev_date:
+            return -1
+        days = (
+            datetime.strptime(game_date, "%Y-%m-%d")
+            - datetime.strptime(str(prev_date)[:10], "%Y-%m-%d")
+        ).days
+        return int(days)
+    except Exception:
+        return -1
+
+
+def attach_b2b_columns(df: pd.DataFrame, con, table: str = "nba", sport_label: str = "NBA") -> pd.DataFrame:
+    out = df.copy()
+    out["days_rest"] = -1
+    out["is_back_to_back"] = 0
+    out["opp_days_rest"] = -1
+    out["opp_b2b"] = 0
+    if "team" not in out.columns:
+        print(f"[B2B] {sport_label}: 0 rows, 0 back-to-backs found (no team column)")
+        return out
+
+    game_dates = out.apply(_parse_slate_game_date, axis=1)
+    rest_cache: dict[tuple[str, str], int] = {}
+
+    def _lookup(team_val: str, gd: str) -> int:
+        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
+        if not key[0] or len(key[1]) < 10:
+            return -1
+        if key not in rest_cache:
+            rest_cache[key] = compute_rest_days(con, key[0], key[1], table=table)
+        return rest_cache[key]
+
+    out["days_rest"] = [
+        _lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index
+    ]
+    out["is_back_to_back"] = (pd.to_numeric(out["days_rest"], errors="coerce") == 1).astype(int)
+
+    if "opp_team" in out.columns:
+        out["opp_days_rest"] = [
+            _lookup(out.at[i, "opp_team"], game_dates.at[i]) for i in out.index
+        ]
+        out["opp_b2b"] = (pd.to_numeric(out["opp_days_rest"], errors="coerce") == 1).astype(int)
+
+    b2b_n = int((out["is_back_to_back"] == 1).sum())
+    print(f"[B2B] {sport_label}: {len(out)} rows, {b2b_n} back-to-backs found")
+    return out
 
 
 def main():
@@ -243,6 +322,8 @@ def main():
         slate.loc[~sparse_mask, "data_source"] = "nba1h_db"
     else:
         slate["data_source"] = slate["data_source"].replace("", "nba_db")
+
+    slate = attach_b2b_columns(slate, con, table="nba", sport_label=sport_key.upper())
 
     slate.to_csv(args.out, index=False, encoding="utf-8-sig")
     print(f"\n✅ Saved → {args.out}  ({len(slate)} rows)")
