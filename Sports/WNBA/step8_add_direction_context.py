@@ -82,6 +82,25 @@ def thin_border():
     s = Side(style='thin', color='DDDDDD')
     return Border(left=s, right=s, top=s, bottom=s)
 
+def _line_shift_fill(val) -> str:
+    if val is None or val == '' or (isinstance(val, float) and pd.isna(val)):
+        return 'FFFFFF'
+    try:
+        num = float(val)
+        if num > 0:
+            return 'C8F7C5'
+        if num < 0:
+            return 'F7C5C5'
+        return 'FFFFFF'
+    except (TypeError, ValueError):
+        pass
+    s = str(val).strip().upper()
+    if 'UP' in s or s == 'MOVED_UP':
+        return 'C8F7C5'
+    if 'DOWN' in s or s == 'MOVED_DOWN':
+        return 'F7C5C5'
+    return 'FFFFFF'
+
 def write_sheet(wb, name, data):
     ws = wb.create_sheet(name)
     tier_bg, tier_fg = TIER_COLORS.get(name, ('333333', 'FFFFFF'))
@@ -112,6 +131,8 @@ def write_sheet(wb, name, data):
                 bg = 'C8F7C5' if val == 'OVER' else 'F7C5C5' if val == 'UNDER' else 'FFFFFF'
                 cell.fill = PatternFill('solid', start_color=bg)
                 cell.font = Font(bold=True, name='Arial', size=9)
+            elif col_name == 'Line Shift':
+                cell.fill = PatternFill('solid', start_color=_line_shift_fill(display_val))
             else:
                 cell.fill = PatternFill('solid', start_color='F9F9F9' if ri % 2 == 0 else 'FFFFFF')
 

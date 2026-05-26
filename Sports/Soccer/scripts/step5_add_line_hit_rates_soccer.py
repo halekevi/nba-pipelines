@@ -25,7 +25,11 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.line_movement import enrich_with_line_movement, print_line_movement_wire_stats
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
+
+# Odds API sport key for line movement (swap per active league/season).
+SOCCER_SPORT_KEY = "soccer_epl"
 
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
@@ -152,6 +156,17 @@ def main() -> None:
             df.loc[ok10, "line_hit_rate_under_ou_10"] = urou10.values
 
     df = finalize_l10_ui_columns(df, line_col=args.line_col)
+    df = enrich_with_line_movement(
+        df,
+        sport_key=SOCCER_SPORT_KEY,
+        markets=[
+            "player_shots_on_target",
+            "player_to_score",
+            "player_assists",
+            "player_anytime_score",
+        ],
+    )
+    print_line_movement_wire_stats(df, "Soccer")
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(
         output_path=args.output,

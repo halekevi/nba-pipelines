@@ -61,12 +61,15 @@ SPORT_LINE_MOVEMENT_PRESETS: dict[str, dict[str, Any]] = {
     },
 }
 
-# Pipeline stat_norm / prop_type → Odds API market keys (NHL pilot mappings)
+# Pipeline stat_norm / prop_type → Odds API market keys.
+# Diagnosis (2026-05): open_line IS stored in the daily snapshot cache; enrich_with_line_movement
+# joins it via prop_norm → odds market. MLB/WNBA/Soccer failed lookup because only NHL keys
+# were mapped — movement defaulted to 0.0 while open_line stayed null.
 PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
+    # NHL
     "shots_on_goal": "player_shots_on_goal",
     "shots": "player_shots_on_goal",
     "sog": "player_shots_on_goal",
-    "goals": "player_goals",
     "goal_scorer": "player_goal_scorer_anytime",
     "anytime_goal": "player_goal_scorer_anytime",
     "anytime_goal_scorer": "player_goal_scorer_anytime",
@@ -74,6 +77,41 @@ PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
     "points": "player_points",
     "power_play_points": "player_power_play_points",
     "blocked_shots": "player_blocked_shots",
+    # MLB (prop_norm → Odds API batter_/pitcher_ markets)
+    "hits": "batter_hits",
+    "total_bases": "batter_total_bases",
+    "home_runs": "batter_home_runs",
+    "rbis": "batter_rbis",
+    "hitter_strikeouts": "batter_strikeouts",
+    "strikeouts": "pitcher_strikeouts",
+    "hits_allowed": "pitcher_hits_allowed",
+    "walks_allowed": "pitcher_walks",
+    "walks": "pitcher_walks",
+    # WNBA (PrizePicks abbreviations)
+    "pts": "player_points",
+    "reb": "player_rebounds",
+    "ast": "player_assists",
+    "3ptmade": "player_threes",
+    "threes": "player_threes",
+    "pra": "player_points_rebounds_assists",
+    "pa": "player_points_assists",
+    # Soccer
+    "shots_on_target": "player_shots_on_target",
+    "goal_assist": "player_assists",
+    "anytime_scorer": "player_to_score",
+    "to_score": "player_to_score",
+}
+
+# Sport-specific prop_norm overrides (resolve cross-sport name collisions).
+SPORT_PROP_TO_ODDS_MARKET: dict[str, dict[str, str]] = {
+    "icehockey_nhl": {
+        "goals": "player_goals",
+        "shots": "player_shots_on_goal",
+    },
+    "soccer_epl": {
+        "goals": "player_to_score",
+        "shots": "player_shots_on_target",
+    },
 }
 
 BM_PRIORITY = ("draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
@@ -200,6 +238,34 @@ def _load_cache(sport_key: str, today: str) -> dict[tuple[str, str, float], dict
     except (OSError, json.JSONDecodeError, TypeError) as exc:
         _log.warning("line_movement: cache read failed (%s): %s", path, exc)
         return None
+
+
+def _merge_line_snapshot(
+    prior: dict[tuple[str, str, float], dict[str, Any]],
+    fresh: dict[tuple[str, str, float], dict[str, Any]],
+) -> dict[tuple[str, str, float], dict[str, Any]]:
+    """Preserve open_line from the first snapshot of the day; refresh current_line/movement."""
+    out = dict(prior)
+    for key, new_row in fresh.items():
+        old_row = out.get(key)
+        old_open = old_row.get("open_line") if isinstance(old_row, dict) else None
+        if old_open is not None:
+            try:
+                open_line = float(old_open)
+                current_line = float(new_row.get("current_line", open_line))
+            except (TypeError, ValueError):
+                out[key] = new_row
+                continue
+            movement = round(current_line - open_line, 3)
+            out[key] = {
+                "open_line": open_line,
+                "current_line": current_line,
+                "line_movement": movement,
+                "line_direction_shift": _line_direction(open_line, current_line),
+            }
+        else:
+            out[key] = new_row
+    return out
 
 
 def _save_cache(sport_key: str, today: str, snapshot: dict[tuple[str, str, float], dict[str, Any]]) -> None:
@@ -588,6 +654,8 @@ def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, s
                 _log.warning("line_movement: event %s failed — %s", event_id[:12], exc)
 
         snapshot = _parse_odds_events(event_payloads, markets)
+        prior = _load_cache(sport_key, today) or {}
+        snapshot = _merge_line_snapshot(prior, snapshot)
         _save_cache(sport_key, today, snapshot)
         _log.info(
             "line_movement: parsed %d prop lines for %s (%d events)",
@@ -609,13 +677,16 @@ def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, s
         return {}
 
 
-def _pipeline_prop_to_odds_market(prop_type: str) -> str:
+def _pipeline_prop_to_odds_market(prop_type: str, sport_key: str = "") -> str:
     raw = str(prop_type or "").strip().lower()
     if not raw:
         return ""
+    sport_map = SPORT_PROP_TO_ODDS_MARKET.get(str(sport_key or "").strip(), {})
+    if raw in sport_map:
+        return sport_map[raw]
     if raw in PIPELINE_PROP_TO_ODDS_MARKET:
         return PIPELINE_PROP_TO_ODDS_MARKET[raw]
-    if raw.startswith("player_"):
+    if raw.startswith("player_") or raw.startswith("batter_") or raw.startswith("pitcher_"):
         return raw
     return PIPELINE_PROP_TO_ODDS_MARKET.get(raw.replace(" ", "_"), raw)
 
@@ -650,7 +721,38 @@ def _lookup_snapshot_row(
         if dist < best_dist:
             best_dist = dist
             best = row
-    return best
+    if best:
+        return best
+
+    # Movement is identical for all line keys under the same player + market.
+    for (p, m, _ln), row in snapshot.items():
+        if p == player_k and m == odds_market:
+            return row
+    return None
+
+
+def _current_line_value(row: pd.Series, line_col: str | None) -> float | None:
+    if not line_col:
+        return None
+    try:
+        return round(float(row.get(line_col)), 2)
+    except (TypeError, ValueError):
+        return None
+
+
+def print_line_movement_wire_stats(df: pd.DataFrame, sport: str) -> None:
+    """Log open_line / line_movement fill rates for pipeline validation."""
+    total = len(df)
+    if total == 0:
+        print(f"[LM-WIRE] {sport}: open_line=0/0, line_movement=0/0, line_direction_shift=0/0")
+        return
+    ol = int(pd.to_numeric(df.get("open_line"), errors="coerce").notna().sum()) if "open_line" in df.columns else 0
+    lm = int(pd.to_numeric(df.get("line_movement"), errors="coerce").notna().sum()) if "line_movement" in df.columns else 0
+    lds = int(df.get("line_direction_shift", pd.Series(dtype=object)).notna().sum()) if "line_direction_shift" in df.columns else 0
+    print(
+        f"[LM-WIRE] {sport}: open_line={ol}/{total}, "
+        f"line_movement={lm}/{total}, line_direction_shift={lds}/{total}"
+    )
 
 
 def enrich_with_line_movement(
@@ -660,7 +762,7 @@ def enrich_with_line_movement(
 ) -> pd.DataFrame:
     """
     Left-join open_line, line_movement, line_direction_shift onto df.
-    Unmatched rows: open_line=None, line_movement=0.0, line_direction_shift='stable'.
+    Unmatched rows: open_line falls back to current line; movement=0.0; direction='stable'.
     """
     out = df.copy()
     snapshot = fetch_line_snapshot(sport_key, markets)
@@ -689,19 +791,21 @@ def enrich_with_line_movement(
             directions.append("stable")
             continue
 
-        odds_market = _pipeline_prop_to_odds_market(str(row.get(prop_col, "")))
+        odds_market = _pipeline_prop_to_odds_market(str(row.get(prop_col, "")), sport_key)
         hit = _lookup_snapshot_row(
             snapshot,
             str(row.get(player_col, "")),
             odds_market,
             row.get(line_col),
         )
+        cur_line = _current_line_value(row, line_col)
         if hit:
-            open_lines.append(hit.get("open_line"))
+            ol = hit.get("open_line")
+            open_lines.append(ol if ol is not None else cur_line)
             movements.append(float(hit.get("line_movement", 0.0) or 0.0))
             directions.append(str(hit.get("line_direction_shift") or "stable"))
         else:
-            open_lines.append(None)
+            open_lines.append(cur_line)
             movements.append(0.0)
             directions.append("stable")
 

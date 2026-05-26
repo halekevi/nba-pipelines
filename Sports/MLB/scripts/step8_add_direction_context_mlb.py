@@ -89,6 +89,26 @@ def thin_border():
     return Border(left=s, right=s, top=s, bottom=s)
 
 
+def _line_shift_fill(val) -> str:
+    if val is None or val == "" or (isinstance(val, float) and pd.isna(val)):
+        return "FFFFFF"
+    try:
+        num = float(val)
+        if num > 0:
+            return "C8F7C5"
+        if num < 0:
+            return "F7C5C5"
+        return "FFFFFF"
+    except (TypeError, ValueError):
+        pass
+    s = str(val).strip().upper()
+    if "UP" in s or s == "MOVED_UP":
+        return "C8F7C5"
+    if "DOWN" in s or s == "MOVED_DOWN":
+        return "F7C5C5"
+    return "FFFFFF"
+
+
 def _row_game_datetimes(df: pd.DataFrame) -> pd.Series:
     """Datetime per row for MLB slate date filtering (prefer game_date, else start_time)."""
     idx = df.index
@@ -139,6 +159,8 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
             elif col_name == "Player Type":
                 bg = "FFE8E8" if str(display_val).lower() == "pitcher" else "E8F4FF"
                 cell.fill = PatternFill("solid", start_color=bg)
+            elif col_name == "Line Shift":
+                cell.fill = PatternFill("solid", start_color=_line_shift_fill(display_val))
             else:
                 cell.fill = PatternFill("solid", start_color="F9F9F9" if ri % 2 == 0 else "FFFFFF")
 
