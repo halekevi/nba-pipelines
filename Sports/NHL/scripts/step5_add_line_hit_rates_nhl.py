@@ -251,6 +251,47 @@ def save_game_log_cache(cache: dict, path: str):
         json.dump(cache, f)
 
 
+def compute_player_shot_avgs(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add player_avg_shots_L5 / player_avg_shots_L10 for SOG rows from stat_g1..stat_g10.
+    - Only for stat_norm == shots_on_goal
+    - Require >=3 non-empty values in window; else None
+    """
+    out = df.copy()
+    out["player_avg_shots_L5"] = None
+    out["player_avg_shots_L10"] = None
+
+    if "stat_norm" not in out.columns:
+        return out
+
+    def _avg_window(row: pd.Series, n: int):
+        vals = []
+        for i in range(1, n + 1):
+            k = f"stat_g{i}"
+            if k not in row.index:
+                continue
+            raw = row.get(k, "")
+            if raw in ("", None):
+                continue
+            try:
+                vals.append(float(raw))
+            except Exception:
+                continue
+        if len(vals) < 3:
+            return None
+        return round(sum(vals) / len(vals), 2)
+
+    sog_mask = out["stat_norm"].astype(str).str.strip().str.lower().eq("shots_on_goal")
+    if sog_mask.any():
+        out.loc[sog_mask, "player_avg_shots_L5"] = out.loc[sog_mask].apply(
+            lambda r: _avg_window(r, 5), axis=1
+        )
+        out.loc[sog_mask, "player_avg_shots_L10"] = out.loc[sog_mask].apply(
+            lambda r: _avg_window(r, 10), axis=1
+        )
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="outputs/step4_nhl_with_stats.csv")
@@ -362,6 +403,7 @@ def main():
     df_out = pd.read_csv(args.output, low_memory=False, encoding="utf-8-sig")
     line_col = "line_score" if "line_score" in df_out.columns else "line"
     df_out = finalize_l10_ui_columns(df_out, line_col=line_col)
+    df_out = compute_player_shot_avgs(df_out)
     df_out = enrich_with_line_movement(
         df_out,
         sport_key="icehockey_nhl",

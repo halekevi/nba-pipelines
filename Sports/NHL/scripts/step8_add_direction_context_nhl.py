@@ -164,6 +164,7 @@ COLUMN_ALIASES = {
     "position_group":   ["position_group"],
     "opp_gaa":          ["opp_gaa"],
     "opp_saa":          ["opp_saa"],
+    "opp_shots_allowed_avg": ["opp_saa"],
     "opp_pk_pct":       ["opp_pk_pct"],
     "def_rank":         ["def_rank"],
     "avg_L5":           ["avg_L5", "stat_last5_avg"],
@@ -185,6 +186,8 @@ COLUMN_ALIASES = {
     "back_to_back":         ["back_to_back"],
     "goalie_name":          ["goalie_name"],
     "goalie_sv_pct":        ["goalie_sv_pct"],
+    "player_avg_shots_L5":  ["player_avg_shots_L5"],
+    "player_avg_shots_L10": ["player_avg_shots_L10"],
 }
 
 # Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
@@ -374,7 +377,10 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "def_rank":         r("def_rank"),
         "opp_gaa":          fmt_num(r("opp_gaa"), 3),
         "opp_saa":          fmt_num(r("opp_saa"), 3),
+        "opp_shots_allowed_avg": fmt_num(r("opp_saa"), 1),
         "opp_pk_pct":       fmt_num(r("opp_pk_pct"), 3),
+        "player_avg_shots_L5": fmt_num(r("player_avg_shots_L5"), 2),
+        "player_avg_shots_L10": fmt_num(r("player_avg_shots_L10"), 2),
         "pts_per_game":     fmt_num(r("pts_per_game"), 3),
         "pp_pts_per_game":  fmt_num(r("pp_pts_per_game"), 3),
         "toi_avg_L10":      fmt_num(r("toi_avg_L10"), 2),
