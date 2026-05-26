@@ -2779,7 +2779,7 @@ SOCCER_OVER_MIN_EDGE = 0.0  # Edge is leaky for Soccer; gate disabled until repl
 # NBA1H props still flow through pipeline, slate explorer, and graded archive.
 ALWAYS_ALLOW_SPORTS = frozenset({"NBA", "MLB"})
 NBA1H_TICKET_GATE = True
-NBA1H_TICKET_GATE_REASON = "AUC 0.4650 — model anti-predictive"
+NBA1H_TICKET_GATE_MIN_AUC = 0.52  # revert when model_performance_log shows >= this for 3 days
 _MODEL_GATE_RECOMMENDATIONS_PATH = os.path.join(REPO_ROOT, "data", "model_gate_recommendations.json")
 _MODEL_GATE_CACHE: dict[str, dict] | None = None
 _MODEL_GATE_LOGGED: set[str] = set()
@@ -2796,13 +2796,27 @@ def _load_model_gate_recommendations() -> dict[str, dict]:
         return {}
 
 
+def _nba1h_ticket_gate_reason() -> str:
+    """Reason string for hardcoded NBA1H ticket gate (reads live AUC from gate JSON)."""
+    global _MODEL_GATE_CACHE
+    if _MODEL_GATE_CACHE is None:
+        _MODEL_GATE_CACHE = _load_model_gate_recommendations()
+    rec = (_MODEL_GATE_CACHE or {}).get("NBA1H") or {}
+    auc = rec.get("auc")
+    if isinstance(auc, (int, float)):
+        return (
+            f"AUC {float(auc):.4f} — below {NBA1H_TICKET_GATE_MIN_AUC:.2f} revert threshold"
+        )
+    return f"below {NBA1H_TICKET_GATE_MIN_AUC:.2f} revert threshold (see model_performance_log)"
+
+
 def _sport_ticket_gated(sport: str) -> tuple[bool, str]:
     """True if sport must not enter EV / win-rate ticket pools (slate unchanged)."""
     su = str(sport or "").strip().upper()
     if not su or su in ALWAYS_ALLOW_SPORTS:
         return False, ""
     if NBA1H_TICKET_GATE and su == "NBA1H":
-        return True, NBA1H_TICKET_GATE_REASON
+        return True, _nba1h_ticket_gate_reason()
     global _MODEL_GATE_CACHE
     if _MODEL_GATE_CACHE is None:
         _MODEL_GATE_CACHE = _load_model_gate_recommendations()
@@ -12093,7 +12107,7 @@ def main():
                 if not (NBA1H_TICKET_GATE and sp == "NBA1H"):
                     _log_auto_gate_once(sp, str(rec.get("reason") or "AUC gate"))
     if NBA1H_TICKET_GATE:
-        print(f"  [ticket-gate] NBA1H excluded from tickets — {NBA1H_TICKET_GATE_REASON}")
+        print(f"  [ticket-gate] NBA1H excluded from tickets — {_nba1h_ticket_gate_reason()}")
 
     def pool(df, pt=None):
         if df is None or len(df) == 0:
