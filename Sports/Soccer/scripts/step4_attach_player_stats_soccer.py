@@ -38,6 +38,41 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
+SOCCER_TEAM_KEY_MAP = {
+    # slate full name -> DB code
+    "GIBRALTAR": "GIB",
+    "ALBANIA": "ALB",   # may not exist in DB yet, will return -1 gracefully
+    "BOSNIA": "BIH",
+    "CZECHIA": "CZE",
+    "DENMARK": "DEN",
+    "ITALY": "ITA",
+    "KOSOVO": "KOS",
+    "LATVIA": "LAT",
+    "N. IRELAND": "NIR",
+    "N. MACEDONIA": "MKD",
+    "POLAND": "POL",
+    "ROMANIA": "ROU",
+    "SLOVAKIA": "SVK",
+    "SWEDEN": "SWE",
+    "UKRAINE": "UKR",
+    "WALES": "WAL",
+    "TÜRKIYE": "TUR",
+    "REP. IRELAND": "IRL",
+    "SAN LORENZO": "SLO",
+    "ARGENTINOS": "ARGJ",
+    "RIESTRA": "RIE",
+    "LANÚS": "LAN",
+    # NWSL clubs
+    "CHICAGO STARS": "CHI",
+    "KC CURRENT": "KC",
+    "PRIDE": "ORL",   # Orlando Pride
+    "REIGN": "SEA",   # OL Reign (Seattle)
+    "ROYALS": "UTA",   # Utah Royals
+    "SAN DIEGO WAVE": "SD",
+    "SPIRIT": "WAS",
+    "THORNS": "POR",   # Portland Thorns
+}
+
 
 def _parse_slate_game_date(row: pd.Series) -> str:
     for col in ("game_date", "game_start", "start_time", "fetched_at"):
@@ -90,8 +125,18 @@ def _soccer_db_slate_team_overlap(con, slate_teams: Set[str]) -> bool:
     print(f"[B2B] Soccer slate teams (first 20): {slate_list}")
     if not slate_list or not db_sample:
         return False
-    overlap = slate_teams & set(db_sample)
-    # Slate uses full club names; DB uses short codes (e.g. FLA vs FLAMENGO).
+    try:
+        db_all = {
+            str(r[0]).strip().upper()
+            for r in con.execute(
+                "SELECT DISTINCT team FROM soccer WHERE team IS NOT NULL AND team != ''"
+            ).fetchall()
+            if r and r[0]
+        }
+    except Exception:
+        db_all = set(db_sample)
+    mapped_slate = {SOCCER_TEAM_KEY_MAP.get(t, t) for t in slate_teams if t}
+    overlap = mapped_slate & db_all
     if len(overlap) == 0:
         return False
     return len(overlap) >= max(1, int(0.25 * len(slate_list)))
@@ -117,11 +162,14 @@ def attach_b2b_columns(
     rest_cache: dict[tuple[str, str], int] = {}
 
     def _lookup(team_val: str, gd: str) -> int:
-        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
-        if not key[0] or len(key[1]) < 10:
+        raw_team = str(team_val or "").strip().upper()
+        gd_s = str(gd or "").strip()[:10]
+        if not raw_team or len(gd_s) < 10:
             return -1
+        db_team = SOCCER_TEAM_KEY_MAP.get(raw_team, raw_team)
+        key = (db_team, gd_s)
         if key not in rest_cache:
-            rest_cache[key] = compute_rest_days(con, key[0], key[1], table=table)
+            rest_cache[key] = compute_rest_days(con, db_team, gd_s, table=table)
         return rest_cache[key]
 
     out["days_rest"] = [_lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index]

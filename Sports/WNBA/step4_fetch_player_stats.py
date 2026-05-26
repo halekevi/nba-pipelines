@@ -77,6 +77,24 @@ ALLSTAR_BREAKS: List[Tuple[str,str]] = [
     # ("2026-07-18", "2026-07-20"),
 ]
 
+WNBA_TEAM_KEY_MAP = {
+    # slate abbrev -> DB abbrev
+    "LAS": "LV",     # Las Vegas Aces
+    "LVA": "LV",     # alternate Aces code
+    "NYL": "NY",     # New York Liberty
+    "CON": "CON",    # Connecticut Sun (already matches)
+    "DAL": "DAL",    # Dallas Wings
+    "IND": "IND",    # Indiana Fever
+    "PHX": "PHX",    # Phoenix Mercury
+    "SEA": "SEA",    # Seattle Storm
+    "CHI": "CHI",    # Chicago Sky
+    "ATL": "ATL",    # Atlanta Dream
+    "MIN": "MIN",    # Minnesota Lynx
+    "WSH": "WSH",    # Washington Mystics
+    "POR": "POR",    # Portland (if present)
+    "GS": "GS",      # Golden State
+}
+
 
 def _parse_slate_game_date(row: pd.Series) -> str:
     for col in ("game_date", "game_start", "start_time", "fetched_at"):
@@ -146,7 +164,7 @@ def _wnba_team_keys_align(con, slate: pd.DataFrame) -> bool:
     if not slate_teams:
         return False
     for t in slate_teams:
-        if t not in db_all:
+        if WNBA_TEAM_KEY_MAP.get(t, t) not in db_all:
             return False
     return True
 
@@ -171,11 +189,14 @@ def attach_b2b_columns(
     rest_cache: dict[tuple[str, str], int] = {}
 
     def _lookup(team_val: str, gd: str) -> int:
-        key = (str(team_val or "").strip().upper(), str(gd or "").strip()[:10])
-        if not key[0] or len(key[1]) < 10 or "/" in key[0]:
+        raw_team = str(team_val or "").strip().upper()
+        gd_s = str(gd or "").strip()[:10]
+        if not raw_team or len(gd_s) < 10 or "/" in raw_team:
             return -1
+        db_team = WNBA_TEAM_KEY_MAP.get(raw_team, raw_team)
+        key = (db_team, gd_s)
         if key not in rest_cache:
-            rest_cache[key] = compute_rest_days(con, key[0], key[1], table=table)
+            rest_cache[key] = compute_rest_days(con, db_team, gd_s, table=table)
         return rest_cache[key]
 
     out["days_rest"] = [_lookup(out.at[i, "team"], game_dates.at[i]) for i in out.index]
