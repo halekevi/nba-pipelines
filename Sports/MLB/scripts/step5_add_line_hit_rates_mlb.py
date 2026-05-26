@@ -23,6 +23,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.h2h_stats import init_mlb_h2h_placeholder, print_h2h_stats
 from utils.line_movement import enrich_with_line_movement, print_line_movement_wire_stats
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
@@ -204,6 +205,9 @@ def main() -> None:
             df.loc[ok10, "line_hit_rate_under_ou_10"] = urou10.values
 
     df = finalize_l10_ui_columns(df, line_col=args.line_col)
+    # TODO: H2H requires opp column in mlb_gamelog DB table (no team column today).
+    df = init_mlb_h2h_placeholder(df)
+    print_h2h_stats(df, "MLB")
     df = enrich_with_line_movement(
         df,
         sport_key="baseball_mlb",

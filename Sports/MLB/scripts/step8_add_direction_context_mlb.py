@@ -207,7 +207,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     keep = [
         "tier", "rank_score",
-        "player", "pos", "player_type_norm", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b", "game_total", "spread", "game_time", "slate_game_date",
+        "player", "pos", "player_type_norm", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b",
+        "h2h_avg", "h2h_over_pct", "h2h_games", "h2h_last",
+        "game_total", "spread", "game_time", "slate_game_date",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
         "edge", "projection",
@@ -272,6 +274,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "is_back_to_back": "B2B",
         "opp_days_rest": "Opp Rest",
         "opp_b2b": "Opp B2B",
+        "h2h_avg": "H2H Avg",
+        "h2h_over_pct": "H2H Over%",
+        "h2h_games": "H2H Games",
+        "h2h_last": "H2H Last",
         "game_total": "Game Total",
         "spread": "Spread",
         "slate_game_date": "Game Date",
