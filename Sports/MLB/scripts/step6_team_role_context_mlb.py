@@ -22,7 +22,10 @@ Run:
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -40,6 +43,47 @@ PITCHER_PROPS = {
     "pitches_thrown",
 }
 GAME_FEED_URL = "https://statsapi.mlb.com/api/v1.1/game/{game_id}/feed/live"
+ODDS_API_BASE = "https://api.the-odds-api.com/v4"
+MLB_SPORT_KEY = "baseball_mlb"
+ODDS_CACHE_SLUG = "mlb"
+
+MLB_TEAM_NAME_MAP = {
+    "ARI": "Arizona Diamondbacks",
+    "ATL": "Atlanta Braves",
+    "BAL": "Baltimore Orioles",
+    "BOS": "Boston Red Sox",
+    "CHC": "Chicago Cubs",
+    "CIN": "Cincinnati Reds",
+    "CLE": "Cleveland Guardians",
+    "COL": "Colorado Rockies",
+    "CWS": "Chicago White Sox",
+    "DET": "Detroit Tigers",
+    "HOU": "Houston Astros",
+    "KC": "Kansas City Royals",
+    "KCR": "Kansas City Royals",
+    "LAA": "Los Angeles Angels",
+    "LAD": "Los Angeles Dodgers",
+    "MIA": "Miami Marlins",
+    "MIL": "Milwaukee Brewers",
+    "MIN": "Minnesota Twins",
+    "NYM": "New York Mets",
+    "NYY": "New York Yankees",
+    "OAK": "Athletics",
+    "ATH": "Athletics",
+    "PHI": "Philadelphia Phillies",
+    "PIT": "Pittsburgh Pirates",
+    "SD": "San Diego Padres",
+    "SDP": "San Diego Padres",
+    "SEA": "Seattle Mariners",
+    "SF": "San Francisco Giants",
+    "SFG": "San Francisco Giants",
+    "STL": "St. Louis Cardinals",
+    "TB": "Tampa Bay Rays",
+    "TBR": "Tampa Bay Rays",
+    "TEX": "Texas Rangers",
+    "TOR": "Toronto Blue Jays",
+    "WSH": "Washington Nationals",
+}
 
 # ── Position normalizer ───────────────────────────────────────────────────────
 
@@ -118,6 +162,163 @@ def _to_float(v) -> float:
 
 def _norm_team(v) -> str:
     return str(v or "").strip().upper()
+
+
+def _norm_name(v: str) -> str:
+    return "".join(ch for ch in str(v or "").strip().lower() if ch.isalnum())
+
+
+def _load_odds_api_key(explicit: str = "") -> str:
+    key = str(explicit or "").strip() or str(os.getenv("ODDS_API_KEY", "")).strip()
+    if key:
+        return key
+    env_path = _REPO_ROOT / ".env"
+    if not env_path.is_file():
+        return ""
+    try:
+        for raw in env_path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, _, val = line.partition("=")
+            if k.strip() == "ODDS_API_KEY":
+                return val.strip().strip('"').strip("'")
+    except OSError:
+        return ""
+    return ""
+
+
+def fetch_game_odds(
+    sport_key: str,
+    date_str: str,
+    api_key: str,
+) -> tuple[pd.DataFrame, str]:
+    """
+    Fetch totals/spreads from Odds API with daily cache fallback.
+    Returns (game_odds_df, requests_remaining).
+    """
+    cache_path = _REPO_ROOT / "data" / "cache" / f"odds_{ODDS_CACHE_SLUG}_{date_str}.json"
+    if cache_path.is_file():
+        try:
+            payload = json.loads(cache_path.read_text(encoding="utf-8"))
+            if str(payload.get("date", ""))[:10] == date_str:
+                rows = payload.get("rows", [])
+                rem = str(payload.get("requests_remaining", "cache"))
+                return pd.DataFrame(rows), rem
+        except Exception:
+            pass
+
+    if not api_key:
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), ""
+
+    params = {
+        "apiKey": api_key,
+        "regions": "us",
+        "markets": "totals,spreads",
+        "oddsFormat": "american",
+        "dateFormat": "iso",
+    }
+    url = f"{ODDS_API_BASE}/sports/{sport_key}/odds"
+    try:
+        resp = requests.get(url, params=params, timeout=25)
+    except Exception as exc:
+        print(f"[ODDS] MLB: fetch failed ({exc})")
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), ""
+
+    remaining = str(resp.headers.get("x-requests-remaining", ""))
+    if resp.status_code != 200:
+        print(f"[ODDS] MLB: HTTP {resp.status_code} — using null odds")
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), remaining
+
+    try:
+        rem_i = int(remaining)
+    except Exception:
+        rem_i = 9999
+    if rem_i < 50:
+        print(f"[ODDS] MLB: requests_remaining={remaining} (<50) — skipping live fetch and using cache/null")
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), remaining
+
+    try:
+        games = resp.json()
+    except Exception:
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), remaining
+    if not isinstance(games, list):
+        return pd.DataFrame(columns=["home_team", "away_team", "game_total", "home_spread", "away_spread", "game_date"]), remaining
+
+    rows = []
+    for g in games:
+        home = str(g.get("home_team", "")).strip()
+        away = str(g.get("away_team", "")).strip()
+        game_date = str(g.get("commence_time", ""))[:10]
+        total = None
+        home_spread = None
+        away_spread = None
+        for bm in g.get("bookmakers", []) or []:
+            for m in bm.get("markets", []) or []:
+                key = str(m.get("key", ""))
+                outcomes = m.get("outcomes", []) or []
+                if key == "totals" and total is None:
+                    over = next((o for o in outcomes if str(o.get("name", "")).lower() == "over"), None)
+                    if over is not None:
+                        total = pd.to_numeric(over.get("point"), errors="coerce")
+                        total = None if pd.isna(total) else float(total)
+                elif key == "spreads":
+                    for o in outcomes:
+                        nm = str(o.get("name", "")).strip().lower()
+                        pt = pd.to_numeric(o.get("point"), errors="coerce")
+                        if pd.isna(pt):
+                            continue
+                        if nm == home.lower() and home_spread is None:
+                            home_spread = float(pt)
+                        elif nm == away.lower() and away_spread is None:
+                            away_spread = float(pt)
+            if total is not None and home_spread is not None and away_spread is not None:
+                break
+        rows.append(
+            {
+                "home_team": home,
+                "away_team": away,
+                "game_total": total,
+                "home_spread": home_spread,
+                "away_spread": away_spread,
+                "game_date": game_date,
+            }
+        )
+
+    out = pd.DataFrame(rows)
+    try:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(
+            json.dumps(
+                {
+                    "date": date_str,
+                    "sport_key": sport_key,
+                    "requests_remaining": remaining,
+                    "saved_at": datetime.utcnow().isoformat(),
+                    "rows": out.to_dict(orient="records"),
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+    except Exception:
+        pass
+    return out, remaining
+
+
+def _game_key(v1: str, v2: str) -> tuple[str, str]:
+    a = _norm_name(v1)
+    b = _norm_name(v2)
+    return (a, b) if a <= b else (b, a)
+
+
+def _team_for_match(v: str) -> str:
+    if pd.isna(v):
+        return ""
+    raw = _norm_team(v)
+    if not raw or raw in {"NAN", "NONE", "NULL"}:
+        return ""
+    return MLB_TEAM_NAME_MAP.get(raw, raw)
 
 
 def _parse_player_id(v: str) -> str:
@@ -245,6 +446,8 @@ def main() -> None:
     ap.add_argument("--input",  default="step5_mlb_hit_rates.csv")
     ap.add_argument("--output", default="step6_mlb_role_context.csv")
     ap.add_argument("--stats-cache", default="mlb_stats_cache.csv")
+    ap.add_argument("--date", default="", help="Slate date YYYY-MM-DD (default from data/start_time)")
+    ap.add_argument("--odds-api-key", default="", help="Override ODDS_API_KEY for game totals/spreads")
     args = ap.parse_args()
 
     print(f"→ Loading: {args.input}")
@@ -310,6 +513,60 @@ def main() -> None:
         [_compute_same_series_hit_rate(df.iloc[i], stats_cache, team_lookup_cache) for i in range(len(df))],
         index=df.index,
     )
+
+    # --- game_total + spread from Odds API ---
+    inferred_date = str(args.date or "").strip()[:10]
+    if len(inferred_date) != 10:
+        if "game_date" in df.columns:
+            gd = pd.to_datetime(df["game_date"], errors="coerce").dropna()
+            if len(gd):
+                inferred_date = gd.dt.strftime("%Y-%m-%d").mode().iloc[0]
+        if not inferred_date and "start_time" in df.columns:
+            st = pd.to_datetime(df["start_time"], errors="coerce").dropna()
+            if len(st):
+                inferred_date = st.dt.strftime("%Y-%m-%d").mode().iloc[0]
+    if len(inferred_date) != 10:
+        inferred_date = datetime.utcnow().strftime("%Y-%m-%d")
+
+    odds_api_key = _load_odds_api_key(args.odds_api_key)
+    odds_df, req_remaining = fetch_game_odds(MLB_SPORT_KEY, inferred_date, odds_api_key)
+    game_lookup: dict[tuple[str, str], dict] = {}
+    if not odds_df.empty:
+        for _, r in odds_df.iterrows():
+            game_lookup[_game_key(str(r.get("home_team", "")), str(r.get("away_team", "")))] = {
+                "game_total": pd.to_numeric(r.get("game_total"), errors="coerce"),
+                "home_spread": pd.to_numeric(r.get("home_spread"), errors="coerce"),
+                "away_spread": pd.to_numeric(r.get("away_spread"), errors="coerce"),
+            }
+
+    matched = 0
+    game_total_vals: list[float] = []
+    spread_vals: list[float] = []
+    for _, row in df.iterrows():
+        home = _team_for_match(row.get("pp_home_team", ""))
+        away = _team_for_match(row.get("pp_away_team", ""))
+        team = _team_for_match(row.get("team", ""))
+        opp = _team_for_match(row.get("opp_team", ""))
+        if not home or not away:
+            home = _team_for_match(row.get("team_1", ""))
+            away = _team_for_match(row.get("team_2", ""))
+        if (not home or not away) and team and opp:
+            home, away = team, opp
+        rec = game_lookup.get(_game_key(home, away)) if home and away else None
+        if rec is None:
+            game_total_vals.append(np.nan)
+            spread_vals.append(np.nan)
+            continue
+        gt = rec.get("game_total")
+        hs = rec.get("home_spread")
+        a_s = rec.get("away_spread")
+        spread = hs if _norm_name(team) == _norm_name(home) else a_s if _norm_name(team) == _norm_name(away) else np.nan
+        game_total_vals.append(gt if pd.notna(gt) else np.nan)
+        spread_vals.append(spread if pd.notna(spread) else np.nan)
+        matched += 1
+    df["game_total"] = game_total_vals
+    df["spread"] = spread_vals
+    print(f"[ODDS] MLB: {matched} games matched, requests_remaining={req_remaining or 'n/a'}")
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     copy_pipeline_output_to_dated_dirs(

@@ -117,7 +117,7 @@ def write_sheet(wb, name, data):
 
     col_widths = {
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
-        'Team': 6, 'Opp': 6, 'Days Rest': 9, 'B2B': 6, 'Opp Rest': 9, 'Opp B2B': 8, 'Game Date': 12, 'Game Time': 10,
+        'Team': 6, 'Opp': 6, 'Days Rest': 9, 'B2B': 6, 'Opp Rest': 9, 'Opp B2B': 8, 'Game Total': 10, 'Spread': 8, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7,
         'Direction': 9, 'Edge': 7, 'Abs Edge': 7, 'Projection': 10,
         'ML Prob': 9, 'Edge Score': 10, 'Blended Score': 12,
@@ -183,7 +183,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
 
     keep = [
         'tier', 'rank_score',
-        'player', 'pos', 'team', 'opp_team', 'days_rest', 'is_back_to_back', 'opp_days_rest', 'opp_b2b', 'game_date', 'game_time',
+        'player', 'pos', 'team', 'opp_team', 'days_rest', 'is_back_to_back', 'opp_days_rest', 'opp_b2b', 'game_total', 'spread', 'game_date', 'game_time',
         'prop_type', 'pick_type', 'line',
         'final_bet_direction',
         'edge', 'projection',
@@ -236,6 +236,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'is_back_to_back': 'B2B',
         'opp_days_rest': 'Opp Rest',
         'opp_b2b': 'Opp B2B',
+        'game_total': 'Game Total',
+        'spread': 'Spread',
         'game_date': 'Game Date', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'final_bet_direction': 'Direction',

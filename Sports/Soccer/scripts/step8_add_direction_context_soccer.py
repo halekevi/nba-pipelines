@@ -118,7 +118,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
 
     col_widths = {
         "Tier": 6, "Rank Score": 10, "Player": 20, "Pos": 6, "Pos Group": 9,
-        "Team": 12, "Opp": 12, "Days Rest": 9, "B2B": 6, "Opp Rest": 9, "Opp B2B": 8, "League": 12, "Game Time": 16,
+        "Team": 12, "Opp": 12, "Days Rest": 9, "B2B": 6, "Opp Rest": 9, "Opp B2B": 8, "Game Total": 10, "Spread": 8, "League": 12, "Game Time": 16,
         "ESPN ID": 10,
         "Prop": 18, "Pick Type": 10, "Line": 7,
         "Direction": 9, "Edge": 7, "Projection": 10,
@@ -159,7 +159,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     keep = [
         "tier", "rank_score",
-        "player", "pos", "position_group", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b", "league", "game_time",
+        "player", "pos", "position_group", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b", "game_total", "spread", "league", "game_time",
         "espn_player_id",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
@@ -226,6 +226,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "is_back_to_back": "B2B",
         "opp_days_rest": "Opp Rest",
         "opp_b2b": "Opp B2B",
+        "game_total": "Game Total",
+        "spread": "Spread",
         "espn_player_id": "ESPN ID",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
