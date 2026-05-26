@@ -728,11 +728,31 @@ def fetch_cbb(date_str: str, con: sqlite3.Connection) -> int:
 
 
 # ── NHL ───────────────────────────────────────────────────────────────────────
+# ESPN NHL summary: label "SOG" = shootoutGoals; shots on goal = keys.shotsTotal (label "S").
+_NHL_ESPN_KEY_PREF: dict[str, list[str]] = {
+    "goals":         ["goals"],
+    "assists":       ["assists"],
+    "points":        ["points"],
+    "shots_on_goal": ["shotsTotal"],
+    "hits":          ["hits"],
+    "blocked_shots": ["blockedShots"],
+    "pim":           ["penaltyMinutes"],
+    "plus_minus":    ["plusMinus"],
+    "pp_goals":      ["powerPlayGoals"],
+    "pp_assists":    ["powerPlayAssists"],
+    "faceoffs_won":  ["faceoffsWon"],
+    "toi":           ["timeOnIce"],
+    "saves":         ["saves"],
+    "goals_allowed": ["goalsAgainst"],
+}
+
+_NHL_DEBUG_LOGGED = False
+
 NHL_STAT_MAP = {
     "goals":         ["G", "GOALS"],
     "assists":       ["A", "ASSISTS"],
     "points":        ["PTS", "P"],
-    "shots_on_goal": ["SOG", "S", "SHOTS"],
+    "shots_on_goal": ["S", "SHOTS"],
     "hits":          ["HIT", "HITS", "HT"],       # ESPN returns "HT"
     "blocked_shots": ["BS", "BKS", "BLOCKED"],
     "pim":           ["PIM"],
@@ -765,21 +785,40 @@ def _parse_toi(v) -> float | None:
         return None
 
 
+def _nhl_parse_stat_value(raw, key: str):
+    if raw is None or raw in ("--", ""):
+        return None
+    if key == "toi":
+        return _parse_toi(raw)
+    try:
+        return float(raw)
+    except (ValueError, TypeError):
+        return None
+
+
 def _nhl_stat(lmap, key):
     for alias in NHL_STAT_MAP.get(key, [key.upper()]):
         norm = re.sub(r"[^A-Z0-9]", "", alias.upper())
         if norm in lmap:
-            if key == "toi":
-                return _parse_toi(lmap[norm])
-            try:
-                return float(lmap[norm])
-            except (ValueError, TypeError):
-                pass
+            val = _nhl_parse_stat_value(lmap[norm], key)
+            if val is not None:
+                return val
     return None
+
+
+def _nhl_stat_dual(kmap: dict, lmap: dict, key: str):
+    """Prefer ESPN semantic keys[] (shotsTotal); fall back to label map."""
+    for ek in _NHL_ESPN_KEY_PREF.get(key, []):
+        if ek in kmap:
+            val = _nhl_parse_stat_value(kmap.get(ek), key)
+            if val is not None:
+                return val
+    return _nhl_stat(lmap, key)
 
 
 def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                          home: str, away: str) -> list[dict]:
+    global _NHL_DEBUG_LOGGED
     rows = []
     base = {
         "game_date": game_date, "event_id": event_id,
@@ -789,7 +828,8 @@ def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
     for tb in box.get("boxscore", {}).get("players", []):
         t_abbr = tb.get("team", {}).get("abbreviation", "")
         for sg in tb.get("statistics", []):
-            labels = sg.get("labels") or sg.get("keys") or []
+            labels = sg.get("labels") or []
+            espn_keys = sg.get("keys") or []
             norm_labels = []
             for lbl in labels:
                 raw = str(lbl).upper().strip()
@@ -813,11 +853,21 @@ def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                 if not stats or all(s in ("--", "", None) for s in stats):
                     continue
                 lmap = {lbl: stats[i] for i, lbl in enumerate(norm_labels) if i < len(stats)}
+                kmap: dict[str, object] = {}
+                if espn_keys and len(espn_keys) == len(stats):
+                    kmap = {str(espn_keys[i]): stats[i] for i in range(len(stats))}
+
+                if kmap and not _NHL_DEBUG_LOGGED:
+                    print(
+                        "  [NHL boxscore debug] first player="
+                        f"{name!r} espn_keys={list(kmap.keys())} raw_stats={stats}"
+                    )
+                    _NHL_DEBUG_LOGGED = True
 
                 if is_goalie_group:
-                    sv = _nhl_stat(lmap, "saves")
-                    ga = _nhl_stat(lmap, "goals_allowed")
-                    toi = _nhl_stat(lmap, "toi")
+                    sv = _nhl_stat_dual(kmap, lmap, "saves")
+                    ga = _nhl_stat_dual(kmap, lmap, "goals_allowed")
+                    toi = _nhl_stat_dual(kmap, lmap, "toi")
                     if all(x is None for x in [sv, ga, toi]):
                         continue
                     rows.append({
@@ -825,28 +875,28 @@ def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                         "player": name, "team": t_abbr, "position": "G",
                         "goals": None, "assists": None, "points": None,
                         "shots_on_goal": None, "hits": None, "blocked_shots": None,
-                        "pim": _nhl_stat(lmap, "pim"), "plus_minus": None,
+                        "pim": _nhl_stat_dual(kmap, lmap, "pim"), "plus_minus": None,
                         "pp_points": None, "faceoffs_won": None, "toi": toi,
                         "saves": sv, "goals_allowed": ga,
                     })
                     continue
 
-                g = _nhl_stat(lmap, "goals")
-                ast = _nhl_stat(lmap, "assists")
-                pts = (g + ast) if g is not None and ast is not None else _nhl_stat(lmap, "points")
-                sog = _nhl_stat(lmap, "shots_on_goal")
-                hits = _nhl_stat(lmap, "hits")
-                bs = _nhl_stat(lmap, "blocked_shots")
-                pim = _nhl_stat(lmap, "pim")
-                pm = _nhl_stat(lmap, "plus_minus")
-                ppp = _nhl_stat(lmap, "pp_points")
+                g = _nhl_stat_dual(kmap, lmap, "goals")
+                ast = _nhl_stat_dual(kmap, lmap, "assists")
+                pts = (g + ast) if g is not None and ast is not None else _nhl_stat_dual(kmap, lmap, "points")
+                sog = _nhl_stat_dual(kmap, lmap, "shots_on_goal")
+                hits = _nhl_stat_dual(kmap, lmap, "hits")
+                bs = _nhl_stat_dual(kmap, lmap, "blocked_shots")
+                pim = _nhl_stat_dual(kmap, lmap, "pim")
+                pm = _nhl_stat_dual(kmap, lmap, "plus_minus")
+                ppp = _nhl_stat_dual(kmap, lmap, "pp_points")
                 if ppp is None:
-                    ppg = _nhl_stat(lmap, "pp_goals")
-                    ppa = _nhl_stat(lmap, "pp_assists")
+                    ppg = _nhl_stat_dual(kmap, lmap, "pp_goals")
+                    ppa = _nhl_stat_dual(kmap, lmap, "pp_assists")
                     if ppg is not None or ppa is not None:
                         ppp = float(ppg or 0.0) + float(ppa or 0.0)
-                fow = _nhl_stat(lmap, "faceoffs_won")
-                toi = _nhl_stat(lmap, "toi")
+                fow = _nhl_stat_dual(kmap, lmap, "faceoffs_won")
+                toi = _nhl_stat_dual(kmap, lmap, "toi")
 
                 if all(x is None for x in [g, ast, sog, hits]):
                     continue

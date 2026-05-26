@@ -52,16 +52,78 @@ def _current_season() -> str:
 
 
 def _build_team_stats_url() -> str:
+    """NHL /team/summary endpoint (bulk /team + gameTypeId cayenne returns 400)."""
     s = _current_season()
     return (
-        f"{NHL_API}/team?isAggregate=false&isGame=false"
+        f"{NHL_API}/team/summary?isAggregate=false&isGame=false"
         f"&sort=%5B%7B%22property%22%3A%22gamesPlayed%22%2C%22direction%22%3A%22DESC%22%7D%5D"
         f"&start=0&limit=50&factCayenneExp=gamesPlayed%3E%3D1"
         f"&cayenneExp=gameTypeId%3D2%20and%20seasonId%3E%3D{s}%20and%20seasonId%3C%3D{s}"
     )
 
 
-TEAM_STATS_URL = _build_team_stats_url()
+def _build_name_to_abbrev_from_standings() -> dict[str, str]:
+    """Map teamFullName (stats API) -> tri-code from api-web standings."""
+    data = fetch_json(STANDINGS_URL)
+    out: dict[str, str] = {
+        "utah hockey club": "UTA",
+    }
+    for entry in data.get("standings", []):
+        abbrev = (entry.get("teamAbbrev") or {}).get("default", "")
+        name = (entry.get("teamName") or {}).get("default", "")
+        if abbrev and name:
+            out[name.strip().lower()] = abbrev.strip().upper()
+    return out
+
+
+def _stats_from_team_record(rec: dict) -> dict:
+    return {
+        "opp_gaa": round(float(rec.get("goalsAgainstPerGame", 0) or 0), 3),
+        "opp_saa": round(float(rec.get("shotsAgainstPerGame", 0) or 0), 3),
+        "opp_pk_pct": round(float(rec.get("penaltyKillPct", 0) or 0), 3),
+        "opp_gf_per_game": round(float(rec.get("goalsForPerGame", 0) or 0), 3),
+        "opp_sf_per_game": round(float(rec.get("shotsForPerGame", 0) or 0), 3),
+        "opp_pp_pct": round(float(rec.get("powerPlayPct", 0) or 0), 3),
+        "opp_wins": int(rec.get("wins", 0) or 0),
+        "opp_gp": int(rec.get("gamesPlayed", 0) or 0),
+    }
+
+
+def _parse_team_summary_records(records: list, name_to_abbr: dict[str, str]) -> dict:
+    teams: dict = {}
+    for rec in records:
+        abbrev = str(rec.get("teamAbbrev", "") or "").strip().upper()
+        if not abbrev:
+            full = str(rec.get("teamFullName", "") or "").strip().lower()
+            abbrev = name_to_abbr.get(full, "")
+        if not abbrev:
+            continue
+        teams[abbrev] = _stats_from_team_record(rec)
+    return teams
+
+
+def _standings_fallback_teams() -> dict:
+    """Goals-only fallback when /team/summary is unavailable."""
+    data = fetch_json(STANDINGS_URL)
+    teams: dict = {}
+    for entry in data.get("standings", []):
+        abbrev = entry.get("teamAbbrev", {}).get("default", "")
+        if not abbrev:
+            continue
+        gp = int(entry.get("gamesPlayed", 1) or 1)
+        ga = int(entry.get("goalAgainst", 0) or 0)
+        gf = int(entry.get("goalFor", 0) or 0)
+        teams[abbrev.upper()] = {
+            "opp_gaa": round(ga / max(gp, 1), 3),
+            "opp_saa": 0.0,
+            "opp_pk_pct": 0.0,
+            "opp_gf_per_game": round(gf / max(gp, 1), 3),
+            "opp_sf_per_game": 0.0,
+            "opp_pp_pct": 0.0,
+            "opp_wins": int(entry.get("wins", 0) or 0),
+            "opp_gp": gp,
+        }
+    return teams
 
 
 def fetch_json(url: str) -> dict:
@@ -78,48 +140,34 @@ def fetch_team_defense_stats() -> dict:
     """
     Returns dict keyed by team abbrev with defensive metrics.
     """
-    print("Fetching NHL team stats from NHL API...")
-    data = fetch_json(TEAM_STATS_URL)
-    records = data.get("data", [])
+    print("Fetching NHL team stats from NHL API (/team/summary)...")
+    name_to_abbr = _build_name_to_abbrev_from_standings()
+    summary_url = _build_team_stats_url()
 
-    teams = {}
-    for rec in records:
-        abbrev = rec.get("teamAbbrev", "")
-        if not abbrev:
-            continue
-        teams[abbrev.upper()] = {
-            "opp_gaa": round(float(rec.get("goalsAgainstPerGame", 0) or 0), 3),
-            "opp_saa": round(float(rec.get("shotsAgainstPerGame", 0) or 0), 3),
-            "opp_pk_pct": round(float(rec.get("penaltyKillPct", 0) or 0), 3),
-            "opp_gf_per_game": round(float(rec.get("goalsForPerGame", 0) or 0), 3),
-            "opp_sf_per_game": round(float(rec.get("shotsForPerGame", 0) or 0), 3),
-            "opp_pp_pct": round(float(rec.get("powerPlayPct", 0) or 0), 3),
-            "opp_wins": int(rec.get("wins", 0) or 0),
-            "opp_gp": int(rec.get("gamesPlayed", 0) or 0),
-        }
+    def _load_summary() -> dict:
+        data = fetch_json(summary_url)
+        return _parse_team_summary_records(data.get("data", []), name_to_abbr)
+
+    teams = _load_summary()
+    if not teams:
+        print("  /team/summary empty — retrying once...")
+        time.sleep(0.3)
+        teams = _load_summary()
 
     if not teams:
-        # Fallback: try standings for basic info
-        print("  Falling back to standings endpoint...")
-        data2 = fetch_json(STANDINGS_URL)
-        standings = data2.get("standings", [])
-        for entry in standings:
-            abbrev = entry.get("teamAbbrev", {}).get("default", "")
-            if not abbrev:
-                continue
-            gp = int(entry.get("gamesPlayed", 1) or 1)
-            ga = int(entry.get("goalAgainst", 0) or 0)
-            gf = int(entry.get("goalFor", 0) or 0)
-            teams[abbrev.upper()] = {
-                "opp_gaa": round(ga / max(gp, 1), 3),
-                "opp_saa": 0.0,
-                "opp_pk_pct": 0.0,
-                "opp_gf_per_game": round(gf / max(gp, 1), 3),
-                "opp_sf_per_game": 0.0,
-                "opp_pp_pct": 0.0,
-                "opp_wins": int(entry.get("wins", 0) or 0),
-                "opp_gp": gp,
-            }
+        print("  /team/summary failed — trying standings (partial), then /team/summary enrich...")
+        teams = _standings_fallback_teams()
+        enrich = _load_summary()
+        for abbrev, stats in enrich.items():
+            if abbrev not in teams:
+                teams[abbrev] = stats
+            elif teams[abbrev].get("opp_saa") in (0, 0.0, None):
+                teams[abbrev].update(stats)
+    elif any(v.get("opp_saa") in (0, 0.0, None) for v in teams.values()):
+        enrich = _load_summary()
+        for abbrev, stats in enrich.items():
+            if abbrev in teams and teams[abbrev].get("opp_saa") in (0, 0.0, None):
+                teams[abbrev].update(stats)
 
     print(f"  Got defense stats for {len(teams)} teams")
     return teams
