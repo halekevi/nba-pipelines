@@ -9046,6 +9046,9 @@ def filter_eligible(
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         _apply_gate(~prop_norm.isin(TICKET_EXCLUDED_PROPS), "prop_banned", "after_prop_ban")
+    if "stat_coverage" in df.columns:
+        cov = df["stat_coverage"].astype(str).str.strip().str.lower()
+        _apply_gate(~cov.eq("unsupported"), "stat_coverage_unsupported", "after_stat_coverage")
     _apply_gate(~_fantasy_prop_mask(df), "fantasy_score_excluded", "after_fantasy_score")
     before_dir = df[mask].copy()
     after_dir = apply_directional_l5_hr(before_dir, DIRECTIONAL_HR_THRESHOLDS, DEFAULT_DIRECTIONAL_THRESHOLD)
@@ -14201,8 +14204,10 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         '<span class="ticket-filter-sort-label">Sort</span>'
         '<select id="ticket-sort-select" class="ticket-filter-sort">'
         '<option value="ev_desc" selected>EV ↓</option>'
-        '<option value="pwin_desc">P(WIN) ↓</option>'
         '<option value="ev_asc">EV ↑</option>'
+        '<option value="pwin_desc">P(WIN) ↓</option>'
+        '<option value="pwin_asc">P(WIN) ↑</option>'
+        '<option value="legs_desc">Legs ↓</option>'
         '<option value="group">Group #</option>'
         '<option value="hit_rate">Hit Rate</option>'
         '</select>'
@@ -14828,9 +14833,10 @@ def render_tickets_body_html(
         d_oi = int(ent.get("original_index", 0))
         rec_cls = d_ev if d_ev in ("strong", "ok", "marginal", "low", "skip") else "skip"
         d_plat = _ticket_group_platforms_attr(group)
+        d_n_legs = int(n_legs) if n_legs else _ticket_group_leg_count(group_name)
 
         parts.append(f'''
-<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-p-win="{_fmt(d_p_win_score, 6)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}" data-platforms="{_h(d_plat)}">
+<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-p-win="{_fmt(d_p_win_score, 6)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-n-legs="{d_n_legs}" data-original-index="{d_oi}" data-platforms="{_h(d_plat)}">
   <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="false">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
@@ -15239,6 +15245,18 @@ def render_tickets_body_html(
     }
     if(sortMode === 'pwin_desc'){
       groups.sort(function(a,b){ return parseNum(b, 'data-p-win') - parseNum(a, 'data-p-win'); });
+      return;
+    }
+    if(sortMode === 'pwin_asc'){
+      groups.sort(function(a,b){ return parseNum(a, 'data-p-win') - parseNum(b, 'data-p-win'); });
+      return;
+    }
+    if(sortMode === 'legs_desc'){
+      groups.sort(function(a,b){
+        var dl = parseNum(b, 'data-n-legs') - parseNum(a, 'data-n-legs');
+        if(dl !== 0) return dl;
+        return parseNum(b, 'data-ev-score') - parseNum(a, 'data-ev-score');
+      });
       return;
     }
     groups.sort(function(a,b){ return parseNum(b, 'data-ev-score') - parseNum(a, 'data-ev-score'); });
