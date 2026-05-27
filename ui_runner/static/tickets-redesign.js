@@ -147,19 +147,7 @@
       filterBar.parentNode.insertBefore(strip, filterBar);
     }
 
-    /* 4. Sort select with Legs option */
-    if (filterBar && !filterBar.querySelector('.rd-sort-select')) {
-      var sel = document.createElement('select');
-      sel.className = 'rd-sort-select';
-      sel.innerHTML = '<option value="ev">Sort: EV</option>' +
-                      '<option value="legs">Sort: Legs</option>' +
-                      '<option value="pwin">Sort: P(win)</option>';
-      sel.addEventListener('change', function() { rdSortTickets(built, sel.value); });
-      var spacer = filterBar.querySelector('.ticket-filter-bar-spacer');
-      if (spacer) filterBar.insertBefore(sel, spacer); else filterBar.appendChild(sel);
-    }
-
-    /* 5. Hero strip — top 3 by EV */
+    /* 4. Hero strip — top 3 by EV */
     if (!built.querySelector('.rd-hero-strip')) {
       var heroData = [];
       allTickets.forEach(function (t) {
