@@ -770,7 +770,7 @@ def main() -> None:
     ap.add_argument("--max_pages",  type=int, default=10)
     ap.add_argument("--retries",    type=int, default=5)
     ap.add_argument("--min_rows",   type=int, default=50,  help="Minimum props required to consider fetch valid")
-    ap.add_argument("--min_teams",  type=int, default=4,   help="Minimum teams required to consider fetch valid")
+    ap.add_argument("--min_teams",  type=int, default=2,   help="Minimum teams required to consider fetch valid (supports playoff/light slates)")
     ap.add_argument("--raw_json",   default="",            help="Optional path to dump raw API response")
     ap.add_argument("--history",    default="",            help="Optional path template for history CSV (use {ts})")
     ap.add_argument("--date", default=_default_et_date_str(), help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD).")
