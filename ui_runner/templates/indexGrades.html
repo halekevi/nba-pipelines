@@ -2046,18 +2046,8 @@ function ensureFrameCollapseCss(doc) {
   style.textContent = `
     /* v20260430mobilecol — hub-injected slate; column stack ≤768px + coarse pick-tier (desktop keeps 2-col). */
     /* Embedded slate: transparent body + fixed ::before/::after glows composite badly in WebView over glass (reads as film grain). */
-    html{
-      background:#0a0a14!important;
-      min-height:0!important;
-      height:auto!important;
-      max-height:none!important;
-    }
-    body{
-      background:#0a0a14!important;
-      min-height:0!important;
-      height:auto!important;
-      max-height:none!important;
-    }
+    html{background:#0a0a14!important;}
+    body{background:#0a0a14!important;}
     body::before,body::after{display:none!important;}
     /* Pick-type / tier badges: never wrap — table cells default min-width:auto can still squeeze inline-block text. */
     .chip,.chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std{
