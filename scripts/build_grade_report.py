@@ -407,8 +407,8 @@ def combined_summary(df):
 # ── CSS ────────────────────────────────────────────────────────────────────────
 CSS = """:root{--bg:#070a10;--bg2:#0c1018;--bg3:#111722;--border:#1c2333;--bd2:#243044;--text:#e8edf5;--muted:#4a5568;--muted2:#6b7a94;--blue:#3b82f6;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6}
 *{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable;height:100%}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px}
+html{overflow-x:hidden;overflow-y:visible;scrollbar-gutter:stable;min-height:0;height:auto;max-height:none}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:0;height:auto;max-height:none;padding-bottom:60px}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(59,130,246,.04) 0%,transparent 70%);pointer-events:none}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(16,185,129,.03) 0%,transparent 70%);pointer-events:none}
 header{background:rgba(7,10,16,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
