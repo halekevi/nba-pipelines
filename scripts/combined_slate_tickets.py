@@ -2815,6 +2815,8 @@ def _sport_ticket_gated(sport: str) -> tuple[bool, str]:
     su = str(sport or "").strip().upper()
     if not su or su in ALWAYS_ALLOW_SPORTS:
         return False, ""
+    if su == "NFL" and NFL_TICKET_GATE:
+        return True, NFL_TICKET_GATE_REASON
     if NBA1H_TICKET_GATE and su == "NBA1H":
         return True, _nba1h_ticket_gate_reason()
     global _MODEL_GATE_CACHE
@@ -2858,6 +2860,8 @@ TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL", "CFB")
 # NFL — Phase 1 scaffold only; keep off slate until step8 + historical hit rates exist (Sept 2026).
 # Reference: {"NFL": False}  # activate September 2026 — do not add "NFL" to ACTIVE_SPORTS yet.
+NFL_TICKET_GATE = True
+NFL_TICKET_GATE_REASON = "Off-season scaffold — activate Week 1 2026"
 
 # When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
 HIGH_CONVICTION_LEG_MIN_HIT_RATE = {

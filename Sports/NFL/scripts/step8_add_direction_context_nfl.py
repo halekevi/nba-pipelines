@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# NFL SCAFFOLD — inactive until September 2026
 """
 NFL step8 — formatted direction workbook for combined_slate_tickets / web UI.
 
