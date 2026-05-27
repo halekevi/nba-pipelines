@@ -1266,7 +1266,19 @@ def _ticket_meets_min_web_payout(ticket: dict, *, group_name: str = "") -> bool:
             pass
     if not payout_vals:
         return False
-    return min(payout_vals) >= float(MIN_WEB_PAYOUT_X)
+    min_required = float(MIN_WEB_PAYOUT_X)
+    gn_u = str(group_name or "").upper()
+    if "GOBLIN" in gn_u:
+        m = re.search(r"(\d+)\s*-\s*LEG", gn_u)
+        if m:
+            try:
+                n_legs = int(m.group(1))
+                if n_legs in (3, 4):
+                    # Allow short goblin slips on /tickets; these usually do not clear the 3x floor.
+                    min_required = float(MIN_WEB_PAYOUT_X_GOBLIN_SHORT)
+            except (TypeError, ValueError):
+                pass
+    return min(payout_vals) >= min_required
 
 
 def _ticket_primary_sport(ticket: dict) -> str:
@@ -2507,6 +2519,7 @@ MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets: hard floor for displayed/generated slip payout multipliers.
 MIN_WEB_PAYOUT_X: float = 3.0
+MIN_WEB_PAYOUT_X_GOBLIN_SHORT: float = 2.0
 DEBUG_PAYOUT_DIAGNOSTIC: bool = os.getenv("PROPORACLE_DEBUG_PAYOUT", "false").lower() == "true"
 
 # /tickets page target volumes per sport after EV gate.
@@ -12896,7 +12909,13 @@ def main():
             return "MARGINAL"
         return "SKIP"
 
-    def _build_mode_ticket(rows: list[dict], sport_label: str, mode: str) -> dict | None:
+    def _build_mode_ticket(
+        rows: list[dict],
+        sport_label: str,
+        mode: str,
+        *,
+        min_payout_x: float | None = None,
+    ) -> dict | None:
         flow = "flex" if mode == "flex" else "power"
         structure = "flex" if mode == "flex" else "power"
         t = _finalize_structure_ticket_dict(
@@ -12910,9 +12929,10 @@ def main():
         )
         if t is None:
             return None
-        if mode == "power" and float(t.get("power_payout") or 0.0) < float(MIN_WEB_PAYOUT_X):
+        min_payout_req = float(min_payout_x) if min_payout_x is not None else float(MIN_WEB_PAYOUT_X)
+        if mode == "power" and float(t.get("power_payout") or 0.0) < min_payout_req:
             return None
-        if mode == "flex" and float(t.get("flex_payout") or 0.0) < float(MIN_WEB_PAYOUT_X):
+        if mode == "flex" and float(t.get("flex_payout") or 0.0) < min_payout_req:
             return None
         t["ticket_type"] = "Flex" if mode == "flex" else "Power Play"
         t["ev_tag"] = _ev_tag(t)
@@ -13116,10 +13136,14 @@ def main():
                     sel_idx = fixed
                 rows = [work.iloc[i].to_dict() for i in sel_idx]
                 tickets: list[dict] = []
-                p_ticket = _build_mode_ticket(rows, sport_label, "power")
+                min_px = None
+                gp_u = str(group_prefix or "").upper()
+                if "GOBLIN" in gp_u and int(n_legs) in (3, 4):
+                    min_px = float(MIN_WEB_PAYOUT_X_GOBLIN_SHORT)
+                p_ticket = _build_mode_ticket(rows, sport_label, "power", min_payout_x=min_px)
                 if p_ticket is not None:
                     tickets.append(p_ticket)
-                f_ticket = _build_mode_ticket(rows, sport_label, "flex")
+                f_ticket = _build_mode_ticket(rows, sport_label, "flex", min_payout_x=min_px)
                 if f_ticket is not None:
                     tickets.append(f_ticket)
                 if not tickets:
