@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import unicodedata
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -249,6 +250,48 @@ def _def_rank_signal(row: pd.Series) -> float:
     return float(signal if direction == "OVER" else -signal)
 
 
+def _norm_player_name(s: object) -> str:
+    t = unicodedata.normalize("NFKD", str(s or "").strip().lower())
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
+def _attach_top3_def_context(out: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    """
+    Merge team top-3 vs weak-defense history from analyze_top_players_vs_defense.py
+    when that CSV exists (run before step7 in the pipeline).
+    """
+    path = repo_root / "Sports" / "WNBA" / "data" / "wnba_top3_vs_defense.csv"
+    out["team_top3_rank"] = np.nan
+    out["def_boost_hist"] = np.nan
+    out["top3_weak_overperformer"] = 0
+    if not path.exists():
+        return out
+    try:
+        t3 = pd.read_csv(path, encoding="utf-8-sig")
+    except Exception:
+        return out
+    need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak"}
+    if not need.issubset(t3.columns):
+        return out
+    sub = t3[list(need)].drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+    out["_player_norm"] = out.get("player", pd.Series([""] * len(out))).map(_norm_player_name)
+    out["_prop_norm"] = out.get("prop_norm", pd.Series([""] * len(out))).astype(str).str.lower().str.strip()
+    merged = out.merge(
+        sub,
+        left_on=["_player_norm", "_prop_norm"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_t3"),
+    )
+    merged.drop(columns=["_player_norm", "_prop_norm", "PLAYER_NORM"], inplace=True, errors="ignore")
+    merged["team_top3_rank"] = pd.to_numeric(merged.get("rank_on_team"), errors="coerce")
+    merged.drop(columns=["rank_on_team"], inplace=True, errors="ignore")
+    merged["def_boost_hist"] = pd.to_numeric(merged.get("def_boost"), errors="coerce")
+    merged["top3_weak_overperformer"] = merged.get("overperform_vs_weak", False).fillna(False).astype(int)
+    merged.drop(columns=["overperform_vs_weak"], inplace=True, errors="ignore")
+    return merged
+
+
 # ── prop norm map ─────────────────────────────────────────────────────────────
 
 _PROP_NORM_MAP = {
@@ -377,6 +420,18 @@ def main():
     out["def_rank_signal"] = def_signal
     out["def_rank_z"]      = zcol(def_signal, direction_aware=True)
 
+    out = _attach_top3_def_context(out, REPO_ROOT)
+    opp_rank_num = pd.to_numeric(out.get("OVERALL_DEF_RANK"), errors="coerce")
+    n_def = int(opp_rank_num.max()) if opp_rank_num.notna().any() else _N_TEAMS_WNBA
+    weak_opp_tonight = opp_rank_num >= np.ceil(n_def * 0.65)
+    top3_boost = (
+        out["top3_weak_overperformer"].astype(int).eq(1)
+        & out["bet_direction"].astype(str).str.upper().eq("OVER")
+        & weak_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_top3_rank"], errors="coerce").le(3)
+    )
+    out["top3_def_context"] = np.where(top3_boost, 1, 0).astype(int)
+
     line_num_filled = line_num.fillna(0)
     for col in ("stat_last5_avg","stat_last10_avg","stat_season_avg"):
         out[col+"_num"] = _to_num(out[col]) if col in out.columns else _to_num(pd.Series([""] * len(out)))
@@ -410,6 +465,7 @@ def main():
         + out["line_hit_z"].astype(float).fillna(0.0)     * 0.85
         + out["avg_vs_line_z"].astype(float).fillna(0.0)  * 0.75
         + out["def_rank_z"].astype(float).fillna(0.0)     * 0.80
+        + out["top3_def_context"].astype(float).fillna(0.0) * 0.35
         + out["prop_hr_z"].astype(float).fillna(0.0)      * 0.50
         + out["min_z"].astype(float).fillna(0.0)          * 0.25
     )

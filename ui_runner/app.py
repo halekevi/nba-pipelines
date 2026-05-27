@@ -4836,6 +4836,48 @@ def api_slate_sport_single(sport: str):
         return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 500
 
 
+@app.get("/api/wnba/matchup-edge")
+def api_wnba_matchup_edge():
+    """WNBA top-team leaders vs opponent defense ranks (Slate Explorer panel)."""
+    json_name = "wnba_matchup_edge.json"
+    path = TEMPLATES_DIR / json_name
+    if not path.is_file():
+        alt = BASE_DIR / "Sports" / "WNBA" / "data" / json_name
+        path = alt if alt.is_file() else path
+
+    def _build():
+        if path.is_file():
+            return json.loads(path.read_text(encoding="utf-8"))
+        # On-demand build when pipeline artifact missing
+        script = BASE_DIR / "Sports" / "WNBA" / "scripts" / "build_wnba_matchup_edge_json.py"
+        if script.is_file():
+            subprocess.run(
+                [sys.executable, str(script)],
+                cwd=str(BASE_DIR),
+                capture_output=True,
+                timeout=120,
+                check=False,
+            )
+            if path.is_file():
+                return json.loads(path.read_text(encoding="utf-8"))
+        return {
+            "error": "wnba_matchup_edge.json not found — run WNBA pipeline or build_wnba_matchup_edge_json.py",
+            "teams": [],
+            "categories": [],
+            "matchups": {},
+            "players_by_team_cat": {},
+        }
+
+    try:
+        return _gz_json_response(
+            f"wnba-matchup-edge-v1:{_template_json_disk_mtime(json_name) or 0}",
+            _build,
+            ttl=120.0,
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.get("/api/slate-excel")
 def api_slate_excel():
     """Return all sheets from the combined Excel with non-blank columns only.

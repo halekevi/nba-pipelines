@@ -38,7 +38,7 @@ async function fetch_smart(localPath) {
 <link rel="stylesheet" href="static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>
 :root{
-  /* Hybrid liquid-glass palette */h
+  /* Hybrid liquid-glass palette */
   --bg-main:#050505;
   --glass-bg:rgba(20,20,20,0.6);
   --glass-border:rgba(212,175,55,0.15);
@@ -62,6 +62,10 @@ async function fetch_smart(localPath) {
   /* Re-assert hybrid border after legacy token block */
   --glass-border:rgba(212,175,55,0.15);
   --card-bg:rgba(255,255,255,0.04);--card-bg-hover:rgba(255,255,255,0.08);
+  /* Home + shell: ~1% gutter each side → 98% content band */
+  --po-page-edge: 5%;
+  --po-content-width: 100%;
+  --po-content-max: min(98vw, 1920px);
 }
 [data-theme='light']{
   --card-bg:rgba(232,244,252,0.94);--card-bg-hover:rgba(0,0,0,0.07);
@@ -120,8 +124,8 @@ body::after{content:'';position:fixed;inset:0;
 .bsp:nth-child(5){top:10%;left:5%;--tx:-16px;--ty:-14px;animation-delay:.50s;}.bsp:nth-child(6){top:5%;left:40%;--tx:2px;--ty:-20px;animation-delay:.52s;}.bsp:nth-child(7){top:8%;left:75%;--tx:14px;--ty:-16px;animation-delay:.54s;}.bsp:nth-child(8){top:30%;left:96%;--tx:20px;--ty:-8px;animation-delay:.51s;}.bsp:nth-child(9){top:55%;left:96%;--tx:18px;--ty:8px;animation-delay:.53s;}.bsp:nth-child(10){top:80%;left:85%;--tx:12px;--ty:14px;animation-delay:.55s;}.bsp:nth-child(11){top:92%;left:55%;--tx:4px;--ty:20px;animation-delay:.50s;}.bsp:nth-child(12){top:90%;left:25%;--tx:-10px;--ty:18px;animation-delay:.52s;}.bsp:nth-child(13){top:70%;left:2%;--tx:-18px;--ty:10px;animation-delay:.54s;}.bsp:nth-child(14){top:45%;left:0%;--tx:-20px;--ty:0px;animation-delay:.51s;}.bsp:nth-child(15){top:20%;left:2%;--tx:-16px;--ty:-10px;animation-delay:.56s;}.bsp:nth-child(16){top:15%;left:60%;--tx:8px;--ty:-18px;animation-delay:.53s;}.bsp:nth-child(17){top:18%;left:20%;--tx:-12px;--ty:-16px;animation-delay:.65s;}.bsp:nth-child(18){top:12%;left:55%;--tx:6px;--ty:-18px;animation-delay:.67s;}.bsp:nth-child(19){top:25%;left:88%;--tx:16px;--ty:-12px;animation-delay:.66s;}.bsp:nth-child(20){top:60%;left:93%;--tx:16px;--ty:10px;animation-delay:.68s;}
 @keyframes bSpark{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.2);}100%{opacity:0;}}
 
-/* nav */
-.snav{position:sticky;top:1rem;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
+/* nav — match shell content width so cards and bar share the same side gutters */
+.snav{position:sticky;top:1rem;z-index:200;width:var(--po-content-width);max-width:var(--po-content-max);margin:clamp(12px,2vh,20px) auto;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 clamp(16px,2vw,40px);display:flex;align-items:center;height:72px;gap:0;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;box-sizing:border-box;}
 .snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
 .nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--lime,#c6ff00) 15%,var(--cyan) 40%,var(--purple) 65%,var(--lime,#c6ff00) 85%,transparent 100%);opacity:.72;}
 /* accentShift (hue-rotate) removed — continuous filter animation was GPU-heavy on scroll */
@@ -196,8 +200,8 @@ body::after{content:'';position:fixed;inset:0;
 .edge-badge{color:#00ffcc;font-weight:800;text-shadow:0 0 10px rgba(0,255,204,0.5);}
 [data-theme="light"] .glass-card{background:rgba(200,215,235,0.72);backdrop-filter:blur(15px) saturate(180%);-webkit-backdrop-filter:blur(15px) saturate(180%);border:1px solid rgba(120,150,185,0.35);}
 
-/* shell — fluid side padding, never touch viewport edges */
-.shell{position:relative;z-index:1;width:100%;max-width:min(1920px,100%);margin:0 auto;padding:clamp(12px,2.5vw,28px) clamp(10px,2.5vw,28px);}
+/* shell — width = viewport minus fixed % gutters (hero + home-cat cards fill this) */
+.shell{position:relative;z-index:1;width:var(--po-content-width);max-width:var(--po-content-max);margin:0 auto;padding:clamp(12px,2.5vw,28px) 0;box-sizing:border-box;}
 .home-flow-lede{font-size:clamp(12px,1.4vw,13px);color:var(--muted);line-height:1.5;max-width:min(72ch,100%);margin:0 0 14px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);}
 [data-theme="light"] .home-flow-lede{border-color:rgba(70,110,140,.14);background:rgba(232,244,252,.78);}
 .home-jump{display:inline-block;font-size:11px;margin-top:6px;}
@@ -218,7 +222,7 @@ body::after{content:'';position:fixed;inset:0;
 .sec-header .sec-title{flex-shrink:0;}
 
 /* hero */
-.hero{display:flex;align-items:stretch;flex-direction:column;flex-wrap:nowrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
+.hero{width:100%;max-width:100%;box-sizing:border-box;display:flex;align-items:stretch;flex-direction:column;flex-wrap:nowrap;gap:16px;margin-bottom:18px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,34px);background:rgba(255,255,255,0.03);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;box-shadow:var(--glass-shadow-lg);position:relative;overflow:hidden;isolation:isolate;}
 .hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--purple));}
 .hero-eyebrow{font-size:11px;font-family:"Inter",sans-serif;font-weight:500;color:var(--muted);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;line-height:.95;color:var(--text);}
@@ -401,7 +405,7 @@ body::after{content:'';position:fixed;inset:0;
 .sub-header .sh-line{flex:1;height:1px;display:block;margin-left:8px;}
 
 /* collapsible home categories */
-.home-cat{margin:0 0 14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.02);backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);box-shadow:0 6px 24px rgba(0,0,0,.24);overflow:hidden;scroll-margin-top:88px;}
+.home-cat{width:100%;max-width:100%;margin:0 0 14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.02);backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);box-shadow:0 6px 24px rgba(0,0,0,.24);overflow:hidden;scroll-margin-top:88px;box-sizing:border-box;}
 .home-cat>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--text);}
 .home-cat>summary::-webkit-details-marker{display:none;}
 .home-cat>summary::marker{display:none;content:'';}
@@ -460,7 +464,7 @@ body{
 .snav-links a,.mobile-menu a{border-color:transparent!important;}
 .snav-links a.active{background:linear-gradient(180deg,rgba(212,175,55,.12),rgba(212,175,55,.04));box-shadow:inset 0 0 0 1px rgba(212,175,55,.15),0 8px 24px rgba(212,175,55,.06);}
 .live-pill{background:rgba(4,20,10,0.6);backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(125,255,203,.18);box-shadow:inset 0 0 20px rgba(125,255,203,.04);}
-.shell{padding-top:clamp(18px,3vw,28px);position:relative;z-index:2;}
+.shell{padding-top:clamp(18px,3vw,28px);position:relative;z-index:2;width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;padding-inline:0;box-sizing:border-box;}
 .hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 82% 24%,rgba(127,199,217,.15),transparent 24%),radial-gradient(circle at 18% 88%,rgba(212,175,55,.08),transparent 26%);z-index:-1;}
 .hero-title{font-size:clamp(2.4rem,5.5vw + 1rem,5.75rem);letter-spacing:clamp(2px,.35vw,6px);text-shadow:0 0 40px rgba(212,175,55,.08);}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);font-size:10px;backdrop-filter:blur(8px) saturate(180%);}
@@ -476,7 +480,8 @@ body{
   .hero-title{font-size:54px;letter-spacing:2px;}
 }
 @media(max-width:900px){
-  .shell{padding:18px 12px 22px;}
+  .shell{padding:18px 0 22px;width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;}
+  .snav{width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;}
   .status-row{grid-template-columns:repeat(2,1fr)!important;gap:10px;}
   .edge-grid{grid-template-columns:1fr!important;}
   .edge-card{overflow:hidden;border-radius:16px;}
@@ -521,11 +526,11 @@ body{
   .edge-line-badge,.edge-mini{max-width:90px;}
 }
 @media(max-width:900px) and (orientation:portrait){
-  .shell{padding:16px 10px 18px;}
+  .shell{padding:16px 0 18px;}
   #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;gap:10px!important;padding:0 0 10px 0!important;}
 }
 @media(max-width:900px) and (orientation:landscape){
-  .shell{padding:12px 10px 14px;}
+  .shell{padding:12px 0 14px;}
   .hero{padding:14px 14px 12px;}
   .hero-title{font-size:38px;letter-spacing:1px;}
   #slate-panel-header-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
@@ -919,12 +924,21 @@ nav.snav .live-pill .live-pill-brand {
 /* --- 2026-03 visual alignment pass (reference mockups) --- */
 .snav{
   top:0;
-  margin:0 0 1rem 0;
+  width:var(--po-content-width);
+  max-width:var(--po-content-max);
+  margin:0 auto 1rem auto;
   border-radius:0;
   border-left:none;
   border-right:none;
+  box-sizing:border-box;
 }
-.shell{padding-top:22px;}
+.shell{
+  width:var(--po-content-width);
+  max-width:var(--po-content-max);
+  margin:0 auto;
+  padding-top:22px;
+  box-sizing:border-box;
+}
 :root{
   --accent-gold:#e1bc65;
 }
@@ -1001,10 +1015,29 @@ body::before{
   }
 }
 
+/* Home layout — final win over legacy passes (linked CSS also reinforces) */
+body > .shell {
+  width: var(--po-content-width) !important;
+  max-width: var(--po-content-max) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+body > nav.snav,
+body > nav.snav.glass-card {
+  width: var(--po-content-width) !important;
+  max-width: var(--po-content-max) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
 </style>
 <link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="static/mobile-content-width.css?v=20260522gradesframe"/>
+<link rel="stylesheet" href="static/mobile-content-width.css?v=20260525shell98"/>
+<link rel="stylesheet" href="static/wnba-matchup-edge.css?v=20260527b"/>
 <link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
+<link rel="stylesheet" href="static/player-consistency.css?v=20260525hotprop"/>
 </head>
 <body>
 
@@ -1016,7 +1049,7 @@ body::before{
 .po-orb{position:fixed;z-index:0;pointer-events:none;contain:strict;transform:translateZ(0);}
 </style>
 <!-- Advanced optical layers -->
-<div class="mesh-bg" aria-hidden="true"></div>h
+<div class="mesh-bg" aria-hidden="true"></div>
 <div class="grain-layer" aria-hidden="true"></div>
 
 
@@ -1077,6 +1110,13 @@ body::before{
       </h1>
     </div>
     
+  <div class="pipeline-status-bar" id="pipeline-status-bar">
+    <div class="pipeline-status-pills" id="pipeline-status-pills"></div>
+    <div class="pipeline-status-right">
+      <button type="button" class="pipeline-offseason-toggle" id="pipeline-offseason-toggle">Show off-season</button>
+      <span class="pipeline-last-run" id="pipeline-last-run">Last run: --</span>
+    </div>
+  </div>
   <!-- SLATE STATUS CARDS -->
   <details class="home-cat" open id="slate-explorer">
     <summary><span class="home-cat-title">Slate <span>Explorer</span></span></summary>
@@ -1146,6 +1186,95 @@ body::before{
     background:rgba(212,175,55,.08);
     box-shadow:0 0 0 1px rgba(212,175,55,.2),0 4px 18px rgba(0,0,0,.35);
   }
+  .pipeline-status-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin:0 0 10px 0;
+    padding:10px 12px;
+    border-radius:14px;
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(var(--blur));
+    -webkit-backdrop-filter:blur(var(--blur));
+    box-shadow:var(--glass-shadow);
+  }
+  .pipeline-status-pills{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .pipeline-status-pill{
+    font-size:10px;
+    font-family:"Inter",sans-serif;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    border-radius:999px;
+    padding:5px 10px;
+    border:1px solid rgba(255,255,255,.16);
+    color:var(--muted);
+    background:rgba(255,255,255,.06);
+    white-space:nowrap;
+  }
+  .pipeline-status-pill.fresh{
+    color:var(--green);
+    border-color:color-mix(in srgb, var(--green) 50%, transparent);
+    background:color-mix(in srgb, var(--green) 16%, transparent);
+  }
+  .pipeline-status-pill.stale{
+    color:var(--muted2);
+    border-color:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    opacity:.78;
+  }
+  .pipeline-status-pill.pending{
+    color:var(--amber);
+    border-color:color-mix(in srgb, var(--amber) 45%, transparent);
+    background:color-mix(in srgb, var(--amber) 14%, transparent);
+  }
+  .pipeline-status-right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .pipeline-offseason-toggle{
+    border-radius:999px;
+    border:1px solid rgba(212,175,55,.28);
+    background:rgba(212,175,55,.1);
+    color:var(--accent-gold);
+    font-family:"Inter",sans-serif;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:6px 10px;
+    cursor:pointer;
+    transition:background .2s,border-color .2s,color .2s;
+  }
+  .pipeline-offseason-toggle:hover{
+    background:rgba(212,175,55,.16);
+    border-color:rgba(212,175,55,.42);
+  }
+  .pipeline-last-run{
+    font-size:10px;
+    letter-spacing:.06em;
+    color:var(--muted2);
+    white-space:nowrap;
+  }
+  .scard.stale { opacity: 0.42; transition: opacity 0.2s; }
+  .scard.stale:hover { opacity: 0.75; }
+  .scard.loading { opacity: 0.38; transition: opacity 0.2s; }
+  .scard.loading:hover { opacity: 0.65; }
+  .scard.fresh { border-color: rgba(212,175,55,0.35) !important; box-shadow: 0 0 0 1px rgba(212,175,55,0.15), var(--glass-shadow); }
+  .scard.inactive-sport { display: none; }
+  #slate-panel-header-row.show-inactive .scard.inactive-sport { display: flex; }
   .slate-panel-header-row .scard-toggle{font-size:14px;color:var(--muted);transition:transform .25s;flex-shrink:0;line-height:1;}
   .slate-panel-header-row .scard.active .scard-toggle{transform:rotate(180deg);}
   /* expand area */
@@ -1989,6 +2118,28 @@ body::before{
     </div>
 
     <div class="slate-expand" id="sp-wnba">
+      <details class="wnba-me-panel" id="wnba-matchup-edge-panel" open>
+        <summary>Matchup Edge — WNBA defense lookup</summary>
+        <div class="wnba-me-body">
+          <div class="wnba-me-loading" id="wnba-me-loading">Loading matchup data…</div>
+          <div id="wnba-me-content" style="display:none">
+            <div class="wnba-me-controls">
+              <div class="wnba-me-field"><label>Team</label><select id="wnba-me-team"></select></div>
+              <div class="wnba-me-field"><label>Category</label><select id="wnba-me-cat"></select></div>
+              <div class="wnba-me-field"><label>Opponent</label><select id="wnba-me-opp" disabled></select></div>
+              <button type="button" class="wnba-me-find" id="wnba-me-find">Find props ↗</button>
+            </div>
+            <div class="wnba-me-cards" id="wnba-me-cards"></div>
+            <div class="wnba-me-table-wrap">
+              <table class="wnba-me-table"><thead><tr>
+                <th>Player</th><th>Pos</th><th id="wnba-me-avg-h">Avg</th><th>Game score</th>
+                <th>Edge vs opp</th><th>Notes</th>
+              </tr></thead><tbody id="wnba-me-tbody"></tbody></table>
+            </div>
+            <div class="wnba-me-legend" id="wnba-me-legend"></div>
+          </div>
+        </div>
+      </details>
       <div class="slate-toolbar">
         <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('wnba',this.value)" id="sf-wnba"/>
         <button class="slate-filter-btn" id="sfb-wnba-over" onclick="toggleDirFilter('wnba','OVER',this)">▲ OVER</button>
@@ -2052,6 +2203,158 @@ body::before{
     </div>
 
   </div><!-- /slate-panel-wrap -->
+    </div>
+  </details>
+
+  <!-- HOT PLAYERS — consistency leaders on today's slate -->
+  <details class="home-cat" id="hot-players-cat">
+    <summary><span class="home-cat-title">Hot <span>Players</span></span></summary>
+    <div class="home-cat-body">
+      <section class="hot-players-section" id="hot-players-section" style="display:none" aria-label="Hot players on today's slate">
+  <div class="hot-players-header">
+    <span class="hot-players-title">Hot <span>Players</span></span>
+    <span class="hot-players-badge">TODAY</span>
+    <span class="hot-players-updated" id="hot-players-updated"></span>
+  </div>
+  <div id="hot-sport-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+  <div class="hot-players-scroll hot-players-grid" id="hot-players-scroll"></div>
+  <div class="hot-players-empty" id="hot-players-empty" style="display:none">
+    No players on today's slate yet — check back after the daily pipeline runs.
+  </div>
+</section>
+
+<script>
+(function () {
+  const API = '/api/hot-players?limit=8&_v=2';
+  const SECTION = document.getElementById('hot-players-section');
+  const SCROLL = document.getElementById('hot-players-scroll');
+  const FILTERS = document.getElementById('hot-sport-filters');
+  const EMPTY = document.getElementById('hot-players-empty');
+  const UPDATED = document.getElementById('hot-players-updated');
+  if (!SECTION || !SCROLL) return;
+
+  let allCardsBySport = {};
+  let activeSport = 'ALL';
+
+  function dirClass(d) {
+    return d === 'OVER' ? 'over' : d === 'UNDER' ? 'under' : 'both';
+  }
+  function fmtPct(v) {
+    return v != null ? (v * 100).toFixed(1) + '%' : '—';
+  }
+  function tierDot(tier) {
+    const colors = { high: 'var(--green,#9fd8a7)', medium: 'var(--amber,#c89a4a)', low: 'var(--muted2,#8b8b99)' };
+    return '<span title="Confidence: ' + tier + '" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + (colors[tier] || colors.low) + ';margin-right:3px;vertical-align:middle"></span>';
+  }
+
+  function resolveBestProp(p) {
+    const dp = p.display_prop;
+    if (dp && dp.prop_type) return dp;
+    const bp = p.best_prop;
+    if (bp && bp.prop_type) return bp;
+    const list = p.best_props;
+    if (Array.isArray(list) && list.length && list[0].prop_type) return list[0];
+    return null;
+  }
+
+  function bestPropBlock(p) {
+    const bp = resolveBestProp(p);
+    if (!bp || !bp.prop_type) {
+      const dir = (p.direction || 'BOTH').toString().toUpperCase();
+      return '<div class="card-best-prop card-best-prop--empty">' +
+        '<div class="card-prop-name card-prop-muted">Mixed props</div>' +
+        '<div class="card-best-prop-row">' +
+        '<span class="card-dir-badge ' + dirClass(dir) + '">' + (dir === 'BOTH' ? '—' : dir) + '</span>' +
+        '</div></div>';
+    }
+    const dir = bp.direction || '';
+    const tip = (bp.prop_type || '') + ' ' + dir + ' — ' + fmtPct(bp.hit_rate) + ' (' + (bp.total || 0) + ' props)';
+    return '<div class="card-best-prop" title="' + tip + '">' +
+      '<div class="card-prop-name">' + (bp.prop_type || '') + '</div>' +
+      '<div class="card-best-prop-row">' +
+      '<span class="card-dir-badge ' + dirClass(dir) + '">' + dir + '</span>' +
+      '<span class="card-slice-rate">' + fmtPct(bp.hit_rate) + '</span>' +
+      '</div>' +
+      '<div class="card-slice-meta">' + (bp.hits || 0) + '/' + (bp.total || 0) + ' on this prop</div>' +
+      '</div>';
+  }
+
+  function buildCard(p) {
+    const slate = p.on_today_slate ? '<span class="card-on-slate" title="On today\'s slate"></span>' : '';
+    const bp = resolveBestProp(p);
+    const rateLabel = bp && bp.prop_type
+      ? tierDot(p.tier) + 'overall · ' + (p.total || 0) + ' props'
+      : tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props';
+    const tip = (p.player || '') + ' — ' + (p.sport || '') +
+      (bp && bp.prop_type ? ' · best: ' + bp.prop_type + ' ' + (bp.direction || '') : '');
+    return '<div class="hot-player-card" data-sport="' + (p.sport || '') + '" title="' + tip + '">' +
+      slate +
+      '<div class="card-sport">' + (p.sport || '') + '</div>' +
+      '<div class="card-name">' + (p.player || '') + '</div>' +
+      '<div class="card-rate">' + fmtPct(p.hit_rate) + '</div>' +
+      '<div class="card-rate-label">' + rateLabel + '</div>' +
+      bestPropBlock(p) +
+      '</div>';
+  }
+
+  function renderCards(sport) {
+    SCROLL.innerHTML = '';
+    const list = sport === 'ALL' ? Object.values(allCardsBySport).flat() : (allCardsBySport[sport] || []);
+    if (!list.length) {
+      EMPTY.style.display = '';
+      SCROLL.style.display = 'none';
+      return;
+    }
+    EMPTY.style.display = 'none';
+    SCROLL.style.display = 'grid';
+    SCROLL.innerHTML = list.map(buildCard).join('');
+  }
+
+  function buildFilters(sports) {
+    const allSports = ['ALL'].concat(sports);
+    FILTERS.innerHTML = allSports.map(function (s) {
+      return '<button type="button" class="hot-sport-pill' + (s === activeSport ? ' active' : '') + '" data-s="' + s + '">' + s + '</button>';
+    }).join('');
+    FILTERS.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeSport = btn.dataset.s;
+        FILTERS.querySelectorAll('button').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.s === activeSport);
+        });
+        renderCards(activeSport);
+      });
+    });
+  }
+
+  function initHotPlayers() {
+    fetch(API)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        allCardsBySport = data.sports || {};
+        const sports = Object.keys(allCardsBySport).sort();
+        if (!sports.length) {
+          SECTION.style.display = '';
+          EMPTY.style.display = '';
+          return;
+        }
+        SECTION.style.display = '';
+        if (data.date) UPDATED.textContent = data.date;
+        buildFilters(sports);
+        renderCards('ALL');
+      })
+      .catch(function (err) {
+        console.warn('[HotPlayers]', err);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHotPlayers);
+  } else {
+    initHotPlayers();
+  }
+})();
+</script>
+
     </div>
   </details>
 
@@ -2156,6 +2459,7 @@ body::before{
 </div>
 
 <script src="static/site-nav-chrome.js?v=20260412" defer></script>
+<script src="static/wnba-matchup-edge.js?v=20260527b" defer></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -2668,13 +2972,14 @@ function passesTopEdgeEmpiricalSanity(p, dir) {
   return true;
 }
 
-/** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
+/** L5/L10 over/under: integer hit counts (0..n) or rates in (0,1] / percent. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
   const x = Number(raw);
   if (!Number.isFinite(x)) return null;
-  // Supports both ratio form (0.8) and percent form (80) from different feeds.
-  if (x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
+  const xi = Math.round(x);
+  if (Math.abs(x - xi) < 1e-6 && xi >= 0 && xi <= n) return xi;
+  if (x > 0 && x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
   if (x > n && x <= 100) return Math.max(0, Math.min(n, Math.round((x / 100) * n)));
   return Math.max(0, Math.min(n, Math.round(x)));
 }
@@ -3309,6 +3614,29 @@ function applyStatusCard(id, info, _label) {
   card.classList.add(cls); badge.classList.add(cls);
   val.textContent = formatSlateModifiedDisplay(info.modified || "—");
   badge.textContent = fresh ? "FRESH" : "STALE";
+  updatePipelineStatusBar();
+}
+
+function updatePipelineStatusBar() {
+  const pillsWrap = document.getElementById("pipeline-status-pills");
+  if (!pillsWrap) return;
+  const lastRunEl = document.getElementById("pipeline-last-run");
+  const nowLabel = document.querySelector(".nav-local-datetime");
+  if (lastRunEl) {
+    const txt = (nowLabel?.textContent || "").trim();
+    lastRunEl.textContent = `Last run: ${txt || "--"}`;
+  }
+  const excluded = new Set(["cbb", "cfb", "nfl", "wcbb"]);
+  const cards = Array.from(document.querySelectorAll('.scard[id^="sc-"]')).filter((card) => {
+    const sport = String(card.id || "").replace(/^sc-/, "").trim().toLowerCase();
+    return sport && !excluded.has(sport);
+  });
+  pillsWrap.innerHTML = cards.map((card) => {
+    const sport = String(card.id || "").replace(/^sc-/, "").trim().toUpperCase();
+    const badgeTxt = String(card.querySelector(".sbadge")?.textContent || "").trim().toUpperCase();
+    const status = badgeTxt === "FRESH" ? "fresh" : (badgeTxt === "STALE" ? "stale" : "pending");
+    return `<span class="pipeline-status-pill ${status}">${sport} ${status}</span>`;
+  }).join("");
 }
 
 function sportDisplayLabel(rawSport) {
@@ -3346,6 +3674,7 @@ async function refreshStatus() {
   const statusIds = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
   if (!d) {
     for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
+    updatePipelineStatusBar();
     return;
   }
   applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
@@ -3360,6 +3689,7 @@ async function refreshStatus() {
   applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
   applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
+  updatePipelineStatusBar();
 }
 setInterval(refreshStatus, 60000);
 refreshStatus();
@@ -4001,8 +4331,7 @@ SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir:
 function _l5HitCount(val) {
   if (val == null) return null;
   if (typeof val === 'number' && Number.isFinite(val)) {
-    if (val <= 1) return Math.max(0, Math.min(5, Math.round(val * 5)));
-    return Math.max(0, Math.min(5, Math.round(val)));
+    return streakHits(val, 5);
   }
   const s = String(val).trim();
   if (!s) return null;
@@ -4013,8 +4342,7 @@ function _l5HitCount(val) {
   }
   const n = Number(s);
   if (!Number.isFinite(n)) return null;
-  if (n <= 1) return Math.max(0, Math.min(5, Math.round(n * 5)));
-  return Math.max(0, Math.min(5, Math.round(n)));
+  return streakHits(n, 5);
 }
 
 function _passesL5FilterForObjectRow(row, l5Mode) {
@@ -4912,6 +5240,103 @@ function sortSlateDynamic(sport, key) {
   } catch (e) {
     console.error("home slate UI boot:", e);
   }
+})();
+</script>
+
+<script>
+(function initHomePipelineAndDefaults() {
+  const OFFSEASON_IDS = ["cbb", "cfb", "nfl", "wcbb"];
+
+  function bindOffseasonToggle() {
+    const headerRow = document.getElementById("slate-panel-header-row");
+    const toggleBtn = document.getElementById("pipeline-offseason-toggle");
+    if (!headerRow || !toggleBtn) return;
+    OFFSEASON_IDS.forEach((id) => {
+      const card = document.getElementById(`sc-${id}`);
+      if (card) card.classList.add("inactive-sport");
+    });
+    const syncText = () => {
+      const showing = headerRow.classList.contains("show-inactive");
+      toggleBtn.textContent = showing ? "Hide off-season" : "Show off-season";
+    };
+    toggleBtn.addEventListener("click", () => {
+      headerRow.classList.toggle("show-inactive");
+      syncText();
+    });
+    syncText();
+  }
+
+  function openDefaultSections() {
+    document.getElementById("top-edges")?.setAttribute("open", "");
+    document.querySelectorAll("details.home-cat").forEach((det) => {
+      const txt = String(det.querySelector("summary")?.textContent || "").toLowerCase();
+      if (txt.includes("l5") || txt.includes("l10") || txt.includes("streak")) {
+        det.setAttribute("open", "");
+      }
+    });
+  }
+
+  function bindHotPlayersEmptyState() {
+    const hotCat = document.getElementById("hot-players-cat");
+    if (!hotCat) return;
+    const body = hotCat.querySelector(".home-cat-body");
+    if (!body) return;
+    let observer = null;
+
+    const hasCards = () => Boolean(
+      hotCat.querySelector(".hp-card")
+    );
+    const getHost = () => hotCat.querySelector(".hot-players-grid, .hp-grid, [data-hot-players-grid]") || body;
+
+    const ensureEmptyState = () => {
+      const existing = hotCat.querySelector(".home-cat-empty-state");
+      const openNow = hotCat.hasAttribute("open");
+      if (!(openNow && !hasCards())) {
+        if (existing) existing.remove();
+        return;
+      }
+      if (existing) return;
+      const host = getHost();
+      if (!host) return;
+      host.insertAdjacentHTML("beforeend", `<div class="home-cat-empty-state" style="text-align:center;padding:28px 20px;color:rgba(255,255,255,0.25);font-size:12px;">
+  <div style="font-size:20px;margin-bottom:6px;opacity:0.5">⚡</div>
+  <div style="font-weight:600;color:rgba(255,255,255,0.35);margin-bottom:4px;">No players on today's slate yet</div>
+  <div style="color:rgba(255,255,255,0.2);">Check back after the daily pipeline runs</div>
+</div>`);
+    };
+
+    hotCat.addEventListener("toggle", ensureEmptyState);
+    observer = new MutationObserver(ensureEmptyState);
+    observer.observe(body, { childList: true, subtree: true });
+    ensureEmptyState();
+  }
+
+  function bindPipelineStatusObservers() {
+    if (typeof updatePipelineStatusBar !== "function") return;
+    updatePipelineStatusBar();
+    const navTs = document.querySelector(".nav-local-datetime");
+    if (navTs) {
+      new MutationObserver(updatePipelineStatusBar).observe(navTs, { childList: true, characterData: true, subtree: true });
+    }
+    const row = document.getElementById("slate-panel-header-row");
+    if (row) {
+      new MutationObserver(updatePipelineStatusBar).observe(row, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
+  }
+
+  function run() {
+    bindOffseasonToggle();
+    bindPipelineStatusObservers();
+    openDefaultSections();
+    bindHotPlayersEmptyState();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+  else run();
 })();
 </script>
 

@@ -374,7 +374,7 @@ if (-not $StatsFrom2025End -and -not $NoStatsFrom2025End) {
     Write-Host "  [WNBA] L5/L10 use last games from current + prior season in ESPN cache (2025+2026 by default)." -ForegroundColor DarkCyan
 }
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --min-minutes-rolling 20 --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
+    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv$step4Attach$step4NoPrior" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 4b - Usage/Pace/Star Context" $WNBADir ".\scripts\step4b_attach_wnba_context.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2025" -TimeoutSeconds 600 }
@@ -384,6 +384,31 @@ if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_l
 
 if ($ok) { $ok = Run-Step "WNBA Step 6 - Team Role Context" $WNBADir ".\step6_team_role_context.py" `
     "--input `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --output `"$WnbaRunOutDir\step6_wnba_context.csv`"" }
+
+# Top-3 team leaders vs opponent defense (feeds step7 top3_def_context rank boost)
+if ($ok) {
+    $Top3Script = Join-Path $WNBADir "scripts\analyze_top_players_vs_defense.py"
+    if (Test-Path -LiteralPath $Top3Script) {
+        Write-Host "  --> WNBA Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+        Push-Location $Root
+        try {
+            & py -3.14 $Top3Script
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+            } else {
+                Write-Host "      OK" -ForegroundColor Green
+            }
+        } finally { Pop-Location }
+    }
+}
+
+if ($ok) {
+    $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
+    if (Test-Path -LiteralPath $MeScript) {
+        Push-Location $Root
+        try { & py -3.14 $MeScript --slate "$WnbaRunOutDir\step6_wnba_context.csv" | Out-Null } finally { Pop-Location }
+    }
+}
 
 if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_props.py" `
     "--input `"$WnbaRunOutDir\step6_wnba_context.csv`" --output `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`"" }
@@ -412,6 +437,37 @@ if ($ok) {
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
     "--input `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`" --sheet ALL --output `"$WnbaRunOutDir\step8_wnba_direction.csv`" --xlsx `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --date $Date" }
 if ($ok) { Publish-WnbaStep8CleanArtifacts }
+
+# Matchup edge JSON for Slate Explorer panel
+if ($ok) {
+    $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
+    if (Test-Path -LiteralPath $MeScript) {
+        Write-Host "  --> WNBA Matchup edge JSON (Slate Explorer)" -ForegroundColor Yellow
+        Push-Location $Root
+        try {
+            & py -3.14 $MeScript --slate "$WnbaRunOutDir\step8_wnba_direction.csv"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+            }
+        } finally { Pop-Location }
+    }
+}
+
+# Refresh top-3 vs defense with tonight's ranked slate overlay
+if ($ok) {
+    $Top3Script = Join-Path $WNBADir "scripts\analyze_top_players_vs_defense.py"
+    $Step8Csv = Join-Path $WnbaRunOutDir "step8_wnba_direction.csv"
+    if ((Test-Path -LiteralPath $Top3Script) -and (Test-Path -LiteralPath $Step8Csv)) {
+        Write-Host "  --> WNBA Top-3 vs defense (slate overlay)" -ForegroundColor Yellow
+        Push-Location $Root
+        try {
+            & py -3.14 $Top3Script --slate $Step8Csv
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "      top3-vs-defense slate WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+            }
+        } finally { Pop-Location }
+    }
+}
 
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
     "--input `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --output `"$WnbaRunOutDir\wnba_best_tickets.xlsx`" --min_hit_rate 0.8 --legs 2,3,4" }

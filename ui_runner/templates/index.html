@@ -1014,6 +1014,7 @@ body > nav.snav.glass-card {
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430schemapage"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260525shell98"/>
+<link rel="stylesheet" href="/static/wnba-matchup-edge.css?v=20260527b"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/player-consistency.css?v=20260525hotprop"/>
 </head>
@@ -2053,6 +2054,28 @@ body > nav.snav.glass-card {
     </div>
 
     <div class="slate-expand" id="sp-wnba">
+      <details class="wnba-me-panel" id="wnba-matchup-edge-panel" open>
+        <summary>Matchup Edge — WNBA defense lookup</summary>
+        <div class="wnba-me-body">
+          <div class="wnba-me-loading" id="wnba-me-loading">Loading matchup data…</div>
+          <div id="wnba-me-content" style="display:none">
+            <div class="wnba-me-controls">
+              <div class="wnba-me-field"><label>Team</label><select id="wnba-me-team"></select></div>
+              <div class="wnba-me-field"><label>Category</label><select id="wnba-me-cat"></select></div>
+              <div class="wnba-me-field"><label>Opponent</label><select id="wnba-me-opp" disabled></select></div>
+              <button type="button" class="wnba-me-find" id="wnba-me-find">Find props ↗</button>
+            </div>
+            <div class="wnba-me-cards" id="wnba-me-cards"></div>
+            <div class="wnba-me-table-wrap">
+              <table class="wnba-me-table"><thead><tr>
+                <th>Player</th><th>Pos</th><th id="wnba-me-avg-h">Avg</th><th>Game score</th>
+                <th>Edge vs opp</th><th>Notes</th>
+              </tr></thead><tbody id="wnba-me-tbody"></tbody></table>
+            </div>
+            <div class="wnba-me-legend" id="wnba-me-legend"></div>
+          </div>
+        </div>
+      </details>
       <div class="slate-toolbar">
         <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('wnba',this.value)" id="sf-wnba"/>
         <button class="slate-filter-btn" id="sfb-wnba-over" onclick="toggleDirFilter('wnba','OVER',this)">▲ OVER</button>
@@ -2228,6 +2251,7 @@ body > nav.snav.glass-card {
 </div>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+<script src="/static/wnba-matchup-edge.js?v=20260527b" defer></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -2740,13 +2764,14 @@ function passesTopEdgeEmpiricalSanity(p, dir) {
   return true;
 }
 
-/** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
+/** L5/L10 over/under: integer hit counts (0..n) or rates in (0,1] / percent. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
   const x = Number(raw);
   if (!Number.isFinite(x)) return null;
-  // Supports both ratio form (0.8) and percent form (80) from different feeds.
-  if (x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
+  const xi = Math.round(x);
+  if (Math.abs(x - xi) < 1e-6 && xi >= 0 && xi <= n) return xi;
+  if (x > 0 && x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
   if (x > n && x <= 100) return Math.max(0, Math.min(n, Math.round((x / 100) * n)));
   return Math.max(0, Math.min(n, Math.round(x)));
 }
@@ -4098,8 +4123,7 @@ SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir:
 function _l5HitCount(val) {
   if (val == null) return null;
   if (typeof val === 'number' && Number.isFinite(val)) {
-    if (val <= 1) return Math.max(0, Math.min(5, Math.round(val * 5)));
-    return Math.max(0, Math.min(5, Math.round(val)));
+    return streakHits(val, 5);
   }
   const s = String(val).trim();
   if (!s) return null;
@@ -4110,8 +4134,7 @@ function _l5HitCount(val) {
   }
   const n = Number(s);
   if (!Number.isFinite(n)) return null;
-  if (n <= 1) return Math.max(0, Math.min(5, Math.round(n * 5)));
-  return Math.max(0, Math.min(5, Math.round(n)));
+  return streakHits(n, 5);
 }
 
 function _passesL5FilterForObjectRow(row, l5Mode) {
