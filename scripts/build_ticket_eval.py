@@ -1118,13 +1118,21 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     if not rec:
         rec = str(ticket.get("empirical_recommendation") or "").strip()
     if not rec and pred_ev is not None:
-        ev = float(pred_ev)
-        rec = (
-            "STRONG" if ev >= 1.40 else
-            "OK" if ev >= 1.15 else
-            "MARGINAL" if ev >= 1.0 else
-            "SKIP"
-        )
+        th = None
+        if isinstance(ticket.get("_tier_ev_thresholds"), dict):
+            th = ticket["_tier_ev_thresholds"]
+        try:
+            from utils.ticket_ev_tiers import recommendation_from_ev
+
+            rec = recommendation_from_ev(float(pred_ev), th)
+        except Exception:
+            ev = float(pred_ev)
+            rec = (
+                "STRONG" if ev >= 1.40 else
+                "OK" if ev >= 1.15 else
+                "MARGINAL" if ev >= 1.0 else
+                "SKIP"
+            )
 
     gross_10 = round(10.0 * actual, 2)
     net_10 = round(gross_10 - 10.0, 2)
@@ -2584,6 +2592,22 @@ def _print_ticket_ev_percentiles(tickets: list[dict[str, Any]]) -> None:
     print(f"[ticket_eval] EV > 1.0: {int((arr > 1.0).sum())}")
     print(f"[ticket_eval] EV > 1.1: {int((arr > 1.1).sum())}")
     print(f"[ticket_eval] EV > 1.4: {int((arr > 1.4).sum())}")
+    try:
+        from utils.ticket_ev_tiers import compute_ev_tier_thresholds, tier_distribution_summary
+
+        th = compute_ev_tier_thresholds(evs)
+        print(
+            f"[ticket_eval] Percentile tier cuts: strong>={th['strong']:.3f} "
+            f"ok>={th['ok']:.3f} marginal>={th['marginal']:.3f}"
+        )
+        fake_payload = {"groups": [{"tickets": tickets}]}
+        dist = tier_distribution_summary(fake_payload)
+        print(
+            f"[ticket_eval] Tier mix: STRONG={dist['STRONG']} OK={dist['OK']} "
+            f"MARGINAL={dist['MARGINAL']} SKIP={dist['SKIP']}"
+        )
+    except Exception:
+        pass
 
 
 def _print_ml_prob_diagnostics(payload: dict[str, Any], arg_date: str) -> None:
@@ -3028,6 +3052,7 @@ def _build_html(
     wins_ct = sum(1 for oc in pay_summary_rows if oc.get("result") in ("WIN", "SWEEP"))
     guar_ct = sum(1 for oc in pay_summary_rows if oc.get("result") == "MIN GUARANTEE")
     loss_ct = sum(1 for oc in pay_summary_rows if oc.get("result") in ("LOSS", "VOID_LOSS"))
+    void_loss_ct: int = sum(1 for oc in pay_summary_rows if oc.get("result") == "VOID_LOSS")
     total_net_10 = sum(float(oc.get("net_10") or 0.0) for oc in pay_summary_rows)
     evs = [float(oc["predicted_ev"]) for oc in pay_summary_rows if oc.get("predicted_ev") is not None]
     avg_ev = sum(evs) / len(evs) if evs else None
@@ -3068,6 +3093,7 @@ def _build_html(
             "wins": wins_ct,
             "guarantees": guar_ct,
             "losses": loss_ct,
+            "void_loss_ct": void_loss_ct,
             "win_rate": round(win_rate_pay, 4),
             "avg_ev_predicted": round(avg_ev, 4) if avg_ev is not None else None,
             "net_per_10": round(net_per, 2),
@@ -3105,13 +3131,18 @@ def _build_html(
         net_abs = abs(total_net_10)
         net_word = "profit" if total_net_10 >= 0 else "loss"
         net_sign = "+" if total_net_10 >= 0 else "−"
+        loss_subnote_html = (
+            f' <span class="grade-eval-subnote">(incl. {void_loss_ct} void-loss)</span>'
+            if void_loss_ct > 0
+            else ""
+        )
         grade_eval_summary_html = (
             '<div class="grade-eval-summary">'
             f'<div class="grade-eval-summary-line1">Date: {json_date} · {n_pay} tickets graded</div>'
             '<div class="grade-eval-summary-line2">'
             f'<span>✅ Wins: {wins_ct}</span>'
             f'<span>🛡️ Guarantees: {guar_ct}</span>'
-            f'<span>❌ Losses: {loss_ct}</span>'
+            f'<span>❌ Losses: {loss_ct}{loss_subnote_html}</span>'
             "</div>"
             '<div class="grade-eval-summary-line3">'
             f"Win rate (W+🛡️): {win_rate_pct:.0f}%"
@@ -3284,6 +3315,7 @@ def _build_html(
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
         ".grade-eval-summary-line1{font-weight:700;color:var(--gold);margin-bottom:6px;}",
         ".grade-eval-summary-line2{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:4px;}",
+        ".grade-eval-subnote{color:var(--muted);font-size:11px;}",
         ".grade-eval-summary-line3{color:var(--muted);margin-bottom:4px;}",
         ".grade-eval-summary-line4{color:var(--cyan);font-weight:600;}",
         ".ticket-grade-payout{margin:0;padding:14px clamp(14px,2vw,22px) 16px;border-top:1px solid var(--glass-bd);"
@@ -3428,7 +3460,7 @@ def _build_html(
                         res_cls = "tg grade-ticket-result void-loss"
                         parts.append(
                             f'<span class="{res_cls}">RESULT: {esc(rem)} VOID / NO ACTION'
-                            f' <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>'
+                            f' <span class="grade-ticket-result-label">(no cash)</span></span>'
                         )
                     else:
                         won = rtxt != "LOSS"
@@ -4443,6 +4475,12 @@ def main() -> int:
     try:
         payload = _load_tickets(tpath, arg_date)
         _enrich_payload_ticket_payouts(payload, arg_date)
+        try:
+            from utils.ticket_ev_tiers import apply_slate_ev_tier_recommendations
+
+            apply_slate_ev_tier_recommendations(payload)
+        except Exception as exc:
+            print(f"[ticket_eval] WARN: tier calibration skipped: {exc}")
         _print_ml_prob_diagnostics(payload, arg_date)
         payload = _filter_payload_groups(payload, debug=bool(args.debug))
     except Exception as e:

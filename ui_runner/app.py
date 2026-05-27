@@ -5146,6 +5146,7 @@ def _load_grade_history_rows() -> list[dict[str, Any]]:
         wins = max(0, _to_int(r.get("wins"), 0))
         guarantees = max(0, _to_int(r.get("guarantees"), 0))
         losses = max(0, _to_int(r.get("losses"), 0))
+        void_loss_ct = max(0, _to_int(r.get("void_loss_ct"), 0))
         decided = wins + guarantees + losses
         if decided == 0:
             decided = n_tickets
@@ -5162,6 +5163,7 @@ def _load_grade_history_rows() -> list[dict[str, Any]]:
                 "tickets": n_tickets,
                 "wins": wins,
                 "losses": losses,
+                "void_loss_ct": min(void_loss_ct, losses),
                 "guarantees": guarantees,
                 "decided": decided,
                 "paid": paid,
