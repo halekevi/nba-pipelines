@@ -355,11 +355,11 @@ function Invoke-MLBStep1Fetch {
         $env:PYTHONIOENCODING = "utf-8"
         $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"   # match WNBA — chrome120 hits DataDome 403
         # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
-        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 2 ..."
+        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 4 ..."
         Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
         $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
             --date $PipelineDate --output $OutputPath `
-            --api-retries 2 --api-session-waves 1 `
+            --api-retries 4 --api-session-waves 2 `
             --api-wave-gap-min 8 --api-wave-gap-max 15 `
             --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
             --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
@@ -1806,7 +1806,7 @@ $MLBJob = Start-Job -ScriptBlock {
             Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
             $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                 --date $PipelineDate --output $OutputPath `
-                --api-retries 2 --api-session-waves 1 `
+                --api-retries 4 --api-session-waves 2 `
                 --api-wave-gap-min 8 --api-wave-gap-max 15 `
                 --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
                 --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
