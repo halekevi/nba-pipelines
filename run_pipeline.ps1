@@ -293,7 +293,22 @@ function Run-Step {
             $exit   = $LASTEXITCODE
         }
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
-        if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
+        if ($exit -ne 0) {
+            # Known false-alarm case: combined_slate_tickets.py can return non-zero when
+            # optional WCBB loading fails, even after writing workbook + web JSON outputs.
+            if ($Label -eq "Combined Slate + Tickets") {
+                $joined = ($output | ForEach-Object { "$_" }) -join "`n"
+                $wcbbOptionalLoadWarn = $joined -match "Could not load WCBB file"
+                $wroteWorkbook = $joined -match "\[OK\]\s+Saved ->"
+                $wroteWebJson = $joined -match "\[OK\]\s+Web JSON\s+->"
+                if ($wcbbOptionalLoadWarn -and $wroteWorkbook -and $wroteWebJson) {
+                    Write-Host "      WARN (exit $exit): treating as success (optional WCBB load failed, artifacts written)" -ForegroundColor Yellow
+                    return $true
+                }
+            }
+            Write-Host "      FAILED (exit $exit)" -ForegroundColor Red
+            return $false
+        }
         Write-Host "      OK" -ForegroundColor Green; return $true
     } catch {
         Write-Host "      EXCEPTION: $_" -ForegroundColor Red; return $false
