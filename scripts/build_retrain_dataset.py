@@ -1492,6 +1492,42 @@ def main() -> int:
     # n_total_after = len(out_df)
     # print(f"[build_retrain] Total rows: {n_total_before:,} → {n_total_after:,}")
 
+    # Critical training hygiene: supervised target must be present.
+    # Keep only rows with known hit outcome before any final export.
+    if "hit" in out_df.columns:
+        before_hit = len(out_df)
+        out_df = out_df.loc[out_df["hit"].notna()].copy()
+        print(f"After dropping null-hit rows: {len(out_df):,} rows remain (from {before_hit:,})")
+    else:
+        print("[WARN] 'hit' column missing from joined dataset; cannot apply null-hit filter.")
+
+    # Prune columns that are effectively all-null across the retained dataset.
+    # Protect required identity/model columns even if mostly null.
+    null_rates = out_df.isna().mean()
+    drop_cols = null_rates[null_rates >= 0.99].index.tolist()
+    keep_always = [
+        "sport",
+        "player",
+        "team",
+        "opp_team",
+        "prop",
+        "line",
+        "direction",
+        "pick_type",
+        "tier",
+        "edge",
+        "ml_prob",
+        "hit",
+        "file_date",
+        "result",
+        "rank_score",
+        "blended_score",
+    ]
+    drop_cols = [c for c in drop_cols if c not in keep_always]
+    if drop_cols:
+        out_df = out_df.drop(columns=drop_cols, errors="ignore")
+    print(f"Dropped {len(drop_cols)} all-null columns: {drop_cols}")
+
     _pt_out = out_df.get("pick_type", pd.Series("", index=out_df.index))
     _dir_out = out_df.get("direction", pd.Series("", index=out_df.index))
     out_df["pick_type_group"] = [normalize_pick_type_group(pt, d) for pt, d in zip(_pt_out, _dir_out, strict=False)]
@@ -1500,6 +1536,12 @@ def main() -> int:
     out_df["tier_era"] = (fd_all >= TIER_OVERHAUL_DATE).astype(int)
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     print(f"Wrote {out_path}  rows={len(out_df):,}")
+    print(f"Final retrain dataset: {len(out_df):,} rows")
+    if "hit" in out_df.columns:
+        print(f"Hit distribution: {out_df['hit'].value_counts().to_dict()}")
+    null_remaining = (out_df.isna().mean() * 100.0).sort_values(ascending=False)
+    print("Remaining null rates > 20%:")
+    print(null_remaining[null_remaining > 20].to_string())
 
     # Feature completeness on rows that successfully joined step8 scores (rank_score or legacy blended_score)
     jmask = pd.Series(False, index=out_df.index)

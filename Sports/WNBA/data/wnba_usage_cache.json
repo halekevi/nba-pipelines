@@ -1,1 +1,1099 @@
-{}
+{
+  "season_2025": {
+    "fetched_at": "2026-05-26T11:34:02.171903+00:00",
+    "players": {
+      "A'ja Wilson|LVA": {
+        "min_per_game": 31.2,
+        "player_name": "A'ja Wilson",
+        "team": "LVA",
+        "usage_pct": 0.307
+      },
+      "Aaliyah Edwards|CON": {
+        "min_per_game": 14.8,
+        "player_name": "Aaliyah Edwards",
+        "team": "CON",
+        "usage_pct": 0.188
+      },
+      "Aaliyah Nye|LVA": {
+        "min_per_game": 15.3,
+        "player_name": "Aaliyah Nye",
+        "team": "LVA",
+        "usage_pct": 0.132
+      },
+      "Aari McDonald|IND": {
+        "min_per_game": 26.3,
+        "player_name": "Aari McDonald",
+        "team": "IND",
+        "usage_pct": 0.182
+      },
+      "Aerial Powers|IND": {
+        "min_per_game": 16.7,
+        "player_name": "Aerial Powers",
+        "team": "IND",
+        "usage_pct": 0.214
+      },
+      "Ajae Petty|DAL": {
+        "min_per_game": 3.2,
+        "player_name": "Ajae Petty",
+        "team": "DAL",
+        "usage_pct": 0.0
+      },
+      "Alanna Smith|MIN": {
+        "min_per_game": 26.5,
+        "player_name": "Alanna Smith",
+        "team": "MIN",
+        "usage_pct": 0.172
+      },
+      "Alexis Prince|PHX": {
+        "min_per_game": 22.1,
+        "player_name": "Alexis Prince",
+        "team": "PHX",
+        "usage_pct": 0.125
+      },
+      "Alissa Pili|LAS": {
+        "min_per_game": 5.2,
+        "player_name": "Alissa Pili",
+        "team": "LAS",
+        "usage_pct": 0.182
+      },
+      "Aliyah Boston|IND": {
+        "min_per_game": 30.2,
+        "player_name": "Aliyah Boston",
+        "team": "IND",
+        "usage_pct": 0.215
+      },
+      "Allisha Gray|ATL": {
+        "min_per_game": 34.5,
+        "player_name": "Allisha Gray",
+        "team": "ATL",
+        "usage_pct": 0.216
+      },
+      "Alysha Clark|WAS": {
+        "min_per_game": 19.7,
+        "player_name": "Alysha Clark",
+        "team": "WAS",
+        "usage_pct": 0.104
+      },
+      "Alyssa Thomas|PHX": {
+        "min_per_game": 31.3,
+        "player_name": "Alyssa Thomas",
+        "team": "PHX",
+        "usage_pct": 0.238
+      },
+      "Amy Okonkwo|DAL": {
+        "min_per_game": 19.6,
+        "player_name": "Amy Okonkwo",
+        "team": "DAL",
+        "usage_pct": 0.207
+      },
+      "Anastasiia Olairi Kosu|MIN": {
+        "min_per_game": 3.8,
+        "player_name": "Anastasiia Olairi Kosu",
+        "team": "MIN",
+        "usage_pct": 0.217
+      },
+      "Aneesah Morrow|CON": {
+        "min_per_game": 18.9,
+        "player_name": "Aneesah Morrow",
+        "team": "CON",
+        "usage_pct": 0.212
+      },
+      "Angel Reese|CHI": {
+        "min_per_game": 31.6,
+        "player_name": "Angel Reese",
+        "team": "CHI",
+        "usage_pct": 0.233
+      },
+      "Ariel Atkins|CHI": {
+        "min_per_game": 28.5,
+        "player_name": "Ariel Atkins",
+        "team": "CHI",
+        "usage_pct": 0.216
+      },
+      "Arike Ogunbowale|DAL": {
+        "min_per_game": 33.3,
+        "player_name": "Arike Ogunbowale",
+        "team": "DAL",
+        "usage_pct": 0.221
+      },
+      "Aziaha James|DAL": {
+        "min_per_game": 17.7,
+        "player_name": "Aziaha James",
+        "team": "DAL",
+        "usage_pct": 0.211
+      },
+      "Azura Stevens|LAS": {
+        "min_per_game": 28.4,
+        "player_name": "Azura Stevens",
+        "team": "LAS",
+        "usage_pct": 0.187
+      },
+      "Breanna Stewart|NYL": {
+        "min_per_game": 30.6,
+        "player_name": "Breanna Stewart",
+        "team": "NYL",
+        "usage_pct": 0.261
+      },
+      "Bree Hall|IND": {
+        "min_per_game": 4.4,
+        "player_name": "Bree Hall",
+        "team": "IND",
+        "usage_pct": 0.237
+      },
+      "Bria Hartley|CON": {
+        "min_per_game": 22.8,
+        "player_name": "Bria Hartley",
+        "team": "CON",
+        "usage_pct": 0.201
+      },
+      "Brianna Turner|IND": {
+        "min_per_game": 8.6,
+        "player_name": "Brianna Turner",
+        "team": "IND",
+        "usage_pct": 0.084
+      },
+      "Bridget Carleton|MIN": {
+        "min_per_game": 27.9,
+        "player_name": "Bridget Carleton",
+        "team": "MIN",
+        "usage_pct": 0.109
+      },
+      "Brionna Jones|ATL": {
+        "min_per_game": 26.6,
+        "player_name": "Brionna Jones",
+        "team": "ATL",
+        "usage_pct": 0.201
+      },
+      "Brittney Griner|ATL": {
+        "min_per_game": 20.8,
+        "player_name": "Brittney Griner",
+        "team": "ATL",
+        "usage_pct": 0.215
+      },
+      "Brittney Sykes|SEA": {
+        "min_per_game": 30.6,
+        "player_name": "Brittney Sykes",
+        "team": "SEA",
+        "usage_pct": 0.237
+      },
+      "Caitlin Clark|IND": {
+        "min_per_game": 31.0,
+        "player_name": "Caitlin Clark",
+        "team": "IND",
+        "usage_pct": 0.287
+      },
+      "Cameron Brink|LAS": {
+        "min_per_game": 12.9,
+        "player_name": "Cameron Brink",
+        "team": "LAS",
+        "usage_pct": 0.198
+      },
+      "Camryn Taylor|MIN": {
+        "min_per_game": 3.8,
+        "player_name": "Camryn Taylor",
+        "team": "MIN",
+        "usage_pct": 0.193
+      },
+      "Carla Leite|GSV": {
+        "min_per_game": 17.2,
+        "player_name": "Carla Leite",
+        "team": "GSV",
+        "usage_pct": 0.223
+      },
+      "Cecilia Zandalasini|GSV": {
+        "min_per_game": 23.7,
+        "player_name": "Cecilia Zandalasini",
+        "team": "GSV",
+        "usage_pct": 0.195
+      },
+      "Chelsea Gray|LVA": {
+        "min_per_game": 31.1,
+        "player_name": "Chelsea Gray",
+        "team": "LVA",
+        "usage_pct": 0.175
+      },
+      "Cheyenne Parker-Tyus|LVA": {
+        "min_per_game": 7.0,
+        "player_name": "Cheyenne Parker-Tyus",
+        "team": "LVA",
+        "usage_pct": 0.353
+      },
+      "Chloe Bibby|IND": {
+        "min_per_game": 11.0,
+        "player_name": "Chloe Bibby",
+        "team": "IND",
+        "usage_pct": 0.172
+      },
+      "Christyn Williams|DAL": {
+        "min_per_game": 11.2,
+        "player_name": "Christyn Williams",
+        "team": "DAL",
+        "usage_pct": 0.194
+      },
+      "Courtney Vandersloot|CHI": {
+        "min_per_game": 27.2,
+        "player_name": "Courtney Vandersloot",
+        "team": "CHI",
+        "usage_pct": 0.178
+      },
+      "Courtney Williams|MIN": {
+        "min_per_game": 28.6,
+        "player_name": "Courtney Williams",
+        "team": "MIN",
+        "usage_pct": 0.249
+      },
+      "Crystal Bradford|LVA": {
+        "min_per_game": 6.0,
+        "player_name": "Crystal Bradford",
+        "team": "LVA",
+        "usage_pct": 0.121
+      },
+      "Damiris Dantas|IND": {
+        "min_per_game": 11.5,
+        "player_name": "Damiris Dantas",
+        "team": "IND",
+        "usage_pct": 0.209
+      },
+      "Dana Evans|LVA": {
+        "min_per_game": 17.7,
+        "player_name": "Dana Evans",
+        "team": "LVA",
+        "usage_pct": 0.191
+      },
+      "DeWanna Bonner|PHX": {
+        "min_per_game": 23.6,
+        "player_name": "DeWanna Bonner",
+        "team": "PHX",
+        "usage_pct": 0.181
+      },
+      "Dearica Hamby|LAS": {
+        "min_per_game": 31.2,
+        "player_name": "Dearica Hamby",
+        "team": "LAS",
+        "usage_pct": 0.246
+      },
+      "DiJonai Carrington|MIN": {
+        "min_per_game": 21.9,
+        "player_name": "DiJonai Carrington",
+        "team": "MIN",
+        "usage_pct": 0.231
+      },
+      "Diamond Miller|DAL": {
+        "min_per_game": 10.9,
+        "player_name": "Diamond Miller",
+        "team": "DAL",
+        "usage_pct": 0.178
+      },
+      "Dominique Malonga|SEA": {
+        "min_per_game": 14.3,
+        "player_name": "Dominique Malonga",
+        "team": "SEA",
+        "usage_pct": 0.239
+      },
+      "Elizabeth Kitley|LVA": {
+        "min_per_game": 8.2,
+        "player_name": "Elizabeth Kitley",
+        "team": "LVA",
+        "usage_pct": 0.142
+      },
+      "Elizabeth Williams|CHI": {
+        "min_per_game": 21.1,
+        "player_name": "Elizabeth Williams",
+        "team": "CHI",
+        "usage_pct": 0.201
+      },
+      "Emily Engstler|WAS": {
+        "min_per_game": 12.8,
+        "player_name": "Emily Engstler",
+        "team": "WAS",
+        "usage_pct": 0.157
+      },
+      "Emma Cannon|LAS": {
+        "min_per_game": 10.1,
+        "player_name": "Emma Cannon",
+        "team": "LAS",
+        "usage_pct": 0.178
+      },
+      "Emma Meesseman|NYL": {
+        "min_per_game": 25.9,
+        "player_name": "Emma Meesseman",
+        "team": "NYL",
+        "usage_pct": 0.221
+      },
+      "Erica Wheeler|SEA": {
+        "min_per_game": 25.6,
+        "player_name": "Erica Wheeler",
+        "team": "SEA",
+        "usage_pct": 0.197
+      },
+      "Ezi Magbegor|SEA": {
+        "min_per_game": 27.3,
+        "player_name": "Ezi Magbegor",
+        "team": "SEA",
+        "usage_pct": 0.136
+      },
+      "Gabby Williams|SEA": {
+        "min_per_game": 31.6,
+        "player_name": "Gabby Williams",
+        "team": "SEA",
+        "usage_pct": 0.186
+      },
+      "Grace Berger|DAL": {
+        "min_per_game": 22.0,
+        "player_name": "Grace Berger",
+        "team": "DAL",
+        "usage_pct": 0.118
+      },
+      "Hailey Van Lith|CHI": {
+        "min_per_game": 12.4,
+        "player_name": "Hailey Van Lith",
+        "team": "CHI",
+        "usage_pct": 0.192
+      },
+      "Haley Jones|DAL": {
+        "min_per_game": 21.2,
+        "player_name": "Haley Jones",
+        "team": "DAL",
+        "usage_pct": 0.178
+      },
+      "Haley Peters|CON": {
+        "min_per_game": 11.5,
+        "player_name": "Haley Peters",
+        "team": "CON",
+        "usage_pct": 0.126
+      },
+      "Iliana Rupert|GSV": {
+        "min_per_game": 23.2,
+        "player_name": "Iliana Rupert",
+        "team": "GSV",
+        "usage_pct": 0.172
+      },
+      "Isabelle Harrison|NYL": {
+        "min_per_game": 10.6,
+        "player_name": "Isabelle Harrison",
+        "team": "NYL",
+        "usage_pct": 0.211
+      },
+      "JJ Quinerly|DAL": {
+        "min_per_game": 15.9,
+        "player_name": "JJ Quinerly",
+        "team": "DAL",
+        "usage_pct": 0.2
+      },
+      "Jackie Young|LVA": {
+        "min_per_game": 30.4,
+        "player_name": "Jackie Young",
+        "team": "LVA",
+        "usage_pct": 0.231
+      },
+      "Jacy Sheldon|WAS": {
+        "min_per_game": 23.6,
+        "player_name": "Jacy Sheldon",
+        "team": "WAS",
+        "usage_pct": 0.136
+      },
+      "Jade Melbourne|WAS": {
+        "min_per_game": 23.4,
+        "player_name": "Jade Melbourne",
+        "team": "WAS",
+        "usage_pct": 0.142
+      },
+      "Jaelyn Brown|CON": {
+        "min_per_game": 13.1,
+        "player_name": "Jaelyn Brown",
+        "team": "CON",
+        "usage_pct": 0.141
+      },
+      "Janelle Salaun|GSV": {
+        "min_per_game": 27.0,
+        "player_name": "Janelle Salaun",
+        "team": "GSV",
+        "usage_pct": 0.205
+      },
+      "Jaylyn Sherrod|MIN": {
+        "min_per_game": 5.5,
+        "player_name": "Jaylyn Sherrod",
+        "team": "MIN",
+        "usage_pct": 0.136
+      },
+      "Jessica Shepard|MIN": {
+        "min_per_game": 20.9,
+        "player_name": "Jessica Shepard",
+        "team": "MIN",
+        "usage_pct": 0.16
+      },
+      "Jewell Loyd|LVA": {
+        "min_per_game": 28.3,
+        "player_name": "Jewell Loyd",
+        "team": "LVA",
+        "usage_pct": 0.179
+      },
+      "Jonquel Jones|NYL": {
+        "min_per_game": 26.8,
+        "player_name": "Jonquel Jones",
+        "team": "NYL",
+        "usage_pct": 0.223
+      },
+      "Jordin Canada|ATL": {
+        "min_per_game": 28.0,
+        "player_name": "Jordin Canada",
+        "team": "ATL",
+        "usage_pct": 0.208
+      },
+      "Joyner Holmes|LVA": {
+        "min_per_game": 4.8,
+        "player_name": "Joyner Holmes",
+        "team": "LVA",
+        "usage_pct": 0.233
+      },
+      "Julie Allemand|LAS": {
+        "min_per_game": 28.3,
+        "player_name": "Julie Allemand",
+        "team": "LAS",
+        "usage_pct": 0.099
+      },
+      "Julie Vanloo|LAS": {
+        "min_per_game": 12.8,
+        "player_name": "Julie Vanloo",
+        "team": "LAS",
+        "usage_pct": 0.156
+      },
+      "Kahleah Copper|PHX": {
+        "min_per_game": 26.9,
+        "player_name": "Kahleah Copper",
+        "team": "PHX",
+        "usage_pct": 0.27
+      },
+      "Kaila Charles|GSV": {
+        "min_per_game": 17.6,
+        "player_name": "Kaila Charles",
+        "team": "GSV",
+        "usage_pct": 0.175
+      },
+      "Kaitlyn Chen|GSV": {
+        "min_per_game": 10.3,
+        "player_name": "Kaitlyn Chen",
+        "team": "GSV",
+        "usage_pct": 0.12
+      },
+      "Kalani Brown|PHX": {
+        "min_per_game": 12.8,
+        "player_name": "Kalani Brown",
+        "team": "PHX",
+        "usage_pct": 0.154
+      },
+      "Kamiah Smalls|ATL": {
+        "min_per_game": 1.1,
+        "player_name": "Kamiah Smalls",
+        "team": "ATL",
+        "usage_pct": 0.0
+      },
+      "Kamilla Cardoso|CHI": {
+        "min_per_game": 27.6,
+        "player_name": "Kamilla Cardoso",
+        "team": "CHI",
+        "usage_pct": 0.225
+      },
+      "Kariata Diaby|CON": {
+        "min_per_game": 8.0,
+        "player_name": "Kariata Diaby",
+        "team": "CON",
+        "usage_pct": 0.133
+      },
+      "Karlie Samuelson|MIN": {
+        "min_per_game": 14.2,
+        "player_name": "Karlie Samuelson",
+        "team": "MIN",
+        "usage_pct": 0.115
+      },
+      "Kate Martin|GSV": {
+        "min_per_game": 16.4,
+        "player_name": "Kate Martin",
+        "team": "GSV",
+        "usage_pct": 0.202
+      },
+      "Kathryn Westbeld|PHX": {
+        "min_per_game": 18.4,
+        "player_name": "Kathryn Westbeld",
+        "team": "PHX",
+        "usage_pct": 0.137
+      },
+      "Kayla McBride|MIN": {
+        "min_per_game": 31.3,
+        "player_name": "Kayla McBride",
+        "team": "MIN",
+        "usage_pct": 0.197
+      },
+      "Kayla Thornton|GSV": {
+        "min_per_game": 30.1,
+        "player_name": "Kayla Thornton",
+        "team": "GSV",
+        "usage_pct": 0.227
+      },
+      "Kelsey Mitchell|IND": {
+        "min_per_game": 31.4,
+        "player_name": "Kelsey Mitchell",
+        "team": "IND",
+        "usage_pct": 0.264
+      },
+      "Kelsey Plum|LAS": {
+        "min_per_game": 35.1,
+        "player_name": "Kelsey Plum",
+        "team": "LAS",
+        "usage_pct": 0.246
+      },
+      "Kennedy Burke|NYL": {
+        "min_per_game": 21.6,
+        "player_name": "Kennedy Burke",
+        "team": "NYL",
+        "usage_pct": 0.155
+      },
+      "Kia Nurse|CHI": {
+        "min_per_game": 21.9,
+        "player_name": "Kia Nurse",
+        "team": "CHI",
+        "usage_pct": 0.165
+      },
+      "Kiah Stokes|LVA": {
+        "min_per_game": 12.9,
+        "player_name": "Kiah Stokes",
+        "team": "LVA",
+        "usage_pct": 0.06
+      },
+      "Kiana Williams|PHX": {
+        "min_per_game": 9.7,
+        "player_name": "Kiana Williams",
+        "team": "PHX",
+        "usage_pct": 0.198
+      },
+      "Kierstan Bell|LVA": {
+        "min_per_game": 12.2,
+        "player_name": "Kierstan Bell",
+        "team": "LVA",
+        "usage_pct": 0.183
+      },
+      "Kiki Iriafen|WAS": {
+        "min_per_game": 26.9,
+        "player_name": "Kiki Iriafen",
+        "team": "WAS",
+        "usage_pct": 0.231
+      },
+      "Kitija Laksa|PHX": {
+        "min_per_game": 19.0,
+        "player_name": "Kitija Laksa",
+        "team": "PHX",
+        "usage_pct": 0.144
+      },
+      "Kyara Linskens|GSV": {
+        "min_per_game": 6.7,
+        "player_name": "Kyara Linskens",
+        "team": "GSV",
+        "usage_pct": 0.106
+      },
+      "Kyra Lambert|IND": {
+        "min_per_game": 0.1,
+        "player_name": "Kyra Lambert",
+        "team": "IND",
+        "usage_pct": 0.0
+      },
+      "Laeticia Amihere|GSV": {
+        "min_per_game": 13.3,
+        "player_name": "Laeticia Amihere",
+        "team": "GSV",
+        "usage_pct": 0.197
+      },
+      "Leila Lacan|CON": {
+        "min_per_game": 26.6,
+        "player_name": "Leila Lacan",
+        "team": "CON",
+        "usage_pct": 0.185
+      },
+      "Leonie Fiebich|NYL": {
+        "min_per_game": 28.1,
+        "player_name": "Leonie Fiebich",
+        "team": "NYL",
+        "usage_pct": 0.127
+      },
+      "Lexi Held|PHX": {
+        "min_per_game": 14.7,
+        "player_name": "Lexi Held",
+        "team": "PHX",
+        "usage_pct": 0.182
+      },
+      "Lexie Brown|SEA": {
+        "min_per_game": 9.4,
+        "player_name": "Lexie Brown",
+        "team": "SEA",
+        "usage_pct": 0.114
+      },
+      "Lexie Hull|IND": {
+        "min_per_game": 27.0,
+        "player_name": "Lexie Hull",
+        "team": "IND",
+        "usage_pct": 0.129
+      },
+      "Li Yueru|DAL": {
+        "min_per_game": 16.8,
+        "player_name": "Li Yueru",
+        "team": "DAL",
+        "usage_pct": 0.167
+      },
+      "Liatu King|DAL": {
+        "min_per_game": 9.7,
+        "player_name": "Liatu King",
+        "team": "DAL",
+        "usage_pct": 0.133
+      },
+      "Lindsay Allen|CON": {
+        "min_per_game": 14.5,
+        "player_name": "Lindsay Allen",
+        "team": "CON",
+        "usage_pct": 0.105
+      },
+      "Lucy Olsen|WAS": {
+        "min_per_game": 12.4,
+        "player_name": "Lucy Olsen",
+        "team": "WAS",
+        "usage_pct": 0.157
+      },
+      "Luisa Geiselsoder|DAL": {
+        "min_per_game": 22.4,
+        "player_name": "Luisa Geiselsoder",
+        "team": "DAL",
+        "usage_pct": 0.144
+      },
+      "Mackenzie Holmes|SEA": {
+        "min_per_game": 5.8,
+        "player_name": "Mackenzie Holmes",
+        "team": "SEA",
+        "usage_pct": 0.056
+      },
+      "Maddy Siegrist|DAL": {
+        "min_per_game": 27.0,
+        "player_name": "Maddy Siegrist",
+        "team": "DAL",
+        "usage_pct": 0.184
+      },
+      "Maddy Westbeld|CHI": {
+        "min_per_game": 13.6,
+        "player_name": "Maddy Westbeld",
+        "team": "CHI",
+        "usage_pct": 0.165
+      },
+      "Madison Scott|WAS": {
+        "min_per_game": 5.2,
+        "player_name": "Madison Scott",
+        "team": "WAS",
+        "usage_pct": 0.126
+      },
+      "Makayla Timpson|IND": {
+        "min_per_game": 7.1,
+        "player_name": "Makayla Timpson",
+        "team": "IND",
+        "usage_pct": 0.155
+      },
+      "Mamignan Toure|CON": {
+        "min_per_game": 8.2,
+        "player_name": "Mamignan Toure",
+        "team": "CON",
+        "usage_pct": 0.135
+      },
+      "Maria Kliundikova|MIN": {
+        "min_per_game": 11.0,
+        "player_name": "Maria Kliundikova",
+        "team": "MIN",
+        "usage_pct": 0.183
+      },
+      "Marina Mabrey|CON": {
+        "min_per_game": 31.5,
+        "player_name": "Marina Mabrey",
+        "team": "CON",
+        "usage_pct": 0.248
+      },
+      "Marine Johannes|NYL": {
+        "min_per_game": 18.3,
+        "player_name": "Marine Johannes",
+        "team": "NYL",
+        "usage_pct": 0.17
+      },
+      "Mari\u00e8me Badiane|MIN": {
+        "min_per_game": 3.6,
+        "player_name": "Mari\u00e8me Badiane",
+        "team": "MIN",
+        "usage_pct": 0.185
+      },
+      "Marquesha Davis|CHI": {
+        "min_per_game": 4.7,
+        "player_name": "Marquesha Davis",
+        "team": "CHI",
+        "usage_pct": 0.16
+      },
+      "Maya Caldwell|ATL": {
+        "min_per_game": 18.5,
+        "player_name": "Maya Caldwell",
+        "team": "ATL",
+        "usage_pct": 0.14
+      },
+      "Megan Gustafson|LVA": {
+        "min_per_game": 11.3,
+        "player_name": "Megan Gustafson",
+        "team": "LVA",
+        "usage_pct": 0.131
+      },
+      "Megan McConnell|PHX": {
+        "min_per_game": 12.6,
+        "player_name": "Megan McConnell",
+        "team": "PHX",
+        "usage_pct": 0.129
+      },
+      "Mercedes Russell|LAS": {
+        "min_per_game": 8.2,
+        "player_name": "Mercedes Russell",
+        "team": "LAS",
+        "usage_pct": 0.108
+      },
+      "Michaela Onyenwere|CHI": {
+        "min_per_game": 16.9,
+        "player_name": "Michaela Onyenwere",
+        "team": "CHI",
+        "usage_pct": 0.176
+      },
+      "Monique Akoa Makani|PHX": {
+        "min_per_game": 21.5,
+        "player_name": "Monique Akoa Makani",
+        "team": "PHX",
+        "usage_pct": 0.167
+      },
+      "Monique Billings|GSV": {
+        "min_per_game": 18.2,
+        "player_name": "Monique Billings",
+        "team": "GSV",
+        "usage_pct": 0.179
+      },
+      "Moriah Jefferson|CHI": {
+        "min_per_game": 7.1,
+        "player_name": "Moriah Jefferson",
+        "team": "CHI",
+        "usage_pct": 0.125
+      },
+      "Murjanatu Musa|PHX": {
+        "min_per_game": 10.1,
+        "player_name": "Murjanatu Musa",
+        "team": "PHX",
+        "usage_pct": 0.164
+      },
+      "Myisha Hines-Allen|DAL": {
+        "min_per_game": 22.1,
+        "player_name": "Myisha Hines-Allen",
+        "team": "DAL",
+        "usage_pct": 0.179
+      },
+      "NaLyssa Smith|LVA": {
+        "min_per_game": 21.2,
+        "player_name": "NaLyssa Smith",
+        "team": "LVA",
+        "usage_pct": 0.168
+      },
+      "Napheesa Collier|MIN": {
+        "min_per_game": 32.3,
+        "player_name": "Napheesa Collier",
+        "team": "MIN",
+        "usage_pct": 0.278
+      },
+      "Natasha Cloud|NYL": {
+        "min_per_game": 29.0,
+        "player_name": "Natasha Cloud",
+        "team": "NYL",
+        "usage_pct": 0.171
+      },
+      "Natasha Howard|IND": {
+        "min_per_game": 24.1,
+        "player_name": "Natasha Howard",
+        "team": "IND",
+        "usage_pct": 0.208
+      },
+      "Natasha Mack|PHX": {
+        "min_per_game": 18.3,
+        "player_name": "Natasha Mack",
+        "team": "PHX",
+        "usage_pct": 0.108
+      },
+      "Natisha Hiedeman|MIN": {
+        "min_per_game": 18.9,
+        "player_name": "Natisha Hiedeman",
+        "team": "MIN",
+        "usage_pct": 0.201
+      },
+      "Naz Hillmon|ATL": {
+        "min_per_game": 25.5,
+        "player_name": "Naz Hillmon",
+        "team": "ATL",
+        "usage_pct": 0.148
+      },
+      "Nia Coffey|ATL": {
+        "min_per_game": 10.3,
+        "player_name": "Nia Coffey",
+        "team": "ATL",
+        "usage_pct": 0.19
+      },
+      "Nneka Ogwumike|SEA": {
+        "min_per_game": 30.9,
+        "player_name": "Nneka Ogwumike",
+        "team": "SEA",
+        "usage_pct": 0.245
+      },
+      "Nyara Sabally|NYL": {
+        "min_per_game": 17.9,
+        "player_name": "Nyara Sabally",
+        "team": "NYL",
+        "usage_pct": 0.147
+      },
+      "Odyssey Sims|IND": {
+        "min_per_game": 27.9,
+        "player_name": "Odyssey Sims",
+        "team": "IND",
+        "usage_pct": 0.178
+      },
+      "Olivia Nelson-Ododa|CON": {
+        "min_per_game": 21.6,
+        "player_name": "Olivia Nelson-Ododa",
+        "team": "CON",
+        "usage_pct": 0.169
+      },
+      "Paige Bueckers|DAL": {
+        "min_per_game": 33.3,
+        "player_name": "Paige Bueckers",
+        "team": "DAL",
+        "usage_pct": 0.241
+      },
+      "Rachel Banham|CHI": {
+        "min_per_game": 24.6,
+        "player_name": "Rachel Banham",
+        "team": "CHI",
+        "usage_pct": 0.174
+      },
+      "Rae Burrell|LAS": {
+        "min_per_game": 18.4,
+        "player_name": "Rae Burrell",
+        "team": "LAS",
+        "usage_pct": 0.179
+      },
+      "Rayah Marshall|CON": {
+        "min_per_game": 6.0,
+        "player_name": "Rayah Marshall",
+        "team": "CON",
+        "usage_pct": 0.171
+      },
+      "Rebecca Allen|CHI": {
+        "min_per_game": 18.7,
+        "player_name": "Rebecca Allen",
+        "team": "CHI",
+        "usage_pct": 0.151
+      },
+      "Rebekah Gardner|NYL": {
+        "min_per_game": 12.2,
+        "player_name": "Rebekah Gardner",
+        "team": "NYL",
+        "usage_pct": 0.128
+      },
+      "Rhyne Howard|ATL": {
+        "min_per_game": 34.9,
+        "player_name": "Rhyne Howard",
+        "team": "ATL",
+        "usage_pct": 0.229
+      },
+      "Rickea Jackson|LAS": {
+        "min_per_game": 30.9,
+        "player_name": "Rickea Jackson",
+        "team": "LAS",
+        "usage_pct": 0.221
+      },
+      "Robyn Parks|CON": {
+        "min_per_game": 10.5,
+        "player_name": "Robyn Parks",
+        "team": "CON",
+        "usage_pct": 0.039
+      },
+      "Sabrina Ionescu|NYL": {
+        "min_per_game": 31.4,
+        "player_name": "Sabrina Ionescu",
+        "team": "NYL",
+        "usage_pct": 0.273
+      },
+      "Sami Whitcomb|PHX": {
+        "min_per_game": 23.9,
+        "player_name": "Sami Whitcomb",
+        "team": "PHX",
+        "usage_pct": 0.175
+      },
+      "Sania Feagin|LAS": {
+        "min_per_game": 4.8,
+        "player_name": "Sania Feagin",
+        "team": "LAS",
+        "usage_pct": 0.198
+      },
+      "Saniya Rivers|CON": {
+        "min_per_game": 26.1,
+        "player_name": "Saniya Rivers",
+        "team": "CON",
+        "usage_pct": 0.173
+      },
+      "Sarah Ashlee Barker|LAS": {
+        "min_per_game": 14.1,
+        "player_name": "Sarah Ashlee Barker",
+        "team": "LAS",
+        "usage_pct": 0.136
+      },
+      "Satou Sabally|PHX": {
+        "min_per_game": 26.6,
+        "player_name": "Satou Sabally",
+        "team": "PHX",
+        "usage_pct": 0.276
+      },
+      "Serena Sundell|DAL": {
+        "min_per_game": 7.2,
+        "player_name": "Serena Sundell",
+        "team": "DAL",
+        "usage_pct": 0.056
+      },
+      "Sevgi Uzun|CHI": {
+        "min_per_game": 17.6,
+        "player_name": "Sevgi Uzun",
+        "team": "CHI",
+        "usage_pct": 0.147
+      },
+      "Shakira Austin|WAS": {
+        "min_per_game": 23.0,
+        "player_name": "Shakira Austin",
+        "team": "WAS",
+        "usage_pct": 0.283
+      },
+      "Shatori Walker-Kimbrough|ATL": {
+        "min_per_game": 8.6,
+        "player_name": "Shatori Walker-Kimbrough",
+        "team": "ATL",
+        "usage_pct": 0.101
+      },
+      "Shey Peddy|IND": {
+        "min_per_game": 17.6,
+        "player_name": "Shey Peddy",
+        "team": "IND",
+        "usage_pct": 0.115
+      },
+      "Sika Kone|ATL": {
+        "min_per_game": 4.5,
+        "player_name": "Sika Kone",
+        "team": "ATL",
+        "usage_pct": 0.16
+      },
+      "Skylar Diggins|SEA": {
+        "min_per_game": 31.2,
+        "player_name": "Skylar Diggins",
+        "team": "SEA",
+        "usage_pct": 0.235
+      },
+      "Sonia Citron|WAS": {
+        "min_per_game": 32.1,
+        "player_name": "Sonia Citron",
+        "team": "WAS",
+        "usage_pct": 0.195
+      },
+      "Sophie Cunningham|IND": {
+        "min_per_game": 25.2,
+        "player_name": "Sophie Cunningham",
+        "team": "IND",
+        "usage_pct": 0.128
+      },
+      "Stefanie Dolson|WAS": {
+        "min_per_game": 15.2,
+        "player_name": "Stefanie Dolson",
+        "team": "WAS",
+        "usage_pct": 0.122
+      },
+      "Stephanie Talbot|NYL": {
+        "min_per_game": 14.2,
+        "player_name": "Stephanie Talbot",
+        "team": "NYL",
+        "usage_pct": 0.124
+      },
+      "Sug Sutton|WAS": {
+        "min_per_game": 26.1,
+        "player_name": "Sug Sutton",
+        "team": "WAS",
+        "usage_pct": 0.152
+      },
+      "Sydney Colson|IND": {
+        "min_per_game": 13.5,
+        "player_name": "Sydney Colson",
+        "team": "IND",
+        "usage_pct": 0.119
+      },
+      "Taylor Thierry|ATL": {
+        "min_per_game": 2.1,
+        "player_name": "Taylor Thierry",
+        "team": "ATL",
+        "usage_pct": 0.163
+      },
+      "Te-Hina Paopao|ATL": {
+        "min_per_game": 16.7,
+        "player_name": "Te-Hina Paopao",
+        "team": "ATL",
+        "usage_pct": 0.163
+      },
+      "Teaira McCowan|DAL": {
+        "min_per_game": 12.9,
+        "player_name": "Teaira McCowan",
+        "team": "DAL",
+        "usage_pct": 0.171
+      },
+      "Temi Fagbenle|GSV": {
+        "min_per_game": 23.7,
+        "player_name": "Temi Fagbenle",
+        "team": "GSV",
+        "usage_pct": 0.156
+      },
+      "Tiffany Hayes|GSV": {
+        "min_per_game": 26.9,
+        "player_name": "Tiffany Hayes",
+        "team": "GSV",
+        "usage_pct": 0.208
+      },
+      "Tiffany Mitchell|SEA": {
+        "min_per_game": 13.1,
+        "player_name": "Tiffany Mitchell",
+        "team": "SEA",
+        "usage_pct": 0.127
+      },
+      "Tina Charles|CON": {
+        "min_per_game": 28.4,
+        "player_name": "Tina Charles",
+        "team": "CON",
+        "usage_pct": 0.274
+      },
+      "Tyasha Harris|DAL": {
+        "min_per_game": 16.5,
+        "player_name": "Tyasha Harris",
+        "team": "DAL",
+        "usage_pct": 0.111
+      },
+      "Veronica Burton|GSV": {
+        "min_per_game": 29.4,
+        "player_name": "Veronica Burton",
+        "team": "GSV",
+        "usage_pct": 0.194
+      },
+      "Yvonne Anderson|MIN": {
+        "min_per_game": 12.4,
+        "player_name": "Yvonne Anderson",
+        "team": "MIN",
+        "usage_pct": 0.094
+      },
+      "Zia Cooke|SEA": {
+        "min_per_game": 10.0,
+        "player_name": "Zia Cooke",
+        "team": "SEA",
+        "usage_pct": 0.192
+      }
+    }
+  }
+}

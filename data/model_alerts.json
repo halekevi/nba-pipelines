@@ -1,11 +1,1 @@
-[
-  {
-    "sport": "NBA1H",
-    "message": "NBA1H AUC below 0.50 for 3 consecutive tracking runs",
-    "auc_series": [
-      0.4761576816745655,
-      0.4761576816745655,
-      0.47590427647415906
-    ]
-  }
-]
+[]

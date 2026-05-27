@@ -1,1 +1,59 @@
-{}
+{
+  "season_2025": {
+    "fetched_at": "2026-05-26T11:34:03.448612+00:00",
+    "teams": {
+      "ATL": {
+        "pace": 93.08,
+        "team_name": "Atlanta Dream"
+      },
+      "CHI": {
+        "pace": 93.75,
+        "team_name": "Chicago Sky"
+      },
+      "CON": {
+        "pace": 94.57,
+        "team_name": "Connecticut Sun"
+      },
+      "DAL": {
+        "pace": 96.34,
+        "team_name": "Dallas Wings"
+      },
+      "GSV": {
+        "pace": 91.55,
+        "team_name": "Golden State Valkyries"
+      },
+      "IND": {
+        "pace": 95.71,
+        "team_name": "Indiana Fever"
+      },
+      "LAS": {
+        "pace": 96.84,
+        "team_name": "Los Angeles Sparks"
+      },
+      "LVA": {
+        "pace": 94.92,
+        "team_name": "Las Vegas Aces"
+      },
+      "MIN": {
+        "pace": 94.06,
+        "team_name": "Minnesota Lynx"
+      },
+      "NYL": {
+        "pace": 95.75,
+        "team_name": "New York Liberty"
+      },
+      "PHO": {
+        "pace": 95.81,
+        "team_name": "Phoenix Mercury"
+      },
+      "SEA": {
+        "pace": 95.28,
+        "team_name": "Seattle Storm"
+      },
+      "WAS": {
+        "pace": 94.76,
+        "team_name": "Washington Mystics"
+      }
+    }
+  }
+}

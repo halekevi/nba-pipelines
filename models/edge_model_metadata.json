@@ -1,53 +1,49 @@
 {
-  "trained_at": "2026-05-25T18:29:51Z",
-  "trained_at_utc": "2026-05-25T18:29:51.440517+00:00",
-  "training_rows_total": 89700,
+  "trained_at": "2026-05-27T12:13:38Z",
+  "trained_at_utc": "2026-05-27T12:13:38.889379+00:00",
+  "training_rows_total": 35593,
   "rows_per_sport": {
-    "MLB": 35197,
-    "NBA": 13366,
-    "NBA1H": 575,
-    "NBA1Q": 1467,
-    "NHL": 4222,
-    "SOCCER": 28583,
-    "WNBA": 6290
+    "MLB": 18672,
+    "NBA": 5081,
+    "NBA1Q": 353,
+    "NHL": 1799,
+    "SOCCER": 6131,
+    "WNBA": 3557
   },
-  "roc_auc_overall": 0.7682183326893959,
-  "roc_auc_test": 0.7682183326893959,
-  "roc_auc_calibrated": 0.7682183326893959,
+  "roc_auc_overall": 0.7673172502710739,
+  "roc_auc_test": 0.7673172502710739,
+  "roc_auc_calibrated": 0.7673172502710739,
   "roc_auc_eval_set": "test",
-  "train_fit_rows": 57408,
-  "platt_calib_rows": 14352,
-  "test_rows": 17940,
+  "train_fit_rows": 22779,
+  "platt_calib_rows": 5695,
+  "test_rows": 7119,
   "test_holdout_frac": 0.2,
   "platt_calib_frac_of_train_pool": 0.2,
   "roc_auc_per_sport": {
-    "MLB": 0.7201715481514244,
-    "NBA": 0.6022557739563712,
-    "NBA1H": 0.5456823877876509,
-    "NBA1Q": 0.6595537788342067,
-    "NHL": 0.7126041230396947,
-    "SOCCER": 0.7435550185270701,
-    "WNBA": 0.6879269139977566
+    "MLB": 0.7344110133157101,
+    "NBA": 0.6024917745511766,
+    "NBA1Q": 0.6927655677655677,
+    "NHL": 0.7732019704433497,
+    "SOCCER": 0.5551128304319793,
+    "WNBA": 0.7031899058432567
   },
   "roc_auc_per_sport_with_nulls": {
-    "MLB": 0.7201715481514244,
-    "NBA": 0.6022557739563712,
-    "NBA1H": 0.5456823877876509,
-    "NBA1Q": 0.6595537788342067,
-    "NHL": 0.7126041230396947,
-    "SOCCER": 0.7435550185270701,
-    "WNBA": 0.6879269139977566
+    "MLB": 0.7344110133157101,
+    "NBA": 0.6024917745511766,
+    "NBA1Q": 0.6927655677655677,
+    "NHL": 0.7732019704433497,
+    "SOCCER": 0.5551128304319793,
+    "WNBA": 0.7031899058432567
   },
   "per_sport_holdout_status": {
     "MLB": "ok",
     "NBA": "ok",
-    "NBA1H": "ok",
     "NBA1Q": "ok",
     "NHL": "ok",
     "SOCCER": "ok",
     "WNBA": "ok"
   },
-  "scale_pos_weight": 2.287159190853122,
+  "scale_pos_weight": 2.128229917384426,
   "feature_columns": [
     "composite_hit_rate",
     "tier_encoded",
@@ -230,7 +226,9 @@
   "features_removed_leakage": [
     "edge"
   ],
-  "sports_skipped_quality": {},
+  "sports_skipped_quality": {
+    "NBA1H": 173
+  },
   "leakage_confirmed": true,
   "recursive_outputs_used": true,
   "dedupe_used": true,
@@ -244,38 +242,28 @@
   "edge_slice_isotonic_inactive_sports": [
     "CBB"
   ],
-  "edge_slice_isotonic_fitted_count": 6,
+  "edge_slice_isotonic_fitted_count": 4,
   "edge_slice_isotonic_fitted_keys": [
     "MLB/goblin/OVER",
     "SOCCER/standard/OVER",
-    "MLB/demon/OVER",
-    "NBA/standard/OVER",
     "NBA/goblin/OVER",
-    "NHL/standard/OVER"
+    "MLB/demon/OVER"
   ],
   "edge_slice_isotonic_skipped": [
-    "('NBA', 'demon', 'OVER'):n=184",
-    "('SOCCER', 'demon', 'OVER'):n=153",
-    "('SOCCER', 'standard', 'UNDER'):n=26",
-    "('WNBA', 'standard', 'OVER'):n=18",
-    "('NBA1Q', 'goblin', 'OVER'):n=73",
-    "('NHL', '\u2014', 'OVER'):n=51",
-    "('WNBA', 'demon', 'OVER'):n=167",
-    "('WNBA', 'goblin', 'OVER'):n=67",
-    "('WNBA', 'standard', 'UNDER'):n=100",
-    "('MLB', 'standard', 'OVER'):n=136",
-    "('NHL', 'demon', 'OVER'):n=31",
-    "('NBA', 'standard', 'UNDER'):n=117",
-    "('NHL', 'standard', 'UNDER'):n=18",
-    "('NBA1H', 'standard', 'OVER'):n=45",
-    "('MLB', 'standard', 'UNDER'):n=91",
-    "('NBA1Q', 'demon', 'OVER'):n=47",
-    "('SOCCER', 'goblin', 'UNDER'):n=1",
-    "('NBA1Q', 'standard', 'OVER'):n=20",
-    "('NBA1H', 'standard', 'UNDER'):n=19",
-    "('NHL', '\u2014', 'UNDER'):n=4",
-    "('NBA1H', 'demon', 'OVER'):n=1",
-    "('NBA1Q', 'standard', 'UNDER'):n=3",
-    "('NHL', 'goblin', 'OVER'):n=1"
+    "('NBA', 'demon', 'OVER'):n=50",
+    "('NBA', 'standard', 'UNDER'):n=61",
+    "('NHL', 'standard', 'OVER'):n=190",
+    "('WNBA', 'standard', 'UNDER'):n=45",
+    "('MLB', 'standard', 'UNDER'):n=95",
+    "('WNBA', 'demon', 'OVER'):n=106",
+    "('NBA', 'standard', 'OVER'):n=145",
+    "('WNBA', 'goblin', 'OVER'):n=65",
+    "('WNBA', 'standard', 'OVER'):n=31",
+    "('MLB', 'standard', 'OVER'):n=97",
+    "('NBA1Q', 'demon', 'OVER'):n=10",
+    "('NBA1Q', 'standard', 'OVER'):n=5",
+    "('NHL', 'standard', 'UNDER'):n=12",
+    "('SOCCER', 'standard', 'UNDER'):n=5",
+    "('NBA1Q', 'goblin', 'OVER'):n=11"
   ]
 }

@@ -42,6 +42,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.line_movement import enrich_with_line_movement
 
 from nba_enrichment_carry import (
     is_nba1h_pipeline,
@@ -198,6 +199,19 @@ def main() -> None:
     df = finalize_l10_ui_columns(df, line_col=args.line_col)
     if carry_df is not None:
         df = reattach_enrichment_carry(df, carry_df, carry_cols, label=args.input)
+    df = enrich_with_line_movement(
+        df,
+        sport_key="basketball_nba",
+        markets=[
+            "player_points",
+            "player_rebounds",
+            "player_assists",
+            "player_threes",
+            "player_points_rebounds_assists",
+            "player_steals",
+            "player_blocks",
+        ],
+    )
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}")
     print(f"Rows: {len(df)}")

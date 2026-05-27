@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-25T18:54:07.494248Z",
+  "generated_at": "2026-05-26T11:31:59.200693Z",
   "source_csv": "retrain_dataset.csv",
   "total_players": 359,
   "players": [
@@ -42,7 +42,7 @@
           "hit_rate": 0.6667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -84,7 +84,7 @@
           "hit_rate": 0.6957
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -133,7 +133,7 @@
           "hit_rate": 0.4
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -175,7 +175,7 @@
           "hit_rate": 0.45
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -231,7 +231,7 @@
           "hit_rate": 0.52
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -265,7 +265,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -314,7 +314,7 @@
           "hit_rate": 0.5833
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -348,7 +348,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -390,7 +390,7 @@
           "hit_rate": 0.4231
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -446,7 +446,7 @@
           "hit_rate": 0.4
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -480,7 +480,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -536,7 +536,7 @@
           "hit_rate": 0.4828
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -578,7 +578,7 @@
           "hit_rate": 0.5217
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -612,7 +612,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -661,7 +661,7 @@
           "hit_rate": 0.4773
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -717,7 +717,7 @@
           "hit_rate": 0.45
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -773,7 +773,7 @@
           "hit_rate": 0.4875
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -815,7 +815,7 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -864,7 +864,7 @@
           "hit_rate": 0.3
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -920,7 +920,7 @@
           "hit_rate": 0.3939
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -976,7 +976,7 @@
           "hit_rate": 0.411
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1032,7 +1032,7 @@
           "hit_rate": 0.3929
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1088,7 +1088,7 @@
           "hit_rate": 0.375
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1130,7 +1130,7 @@
           "hit_rate": 0.4103
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1172,7 +1172,7 @@
           "hit_rate": 0.6818
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1228,7 +1228,7 @@
           "hit_rate": 0.3704
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1270,7 +1270,7 @@
           "hit_rate": 0.32
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1326,7 +1326,7 @@
           "hit_rate": 0.381
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1382,7 +1382,7 @@
           "hit_rate": 0.4
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1438,7 +1438,7 @@
           "hit_rate": 0.3833
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1494,7 +1494,7 @@
           "hit_rate": 0.303
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1536,7 +1536,7 @@
           "hit_rate": 0.45
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1578,7 +1578,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1634,7 +1634,7 @@
           "hit_rate": 0.4474
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1668,7 +1668,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1724,7 +1724,7 @@
           "hit_rate": 0.3607
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1780,7 +1780,7 @@
           "hit_rate": 0.3913
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1836,7 +1836,7 @@
           "hit_rate": 0.0909
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1892,7 +1892,7 @@
           "hit_rate": 0.32
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1934,7 +1934,7 @@
           "hit_rate": 0.2381
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -1990,7 +1990,7 @@
           "hit_rate": 0.4085
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2046,7 +2046,7 @@
           "hit_rate": 0.36
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2088,7 +2088,7 @@
           "hit_rate": 0.375
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2130,7 +2130,7 @@
           "hit_rate": 0.1304
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2186,7 +2186,7 @@
           "hit_rate": 0.3182
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2242,7 +2242,7 @@
           "hit_rate": 0.3409
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2298,7 +2298,7 @@
           "hit_rate": 0.3625
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2354,7 +2354,7 @@
           "hit_rate": 0.3793
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2410,7 +2410,7 @@
           "hit_rate": 0.3538
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2466,7 +2466,7 @@
           "hit_rate": 0.4242
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2508,7 +2508,7 @@
           "hit_rate": 1.0
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2550,7 +2550,7 @@
           "hit_rate": 0.9583
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2584,7 +2584,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2626,7 +2626,7 @@
           "hit_rate": 0.8696
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2660,7 +2660,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2716,7 +2716,7 @@
           "hit_rate": 0.8056
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2772,7 +2772,7 @@
           "hit_rate": 0.8478
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2806,7 +2806,7 @@
         "hit_rate": 0.7857
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2862,7 +2862,7 @@
           "hit_rate": 0.7576
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -2918,7 +2918,7 @@
           "hit_rate": 0.875
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -2952,7 +2952,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3001,7 +3001,7 @@
           "hit_rate": 0.7241
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3057,7 +3057,7 @@
           "hit_rate": 0.7742
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3091,7 +3091,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3147,7 +3147,7 @@
           "hit_rate": 0.72
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3203,7 +3203,7 @@
           "hit_rate": 0.7429
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3259,7 +3259,7 @@
           "hit_rate": 0.7273
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3315,7 +3315,7 @@
           "hit_rate": 0.6552
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3371,7 +3371,7 @@
           "hit_rate": 0.65
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3405,7 +3405,7 @@
         "hit_rate": 0.9091
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3461,7 +3461,7 @@
           "hit_rate": 0.6667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3495,7 +3495,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3529,7 +3529,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3585,7 +3585,7 @@
           "hit_rate": 0.725
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3641,7 +3641,7 @@
           "hit_rate": 0.7037
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3697,7 +3697,7 @@
           "hit_rate": 0.7143
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3746,7 +3746,7 @@
           "hit_rate": 0.6667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3780,7 +3780,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3836,7 +3836,7 @@
           "hit_rate": 0.625
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3870,7 +3870,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -3926,7 +3926,7 @@
           "hit_rate": 0.5185
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -3982,7 +3982,7 @@
           "hit_rate": 0.5517
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4038,7 +4038,7 @@
           "hit_rate": 0.5833
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4094,7 +4094,7 @@
           "hit_rate": 0.45
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4136,7 +4136,7 @@
           "hit_rate": 0.6667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4170,7 +4170,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4219,7 +4219,7 @@
           "hit_rate": 0.3611
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4275,7 +4275,7 @@
           "hit_rate": 0.5769
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4331,7 +4331,7 @@
           "hit_rate": 0.4848
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4365,7 +4365,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4399,7 +4399,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4455,7 +4455,7 @@
           "hit_rate": 0.48
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4511,7 +4511,7 @@
           "hit_rate": 0.52
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4567,7 +4567,7 @@
           "hit_rate": 0.5667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4601,7 +4601,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4657,7 +4657,7 @@
           "hit_rate": 0.5455
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4691,7 +4691,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4740,7 +4740,7 @@
           "hit_rate": 0.3
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4796,7 +4796,7 @@
           "hit_rate": 0.5517
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -4852,7 +4852,7 @@
           "hit_rate": 0.4595
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4908,7 +4908,7 @@
           "hit_rate": 0.3913
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4942,7 +4942,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -4976,7 +4976,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5010,7 +5010,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5044,7 +5044,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5078,7 +5078,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5112,7 +5112,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5161,7 +5161,7 @@
           "hit_rate": 0.7143
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5210,7 +5210,7 @@
           "hit_rate": 0.8571
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5244,7 +5244,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5278,7 +5278,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5327,7 +5327,7 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5383,7 +5383,7 @@
           "hit_rate": 0.4286
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5417,7 +5417,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5459,7 +5459,7 @@
           "hit_rate": 0.8333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5493,7 +5493,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5549,7 +5549,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5583,7 +5583,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5625,7 +5625,7 @@
           "hit_rate": 0.6
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5681,7 +5681,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5730,7 +5730,7 @@
           "hit_rate": 0.6
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5779,7 +5779,7 @@
           "hit_rate": 0.4286
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5813,7 +5813,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5855,7 +5855,7 @@
           "hit_rate": 0.5714
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -5911,7 +5911,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5960,7 +5960,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -5994,7 +5994,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6028,7 +6028,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6077,7 +6077,7 @@
           "hit_rate": 0.4
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6119,7 +6119,7 @@
           "hit_rate": 0.5714
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6168,7 +6168,7 @@
           "hit_rate": 0.4
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6210,7 +6210,7 @@
           "hit_rate": 0.7879
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6244,7 +6244,7 @@
         "hit_rate": 0.9412
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6278,7 +6278,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6312,7 +6312,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6346,7 +6346,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6380,7 +6380,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6422,7 +6422,7 @@
           "hit_rate": 0.88
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6464,7 +6464,7 @@
           "hit_rate": 0.619
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6498,7 +6498,7 @@
         "hit_rate": 0.7692
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6540,7 +6540,7 @@
           "hit_rate": 0.7083
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6574,7 +6574,7 @@
         "hit_rate": 0.8125
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6616,7 +6616,7 @@
           "hit_rate": 0.6818
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6650,7 +6650,7 @@
         "hit_rate": 0.8571
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6684,7 +6684,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6726,7 +6726,7 @@
           "hit_rate": 0.7
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6768,7 +6768,7 @@
           "hit_rate": 0.52
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6802,7 +6802,7 @@
         "hit_rate": 0.7143
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6836,7 +6836,7 @@
         "hit_rate": 0.6364
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6878,7 +6878,7 @@
           "hit_rate": 0.5417
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6912,7 +6912,7 @@
         "hit_rate": 0.7143
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -6946,7 +6946,7 @@
         "hit_rate": 0.7692
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -6980,7 +6980,7 @@
         "hit_rate": 0.4706
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7014,7 +7014,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7048,7 +7048,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7082,7 +7082,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7116,7 +7116,7 @@
         "hit_rate": 0.9286
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7150,7 +7150,7 @@
         "hit_rate": 0.8182
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7184,7 +7184,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7218,7 +7218,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7252,7 +7252,7 @@
         "hit_rate": 0.9
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7286,7 +7286,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7320,7 +7320,7 @@
         "hit_rate": 0.875
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7354,7 +7354,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7388,7 +7388,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7422,7 +7422,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7456,7 +7456,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7490,7 +7490,7 @@
         "hit_rate": 0.8
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7524,7 +7524,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7558,7 +7558,7 @@
         "hit_rate": 0.7273
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7592,7 +7592,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7626,7 +7626,7 @@
         "hit_rate": 0.6429
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7660,7 +7660,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7694,7 +7694,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7728,7 +7728,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7762,7 +7762,7 @@
         "hit_rate": 0.6
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7796,7 +7796,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7830,7 +7830,7 @@
         "hit_rate": 0.7
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7864,7 +7864,7 @@
         "hit_rate": 0.5455
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7898,7 +7898,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -7932,7 +7932,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -7966,7 +7966,7 @@
         "hit_rate": 0.6
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8000,7 +8000,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8034,7 +8034,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8068,7 +8068,7 @@
         "hit_rate": 0.9
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8102,7 +8102,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8136,7 +8136,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8178,7 +8178,7 @@
           "hit_rate": 0.55
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8212,7 +8212,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8246,7 +8246,7 @@
         "hit_rate": 0.625
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8288,7 +8288,7 @@
           "hit_rate": 0.2
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8330,7 +8330,7 @@
           "hit_rate": 0.4783
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8372,7 +8372,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8406,7 +8406,7 @@
         "hit_rate": 0.4444
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8440,7 +8440,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8474,7 +8474,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8523,7 +8523,7 @@
           "hit_rate": 0.1905
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8557,7 +8557,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8591,7 +8591,7 @@
         "hit_rate": 0.4444
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8625,7 +8625,7 @@
         "hit_rate": 0.5714
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8659,7 +8659,7 @@
         "hit_rate": 0.375
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8701,7 +8701,7 @@
           "hit_rate": 0.0952
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8735,7 +8735,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8769,7 +8769,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8803,7 +8803,7 @@
         "hit_rate": 0.4444
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8852,7 +8852,7 @@
           "hit_rate": 0.1905
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8886,7 +8886,7 @@
         "hit_rate": 0.5714
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8920,7 +8920,7 @@
         "hit_rate": 0.4
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8954,7 +8954,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -8988,7 +8988,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9022,7 +9022,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9064,7 +9064,7 @@
           "hit_rate": 0.0
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9098,7 +9098,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9140,7 +9140,7 @@
           "hit_rate": 0.1667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9174,7 +9174,7 @@
         "hit_rate": 0.4286
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9208,7 +9208,7 @@
         "hit_rate": 0.6
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9242,7 +9242,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9276,7 +9276,7 @@
         "hit_rate": 0.4286
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9310,7 +9310,7 @@
         "hit_rate": 0.8571
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9352,7 +9352,7 @@
           "hit_rate": 0.52
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9386,7 +9386,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9420,7 +9420,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9454,7 +9454,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9488,7 +9488,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9530,7 +9530,7 @@
           "hit_rate": 0.56
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9564,7 +9564,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9598,7 +9598,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9632,7 +9632,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9666,7 +9666,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9700,7 +9700,7 @@
         "hit_rate": 0.5556
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9742,7 +9742,7 @@
           "hit_rate": 0.3889
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9776,7 +9776,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9810,7 +9810,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9844,7 +9844,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9878,7 +9878,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9912,7 +9912,7 @@
         "hit_rate": 0.75
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9946,7 +9946,7 @@
         "hit_rate": 0.9
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -9980,7 +9980,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10014,7 +10014,7 @@
         "hit_rate": 0.5833
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10048,7 +10048,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10082,7 +10082,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10116,7 +10116,7 @@
         "hit_rate": 0.6364
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10150,7 +10150,7 @@
         "hit_rate": 0.6154
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10184,7 +10184,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10218,7 +10218,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10252,7 +10252,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10286,7 +10286,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10320,7 +10320,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10354,7 +10354,7 @@
         "hit_rate": 0.3846
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10388,7 +10388,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10422,7 +10422,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10456,7 +10456,7 @@
         "hit_rate": 0.7273
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10490,7 +10490,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -10524,7 +10524,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10558,7 +10558,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10592,7 +10592,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10626,7 +10626,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10660,7 +10660,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10694,7 +10694,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10728,7 +10728,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10762,7 +10762,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10796,7 +10796,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10830,7 +10830,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10864,7 +10864,7 @@
         "hit_rate": 0.3125
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10898,7 +10898,7 @@
         "hit_rate": 0.3077
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10932,7 +10932,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -10966,7 +10966,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11000,7 +11000,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11034,7 +11034,7 @@
         "hit_rate": 0.4
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11068,7 +11068,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11102,7 +11102,7 @@
         "hit_rate": 0.3
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11136,7 +11136,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11170,7 +11170,7 @@
         "hit_rate": 0.1667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11204,7 +11204,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11238,7 +11238,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11272,7 +11272,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11306,7 +11306,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11340,7 +11340,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11374,7 +11374,7 @@
         "hit_rate": 0.2
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11408,7 +11408,7 @@
         "hit_rate": 0.3
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11442,7 +11442,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11476,7 +11476,7 @@
         "hit_rate": 0.1818
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11510,7 +11510,7 @@
         "hit_rate": 0.2727
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11544,7 +11544,7 @@
         "hit_rate": 0.25
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11578,8 +11578,8 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "NaLyssa Smith",
@@ -11627,7 +11627,7 @@
           "hit_rate": 0.56
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11661,7 +11661,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -11695,8 +11695,8 @@
         "hit_rate": 0.7778
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Jovana Nogic",
@@ -11744,7 +11744,7 @@
           "hit_rate": 0.5882
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11800,7 +11800,7 @@
           "hit_rate": 0.5455
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11842,7 +11842,7 @@
           "hit_rate": 0.3889
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11898,7 +11898,7 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -11932,8 +11932,8 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Arike Ogunbowale",
@@ -11988,8 +11988,8 @@
           "hit_rate": 0.6
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Paige Bueckers",
@@ -12044,8 +12044,8 @@
           "hit_rate": 0.5625
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Kelsey Plum",
@@ -12100,7 +12100,7 @@
           "hit_rate": 0.6667
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -12149,7 +12149,7 @@
           "hit_rate": 0.4167
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -12205,8 +12205,8 @@
           "hit_rate": 0.4643
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Brittney Sykes",
@@ -12261,8 +12261,8 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Bridget Carleton",
@@ -12303,7 +12303,7 @@
           "hit_rate": 0.4118
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -12352,7 +12352,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -12408,7 +12408,7 @@
           "hit_rate": 0.3684
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -12442,7 +12442,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -12476,8 +12476,8 @@
         "hit_rate": 0.6364
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "A'ja Wilson",
@@ -12532,8 +12532,8 @@
           "hit_rate": 0.375
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Natisha Hiedeman",
@@ -12588,8 +12588,8 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Kiki Iriafen",
@@ -12637,7 +12637,7 @@
           "hit_rate": 0.4194
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -12679,8 +12679,8 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Nneka Ogwumike",
@@ -12735,7 +12735,7 @@
           "hit_rate": 0.25
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -12777,8 +12777,8 @@
           "hit_rate": 0.5556
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Angel Reese",
@@ -12826,7 +12826,7 @@
           "hit_rate": 0.1053
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -12882,8 +12882,8 @@
           "hit_rate": 0.5
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Kahleah Copper",
@@ -12931,8 +12931,8 @@
           "hit_rate": 0.0
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Monique Billings",
@@ -12980,7 +12980,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13022,8 +13022,8 @@
           "hit_rate": 0.3125
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Dominique Malonga",
@@ -13056,7 +13056,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13112,7 +13112,7 @@
           "hit_rate": 0.2273
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13154,7 +13154,7 @@
           "hit_rate": 0.4375
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13196,7 +13196,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13238,8 +13238,8 @@
           "hit_rate": 0.1333
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Breanna Stewart",
@@ -13280,7 +13280,7 @@
           "hit_rate": 0.7647
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13336,7 +13336,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13392,7 +13392,7 @@
           "hit_rate": 0.1333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13434,7 +13434,7 @@
           "hit_rate": 0.3333
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13483,8 +13483,8 @@
           "hit_rate": 0.25
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Jonquel Jones",
@@ -13525,7 +13525,7 @@
           "hit_rate": 0.2353
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13567,8 +13567,8 @@
           "hit_rate": 0.125
         }
       ],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Carla Leite",
@@ -13601,7 +13601,7 @@
         "hit_rate": 0.4545
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13635,7 +13635,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13691,7 +13691,7 @@
           "hit_rate": 0.1429
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13740,7 +13740,7 @@
           "hit_rate": 0.2381
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13774,7 +13774,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13816,7 +13816,7 @@
           "hit_rate": 0.9
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13850,7 +13850,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13884,7 +13884,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13918,7 +13918,7 @@
         "hit_rate": 0.7692
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -13952,7 +13952,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -13986,7 +13986,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14020,7 +14020,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -14054,8 +14054,8 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Jewell Loyd",
@@ -14096,7 +14096,7 @@
           "hit_rate": 0.3125
         }
       ],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14130,7 +14130,7 @@
         "hit_rate": 0.875
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14164,7 +14164,7 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -14198,7 +14198,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14232,7 +14232,7 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14266,8 +14266,8 @@
         "hit_rate": 0.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Nyara Sabally",
@@ -14300,8 +14300,8 @@
         "hit_rate": 0.5556
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Betnijah Laney-Hamilton",
@@ -14334,7 +14334,7 @@
         "hit_rate": 0.2
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14368,7 +14368,7 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -14402,7 +14402,7 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": false
     },
     {
@@ -14436,8 +14436,8 @@
         "hit_rate": 0.1429
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Natasha Cloud",
@@ -14470,8 +14470,8 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Satou Sabally",
@@ -14504,8 +14504,8 @@
         "hit_rate": 1.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Gabriela Jaquez",
@@ -14538,8 +14538,8 @@
         "hit_rate": 0.5
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Kayla McBride",
@@ -14572,7 +14572,7 @@
         "hit_rate": 0.8333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
+      "last_updated": "2026-05-26",
       "on_today_slate": true
     },
     {
@@ -14606,8 +14606,8 @@
         "hit_rate": 0.6667
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     },
     {
       "player": "Hailey Van Lith",
@@ -14640,8 +14640,8 @@
         "hit_rate": 0.3333
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Tiffany Hayes",
@@ -14674,8 +14674,8 @@
         "hit_rate": 0.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": true
+      "last_updated": "2026-05-26",
+      "on_today_slate": false
     },
     {
       "player": "Nia Coffey",
@@ -14708,8 +14708,8 @@
         "hit_rate": 0.0
       },
       "best_props": [],
-      "last_updated": "2026-05-25",
-      "on_today_slate": false
+      "last_updated": "2026-05-26",
+      "on_today_slate": true
     }
   ]
 }
