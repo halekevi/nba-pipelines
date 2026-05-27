@@ -43,8 +43,8 @@
   --card-bg:rgba(255,255,255,0.04);--card-bg-hover:rgba(255,255,255,0.08);
   /* Home + shell: ~1% gutter each side → 98% content band */
   --po-page-edge: 5%;
-  --po-content-width: 98%;
-  --po-content-max: 1680px;
+  --po-content-width: 100%;
+  --po-content-max: min(98vw, 1920px);
 }
 [data-theme='light']{
   --card-bg:rgba(232,244,252,0.94);--card-bg-hover:rgba(0,0,0,0.07);
@@ -104,7 +104,7 @@ body::after{content:'';position:fixed;inset:0;
 @keyframes bSpark{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.2);}100%{opacity:0;}}
 
 /* nav — match shell content width so cards and bar share the same side gutters */
-.snav{position:sticky;top:1rem;z-index:200;width:98%;max-width:1680px;margin:clamp(12px,2vh,20px) auto;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 clamp(16px,2vw,40px);display:flex;align-items:center;height:72px;gap:0;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;box-sizing:border-box;}
+.snav{position:sticky;top:1rem;z-index:200;width:var(--po-content-width);max-width:var(--po-content-max);margin:clamp(12px,2vh,20px) auto;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 clamp(16px,2vw,40px);display:flex;align-items:center;height:72px;gap:0;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;box-sizing:border-box;}
 .snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
 .nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--lime,#c6ff00) 15%,var(--cyan) 40%,var(--purple) 65%,var(--lime,#c6ff00) 85%,transparent 100%);opacity:.72;}
 /* accentShift (hue-rotate) removed — continuous filter animation was GPU-heavy on scroll */
@@ -180,7 +180,7 @@ body::after{content:'';position:fixed;inset:0;
 [data-theme="light"] .glass-card{background:rgba(200,215,235,0.72);backdrop-filter:blur(15px) saturate(180%);-webkit-backdrop-filter:blur(15px) saturate(180%);border:1px solid rgba(120,150,185,0.35);}
 
 /* shell — width = viewport minus fixed % gutters (hero + home-cat cards fill this) */
-.shell{position:relative;z-index:1;width:98%;max-width:1680px;margin:0 auto;padding:clamp(12px,2.5vw,28px) 0;box-sizing:border-box;}
+.shell{position:relative;z-index:1;width:var(--po-content-width);max-width:var(--po-content-max);margin:0 auto;padding:clamp(12px,2.5vw,28px) 0;box-sizing:border-box;}
 .home-flow-lede{font-size:clamp(12px,1.4vw,13px);color:var(--muted);line-height:1.5;max-width:min(72ch,100%);margin:0 0 14px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);}
 [data-theme="light"] .home-flow-lede{border-color:rgba(70,110,140,.14);background:rgba(232,244,252,.78);}
 .home-jump{display:inline-block;font-size:11px;margin-top:6px;}
@@ -443,7 +443,7 @@ body{
 .snav-links a,.mobile-menu a{border-color:transparent!important;}
 .snav-links a.active{background:linear-gradient(180deg,rgba(212,175,55,.12),rgba(212,175,55,.04));box-shadow:inset 0 0 0 1px rgba(212,175,55,.15),0 8px 24px rgba(212,175,55,.06);}
 .live-pill{background:rgba(4,20,10,0.6);backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(125,255,203,.18);box-shadow:inset 0 0 20px rgba(125,255,203,.04);}
-.shell{padding-top:clamp(18px,3vw,28px);position:relative;z-index:2;width:98%;max-width:1680px;margin-inline:auto;padding-inline:0;box-sizing:border-box;}
+.shell{padding-top:clamp(18px,3vw,28px);position:relative;z-index:2;width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;padding-inline:0;box-sizing:border-box;}
 .hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 82% 24%,rgba(127,199,217,.15),transparent 24%),radial-gradient(circle at 18% 88%,rgba(212,175,55,.08),transparent 26%);z-index:-1;}
 .hero-title{font-size:clamp(2.4rem,5.5vw + 1rem,5.75rem);letter-spacing:clamp(2px,.35vw,6px);text-shadow:0 0 40px rgba(212,175,55,.08);}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);font-size:10px;backdrop-filter:blur(8px) saturate(180%);}
@@ -459,8 +459,8 @@ body{
   .hero-title{font-size:54px;letter-spacing:2px;}
 }
 @media(max-width:900px){
-  .shell{padding:18px 0 22px;width:98%;max-width:1680px;margin-inline:auto;}
-  .snav{width:98%;max-width:1680px;margin-inline:auto;}
+  .shell{padding:18px 0 22px;width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;}
+  .snav{width:var(--po-content-width);max-width:var(--po-content-max);margin-inline:auto;}
   .status-row{grid-template-columns:repeat(2,1fr)!important;gap:10px;}
   .edge-grid{grid-template-columns:1fr!important;}
   .edge-card{overflow:hidden;border-radius:16px;}
@@ -903,8 +903,8 @@ nav.snav .live-pill .live-pill-brand {
 /* --- 2026-03 visual alignment pass (reference mockups) --- */
 .snav{
   top:0;
-  width:98%;
-  max-width:1680px;
+  width:var(--po-content-width);
+  max-width:var(--po-content-max);
   margin:0 auto 1rem auto;
   border-radius:0;
   border-left:none;
@@ -912,8 +912,8 @@ nav.snav .live-pill .live-pill-brand {
   box-sizing:border-box;
 }
 .shell{
-  width:98%;
-  max-width:1680px;
+  width:var(--po-content-width);
+  max-width:var(--po-content-max);
   margin:0 auto;
   padding-top:22px;
   box-sizing:border-box;
@@ -996,16 +996,16 @@ body::before{
 
 /* Home layout — final win over legacy passes (linked CSS also reinforces) */
 body > .shell {
-  width: 98% !important;
-  max-width: 1680px !important;
+  width: var(--po-content-width) !important;
+  max-width: var(--po-content-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
 }
 body > nav.snav,
 body > nav.snav.glass-card {
-  width: 98% !important;
-  max-width: 1680px !important;
+  width: var(--po-content-width) !important;
+  max-width: var(--po-content-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
