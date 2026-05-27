@@ -271,6 +271,7 @@ def import_line_csv(
         raise FileNotFoundError(f"NST import CSV not found: {path}")
 
     df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+    df.columns = df.columns.str.replace('\xa0', ' ', regex=False).str.strip()
     df.columns = [str(c).strip() for c in df.columns]
 
     rename = {
@@ -283,6 +284,11 @@ def import_line_csv(
 
     if "Line" not in df.columns:
         df["Line"] = ""
+    else:
+        # Some NST exports duplicate each line; keep the row with populated stats.
+        if "TOI" in df.columns:
+            df = df.sort_values(by="TOI", ascending=False, na_position="last")
+        df = df.drop_duplicates(subset=["Line"], keep="first")
 
     team_norm = _nst_team(team_filter)
     df["season_id"] = int(season_id)
