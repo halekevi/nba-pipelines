@@ -1,0 +1,243 @@
+/**
+ * tickets-redesign.css
+ * UX redesign layer for /tickets page.
+ * Loads after tickets-built-content.css — overrides only, non-destructive.
+ *
+ * Changes:
+ *  - Hero "Today's Best" as prominent top card strip
+ *  - Sport-grouped sections with colored left-accent headers
+ *  - Cleaner ticket rows: EV badge + rec badge, sport dot accent
+ *  - Sort toolbar with "Sort: Legs" option
+ *  - Summary KPI strip (groups / slips / strong count)
+ */
+
+/* ── Variables ────────────────────────────────────────────── */
+:root {
+  --rd-nba:    #3B82F6;
+  --rd-wnba:   #9333EA;
+  --rd-mlb:    #EF4444;
+  --rd-nhl:    #06B6D4;
+  --rd-tennis: #22C55E;
+  --rd-soccer: #F97316;
+  --rd-cbb:    #F59E0B;
+  --rd-nfl:    #6366F1;
+  --rd-surface: rgba(255,255,255,0.035);
+  --rd-border:  rgba(255,255,255,0.08);
+  --rd-border2: rgba(255,255,255,0.14);
+  --rd-radius:  10px;
+}
+[data-theme="light"] {
+  --rd-surface: rgba(255,255,255,0.82);
+  --rd-border:  rgba(0,0,0,0.09);
+  --rd-border2: rgba(0,0,0,0.15);
+}
+
+/* ── Summary KPI strip ──────────────────────────────────────────── */
+.rd-summary-strip {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.rd-kpi-card {
+  flex: 1;
+  min-width: 90px;
+  background: var(--rd-surface);
+  border: 0.5px solid var(--rd-border);
+  border-radius: var(--rd-radius);
+  padding: 10px 14px;
+}
+.rd-kpi-val {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.rd-kpi-lbl {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Hero strip ─────────────────────────────────────────────────── */
+.rd-hero-strip { margin-bottom: 18px; }
+.rd-hero-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rd-hero-label::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: rgba(196,166,107,0.25);
+}
+.rd-hero-cards {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.rd-hero-cards::-webkit-scrollbar { display: none; }
+.rd-hero-card {
+  background: var(--rd-surface);
+  border: 0.5px solid rgba(196,166,107,0.28);
+  border-radius: var(--rd-radius);
+  padding: 12px 14px;
+  min-width: 190px;
+  flex: 1;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+  position: relative;
+  overflow: hidden;
+}
+.rd-hero-card:hover {
+  border-color: rgba(196,166,107,0.55);
+  transform: translateY(-2px);
+}
+.rd-hero-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--rd-sport-color, var(--accent));
+}
+.rd-hero-rank { font-size: 10px; color: var(--muted2); margin-bottom: 4px; }
+.rd-hero-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+.rd-hero-meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.rd-hero-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.rd-hero-ev { font-family: "Bebas Neue", sans-serif; font-size: 20px; letter-spacing: 0.05em; color: #00ff88; }
+.rd-hero-pwin { font-size: 11px; color: var(--muted); }
+
+/* ── Sort select ─────────────────────────────────────────────── */
+.rd-sort-select {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.3);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color .15s;
+}
+.rd-sort-select:hover, .rd-sort-select:focus {
+  border-color: var(--cyan);
+  outline: none;
+}
+[data-theme="light"] .rd-sort-select {
+  background: rgba(255,255,255,0.75);
+  border-color: rgba(0,0,0,0.15);
+  color: #1a2a3a;
+}
+
+/* ── Sport group headers ─────────────────────────────────────────── */
+.tickets-built .ticket-group-header.collapsible-header {
+  border-left: 3px solid var(--rd-sport-color, rgba(196,166,107,0.5));
+  border-radius: 0 8px 8px 0;
+  border-top: 0.5px solid var(--rd-border);
+  border-right: 0.5px solid var(--rd-border);
+  border-bottom: 0.5px solid var(--rd-border);
+  background: var(--rd-surface);
+  padding: 9px 14px;
+}
+.ticket-group-section[data-sport="NBA"]    { --rd-sport-color: var(--rd-nba); }
+.ticket-group-section[data-sport="WNBA"]   { --rd-sport-color: var(--rd-wnba); }
+.ticket-group-section[data-sport="MLB"]    { --rd-sport-color: var(--rd-mlb); }
+.ticket-group-section[data-sport="NHL"]    { --rd-sport-color: var(--rd-nhl); }
+.ticket-group-section[data-sport="Tennis"] { --rd-sport-color: var(--rd-tennis); }
+.ticket-group-section[data-sport="Soccer"] { --rd-sport-color: var(--rd-soccer); }
+.ticket-group-section[data-sport="CBB"]    { --rd-sport-color: var(--rd-cbb); }
+.ticket-group-section[data-sport="NFL"]    { --rd-sport-color: var(--rd-nfl); }
+
+/* ── Ticket left accent ────────────────────────────────────────────── */
+.tickets-built .ticket {
+  border-left: 3px solid var(--rd-sport-color, rgba(196,166,107,0.4));
+  border-radius: 0 12px 12px 0;
+  border-top: 0.5px solid rgba(196,166,107,0.18);
+  border-right: 0.5px solid rgba(196,166,107,0.18);
+  border-bottom: 0.5px solid rgba(196,166,107,0.18);
+  background: rgba(14,18,34,0.65);
+  margin-bottom: 10px;
+}
+[data-theme="light"] .tickets-built .ticket { background: rgba(255,255,255,0.76); }
+
+/* ── Sport dot ──────────────────────────────────────────────────── */
+.rd-sport-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rd-sport-color, var(--accent));
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+/* ── Rec badges ────────────────────────────────────────────────── */
+.rd-rec-badge {
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.rd-rec-badge--strong { background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.35); color: #00ff88; }
+.rd-rec-badge--ok     { background: rgba(240,165,0,0.15);  border: 1px solid rgba(240,165,0,0.35);  color: #f0a500; }
+.rd-rec-badge--skip   { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--muted2); }
+[data-theme="light"] .rd-rec-badge--strong { color: #0a7a44; background: rgba(0,180,80,0.12); border-color: rgba(0,180,80,0.3); }
+[data-theme="light"] .rd-rec-badge--ok     { color: #7a4f00; background: rgba(200,130,0,0.1); border-color: rgba(200,130,0,0.3); }
+[data-theme="light"] .rd-rec-badge--skip   { color: #666; background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+
+/* ── Group count badge ───────────────────────────────────────────── */
+.rd-group-count {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid var(--rd-border2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+[data-theme="light"] .rd-group-count {
+  background: rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.12);
+  color: #555;
+}
+
+/* ── Table tighter ───────────────────────────────────────────────── */
+.tickets-built td { padding: 8px 10px; font-size: clamp(12px,1vw,14px); }
+.tickets-built th { padding: 8px 10px; font-size: clamp(13px,1.05vw,15px); }
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .rd-hero-cards { gap: 8px; }
+  .rd-hero-card  { min-width: 160px; padding: 10px 12px; }
+  .rd-hero-ev    { font-size: 18px; }
+  .rd-summary-strip { gap: 8px; }
+  .rd-kpi-val    { font-size: 19px; }
+}
+
+/* ── Light theme ────────────────────────────────────────────────── */
+[data-theme="light"] .rd-hero-ev { color: #0a7a44; }
+[data-theme="light"] .rd-kpi-val { color: #1a2a3a; }
+[data-theme="light"] .rd-kpi-lbl { color: #556; }
+[data-theme="light"] .rd-hero-rank,
+[data-theme="light"] .rd-hero-meta { color: #556; }
+[data-theme="light"] .rd-hero-name { color: #1a2a3a; }
