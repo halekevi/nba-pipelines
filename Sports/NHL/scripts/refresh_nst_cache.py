@@ -44,6 +44,22 @@ def main() -> None:
     )
     ap.add_argument("--sit", default="5v5", help="Situation filter for --import-csv (default: 5v5)")
     ap.add_argument("--skip-pp", action="store_true", help="Skip NHL API PP cache refresh")
+    ap.add_argument(
+        "--cdp",
+        metavar="URL",
+        nargs="?",
+        const="http://127.0.0.1:9222",
+        default="",
+        help=(
+            "CDP endpoint (default: http://127.0.0.1:9222). "
+            "When passed, uses browser_fetch_html for line combos fetch."
+        ),
+    )
+    ap.add_argument(
+        "--cdp-only",
+        action="store_true",
+        help="Skip requests path entirely, use CDP only",
+    )
     args = ap.parse_args()
 
     season_id = _resolve_season_id(args.season)
@@ -65,11 +81,19 @@ def main() -> None:
         print(f"✅ NHL PP cache: {len(df)} rows (season_id={season_id})")
 
     if do_nst:
-        if not nst_key():
+        use_cdp = bool(str(args.cdp).strip()) or args.cdp_only
+        cdp_url = str(args.cdp).strip() or "http://127.0.0.1:9222"
+        if not use_cdp and not nst_key():
             print("❌ NST_ACCESS_KEY not set. Request a key at naturalstattrick.com → profile.")
             sys.exit(1)
         teams = [args.team] if args.team else ["all"]
-        lines = refresh_line_cache(season_id, teams=teams)
+        lines = refresh_line_cache(
+            season_id,
+            teams=teams,
+            prefer_browser=use_cdp,
+            cdp_url=cdp_url,
+            cdp_only=args.cdp_only,
+        )
         print(f"✅ NST line combos: {len(lines)} rows cached")
         pp = refresh_player_pp_cache(season_id, teams=teams)
         print(f"✅ NST player PP table: {len(pp)} rows cached")

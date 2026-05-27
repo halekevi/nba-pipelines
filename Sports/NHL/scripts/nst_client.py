@@ -20,6 +20,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlencode
 
 import pandas as pd
 import requests
@@ -27,6 +28,7 @@ import requests
 log = logging.getLogger("nhl.nst")
 
 NST_DATA = "https://data.naturalstattrick.com"
+NST_BASE = f"{NST_DATA}/"
 HEADERS = {"User-Agent": "Mozilla/5.0 (PropORACLE/1.0)"}
 TIMEOUT = 30
 SLEEP_S = 0.4
@@ -132,6 +134,49 @@ def fetch_html(path: str, params: dict) -> Optional[str]:
         return None
 
 
+def browser_fetch_html(
+    path: str,
+    params: dict,
+    cdp_url: str = "http://127.0.0.1:9222",
+    timeout: int = 30,
+) -> Optional[str]:
+    """
+    Fetch NST page via Playwright CDP (connect to existing Chrome session).
+    Falls back to None on any error — caller must handle gracefully.
+
+    Setup (one-time):
+      1. Launch Chrome: scripts/launch_nst_chrome_cdp.ps1
+      2. Navigate to naturalstattrick.com, log in
+      3. Run: py Sports/NHL/scripts/refresh_nst_cache.py --cdp
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        log.warning("playwright not installed — skipping browser fetch")
+        return None
+
+    url = NST_BASE + path.lstrip("/")
+    if params:
+        url += "?" + urlencode(params)
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.connect_over_cdp(cdp_url)
+            ctx = browser.contexts[0] if browser.contexts else browser.new_context()
+            page = ctx.new_page()
+            page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
+            try:
+                page.wait_for_selector("table", timeout=timeout * 1000)
+            except Exception:
+                pass
+            html = page.content()
+            page.close()
+            return html
+    except Exception as e:
+        log.warning("[NST CDP] browser_fetch_html failed: %s", e)
+        return None
+
+
 def parse_tables(html: str, *, label: str = "") -> list[pd.DataFrame]:
     if not html:
         return []
@@ -150,14 +195,34 @@ def parse_tables(html: str, *, label: str = "") -> list[pd.DataFrame]:
         return []
 
 
-def fetch_line_combos(season_id: int, team: str = "all", sit: str = "5v5") -> pd.DataFrame:
+def fetch_line_combos(
+    season_id: int,
+    team: str = "all",
+    sit: str = "5v5",
+    prefer_browser: bool = False,
+    cdp_url: str = "http://127.0.0.1:9222",
+    cdp_only: bool = False,
+) -> pd.DataFrame:
     """
     Line combo stats (2-man / 3-man lines). sit: 5v5 | pp | etc.
     lines: 2 | 3 | … (NST linestats.php; not WOWY view=log)
     """
-    params = _linestats_params(season_id, sit=sit, team=team, lines="2")
-    html = fetch_html("linestats.php", params)
-    tables = parse_tables(html or "", label=f"linestats {sit}")
+    params = _playerteams_params(season_id, sit=sit, team=team, lines="2")
+    html = None
+    if prefer_browser:
+        html = browser_fetch_html("playerteams.php", params, cdp_url=cdp_url)
+    elif not cdp_only:
+        html = fetch_html("playerteams.php", params)
+
+    if (not html or "<table" not in html.lower()) and not prefer_browser:
+        log.info("[NST] requests fetch returned no table — trying CDP fallback")
+        html = browser_fetch_html("playerteams.php", params, cdp_url=cdp_url)
+
+    if not html or "<table" not in html.lower():
+        log.warning("[NST] no table HTML from either path — returning empty")
+        return pd.DataFrame()
+
+    tables = parse_tables(html or "", label=f"playerteams {sit}")
     if not tables:
         return pd.DataFrame()
     df = tables[0].copy()
@@ -325,12 +390,22 @@ def import_line_csv(
 def refresh_line_cache(
     season_id: int,
     teams: Optional[list[str]] = None,
+    prefer_browser: bool = False,
+    cdp_url: str = "http://127.0.0.1:9222",
+    cdp_only: bool = False,
 ) -> pd.DataFrame:
     teams = teams or ["all"]
     parts: list[pd.DataFrame] = []
     for team in teams:
         for sit in ("5v5", "pp"):
-            df = fetch_line_combos(season_id, team=team, sit=sit)
+            df = fetch_line_combos(
+                season_id,
+                team=team,
+                sit=sit,
+                prefer_browser=prefer_browser,
+                cdp_url=cdp_url,
+                cdp_only=cdp_only,
+            )
             if not df.empty:
                 parts.append(df)
     if not parts:

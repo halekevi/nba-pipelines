@@ -4,6 +4,21 @@
 Daily before NHL pipeline runs. Required until Option A (Playwright CDP)
 is built. Takes ~3 minutes.
 
+## Option A — Automated CDP Fetch (preferred when Chrome is open)
+
+### One-time setup
+1. `pwsh -File scripts\launch_nst_chrome_cdp.ps1`
+2. Log in at naturalstattrick.com in that window
+3. Complete Cloudflare challenge (one-time per session)
+
+### Daily fetch
+`py Sports/NHL/scripts/refresh_nst_cache.py --cdp http://127.0.0.1:9223`
+
+### All teams on tonight's slate
+`py Sports/NHL/scripts/refresh_nst_cache.py --cdp http://127.0.0.1:9223 --team ALL`
+
+Falls back to manual import (Option B) if CDP is unavailable.
+
 ## Step 1 — Export from NST browser
 1. Go to: https://www.naturalstattrick.com/playerteams.php?fromseason=20252026&thruseason=20252026&stype=2&sit=5v5&score=all&rate=n&team=VGK&pos=F&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=2&draftteam=ALL
 2. Change `team=VGK` to your target team abbrev (or run per-team)
