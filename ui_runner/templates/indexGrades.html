@@ -3728,23 +3728,12 @@ function syncGradeFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    let maxBottom = 0;
-    const nodes = Array.from(doc.querySelectorAll('body *'));
-    nodes.forEach(function (el) {
-      if (!(el instanceof Element)) return;
-      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
-      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
-      if ((el.offsetHeight || 0) <= 0) return;
-      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
-      if (bottom > maxBottom) maxBottom = bottom;
-    });
     const scrollH = Math.max(
       doc.body ? doc.body.scrollHeight : 0,
       doc.documentElement.scrollHeight || 0,
       doc.documentElement.offsetHeight || 0
     );
-    const contentBottom = Math.ceil(maxBottom);
-    const h = contentBottom > 0 ? contentBottom : Math.ceil(scrollH || 0);
+    const h = Math.ceil(scrollH || 0);
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
     const gradesPage = document.querySelector('.grades-page');
@@ -3775,23 +3764,12 @@ function syncTicketFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    let maxBottom = 0;
-    const nodes = Array.from(doc.querySelectorAll('body *'));
-    nodes.forEach(function (el) {
-      if (!(el instanceof Element)) return;
-      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
-      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
-      if ((el.offsetHeight || 0) <= 0) return;
-      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
-      if (bottom > maxBottom) maxBottom = bottom;
-    });
     const scrollH = Math.max(
       doc.body ? doc.body.scrollHeight : 0,
       doc.documentElement.scrollHeight || 0,
       doc.documentElement.offsetHeight || 0
     );
-    const contentBottom = Math.ceil(maxBottom);
-    const h = contentBottom > 0 ? contentBottom : Math.ceil(scrollH || 0);
+    const h = Math.ceil(scrollH || 0);
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
     const gp = document.querySelector('.grades-page');
