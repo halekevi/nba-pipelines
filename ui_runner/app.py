@@ -5410,6 +5410,97 @@ def page_income():
     )
 
 
+@app.get("/income/health")
+def income_health():
+    try:
+        payload: dict[str, Any] = {
+            "last_ingest": None,
+            "total_rows": 0,
+            "sports_covered": [],
+            "date_range": {"min": None, "max": None},
+            "status": "empty",
+        }
+
+        runs = _read_grade_history_runs()
+        valid_runs: list[dict[str, Any]] = []
+        total_rows = 0
+
+        for r in runs:
+            if not isinstance(r, dict):
+                continue
+            d = str(r.get("date") or "").strip()[:10]
+            if not d:
+                continue
+            valid_runs.append(r)
+            decided = max(0, _to_int(r.get("decided"), 0))
+            if decided <= 0:
+                n_tickets = max(0, _to_int(r.get("n_tickets"), 0))
+                decided = n_tickets
+            total_rows += decided
+
+        if valid_runs:
+            dates = sorted(str(r.get("date") or "").strip()[:10] for r in valid_runs)
+            payload["date_range"] = {
+                "min": dates[0] if dates else None,
+                "max": dates[-1] if dates else None,
+            }
+
+        payload["total_rows"] = int(total_rows)
+        # Read sports from graded_props_*.json (same source as ingest)
+        sports_seen = set()
+        try:
+            import glob
+            gp_files = sorted(glob.glob(
+                str(Path(TEMPLATES_DIR) / "graded_props_*.json")
+            ))
+            for gp_file in gp_files[-7:]:  # last 7 days only
+                try:
+                    gp = json.loads(Path(gp_file).read_text(encoding="utf-8"))
+                    props = gp.get("props", []) if isinstance(gp, dict) else gp
+                    for row in props:
+                        s = str(row.get("sport") or "").strip().upper()
+                        if s:
+                            sports_seen.add(s)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        payload["sports_covered"] = sorted(sports_seen)
+
+        last_ingest_dt: datetime | None = None
+        for p in _grade_history_candidate_paths():
+            if p.is_file():
+                last_ingest_dt = datetime.fromtimestamp(p.stat().st_mtime, tz=timezone.utc)
+                break
+
+        if last_ingest_dt is not None:
+            payload["last_ingest"] = last_ingest_dt.isoformat().replace("+00:00", "Z")
+
+        now_utc = datetime.now(timezone.utc)
+        is_stale = True
+        if last_ingest_dt is not None:
+            is_stale = (now_utc - last_ingest_dt) > timedelta(hours=25)
+
+        if payload["total_rows"] == 0:
+            payload["status"] = "empty"
+        elif is_stale:
+            payload["status"] = "stale"
+        else:
+            payload["status"] = "ok"
+
+        return app.response_class(
+            response=json.dumps(payload),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        return app.response_class(
+            response=json.dumps({"status": "error", "detail": str(e)}),
+            status=200,
+            mimetype="application/json",
+        )
+
+
 @app.get("/dashboard/income")
 def dashboard_income_legacy_redirect():
     return redirect("/income", code=302)
