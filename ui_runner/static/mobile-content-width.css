@@ -5,8 +5,8 @@
  */
 :root {
   --po-page-edge: 5%;
-  --po-content-width: 98%;
-  --po-content-max: 1680px;
+  --po-content-width: 100%;
+  --po-content-max: min(98vw, 1920px);
   --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
   --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
   --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
