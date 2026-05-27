@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/static/tickets-built-content.css?v=20260520pwin1"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260522gradesframe"/>
 <link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260515utp4"/>
+<link rel="stylesheet" href="/static/tickets-redesign.css?v=20260526rd1"/>
 </head>
 <body class="page-tickets">
 <div class="orb-1" style="position:fixed;top:-12%;left:-6%;width:560px;height:560px;background:radial-gradient(circle,rgba(127,199,217,0.18) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbP1 20s ease-in-out infinite alternate;"></div>
@@ -35,9 +36,11 @@
 {# Slips, empirical payout panel (sweep multiplier), and filter pills including TOP PAYOUT are rendered by scripts/combined_slate_tickets.render_tickets_body_html #}
 {{ tickets_body|safe }}
 
+
 {# Uniform-bucket tickets — toggle in filter bar; panel docks below it via JS. #}
 {% include '_uniform_tickets_panel_tickets.html' %}
 </div>
+
 
 <script>
 (function () {
@@ -63,7 +66,10 @@
 })();
 </script>
 
+
+<script src="/static/tickets-redesign.js?v=20260526rd1" defer></script>
 <script src="/static/uniform-tickets-panel.js?v=20260515utp4" defer></script>
+
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>
@@ -71,56 +77,3 @@
   // Skip cosmetic DOM passes on coarse-pointer (touch) devices.
   const isCoarse = window.matchMedia('(pointer: coarse)').matches;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!isCoarse && !reduceMotion) {
-    const CA_SELS = [
-      '.tickets-built .ticket', '.tickets-built .hero',
-      '.tickets-built .filter-pill', '.tickets-built .kpi'
-    ];
-    function initCA() {
-      CA_SELS.forEach(sel =>
-        document.querySelectorAll(sel).forEach(el => {
-          el.classList.add('ca-border');
-        })
-      );
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCA);
-    } else {
-      initCA();
-    }
-    let queued = false;
-    const queueInit = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        initCA();
-      });
-    };
-    const obs = new MutationObserver(queueInit);
-    obs.observe(document.body, { childList: true, subtree: true });
-  }
-})();
-</script>
-<script>
-(function () {
-  const legTables = document.querySelectorAll('.ticket-legs-table-wrapper');
-  if (!legTables.length || !('IntersectionObserver' in window)) return;
-
-  const legObs = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.contentVisibility = 'visible';
-        legObs.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '200px' });
-
-  legTables.forEach((node) => {
-    node.style.contentVisibility = 'auto';
-    legObs.observe(node);
-  });
-})();
-</script>
-</body>
-</html>
