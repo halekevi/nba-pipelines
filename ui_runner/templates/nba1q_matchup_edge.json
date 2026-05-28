@@ -1,7 +1,9 @@
 {
   "sport": "nba1q",
   "display_name": "NBA 1Q",
-  "generated_at": "2026-05-28T01:20:58.200989+00:00",
+  "matchup_mode": "team",
+  "generated_at": "2026-05-28T04:52:23.449015+00:00",
+  "slate_note": "",
   "n_teams": 30,
   "elite_rank_cut": 4,
   "weak_rank_cut": 20,
@@ -45,25 +47,11 @@
   ],
   "teams": [
     {
-      "def_key": "MIN",
-      "slate_abbr": "MIN",
-      "name": "MIN",
-      "def_rank": 11,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "NYK",
-      "slate_abbr": "NYK",
-      "name": "NYK",
-      "def_rank": 3,
+      "def_key": "OKC",
+      "slate_abbr": "OKC",
+      "name": "OKC",
+      "def_rank": 4,
       "def_tier": "Elite"
-    },
-    {
-      "def_key": "PHI",
-      "slate_abbr": "PHI",
-      "name": "PHI",
-      "def_rank": 20,
-      "def_tier": "Below Avg"
     },
     {
       "def_key": "SAS",
@@ -74,42 +62,26 @@
     }
   ],
   "matchups": {
-    "PHI": {
-      "opponent_slate": "NYK",
-      "opponent_name": "NYK",
-      "opponent_def_rank": 3,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 20,
-      "team_def_tier": "Below Avg"
-    },
-    "NYK": {
-      "opponent_slate": "PHI",
-      "opponent_name": "PHI",
-      "opponent_def_rank": 20,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 3,
-      "team_def_tier": "Elite"
-    },
-    "MIN": {
+    "OKC": {
       "opponent_slate": "SAS",
       "opponent_name": "SAS",
       "opponent_def_rank": 10,
       "opponent_def_tier": "Above Avg",
-      "team_def_rank": 11,
-      "team_def_tier": "Above Avg"
+      "team_def_rank": 4,
+      "team_def_tier": "Elite"
     },
     "SAS": {
-      "opponent_slate": "MIN",
-      "opponent_name": "MIN",
-      "opponent_def_rank": 11,
-      "opponent_def_tier": "Above Avg",
+      "opponent_slate": "OKC",
+      "opponent_name": "OKC",
+      "opponent_def_rank": 4,
+      "opponent_def_tier": "Elite",
       "team_def_rank": 10,
       "team_def_tier": "Above Avg"
     }
   },
   "players_by_team_cat": {
-    "MIN|pts": {
-      "team_slate": "MIN",
+    "OKC|pts": {
+      "team_slate": "OKC",
       "category": "pts",
       "category_label": "Points",
       "threshold": 18.0,
@@ -121,136 +93,62 @@
       },
       "players": [
         {
-          "player": "Anthony Edwards",
-          "player_norm": "anthony edwards",
+          "player": "Shai Gilgeous-Alexander",
+          "player_norm": "shai gilgeous-alexander",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 29.67,
-          "game_score": 35.6,
+          "season_avg": 31.7,
+          "game_score": 38.0,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Julius Randle",
-          "player_norm": "julius randle",
+          "player": "Jalen Williams",
+          "player_norm": "jalen williams",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 20.93,
-          "game_score": 25.1,
+          "season_avg": 17.5,
+          "game_score": 21.0,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Jaden McDaniels",
-          "player_norm": "jaden mcdaniels",
+          "player": "Chet Holmgren",
+          "player_norm": "chet holmgren",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 14.69,
-          "game_score": 17.6,
+          "season_avg": 17.04,
+          "game_score": 20.4,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Naz Reid",
-          "player_norm": "naz reid",
+          "player": "Ajay Mitchell",
+          "player_norm": "ajay mitchell",
           "pos": "",
           "rank_on_team": 4,
-          "season_avg": 13.86,
-          "game_score": 16.6,
+          "season_avg": 14.3,
+          "game_score": 17.2,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Donte DiVincenzo",
-          "player_norm": "donte divincenzo",
+          "player": "Isaiah Joe",
+          "player_norm": "isaiah joe",
           "pos": "",
           "rank_on_team": 5,
-          "season_avg": 12.45,
-          "game_score": 14.9,
+          "season_avg": 10.9,
+          "game_score": 13.1,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "NYK|pts": {
-      "team_slate": "NYK",
-      "category": "pts",
-      "category_label": "Points",
-      "threshold": 18.0,
-      "opponent": {
-        "slate_abbr": "PHI",
-        "name": "PHI",
-        "def_rank": 20,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Jalen Brunson",
-          "player_norm": "jalen brunson",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 9.2,
-          "game_score": 9.2,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Brunson",
-          "player_norm": "jalen brunson",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 9.2,
-          "game_score": 9.2,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Brunson",
-          "player_norm": "jalen brunson",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 9.2,
-          "game_score": 9.2,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Brunson",
-          "player_norm": "jalen brunson",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 9.2,
-          "game_score": 9.2,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "OG Anunoby",
-          "player_norm": "og anunoby",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 6.1,
-          "game_score": 6.1,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -262,10 +160,10 @@
       "category_label": "Points",
       "threshold": 18.0,
       "opponent": {
-        "slate_abbr": "MIN",
-        "name": "MIN",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
+        "slate_abbr": "OKC",
+        "name": "OKC",
+        "def_rank": 4,
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -273,9 +171,9 @@
           "player_norm": "victor wembanyama",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 8.9,
-          "game_score": 8.9,
-          "edge": "NEUTRAL",
+          "season_avg": 7.1,
+          "game_score": 7.1,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -285,9 +183,9 @@
           "player_norm": "victor wembanyama",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 8.9,
-          "game_score": 8.9,
-          "edge": "NEUTRAL",
+          "season_avg": 7.1,
+          "game_score": 7.1,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -297,9 +195,9 @@
           "player_norm": "victor wembanyama",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 8.9,
-          "game_score": 8.9,
-          "edge": "NEUTRAL",
+          "season_avg": 7.1,
+          "game_score": 7.1,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -309,9 +207,9 @@
           "player_norm": "victor wembanyama",
           "pos": "",
           "rank_on_team": 4,
-          "season_avg": 8.9,
-          "game_score": 8.9,
-          "edge": "NEUTRAL",
+          "season_avg": 7.1,
+          "game_score": 7.1,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -321,91 +219,17 @@
           "player_norm": "stephon castle",
           "pos": "",
           "rank_on_team": 5,
-          "season_avg": 7.3,
-          "game_score": 7.3,
-          "edge": "NEUTRAL",
+          "season_avg": 6.1,
+          "game_score": 6.1,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         }
       ]
     },
-    "PHI|pts": {
-      "team_slate": "PHI",
-      "category": "pts",
-      "category_label": "Points",
-      "threshold": 18.0,
-      "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Tyrese Maxey",
-          "player_norm": "tyrese maxey",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 28.97,
-          "game_score": 34.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Joel Embiid",
-          "player_norm": "joel embiid",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 26.61,
-          "game_score": 31.9,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Paul George",
-          "player_norm": "paul george",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 15.96,
-          "game_score": 19.2,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "VJ Edgecombe",
-          "player_norm": "vj edgecombe",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 15.33,
-          "game_score": 18.4,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kelly Oubre Jr.",
-          "player_norm": "kelly oubre jr.",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 14.68,
-          "game_score": 17.6,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "MIN|reb": {
-      "team_slate": "MIN",
+    "OKC|reb": {
+      "team_slate": "OKC",
       "category": "reb",
       "category_label": "Rebounds",
       "threshold": 6.0,
@@ -417,136 +241,62 @@
       },
       "players": [
         {
-          "player": "Rudy Gobert",
-          "player_norm": "rudy gobert",
+          "player": "Isaiah Hartenstein",
+          "player_norm": "isaiah hartenstein",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 11.31,
-          "game_score": 13.6,
+          "season_avg": 9.26,
+          "game_score": 11.1,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Julius Randle",
-          "player_norm": "julius randle",
+          "player": "Chet Holmgren",
+          "player_norm": "chet holmgren",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 6.91,
-          "game_score": 8.3,
+          "season_avg": 9.05,
+          "game_score": 10.9,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Naz Reid",
-          "player_norm": "naz reid",
+          "player": "Jaylin Williams",
+          "player_norm": "jaylin williams",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 6.27,
-          "game_score": 7.5,
+          "season_avg": 5.61,
+          "game_score": 6.7,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Anthony Edwards",
-          "player_norm": "anthony edwards",
+          "player": "Jalen Williams",
+          "player_norm": "jalen williams",
           "pos": "",
           "rank_on_team": 4,
-          "season_avg": 5.09,
-          "game_score": 6.1,
+          "season_avg": 4.69,
+          "game_score": 5.6,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Donte DiVincenzo",
-          "player_norm": "donte divincenzo",
+          "player": "Shai Gilgeous-Alexander",
+          "player_norm": "shai gilgeous-alexander",
           "pos": "",
           "rank_on_team": 5,
-          "season_avg": 4.4,
-          "game_score": 5.3,
+          "season_avg": 4.5,
+          "game_score": 5.4,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "NYK|reb": {
-      "team_slate": "NYK",
-      "category": "reb",
-      "category_label": "Rebounds",
-      "threshold": 6.0,
-      "opponent": {
-        "slate_abbr": "PHI",
-        "name": "PHI",
-        "def_rank": 20,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "OG Anunoby",
-          "player_norm": "og anunoby",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.1,
-          "game_score": 3.1,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mitchell Robinson",
-          "player_norm": "mitchell robinson",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 3.1,
-          "game_score": 3.1,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mitchell Robinson",
-          "player_norm": "mitchell robinson",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 3.1,
-          "game_score": 3.1,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "OG Anunoby",
-          "player_norm": "og anunoby",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 3.1,
-          "game_score": 3.1,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Josh Hart",
-          "player_norm": "josh hart",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 2.4,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -558,10 +308,10 @@
       "category_label": "Rebounds",
       "threshold": 6.0,
       "opponent": {
-        "slate_abbr": "MIN",
-        "name": "MIN",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
+        "slate_abbr": "OKC",
+        "name": "OKC",
+        "def_rank": 4,
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -569,243 +319,33 @@
           "player_norm": "victor wembanyama",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "edge": "NEUTRAL",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Julian Champagnie",
-          "player_norm": "julian champagnie",
+          "player": "De'Aaron Fox",
+          "player_norm": "de'aaron fox",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 2.1,
-          "game_score": 2.1,
-          "edge": "NEUTRAL",
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Stephon Castle",
-          "player_norm": "stephon castle",
+          "player": "Luke Kornet",
+          "player_norm": "luke kornet",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Keldon Johnson",
-          "player_norm": "keldon johnson",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 1.9,
-          "game_score": 1.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Devin Vassell",
-          "player_norm": "devin vassell",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 1.6,
-          "game_score": 1.6,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PHI|reb": {
-      "team_slate": "PHI",
-      "category": "reb",
-      "category_label": "Rebounds",
-      "threshold": 6.0,
-      "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Andre Drummond",
-          "player_norm": "andre drummond",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 8.45,
-          "game_score": 10.1,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Joel Embiid",
-          "player_norm": "joel embiid",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 7.55,
-          "game_score": 9.1,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "VJ Edgecombe",
-          "player_norm": "vj edgecombe",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 5.48,
-          "game_score": 6.6,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Paul George",
-          "player_norm": "paul george",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 5.15,
-          "game_score": 6.2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kelly Oubre Jr.",
-          "player_norm": "kelly oubre jr.",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 4.85,
-          "game_score": 5.8,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PHI|ast": {
-      "team_slate": "PHI",
-      "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Tyrese Maxey",
-          "player_norm": "tyrese maxey",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.67,
-          "game_score": 8.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Joel Embiid",
-          "player_norm": "joel embiid",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 3.94,
-          "game_score": 4.7,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "VJ Edgecombe",
-          "player_norm": "vj edgecombe",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 3.9,
-          "game_score": 4.7,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Paul George",
-          "player_norm": "paul george",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 3.7,
-          "game_score": 4.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Quentin Grimes",
-          "player_norm": "quentin grimes",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 3.43,
-          "game_score": 4.1,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "SAS|ast": {
-      "team_slate": "SAS",
-      "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "MIN",
-        "name": "MIN",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Stephon Castle",
-          "player_norm": "stephon castle",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.9,
-          "game_score": 1.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Victor Wembanyama",
-          "player_norm": "victor wembanyama",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -814,68 +354,18 @@
           "player": "Dylan Harper",
           "player_norm": "dylan harper",
           "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "edge": "NEUTRAL",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "AVOID",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         }
       ]
     },
-    "NYK|ast": {
-      "team_slate": "NYK",
-      "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "PHI",
-        "name": "PHI",
-        "def_rank": 20,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Jalen Brunson",
-          "player_norm": "jalen brunson",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.6,
-          "game_score": 2.6,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "player_norm": "karl-anthony towns",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.3,
-          "game_score": 2.3,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Josh Hart",
-          "player_norm": "josh hart",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.6,
-          "game_score": 1.6,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "MIN|ast": {
-      "team_slate": "MIN",
+    "OKC|ast": {
+      "team_slate": "OKC",
       "category": "ast",
       "category_label": "Assists",
       "threshold": 4.0,
@@ -887,62 +377,136 @@
       },
       "players": [
         {
-          "player": "Julius Randle",
-          "player_norm": "julius randle",
+          "player": "Shai Gilgeous-Alexander",
+          "player_norm": "shai gilgeous-alexander",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 5.12,
-          "game_score": 6.1,
+          "season_avg": 6.67,
+          "game_score": 8.0,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Donte DiVincenzo",
-          "player_norm": "donte divincenzo",
+          "player": "Jalen Williams",
+          "player_norm": "jalen williams",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 4.12,
-          "game_score": 4.9,
+          "season_avg": 5.42,
+          "game_score": 6.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Anthony Edwards",
-          "player_norm": "anthony edwards",
+          "player": "Ajay Mitchell",
+          "player_norm": "ajay mitchell",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 3.7,
-          "game_score": 4.4,
+          "season_avg": 3.73,
+          "game_score": 4.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Ayo Dosunmu",
-          "player_norm": "ayo dosunmu",
+          "player": "Isaiah Hartenstein",
+          "player_norm": "isaiah hartenstein",
           "pos": "",
           "rank_on_team": 4,
-          "season_avg": 2.85,
-          "game_score": 3.4,
+          "season_avg": 3.46,
+          "game_score": 4.1,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Mike Conley",
-          "player_norm": "mike conley",
+          "player": "Cason Wallace",
+          "player_norm": "cason wallace",
           "pos": "",
           "rank_on_team": 5,
-          "season_avg": 2.83,
-          "game_score": 3.4,
+          "season_avg": 2.65,
+          "game_score": 3.2,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "SAS|ast": {
+      "team_slate": "SAS",
+      "category": "ast",
+      "category_label": "Assists",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "OKC",
+        "name": "OKC",
+        "def_rank": 4,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "De'Aaron Fox",
+          "player_norm": "de'aaron fox",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.9,
+          "game_score": 1.9,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "De'Aaron Fox",
+          "player_norm": "de'aaron fox",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.9,
+          "game_score": 1.9,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Stephon Castle",
+          "player_norm": "stephon castle",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Devin Vassell",
+          "player_norm": "devin vassell",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dylan Harper",
+          "player_norm": "dylan harper",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "AVOID",
+          "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -1466,80 +1030,6 @@
         }
       ]
     },
-    "OKC|pts": {
-      "team_slate": "OKC",
-      "category": "pts",
-      "category_label": "Points",
-      "threshold": 18.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 31.7,
-          "game_score": 38.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 17.5,
-          "game_score": 21.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Chet Holmgren",
-          "player_norm": "chet holmgren",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 17.04,
-          "game_score": 20.4,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 14.3,
-          "game_score": 17.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Isaiah Joe",
-          "player_norm": "isaiah joe",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 10.9,
-          "game_score": 13.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "UTAH|pts": {
       "team_slate": "UTAH",
       "category": "pts",
@@ -1607,6 +1097,80 @@
           "rank_on_team": 5,
           "season_avg": 13.39,
           "game_score": 16.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PHI|pts": {
+      "team_slate": "PHI",
+      "category": "pts",
+      "category_label": "Points",
+      "threshold": 18.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Tyrese Maxey",
+          "player_norm": "tyrese maxey",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 28.97,
+          "game_score": 34.8,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Joel Embiid",
+          "player_norm": "joel embiid",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 26.61,
+          "game_score": 31.9,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Paul George",
+          "player_norm": "paul george",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 15.96,
+          "game_score": 19.2,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "VJ Edgecombe",
+          "player_norm": "vj edgecombe",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 15.33,
+          "game_score": 18.4,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kelly Oubre Jr.",
+          "player_norm": "kelly oubre jr.",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 14.68,
+          "game_score": 17.6,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -2199,6 +1763,80 @@
           "rank_on_team": 5,
           "season_avg": 14.07,
           "game_score": 16.9,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|pts": {
+      "team_slate": "MIN",
+      "category": "pts",
+      "category_label": "Points",
+      "threshold": 18.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Anthony Edwards",
+          "player_norm": "anthony edwards",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 29.67,
+          "game_score": 35.6,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Julius Randle",
+          "player_norm": "julius randle",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 20.93,
+          "game_score": 25.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jaden McDaniels",
+          "player_norm": "jaden mcdaniels",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 14.69,
+          "game_score": 17.6,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Naz Reid",
+          "player_norm": "naz reid",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 13.86,
+          "game_score": 16.6,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Donte DiVincenzo",
+          "player_norm": "donte divincenzo",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 12.45,
+          "game_score": 14.9,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -3760,80 +3398,6 @@
         }
       ]
     },
-    "OKC|reb": {
-      "team_slate": "OKC",
-      "category": "reb",
-      "category_label": "Rebounds",
-      "threshold": 6.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Isaiah Hartenstein",
-          "player_norm": "isaiah hartenstein",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 9.26,
-          "game_score": 11.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Chet Holmgren",
-          "player_norm": "chet holmgren",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 9.05,
-          "game_score": 10.9,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jaylin Williams",
-          "player_norm": "jaylin williams",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 5.61,
-          "game_score": 6.7,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 4.69,
-          "game_score": 5.6,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 4.5,
-          "game_score": 5.4,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "UTAH|reb": {
       "team_slate": "UTAH",
       "category": "reb",
@@ -3901,6 +3465,80 @@
           "rank_on_team": 5,
           "season_avg": 6.88,
           "game_score": 8.3,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PHI|reb": {
+      "team_slate": "PHI",
+      "category": "reb",
+      "category_label": "Rebounds",
+      "threshold": 6.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Andre Drummond",
+          "player_norm": "andre drummond",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.45,
+          "game_score": 10.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Joel Embiid",
+          "player_norm": "joel embiid",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 7.55,
+          "game_score": 9.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "VJ Edgecombe",
+          "player_norm": "vj edgecombe",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 5.48,
+          "game_score": 6.6,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Paul George",
+          "player_norm": "paul george",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 5.15,
+          "game_score": 6.2,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kelly Oubre Jr.",
+          "player_norm": "kelly oubre jr.",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 4.85,
+          "game_score": 5.8,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -4493,6 +4131,80 @@
           "rank_on_team": 5,
           "season_avg": 4.17,
           "game_score": 5.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|reb": {
+      "team_slate": "MIN",
+      "category": "reb",
+      "category_label": "Rebounds",
+      "threshold": 6.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Rudy Gobert",
+          "player_norm": "rudy gobert",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.31,
+          "game_score": 13.6,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Julius Randle",
+          "player_norm": "julius randle",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 6.91,
+          "game_score": 8.3,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Naz Reid",
+          "player_norm": "naz reid",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 6.27,
+          "game_score": 7.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Anthony Edwards",
+          "player_norm": "anthony edwards",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 5.09,
+          "game_score": 6.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Donte DiVincenzo",
+          "player_norm": "donte divincenzo",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 4.4,
+          "game_score": 5.3,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -6054,80 +5766,6 @@
         }
       ]
     },
-    "OKC|ast": {
-      "team_slate": "OKC",
-      "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.67,
-          "game_score": 8.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 5.42,
-          "game_score": 6.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 3.73,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Isaiah Hartenstein",
-          "player_norm": "isaiah hartenstein",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 3.46,
-          "game_score": 4.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cason Wallace",
-          "player_norm": "cason wallace",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 2.65,
-          "game_score": 3.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "UTAH|ast": {
       "team_slate": "UTAH",
       "category": "ast",
@@ -6195,6 +5833,80 @@
           "rank_on_team": 5,
           "season_avg": 3.18,
           "game_score": 3.8,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PHI|ast": {
+      "team_slate": "PHI",
+      "category": "ast",
+      "category_label": "Assists",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Tyrese Maxey",
+          "player_norm": "tyrese maxey",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.67,
+          "game_score": 8.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Joel Embiid",
+          "player_norm": "joel embiid",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 3.94,
+          "game_score": 4.7,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "VJ Edgecombe",
+          "player_norm": "vj edgecombe",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 3.9,
+          "game_score": 4.7,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Paul George",
+          "player_norm": "paul george",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 3.7,
+          "game_score": 4.4,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Quentin Grimes",
+          "player_norm": "quentin grimes",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 3.43,
+          "game_score": 4.1,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -6787,6 +6499,80 @@
           "rank_on_team": 5,
           "season_avg": 3.61,
           "game_score": 4.3,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|ast": {
+      "team_slate": "MIN",
+      "category": "ast",
+      "category_label": "Assists",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Julius Randle",
+          "player_norm": "julius randle",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.12,
+          "game_score": 6.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Donte DiVincenzo",
+          "player_norm": "donte divincenzo",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 4.12,
+          "game_score": 4.9,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Anthony Edwards",
+          "player_norm": "anthony edwards",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 3.7,
+          "game_score": 4.4,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "player_norm": "ayo dosunmu",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 2.85,
+          "game_score": 3.4,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mike Conley",
+          "player_norm": "mike conley",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 2.83,
+          "game_score": 3.4,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -8354,10 +8140,10 @@
       "category_label": "3-Pointers made",
       "threshold": 1.5,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "SAS",
+        "name": "SAS",
+        "def_rank": 10,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -8502,10 +8288,10 @@
       "category_label": "3-Pointers made",
       "threshold": 1.5,
       "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -8516,7 +8302,7 @@
           "season_avg": 3.31,
           "game_score": 4.0,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -8528,7 +8314,7 @@
           "season_avg": 2.44,
           "game_score": 2.9,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -8540,7 +8326,7 @@
           "season_avg": 1.98,
           "game_score": 2.4,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -8552,7 +8338,7 @@
           "season_avg": 1.8,
           "game_score": 2.2,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -8564,7 +8350,7 @@
           "season_avg": 1.77,
           "game_score": 2.1,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -9168,10 +8954,10 @@
       "category_label": "3-Pointers made",
       "threshold": 1.5,
       "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -10796,10 +10582,10 @@
       "category_label": "Steals",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "SAS",
+        "name": "SAS",
+        "def_rank": 10,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -10944,10 +10730,10 @@
       "category_label": "Steals",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -10958,7 +10744,7 @@
           "season_avg": 2.03,
           "game_score": 2.4,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -10970,7 +10756,7 @@
           "season_avg": 1.48,
           "game_score": 1.8,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -10982,7 +10768,7 @@
           "season_avg": 1.48,
           "game_score": 1.8,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -10994,7 +10780,7 @@
           "season_avg": 1.32,
           "game_score": 1.6,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -11006,7 +10792,7 @@
           "season_avg": 1.23,
           "game_score": 1.5,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -11610,10 +11396,10 @@
       "category_label": "Steals",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -13238,10 +13024,10 @@
       "category_label": "Blocks",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "SAS",
+        "name": "SAS",
+        "def_rank": 10,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -13386,10 +13172,10 @@
       "category_label": "Blocks",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -13400,7 +13186,7 @@
           "season_avg": 1.23,
           "game_score": 1.5,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -13412,7 +13198,7 @@
           "season_avg": 1.06,
           "game_score": 1.3,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -13424,7 +13210,7 @@
           "season_avg": 1.0,
           "game_score": 1.2,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -13435,8 +13221,8 @@
           "rank_on_team": 4,
           "season_avg": 0.82,
           "game_score": 1.0,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -13447,8 +13233,8 @@
           "rank_on_team": 5,
           "season_avg": 0.78,
           "game_score": 0.9,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -14052,10 +13838,10 @@
       "category_label": "Blocks",
       "threshold": 1.0,
       "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -15680,10 +15466,10 @@
       "category_label": "Pts+Reb+Ast",
       "threshold": 28.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "SAS",
+        "name": "SAS",
+        "def_rank": 10,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -15828,10 +15614,10 @@
       "category_label": "Pts+Reb+Ast",
       "threshold": 28.0,
       "opponent": {
-        "slate_abbr": "NYK",
-        "name": "NYK",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -15842,7 +15628,7 @@
           "season_avg": 39.75,
           "game_score": 47.7,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -15854,7 +15640,7 @@
           "season_avg": 38.09,
           "game_score": 45.7,
           "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -15865,8 +15651,8 @@
           "rank_on_team": 3,
           "season_avg": 24.81,
           "game_score": 29.8,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -15877,8 +15663,8 @@
           "rank_on_team": 4,
           "season_avg": 24.72,
           "game_score": 29.7,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -15889,8 +15675,8 @@
           "rank_on_team": 5,
           "season_avg": 21.27,
           "game_score": 25.5,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -16494,10 +16280,10 @@
       "category_label": "Pts+Reb+Ast",
       "threshold": 28.0,
       "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {

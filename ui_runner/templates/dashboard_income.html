@@ -127,6 +127,15 @@
       font-size: 13px;
       padding: 8px 2px;
     }
+    .stale-banner {
+      background: #FFF3CD;
+      border: 1px solid #FFEAA7;
+      border-radius: 6px;
+      padding: 8px 16px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #856404;
+    }
     @media (max-width: 1020px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
     }
@@ -139,6 +148,9 @@
   {% include '_site_nav.html' %}
 
   <main class="income-wrap">
+    <div id="income-stale-banner" style="display:none" class="stale-banner">
+      ⚠ Data may be outdated — last updated <span id="stale-ts"></span>
+    </div>
     <section class="hero">
       <h1>P&L Log</h1>
       <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
@@ -410,6 +422,21 @@
         .then((raw) => render(parseRows(raw)))
         .catch(() => {});
     })();
+  </script>
+  <script>
+    fetch('/income/health')
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'stale' || data.status === 'empty') {
+          const ts = document.getElementById('stale-ts');
+          const banner = document.getElementById('income-stale-banner');
+          if (ts && banner) {
+            ts.textContent = data.last_ingest || 'unknown';
+            banner.style.display = 'block';
+          }
+        }
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>

@@ -1,7 +1,9 @@
 {
   "sport": "nhl",
   "display_name": "NHL",
-  "generated_at": "2026-05-28T01:21:00.738272+00:00",
+  "matchup_mode": "team",
+  "generated_at": "2026-05-28T04:52:26.782172+00:00",
+  "slate_note": "",
   "n_teams": 32,
   "elite_rank_cut": 6,
   "weak_rank_cut": 21,
@@ -30,101 +32,10 @@
   ],
   "teams": [
     {
-      "def_key": "ANA",
-      "slate_abbr": "ANA",
-      "name": "ANA",
-      "def_rank": 29,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "BOS",
-      "slate_abbr": "BOS",
-      "name": "BOS",
-      "def_rank": 14,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "BUF",
-      "slate_abbr": "BUF",
-      "name": "BUF",
-      "def_rank": 10,
-      "def_tier": "Above Avg"
-    },
-    {
       "def_key": "CAR",
       "slate_abbr": "CAR",
       "name": "CAR",
       "def_rank": 5,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "CBJ",
-      "slate_abbr": "CBJ",
-      "name": "CBJ",
-      "def_rank": 17,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "CGY",
-      "slate_abbr": "CGY",
-      "name": "CGY",
-      "def_rank": 21,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "CHI",
-      "slate_abbr": "CHI",
-      "name": "CHI",
-      "def_rank": 27,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "COL",
-      "slate_abbr": "COL",
-      "name": "COL",
-      "def_rank": 1,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "DAL",
-      "slate_abbr": "DAL",
-      "name": "DAL",
-      "def_rank": 2,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "DET",
-      "slate_abbr": "DET",
-      "name": "DET",
-      "def_rank": 19,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "EDM",
-      "slate_abbr": "EDM",
-      "name": "EDM",
-      "def_rank": 25,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "FLA",
-      "slate_abbr": "FLA",
-      "name": "FLA",
-      "def_rank": 28,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "LAK",
-      "slate_abbr": "LAK",
-      "name": "LAK",
-      "def_rank": 8,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "MIN",
-      "slate_abbr": "MIN",
-      "name": "MIN",
-      "def_rank": 4,
       "def_tier": "Elite"
     },
     {
@@ -133,129 +44,323 @@
       "name": "MTL",
       "def_rank": 16,
       "def_tier": "Avg"
-    },
-    {
-      "def_key": "NJD",
-      "slate_abbr": "NJD",
-      "name": "NJD",
-      "def_rank": 18,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "NSH",
-      "slate_abbr": "NSH",
-      "name": "NSH",
-      "def_rank": 26,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "NYI",
-      "slate_abbr": "NYI",
-      "name": "NYI",
-      "def_rank": 6,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "NYR",
-      "slate_abbr": "NYR",
-      "name": "NYR",
-      "def_rank": 15,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "OTT",
-      "slate_abbr": "OTT",
-      "name": "OTT",
-      "def_rank": 13,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "PHI",
-      "slate_abbr": "PHI",
-      "name": "PHI",
-      "def_rank": 9,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "PIT",
-      "slate_abbr": "PIT",
-      "name": "PIT",
-      "def_rank": 24,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "SEA",
-      "slate_abbr": "SEA",
-      "name": "SEA",
-      "def_rank": 23,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "SJS",
-      "slate_abbr": "SJS",
-      "name": "SJS",
-      "def_rank": 30,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "STL",
-      "slate_abbr": "STL",
-      "name": "STL",
-      "def_rank": 20,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "TBL",
-      "slate_abbr": "TBL",
-      "name": "TBL",
-      "def_rank": 3,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "TOR",
-      "slate_abbr": "TOR",
-      "name": "TOR",
-      "def_rank": 31,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "UTA",
-      "slate_abbr": "UTA",
-      "name": "UTA",
-      "def_rank": 11,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "VAN",
-      "slate_abbr": "VAN",
-      "name": "VAN",
-      "def_rank": 32,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "VGK",
-      "slate_abbr": "VGK",
-      "name": "VGK",
-      "def_rank": 12,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "WPG",
-      "slate_abbr": "WPG",
-      "name": "WPG",
-      "def_rank": 22,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "WSH",
-      "slate_abbr": "WSH",
-      "name": "WSH",
-      "def_rank": 7,
-      "def_tier": "Elite"
     }
   ],
-  "matchups": {},
+  "matchups": {
+    "MTL": {
+      "opponent_slate": "CAR",
+      "opponent_name": "CAR",
+      "opponent_def_rank": 5,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
+    },
+    "CAR": {
+      "opponent_slate": "MTL",
+      "opponent_name": "MTL",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 5,
+      "team_def_tier": "Elite"
+    }
+  },
   "players_by_team_cat": {
+    "CAR|goals": {
+      "team_slate": "CAR",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "MTL",
+        "name": "MTL",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Andrei Svechnikov",
+          "player_norm": "andrei svechnikov",
+          "pos": "R",
+          "rank_on_team": 1,
+          "season_avg": 0.15,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nikolaj Ehlers",
+          "player_norm": "nikolaj ehlers",
+          "pos": "L",
+          "rank_on_team": 2,
+          "season_avg": 0.12,
+          "game_score": 0.4,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Shayne Gostisbehere",
+          "player_norm": "shayne gostisbehere",
+          "pos": "D",
+          "rank_on_team": 3,
+          "season_avg": 0.11,
+          "game_score": 0.3,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Sebastian Aho",
+          "player_norm": "sebastian aho",
+          "pos": "C",
+          "rank_on_team": 4,
+          "season_avg": 0.09,
+          "game_score": 0.3,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Bradly Nadeau",
+          "player_norm": "bradly nadeau",
+          "pos": "L",
+          "rank_on_team": 5,
+          "season_avg": 0.08,
+          "game_score": 0.2,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MTL|goals": {
+      "team_slate": "MTL",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CAR",
+        "name": "CAR",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Juraj Slafkovsk\u00fd",
+          "player_norm": "juraj slafkovsky",
+          "pos": "L",
+          "rank_on_team": 1,
+          "season_avg": 0.18,
+          "game_score": 0.5,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Cole Caufield",
+          "player_norm": "cole caufield",
+          "pos": "R",
+          "rank_on_team": 2,
+          "season_avg": 0.14,
+          "game_score": 0.4,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nick Suzuki",
+          "player_norm": "nick suzuki",
+          "pos": "C",
+          "rank_on_team": 3,
+          "season_avg": 0.13,
+          "game_score": 0.4,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ivan Demidov",
+          "player_norm": "ivan demidov",
+          "pos": "R",
+          "rank_on_team": 4,
+          "season_avg": 0.09,
+          "game_score": 0.3,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alex Newhook",
+          "player_norm": "alex newhook",
+          "pos": "C",
+          "rank_on_team": 5,
+          "season_avg": 0.05,
+          "game_score": 0.1,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CAR|shots": {
+      "team_slate": "CAR",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.5,
+      "opponent": {
+        "slate_abbr": "MTL",
+        "name": "MTL",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Andrei Svechnikov",
+          "player_norm": "andrei svechnikov",
+          "pos": "R",
+          "rank_on_team": 1,
+          "season_avg": 0.68,
+          "game_score": 2.1,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Seth Jarvis",
+          "player_norm": "seth jarvis",
+          "pos": "C",
+          "rank_on_team": 2,
+          "season_avg": 0.68,
+          "game_score": 2.0,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nikolaj Ehlers",
+          "player_norm": "nikolaj ehlers",
+          "pos": "L",
+          "rank_on_team": 3,
+          "season_avg": 0.6,
+          "game_score": 1.8,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Sebastian Aho",
+          "player_norm": "sebastian aho",
+          "pos": "C",
+          "rank_on_team": 4,
+          "season_avg": 0.56,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Shayne Gostisbehere",
+          "player_norm": "shayne gostisbehere",
+          "pos": "D",
+          "rank_on_team": 5,
+          "season_avg": 0.53,
+          "game_score": 1.6,
+          "edge": "NEUTRAL",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MTL|shots": {
+      "team_slate": "MTL",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.5,
+      "opponent": {
+        "slate_abbr": "CAR",
+        "name": "CAR",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Patrik Laine",
+          "player_norm": "patrik laine",
+          "pos": "L",
+          "rank_on_team": 1,
+          "season_avg": 0.8,
+          "game_score": 2.4,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Cole Caufield",
+          "player_norm": "cole caufield",
+          "pos": "R",
+          "rank_on_team": 2,
+          "season_avg": 0.78,
+          "game_score": 2.3,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Juraj Slafkovsk\u00fd",
+          "player_norm": "juraj slafkovsky",
+          "pos": "L",
+          "rank_on_team": 3,
+          "season_avg": 0.63,
+          "game_score": 1.9,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nick Suzuki",
+          "player_norm": "nick suzuki",
+          "pos": "C",
+          "rank_on_team": 4,
+          "season_avg": 0.57,
+          "game_score": 1.7,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ivan Demidov",
+          "player_norm": "ivan demidov",
+          "pos": "R",
+          "rank_on_team": 5,
+          "season_avg": 0.41,
+          "game_score": 1.2,
+          "edge": "AVOID",
+          "notes": "NST season rate per game",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
     "COL|goals": {
       "team_slate": "COL",
       "category": "goals",
@@ -840,80 +945,6 @@
           "pos": "D",
           "rank_on_team": 5,
           "season_avg": 0.07,
-          "game_score": 0.2,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CAR|goals": {
-      "team_slate": "CAR",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Andrei Svechnikov",
-          "player_norm": "andrei svechnikov",
-          "pos": "R",
-          "rank_on_team": 1,
-          "season_avg": 0.15,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nikolaj Ehlers",
-          "player_norm": "nikolaj ehlers",
-          "pos": "L",
-          "rank_on_team": 2,
-          "season_avg": 0.12,
-          "game_score": 0.4,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Shayne Gostisbehere",
-          "player_norm": "shayne gostisbehere",
-          "pos": "D",
-          "rank_on_team": 3,
-          "season_avg": 0.11,
-          "game_score": 0.3,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Sebastian Aho",
-          "player_norm": "sebastian aho",
-          "pos": "C",
-          "rank_on_team": 4,
-          "season_avg": 0.09,
-          "game_score": 0.3,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Bradly Nadeau",
-          "player_norm": "bradly nadeau",
-          "pos": "L",
-          "rank_on_team": 5,
-          "season_avg": 0.08,
           "game_score": 0.2,
           "edge": "NEUTRAL",
           "notes": "NST season rate per game",
@@ -2328,80 +2359,6 @@
         }
       ]
     },
-    "MTL|goals": {
-      "team_slate": "MTL",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Juraj Slafkovsk\u00fd",
-          "player_norm": "juraj slafkovsky",
-          "pos": "L",
-          "rank_on_team": 1,
-          "season_avg": 0.18,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cole Caufield",
-          "player_norm": "cole caufield",
-          "pos": "R",
-          "rank_on_team": 2,
-          "season_avg": 0.14,
-          "game_score": 0.4,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nick Suzuki",
-          "player_norm": "nick suzuki",
-          "pos": "C",
-          "rank_on_team": 3,
-          "season_avg": 0.13,
-          "game_score": 0.4,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ivan Demidov",
-          "player_norm": "ivan demidov",
-          "pos": "R",
-          "rank_on_team": 4,
-          "season_avg": 0.09,
-          "game_score": 0.3,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alex Newhook",
-          "player_norm": "alex newhook",
-          "pos": "C",
-          "rank_on_team": 5,
-          "season_avg": 0.05,
-          "game_score": 0.1,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "PHI|goals": {
       "team_slate": "PHI",
       "category": "goals",
@@ -3222,10 +3179,10 @@
       "category_label": "Assists",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "MTL",
+        "name": "MTL",
+        "def_rank": 16,
+        "def_tier": "Avg"
       },
       "players": [
         {
@@ -4702,10 +4659,10 @@
       "category_label": "Assists",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "CAR",
+        "name": "CAR",
+        "def_rank": 5,
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -4727,7 +4684,7 @@
           "rank_on_team": 2,
           "season_avg": 0.22,
           "game_score": 0.7,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -4739,7 +4696,7 @@
           "rank_on_team": 3,
           "season_avg": 0.22,
           "game_score": 0.7,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -4751,7 +4708,7 @@
           "rank_on_team": 4,
           "season_avg": 0.16,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -4763,7 +4720,7 @@
           "rank_on_team": 5,
           "season_avg": 0.16,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -5590,10 +5547,10 @@
       "category_label": "Points",
       "threshold": 0.8,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "MTL",
+        "name": "MTL",
+        "def_rank": 16,
+        "def_tier": "Avg"
       },
       "players": [
         {
@@ -7070,10 +7027,10 @@
       "category_label": "Points",
       "threshold": 0.8,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "CAR",
+        "name": "CAR",
+        "def_rank": 5,
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -7083,7 +7040,7 @@
           "rank_on_team": 1,
           "season_avg": 0.52,
           "game_score": 1.6,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -7095,7 +7052,7 @@
           "rank_on_team": 2,
           "season_avg": 0.36,
           "game_score": 1.1,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -7107,7 +7064,7 @@
           "rank_on_team": 3,
           "season_avg": 0.34,
           "game_score": 1.0,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -7119,7 +7076,7 @@
           "rank_on_team": 4,
           "season_avg": 0.24,
           "game_score": 0.7,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -7131,7 +7088,7 @@
           "rank_on_team": 5,
           "season_avg": 0.24,
           "game_score": 0.7,
-          "edge": "NEUTRAL",
+          "edge": "AVOID",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
           "def_boost": null
@@ -7945,80 +7902,6 @@
           "rank_on_team": 5,
           "season_avg": 0.51,
           "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CAR|shots": {
-      "team_slate": "CAR",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.5,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Andrei Svechnikov",
-          "player_norm": "andrei svechnikov",
-          "pos": "R",
-          "rank_on_team": 1,
-          "season_avg": 0.68,
-          "game_score": 2.1,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Seth Jarvis",
-          "player_norm": "seth jarvis",
-          "pos": "C",
-          "rank_on_team": 2,
-          "season_avg": 0.68,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nikolaj Ehlers",
-          "player_norm": "nikolaj ehlers",
-          "pos": "L",
-          "rank_on_team": 3,
-          "season_avg": 0.6,
-          "game_score": 1.8,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Sebastian Aho",
-          "player_norm": "sebastian aho",
-          "pos": "C",
-          "rank_on_team": 4,
-          "season_avg": 0.56,
-          "game_score": 1.7,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Shayne Gostisbehere",
-          "player_norm": "shayne gostisbehere",
-          "pos": "D",
-          "rank_on_team": 5,
-          "season_avg": 0.53,
-          "game_score": 1.6,
           "edge": "NEUTRAL",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,
@@ -9425,80 +9308,6 @@
           "rank_on_team": 5,
           "season_avg": 0.31,
           "game_score": 0.9,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "MTL|shots": {
-      "team_slate": "MTL",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.5,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Patrik Laine",
-          "player_norm": "patrik laine",
-          "pos": "L",
-          "rank_on_team": 1,
-          "season_avg": 0.8,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cole Caufield",
-          "player_norm": "cole caufield",
-          "pos": "R",
-          "rank_on_team": 2,
-          "season_avg": 0.78,
-          "game_score": 2.3,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Juraj Slafkovsk\u00fd",
-          "player_norm": "juraj slafkovsky",
-          "pos": "L",
-          "rank_on_team": 3,
-          "season_avg": 0.63,
-          "game_score": 1.9,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nick Suzuki",
-          "player_norm": "nick suzuki",
-          "pos": "C",
-          "rank_on_team": 4,
-          "season_avg": 0.57,
-          "game_score": 1.7,
-          "edge": "NEUTRAL",
-          "notes": "NST season rate per game",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ivan Demidov",
-          "player_norm": "ivan demidov",
-          "pos": "R",
-          "rank_on_team": 5,
-          "season_avg": 0.41,
-          "game_score": 1.2,
           "edge": "NEUTRAL",
           "notes": "NST season rate per game",
           "overperform_vs_weak": false,

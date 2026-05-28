@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-05-20T02:31:46.230037+00:00",
+  "generated_at": "2026-05-28T04:23:47.278154+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -16,14 +16,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -32,9 +32,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -42,14 +42,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -58,9 +58,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -68,14 +68,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -84,9 +84,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -94,14 +94,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -110,9 +110,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -120,14 +120,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -136,9 +136,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -146,14 +146,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -162,9 +162,9 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -172,14 +172,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -188,9 +188,9 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -198,24 +198,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -224,9 +224,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -234,24 +234,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -260,9 +260,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -270,24 +270,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -296,9 +296,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -306,24 +306,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -332,9 +332,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -342,24 +342,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -368,9 +368,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -378,24 +378,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -404,9 +404,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -414,24 +414,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "VJ Edgecombe",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Adolfo Daniel Vallejo",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -440,9 +440,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -450,24 +450,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -476,9 +476,9 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -486,24 +486,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -512,9 +512,9 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -522,19 +522,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -542,14 +532,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -558,9 +558,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -568,19 +568,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -588,14 +578,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -604,9 +604,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -614,19 +614,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -634,14 +624,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -650,9 +650,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -660,19 +660,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -680,14 +670,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -696,9 +696,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -706,19 +706,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -726,14 +716,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -742,9 +742,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -752,19 +752,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -772,14 +762,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -788,9 +788,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -798,34 +798,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "VJ Edgecombe",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Adolfo Daniel Vallejo",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -834,9 +834,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -844,34 +844,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -880,9 +880,9 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -890,19 +890,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -910,14 +900,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -926,9 +926,9 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -936,29 +936,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -966,14 +946,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -982,9 +982,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -992,29 +992,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1022,14 +1002,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1038,9 +1038,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1048,29 +1048,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1078,14 +1058,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1094,9 +1094,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1104,29 +1104,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1134,14 +1114,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1150,9 +1150,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1160,29 +1160,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1190,14 +1170,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1206,9 +1206,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1216,29 +1216,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1246,14 +1226,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1262,9 +1262,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1272,19 +1272,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1292,24 +1282,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "VJ Edgecombe",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
+        },
+        {
+          "player": "Adolfo Daniel Vallejo",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1318,9 +1318,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1328,19 +1328,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1348,24 +1338,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1374,9 +1374,9 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1384,29 +1384,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1414,14 +1394,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
-          "pick_type": "Demon",
-          "delta": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
+          "pick_type": "Demon",
+          "delta": 5.0,
+          "direction": "OVER",
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1430,9 +1430,9 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1440,54 +1440,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1496,9 +1496,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1506,54 +1506,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1562,9 +1562,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1572,54 +1572,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1628,9 +1628,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1638,54 +1638,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1694,9 +1694,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1704,54 +1704,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1760,9 +1760,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1770,54 +1770,54 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
           "line": 3.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1826,9 +1826,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1836,29 +1836,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1866,24 +1846,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "VJ Edgecombe",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
+        },
+        {
+          "player": "Adolfo Daniel Vallejo",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1892,9 +1892,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1902,29 +1902,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1932,24 +1912,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Adam Walton",
+          "prop_type": "Total Sets",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.5125
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     },
@@ -1958,9 +1958,9 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
+          "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 23.0,
+          "line": 21.0,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1968,29 +1968,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Mikal Bridges",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 6.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jose Alvarado",
+          "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
-          "line": 3.5,
+          "line": 12.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1998,9 +1978,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Landry Shamet",
-          "prop_type": "Points",
-          "line": 2.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -2008,14 +1988,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jovana Nogic",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 12.0,
+          "player": "Ajay Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Moise Kouame",
+          "prop_type": "Total Games Won",
+          "line": 21.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.5125
         }
       ]
     }

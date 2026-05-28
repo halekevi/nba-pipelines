@@ -20,7 +20,7 @@ body{
               var(--bg);
   color:var(--text);
 }
-.shell{max-width:1200px;margin:0 auto;padding:28px}
+.shell{width:90%;max-width:1680px;margin:0 auto;padding:28px;box-sizing:border-box}
 .topbar{
   display:flex;align-items:flex-start;justify-content:space-between;
   padding:18px 20px;border:1px solid var(--line);

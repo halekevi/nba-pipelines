@@ -1,7 +1,9 @@
 {
   "sport": "mlb",
   "display_name": "MLB",
-  "generated_at": "2026-05-28T01:21:00.756328+00:00",
+  "matchup_mode": "team",
+  "generated_at": "2026-05-28T04:52:26.953270+00:00",
+  "slate_note": "",
   "n_teams": 30,
   "elite_rank_cut": 4,
   "weak_rank_cut": 20,
@@ -30,13 +32,6 @@
   ],
   "teams": [
     {
-      "def_key": "NYY",
-      "slate_abbr": "NYY",
-      "name": "NYY",
-      "def_rank": 1,
-      "def_tier": "Elite"
-    },
-    {
       "def_key": "ATL",
       "slate_abbr": "ATL",
       "name": "ATL",
@@ -44,31 +39,10 @@
       "def_tier": "Elite"
     },
     {
-      "def_key": "LAD",
-      "slate_abbr": "LAD",
-      "name": "LAD",
-      "def_rank": 2,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "MIL",
-      "slate_abbr": "MIL",
-      "name": "MIL",
-      "def_rank": 7,
-      "def_tier": "Above Avg"
-    },
-    {
       "def_key": "TEX",
       "slate_abbr": "TEX",
       "name": "TEX",
       "def_rank": 5,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "TB",
-      "slate_abbr": "TB",
-      "name": "TB",
-      "def_rank": 4,
       "def_tier": "Elite"
     },
     {
@@ -79,38 +53,10 @@
       "def_tier": "Elite"
     },
     {
-      "def_key": "SEA",
-      "slate_abbr": "SEA",
-      "name": "SEA",
-      "def_rank": 10,
-      "def_tier": "Above Avg"
-    },
-    {
       "def_key": "DET",
       "slate_abbr": "DET",
       "name": "DET",
       "def_rank": 12,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "MIA",
-      "slate_abbr": "MIA",
-      "name": "MIA",
-      "def_rank": 9,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "SF",
-      "slate_abbr": "SF",
-      "name": "SF",
-      "def_rank": 14,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "NYM",
-      "slate_abbr": "NYM",
-      "name": "NYM",
-      "def_rank": 11,
       "def_tier": "Above Avg"
     },
     {
@@ -121,25 +67,11 @@
       "def_tier": "Above Avg"
     },
     {
-      "def_key": "CLE",
-      "slate_abbr": "CLE",
-      "name": "CLE",
-      "def_rank": 13,
-      "def_tier": "Avg"
-    },
-    {
       "def_key": "BOS",
       "slate_abbr": "BOS",
       "name": "BOS",
       "def_rank": 16,
       "def_tier": "Avg"
-    },
-    {
-      "def_key": "CWS",
-      "slate_abbr": "CWS",
-      "name": "CWS",
-      "def_rank": 19,
-      "def_tier": "Below Avg"
     },
     {
       "def_key": "TOR",
@@ -149,38 +81,10 @@
       "def_tier": "Avg"
     },
     {
-      "def_key": "SD",
-      "slate_abbr": "SD",
-      "name": "SD",
-      "def_rank": 17,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "KC",
-      "slate_abbr": "KC",
-      "name": "KC",
-      "def_rank": 18,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "CIN",
-      "slate_abbr": "CIN",
-      "name": "CIN",
-      "def_rank": 25,
-      "def_tier": "Weak"
-    },
-    {
       "def_key": "MIN",
       "slate_abbr": "MIN",
       "name": "MIN",
       "def_rank": 20,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "STL",
-      "slate_abbr": "STL",
-      "name": "STL",
-      "def_rank": 23,
       "def_tier": "Below Avg"
     },
     {
@@ -191,46 +95,11 @@
       "def_tier": "Below Avg"
     },
     {
-      "def_key": "ATH",
-      "slate_abbr": "ATH",
-      "name": "ATH",
-      "def_rank": 26,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "COL",
-      "slate_abbr": "COL",
-      "name": "COL",
-      "def_rank": 21,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "PHI",
-      "slate_abbr": "PHI",
-      "name": "PHI",
-      "def_rank": 27,
-      "def_tier": "Weak"
-    },
-    {
       "def_key": "BAL",
       "slate_abbr": "BAL",
       "name": "BAL",
       "def_rank": 29,
       "def_tier": "Weak"
-    },
-    {
-      "def_key": "WSH",
-      "slate_abbr": "WSH",
-      "name": "WSH",
-      "def_rank": 28,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "AZ",
-      "slate_abbr": "AZ",
-      "name": "AZ",
-      "def_rank": 24,
-      "def_tier": "Below Avg"
     },
     {
       "def_key": "HOU",
@@ -240,8 +109,2540 @@
       "def_tier": "Weak"
     }
   ],
-  "matchups": {},
-  "players_by_team_cat": {},
+  "matchups": {
+    "MIN": {
+      "opponent_slate": "CWS",
+      "opponent_name": "CWS",
+      "opponent_def_rank": 19,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 20,
+      "team_def_tier": "Below Avg"
+    },
+    "TEX": {
+      "opponent_slate": "HOU",
+      "opponent_name": "HOU",
+      "opponent_def_rank": 30,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 5,
+      "team_def_tier": "Elite"
+    },
+    "HOU": {
+      "opponent_slate": "TEX",
+      "opponent_name": "TEX",
+      "opponent_def_rank": 5,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 30,
+      "team_def_tier": "Weak"
+    },
+    "PIT": {
+      "opponent_slate": "CHC",
+      "opponent_name": "CHC",
+      "opponent_def_rank": 8,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 6,
+      "team_def_tier": "Elite"
+    },
+    "DET": {
+      "opponent_slate": "LAA",
+      "opponent_name": "LAA",
+      "opponent_def_rank": 22,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 12,
+      "team_def_tier": "Above Avg"
+    },
+    "BOS": {
+      "opponent_slate": "ATL",
+      "opponent_name": "ATL",
+      "opponent_def_rank": 3,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
+    },
+    "CHC": {
+      "opponent_slate": "PIT",
+      "opponent_name": "PIT",
+      "opponent_def_rank": 6,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 8,
+      "team_def_tier": "Above Avg"
+    },
+    "TOR": {
+      "opponent_slate": "BAL",
+      "opponent_name": "BAL",
+      "opponent_def_rank": 29,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 15,
+      "team_def_tier": "Avg"
+    },
+    "LAA": {
+      "opponent_slate": "DET",
+      "opponent_name": "DET",
+      "opponent_def_rank": 12,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 22,
+      "team_def_tier": "Below Avg"
+    },
+    "ATL": {
+      "opponent_slate": "BOS",
+      "opponent_name": "BOS",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 3,
+      "team_def_tier": "Elite"
+    },
+    "BAL": {
+      "opponent_slate": "TOR",
+      "opponent_name": "TOR",
+      "opponent_def_rank": 15,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 29,
+      "team_def_tier": "Weak"
+    }
+  },
+  "players_by_team_cat": {
+    "BOS|hits": {
+      "team_slate": "BOS",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "ATL",
+        "name": "ATL",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Ceddanne Rafaela",
+          "player_norm": "ceddanne rafaela",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nick Sogard",
+          "player_norm": "nick sogard",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Wilyer Abreu",
+          "player_norm": "wilyer abreu",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Willson Contreras",
+          "player_norm": "willson contreras",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jarren Duran",
+          "player_norm": "jarren duran",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DET|hits": {
+      "team_slate": "DET",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "LAA",
+        "name": "LAA",
+        "def_rank": 22,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Riley Greene",
+          "player_norm": "riley greene",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dillon Dingler",
+          "player_norm": "dillon dingler",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matt Vierling",
+          "player_norm": "matt vierling",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Colt Keith",
+          "player_norm": "colt keith",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kevin McGonigle",
+          "player_norm": "kevin mcgonigle",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CHC|hits": {
+      "team_slate": "CHC",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "PIT",
+        "name": "PIT",
+        "def_rank": 6,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Michael Busch",
+          "player_norm": "michael busch",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Seiya Suzuki",
+          "player_norm": "seiya suzuki",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pete Crow-Armstrong",
+          "player_norm": "pete crow-armstrong",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ian Happ",
+          "player_norm": "ian happ",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nico Hoerner",
+          "player_norm": "nico hoerner",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|hits": {
+      "team_slate": "MIN",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "CWS",
+        "name": "CWS",
+        "def_rank": 19,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Byron Buxton",
+          "player_norm": "byron buxton",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brooks Lee",
+          "player_norm": "brooks lee",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Austin Martin",
+          "player_norm": "austin martin",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Trevor Larnach",
+          "player_norm": "trevor larnach",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Luke Keaschall",
+          "player_norm": "luke keaschall",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "LAA|hits": {
+      "team_slate": "LAA",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "DET",
+        "name": "DET",
+        "def_rank": 12,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Wade Meckler",
+          "player_norm": "wade meckler",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mike Trout",
+          "player_norm": "mike trout",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jo Adell",
+          "player_norm": "jo adell",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jorge Soler",
+          "player_norm": "jorge soler",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Oswald Peraza",
+          "player_norm": "oswald peraza",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TOR|hits": {
+      "team_slate": "TOR",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "BAL",
+        "name": "BAL",
+        "def_rank": 29,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Yohendrick Pi\u00f1ango",
+          "player_norm": "yohendrick pi\u00f1ango",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ernie Clement",
+          "player_norm": "ernie clement",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Daulton Varsho",
+          "player_norm": "daulton varsho",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kazuma Okamoto",
+          "player_norm": "kazuma okamoto",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jes\u00fas S\u00e1nchez",
+          "player_norm": "jes\u00fas s\u00e1nchez",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TEX|hits": {
+      "team_slate": "TEX",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "HOU",
+        "name": "HOU",
+        "def_rank": 30,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Josh Jung",
+          "player_norm": "josh jung",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ezequiel Duran",
+          "player_norm": "ezequiel duran",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brandon Nimmo",
+          "player_norm": "brandon nimmo",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kyle Higashioka",
+          "player_norm": "kyle higashioka",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jake Burger",
+          "player_norm": "jake burger",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "HOU|hits": {
+      "team_slate": "HOU",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "TEX",
+        "name": "TEX",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Isaac Paredes",
+          "player_norm": "isaac paredes",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Taylor Trammell",
+          "player_norm": "taylor trammell",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jeremy Pe\u00f1a",
+          "player_norm": "jeremy pe\u00f1a",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Christian Walker",
+          "player_norm": "christian walker",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Yordan Alvarez",
+          "player_norm": "yordan alvarez",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ATL|hits": {
+      "team_slate": "ATL",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "BOS",
+        "name": "BOS",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Ozzie Albies",
+          "player_norm": "ozzie albies",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matt Olson",
+          "player_norm": "matt olson",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ronald Acu\u00f1a Jr.",
+          "player_norm": "ronald acu\u00f1a jr.",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mauricio Dub\u00f3n",
+          "player_norm": "mauricio dub\u00f3n",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Austin Riley",
+          "player_norm": "austin riley",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PIT|hits": {
+      "team_slate": "PIT",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "CHC",
+        "name": "CHC",
+        "def_rank": 8,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Konnor Griffin",
+          "player_norm": "konnor griffin",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brandon Lowe",
+          "player_norm": "brandon lowe",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nick Gonzales",
+          "player_norm": "nick gonzales",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marcell Ozuna",
+          "player_norm": "marcell ozuna",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Oneil Cruz",
+          "player_norm": "oneil cruz",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BAL|hits": {
+      "team_slate": "BAL",
+      "category": "hits",
+      "category_label": "Hits",
+      "threshold": 1.0,
+      "opponent": {
+        "slate_abbr": "TOR",
+        "name": "TOR",
+        "def_rank": 15,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Adley Rutschman",
+          "player_norm": "adley rutschman",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gunnar Henderson",
+          "player_norm": "gunnar henderson",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Blaze Alexander",
+          "player_norm": "blaze alexander",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pete Alonso",
+          "player_norm": "pete alonso",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Coby Mayo",
+          "player_norm": "coby mayo",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CHC|total_bases": {
+      "team_slate": "CHC",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "PIT",
+        "name": "PIT",
+        "def_rank": 6,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Seiya Suzuki",
+          "player_norm": "seiya suzuki",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.2,
+          "game_score": 2.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Michael Busch",
+          "player_norm": "michael busch",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pete Crow-Armstrong",
+          "player_norm": "pete crow-armstrong",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nico Hoerner",
+          "player_norm": "nico hoerner",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dansby Swanson",
+          "player_norm": "dansby swanson",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BOS|total_bases": {
+      "team_slate": "BOS",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "ATL",
+        "name": "ATL",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Jarren Duran",
+          "player_norm": "jarren duran",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.9,
+          "game_score": 1.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Willson Contreras",
+          "player_norm": "willson contreras",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ceddanne Rafaela",
+          "player_norm": "ceddanne rafaela",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Wilyer Abreu",
+          "player_norm": "wilyer abreu",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nick Sogard",
+          "player_norm": "nick sogard",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|total_bases": {
+      "team_slate": "MIN",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "CWS",
+        "name": "CWS",
+        "def_rank": 19,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Byron Buxton",
+          "player_norm": "byron buxton",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brooks Lee",
+          "player_norm": "brooks lee",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Trevor Larnach",
+          "player_norm": "trevor larnach",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Austin Martin",
+          "player_norm": "austin martin",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Luke Keaschall",
+          "player_norm": "luke keaschall",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "LAA|total_bases": {
+      "team_slate": "LAA",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "DET",
+        "name": "DET",
+        "def_rank": 12,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Wade Meckler",
+          "player_norm": "wade meckler",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.2,
+          "game_score": 2.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mike Trout",
+          "player_norm": "mike trout",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jorge Soler",
+          "player_norm": "jorge soler",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Zach Neto",
+          "player_norm": "zach neto",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jo Adell",
+          "player_norm": "jo adell",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TOR|total_bases": {
+      "team_slate": "TOR",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "BAL",
+        "name": "BAL",
+        "def_rank": 29,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Brandon Valenzuela",
+          "player_norm": "brandon valenzuela",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.9,
+          "game_score": 1.9,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Yohendrick Pi\u00f1ango",
+          "player_norm": "yohendrick pi\u00f1ango",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ernie Clement",
+          "player_norm": "ernie clement",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Daulton Varsho",
+          "player_norm": "daulton varsho",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kazuma Okamoto",
+          "player_norm": "kazuma okamoto",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DET|total_bases": {
+      "team_slate": "DET",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "LAA",
+        "name": "LAA",
+        "def_rank": 22,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Riley Greene",
+          "player_norm": "riley greene",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dillon Dingler",
+          "player_norm": "dillon dingler",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matt Vierling",
+          "player_norm": "matt vierling",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kevin McGonigle",
+          "player_norm": "kevin mcgonigle",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Wenceel P\u00e9rez",
+          "player_norm": "wenceel p\u00e9rez",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TEX|total_bases": {
+      "team_slate": "TEX",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "HOU",
+        "name": "HOU",
+        "def_rank": 30,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Josh Jung",
+          "player_norm": "josh jung",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brandon Nimmo",
+          "player_norm": "brandon nimmo",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jake Burger",
+          "player_norm": "jake burger",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Joc Pederson",
+          "player_norm": "joc pederson",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Evan Carter",
+          "player_norm": "evan carter",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ATL|total_bases": {
+      "team_slate": "ATL",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "BOS",
+        "name": "BOS",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Matt Olson",
+          "player_norm": "matt olson",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ozzie Albies",
+          "player_norm": "ozzie albies",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ronald Acu\u00f1a Jr.",
+          "player_norm": "ronald acu\u00f1a jr.",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Austin Riley",
+          "player_norm": "austin riley",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Michael Harris II",
+          "player_norm": "michael harris ii",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "HOU|total_bases": {
+      "team_slate": "HOU",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "TEX",
+        "name": "TEX",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Yordan Alvarez",
+          "player_norm": "yordan alvarez",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Christian Walker",
+          "player_norm": "christian walker",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jeremy Pe\u00f1a",
+          "player_norm": "jeremy pe\u00f1a",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Isaac Paredes",
+          "player_norm": "isaac paredes",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Taylor Trammell",
+          "player_norm": "taylor trammell",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PIT|total_bases": {
+      "team_slate": "PIT",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "CHC",
+        "name": "CHC",
+        "def_rank": 8,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Brandon Lowe",
+          "player_norm": "brandon lowe",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marcell Ozuna",
+          "player_norm": "marcell ozuna",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Konnor Griffin",
+          "player_norm": "konnor griffin",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Bryan Reynolds",
+          "player_norm": "bryan reynolds",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Spencer Horwitz",
+          "player_norm": "spencer horwitz",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BAL|total_bases": {
+      "team_slate": "BAL",
+      "category": "total_bases",
+      "category_label": "Total bases",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "TOR",
+        "name": "TOR",
+        "def_rank": 15,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Adley Rutschman",
+          "player_norm": "adley rutschman",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pete Alonso",
+          "player_norm": "pete alonso",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Coby Mayo",
+          "player_norm": "coby mayo",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gunnar Henderson",
+          "player_norm": "gunnar henderson",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Blaze Alexander",
+          "player_norm": "blaze alexander",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "HOU|strikeouts": {
+      "team_slate": "HOU",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "TEX",
+        "name": "TEX",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Spencer Arrighetti",
+          "player_norm": "spencer arrighetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.0,
+          "game_score": 6.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Spencer Arrighetti",
+          "player_norm": "spencer arrighetti",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 6.0,
+          "game_score": 6.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Cam Smith",
+          "player_norm": "cam smith",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Taylor Trammell",
+          "player_norm": "taylor trammell",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Christian Walker",
+          "player_norm": "christian walker",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ATL|strikeouts": {
+      "team_slate": "ATL",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "BOS",
+        "name": "BOS",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Chris Sale",
+          "player_norm": "chris sale",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.0,
+          "game_score": 7.0,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Austin Riley",
+          "player_norm": "austin riley",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ronald Acu\u00f1a Jr.",
+          "player_norm": "ronald acu\u00f1a jr.",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matt Olson",
+          "player_norm": "matt olson",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mauricio Dub\u00f3n",
+          "player_norm": "mauricio dub\u00f3n",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CHC|strikeouts": {
+      "team_slate": "CHC",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "PIT",
+        "name": "PIT",
+        "def_rank": 6,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Colin Rea",
+          "player_norm": "colin rea",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.4,
+          "game_score": 4.4,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alex Bregman",
+          "player_norm": "alex bregman",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Seiya Suzuki",
+          "player_norm": "seiya suzuki",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Michael Busch",
+          "player_norm": "michael busch",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Miguel Amaya",
+          "player_norm": "miguel amaya",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DET|strikeouts": {
+      "team_slate": "DET",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "LAA",
+        "name": "LAA",
+        "def_rank": 22,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Jack Flaherty",
+          "player_norm": "jack flaherty",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.2,
+          "game_score": 5.2,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jack Flaherty",
+          "player_norm": "jack flaherty",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 5.2,
+          "game_score": 5.2,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Spencer Torkelson",
+          "player_norm": "spencer torkelson",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Riley Greene",
+          "player_norm": "riley greene",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dillon Dingler",
+          "player_norm": "dillon dingler",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BOS|strikeouts": {
+      "team_slate": "BOS",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "ATL",
+        "name": "ATL",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Payton Tolle",
+          "player_norm": "payton tolle",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.7,
+          "game_score": 7.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Payton Tolle",
+          "player_norm": "payton tolle",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 7.7,
+          "game_score": 7.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Willson Contreras",
+          "player_norm": "willson contreras",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jarren Duran",
+          "player_norm": "jarren duran",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Wilyer Abreu",
+          "player_norm": "wilyer abreu",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "AVOID",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TOR|strikeouts": {
+      "team_slate": "TOR",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "BAL",
+        "name": "BAL",
+        "def_rank": 29,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Patrick Corbin",
+          "player_norm": "patrick corbin",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kazuma Okamoto",
+          "player_norm": "kazuma okamoto",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Daulton Varsho",
+          "player_norm": "daulton varsho",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "George Springer",
+          "player_norm": "george springer",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brandon Valenzuela",
+          "player_norm": "brandon valenzuela",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "MIN|strikeouts": {
+      "team_slate": "MIN",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "CWS",
+        "name": "CWS",
+        "def_rank": 19,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Kendry Rojas",
+          "player_norm": "kendry rojas",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Josh Bell",
+          "player_norm": "josh bell",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Tristan Gray",
+          "player_norm": "tristan gray",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Victor Caratini",
+          "player_norm": "victor caratini",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Byron Buxton",
+          "player_norm": "byron buxton",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "LAA|strikeouts": {
+      "team_slate": "LAA",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "DET",
+        "name": "DET",
+        "def_rank": 12,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Grayson Rodriguez",
+          "player_norm": "grayson rodriguez",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mike Trout",
+          "player_norm": "mike trout",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.9,
+          "game_score": 1.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jo Adell",
+          "player_norm": "jo adell",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jorge Soler",
+          "player_norm": "jorge soler",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Logan O'Hoppe",
+          "player_norm": "logan o'hoppe",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BAL|strikeouts": {
+      "team_slate": "BAL",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "TOR",
+        "name": "TOR",
+        "def_rank": 15,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Chris Bassitt",
+          "player_norm": "chris bassitt",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.9,
+          "game_score": 2.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Coby Mayo",
+          "player_norm": "coby mayo",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Taylor Ward",
+          "player_norm": "taylor ward",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pete Alonso",
+          "player_norm": "pete alonso",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gunnar Henderson",
+          "player_norm": "gunnar henderson",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PIT|strikeouts": {
+      "team_slate": "PIT",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "CHC",
+        "name": "CHC",
+        "def_rank": 8,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Paul Skenes",
+          "player_norm": "paul skenes",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.8,
+          "game_score": 5.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Paul Skenes",
+          "player_norm": "paul skenes",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 5.8,
+          "game_score": 5.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Oneil Cruz",
+          "player_norm": "oneil cruz",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Konnor Griffin",
+          "player_norm": "konnor griffin",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Bryan Reynolds",
+          "player_norm": "bryan reynolds",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "TEX|strikeouts": {
+      "team_slate": "TEX",
+      "category": "strikeouts",
+      "category_label": "Strikeouts (pitcher)",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "HOU",
+        "name": "HOU",
+        "def_rank": 30,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Nathan Eovaldi",
+          "player_norm": "nathan eovaldi",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.9,
+          "game_score": 5.9,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nathan Eovaldi",
+          "player_norm": "nathan eovaldi",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 5.9,
+          "game_score": 5.9,
+          "edge": "TOP_EDGE",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kyle Higashioka",
+          "player_norm": "kyle higashioka",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jake Burger",
+          "player_norm": "jake burger",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Brandon Nimmo",
+          "player_norm": "brandon nimmo",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    }
+  },
   "edge_legend": {
     "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
     "OK_EDGE": "Solid vs average-or-softer defense.",

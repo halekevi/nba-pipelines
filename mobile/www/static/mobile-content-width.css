@@ -4,11 +4,32 @@
  * v=20260430schemapage — :root here + proporacle-page-shell @imports schema; shell pages get full mobile baseline.
  */
 :root {
+  --po-page-edge: 5%;
+  --po-content-width: 100%;
+  --po-content-max: min(98vw, 1920px);
   --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
   --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
   --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
   --po-mobile-nav-clearance: calc(82px + env(safe-area-inset-bottom, 0px));
   --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Home only uses .shell — 98% band on all viewports (loads after index.html inline CSS) */
+.shell {
+  width: 98% !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+nav.snav,
+nav.snav.glass-card {
+  width: 98% !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
 }
 
 /* Payouts nav glyph: path reads as a reversed “p” until flipped vertically. */
@@ -92,15 +113,26 @@
     font-size: max(16px, 1rem) !important;
   }
 
-  /* Home — shell */
+  /* Home — shell: reinforce 98% / 1680px; no width:100% or side padding */
   .shell {
-    max-width: 100% !important;
-    width: 100% !important;
+    width: 98% !important;
+    max-width: 1680px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     box-sizing: border-box !important;
-    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
-    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     padding-top: 14px !important;
     padding-bottom: 20px !important;
+  }
+
+  nav.snav,
+  nav.snav.glass-card {
+    width: 98% !important;
+    max-width: 1680px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
   }
 
   /* “How to read this page” — was only 8px horizontal; give links/text room from edges */
@@ -1061,9 +1093,9 @@ nav.snav .mobile-menu a {
     position: sticky !important;
     top: 0 !important;
     bottom: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin: 0 0 12px 0 !important;
+    left: auto !important;
+    right: auto !important;
+    margin: 0 auto 12px auto !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     align-items: center !important;

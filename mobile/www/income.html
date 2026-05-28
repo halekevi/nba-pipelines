@@ -115,10 +115,26 @@
     }
     .num-pos { color: #45d388; }
     .num-neg { color: #ff7f7f; }
+    .cell-sub {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted, rgba(255, 255, 255, 0.68));
+      font-size: 11px;
+      line-height: 1.15;
+    }
     .empty-note {
       color: var(--muted, rgba(255, 255, 255, 0.72));
       font-size: 13px;
       padding: 8px 2px;
+    }
+    .stale-banner {
+      background: #FFF3CD;
+      border: 1px solid #FFEAA7;
+      border-radius: 6px;
+      padding: 8px 16px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #856404;
     }
     @media (max-width: 1020px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
@@ -175,6 +191,9 @@
 
 
   <main class="income-wrap">
+    <div id="income-stale-banner" style="display:none" class="stale-banner">
+      ⚠ Data may be outdated — last updated <span id="stale-ts"></span>
+    </div>
     <section class="hero">
       <h1>P&L Log</h1>
       <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
@@ -229,7 +248,12 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td title="">
+              
+              
+              <span class="cell-sub">(incl.  void-loss)</span>
+              
+            </td>
             <td></td>
             <td class="">$</td>
             <td class=""></td>
@@ -337,13 +361,14 @@
             const wins = Number(r.wins ?? 0);
             const guarantees = Number(r.guarantees ?? 0);
             const losses = Number(r.losses ?? 0);
+            const voidLoss = Number(r.void_loss_ct ?? 0);
             const decided = Math.max(0, wins + losses);
             const paid = Math.max(0, wins + guarantees);
             const net = (r.net_dollars != null)
               ? Number(r.net_dollars)
               : (r.net_per_10 != null ? tickets * Number(r.net_per_10) : 0);
             const roi = Number(r.roi_pct ?? ((tickets > 0) ? (net / (tickets * 10) * 100) : 0));
-            return { date: String(r.date || ''), tickets, wins, guarantees, losses, decided, paid, net, roi };
+            return { date: String(r.date || ''), tickets, wins, guarantees, losses, voidLoss, decided, paid, net, roi };
           })
           .filter((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.date))
           .sort((a, b) => a.date.localeCompare(b.date));
@@ -394,7 +419,7 @@
                 <td>${r.date}</td>
                 <td>${r.tickets}</td>
                 <td>${r.wins}</td>
-                <td>${r.losses}</td>
+                <td title="${r.voidLoss > 0 ? `Includes ${r.voidLoss} void-loss` : ''}">${r.losses}${r.voidLoss > 0 ? `<span class="cell-sub">(incl. ${r.voidLoss} void-loss)</span>` : ''}</td>
                 <td>${r.guarantees}</td>
                 <td class="${clsFor(r.net, 'num-pos', 'num-neg')}">${fmtMoney(r.net)}</td>
                 <td class="${clsFor(r.roi, 'num-pos', 'num-neg')}">${fmtPct(r.roi)}</td>
@@ -440,6 +465,21 @@
         .then((raw) => render(parseRows(raw)))
         .catch(() => {});
     })();
+  </script>
+  <script>
+    fetch('/income/health')
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'stale' || data.status === 'empty') {
+          const ts = document.getElementById('stale-ts');
+          const banner = document.getElementById('income-stale-banner');
+          if (ts && banner) {
+            ts.textContent = data.last_ingest || 'unknown';
+            banner.style.display = 'block';
+          }
+        }
+      })
+      .catch(() => {});
   </script>
 
   <script>

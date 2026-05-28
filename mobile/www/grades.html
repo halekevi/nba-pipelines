@@ -51,18 +51,11 @@ body{
   position:relative;
   background:linear-gradient(135deg,#0a0a1a 0%,#0d0b1e 50%,#0a0f1a 100%);
 }
-/* Suppress extension-injected Claude status banner during local debugging sessions. */
-#claude-static-indicator-container{
-  display:none !important;
-  visibility:hidden !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-}
 html.page-grades-root,
 html.page-grades-root body.page-grades{
   display:block!important;
   height:auto!important;
-  min-height:100%!important;
+  min-height:0!important;
   max-height:none!important;
   overflow-x:hidden!important;
   overflow-y:scroll!important;
@@ -132,7 +125,7 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   overflow:visible!important;
   flex:none!important;
   position:relative!important;
-  min-height:min(45vh,520px);
+  min-height:0;
 }
 /* Slate/ticket iframes: normal flow so stage height follows iframe (absolute+height:100% often leaves empty bands). */
 html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
@@ -149,7 +142,7 @@ html.page-grades-root body.page-grades .iframe-shell-stage > iframe.grade-frame{
 }
 /* If the early <html> script fails, still avoid absolute iframe collapse (same as page-grades-root block). */
 body.page-grades .iframe-shell-stage{
-  min-height:min(45vh,520px);
+  min-height:0;
   position:relative;
   overflow:visible;
 }
@@ -543,7 +536,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   visibility:visible !important;
   pointer-events:auto !important;
   height:auto !important;
-  min-height:min(45vh,520px) !important;
+  min-height:0 !important;
   max-height:none !important;
   overflow-x:hidden !important;
   overflow-y:visible !important;
@@ -555,7 +548,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   visibility:visible !important;
   pointer-events:auto !important;
   height:auto !important;
-  min-height:min(45vh,520px) !important;
+  min-height:0 !important;
   max-height:none !important;
   overflow-x:hidden !important;
   overflow-y:visible !important;
@@ -568,7 +561,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   visibility:visible !important;
   pointer-events:auto !important;
   height:auto !important;
-  min-height:min(45vh,520px) !important;
+  min-height:0 !important;
   max-height:none !important;
   opacity:1 !important;
   z-index:2;
@@ -2653,7 +2646,7 @@ function ensureFrameCollapseCss(doc) {
       margin:0;
       overflow-x:hidden !important;
       overflow-y:visible !important;
-      padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
+      padding-bottom:max(0px, env(safe-area-inset-bottom, 0px));
     }
     body > header{
       margin-left:0;
@@ -3566,7 +3559,7 @@ function applyTicketEvalGradesEmbed(doc) {
   st.setAttribute('data-from', 'grades-hub');
   st.textContent =
     'html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}' +
-    'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px))!important;}' +
+    'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:max(0px, env(safe-area-inset-bottom, 0px))!important;}' +
     'html.ticket-eval-embed-grades .snav,' +
     'html.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
     'html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}' +
@@ -4061,9 +4054,7 @@ function syncPropsEvalHeight() {
     }
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
-    const h = Math.max(panel.scrollHeight || 0, 400);
-    const hPx = Math.ceil(h) + 'px';
-    if (gp) gp.style.minHeight = hPx;
+    if (gp) gp.style.removeProperty('min-height');
   } catch (_e) {}
 }
 
@@ -4085,30 +4076,16 @@ function syncGradeFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    let maxBottom = 0;
-    const nodes = Array.from(doc.querySelectorAll('body *'));
-    nodes.forEach(function (el) {
-      if (!(el instanceof Element)) return;
-      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
-      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
-      if ((el.offsetHeight || 0) <= 0) return;
-      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
-      if (bottom > maxBottom) maxBottom = bottom;
-    });
     const scrollH = Math.max(
       doc.body ? doc.body.scrollHeight : 0,
       doc.documentElement.scrollHeight || 0,
       doc.documentElement.offsetHeight || 0
     );
-    const h = Math.max(
-      Math.ceil(maxBottom + 24),
-      scrollH,
-      300
-    );
+    const h = Math.ceil(scrollH || 0);
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
     const gradesPage = document.querySelector('.grades-page');
-    if (gradesPage) gradesPage.style.minHeight = hPx;
+    if (gradesPage) gradesPage.style.removeProperty('min-height');
   } catch (_e) {}
 }
 
@@ -4135,30 +4112,16 @@ function syncTicketFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    let maxBottom = 0;
-    const nodes = Array.from(doc.querySelectorAll('body *'));
-    nodes.forEach(function (el) {
-      if (!(el instanceof Element)) return;
-      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
-      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
-      if ((el.offsetHeight || 0) <= 0) return;
-      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
-      if (bottom > maxBottom) maxBottom = bottom;
-    });
     const scrollH = Math.max(
       doc.body ? doc.body.scrollHeight : 0,
       doc.documentElement.scrollHeight || 0,
       doc.documentElement.offsetHeight || 0
     );
-    const h = Math.max(
-      Math.ceil(maxBottom + 24),
-      scrollH,
-      300
-    );
+    const h = Math.ceil(scrollH || 0);
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
     const gp = document.querySelector('.grades-page');
-    if (gp) gp.style.minHeight = hPx;
+    if (gp) gp.style.removeProperty('min-height');
   } catch (_e) {}
 }
 
@@ -4758,7 +4721,7 @@ window.addEventListener('resize', () => {
         if (stage && window.ResizeObserver) {
           new ResizeObserver(function() {
             var h = div.offsetHeight;
-            if (h > 200) stage.style.minHeight = h + 'px';
+            if (h > 200) stage.style.removeProperty('min-height');
           }).observe(div);
         }
       })

@@ -1,10 +1,12 @@
 {
   "sport": "soccer",
   "display_name": "Soccer",
-  "generated_at": "2026-05-28T01:21:00.907356+00:00",
-  "n_teams": 477,
+  "matchup_mode": "team",
+  "generated_at": "2026-05-28T04:52:27.046058+00:00",
+  "slate_note": "",
+  "n_teams": 374,
   "elite_rank_cut": 5,
-  "weak_rank_cut": 311,
+  "weak_rank_cut": 244,
   "opp_metric_label": "Opp goals conceded rank",
   "categories": [
     {
@@ -25,554 +27,120 @@
   ],
   "teams": [
     {
-      "def_key": "PLATENSE",
-      "slate_abbr": "PLATENSE",
-      "name": "Platense",
-      "def_rank": 11,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "ROSARIO",
-      "slate_abbr": "ROSARIO",
-      "name": "Rosario Central",
-      "def_rank": 17,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "FLUMINENSE",
-      "slate_abbr": "FLUMINENSE",
-      "name": "Fluminense",
-      "def_rank": 11,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "CRUZEIRO",
-      "slate_abbr": "CRUZEIRO",
-      "name": "Cruzeiro",
-      "def_rank": 17,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "MIRASSOL",
-      "slate_abbr": "MIRASSOL",
-      "name": "Mirassol",
-      "def_rank": 14,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "MAN CITY",
-      "slate_abbr": "MAN CITY",
-      "name": "Manchester City",
-      "def_rank": 2,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "CHELSEA",
-      "slate_abbr": "CHELSEA",
-      "name": "Chelsea",
-      "def_rank": 8,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "SPURS",
-      "slate_abbr": "SPURS",
-      "name": "Tottenham Hotspur",
-      "def_rank": 17,
-      "def_tier": "Weak"
-    },
-    {
-      "def_key": "SPURS",
-      "slate_abbr": "SPURS",
-      "name": "Tottenham Hotspur",
-      "def_rank": 2,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "CHELSEA",
-      "slate_abbr": "CHELSEA",
-      "name": "Chelsea",
-      "def_rank": 8,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "MAN CITY",
-      "slate_abbr": "MAN CITY",
-      "name": "Manchester City",
-      "def_rank": 7,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "MAN CITY",
-      "slate_abbr": "MAN CITY",
-      "name": "Manchester City",
-      "def_rank": 2,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "CHELSEA",
-      "slate_abbr": "CHELSEA",
-      "name": "Chelsea",
-      "def_rank": 3,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "SPURS",
-      "slate_abbr": "SPURS",
-      "name": "Tottenham Hotspur",
-      "def_rank": 9,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "TOLIMA",
-      "slate_abbr": "TOLIMA",
-      "name": "Deportes Tolima",
-      "def_rank": 16,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "COQUIMBO",
-      "slate_abbr": "COQUIMBO",
-      "name": "Coquimbo Unido",
-      "def_rank": 12,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "FLUMINENSE",
-      "slate_abbr": "FLUMINENSE",
-      "name": "Fluminense",
-      "def_rank": 17,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "CRUZEIRO",
-      "slate_abbr": "CRUZEIRO",
-      "name": "Cruzeiro",
-      "def_rank": 5,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "SANTA FE",
-      "slate_abbr": "SANTA FE",
-      "name": "Independiente Santa Fe",
-      "def_rank": 21,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "PLATENSE",
-      "slate_abbr": "PLATENSE",
-      "name": "Platense",
-      "def_rank": 22,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "MIRASSOL",
-      "slate_abbr": "MIRASSOL",
-      "name": "Mirassol",
-      "def_rank": 7,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "ALWAYS READY",
-      "slate_abbr": "ALWAYS READY",
-      "name": "Always Ready",
-      "def_rank": 18,
-      "def_tier": "Avg"
-    },
-    {
-      "def_key": "ROSARIO",
-      "slate_abbr": "ROSARIO",
-      "name": "Rosario Central",
+      "def_key": "PALMEIRAS",
+      "slate_abbr": "PALMEIRAS",
+      "name": "Palmeiras",
       "def_rank": 1,
       "def_tier": "Elite"
     },
     {
-      "def_key": "LIBERTAD",
-      "slate_abbr": "LIBERTAD",
-      "name": "Libertad",
-      "def_rank": 32,
-      "def_tier": "Weak"
+      "def_key": "CRUZEIRO",
+      "slate_abbr": "CRUZEIRO",
+      "name": "Cruzeiro",
+      "def_rank": 15,
+      "def_tier": "Below Avg"
     },
     {
-      "def_key": "UCV",
-      "slate_abbr": "UCV",
-      "name": "Universidad Central",
-      "def_rank": 31,
-      "def_tier": "Weak"
+      "def_key": "BARCELONA",
+      "slate_abbr": "BARCELONA",
+      "name": "Barcelona",
+      "def_rank": 2,
+      "def_tier": "Elite"
     },
     {
-      "def_key": "IND. DEL VALLE",
-      "slate_abbr": "IND. DEL VALLE",
-      "name": "Independiente del Valle",
-      "def_rank": 19,
+      "def_key": "BARCELONA",
+      "slate_abbr": "BARCELONA",
+      "name": "Barcelona",
+      "def_rank": 17,
       "def_tier": "Avg"
     }
   ],
   "matchups": {
-    "ROSARIO": {
-      "opponent_slate": "UCV",
-      "opponent_name": "Universidad Central",
-      "opponent_def_rank": 31,
-      "opponent_def_tier": "Weak",
+    "PALMEIRAS": {
+      "opponent_slate": "JUNIOR",
+      "opponent_name": "JUNIOR",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
       "team_def_rank": 1,
       "team_def_tier": "Elite"
     },
-    "BOCA": {
-      "opponent_slate": "CRUZEIRO",
-      "opponent_name": "Cruzeiro",
-      "opponent_def_rank": 5,
+    "JUNIOR": {
+      "opponent_slate": "PALMEIRAS",
+      "opponent_name": "Palmeiras",
+      "opponent_def_rank": 1,
       "opponent_def_tier": "Elite",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "MIRASSOL": {
-      "opponent_slate": "ALWAYS READY",
-      "opponent_name": "Always Ready",
-      "opponent_def_rank": 18,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 7,
-      "team_def_tier": "Elite"
-    },
-    "IND. DEL VALLE": {
-      "opponent_slate": "LIBERTAD",
-      "opponent_name": "Libertad",
-      "opponent_def_rank": 32,
-      "opponent_def_tier": "Weak",
-      "team_def_rank": 19,
-      "team_def_tier": "Avg"
-    },
-    "MAN CITY": {
-      "opponent_slate": "BOURNEMOUTH",
-      "opponent_name": "BOURNEMOUTH",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
-      "team_def_rank": 2,
-      "team_def_tier": "Elite"
-    },
-    "ALWAYS READY": {
-      "opponent_slate": "MIRASSOL",
-      "opponent_name": "Mirassol",
-      "opponent_def_rank": 7,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 18,
-      "team_def_tier": "Avg"
-    },
-    "FLUMINENSE": {
-      "opponent_slate": "BOL\u00cdVAR",
-      "opponent_name": "BOL\u00cdVAR",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
+    "BARCELONA": {
+      "opponent_slate": "CRUZEIRO",
+      "opponent_name": "Cruzeiro",
+      "opponent_def_rank": 15,
+      "opponent_def_tier": "Below Avg",
       "team_def_rank": 17,
       "team_def_tier": "Avg"
     },
-    "PLATENSE": {
-      "opponent_slate": "SANTA FE",
-      "opponent_name": "Independiente Santa Fe",
-      "opponent_def_rank": 21,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 22,
-      "team_def_tier": "Below Avg"
-    },
-    "SANTA FE": {
-      "opponent_slate": "PLATENSE",
-      "opponent_name": "Platense",
-      "opponent_def_rank": 22,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 21,
-      "team_def_tier": "Below Avg"
-    },
-    "COQUIMBO": {
-      "opponent_slate": "TOLIMA",
-      "opponent_name": "Deportes Tolima",
-      "opponent_def_rank": 16,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 12,
-      "team_def_tier": "Above Avg"
-    },
-    "SPURS": {
-      "opponent_slate": "CHELSEA",
-      "opponent_name": "Chelsea",
-      "opponent_def_rank": 3,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 9,
-      "team_def_tier": "Below Avg"
-    },
-    "BOL\u00cdVAR": {
-      "opponent_slate": "FLUMINENSE",
-      "opponent_name": "Fluminense",
-      "opponent_def_rank": 17,
-      "opponent_def_tier": "Avg",
+    "CERRO PORTE\u00d1O": {
+      "opponent_slate": "CRISTAL",
+      "opponent_name": "CRISTAL",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "BOURNEMOUTH": {
-      "opponent_slate": "MAN CITY",
-      "opponent_name": "Manchester City",
-      "opponent_def_rank": 2,
-      "opponent_def_tier": "Elite",
+    "CRISTAL": {
+      "opponent_slate": "CERRO PORTE\u00d1O",
+      "opponent_name": "CERRO PORTE\u00d1O",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "UCV": {
-      "opponent_slate": "ROSARIO",
-      "opponent_name": "Rosario Central",
-      "opponent_def_rank": 1,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 31,
-      "team_def_tier": "Weak"
+    "BOCA": {
+      "opponent_slate": "UNIV CAT\u00d3LICA",
+      "opponent_name": "UNIV CAT\u00d3LICA",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": null,
+      "team_def_tier": ""
     },
-    "CHELSEA": {
-      "opponent_slate": "SPURS",
-      "opponent_name": "Tottenham Hotspur",
-      "opponent_def_rank": 9,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 3,
-      "team_def_tier": "Elite"
-    },
-    "TOLIMA": {
-      "opponent_slate": "COQUIMBO",
-      "opponent_name": "Coquimbo Unido",
-      "opponent_def_rank": 12,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 16,
-      "team_def_tier": "Avg"
-    },
-    "LIBERTAD": {
-      "opponent_slate": "IND. DEL VALLE",
-      "opponent_name": "Independiente del Valle",
-      "opponent_def_rank": 19,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 32,
-      "team_def_tier": "Weak"
-    },
-    "CRUZEIRO": {
+    "UNIV CAT\u00d3LICA": {
       "opponent_slate": "BOCA",
       "opponent_name": "BOCA",
       "opponent_def_rank": null,
       "opponent_def_tier": "",
-      "team_def_rank": 5,
-      "team_def_tier": "Elite"
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "CRUZEIRO": {
+      "opponent_slate": "BARCELONA",
+      "opponent_name": "Barcelona",
+      "opponent_def_rank": 17,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 15,
+      "team_def_tier": "Below Avg"
     }
   },
   "players_by_team_cat": {
-    "SPURS|goals": {
-      "team_slate": "SPURS",
+    "JUNIOR|goals": {
+      "team_slate": "JUNIOR",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "CHELSEA",
-        "name": "Chelsea",
-        "def_rank": 3,
+        "slate_abbr": "PALMEIRAS",
+        "name": "Palmeiras",
+        "def_rank": 1,
         "def_tier": "Elite"
       },
       "players": [
         {
-          "player": "Anton\u00edn Kinsky",
-          "player_norm": "anton\u00edn kinsky",
+          "player": "Jefersson Mart\u00ednez",
+          "player_norm": "jefersson mart\u00ednez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Anton\u00edn Kinsky",
-          "player_norm": "anton\u00edn kinsky",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Anton\u00edn Kinsky",
-          "player_norm": "anton\u00edn kinsky",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CHELSEA|goals": {
-      "team_slate": "CHELSEA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "SPURS",
-        "name": "Tottenham Hotspur",
-        "def_rank": 9,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Robert S\u00e1nchez + Anton\u00edn Kinsky",
-          "player_norm": "robert s\u00e1nchez + anton\u00edn kinsky",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Robert S\u00e1nchez + Anton\u00edn Kinsky",
-          "player_norm": "robert s\u00e1nchez + anton\u00edn kinsky",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Filip J\u00f6rgensen",
-          "player_norm": "filip j\u00f6rgensen",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Robert S\u00e1nchez",
-          "player_norm": "robert s\u00e1nchez",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 2.4,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Robert S\u00e1nchez",
-          "player_norm": "robert s\u00e1nchez",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 2.4,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOURNEMOUTH|goals": {
-      "team_slate": "BOURNEMOUTH",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "MAN CITY",
-        "name": "Manchester City",
-        "def_rank": 2,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Djordje Petrovic + Gianluigi Donnarumma",
-          "player_norm": "djordje petrovic + gianluigi donnarumma",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Djordje Petrovic",
-          "player_norm": "djordje petrovic",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Djordje Petrovic",
-          "player_norm": "djordje petrovic",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ROSARIO|goals": {
-      "team_slate": "ROSARIO",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "UCV",
-        "name": "Universidad Central",
-        "def_rank": 31,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Jerem\u00edas Ledesma",
-          "player_norm": "jerem\u00edas ledesma",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "TOLIMA|goals": {
-      "team_slate": "TOLIMA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "COQUIMBO",
-        "name": "Coquimbo Unido",
-        "def_rank": 12,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Neto Volpi",
-          "player_norm": "neto volpi",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.3,
-          "game_score": 1.3,
+          "season_avg": 0.5,
+          "game_score": 0.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -586,10 +154,10 @@
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "CRUZEIRO",
-        "name": "Cruzeiro",
-        "def_rank": 5,
-        "def_tier": "Elite"
+        "slate_abbr": "UNIV CAT\u00d3LICA",
+        "name": "UNIV CAT\u00d3LICA",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
@@ -597,8 +165,8 @@
           "player_norm": "leandro brey",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.7,
-          "game_score": 0.7,
+          "season_avg": 1.0,
+          "game_score": 1.0,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -606,319 +174,25 @@
         }
       ]
     },
-    "MAN CITY|goals": {
-      "team_slate": "MAN CITY",
+    "PALMEIRAS|goals": {
+      "team_slate": "PALMEIRAS",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "BOURNEMOUTH",
-        "name": "BOURNEMOUTH",
+        "slate_abbr": "JUNIOR",
+        "name": "JUNIOR",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Gianluigi Donnarumma",
-          "player_norm": "gianluigi donnarumma",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Gianluigi Donnarumma",
-          "player_norm": "gianluigi donnarumma",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "LIBERTAD|goals": {
-      "team_slate": "LIBERTAD",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "IND. DEL VALLE",
-        "name": "Independiente del Valle",
-        "def_rank": 19,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Rodrigo Mor\u00ednigo",
-          "player_norm": "rodrigo mor\u00ednigo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Rodrigo Mor\u00ednigo",
-          "player_norm": "rodrigo mor\u00ednigo",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "UCV|goals": {
-      "team_slate": "UCV",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ROSARIO",
-        "name": "Rosario Central",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Giancarlo Schiavone",
-          "player_norm": "giancarlo schiavone",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALWAYS READY|goals": {
-      "team_slate": "ALWAYS READY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "MIRASSOL",
-        "name": "Mirassol",
-        "def_rank": 7,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Alain Baroja",
-          "player_norm": "alain baroja",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "FLUMINENSE|goals": {
-      "team_slate": "FLUMINENSE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BOL\u00cdVAR",
-        "name": "BOL\u00cdVAR",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "F\u00e1bio",
-          "player_norm": "f\u00e1bio",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.7,
-          "game_score": 2.7,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOL\u00cdVAR|goals": {
-      "team_slate": "BOL\u00cdVAR",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "FLUMINENSE",
-        "name": "Fluminense",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Carlos Lampe",
-          "player_norm": "carlos lampe",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "SANTA FE|goals": {
-      "team_slate": "SANTA FE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PLATENSE",
-        "name": "Platense",
-        "def_rank": 22,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Andr\u00e9s Mosquera",
-          "player_norm": "andr\u00e9s mosquera",
+          "player": "Carlos Miguel",
+          "player_norm": "carlos miguel",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 3.0,
           "game_score": 3.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "MIRASSOL|goals": {
-      "team_slate": "MIRASSOL",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ALWAYS READY",
-        "name": "Always Ready",
-        "def_rank": 18,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Walter",
-          "player_norm": "walter",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Walter",
-          "player_norm": "walter",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PLATENSE|goals": {
-      "team_slate": "PLATENSE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "SANTA FE",
-        "name": "Independiente Santa Fe",
-        "def_rank": 21,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Mat\u00edas Borgogno",
-          "player_norm": "mat\u00edas borgogno",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.9,
-          "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mat\u00edas Borgogno",
-          "player_norm": "mat\u00edas borgogno",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.9,
-          "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "COQUIMBO|goals": {
-      "team_slate": "COQUIMBO",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "TOLIMA",
-        "name": "Deportes Tolima",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Diego S\u00e1nchez",
-          "player_norm": "diego s\u00e1nchez",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.0,
-          "game_score": 2.0,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -932,41 +206,15 @@
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "BOCA",
-        "name": "BOCA",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "BARCELONA",
+        "name": "Barcelona",
+        "def_rank": 17,
+        "def_tier": "Avg"
       },
       "players": [
         {
           "player": "Ot\u00e1vio",
           "player_norm": "ot\u00e1vio",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "IND. DEL VALLE|goals": {
-      "team_slate": "IND. DEL VALLE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "LIBERTAD",
-        "name": "Libertad",
-        "def_rank": 32,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Aldair Quintana",
-          "player_norm": "aldair quintana",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 2.5,
@@ -978,73 +226,51 @@
         }
       ]
     },
-    "MAN CITY|assists": {
-      "team_slate": "MAN CITY",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
+    "BARCELONA|goals": {
+      "team_slate": "BARCELONA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "BOURNEMOUTH",
-        "name": "BOURNEMOUTH",
+        "slate_abbr": "CRUZEIRO",
+        "name": "Cruzeiro",
+        "def_rank": 15,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Jos\u00e9 Contreras",
+          "player_norm": "jos\u00e9 contreras",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRISTAL|goals": {
+      "team_slate": "CRISTAL",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CERRO PORTE\u00d1O",
+        "name": "CERRO PORTE\u00d1O",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Marc Gu\u00e9hi + Marcos Senesi",
-          "player_norm": "marc gu\u00e9hi + marcos senesi",
+          "player": "Diego Enr\u00edquez",
+          "player_norm": "diego enr\u00edquez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 122.5,
-          "game_score": 122.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Bernardo Silva + Alex Scott",
-          "player_norm": "bernardo silva + alex scott",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 105.5,
-          "game_score": 105.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Marc Gu\u00e9hi",
-          "player_norm": "marc gu\u00e9hi",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 77.5,
-          "game_score": 77.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Marc Gu\u00e9hi",
-          "player_norm": "marc gu\u00e9hi",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 77.5,
-          "game_score": 77.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "J\u00e9r\u00e9my Doku + Adrien Truffert",
-          "player_norm": "j\u00e9r\u00e9my doku + adrien truffert",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 72.5,
-          "game_score": 72.5,
+          "season_avg": 3.5,
+          "game_score": 3.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1052,25 +278,25 @@
         }
       ]
     },
-    "UCV|assists": {
-      "team_slate": "UCV",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
+    "CERRO PORTE\u00d1O|goals": {
+      "team_slate": "CERRO PORTE\u00d1O",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "ROSARIO",
-        "name": "Rosario Central",
-        "def_rank": 1,
-        "def_tier": "Elite"
+        "slate_abbr": "CRISTAL",
+        "name": "CRISTAL",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Jovanny Bol\u00edvar",
-          "player_norm": "jovanny bol\u00edvar",
+          "player": "Alexis Mart\u00edn",
+          "player_norm": "alexis mart\u00edn",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 17.5,
-          "game_score": 17.5,
+          "season_avg": 2.5,
+          "game_score": 2.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1078,73 +304,113 @@
         }
       ]
     },
-    "CHELSEA|assists": {
-      "team_slate": "CHELSEA",
+    "UNIV CAT\u00d3LICA|goals": {
+      "team_slate": "UNIV CAT\u00d3LICA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BOCA",
+        "name": "BOCA",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Vicente Bernedo",
+          "player_norm": "vicente bernedo",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.0,
+          "game_score": 4.0,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRUZEIRO|assists": {
+      "team_slate": "CRUZEIRO",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "SPURS",
-        "name": "Tottenham Hotspur",
-        "def_rank": 9,
+        "slate_abbr": "BARCELONA",
+        "name": "Barcelona",
+        "def_rank": 17,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Matheus Pereira",
+          "player_norm": "matheus pereira",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 42.5,
+          "game_score": 42.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kaiki",
+          "player_norm": "kaiki",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 35.5,
+          "game_score": 35.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kaio Jorge",
+          "player_norm": "kaio jorge",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matheus Pereira",
+          "player_norm": "matheus pereira",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "From slate season average",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BARCELONA|assists": {
+      "team_slate": "BARCELONA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "CRUZEIRO",
+        "name": "Cruzeiro",
+        "def_rank": 15,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Mois\u00e9s Caicedo + Micky van de Ven",
-          "player_norm": "mois\u00e9s caicedo + micky van de ven",
+          "player": "Javier B\u00e1ez",
+          "player_norm": "javier b\u00e1ez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 111.5,
-          "game_score": 111.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Enzo Fern\u00e1ndez + Pedro Porro",
-          "player_norm": "enzo fern\u00e1ndez + pedro porro",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 92.5,
-          "game_score": 92.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Pedro Neto + Rodrigo Bentancur",
-          "player_norm": "pedro neto + rodrigo bentancur",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 67.5,
-          "game_score": 67.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cole Palmer + Conor Gallagher",
-          "player_norm": "cole palmer + conor gallagher",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 66.5,
-          "game_score": 66.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mois\u00e9s Caicedo",
-          "player_norm": "mois\u00e9s caicedo",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 63.5,
-          "game_score": 63.5,
+          "season_avg": 44.5,
+          "game_score": 44.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1152,73 +418,61 @@
         }
       ]
     },
-    "BOURNEMOUTH|assists": {
-      "team_slate": "BOURNEMOUTH",
+    "PALMEIRAS|assists": {
+      "team_slate": "PALMEIRAS",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "MAN CITY",
-        "name": "Manchester City",
-        "def_rank": 2,
-        "def_tier": "Elite"
+        "slate_abbr": "JUNIOR",
+        "name": "JUNIOR",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Djordje Petrovic + Gianluigi Donnarumma",
-          "player_norm": "djordje petrovic + gianluigi donnarumma",
+          "player": "Jhon Arias",
+          "player_norm": "jhon arias",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 53.5,
-          "game_score": 53.5,
+          "season_avg": 36.5,
+          "game_score": 36.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Marcos Senesi",
-          "player_norm": "marcos senesi",
+          "player": "Jos\u00e9 Manuel L\u00f3pez",
+          "player_norm": "jos\u00e9 manuel l\u00f3pez",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 50.5,
-          "game_score": 50.5,
+          "season_avg": 19.5,
+          "game_score": 19.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Adrien Truffert",
-          "player_norm": "adrien truffert",
+          "player": "Marlon Freitas",
+          "player_norm": "marlon freitas",
           "pos": "",
           "rank_on_team": 3,
-          "season_avg": 34.5,
-          "game_score": 34.5,
+          "season_avg": 2.0,
+          "game_score": 2.0,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Alex Scott",
-          "player_norm": "alex scott",
+          "player": "Jhon Arias",
+          "player_norm": "jhon arias",
           "pos": "",
           "rank_on_team": 4,
-          "season_avg": 34.5,
-          "game_score": 34.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Marcus Tavernier",
-          "player_norm": "marcus tavernier",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 26.5,
-          "game_score": 26.5,
+          "season_avg": 2.0,
+          "game_score": 2.0,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1226,59 +480,23 @@
         }
       ]
     },
-    "SPURS|assists": {
-      "team_slate": "SPURS",
+    "CERRO PORTE\u00d1O|assists": {
+      "team_slate": "CERRO PORTE\u00d1O",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "CHELSEA",
-        "name": "Chelsea",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "CRISTAL",
+        "name": "CRISTAL",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Micky van de Ven",
-          "player_norm": "micky van de ven",
+          "player": "Jorge Morel",
+          "player_norm": "jorge morel",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 48.5,
-          "game_score": 48.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Pedro Porro",
-          "player_norm": "pedro porro",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 40.5,
-          "game_score": 40.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Rodrigo Bentancur",
-          "player_norm": "rodrigo bentancur",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 37.5,
-          "game_score": 37.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Conor Gallagher",
-          "player_norm": "conor gallagher",
-          "pos": "",
-          "rank_on_team": 4,
           "season_avg": 31.5,
           "game_score": 31.5,
           "edge": "NEUTRAL",
@@ -1287,12 +505,12 @@
           "def_boost": null
         },
         {
-          "player": "Richarlison",
-          "player_norm": "richarlison",
+          "player": "Alexis Mart\u00edn",
+          "player_norm": "alexis mart\u00edn",
           "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 10.5,
-          "game_score": 10.5,
+          "rank_on_team": 2,
+          "season_avg": 28.5,
+          "game_score": 28.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1300,99 +518,37 @@
         }
       ]
     },
-    "ROSARIO|assists": {
-      "team_slate": "ROSARIO",
+    "CRISTAL|assists": {
+      "team_slate": "CRISTAL",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "UCV",
-        "name": "Universidad Central",
-        "def_rank": 31,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "\u00c1ngel Di Mar\u00eda",
-          "player_norm": "\u00e1ngel di mar\u00eda",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 40.5,
-          "game_score": 40.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "MAN CITY|shots": {
-      "team_slate": "MAN CITY",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "BOURNEMOUTH",
-        "name": "BOURNEMOUTH",
+        "slate_abbr": "CERRO PORTE\u00d1O",
+        "name": "CERRO PORTE\u00d1O",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
+          "player": "Diego Enr\u00edquez",
+          "player_norm": "diego enr\u00edquez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 3.8,
-          "game_score": 3.8,
+          "season_avg": 24.5,
+          "game_score": 24.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
+          "player": "Maxloren Castro",
+          "player_norm": "maxloren castro",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 3.8,
-          "game_score": 3.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 3.8,
-          "game_score": 3.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Rayan Cherki",
-          "player_norm": "rayan cherki",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 2.9,
-          "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Rayan Cherki",
-          "player_norm": "rayan cherki",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 2.9,
-          "game_score": 2.9,
+          "season_avg": 16.5,
+          "game_score": 16.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1400,199 +556,25 @@
         }
       ]
     },
-    "UCV|shots": {
-      "team_slate": "UCV",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
+    "BOCA|assists": {
+      "team_slate": "BOCA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "ROSARIO",
-        "name": "Rosario Central",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Jovanny Bol\u00edvar",
-          "player_norm": "jovanny bol\u00edvar",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jovanny Bol\u00edvar",
-          "player_norm": "jovanny bol\u00edvar",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Juan Cuesta",
-          "player_norm": "juan cuesta",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ROSARIO|shots": {
-      "team_slate": "ROSARIO",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "UCV",
-        "name": "Universidad Central",
-        "def_rank": 31,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Jaminton Campaz",
-          "player_norm": "jaminton campaz",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.9,
-          "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alejo Veliz",
-          "player_norm": "alejo veliz",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.4,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "\u00c1ngel Di Mar\u00eda",
-          "player_norm": "\u00e1ngel di mar\u00eda",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOL\u00cdVAR|shots": {
-      "team_slate": "BOL\u00cdVAR",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "FLUMINENSE",
-        "name": "Fluminense",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Dorny Romero",
-          "player_norm": "dorny romero",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Dorny Romero",
-          "player_norm": "dorny romero",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Leonel Justiniano",
-          "player_norm": "leonel justiniano",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Robson Matheus",
-          "player_norm": "robson matheus",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "FLUMINENSE|shots": {
-      "team_slate": "FLUMINENSE",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "BOL\u00cdVAR",
-        "name": "BOL\u00cdVAR",
+        "slate_abbr": "UNIV CAT\u00d3LICA",
+        "name": "UNIV CAT\u00d3LICA",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Jefferson Savarino",
-          "player_norm": "jefferson savarino",
+          "player": "Leandro Paredes",
+          "player_norm": "leandro paredes",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 3.4,
-          "game_score": 3.4,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Martinelli",
-          "player_norm": "martinelli",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 1.2,
-          "game_score": 1.2,
+          "season_avg": 79.5,
+          "game_score": 79.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1600,73 +582,37 @@
         }
       ]
     },
-    "CHELSEA|shots": {
-      "team_slate": "CHELSEA",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
+    "UNIV CAT\u00d3LICA|assists": {
+      "team_slate": "UNIV CAT\u00d3LICA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "SPURS",
-        "name": "Tottenham Hotspur",
-        "def_rank": 9,
-        "def_tier": "Below Avg"
+        "slate_abbr": "BOCA",
+        "name": "BOCA",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Jo\u00e3o Pedro",
-          "player_norm": "jo\u00e3o pedro",
+          "player": "Jhojan Valencia",
+          "player_norm": "jhojan valencia",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 2.6,
-          "game_score": 2.6,
+          "season_avg": 43.5,
+          "game_score": 43.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Jo\u00e3o Pedro",
-          "player_norm": "jo\u00e3o pedro",
+          "player": "Vicente Bernedo",
+          "player_norm": "vicente bernedo",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 2.6,
-          "game_score": 2.6,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jo\u00e3o Pedro",
-          "player_norm": "jo\u00e3o pedro",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 2.6,
-          "game_score": 2.6,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cole Palmer",
-          "player_norm": "cole palmer",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alejandro Garnacho",
-          "player_norm": "alejandro garnacho",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 1.9,
-          "game_score": 1.9,
+          "season_avg": 23.5,
+          "game_score": 23.5,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
@@ -1674,185 +620,37 @@
         }
       ]
     },
-    "SPURS|shots": {
-      "team_slate": "SPURS",
+    "PALMEIRAS|shots": {
+      "team_slate": "PALMEIRAS",
       "category": "shots",
       "category_label": "Shots",
       "threshold": 2.0,
       "opponent": {
-        "slate_abbr": "CHELSEA",
-        "name": "Chelsea",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "JUNIOR",
+        "name": "JUNIOR",
+        "def_rank": null,
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Pape Matar Sarr",
-          "player_norm": "pape matar sarr",
+          "player": "Jos\u00e9 Manuel L\u00f3pez",
+          "player_norm": "jos\u00e9 manuel l\u00f3pez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.7,
-          "game_score": 1.7,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Richarlison",
-          "player_norm": "richarlison",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 1.6,
-          "game_score": 1.6,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Richarlison",
-          "player_norm": "richarlison",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.6,
-          "game_score": 1.6,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Dominic Solanke",
-          "player_norm": "dominic solanke",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 1.3,
-          "game_score": 1.3,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Pedro Porro",
-          "player_norm": "pedro porro",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOURNEMOUTH|shots": {
-      "team_slate": "BOURNEMOUTH",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "MAN CITY",
-        "name": "Manchester City",
-        "def_rank": 2,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Justin Kluivert",
-          "player_norm": "justin kluivert",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
+          "season_avg": 2.1,
+          "game_score": 2.1,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Evanilson",
-          "player_norm": "evanilson",
+          "player": "Jhon Arias",
+          "player_norm": "jhon arias",
           "pos": "",
           "rank_on_team": 2,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Junior Kroupi",
-          "player_norm": "junior kroupi",
-          "pos": "",
-          "rank_on_team": 3,
           "season_avg": 1.8,
           "game_score": 1.8,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alex Scott",
-          "player_norm": "alex scott",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 1.7,
-          "game_score": 1.7,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ben Gannon-Doak",
-          "player_norm": "ben gannon-doak",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "AVOID",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALWAYS READY|shots": {
-      "team_slate": "ALWAYS READY",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "MIRASSOL",
-        "name": "Mirassol",
-        "def_rank": 7,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Jes\u00fas Maraude",
-          "player_norm": "jes\u00fas maraude",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Enrique Triverio",
-          "player_norm": "enrique triverio",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 2.0,
-          "game_score": 2.0,
           "edge": "NEUTRAL",
           "notes": "From slate season average",
           "overperform_vs_weak": false,

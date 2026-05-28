@@ -1,0 +1,419 @@
+{
+  "sport": "tennis",
+  "display_name": "Tennis",
+  "matchup_mode": "player",
+  "generated_at": "2026-05-28T04:52:28.428954+00:00",
+  "n_teams": 300,
+  "elite_rank_cut": 25,
+  "weak_rank_cut": 195,
+  "opp_metric_label": "Opponent ATP rank",
+  "categories": [
+    {
+      "id": "match_total_games",
+      "label": "Total games",
+      "threshold": 22.0
+    },
+    {
+      "id": "games_won",
+      "label": "Games won",
+      "threshold": 12.0
+    },
+    {
+      "id": "aces",
+      "label": "Aces",
+      "threshold": 5.0
+    },
+    {
+      "id": "double_faults",
+      "label": "Double faults",
+      "threshold": 3.0
+    },
+    {
+      "id": "break_points_won",
+      "label": "Break points won",
+      "threshold": 4.0
+    }
+  ],
+  "teams": [
+    {
+      "def_key": "jiajing lu",
+      "slate_abbr": "jiajing lu",
+      "name": "Jia-Jing Lu",
+      "def_rank": 999,
+      "def_tier": ""
+    },
+    {
+      "def_key": "zhuoxuan bai",
+      "slate_abbr": "zhuoxuan bai",
+      "name": "Zhuoxuan Bai",
+      "def_rank": 999,
+      "def_tier": ""
+    }
+  ],
+  "matchups": {
+    "zhuoxuan bai": {
+      "opponent_slate": "jiajing lu",
+      "opponent_name": "JIA-JING LU",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "",
+      "team_def_rank": 999,
+      "team_def_tier": ""
+    },
+    "jiajing lu": {
+      "opponent_slate": "zhuoxuan bai",
+      "opponent_name": "ZHUOXUAN BAI",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "",
+      "team_def_rank": 999,
+      "team_def_tier": ""
+    }
+  },
+  "players_by_team_cat": {
+    "zhuoxuan bai|match_total_games": {
+      "team_slate": "zhuoxuan bai",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "jiajing lu",
+        "name": "JIA-JING LU",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 19.0,
+          "game_score": 19.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "zhuoxuan bai|games_won": {
+      "team_slate": "zhuoxuan bai",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "jiajing lu",
+        "name": "JIA-JING LU",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "jiajing lu|games_won": {
+      "team_slate": "jiajing lu",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "zhuoxuan bai",
+        "name": "ZHUOXUAN BAI",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 7.5,
+          "game_score": 7.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "jiajing lu|aces": {
+      "team_slate": "jiajing lu",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "zhuoxuan bai",
+        "name": "ZHUOXUAN BAI",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 2,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 3,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 4,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "zhuoxuan bai|aces": {
+      "team_slate": "zhuoxuan bai",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "jiajing lu",
+        "name": "JIA-JING LU",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 2,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 3,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "jiajing lu|double_faults": {
+      "team_slate": "jiajing lu",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "zhuoxuan bai",
+        "name": "ZHUOXUAN BAI",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 2,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 3,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 4,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jia-Jing Lu",
+          "player_norm": "jiajing lu",
+          "pos": "ATP",
+          "rank_on_team": 5,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "zhuoxuan bai|double_faults": {
+      "team_slate": "zhuoxuan bai",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "jiajing lu",
+        "name": "JIA-JING LU",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 2,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 3,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "zhuoxuan bai|break_points_won": {
+      "team_slate": "zhuoxuan bai",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "jiajing lu",
+        "name": "JIA-JING LU",
+        "def_rank": 75,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Zhuoxuan Bai",
+          "player_norm": "zhuoxuan bai",
+          "pos": "ATP",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    }
+  },
+  "edge_legend": {
+    "TOP_EDGE": "Avg at/above threshold vs weaker opponent (high ATP rank #).",
+    "OK_EDGE": "Solid vs average-or-weaker opponent.",
+    "NEUTRAL": "No clear edge.",
+    "AVOID": "Top-ranked opponent with below-threshold production."
+  }
+}
