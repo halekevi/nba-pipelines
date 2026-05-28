@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import unicodedata
 from datetime import datetime, timezone
@@ -10,8 +11,18 @@ import numpy as np
 import pandas as pd
 
 from utils.matchup_edge.classify import classify_edge
-from utils.matchup_edge.slate_io import leaders_from_slate, load_slate_rows, norm_prop, tonight_matchups
-from utils.matchup_edge.sports_config import SPORT_CONFIGS, SportMatchupConfig, _REPO
+from utils.matchup_edge.slate_io import (
+    build_slate_pp_lookup,
+    leaders_from_slate,
+    load_slate_rows,
+    lookup_pp_edge,
+    norm_prop,
+    pp_leaders_from_slate,
+    tonight_matchups,
+)
+from utils.matchup_edge.sports_config import SPORT_CONFIGS, SportMatchupConfig
+from utils.matchup_edge.team_aliases import cbb_defense_alias_keys, cbb_slate_to_defense_key
+from utils.matchup_edge.tennis_builder import build_tennis_matchup_payload
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -86,6 +97,19 @@ def _derive_basketball_stat(df: pd.DataFrame, cat: str) -> pd.Series:
         return blk
     if cat == "pra":
         return pts + reb + ast
+    return pd.Series([np.nan] * len(df), index=df.index)
+
+
+def _derive_football_stat(df: pd.DataFrame, cat: str) -> pd.Series:
+    pass_yds = pd.to_numeric(df.get("PASS_YDS", df.get("pass_yds")), errors="coerce")
+    rush_yds = pd.to_numeric(df.get("RUSH_YDS", df.get("rush_yds")), errors="coerce")
+    rec_yds = pd.to_numeric(df.get("REC_YDS", df.get("rec_yds")), errors="coerce")
+    if cat == "pass_yds":
+        return pass_yds
+    if cat == "rush_yds":
+        return rush_yds
+    if cat == "rec_yds":
+        return rec_yds
     return pd.Series([np.nan] * len(df), index=df.index)
 
 
@@ -167,6 +191,18 @@ def _load_cache_leaders(cfg: SportMatchupConfig) -> dict[str, list[dict]] | None
                     out[f"{_team_norm(cfg, team)}|{cid}"] = plist
         return out
 
+    if sport == "cfb":
+        df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+        df["TEAM"] = df.get("team_abbr", df.get("team_id", "")).astype(str).str.upper()
+        df["PLAYER"] = df.get("player", df.get("player_norm", "")).astype(str)
+        # Offseason fallback: use last available season when present.
+        if "SEASON" in df.columns:
+            seasons = pd.to_numeric(df["SEASON"], errors="coerce")
+            if seasons.notna().any():
+                last_season = int(seasons.max())
+                df = df[seasons == last_season]
+        return _build_from_game_logs(cfg, df, _derive_football_stat, "PLAYER", "TEAM", "game_date", player_norm_col="player_norm")
+
     return None
 
 
@@ -208,7 +244,7 @@ def _build_from_game_logs(
             df.groupby([player_col, pnorm, team_col], as_index=False)
             .agg(season_avg=(f"_s_{cid}", "mean"), games=(f"_s_{cid}", "count"))
         )
-        if "MIN" in df.columns:
+        if "MIN" in df.columns and cfg.sport not in ("cfb", "nfl"):
             mins = df.groupby([pnorm, team_col])["MIN"].mean().reset_index()
             agg = agg.merge(mins, on=[pnorm, team_col], how="left")
             agg = agg[pd.to_numeric(agg.get("MIN"), errors="coerce").fillna(0) >= cfg.min_mpg]
@@ -240,20 +276,133 @@ def _build_from_game_logs(
     return out_blocks
 
 
+_PIPELINE_SLATES: dict[str, list[str]] = {
+    "nhl": [
+        "Sports/NHL/step8_nhl_direction_clean.csv",
+        "Sports/NHL/step1_nhl_props.csv",
+    ],
+    "mlb": ["Sports/MLB/step8_mlb_direction.csv"],
+    "cbb": [
+        "Sports/CBB/step5b_cbb.csv",
+        "Sports/CBB/step3b_with_def_rankings_cbb.csv",
+    ],
+    "tennis": [
+        "ui_runner/templates/slate_sport_tennis.json",
+        "Sports/Tennis/step8_tennis_direction.csv",
+    ],
+}
+
+
 def _resolve_slate_path(cfg: SportMatchupConfig, slate_path: Path | None) -> Path:
     if slate_path and slate_path.is_file():
         return slate_path
-    candidates = [
+    candidates: list[Path] = [
         _REPO_ROOT / "ui_runner/templates" / f"slate_sport_{cfg.sport}.json",
         _REPO_ROOT / "mobile/www" / f"slate_sport_{cfg.sport}.json",
         _REPO_ROOT / f"Sports/{cfg.sport.upper()}/step8_{cfg.sport}_direction.csv",
     ]
     if cfg.sport == "wnba":
         candidates.insert(0, _REPO_ROOT / "Sports/WNBA/step8_wnba_direction.csv")
+    for rel in _PIPELINE_SLATES.get(cfg.sport, []):
+        candidates.append(_REPO_ROOT / rel)
     for c in candidates:
         if c.is_file():
+            try:
+                if c.suffix.lower() == ".json":
+                    raw = json.loads(c.read_text(encoding="utf-8-sig"))
+                    rows = raw.get("rows") or raw.get("picks") or []
+                    if isinstance(raw, list):
+                        rows = raw
+                    if not rows:
+                        continue
+                elif c.suffix.lower() == ".csv":
+                    if sum(1 for _ in open(c, encoding="utf-8-sig")) < 2:
+                        continue
+            except Exception:
+                continue
             return c
     return candidates[0]
+
+
+def _extend_def_lookup(cfg: SportMatchupConfig, def_lookup: dict[str, dict]) -> None:
+    if cfg.sport != "cbb":
+        return
+    for abbr, sr_name in cbb_defense_alias_keys().items():
+        sr_row = def_lookup.get(sr_name.upper()) or def_lookup.get(sr_name)
+        if sr_row:
+            def_lookup[abbr] = sr_row
+            def_lookup[abbr.upper()] = sr_row
+
+
+def _def_row_for_team(cfg: SportMatchupConfig, def_lookup: dict[str, dict], team: str) -> dict | None:
+    t = str(team or "").upper()
+    row = def_lookup.get(t) or def_lookup.get(_team_norm(cfg, t))
+    if row:
+        return row
+    if cfg.sport == "cbb":
+        sr = cbb_slate_to_defense_key(t)
+        return def_lookup.get(sr.upper()) or def_lookup.get(sr)
+    return None
+
+
+def _resolve_wnba_slate(slate_path: Path | None) -> Path:
+    if slate_path and slate_path.is_file():
+        return slate_path
+    for c in (
+        _REPO_ROOT / "ui_runner/templates/slate_sport_wnba.json",
+        _REPO_ROOT / "mobile/www/slate_sport_wnba.json",
+        _REPO_ROOT / "Sports/WNBA/step8_wnba_direction.csv",
+    ):
+        if c.is_file():
+            return c
+    return _REPO_ROOT / "ui_runner/templates/slate_sport_wnba.json"
+
+
+def _merge_player_blocks(
+    cache_blocks: dict[str, list[dict]],
+    slate_blocks: dict[str, list[dict]],
+    *,
+    top_n: int,
+) -> dict[str, list[dict]]:
+    out: dict[str, list[dict]] = {}
+    keys = set(cache_blocks) | set(slate_blocks)
+    for key in keys:
+        merged: list[dict] = []
+        seen: set[str] = set()
+        for src in (cache_blocks.get(key, []), slate_blocks.get(key, [])):
+            for p in src:
+                pn = str(p.get("player_norm") or _norm_name(p.get("player", ""))).lower()
+                if not pn or pn in seen:
+                    continue
+                seen.add(pn)
+                merged.append(p)
+                if len(merged) >= top_n:
+                    break
+            if len(merged) >= top_n:
+                break
+        if merged:
+            for i, p in enumerate(merged, start=1):
+                p["rank_on_team"] = i
+            out[key] = merged
+    return out
+
+
+def _build_wnba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
+    script = _REPO_ROOT / "Sports" / "WNBA" / "scripts" / "build_wnba_matchup_edge_json.py"
+    spec = importlib.util.spec_from_file_location("build_wnba_matchup_edge_json", script)
+    if spec is None or spec.loader is None:
+        return {"sport": "wnba", "error": f"Missing WNBA builder: {script}", "teams": [], "categories": [], "matchups": {}, "players_by_team_cat": {}}
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    wnba = _REPO_ROOT / "Sports" / "WNBA"
+    slate_file = _resolve_wnba_slate(slate_path)
+    return mod.build_payload(
+        cache_path=wnba / "wnba_espn_cache.csv",
+        defense_path=wnba / "wnba_defense_summary.csv",
+        top3_path=wnba / "data" / "wnba_top3_vs_defense.csv",
+        slate_path=slate_file,
+    )
 
 
 def build_matchup_payload(
@@ -271,6 +420,12 @@ def build_matchup_payload(
             "matchups": {},
             "players_by_team_cat": {},
         }
+
+    if cfg.matchup_mode == "player":
+        return build_tennis_matchup_payload(cfg, slate_path=slate_path)
+
+    if cfg.sport == "wnba":
+        return _build_wnba_matchup_payload(slate_path)
 
     defense = _load_defense(cfg)
     if defense.empty:
@@ -301,14 +456,15 @@ def build_matchup_payload(
         }
         def_lookup[str(rec["slate_abbr"]).upper()] = rec
         def_lookup[str(rec["def_key"]).upper()] = rec
+    _extend_def_lookup(cfg, def_lookup)
 
     matchups_ui: dict[str, dict] = {}
     teams_on_slate = set(matchups_raw.keys())
     for t in teams_on_slate:
         mu = matchups_raw[t]
         opp = str(mu.get("opp_slate", "")).upper()
-        opp_row = def_lookup.get(opp) or def_lookup.get(_team_norm(cfg, opp))
-        team_row = def_lookup.get(t) or def_lookup.get(_team_norm(cfg, t))
+        opp_row = _def_row_for_team(cfg, def_lookup, opp)
+        team_row = _def_row_for_team(cfg, def_lookup, t)
         matchups_ui[t] = {
             "opponent_slate": opp,
             "opponent_name": str(opp_row["_def_name"]) if opp_row else opp,
@@ -348,11 +504,22 @@ def build_matchup_payload(
             for t in sorted(teams_on_slate)
         ]
 
-    slate_blocks = leaders_from_slate(slate_rows, list(cfg.categories), top_n=cfg.top_n)
+    slate_blocks = pp_leaders_from_slate(
+        slate_rows,
+        list(cfg.categories),
+        top_n=cfg.top_n,
+        team_normalize=cfg.team_normalize,
+    )
     cache_blocks = _load_cache_leaders(cfg) or {}
+    player_blocks = _merge_player_blocks(cache_blocks, slate_blocks, top_n=cfg.top_n)
+    pp_lookup = build_slate_pp_lookup(
+        slate_rows,
+        list(cfg.categories),
+        team_normalize=cfg.team_normalize,
+    )
 
     players_by_key: dict[str, Any] = {}
-    for key, players in {**slate_blocks, **cache_blocks}.items():
+    for key, players in player_blocks.items():
         if "|" not in key:
             continue
         team_slate, cid = key.split("|", 1)
@@ -362,8 +529,16 @@ def build_matchup_payload(
         threshold = float(cat.get("threshold", 1.0))
 
         enriched = []
-        for p in players:
+        for i, p in enumerate(players, start=1):
             hist = {"overperform_vs_weak": p.get("overperform_vs_weak"), "def_boost": p.get("def_boost")}
+            pp = lookup_pp_edge(
+                pp_lookup,
+                player=str(p.get("player") or ""),
+                team=team_slate,
+                cat_id=cid,
+                player_norm=p.get("player_norm"),
+            )
+            rank_on_team = int(p.get("rank_on_team") or i)
             edge, note = classify_edge(
                 float(p["season_avg"]),
                 threshold,
@@ -371,8 +546,21 @@ def build_matchup_payload(
                 n_teams,
                 elite_rank_cut=cfg.elite_rank_cut,
                 hist=hist,
+                cat_id=cid,
+                pp_line=pp.get("pp_line"),
+                pp_edge=pp.get("pp_edge"),
+                rank_on_team=rank_on_team,
             )
-            enriched.append({**p, "edge": edge, "notes": p.get("notes") or note})
+            pp_edge_val = pp.get("pp_edge")
+            enriched.append(
+                {
+                    **p,
+                    "edge": edge,
+                    "notes": note,
+                    "pp_line": pp.get("pp_line"),
+                    "pp_edge": round(float(pp_edge_val), 2) if pp_edge_val is not None else None,
+                }
+            )
 
         players_by_key[key] = {
             "team_slate": team_slate,
@@ -388,10 +576,16 @@ def build_matchup_payload(
             "players": enriched,
         }
 
+    slate_note = ""
+    if not slate_rows and not players_by_key:
+        slate_note = "No slate rows — run sport pipeline or publish slate_sport JSON."
+
     return {
         "sport": cfg.sport,
         "display_name": cfg.display_name,
+        "matchup_mode": cfg.matchup_mode,
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "slate_note": slate_note,
         "n_teams": n_teams,
         "elite_rank_cut": cfg.elite_rank_cut,
         "weak_rank_cut": max(10, int(np.ceil(n_teams * 0.65))),
@@ -401,10 +595,10 @@ def build_matchup_payload(
         "matchups": matchups_ui,
         "players_by_team_cat": players_by_key,
         "edge_legend": {
-            "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
-            "OK_EDGE": "Solid vs average-or-softer defense.",
+            "TOP_EDGE": "Positive PP edge (+1.5+) or strong avg vs soft defense (high rank = weak).",
+            "OK_EDGE": "PP edge on board or solid production vs average-or-softer defense.",
             "NEUTRAL": "No clear edge.",
-            "AVOID": "Elite defense with below-threshold production.",
+            "AVOID": "Negative PP edge or elite defense with weak production.",
         },
     }
 

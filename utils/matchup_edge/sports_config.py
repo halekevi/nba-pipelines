@@ -25,6 +25,7 @@ class SportMatchupConfig:
     elite_rank_cut: int = 4
     opp_metric_label: str = "Opp def rank"
     enabled: bool = True
+    matchup_mode: str = "team"  # "player" for tennis (opponent player, not team)
     team_normalize: Callable[[str], str] | None = None
 
 
@@ -185,6 +186,7 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
             {"id": "rush_yds", "label": "Rush yards", "threshold": 80.0},
             {"id": "rec_yds", "label": "Receiving yards", "threshold": 60.0},
         ),
+        cache_path=_REPO / "Sports/CFB/data/cache/cfb_boxscore_cache.csv",
         opp_metric_label="Opp def rank (nat)",
         enabled=True,
     ),
@@ -207,13 +209,22 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
     "tennis": SportMatchupConfig(
         sport="tennis",
         display_name="Tennis",
-        defense_path=_REPO / "Sports/Tennis/data/.placeholder",
-        defense_team_col="",
-        defense_rank_col="",
+        defense_path=_REPO / "Sports/Tennis/cache/tennis_rankings.json",
+        defense_team_col="player_key",
+        defense_rank_col="rank",
         defense_tier_col="",
-        defense_name_col="",
-        categories=(),
-        enabled=False,
+        defense_name_col="player",
+        categories=(
+            {"id": "match_total_games", "label": "Total games", "threshold": 22.0},
+            {"id": "games_won", "label": "Games won", "threshold": 12.0},
+            {"id": "aces", "label": "Aces", "threshold": 5.0},
+            {"id": "double_faults", "label": "Double faults", "threshold": 3.0},
+            {"id": "break_points_won", "label": "Break points won", "threshold": 4.0},
+        ),
+        matchup_mode="player",
+        opp_metric_label="Opponent ATP rank",
+        elite_rank_cut=25,
+        enabled=True,
     ),
 }
 

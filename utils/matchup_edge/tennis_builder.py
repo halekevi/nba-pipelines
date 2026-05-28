@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from utils.matchup_edge.classify import classify_edge
-from utils.matchup_edge.slate_io import load_slate_rows, norm_prop
+from utils.matchup_edge.slate_io import load_slate_rows, norm_prop, build_slate_pp_lookup, lookup_pp_edge
 from utils.matchup_edge.sports_config import SportMatchupConfig
 
 _REPO = Path(__file__).resolve().parents[2]
@@ -219,6 +219,7 @@ def build_tennis_matchup_payload(
     ]
 
     slate_blocks = _leaders_by_player(rows, cfg.categories, top_n=cfg.top_n)
+    pp_lookup = build_slate_pp_lookup(rows, list(cfg.categories), player_mode=True)
     players_by_key: dict[str, Any] = {}
 
     for key, players in slate_blocks.items():
@@ -231,15 +232,36 @@ def build_tennis_matchup_payload(
         threshold = float(cat.get("threshold", 1.0))
 
         enriched = []
-        for p in players:
+        for i, p in enumerate(players, start=1):
+            pp = lookup_pp_edge(
+                pp_lookup,
+                player=str(p.get("player") or ""),
+                team=pk,
+                cat_id=cid,
+                player_norm=p.get("player_norm"),
+                player_mode=True,
+            )
             edge, note = classify_edge(
                 float(p["season_avg"]),
                 threshold,
                 opp_rank,
                 n_field,
                 elite_rank_cut=cfg.elite_rank_cut,
+                cat_id=cid,
+                pp_line=pp.get("pp_line"),
+                pp_edge=pp.get("pp_edge"),
+                rank_on_team=int(p.get("rank_on_team") or i),
             )
-            enriched.append({**p, "edge": edge, "notes": note})
+            pp_edge_val = pp.get("pp_edge")
+            enriched.append(
+                {
+                    **p,
+                    "edge": edge,
+                    "notes": note,
+                    "pp_line": pp.get("pp_line"),
+                    "pp_edge": round(float(pp_edge_val), 2) if pp_edge_val is not None else None,
+                }
+            )
 
         players_by_key[key] = {
             "team_slate": pk,
@@ -281,9 +303,9 @@ def build_tennis_matchup_payload(
         "matchups": matchups_ui,
         "players_by_team_cat": players_by_key,
         "edge_legend": {
-            "TOP_EDGE": "Avg at/above threshold vs weaker opponent (high ATP rank #).",
-            "OK_EDGE": "Solid vs average-or-weaker opponent.",
+            "TOP_EDGE": "Positive PP edge (+1.5+) or avg at/above threshold vs weaker opponent (high ATP rank #).",
+            "OK_EDGE": "PP edge on board or solid vs average-or-weaker opponent.",
             "NEUTRAL": "No clear edge.",
-            "AVOID": "Top-ranked opponent with below-threshold production.",
+            "AVOID": "Negative PP edge or top-ranked opponent with below-threshold production.",
         },
     }

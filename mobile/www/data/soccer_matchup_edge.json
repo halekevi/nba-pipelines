@@ -2,7 +2,7 @@
   "sport": "soccer",
   "display_name": "Soccer",
   "matchup_mode": "team",
-  "generated_at": "2026-05-28T04:52:27.046058+00:00",
+  "generated_at": "2026-05-28T22:50:20.912547+00:00",
   "slate_note": "",
   "n_teams": 374,
   "elite_rank_cut": 5,
@@ -56,6 +56,14 @@
     }
   ],
   "matchups": {
+    "CRISTAL": {
+      "opponent_slate": "CERRO PORTE\u00d1O",
+      "opponent_name": "CERRO PORTE\u00d1O",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
     "PALMEIRAS": {
       "opponent_slate": "JUNIOR",
       "opponent_name": "JUNIOR",
@@ -72,25 +80,9 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "BARCELONA": {
-      "opponent_slate": "CRUZEIRO",
-      "opponent_name": "Cruzeiro",
-      "opponent_def_rank": 15,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 17,
-      "team_def_tier": "Avg"
-    },
-    "CERRO PORTE\u00d1O": {
-      "opponent_slate": "CRISTAL",
-      "opponent_name": "CRISTAL",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "CRISTAL": {
-      "opponent_slate": "CERRO PORTE\u00d1O",
-      "opponent_name": "CERRO PORTE\u00d1O",
+    "UNIV CAT\u00d3LICA": {
+      "opponent_slate": "BOCA",
+      "opponent_name": "BOCA",
       "opponent_def_rank": null,
       "opponent_def_tier": "",
       "team_def_rank": null,
@@ -104,14 +96,6 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "UNIV CAT\u00d3LICA": {
-      "opponent_slate": "BOCA",
-      "opponent_name": "BOCA",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
     "CRUZEIRO": {
       "opponent_slate": "BARCELONA",
       "opponent_name": "Barcelona",
@@ -119,507 +103,25 @@
       "opponent_def_tier": "Avg",
       "team_def_rank": 15,
       "team_def_tier": "Below Avg"
+    },
+    "CERRO PORTE\u00d1O": {
+      "opponent_slate": "CRISTAL",
+      "opponent_name": "CRISTAL",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "BARCELONA": {
+      "opponent_slate": "CRUZEIRO",
+      "opponent_name": "Cruzeiro",
+      "opponent_def_rank": 15,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 17,
+      "team_def_tier": "Avg"
     }
   },
   "players_by_team_cat": {
-    "JUNIOR|goals": {
-      "team_slate": "JUNIOR",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PALMEIRAS",
-        "name": "Palmeiras",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Jefersson Mart\u00ednez",
-          "player_norm": "jefersson mart\u00ednez",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOCA|goals": {
-      "team_slate": "BOCA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "UNIV CAT\u00d3LICA",
-        "name": "UNIV CAT\u00d3LICA",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Leandro Brey",
-          "player_norm": "leandro brey",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PALMEIRAS|goals": {
-      "team_slate": "PALMEIRAS",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "JUNIOR",
-        "name": "JUNIOR",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Carlos Miguel",
-          "player_norm": "carlos miguel",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRUZEIRO|goals": {
-      "team_slate": "CRUZEIRO",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BARCELONA",
-        "name": "Barcelona",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Ot\u00e1vio",
-          "player_norm": "ot\u00e1vio",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BARCELONA|goals": {
-      "team_slate": "BARCELONA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CRUZEIRO",
-        "name": "Cruzeiro",
-        "def_rank": 15,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Jos\u00e9 Contreras",
-          "player_norm": "jos\u00e9 contreras",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRISTAL|goals": {
-      "team_slate": "CRISTAL",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CERRO PORTE\u00d1O",
-        "name": "CERRO PORTE\u00d1O",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Diego Enr\u00edquez",
-          "player_norm": "diego enr\u00edquez",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CERRO PORTE\u00d1O|goals": {
-      "team_slate": "CERRO PORTE\u00d1O",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CRISTAL",
-        "name": "CRISTAL",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Alexis Mart\u00edn",
-          "player_norm": "alexis mart\u00edn",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "UNIV CAT\u00d3LICA|goals": {
-      "team_slate": "UNIV CAT\u00d3LICA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BOCA",
-        "name": "BOCA",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Vicente Bernedo",
-          "player_norm": "vicente bernedo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRUZEIRO|assists": {
-      "team_slate": "CRUZEIRO",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "BARCELONA",
-        "name": "Barcelona",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Matheus Pereira",
-          "player_norm": "matheus pereira",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 42.5,
-          "game_score": 42.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kaiki",
-          "player_norm": "kaiki",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 35.5,
-          "game_score": 35.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kaio Jorge",
-          "player_norm": "kaio jorge",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 11.5,
-          "game_score": 11.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Matheus Pereira",
-          "player_norm": "matheus pereira",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BARCELONA|assists": {
-      "team_slate": "BARCELONA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "CRUZEIRO",
-        "name": "Cruzeiro",
-        "def_rank": 15,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Javier B\u00e1ez",
-          "player_norm": "javier b\u00e1ez",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 44.5,
-          "game_score": 44.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PALMEIRAS|assists": {
-      "team_slate": "PALMEIRAS",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "JUNIOR",
-        "name": "JUNIOR",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jhon Arias",
-          "player_norm": "jhon arias",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 36.5,
-          "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jos\u00e9 Manuel L\u00f3pez",
-          "player_norm": "jos\u00e9 manuel l\u00f3pez",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 19.5,
-          "game_score": 19.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Marlon Freitas",
-          "player_norm": "marlon freitas",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Jhon Arias",
-          "player_norm": "jhon arias",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CERRO PORTE\u00d1O|assists": {
-      "team_slate": "CERRO PORTE\u00d1O",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "CRISTAL",
-        "name": "CRISTAL",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jorge Morel",
-          "player_norm": "jorge morel",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 31.5,
-          "game_score": 31.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alexis Mart\u00edn",
-          "player_norm": "alexis mart\u00edn",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 28.5,
-          "game_score": 28.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRISTAL|assists": {
-      "team_slate": "CRISTAL",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "CERRO PORTE\u00d1O",
-        "name": "CERRO PORTE\u00d1O",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Diego Enr\u00edquez",
-          "player_norm": "diego enr\u00edquez",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 24.5,
-          "game_score": 24.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Maxloren Castro",
-          "player_norm": "maxloren castro",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 16.5,
-          "game_score": 16.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOCA|assists": {
-      "team_slate": "BOCA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "UNIV CAT\u00d3LICA",
-        "name": "UNIV CAT\u00d3LICA",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Leandro Paredes",
-          "player_norm": "leandro paredes",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 79.5,
-          "game_score": 79.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "UNIV CAT\u00d3LICA|assists": {
-      "team_slate": "UNIV CAT\u00d3LICA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "BOCA",
-        "name": "BOCA",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jhojan Valencia",
-          "player_norm": "jhojan valencia",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 43.5,
-          "game_score": 43.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Vicente Bernedo",
-          "player_norm": "vicente bernedo",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 23.5,
-          "game_score": 23.5,
-          "edge": "NEUTRAL",
-          "notes": "From slate season average",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "PALMEIRAS|shots": {
       "team_slate": "PALMEIRAS",
       "category": "shots",
@@ -634,25 +136,29 @@
       "players": [
         {
           "player": "Jos\u00e9 Manuel L\u00f3pez",
-          "player_norm": "jos\u00e9 manuel l\u00f3pez",
-          "pos": "",
-          "rank_on_team": 1,
+          "player_norm": "jose manuel lopez",
+          "pos": "ATT",
           "season_avg": 2.1,
           "game_score": 2.1,
+          "pp_line": 2.5,
+          "pp_edge": -0.5,
+          "rank_on_team": 1,
           "edge": "NEUTRAL",
-          "notes": "From slate season average",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
           "player": "Jhon Arias",
           "player_norm": "jhon arias",
-          "pos": "",
-          "rank_on_team": 2,
+          "pos": "MID",
           "season_avg": 1.8,
           "game_score": 1.8,
+          "pp_line": 2.5,
+          "pp_edge": -0.9,
+          "rank_on_team": 2,
           "edge": "NEUTRAL",
-          "notes": "From slate season average",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -660,9 +166,9 @@
     }
   },
   "edge_legend": {
-    "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
-    "OK_EDGE": "Solid vs average-or-softer defense.",
+    "TOP_EDGE": "Positive PP edge (+1.5+) or strong avg vs soft defense (high rank = weak).",
+    "OK_EDGE": "PP edge on board or solid production vs average-or-softer defense.",
     "NEUTRAL": "No clear edge.",
-    "AVOID": "Elite defense with below-threshold production."
+    "AVOID": "Negative PP edge or elite defense with weak production."
   }
 }

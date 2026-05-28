@@ -29,12 +29,14 @@ _WNBA_SCRIPTS_PARENT = Path(__file__).resolve().parents[1]
 if str(_WNBA_SCRIPTS_PARENT) not in sys.path:
     sys.path.insert(0, str(_WNBA_SCRIPTS_PARENT))
 from step4_fetch_player_stats import derive_stat  # noqa: E402
+from utils.matchup_edge.classify import classify_edge  # noqa: E402
+from utils.matchup_edge.slate_io import build_slate_pp_lookup, lookup_pp_edge  # noqa: E402
 from utils.wnba_team_keys import canonical_team_key, defense_team_key  # noqa: E402
 
 ESPN_TO_SLATE: dict[str, str] = {
     "LV": "LVA", "LA": "LAS", "NY": "NYL", "GS": "GSV", "PHO": "PHX", "PHX": "PHX",
     "CONN": "CON", "CON": "CON", "DAL": "DAL", "IND": "IND", "ATL": "ATL", "CHI": "CHI",
-    "MIN": "MIN", "SEA": "SEA", "WSH": "WSH", "POR": "POR", "TOR": "TOR",
+    "MIN": "MIN", "SEA": "SEA", "WSH": "WSH", "POR": "POR", "PDX": "POR", "TOR": "TOR",
 }
 
 SLATE_TO_DEF: dict[str, str] = {v: k for k, v in ESPN_TO_SLATE.items()}
@@ -57,9 +59,22 @@ TOP_N = 5
 MIN_MPG = 14.0
 ELITE_RANK_CUT = 4
 PROP_LABEL_TO_NORM: dict[str, str] = {
-    "points": "pts", "rebounds": "reb", "assists": "ast", "steals": "stl", "blocks": "blk",
-    "3-pointers made": "fg3m", "3pt made": "fg3m", "3-pointers": "fg3m",
-    "pts+rebs+asts": "pra", "pts+rebs": "pr", "pts+asts": "pa", "rebs+asts": "ra",
+    "points": "pts",
+    "rebounds": "reb",
+    "assists": "ast",
+    "steals": "stl",
+    "blocks": "blk",
+    "3-pointers made": "fg3m",
+    "3-pt made": "fg3m",
+    "3pt made": "fg3m",
+    "3-pointers": "fg3m",
+    "pts+rebs+asts": "pra",
+    "pts+reb+ast": "pra",
+    "pts+rebs": "pr",
+    "pts+asts": "pa",
+    "rebs+asts": "ra",
+    "stocks": "stocks",
+    "stl+blk": "stocks",
 }
 
 
@@ -109,6 +124,62 @@ def _load_slate_rows(slate_path: Path) -> list[dict]:
     return [r for r in (raw.get("rows") or raw.get("picks") or []) if isinstance(r, dict)]
 
 
+def _slate_roster_maps(slate_path: Path) -> tuple[dict[str, str], dict[str, str], dict[str, set[str]]]:
+    """
+    From tonight's board: player_norm -> slate team abbr, player_norm -> pos,
+    team_slate -> set of player_norm on that franchise tonight.
+    """
+    team_by_player: dict[str, str] = {}
+    pos_by_player: dict[str, str] = {}
+    roster_by_team: dict[str, set[str]] = {}
+    for row in _load_slate_rows(slate_path):
+        if not isinstance(row, dict):
+            continue
+        player = str(row.get("player") or "").strip()
+        if not player:
+            continue
+        pnorm = _norm_name(player)
+        team_raw = str(row.get("team") or "").strip().upper()
+        if not team_raw or team_raw in ("—", "-", "NAN"):
+            continue
+        team_slate = _slate_team(team_raw)
+        team_by_player[pnorm] = team_slate
+        roster_by_team.setdefault(team_slate, set()).add(pnorm)
+        pos_raw = row.get("pos") or row.get("Pos") or row.get("position")
+        if pos_raw and str(pos_raw).strip().lower() not in ("", "nan", "none"):
+            pos_by_player[pnorm] = str(pos_raw).strip().upper()[:3]
+    return team_by_player, pos_by_player, roster_by_team
+
+
+def _assign_player_teams(
+    df: pd.DataFrame,
+    *,
+    slate_team_by_player: dict[str, str],
+    season: int | None,
+) -> pd.Series:
+    """Current franchise: slate board first, else latest ESPN game in season."""
+    df = df.copy()
+    df["_pnorm"] = df["PLAYER_NORM"].astype(str).map(_norm_name)
+    df["_game_dt"] = pd.to_datetime(df.get("GAME_DATE"), errors="coerce")
+    df["_team_def"] = df["TEAM"].astype(str).str.upper().map(defense_team_key)
+    df["_team_slate"] = df["_team_def"].map(_slate_team)
+
+    latest: dict[str, str] = {}
+    if season is not None:
+        sub = df[pd.to_numeric(df.get("SEASON"), errors="coerce") == season].sort_values("_game_dt")
+    else:
+        sub = df.sort_values("_game_dt")
+    for pnorm, grp in sub.groupby("_pnorm", sort=False):
+        if grp.empty:
+            continue
+        latest[pnorm] = str(grp.iloc[-1]["_team_slate"])
+
+    out: list[str] = []
+    for pnorm in df["_pnorm"]:
+        out.append(slate_team_by_player.get(pnorm) or latest.get(pnorm) or "")
+    return pd.Series(out, index=df.index)
+
+
 def _tonight_matchups(slate_path: Path) -> dict[str, dict]:
     """team slate abbr -> {opp_slate, opp_name, opp_def_rank, opp_def_tier, opp_ppg}."""
     rows = _load_slate_rows(slate_path)
@@ -129,34 +200,6 @@ def _tonight_matchups(slate_path: Path) -> dict[str, dict]:
                 "opp_def_tier": row.get("def_tier") or row.get("DEF_TIER") or "",
             }
     return matchups
-
-
-def _classify_edge(
-    season_avg: float,
-    threshold: float,
-    opp_rank: float | None,
-    n_teams: int,
-    hist: dict,
-) -> tuple[str, str]:
-    rank = float(opp_rank) if opp_rank is not None and not pd.isna(opp_rank) else np.nan
-    weak_cut = max(10, int(np.ceil(n_teams * 0.65)))
-    over_weak = hist.get("overperform_vs_weak", False)
-    boost = hist.get("def_boost")
-
-    if not np.isnan(rank) and rank <= ELITE_RANK_CUT and season_avg < threshold * 0.9:
-        return "AVOID", "Elite defense (#1–4); production below threshold — lean UNDER or skip OVER."
-    if not np.isnan(rank) and rank >= weak_cut and season_avg >= threshold:
-        note = "Strong avg vs soft defense tier."
-        if over_weak:
-            note += " Historical weak-D booster."
-        return "TOP_EDGE", note
-    if over_weak and not np.isnan(rank) and rank >= weak_cut - 2:
-        return "TOP_EDGE", "Top team producer; historically spikes vs weak defenses."
-    if not np.isnan(rank) and rank >= int(n_teams / 2) and season_avg >= threshold * 0.85:
-        return "OK_EDGE", "Solid vs average-or-softer opponent defense."
-    if not np.isnan(rank) and rank <= ELITE_RANK_CUT:
-        return "NEUTRAL", "Elite opponent defense — no clear OVER edge on volume."
-    return "NEUTRAL", "No strong matchup edge either way."
 
 
 def _player_notes(name: str, cat: str, rank: int | None, hist: dict) -> str:
@@ -180,6 +223,9 @@ def build_payload(
     def_by_key = defense.set_index("def_key")
     top3_lookup = _load_top3(top3_path)
     matchups_raw = _tonight_matchups(slate_path)
+    slate_rows = _load_slate_rows(slate_path)
+    pp_by_player = build_slate_pp_lookup(slate_rows, CATEGORIES, team_normalize=_slate_team)
+    slate_team_by_player, pos_by_player, roster_by_team = _slate_roster_maps(slate_path)
 
     df = pd.read_csv(cache_path, low_memory=False, encoding="utf-8-sig")
     if season is None and "SEASON" in df.columns:
@@ -192,11 +238,10 @@ def build_payload(
     df = df[df["MIN"] >= MIN_MPG * 0.4]
     valid = set(def_by_key.index)
     df = df[df["TEAM"].map(defense_team_key).isin(valid)]
-
-    pos_map: dict[str, str] = {}
-    for row in _load_slate_rows(slate_path):
-            if isinstance(row, dict) and row.get("player") and row.get("pos"):
-                pos_map[_norm_name(row["player"])] = str(row["pos"]).upper()[:2]
+    df["team_slate"] = _assign_player_teams(
+        df, slate_team_by_player=slate_team_by_player, season=season
+    )
+    df = df[df["team_slate"].astype(str).str.len() > 0]
 
     teams_meta: list[dict] = []
     for r in defense.itertuples(index=False):
@@ -238,7 +283,7 @@ def build_payload(
         df[f"_stat_{cid}"] = derive_stat(df, cid)
         df["_gs"] = derive_stat(df, "pra")  # display "game score" = PRA
         agg = (
-            df.groupby(["PLAYER_NAME", "PLAYER_NORM", "TEAM"], as_index=False)
+            df.groupby(["PLAYER_NAME", "PLAYER_NORM", "team_slate"], as_index=False)
             .agg(
                 season_avg=(f"_stat_{cid}", "mean"),
                 avg_min=("MIN", "mean"),
@@ -247,9 +292,13 @@ def build_payload(
         )
 
         agg = agg[agg["avg_min"] >= MIN_MPG]
-        agg["team_slate"] = agg["TEAM"].map(_slate_team)
 
         for team_slate, grp in agg.groupby("team_slate", sort=False):
+            roster = roster_by_team.get(str(team_slate).upper())
+            if roster:
+                grp = grp[grp["PLAYER_NORM"].astype(str).map(_norm_name).isin(roster)]
+            if grp.empty:
+                continue
             top = grp.nlargest(TOP_N, "season_avg")
             mu_ui = matchups_ui.get(team_slate, {})
             opp_slate = mu_ui.get("opponent_slate", "")
@@ -262,18 +311,38 @@ def build_payload(
             for i, r in enumerate(top.itertuples(index=False), start=1):
                 pnorm = _norm_name(r.PLAYER_NORM)
                 hist = top3_lookup.get((pnorm, str(team_slate).upper(), cid), {})
+                pp = lookup_pp_edge(
+                    pp_by_player,
+                    player=r.PLAYER_NAME,
+                    team=str(team_slate),
+                    cat_id=cid,
+                    player_norm=pnorm,
+                )
                 avg = float(r.season_avg)
-                edge, note = _classify_edge(avg, cat["threshold"], opp_rank, n_teams, hist)
+                edge, note = classify_edge(
+                    avg,
+                    cat["threshold"],
+                    opp_rank,
+                    n_teams,
+                    hist=hist,
+                    elite_rank_cut=ELITE_RANK_CUT,
+                    cat_id=cid,
+                    pp_line=pp.get("pp_line"),
+                    pp_edge=pp.get("pp_edge"),
+                    rank_on_team=i,
+                )
                 plist.append(
                     {
                         "player": r.PLAYER_NAME,
                         "player_norm": pnorm,
-                        "pos": pos_map.get(pnorm, ""),
+                        "pos": pos_by_player.get(pnorm, ""),
                         "rank_on_team": i,
                         "season_avg": round(avg, 2),
                         "game_score": round(float(r.game_score), 1) if pd.notna(r.game_score) else round(avg, 1),
+                        "pp_line": pp.get("pp_line"),
+                        "pp_edge": round(float(pp["pp_edge"]), 2) if pp.get("pp_edge") is not None else None,
                         "edge": edge,
-                        "notes": _player_notes(r.PLAYER_NAME, cid, i, hist) or note,
+                        "notes": note or _player_notes(r.PLAYER_NAME, cid, i, hist),
                         "overperform_vs_weak": hist.get("overperform_vs_weak", False),
                         "def_boost": hist.get("def_boost"),
                     }
@@ -296,20 +365,24 @@ def build_payload(
             }
 
     return {
+        "sport": "wnba",
+        "display_name": "WNBA",
+        "matchup_mode": "team",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "season": season,
         "n_teams": n_teams,
         "elite_rank_cut": ELITE_RANK_CUT,
         "weak_rank_cut": max(10, int(np.ceil(n_teams * 0.65))),
+        "opp_metric_label": "Opp def rank",
         "categories": CATEGORIES,
         "teams": teams_meta,
         "matchups": matchups_ui,
         "players_by_team_cat": players_by_key,
         "edge_legend": {
-            "TOP_EDGE": "Avg at/above threshold vs soft defense (rank 10+). Historical weak-D boosters qualify.",
-            "OK_EDGE": "Solid production vs average-or-softer defense.",
+            "TOP_EDGE": "Positive PP edge (+1.5+) or strong avg vs soft defense (rank 10+).",
+            "OK_EDGE": "PP edge on board or team leader vs soft/average defense.",
             "NEUTRAL": "No clear edge.",
-            "AVOID": "Elite defense (#1–4) with below-threshold production — skip OVER.",
+            "AVOID": "Negative PP edge or elite defense with weak production — skip OVER.",
         },
     }
 

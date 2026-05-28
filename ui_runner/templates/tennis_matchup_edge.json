@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-05-28T22:15:41.858363+00:00",
+  "generated_at": "2026-05-28T22:50:21.857009+00:00",
   "n_teams": 300,
   "elite_rank_cut": 25,
   "weak_rank_cut": 195,
@@ -463,10 +463,12 @@
           "rank_on_team": 1,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #89 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -475,10 +477,12 @@
           "rank_on_team": 2,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #89 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -487,10 +491,12 @@
           "rank_on_team": 3,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #89 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -499,10 +505,12 @@
           "rank_on_team": 4,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #89 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -511,10 +519,12 @@
           "rank_on_team": 5,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #89 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 9.5
         }
       ]
     },
@@ -537,10 +547,12 @@
           "rank_on_team": 1,
           "season_avg": 22.5,
           "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +7.0 on board tonight vs #95 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 7.0
         },
         {
           "player": "Elina Svitolina",
@@ -549,10 +561,12 @@
           "rank_on_team": 2,
           "season_avg": 22.5,
           "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +7.0 on board tonight vs #95 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 7.0
         },
         {
           "player": "Elina Svitolina",
@@ -561,10 +575,12 @@
           "rank_on_team": 3,
           "season_avg": 22.5,
           "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +7.0 on board tonight vs #95 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 7.0
         },
         {
           "player": "Elina Svitolina",
@@ -573,10 +589,12 @@
           "rank_on_team": 4,
           "season_avg": 22.5,
           "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +7.0 on board tonight vs #95 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 7.0
         }
       ]
     },
@@ -599,10 +617,12 @@
           "rank_on_team": 1,
           "season_avg": 20.5,
           "game_score": 20.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight vs #28 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 4.0
         },
         {
           "player": "Mirra Andreeva",
@@ -611,10 +631,12 @@
           "rank_on_team": 2,
           "season_avg": 20.5,
           "game_score": 20.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight vs #28 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 4.0
         },
         {
           "player": "Mirra Andreeva",
@@ -623,10 +645,12 @@
           "rank_on_team": 3,
           "season_avg": 20.5,
           "game_score": 20.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight vs #28 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 4.0
         },
         {
           "player": "Mirra Andreeva",
@@ -635,10 +659,12 @@
           "rank_on_team": 4,
           "season_avg": 20.5,
           "game_score": 20.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight vs #28 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 4.0
         },
         {
           "player": "Mirra Andreeva",
@@ -647,10 +673,12 @@
           "rank_on_team": 5,
           "season_avg": 20.5,
           "game_score": 20.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight vs #28 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 4.0
         }
       ]
     },
@@ -673,10 +701,12 @@
           "rank_on_team": 1,
           "season_avg": 24.0,
           "game_score": 24.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Marta Kostyuk",
@@ -685,10 +715,12 @@
           "rank_on_team": 2,
           "season_avg": 24.0,
           "game_score": 24.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Marta Kostyuk",
@@ -697,10 +729,12 @@
           "rank_on_team": 3,
           "season_avg": 24.0,
           "game_score": 24.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 8.5
         }
       ]
     },
@@ -723,10 +757,12 @@
           "rank_on_team": 1,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #30 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Novak Djokovic",
@@ -735,10 +771,12 @@
           "rank_on_team": 2,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #30 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Novak Djokovic",
@@ -747,10 +785,12 @@
           "rank_on_team": 3,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #30 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Novak Djokovic",
@@ -759,10 +799,12 @@
           "rank_on_team": 4,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #30 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": 8.5
         },
         {
           "player": "Novak Djokovic",
@@ -771,10 +813,12 @@
           "rank_on_team": 5,
           "season_avg": 40.0,
           "game_score": 40.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +8.5 on board tonight vs #30 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": 8.5
         }
       ]
     },
@@ -797,10 +841,12 @@
           "rank_on_team": 1,
           "season_avg": 39.5,
           "game_score": 39.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.0 on board tonight vs #51 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": 11.0
         },
         {
           "player": "Andrey Rublev",
@@ -809,10 +855,12 @@
           "rank_on_team": 2,
           "season_avg": 39.5,
           "game_score": 39.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.0 on board tonight vs #51 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": 11.0
         },
         {
           "player": "Andrey Rublev",
@@ -821,10 +869,12 @@
           "rank_on_team": 3,
           "season_avg": 39.5,
           "game_score": 39.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.0 on board tonight vs #51 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": 11.0
         },
         {
           "player": "Andrey Rublev",
@@ -833,10 +883,12 @@
           "rank_on_team": 4,
           "season_avg": 39.5,
           "game_score": 39.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.0 on board tonight vs #51 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": 11.0
         },
         {
           "player": "Andrey Rublev",
@@ -845,10 +897,12 @@
           "rank_on_team": 5,
           "season_avg": 39.5,
           "game_score": 39.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.0 on board tonight vs #51 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": 11.0
         }
       ]
     },
@@ -874,7 +928,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -900,7 +956,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -926,7 +984,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -952,7 +1012,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -978,7 +1040,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1004,7 +1068,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1030,7 +1096,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1056,7 +1124,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1082,7 +1152,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1108,7 +1180,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1134,7 +1208,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1160,7 +1236,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1186,7 +1264,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1212,7 +1292,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1238,7 +1320,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1261,10 +1345,12 @@
           "rank_on_team": 1,
           "season_avg": 32.5,
           "game_score": 32.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 29.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Rafael Jodar",
@@ -1273,10 +1359,12 @@
           "rank_on_team": 2,
           "season_avg": 32.5,
           "game_score": 32.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 29.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Rafael Jodar",
@@ -1285,10 +1373,12 @@
           "rank_on_team": 3,
           "season_avg": 32.5,
           "game_score": 32.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 29.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Rafael Jodar",
@@ -1297,10 +1387,12 @@
           "rank_on_team": 4,
           "season_avg": 32.5,
           "game_score": 32.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 29.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Rafael Jodar",
@@ -1309,10 +1401,12 @@
           "rank_on_team": 5,
           "season_avg": 32.5,
           "game_score": 32.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 29.5,
+          "pp_edge": 3.0
         }
       ]
     },
@@ -1335,10 +1429,12 @@
           "rank_on_team": 1,
           "season_avg": 18.0,
           "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Karolina Muchova",
@@ -1347,10 +1443,12 @@
           "rank_on_team": 2,
           "season_avg": 18.0,
           "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Karolina Muchova",
@@ -1359,10 +1457,12 @@
           "rank_on_team": 3,
           "season_avg": 18.0,
           "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Karolina Muchova",
@@ -1371,10 +1471,12 @@
           "rank_on_team": 4,
           "season_avg": 18.0,
           "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Karolina Muchova",
@@ -1383,10 +1485,12 @@
           "rank_on_team": 5,
           "season_avg": 18.0,
           "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 1.5
         }
       ]
     },
@@ -1409,10 +1513,12 @@
           "rank_on_team": 1,
           "season_avg": 16.0,
           "game_score": 16.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.5.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Iga Swiatek",
@@ -1424,7 +1530,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Iga Swiatek",
@@ -1436,7 +1544,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Iga Swiatek",
@@ -1448,7 +1558,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Iga Swiatek",
@@ -1460,7 +1572,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": 0.5
         }
       ]
     },
@@ -1483,10 +1597,12 @@
           "rank_on_team": 1,
           "season_avg": 37.0,
           "game_score": 37.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight vs #58 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
         },
         {
           "player": "Casper Ruud",
@@ -1495,10 +1611,12 @@
           "rank_on_team": 2,
           "season_avg": 37.0,
           "game_score": 37.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight vs #58 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
         },
         {
           "player": "Casper Ruud",
@@ -1507,10 +1625,12 @@
           "rank_on_team": 3,
           "season_avg": 37.0,
           "game_score": 37.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight vs #58 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
         },
         {
           "player": "Casper Ruud",
@@ -1519,10 +1639,12 @@
           "rank_on_team": 4,
           "season_avg": 37.0,
           "game_score": 37.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight vs #58 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
         },
         {
           "player": "Casper Ruud",
@@ -1531,10 +1653,12 @@
           "rank_on_team": 5,
           "season_avg": 37.0,
           "game_score": 37.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight vs #58 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
         }
       ]
     },
@@ -1557,10 +1681,12 @@
           "rank_on_team": 1,
           "season_avg": 36.5,
           "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 33.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Karen Khachanov",
@@ -1569,10 +1695,12 @@
           "rank_on_team": 2,
           "season_avg": 36.5,
           "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 33.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Karen Khachanov",
@@ -1581,10 +1709,12 @@
           "rank_on_team": 3,
           "season_avg": 36.5,
           "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 33.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Karen Khachanov",
@@ -1593,10 +1723,12 @@
           "rank_on_team": 4,
           "season_avg": 36.5,
           "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 33.5,
+          "pp_edge": 3.0
         },
         {
           "player": "Karen Khachanov",
@@ -1605,10 +1737,12 @@
           "rank_on_team": 5,
           "season_avg": 36.5,
           "game_score": 36.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 33.5,
+          "pp_edge": 3.0
         }
       ]
     },
@@ -1631,10 +1765,12 @@
           "rank_on_team": 1,
           "season_avg": 26.5,
           "game_score": 26.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Alexander Zverev",
@@ -1643,10 +1779,12 @@
           "rank_on_team": 2,
           "season_avg": 26.5,
           "game_score": 26.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Alexander Zverev",
@@ -1655,10 +1793,12 @@
           "rank_on_team": 3,
           "season_avg": 26.5,
           "game_score": 26.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Alexander Zverev",
@@ -1667,10 +1807,12 @@
           "rank_on_team": 4,
           "season_avg": 26.5,
           "game_score": 26.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 28.5,
+          "pp_edge": -2.0
         }
       ]
     },
@@ -1696,7 +1838,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Belinda Bencic",
@@ -1708,7 +1852,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Belinda Bencic",
@@ -1720,7 +1866,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Belinda Bencic",
@@ -1732,7 +1880,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Belinda Bencic",
@@ -1744,7 +1894,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -1.0
         }
       ]
     },
@@ -1767,10 +1919,12 @@
           "rank_on_team": 1,
           "season_avg": 15.5,
           "game_score": 15.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Sorana Cirstea",
@@ -1779,10 +1933,12 @@
           "rank_on_team": 2,
           "season_avg": 15.5,
           "game_score": 15.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Sorana Cirstea",
@@ -1791,10 +1947,12 @@
           "rank_on_team": 3,
           "season_avg": 15.5,
           "game_score": 15.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Sorana Cirstea",
@@ -1803,10 +1961,12 @@
           "rank_on_team": 4,
           "season_avg": 15.5,
           "game_score": 15.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Sorana Cirstea",
@@ -1815,10 +1975,12 @@
           "rank_on_team": 5,
           "season_avg": 15.5,
           "game_score": 15.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -2.0
         }
       ]
     },
@@ -1841,10 +2003,12 @@
           "rank_on_team": 1,
           "season_avg": 13.0,
           "game_score": 13.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #7 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Tamara Korpatsch",
@@ -1853,10 +2017,12 @@
           "rank_on_team": 2,
           "season_avg": 13.0,
           "game_score": 13.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #7 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 9.5
         },
         {
           "player": "Tamara Korpatsch",
@@ -1865,10 +2031,12 @@
           "rank_on_team": 3,
           "season_avg": 13.0,
           "game_score": 13.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +9.5 on board tonight vs #7 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 9.5
         }
       ]
     },
@@ -1891,10 +2059,12 @@
           "rank_on_team": 1,
           "season_avg": 12.0,
           "game_score": 12.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.5 on board tonight vs #11 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": 2.5
         }
       ]
     },
@@ -1917,10 +2087,12 @@
           "rank_on_team": 1,
           "season_avg": 15.4,
           "game_score": 15.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": 1.9
         },
         {
           "player": "Jesper De Jong",
@@ -1929,10 +2101,12 @@
           "rank_on_team": 2,
           "season_avg": 15.4,
           "game_score": 15.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": 1.9
         },
         {
           "player": "Jesper De Jong",
@@ -1941,10 +2115,12 @@
           "rank_on_team": 3,
           "season_avg": 15.4,
           "game_score": 15.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": 1.9
         },
         {
           "player": "Jesper De Jong",
@@ -1953,10 +2129,12 @@
           "rank_on_team": 4,
           "season_avg": 15.4,
           "game_score": 15.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": 1.9
         },
         {
           "player": "Jesper De Jong",
@@ -1965,10 +2143,12 @@
           "rank_on_team": 5,
           "season_avg": 15.4,
           "game_score": 15.4,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": 1.9
         }
       ]
     },
@@ -1994,7 +2174,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2020,7 +2202,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2046,7 +2230,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2072,7 +2258,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2098,7 +2286,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2124,7 +2314,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2150,7 +2342,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2176,7 +2370,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2202,7 +2398,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2228,7 +2426,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2254,7 +2454,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2280,7 +2482,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2306,7 +2510,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -2329,10 +2535,12 @@
           "rank_on_team": 1,
           "season_avg": 22.0,
           "game_score": 22.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.5 on board tonight vs #106 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 19.5,
+          "pp_edge": 2.5
         }
       ]
     },
@@ -2358,7 +2566,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": -0.5
         }
       ]
     },
@@ -2381,10 +2591,12 @@
           "rank_on_team": 1,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Pablo Carreno Busta",
@@ -2393,10 +2605,12 @@
           "rank_on_team": 2,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 1.5
         },
         {
           "player": "Pablo Carreno Busta",
@@ -2405,10 +2619,12 @@
           "rank_on_team": 3,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 1.5
         }
       ]
     },
@@ -2434,7 +2650,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -2446,7 +2664,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -2458,7 +2678,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -2470,7 +2692,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         }
       ]
     },
@@ -2496,7 +2720,9 @@
           "edge": "AVOID",
           "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Jil Teichmann",
@@ -2508,7 +2734,9 @@
           "edge": "AVOID",
           "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 0.0
         }
       ]
     },
@@ -2531,10 +2759,12 @@
           "rank_on_team": 1,
           "season_avg": 7.5,
           "game_score": 7.5,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.0 on board tonight vs #11 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 6.0
         }
       ]
     },
@@ -2557,10 +2787,12 @@
           "rank_on_team": 1,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -2569,10 +2801,12 @@
           "rank_on_team": 2,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -2581,10 +2815,12 @@
           "rank_on_team": 3,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -2593,10 +2829,12 @@
           "rank_on_team": 4,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -3.0
         }
       ]
     },
@@ -2619,10 +2857,12 @@
           "rank_on_team": 1,
           "season_avg": 2.0,
           "game_score": 2.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.5.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Karolina Muchova",
@@ -2634,7 +2874,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Karolina Muchova",
@@ -2646,7 +2888,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.5
         }
       ]
     },
@@ -2672,7 +2916,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -0.3
         },
         {
           "player": "Elina Svitolina",
@@ -2684,7 +2930,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -0.3
         },
         {
           "player": "Elina Svitolina",
@@ -2696,7 +2944,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -0.3
         }
       ]
     },
@@ -2719,10 +2969,12 @@
           "rank_on_team": 1,
           "season_avg": 3.3,
           "game_score": 3.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.8 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.83
         },
         {
           "player": "Sorana Cirstea",
@@ -2731,10 +2983,12 @@
           "rank_on_team": 2,
           "season_avg": 3.3,
           "game_score": 3.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.8 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.83
         },
         {
           "player": "Sorana Cirstea",
@@ -2743,10 +2997,12 @@
           "rank_on_team": 3,
           "season_avg": 3.3,
           "game_score": 3.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.8 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.83
         },
         {
           "player": "Sorana Cirstea",
@@ -2755,10 +3011,12 @@
           "rank_on_team": 4,
           "season_avg": 3.3,
           "game_score": 3.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.8 on board tonight.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.83
         }
       ]
     },
@@ -2784,7 +3042,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Marta Kostyuk",
@@ -2796,7 +3056,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.0
         },
         {
           "player": "Marta Kostyuk",
@@ -2808,7 +3070,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.0
         }
       ]
     },
@@ -2831,10 +3095,12 @@
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -5.0
         },
         {
           "player": "Andrey Rublev",
@@ -2843,10 +3109,12 @@
           "rank_on_team": 2,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -5.0
         },
         {
           "player": "Andrey Rublev",
@@ -2855,10 +3123,12 @@
           "rank_on_team": 3,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -5.0
         }
       ]
     },
@@ -2881,10 +3151,12 @@
           "rank_on_team": 1,
           "season_avg": 6.8,
           "game_score": 6.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite defense \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -0.75
         },
         {
           "player": "Nuno Borges",
@@ -2893,10 +3165,12 @@
           "rank_on_team": 2,
           "season_avg": 6.8,
           "game_score": 6.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite defense \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -0.75
         },
         {
           "player": "Nuno Borges",
@@ -2905,10 +3179,12 @@
           "rank_on_team": 3,
           "season_avg": 6.8,
           "game_score": 6.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite defense \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -0.75
         },
         {
           "player": "Nuno Borges",
@@ -2917,10 +3193,12 @@
           "rank_on_team": 4,
           "season_avg": 6.8,
           "game_score": 6.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite defense \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -0.75
         },
         {
           "player": "Nuno Borges",
@@ -2929,10 +3207,12 @@
           "rank_on_team": 5,
           "season_avg": 6.8,
           "game_score": 6.8,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite defense \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -0.75
         }
       ]
     },
@@ -2955,10 +3235,12 @@
           "rank_on_team": 1,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -5.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -2967,10 +3249,12 @@
           "rank_on_team": 2,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -5.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -2979,10 +3263,12 @@
           "rank_on_team": 3,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -5.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -2991,10 +3277,12 @@
           "rank_on_team": 4,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -5.5
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -3003,10 +3291,12 @@
           "rank_on_team": 5,
           "season_avg": 5.0,
           "game_score": 5.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -5.5
         }
       ]
     },
@@ -3029,10 +3319,12 @@
           "rank_on_team": 1,
           "season_avg": 4.0,
           "game_score": 4.0,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.5.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Nuno Borges",
@@ -3044,7 +3336,9 @@
           "edge": "NEUTRAL",
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Nuno Borges",
@@ -3056,7 +3350,9 @@
           "edge": "NEUTRAL",
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 0.5
         },
         {
           "player": "Nuno Borges",
@@ -3068,7 +3364,9 @@
           "edge": "NEUTRAL",
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 0.5
         }
       ]
     },
@@ -3094,7 +3392,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -3106,7 +3406,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -3118,7 +3420,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Xiyu Wang",
@@ -3130,7 +3434,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         }
       ]
     },
@@ -3156,7 +3462,9 @@
           "edge": "NEUTRAL",
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         },
         {
           "player": "Jil Teichmann",
@@ -3165,10 +3473,12 @@
           "rank_on_team": 2,
           "season_avg": 2.5,
           "game_score": 2.5,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         }
       ]
     },
@@ -3191,10 +3501,12 @@
           "rank_on_team": 1,
           "season_avg": 2.5,
           "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #75 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Karolina Muchova",
@@ -3203,10 +3515,12 @@
           "rank_on_team": 2,
           "season_avg": 2.5,
           "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #75 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Karolina Muchova",
@@ -3215,10 +3529,12 @@
           "rank_on_team": 3,
           "season_avg": 2.5,
           "game_score": 2.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #75 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 2.0
         }
       ]
     },
@@ -3241,10 +3557,12 @@
           "rank_on_team": 1,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Marta Kostyuk",
@@ -3253,10 +3571,12 @@
           "rank_on_team": 2,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Marta Kostyuk",
@@ -3265,10 +3585,12 @@
           "rank_on_team": 3,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Marta Kostyuk",
@@ -3277,10 +3599,12 @@
           "rank_on_team": 4,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
         },
         {
           "player": "Marta Kostyuk",
@@ -3289,10 +3613,12 @@
           "rank_on_team": 5,
           "season_avg": 4.5,
           "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.0 on board tonight vs #82 defense.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
         }
       ]
     },
@@ -3315,10 +3641,12 @@
           "rank_on_team": 1,
           "season_avg": 2.1,
           "game_score": 2.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.6.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.6
         },
         {
           "player": "Elina Svitolina",
@@ -3330,7 +3658,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.6
         },
         {
           "player": "Elina Svitolina",
@@ -3342,7 +3672,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.6
         }
       ]
     },
@@ -3368,7 +3700,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.33
         },
         {
           "player": "Sorana Cirstea",
@@ -3380,7 +3714,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.33
         },
         {
           "player": "Sorana Cirstea",
@@ -3392,7 +3728,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.33
         }
       ]
     },
@@ -3418,7 +3756,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.5
         },
         {
           "player": "Andrey Rublev",
@@ -3430,7 +3770,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.5
         },
         {
           "player": "Andrey Rublev",
@@ -3442,7 +3784,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.5
         },
         {
           "player": "Andrey Rublev",
@@ -3454,7 +3798,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.5
         }
       ]
     },
@@ -3478,9 +3824,11 @@
           "season_avg": 0.5,
           "game_score": 0.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -2.0 vs elite defense (#11).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Peyton Stearns",
@@ -3490,9 +3838,11 @@
           "season_avg": 0.5,
           "game_score": 0.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -2.0 vs elite defense (#11).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Peyton Stearns",
@@ -3502,9 +3852,11 @@
           "season_avg": 0.5,
           "game_score": 0.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -2.0 vs elite defense (#11).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Peyton Stearns",
@@ -3514,9 +3866,11 @@
           "season_avg": 0.5,
           "game_score": 0.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -2.0 vs elite defense (#11).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         }
       ]
     },
@@ -3539,10 +3893,12 @@
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -3551,10 +3907,12 @@
           "rank_on_team": 2,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -3563,10 +3921,12 @@
           "rank_on_team": 3,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -3575,10 +3935,12 @@
           "rank_on_team": 4,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.0
         }
       ]
     },
@@ -3602,9 +3964,11 @@
           "season_avg": 1.5,
           "game_score": 1.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -3614,9 +3978,11 @@
           "season_avg": 1.5,
           "game_score": 1.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -3626,9 +3992,11 @@
           "season_avg": 1.5,
           "game_score": 1.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -3638,9 +4006,11 @@
           "season_avg": 1.5,
           "game_score": 1.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
         },
         {
           "player": "Jakub Mensik",
@@ -3650,9 +4020,11 @@
           "season_avg": 1.5,
           "game_score": 1.5,
           "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.0 vs elite defense (#7).",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
         }
       ]
     },
@@ -3678,7 +4050,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Rafael Jodar",
@@ -3690,7 +4064,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3716,7 +4092,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Thiago Agustin Tirante",
@@ -3728,7 +4106,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3754,7 +4134,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Casper Ruud",
@@ -3766,7 +4148,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3792,7 +4176,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Karen Khachanov",
@@ -3804,7 +4190,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3830,7 +4218,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Novak Djokovic",
@@ -3842,7 +4232,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3868,7 +4260,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         },
         {
           "player": "Andrey Rublev",
@@ -3880,7 +4274,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3906,7 +4302,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3932,7 +4330,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3958,7 +4358,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -3984,7 +4386,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -4010,7 +4414,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -4036,7 +4442,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -4062,7 +4470,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -4088,15 +4498,17 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "def_boost": null
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     }
   },
   "edge_legend": {
-    "TOP_EDGE": "Avg at/above threshold vs weaker opponent (high ATP rank #).",
-    "OK_EDGE": "Solid vs average-or-weaker opponent.",
+    "TOP_EDGE": "Positive PP edge (+1.5+) or avg at/above threshold vs weaker opponent (high ATP rank #).",
+    "OK_EDGE": "PP edge on board or solid vs average-or-weaker opponent.",
     "NEUTRAL": "No clear edge.",
-    "AVOID": "Top-ranked opponent with below-threshold production."
+    "AVOID": "Negative PP edge or top-ranked opponent with below-threshold production."
   }
 }
