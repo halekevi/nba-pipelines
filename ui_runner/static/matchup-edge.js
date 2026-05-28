@@ -205,7 +205,25 @@
         return !teamsWithBlocks.size || teamsWithBlocks.has(ab);
       })
       .slice()
-      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+      .sort((a, b) => {
+        const edgeRank = (e) => (e === "TOP_EDGE" ? 0 : e === "OK_EDGE" ? 1 : e === "NEUTRAL" ? 2 : 3);
+        const bestEdge = (abbr) => {
+          const keys = Object.keys(data.players_by_team_cat || {}).filter((k) => k.startsWith(abbr + "|"));
+          let best = 3;
+          keys.forEach((k) => {
+            const players = data.players_by_team_cat[k]?.players || [];
+            players.forEach((p) => {
+              const r = edgeRank(p.edge);
+              if (r < best) best = r;
+            });
+          });
+          return best;
+        };
+        const abA = a.slate_abbr || a.def_key || "";
+        const abB = b.slate_abbr || b.def_key || "";
+        const diff = bestEdge(abA) - bestEdge(abB);
+        return diff !== 0 ? diff : String(a.name).localeCompare(String(b.name));
+      });
     if (!teams.length && data.matchups) {
       Object.keys(data.matchups).forEach((k) => {
         const mu = data.matchups[k] || {};
