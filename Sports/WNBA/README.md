@@ -58,7 +58,7 @@ Other presets: `full-2025` (May–Oct), `late-2025` (Sep–Oct). ESPN is queried
 - **Per-step artifacts (canonical run):** `outputs/<date>/wnba/` — e.g. `step1_wnba_props.csv` through step 9 outputs.
 - **Published clean sheet:** after step 8, `scripts/run_wnba_pipeline.ps1` mirrors the direction-clean workbook to `outputs/<date>/` (e.g. `step8_wnba_direction_clean_<date>.xlsx`) for dated consumers and mobile sync patterns.
 - **Slate Explorer / mobile:** after step 9, the same runner calls `scripts/publish_wnba_slate_to_ui.py`, which **merges** WNBA rows into `ui_runner/templates/slate_latest.json` and `mobile/www/slate_latest.json` (and writes `slate_sport_wnba.json`) without wiping other sports. Run that script manually with `--date` if you need to refresh only the web JSON.
-- **Matchup Edge panel:** the WNBA slate card in Slate Explorer includes a collapsible **Matchup Edge** block (team × stat category vs tonight’s opponent defense). Data is built by `scripts/build_wnba_matchup_edge_json.py` (uses `wnba_top3_vs_defense.csv` + `wnba_defense_summary.csv` + slate). API: `GET /api/wnba/matchup-edge`; static fallback: `mobile/www/data/wnba_matchup_edge.json`.
+- **Matchup Edge panel:** Slate Explorer includes a **Matchup Edge** block per sport (NBA, WNBA, NHL, Soccer, …). Build all: `py -3 scripts/build_matchup_edge_json.py --sport all`. API: `GET /api/<sport>/matchup-edge`. WNBA also runs `Sports/WNBA/scripts/build_wnba_matchup_edge_json.py` in its pipeline.
 
 ## Combined slate / web tickets
 

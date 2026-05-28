@@ -1,0 +1,890 @@
+{
+  "sport": "cfb",
+  "display_name": "CFB",
+  "generated_at": "2026-05-28T01:21:00.959119+00:00",
+  "n_teams": 122,
+  "elite_rank_cut": 4,
+  "weak_rank_cut": 80,
+  "opp_metric_label": "Opp def rank (nat)",
+  "categories": [
+    {
+      "id": "pass_yds",
+      "label": "Pass yards",
+      "threshold": 200.0
+    },
+    {
+      "id": "rush_yds",
+      "label": "Rush yards",
+      "threshold": 80.0
+    },
+    {
+      "id": "rec_yds",
+      "label": "Receiving yards",
+      "threshold": 60.0
+    }
+  ],
+  "teams": [
+    {
+      "def_key": "ARMY",
+      "slate_abbr": "ARMY",
+      "name": "ARMY",
+      "def_rank": 41,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CLT",
+      "slate_abbr": "CLT",
+      "name": "CLT",
+      "def_rank": 121,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ECU",
+      "slate_abbr": "ECU",
+      "name": "ECU",
+      "def_rank": 48,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FAU",
+      "slate_abbr": "FAU",
+      "name": "FAU",
+      "def_rank": 119,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MEM",
+      "slate_abbr": "MEM",
+      "name": "MEM",
+      "def_rank": 58,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NAVY",
+      "slate_abbr": "NAVY",
+      "name": "NAVY",
+      "def_rank": 62,
+      "def_tier": ""
+    },
+    {
+      "def_key": "RICE",
+      "slate_abbr": "RICE",
+      "name": "RICE",
+      "def_rank": 94,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TEM",
+      "slate_abbr": "TEM",
+      "name": "TEM",
+      "def_rank": 85,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TLSA",
+      "slate_abbr": "TLSA",
+      "name": "TLSA",
+      "def_rank": 84,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TULN",
+      "slate_abbr": "TULN",
+      "name": "TULN",
+      "def_rank": 75,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UAB",
+      "slate_abbr": "UAB",
+      "name": "UAB",
+      "def_rank": 108,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNT",
+      "slate_abbr": "UNT",
+      "name": "UNT",
+      "def_rank": 73,
+      "def_tier": ""
+    },
+    {
+      "def_key": "USF",
+      "slate_abbr": "USF",
+      "name": "USF",
+      "def_rank": 78,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UTSA",
+      "slate_abbr": "UTSA",
+      "name": "UTSA",
+      "def_rank": 63,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BC",
+      "slate_abbr": "BC",
+      "name": "BC",
+      "def_rank": 117,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CAL",
+      "slate_abbr": "CAL",
+      "name": "CAL",
+      "def_rank": 60,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CLEM",
+      "slate_abbr": "CLEM",
+      "name": "CLEM",
+      "def_rank": 53,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DUKE",
+      "slate_abbr": "DUKE",
+      "name": "DUKE",
+      "def_rank": 110,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FSU",
+      "slate_abbr": "FSU",
+      "name": "FSU",
+      "def_rank": 27,
+      "def_tier": ""
+    },
+    {
+      "def_key": "GT",
+      "slate_abbr": "GT",
+      "name": "GT",
+      "def_rank": 87,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LOU",
+      "slate_abbr": "LOU",
+      "name": "LOU",
+      "def_rank": 15,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MIA",
+      "slate_abbr": "MIA",
+      "name": "MIA",
+      "def_rank": 11,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NCSU",
+      "slate_abbr": "NCSU",
+      "name": "NCSU",
+      "def_rank": 102,
+      "def_tier": ""
+    },
+    {
+      "def_key": "PITT",
+      "slate_abbr": "PITT",
+      "name": "PITT",
+      "def_rank": 31,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SMU",
+      "slate_abbr": "SMU",
+      "name": "SMU",
+      "def_rank": 83,
+      "def_tier": ""
+    },
+    {
+      "def_key": "STAN",
+      "slate_abbr": "STAN",
+      "name": "STAN",
+      "def_rank": 98,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SYR",
+      "slate_abbr": "SYR",
+      "name": "SYR",
+      "def_rank": 115,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNC",
+      "slate_abbr": "UNC",
+      "name": "UNC",
+      "def_rank": 36,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UVA",
+      "slate_abbr": "UVA",
+      "name": "UVA",
+      "def_rank": 19,
+      "def_tier": ""
+    },
+    {
+      "def_key": "VT",
+      "slate_abbr": "VT",
+      "name": "VT",
+      "def_rank": 68,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WAKE",
+      "slate_abbr": "WAKE",
+      "name": "WAKE",
+      "def_rank": 25,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ILL",
+      "slate_abbr": "ILL",
+      "name": "ILL",
+      "def_rank": 44,
+      "def_tier": ""
+    },
+    {
+      "def_key": "IOWA",
+      "slate_abbr": "IOWA",
+      "name": "IOWA",
+      "def_rank": 8,
+      "def_tier": ""
+    },
+    {
+      "def_key": "IU",
+      "slate_abbr": "IU",
+      "name": "IU",
+      "def_rank": 4,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MD",
+      "slate_abbr": "MD",
+      "name": "MD",
+      "def_rank": 92,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MICH",
+      "slate_abbr": "MICH",
+      "name": "MICH",
+      "def_rank": 22,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MINN",
+      "slate_abbr": "MINN",
+      "name": "MINN",
+      "def_rank": 32,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MSU",
+      "slate_abbr": "MSU",
+      "name": "MSU",
+      "def_rank": 69,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NEB",
+      "slate_abbr": "NEB",
+      "name": "NEB",
+      "def_rank": 29,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NU",
+      "slate_abbr": "NU",
+      "name": "NU",
+      "def_rank": 30,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ORE",
+      "slate_abbr": "ORE",
+      "name": "ORE",
+      "def_rank": 6,
+      "def_tier": ""
+    },
+    {
+      "def_key": "OSU",
+      "slate_abbr": "OSU",
+      "name": "OSU",
+      "def_rank": 1,
+      "def_tier": ""
+    },
+    {
+      "def_key": "PSU",
+      "slate_abbr": "PSU",
+      "name": "PSU",
+      "def_rank": 24,
+      "def_tier": ""
+    },
+    {
+      "def_key": "PUR",
+      "slate_abbr": "PUR",
+      "name": "PUR",
+      "def_rank": 109,
+      "def_tier": ""
+    },
+    {
+      "def_key": "RUTG",
+      "slate_abbr": "RUTG",
+      "name": "RUTG",
+      "def_rank": 116,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UCLA",
+      "slate_abbr": "UCLA",
+      "name": "UCLA",
+      "def_rank": 79,
+      "def_tier": ""
+    },
+    {
+      "def_key": "USC",
+      "slate_abbr": "USC",
+      "name": "USC",
+      "def_rank": 47,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WASH",
+      "slate_abbr": "WASH",
+      "name": "WASH",
+      "def_rank": 20,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WIS",
+      "slate_abbr": "WIS",
+      "name": "WIS",
+      "def_rank": 23,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ARIZ",
+      "slate_abbr": "ARIZ",
+      "name": "ARIZ",
+      "def_rank": 18,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ASU",
+      "slate_abbr": "ASU",
+      "name": "ASU",
+      "def_rank": 55,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BAY",
+      "slate_abbr": "BAY",
+      "name": "BAY",
+      "def_rank": 82,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BYU",
+      "slate_abbr": "BYU",
+      "name": "BYU",
+      "def_rank": 33,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CIN",
+      "slate_abbr": "CIN",
+      "name": "CIN",
+      "def_rank": 88,
+      "def_tier": ""
+    },
+    {
+      "def_key": "COLO",
+      "slate_abbr": "COLO",
+      "name": "COLO",
+      "def_rank": 112,
+      "def_tier": ""
+    },
+    {
+      "def_key": "HOU",
+      "slate_abbr": "HOU",
+      "name": "HOU",
+      "def_rank": 45,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ISU",
+      "slate_abbr": "ISU",
+      "name": "ISU",
+      "def_rank": 52,
+      "def_tier": ""
+    },
+    {
+      "def_key": "KSU",
+      "slate_abbr": "KSU",
+      "name": "KSU",
+      "def_rank": 77,
+      "def_tier": ""
+    },
+    {
+      "def_key": "KU",
+      "slate_abbr": "KU",
+      "name": "KU",
+      "def_rank": 80,
+      "def_tier": ""
+    },
+    {
+      "def_key": "OKST",
+      "slate_abbr": "OKST",
+      "name": "OKST",
+      "def_rank": 105,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TCU",
+      "slate_abbr": "TCU",
+      "name": "TCU",
+      "def_rank": 70,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TTU",
+      "slate_abbr": "TTU",
+      "name": "TTU",
+      "def_rank": 3,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UCF",
+      "slate_abbr": "UCF",
+      "name": "UCF",
+      "def_rank": 35,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UTAH",
+      "slate_abbr": "UTAH",
+      "name": "UTAH",
+      "def_rank": 57,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WVU",
+      "slate_abbr": "WVU",
+      "name": "WVU",
+      "def_rank": 99,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CONN",
+      "slate_abbr": "CONN",
+      "name": "CONN",
+      "def_rank": 104,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ND",
+      "slate_abbr": "ND",
+      "name": "ND",
+      "def_rank": 21,
+      "def_tier": ""
+    },
+    {
+      "def_key": "AKR",
+      "slate_abbr": "AKR",
+      "name": "AKR",
+      "def_rank": 76,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BALL",
+      "slate_abbr": "BALL",
+      "name": "BALL",
+      "def_rank": 97,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BGSU",
+      "slate_abbr": "BGSU",
+      "name": "BGSU",
+      "def_rank": 40,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BUFF",
+      "slate_abbr": "BUFF",
+      "name": "BUFF",
+      "def_rank": 42,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CMU",
+      "slate_abbr": "CMU",
+      "name": "CMU",
+      "def_rank": 51,
+      "def_tier": ""
+    },
+    {
+      "def_key": "EMU",
+      "slate_abbr": "EMU",
+      "name": "EMU",
+      "def_rank": 103,
+      "def_tier": ""
+    },
+    {
+      "def_key": "KENT",
+      "slate_abbr": "KENT",
+      "name": "KENT",
+      "def_rank": 114,
+      "def_tier": ""
+    },
+    {
+      "def_key": "M-OH",
+      "slate_abbr": "M-OH",
+      "name": "M-OH",
+      "def_rank": 34,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MASS",
+      "slate_abbr": "MASS",
+      "name": "MASS",
+      "def_rank": 118,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NIU",
+      "slate_abbr": "NIU",
+      "name": "NIU",
+      "def_rank": 54,
+      "def_tier": ""
+    },
+    {
+      "def_key": "OHIO",
+      "slate_abbr": "OHIO",
+      "name": "OHIO",
+      "def_rank": 49,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TOL",
+      "slate_abbr": "TOL",
+      "name": "TOL",
+      "def_rank": 2,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WMU",
+      "slate_abbr": "WMU",
+      "name": "WMU",
+      "def_rank": 16,
+      "def_tier": ""
+    },
+    {
+      "def_key": "AFA",
+      "slate_abbr": "AFA",
+      "name": "AFA",
+      "def_rank": 107,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BOIS",
+      "slate_abbr": "BOIS",
+      "name": "BOIS",
+      "def_rank": 37,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CSU",
+      "slate_abbr": "CSU",
+      "name": "CSU",
+      "def_rank": 113,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FRES",
+      "slate_abbr": "FRES",
+      "name": "FRES",
+      "def_rank": 9,
+      "def_tier": ""
+    },
+    {
+      "def_key": "HAW",
+      "slate_abbr": "HAW",
+      "name": "HAW",
+      "def_rank": 59,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NEV",
+      "slate_abbr": "NEV",
+      "name": "NEV",
+      "def_rank": 61,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SDSU",
+      "slate_abbr": "SDSU",
+      "name": "SDSU",
+      "def_rank": 10,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SJSU",
+      "slate_abbr": "SJSU",
+      "name": "SJSU",
+      "def_rank": 93,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNLV",
+      "slate_abbr": "UNLV",
+      "name": "UNLV",
+      "def_rank": 106,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNM",
+      "slate_abbr": "UNM",
+      "name": "UNM",
+      "def_rank": 39,
+      "def_tier": ""
+    },
+    {
+      "def_key": "USU",
+      "slate_abbr": "USU",
+      "name": "USU",
+      "def_rank": 120,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WYO",
+      "slate_abbr": "WYO",
+      "name": "WYO",
+      "def_rank": 43,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ORST",
+      "slate_abbr": "ORST",
+      "name": "ORST",
+      "def_rank": 72,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WSU",
+      "slate_abbr": "WSU",
+      "name": "WSU",
+      "def_rank": 14,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ALA",
+      "slate_abbr": "ALA",
+      "name": "ALA",
+      "def_rank": 12,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ARK",
+      "slate_abbr": "ARK",
+      "name": "ARK",
+      "def_rank": 111,
+      "def_tier": ""
+    },
+    {
+      "def_key": "AUB",
+      "slate_abbr": "AUB",
+      "name": "AUB",
+      "def_rank": 28,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FLA",
+      "slate_abbr": "FLA",
+      "name": "FLA",
+      "def_rank": 67,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LSU",
+      "slate_abbr": "LSU",
+      "name": "LSU",
+      "def_rank": 26,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MISS",
+      "slate_abbr": "MISS",
+      "name": "MISS",
+      "def_rank": 46,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MIZ",
+      "slate_abbr": "MIZ",
+      "name": "MIZ",
+      "def_rank": 7,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MSST",
+      "slate_abbr": "MSST",
+      "name": "MSST",
+      "def_rank": 100,
+      "def_tier": ""
+    },
+    {
+      "def_key": "OU",
+      "slate_abbr": "OU",
+      "name": "OU",
+      "def_rank": 5,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SC",
+      "slate_abbr": "SC",
+      "name": "SC",
+      "def_rank": 50,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TA&M",
+      "slate_abbr": "TA&M",
+      "name": "TA&M",
+      "def_rank": 17,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TENN",
+      "slate_abbr": "TENN",
+      "name": "TENN",
+      "def_rank": 86,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TEX",
+      "slate_abbr": "TEX",
+      "name": "TEX",
+      "def_rank": 38,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UGA",
+      "slate_abbr": "UGA",
+      "name": "UGA",
+      "def_rank": 13,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UK",
+      "slate_abbr": "UK",
+      "name": "UK",
+      "def_rank": 64,
+      "def_tier": ""
+    },
+    {
+      "def_key": "VAN",
+      "slate_abbr": "VAN",
+      "name": "VAN",
+      "def_rank": 56,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DEL",
+      "slate_abbr": "DEL",
+      "name": "DEL",
+      "def_rank": 96,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FIU",
+      "slate_abbr": "FIU",
+      "name": "FIU",
+      "def_rank": 101,
+      "def_tier": ""
+    },
+    {
+      "def_key": "JVST",
+      "slate_abbr": "JVST",
+      "name": "JVST",
+      "def_rank": 71,
+      "def_tier": ""
+    },
+    {
+      "def_key": "KENN",
+      "slate_abbr": "KENN",
+      "name": "KENN",
+      "def_rank": 95,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LIB",
+      "slate_abbr": "LIB",
+      "name": "LIB",
+      "def_rank": 66,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LT",
+      "slate_abbr": "LT",
+      "name": "LT",
+      "def_rank": 65,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MOST",
+      "slate_abbr": "MOST",
+      "name": "MOST",
+      "def_rank": 74,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MTSU",
+      "slate_abbr": "MTSU",
+      "name": "MTSU",
+      "def_rank": 89,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NMSU",
+      "slate_abbr": "NMSU",
+      "name": "NMSU",
+      "def_rank": 91,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SHSU",
+      "slate_abbr": "SHSU",
+      "name": "SHSU",
+      "def_rank": 122,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UTEP",
+      "slate_abbr": "UTEP",
+      "name": "UTEP",
+      "def_rank": 81,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WKU",
+      "slate_abbr": "WKU",
+      "name": "WKU",
+      "def_rank": 90,
+      "def_tier": ""
+    }
+  ],
+  "matchups": {},
+  "players_by_team_cat": {},
+  "edge_legend": {
+    "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
+    "OK_EDGE": "Solid vs average-or-softer defense.",
+    "NEUTRAL": "No clear edge.",
+    "AVOID": "Elite defense with below-threshold production."
+  }
+}

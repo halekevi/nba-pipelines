@@ -1,0 +1,2611 @@
+{
+  "sport": "cbb",
+  "display_name": "CBB",
+  "generated_at": "2026-05-28T01:21:00.940364+00:00",
+  "n_teams": 365,
+  "elite_rank_cut": 4,
+  "weak_rank_cut": 238,
+  "opp_metric_label": "Opp def rank",
+  "categories": [
+    {
+      "id": "pts",
+      "label": "Points",
+      "threshold": 18.0
+    },
+    {
+      "id": "reb",
+      "label": "Rebounds",
+      "threshold": 6.0
+    },
+    {
+      "id": "ast",
+      "label": "Assists",
+      "threshold": 4.0
+    },
+    {
+      "id": "fg3m",
+      "label": "3-Pointers made",
+      "threshold": 1.5
+    },
+    {
+      "id": "stl",
+      "label": "Steals",
+      "threshold": 1.0
+    },
+    {
+      "id": "blk",
+      "label": "Blocks",
+      "threshold": 1.0
+    },
+    {
+      "id": "pra",
+      "label": "Pts+Reb+Ast",
+      "threshold": 28.0
+    }
+  ],
+  "teams": [
+    {
+      "def_key": "Northern Iowa",
+      "slate_abbr": "NORTHERN IOWA",
+      "name": "Northern Iowa",
+      "def_rank": 1,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Houston",
+      "slate_abbr": "HOUSTON",
+      "name": "Houston",
+      "def_rank": 2,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Duke",
+      "slate_abbr": "DUKE",
+      "name": "Duke",
+      "def_rank": 3,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tennessee-Martin",
+      "slate_abbr": "TENNESSEE-MARTIN",
+      "name": "Tennessee-Martin",
+      "def_rank": 4,
+      "def_tier": ""
+    },
+    {
+      "def_key": "West Virginia",
+      "slate_abbr": "WEST VIRGINIA",
+      "name": "West Virginia",
+      "def_rank": 5,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Navy",
+      "slate_abbr": "NAVY",
+      "name": "Navy",
+      "def_rank": 6,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Marist",
+      "slate_abbr": "MARIST",
+      "name": "Marist",
+      "def_rank": 7,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Saint Mary's (CA)",
+      "slate_abbr": "SAINT MARY'S (CA)",
+      "name": "Saint Mary's (CA)",
+      "def_rank": 8,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Iowa",
+      "slate_abbr": "IOWA",
+      "name": "Iowa",
+      "def_rank": 9,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Louisiana Tech",
+      "slate_abbr": "LOUISIANA TECH",
+      "name": "Louisiana Tech",
+      "def_rank": 10,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Seton Hall",
+      "slate_abbr": "SETON HALL",
+      "name": "Seton Hall",
+      "def_rank": 11,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Fordham",
+      "slate_abbr": "FORDHAM",
+      "name": "Fordham",
+      "def_rank": 12,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Iowa State",
+      "slate_abbr": "IOWA STATE",
+      "name": "Iowa State",
+      "def_rank": 13,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SIU Edwardsville",
+      "slate_abbr": "SIU EDWARDSVILLE",
+      "name": "SIU Edwardsville",
+      "def_rank": 14,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Nebraska",
+      "slate_abbr": "NEBRASKA",
+      "name": "Nebraska",
+      "def_rank": 15,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Appalachian State",
+      "slate_abbr": "APPALACHIAN STATE",
+      "name": "Appalachian State",
+      "def_rank": 16,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Clemson",
+      "slate_abbr": "CLEMSON",
+      "name": "Clemson",
+      "def_rank": 17,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Stephen F. Austin",
+      "slate_abbr": "STEPHEN F. AUSTIN",
+      "name": "Stephen F. Austin",
+      "def_rank": 18,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Connecticut",
+      "slate_abbr": "CONNECTICUT",
+      "name": "Connecticut",
+      "def_rank": 19,
+      "def_tier": ""
+    },
+    {
+      "def_key": "New Haven",
+      "slate_abbr": "NEW HAVEN",
+      "name": "New Haven",
+      "def_rank": 20,
+      "def_tier": ""
+    },
+    {
+      "def_key": "McNeese State",
+      "slate_abbr": "MCNEESE STATE",
+      "name": "McNeese State",
+      "def_rank": 21,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Michigan State",
+      "slate_abbr": "MICHIGAN STATE",
+      "name": "Michigan State",
+      "def_rank": 22,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Texas",
+      "slate_abbr": "NORTH TEXAS",
+      "name": "North Texas",
+      "def_rank": 23,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Siena",
+      "slate_abbr": "SIENA",
+      "name": "Siena",
+      "def_rank": 24,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Gonzaga",
+      "slate_abbr": "GONZAGA",
+      "name": "Gonzaga",
+      "def_rank": 25,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Utah Valley",
+      "slate_abbr": "UTAH VALLEY",
+      "name": "Utah Valley",
+      "def_rank": 26,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Merrimack",
+      "slate_abbr": "MERRIMACK",
+      "name": "Merrimack",
+      "def_rank": 27,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Towson",
+      "slate_abbr": "TOWSON",
+      "name": "Towson",
+      "def_rank": 28,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Hofstra",
+      "slate_abbr": "HOFSTRA",
+      "name": "Hofstra",
+      "def_rank": 29,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cincinnati",
+      "slate_abbr": "CINCINNATI",
+      "name": "Cincinnati",
+      "def_rank": 30,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNC Wilmington",
+      "slate_abbr": "UNC WILMINGTON",
+      "name": "UNC Wilmington",
+      "def_rank": 31,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Seattle",
+      "slate_abbr": "SEATTLE",
+      "name": "Seattle",
+      "def_rank": 32,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mercyhurst",
+      "slate_abbr": "MERCYHURST",
+      "name": "Mercyhurst",
+      "def_rank": 33,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Harvard",
+      "slate_abbr": "HARVARD",
+      "name": "Harvard",
+      "def_rank": 34,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UT Arlington",
+      "slate_abbr": "UT ARLINGTON",
+      "name": "UT Arlington",
+      "def_rank": 35,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Drexel",
+      "slate_abbr": "DREXEL",
+      "name": "Drexel",
+      "def_rank": 36,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Minnesota",
+      "slate_abbr": "MINNESOTA",
+      "name": "Minnesota",
+      "def_rank": 37,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UC Irvine",
+      "slate_abbr": "UC IRVINE",
+      "name": "UC Irvine",
+      "def_rank": 38,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Jacksonville State",
+      "slate_abbr": "JACKSONVILLE STATE",
+      "name": "Jacksonville State",
+      "def_rank": 39,
+      "def_tier": ""
+    },
+    {
+      "def_key": "George Mason",
+      "slate_abbr": "GEORGE MASON",
+      "name": "George Mason",
+      "def_rank": 40,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Virginia",
+      "slate_abbr": "VIRGINIA",
+      "name": "Virginia",
+      "def_rank": 41,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Illinois State",
+      "slate_abbr": "ILLINOIS STATE",
+      "name": "Illinois State",
+      "def_rank": 42,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Howard",
+      "slate_abbr": "HOWARD",
+      "name": "Howard",
+      "def_rank": 43,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Saint Louis",
+      "slate_abbr": "SAINT LOUIS",
+      "name": "Saint Louis",
+      "def_rank": 44,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Davidson",
+      "slate_abbr": "DAVIDSON",
+      "name": "Davidson",
+      "def_rank": 45,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Maryland-Baltimore County",
+      "slate_abbr": "MARYLAND-BALTIMORE COUNTY",
+      "name": "Maryland-Baltimore County",
+      "def_rank": 46,
+      "def_tier": ""
+    },
+    {
+      "def_key": "East Tennessee State",
+      "slate_abbr": "EAST TENNESSEE STATE",
+      "name": "East Tennessee State",
+      "def_rank": 47,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas A&amp;M-Corpus Christi",
+      "slate_abbr": "TEXAS A&AMP;M-CORPUS CHRISTI",
+      "name": "Texas A&amp;M-Corpus Christi",
+      "def_rank": 48,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Rhode Island",
+      "slate_abbr": "RHODE ISLAND",
+      "name": "Rhode Island",
+      "def_rank": 49,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Stonehill",
+      "slate_abbr": "STONEHILL",
+      "name": "Stonehill",
+      "def_rank": 50,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Arizona",
+      "slate_abbr": "ARIZONA",
+      "name": "Arizona",
+      "def_rank": 51,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Brown",
+      "slate_abbr": "BROWN",
+      "name": "Brown",
+      "def_rank": 52,
+      "def_tier": ""
+    },
+    {
+      "def_key": "California Baptist",
+      "slate_abbr": "CALIFORNIA BAPTIST",
+      "name": "California Baptist",
+      "def_rank": 53,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Grand Canyon",
+      "slate_abbr": "GRAND CANYON",
+      "name": "Grand Canyon",
+      "def_rank": 54,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kansas",
+      "slate_abbr": "KANSAS",
+      "name": "Kansas",
+      "def_rank": 55,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Saint Peter's",
+      "slate_abbr": "SAINT PETER'S",
+      "name": "Saint Peter's",
+      "def_rank": 56,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Michigan",
+      "slate_abbr": "MICHIGAN",
+      "name": "Michigan",
+      "def_rank": 57,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Hawaii",
+      "slate_abbr": "HAWAII",
+      "name": "Hawaii",
+      "def_rank": 58,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Pacific",
+      "slate_abbr": "PACIFIC",
+      "name": "Pacific",
+      "def_rank": 59,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Maine",
+      "slate_abbr": "MAINE",
+      "name": "Maine",
+      "def_rank": 60,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Illinois-Chicago",
+      "slate_abbr": "ILLINOIS-CHICAGO",
+      "name": "Illinois-Chicago",
+      "def_rank": 61,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tennessee",
+      "slate_abbr": "TENNESSEE",
+      "name": "Tennessee",
+      "def_rank": 62,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Utah State",
+      "slate_abbr": "UTAH STATE",
+      "name": "Utah State",
+      "def_rank": 63,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Illinois",
+      "slate_abbr": "ILLINOIS",
+      "name": "Illinois",
+      "def_rank": 64,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Purdue",
+      "slate_abbr": "PURDUE",
+      "name": "Purdue",
+      "def_rank": 65,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Louisiana",
+      "slate_abbr": "LOUISIANA",
+      "name": "Louisiana",
+      "def_rank": 66,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Lamar",
+      "slate_abbr": "LAMAR",
+      "name": "Lamar",
+      "def_rank": 67,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Liberty",
+      "slate_abbr": "LIBERTY",
+      "name": "Liberty",
+      "def_rank": 68,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Hampton",
+      "slate_abbr": "HAMPTON",
+      "name": "Hampton",
+      "def_rank": 69,
+      "def_tier": ""
+    },
+    {
+      "def_key": "New Mexico",
+      "slate_abbr": "NEW MEXICO",
+      "name": "New Mexico",
+      "def_rank": 70,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Portland State",
+      "slate_abbr": "PORTLAND STATE",
+      "name": "Portland State",
+      "def_rank": 71,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Alabama",
+      "slate_abbr": "SOUTH ALABAMA",
+      "name": "South Alabama",
+      "def_rank": 72,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas-Rio Grande Valley",
+      "slate_abbr": "TEXAS-RIO GRANDE VALLEY",
+      "name": "Texas-Rio Grande Valley",
+      "def_rank": 73,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DePaul",
+      "slate_abbr": "DEPAUL",
+      "name": "DePaul",
+      "def_rank": 74,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Vermont",
+      "slate_abbr": "VERMONT",
+      "name": "Vermont",
+      "def_rank": 75,
+      "def_tier": ""
+    },
+    {
+      "def_key": "FDU",
+      "slate_abbr": "FDU",
+      "name": "FDU",
+      "def_rank": 76,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Villanova",
+      "slate_abbr": "VILLANOVA",
+      "name": "Villanova",
+      "def_rank": 77,
+      "def_tier": ""
+    },
+    {
+      "def_key": "San Diego State",
+      "slate_abbr": "SAN DIEGO STATE",
+      "name": "San Diego State",
+      "def_rank": 78,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Stony Brook",
+      "slate_abbr": "STONY BROOK",
+      "name": "Stony Brook",
+      "def_rank": 79,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southeastern Louisiana",
+      "slate_abbr": "SOUTHEASTERN LOUISIANA",
+      "name": "Southeastern Louisiana",
+      "def_rank": 80,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern Illinois",
+      "slate_abbr": "SOUTHERN ILLINOIS",
+      "name": "Southern Illinois",
+      "def_rank": 81,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UC San Diego",
+      "slate_abbr": "UC SAN DIEGO",
+      "name": "UC San Diego",
+      "def_rank": 82,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wichita State",
+      "slate_abbr": "WICHITA STATE",
+      "name": "Wichita State",
+      "def_rank": 83,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Ball State",
+      "slate_abbr": "BALL STATE",
+      "name": "Ball State",
+      "def_rank": 84,
+      "def_tier": ""
+    },
+    {
+      "def_key": "High Point",
+      "slate_abbr": "HIGH POINT",
+      "name": "High Point",
+      "def_rank": 85,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Eastern Illinois",
+      "slate_abbr": "EASTERN ILLINOIS",
+      "name": "Eastern Illinois",
+      "def_rank": 86,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Dakota State",
+      "slate_abbr": "NORTH DAKOTA STATE",
+      "name": "North Dakota State",
+      "def_rank": 87,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Furman",
+      "slate_abbr": "FURMAN",
+      "name": "Furman",
+      "def_rank": 88,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Miami (FL)",
+      "slate_abbr": "MIAMI (FL)",
+      "name": "Miami (FL)",
+      "def_rank": 89,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Temple",
+      "slate_abbr": "TEMPLE",
+      "name": "Temple",
+      "def_rank": 90,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southeast Missouri State",
+      "slate_abbr": "SOUTHEAST MISSOURI STATE",
+      "name": "Southeast Missouri State",
+      "def_rank": 91,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Carolina",
+      "slate_abbr": "NORTH CAROLINA",
+      "name": "North Carolina",
+      "def_rank": 92,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Boston College",
+      "slate_abbr": "BOSTON COLLEGE",
+      "name": "Boston College",
+      "def_rank": 93,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Saint Joseph's",
+      "slate_abbr": "SAINT JOSEPH'S",
+      "name": "Saint Joseph's",
+      "def_rank": 94,
+      "def_tier": ""
+    },
+    {
+      "def_key": "New Mexico State",
+      "slate_abbr": "NEW MEXICO STATE",
+      "name": "New Mexico State",
+      "def_rank": 95,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Valparaiso",
+      "slate_abbr": "VALPARAISO",
+      "name": "Valparaiso",
+      "def_rank": 96,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Central Connecticut State",
+      "slate_abbr": "CENTRAL CONNECTICUT STATE",
+      "name": "Central Connecticut State",
+      "def_rank": 97,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Austin Peay",
+      "slate_abbr": "AUSTIN PEAY",
+      "name": "Austin Peay",
+      "def_rank": 98,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Canisius",
+      "slate_abbr": "CANISIUS",
+      "name": "Canisius",
+      "def_rank": 99,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Colorado State",
+      "slate_abbr": "COLORADO STATE",
+      "name": "Colorado State",
+      "def_rank": 100,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Dayton",
+      "slate_abbr": "DAYTON",
+      "name": "Dayton",
+      "def_rank": 101,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas State",
+      "slate_abbr": "TEXAS STATE",
+      "name": "Texas State",
+      "def_rank": 102,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Maryland-Eastern Shore",
+      "slate_abbr": "MARYLAND-EASTERN SHORE",
+      "name": "Maryland-Eastern Shore",
+      "def_rank": 103,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Grambling",
+      "slate_abbr": "GRAMBLING",
+      "name": "Grambling",
+      "def_rank": 104,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Niagara",
+      "slate_abbr": "NIAGARA",
+      "name": "Niagara",
+      "def_rank": 105,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Abilene Christian",
+      "slate_abbr": "ABILENE CHRISTIAN",
+      "name": "Abilene Christian",
+      "def_rank": 106,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bowling Green",
+      "slate_abbr": "BOWLING GREEN",
+      "name": "Bowling Green",
+      "def_rank": 107,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida",
+      "slate_abbr": "FLORIDA",
+      "name": "Florida",
+      "def_rank": 108,
+      "def_tier": ""
+    },
+    {
+      "def_key": "La Salle",
+      "slate_abbr": "LA SALLE",
+      "name": "La Salle",
+      "def_rank": 109,
+      "def_tier": ""
+    },
+    {
+      "def_key": "St. John's (NY)",
+      "slate_abbr": "ST. JOHN'S (NY)",
+      "name": "St. John's (NY)",
+      "def_rank": 110,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Presbyterian",
+      "slate_abbr": "PRESBYTERIAN",
+      "name": "Presbyterian",
+      "def_rank": 111,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Quinnipiac",
+      "slate_abbr": "QUINNIPIAC",
+      "name": "Quinnipiac",
+      "def_rank": 112,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Yale",
+      "slate_abbr": "YALE",
+      "name": "Yale",
+      "def_rank": 113,
+      "def_tier": ""
+    },
+    {
+      "def_key": "American",
+      "slate_abbr": "AMERICAN",
+      "name": "American",
+      "def_rank": 114,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Monmouth",
+      "slate_abbr": "MONMOUTH",
+      "name": "Monmouth",
+      "def_rank": 115,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Alabama A&amp;M",
+      "slate_abbr": "ALABAMA A&AMP;M",
+      "name": "Alabama A&amp;M",
+      "def_rank": 116,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Pittsburgh",
+      "slate_abbr": "PITTSBURGH",
+      "name": "Pittsburgh",
+      "def_rank": 117,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UTEP",
+      "slate_abbr": "UTEP",
+      "name": "UTEP",
+      "def_rank": 118,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Delaware State",
+      "slate_abbr": "DELAWARE STATE",
+      "name": "Delaware State",
+      "def_rank": 119,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Louisville",
+      "slate_abbr": "LOUISVILLE",
+      "name": "Louisville",
+      "def_rank": 120,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UCLA",
+      "slate_abbr": "UCLA",
+      "name": "UCLA",
+      "def_rank": 121,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TCU",
+      "slate_abbr": "TCU",
+      "name": "TCU",
+      "def_rank": 122,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mount St. Mary's",
+      "slate_abbr": "MOUNT ST. MARY'S",
+      "name": "Mount St. Mary's",
+      "def_rank": 123,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Montana State",
+      "slate_abbr": "MONTANA STATE",
+      "name": "Montana State",
+      "def_rank": 124,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNC Asheville",
+      "slate_abbr": "UNC ASHEVILLE",
+      "name": "UNC Asheville",
+      "def_rank": 125,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Nevada",
+      "slate_abbr": "NEVADA",
+      "name": "Nevada",
+      "def_rank": 126,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Santa Clara",
+      "slate_abbr": "SANTA CLARA",
+      "name": "Santa Clara",
+      "def_rank": 127,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Coastal Carolina",
+      "slate_abbr": "COASTAL CAROLINA",
+      "name": "Coastal Carolina",
+      "def_rank": 128,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Washington",
+      "slate_abbr": "WASHINGTON",
+      "name": "Washington",
+      "def_rank": 129,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Indiana",
+      "slate_abbr": "INDIANA",
+      "name": "Indiana",
+      "def_rank": 130,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Columbia",
+      "slate_abbr": "COLUMBIA",
+      "name": "Columbia",
+      "def_rank": 131,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bradley",
+      "slate_abbr": "BRADLEY",
+      "name": "Bradley",
+      "def_rank": 132,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas Tech",
+      "slate_abbr": "TEXAS TECH",
+      "name": "Texas Tech",
+      "def_rank": 133,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Long Island University",
+      "slate_abbr": "LONG ISLAND UNIVERSITY",
+      "name": "Long Island University",
+      "def_rank": 134,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Belmont",
+      "slate_abbr": "BELMONT",
+      "name": "Belmont",
+      "def_rank": 135,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Stanford",
+      "slate_abbr": "STANFORD",
+      "name": "Stanford",
+      "def_rank": 136,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Loyola Marymount",
+      "slate_abbr": "LOYOLA MARYMOUNT",
+      "name": "Loyola Marymount",
+      "def_rank": 137,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Norfolk State",
+      "slate_abbr": "NORFOLK STATE",
+      "name": "Norfolk State",
+      "def_rank": 138,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bryant",
+      "slate_abbr": "BRYANT",
+      "name": "Bryant",
+      "def_rank": 139,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Delaware",
+      "slate_abbr": "DELAWARE",
+      "name": "Delaware",
+      "def_rank": 140,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Fairfield",
+      "slate_abbr": "FAIRFIELD",
+      "name": "Fairfield",
+      "def_rank": 141,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Princeton",
+      "slate_abbr": "PRINCETON",
+      "name": "Princeton",
+      "def_rank": 142,
+      "def_tier": ""
+    },
+    {
+      "def_key": "California",
+      "slate_abbr": "CALIFORNIA",
+      "name": "California",
+      "def_rank": 143,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kentucky",
+      "slate_abbr": "KENTUCKY",
+      "name": "Kentucky",
+      "def_rank": 144,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Houston Christian",
+      "slate_abbr": "HOUSTON CHRISTIAN",
+      "name": "Houston Christian",
+      "def_rank": 145,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Iona",
+      "slate_abbr": "IONA",
+      "name": "Iona",
+      "def_rank": 146,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tarleton State",
+      "slate_abbr": "TARLETON STATE",
+      "name": "Tarleton State",
+      "def_rank": 147,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Fresno State",
+      "slate_abbr": "FRESNO STATE",
+      "name": "Fresno State",
+      "def_rank": 148,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Middle Tennessee",
+      "slate_abbr": "MIDDLE TENNESSEE",
+      "name": "Middle Tennessee",
+      "def_rank": 149,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wright State",
+      "slate_abbr": "WRIGHT STATE",
+      "name": "Wright State",
+      "def_rank": 150,
+      "def_tier": ""
+    },
+    {
+      "def_key": "St. Thomas",
+      "slate_abbr": "ST. THOMAS",
+      "name": "St. Thomas",
+      "def_rank": 151,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Dakota State",
+      "slate_abbr": "SOUTH DAKOTA STATE",
+      "name": "South Dakota State",
+      "def_rank": 152,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tulsa",
+      "slate_abbr": "TULSA",
+      "name": "Tulsa",
+      "def_rank": 153,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northwestern",
+      "slate_abbr": "NORTHWESTERN",
+      "name": "Northwestern",
+      "def_rank": 154,
+      "def_tier": ""
+    },
+    {
+      "def_key": "College of Charleston",
+      "slate_abbr": "COLLEGE OF CHARLESTON",
+      "name": "College of Charleston",
+      "def_rank": 155,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Georgetown",
+      "slate_abbr": "GEORGETOWN",
+      "name": "Georgetown",
+      "def_rank": 156,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Jacksonville",
+      "slate_abbr": "JACKSONVILLE",
+      "name": "Jacksonville",
+      "def_rank": 157,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Virginia Commonwealth",
+      "slate_abbr": "VIRGINIA COMMONWEALTH",
+      "name": "Virginia Commonwealth",
+      "def_rank": 158,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wagner",
+      "slate_abbr": "WAGNER",
+      "name": "Wagner",
+      "def_rank": 159,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Utah Tech",
+      "slate_abbr": "UTAH TECH",
+      "name": "Utah Tech",
+      "def_rank": 160,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Youngstown State",
+      "slate_abbr": "YOUNGSTOWN STATE",
+      "name": "Youngstown State",
+      "def_rank": 161,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wyoming",
+      "slate_abbr": "WYOMING",
+      "name": "Wyoming",
+      "def_rank": 162,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Albany (NY)",
+      "slate_abbr": "ALBANY (NY)",
+      "name": "Albany (NY)",
+      "def_rank": 163,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Syracuse",
+      "slate_abbr": "SYRACUSE",
+      "name": "Syracuse",
+      "def_rank": 164,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Ohio State",
+      "slate_abbr": "OHIO STATE",
+      "name": "Ohio State",
+      "def_rank": 165,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Lindenwood",
+      "slate_abbr": "LINDENWOOD",
+      "name": "Lindenwood",
+      "def_rank": 166,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Holy Cross",
+      "slate_abbr": "HOLY CROSS",
+      "name": "Holy Cross",
+      "def_rank": 167,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Notre Dame",
+      "slate_abbr": "NOTRE DAME",
+      "name": "Notre Dame",
+      "def_rank": 168,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Eastern Michigan",
+      "slate_abbr": "EASTERN MICHIGAN",
+      "name": "Eastern Michigan",
+      "def_rank": 169,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oregon State",
+      "slate_abbr": "OREGON STATE",
+      "name": "Oregon State",
+      "def_rank": 170,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tulane",
+      "slate_abbr": "TULANE",
+      "name": "Tulane",
+      "def_rank": 171,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern Indiana",
+      "slate_abbr": "SOUTHERN INDIANA",
+      "name": "Southern Indiana",
+      "def_rank": 172,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Missouri State",
+      "slate_abbr": "MISSOURI STATE",
+      "name": "Missouri State",
+      "def_rank": 173,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern Mississippi",
+      "slate_abbr": "SOUTHERN MISSISSIPPI",
+      "name": "Southern Mississippi",
+      "def_rank": 174,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Charlotte",
+      "slate_abbr": "CHARLOTTE",
+      "name": "Charlotte",
+      "def_rank": 175,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Le Moyne",
+      "slate_abbr": "LE MOYNE",
+      "name": "Le Moyne",
+      "def_rank": 176,
+      "def_tier": ""
+    },
+    {
+      "def_key": "George Washington",
+      "slate_abbr": "GEORGE WASHINGTON",
+      "name": "George Washington",
+      "def_rank": 177,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UC Santa Barbara",
+      "slate_abbr": "UC SANTA BARBARA",
+      "name": "UC Santa Barbara",
+      "def_rank": 178,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northwestern State",
+      "slate_abbr": "NORTHWESTERN STATE",
+      "name": "Northwestern State",
+      "def_rank": 179,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Robert Morris",
+      "slate_abbr": "ROBERT MORRIS",
+      "name": "Robert Morris",
+      "def_rank": 180,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NJIT",
+      "slate_abbr": "NJIT",
+      "name": "NJIT",
+      "def_rank": 181,
+      "def_tier": ""
+    },
+    {
+      "def_key": "San Francisco",
+      "slate_abbr": "SAN FRANCISCO",
+      "name": "San Francisco",
+      "def_rank": 182,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Vanderbilt",
+      "slate_abbr": "VANDERBILT",
+      "name": "Vanderbilt",
+      "def_rank": 183,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Longwood",
+      "slate_abbr": "LONGWOOD",
+      "name": "Longwood",
+      "def_rank": 184,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NC State",
+      "slate_abbr": "NC STATE",
+      "name": "NC State",
+      "def_rank": 185,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UAB",
+      "slate_abbr": "UAB",
+      "name": "UAB",
+      "def_rank": 186,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Central Arkansas",
+      "slate_abbr": "CENTRAL ARKANSAS",
+      "name": "Central Arkansas",
+      "def_rank": 187,
+      "def_tier": ""
+    },
+    {
+      "def_key": "New Hampshire",
+      "slate_abbr": "NEW HAMPSHIRE",
+      "name": "New Hampshire",
+      "def_rank": 188,
+      "def_tier": ""
+    },
+    {
+      "def_key": "James Madison",
+      "slate_abbr": "JAMES MADISON",
+      "name": "James Madison",
+      "def_rank": 189,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Sam Houston",
+      "slate_abbr": "SAM HOUSTON",
+      "name": "Sam Houston",
+      "def_rank": 190,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Montana",
+      "slate_abbr": "MONTANA",
+      "name": "Montana",
+      "def_rank": 191,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Idaho",
+      "slate_abbr": "IDAHO",
+      "name": "Idaho",
+      "def_rank": 192,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Virginia Tech",
+      "slate_abbr": "VIRGINIA TECH",
+      "name": "Virginia Tech",
+      "def_rank": 193,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Georgia State",
+      "slate_abbr": "GEORGIA STATE",
+      "name": "Georgia State",
+      "def_rank": 194,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oregon",
+      "slate_abbr": "OREGON",
+      "name": "Oregon",
+      "def_rank": 195,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Richmond",
+      "slate_abbr": "RICHMOND",
+      "name": "Richmond",
+      "def_rank": 196,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Lafayette",
+      "slate_abbr": "LAFAYETTE",
+      "name": "Lafayette",
+      "def_rank": 197,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Colgate",
+      "slate_abbr": "COLGATE",
+      "name": "Colgate",
+      "def_rank": 198,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Little Rock",
+      "slate_abbr": "LITTLE ROCK",
+      "name": "Little Rock",
+      "def_rank": 199,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tennessee Tech",
+      "slate_abbr": "TENNESSEE TECH",
+      "name": "Tennessee Tech",
+      "def_rank": 200,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Memphis",
+      "slate_abbr": "MEMPHIS",
+      "name": "Memphis",
+      "def_rank": 201,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Brigham Young",
+      "slate_abbr": "BRIGHAM YOUNG",
+      "name": "Brigham Young",
+      "def_rank": 202,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Chattanooga",
+      "slate_abbr": "CHATTANOOGA",
+      "name": "Chattanooga",
+      "def_rank": 203,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Boise State",
+      "slate_abbr": "BOISE STATE",
+      "name": "Boise State",
+      "def_rank": 204,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Troy",
+      "slate_abbr": "TROY",
+      "name": "Troy",
+      "def_rank": 205,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida Atlantic",
+      "slate_abbr": "FLORIDA ATLANTIC",
+      "name": "Florida Atlantic",
+      "def_rank": 206,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Akron",
+      "slate_abbr": "AKRON",
+      "name": "Akron",
+      "def_rank": 207,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Carolina Upstate",
+      "slate_abbr": "SOUTH CAROLINA UPSTATE",
+      "name": "South Carolina Upstate",
+      "def_rank": 208,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Miami (OH)",
+      "slate_abbr": "MIAMI (OH)",
+      "name": "Miami (OH)",
+      "def_rank": 209,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Pennsylvania",
+      "slate_abbr": "PENNSYLVANIA",
+      "name": "Pennsylvania",
+      "def_rank": 210,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mississippi",
+      "slate_abbr": "MISSISSIPPI",
+      "name": "Mississippi",
+      "def_rank": 211,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Winthrop",
+      "slate_abbr": "WINTHROP",
+      "name": "Winthrop",
+      "def_rank": 212,
+      "def_tier": ""
+    },
+    {
+      "def_key": "East Texas A&amp;M",
+      "slate_abbr": "EAST TEXAS A&AMP;M",
+      "name": "East Texas A&amp;M",
+      "def_rank": 213,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Incarnate Word",
+      "slate_abbr": "INCARNATE WORD",
+      "name": "Incarnate Word",
+      "def_rank": 214,
+      "def_tier": ""
+    },
+    {
+      "def_key": "St. Bonaventure",
+      "slate_abbr": "ST. BONAVENTURE",
+      "name": "St. Bonaventure",
+      "def_rank": 215,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Boston University",
+      "slate_abbr": "BOSTON UNIVERSITY",
+      "name": "Boston University",
+      "def_rank": 216,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UC Davis",
+      "slate_abbr": "UC DAVIS",
+      "name": "UC Davis",
+      "def_rank": 217,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Dartmouth",
+      "slate_abbr": "DARTMOUTH",
+      "name": "Dartmouth",
+      "def_rank": 218,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Rice",
+      "slate_abbr": "RICE",
+      "name": "Rice",
+      "def_rank": 219,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Buffalo",
+      "slate_abbr": "BUFFALO",
+      "name": "Buffalo",
+      "def_rank": 220,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Western Kentucky",
+      "slate_abbr": "WESTERN KENTUCKY",
+      "name": "Western Kentucky",
+      "def_rank": 221,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Lehigh",
+      "slate_abbr": "LEHIGH",
+      "name": "Lehigh",
+      "def_rank": 222,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Morehead State",
+      "slate_abbr": "MOREHEAD STATE",
+      "name": "Morehead State",
+      "def_rank": 223,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Green Bay",
+      "slate_abbr": "GREEN BAY",
+      "name": "Green Bay",
+      "def_rank": 224,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Drake",
+      "slate_abbr": "DRAKE",
+      "name": "Drake",
+      "def_rank": 225,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Missouri",
+      "slate_abbr": "MISSOURI",
+      "name": "Missouri",
+      "def_rank": 226,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Samford",
+      "slate_abbr": "SAMFORD",
+      "name": "Samford",
+      "def_rank": 227,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Lipscomb",
+      "slate_abbr": "LIPSCOMB",
+      "name": "Lipscomb",
+      "def_rank": 228,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mercer",
+      "slate_abbr": "MERCER",
+      "name": "Mercer",
+      "def_rank": 229,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas",
+      "slate_abbr": "TEXAS",
+      "name": "Texas",
+      "def_rank": 230,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Tennessee State",
+      "slate_abbr": "TENNESSEE STATE",
+      "name": "Tennessee State",
+      "def_rank": 231,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Binghamton",
+      "slate_abbr": "BINGHAMTON",
+      "name": "Binghamton",
+      "def_rank": 232,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Indiana State",
+      "slate_abbr": "INDIANA STATE",
+      "name": "Indiana State",
+      "def_rank": 233,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Rutgers",
+      "slate_abbr": "RUTGERS",
+      "name": "Rutgers",
+      "def_rank": 234,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Creighton",
+      "slate_abbr": "CREIGHTON",
+      "name": "Creighton",
+      "def_rank": 235,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Evansville",
+      "slate_abbr": "EVANSVILLE",
+      "name": "Evansville",
+      "def_rank": 236,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Idaho State",
+      "slate_abbr": "IDAHO STATE",
+      "name": "Idaho State",
+      "def_rank": 237,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida A&amp;M",
+      "slate_abbr": "FLORIDA A&AMP;M",
+      "name": "Florida A&amp;M",
+      "def_rank": 238,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Chicago State",
+      "slate_abbr": "CHICAGO STATE",
+      "name": "Chicago State",
+      "def_rank": 239,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Duquesne",
+      "slate_abbr": "DUQUESNE",
+      "name": "Duquesne",
+      "def_rank": 240,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wisconsin",
+      "slate_abbr": "WISCONSIN",
+      "name": "Wisconsin",
+      "def_rank": 241,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northern Arizona",
+      "slate_abbr": "NORTHERN ARIZONA",
+      "name": "Northern Arizona",
+      "def_rank": 242,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Carolina A&amp;T",
+      "slate_abbr": "NORTH CAROLINA A&AMP;T",
+      "name": "North Carolina A&amp;T",
+      "def_rank": 243,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northern Illinois",
+      "slate_abbr": "NORTHERN ILLINOIS",
+      "name": "Northern Illinois",
+      "def_rank": 244,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Louisiana State",
+      "slate_abbr": "LOUISIANA STATE",
+      "name": "Louisiana State",
+      "def_rank": 245,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Baylor",
+      "slate_abbr": "BAYLOR",
+      "name": "Baylor",
+      "def_rank": 246,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kennesaw State",
+      "slate_abbr": "KENNESAW STATE",
+      "name": "Kennesaw State",
+      "def_rank": 247,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Rider",
+      "slate_abbr": "RIDER",
+      "name": "Rider",
+      "def_rank": 248,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Carolina",
+      "slate_abbr": "SOUTH CAROLINA",
+      "name": "South Carolina",
+      "def_rank": 249,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern California",
+      "slate_abbr": "SOUTHERN CALIFORNIA",
+      "name": "Southern California",
+      "def_rank": 250,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Massachusetts-Lowell",
+      "slate_abbr": "MASSACHUSETTS-LOWELL",
+      "name": "Massachusetts-Lowell",
+      "def_rank": 251,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northern Kentucky",
+      "slate_abbr": "NORTHERN KENTUCKY",
+      "name": "Northern Kentucky",
+      "def_rank": 252,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Central Michigan",
+      "slate_abbr": "CENTRAL MICHIGAN",
+      "name": "Central Michigan",
+      "def_rank": 253,
+      "def_tier": ""
+    },
+    {
+      "def_key": "East Carolina",
+      "slate_abbr": "EAST CAROLINA",
+      "name": "East Carolina",
+      "def_rank": 254,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Ohio",
+      "slate_abbr": "OHIO",
+      "name": "Ohio",
+      "def_rank": 255,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Western Illinois",
+      "slate_abbr": "WESTERN ILLINOIS",
+      "name": "Western Illinois",
+      "def_rank": 256,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northern Colorado",
+      "slate_abbr": "NORTHERN COLORADO",
+      "name": "Northern Colorado",
+      "def_rank": 257,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Long Beach State",
+      "slate_abbr": "LONG BEACH STATE",
+      "name": "Long Beach State",
+      "def_rank": 258,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Nicholls State",
+      "slate_abbr": "NICHOLLS STATE",
+      "name": "Nicholls State",
+      "def_rank": 259,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Marshall",
+      "slate_abbr": "MARSHALL",
+      "name": "Marshall",
+      "def_rank": 260,
+      "def_tier": ""
+    },
+    {
+      "def_key": "The Citadel",
+      "slate_abbr": "THE CITADEL",
+      "name": "The Citadel",
+      "def_rank": 261,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Omaha",
+      "slate_abbr": "OMAHA",
+      "name": "Omaha",
+      "def_rank": 262,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wofford",
+      "slate_abbr": "WOFFORD",
+      "name": "Wofford",
+      "def_rank": 263,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bucknell",
+      "slate_abbr": "BUCKNELL",
+      "name": "Bucknell",
+      "def_rank": 264,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Old Dominion",
+      "slate_abbr": "OLD DOMINION",
+      "name": "Old Dominion",
+      "def_rank": 265,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Weber State",
+      "slate_abbr": "WEBER STATE",
+      "name": "Weber State",
+      "def_rank": 266,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Carolina Central",
+      "slate_abbr": "NORTH CAROLINA CENTRAL",
+      "name": "North Carolina Central",
+      "def_rank": 267,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Loyola (MD)",
+      "slate_abbr": "LOYOLA (MD)",
+      "name": "Loyola (MD)",
+      "def_rank": 268,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bethune-Cookman",
+      "slate_abbr": "BETHUNE-COOKMAN",
+      "name": "Bethune-Cookman",
+      "def_rank": 269,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UCF",
+      "slate_abbr": "UCF",
+      "name": "UCF",
+      "def_rank": 270,
+      "def_tier": ""
+    },
+    {
+      "def_key": "William &amp; Mary",
+      "slate_abbr": "WILLIAM &AMP; MARY",
+      "name": "William &amp; Mary",
+      "def_rank": 271,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Butler",
+      "slate_abbr": "BUTLER",
+      "name": "Butler",
+      "def_rank": 272,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Wake Forest",
+      "slate_abbr": "WAKE FOREST",
+      "name": "Wake Forest",
+      "def_rank": 273,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Purdue Fort Wayne",
+      "slate_abbr": "PURDUE FORT WAYNE",
+      "name": "Purdue Fort Wayne",
+      "def_rank": 274,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Loyola (IL)",
+      "slate_abbr": "LOYOLA (IL)",
+      "name": "Loyola (IL)",
+      "def_rank": 275,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Massachusetts",
+      "slate_abbr": "MASSACHUSETTS",
+      "name": "Massachusetts",
+      "def_rank": 276,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Georgia Tech",
+      "slate_abbr": "GEORGIA TECH",
+      "name": "Georgia Tech",
+      "def_rank": 277,
+      "def_tier": ""
+    },
+    {
+      "def_key": "San Jose State",
+      "slate_abbr": "SAN JOSE STATE",
+      "name": "San Jose State",
+      "def_rank": 278,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Sacred Heart",
+      "slate_abbr": "SACRED HEART",
+      "name": "Sacred Heart",
+      "def_rank": 279,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UC Riverside",
+      "slate_abbr": "UC RIVERSIDE",
+      "name": "UC Riverside",
+      "def_rank": 280,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Army",
+      "slate_abbr": "ARMY",
+      "name": "Army",
+      "def_rank": 281,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Toledo",
+      "slate_abbr": "TOLEDO",
+      "name": "Toledo",
+      "def_rank": 282,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Maryland",
+      "slate_abbr": "MARYLAND",
+      "name": "Maryland",
+      "def_rank": 283,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Arkansas State",
+      "slate_abbr": "ARKANSAS STATE",
+      "name": "Arkansas State",
+      "def_rank": 284,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern Methodist",
+      "slate_abbr": "SOUTHERN METHODIST",
+      "name": "Southern Methodist",
+      "def_rank": 285,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Alabama State",
+      "slate_abbr": "ALABAMA STATE",
+      "name": "Alabama State",
+      "def_rank": 286,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Dakota",
+      "slate_abbr": "NORTH DAKOTA",
+      "name": "North Dakota",
+      "def_rank": 287,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Washington State",
+      "slate_abbr": "WASHINGTON STATE",
+      "name": "Washington State",
+      "def_rank": 288,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Marquette",
+      "slate_abbr": "MARQUETTE",
+      "name": "Marquette",
+      "def_rank": 289,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida State",
+      "slate_abbr": "FLORIDA STATE",
+      "name": "Florida State",
+      "def_rank": 290,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida International",
+      "slate_abbr": "FLORIDA INTERNATIONAL",
+      "name": "Florida International",
+      "def_rank": 291,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Florida Gulf Coast",
+      "slate_abbr": "FLORIDA GULF COAST",
+      "name": "Florida Gulf Coast",
+      "def_rank": 292,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Florida",
+      "slate_abbr": "SOUTH FLORIDA",
+      "name": "South Florida",
+      "def_rank": 293,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oklahoma",
+      "slate_abbr": "OKLAHOMA",
+      "name": "Oklahoma",
+      "def_rank": 294,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Colorado",
+      "slate_abbr": "COLORADO",
+      "name": "Colorado",
+      "def_rank": 295,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Morgan State",
+      "slate_abbr": "MORGAN STATE",
+      "name": "Morgan State",
+      "def_rank": 296,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas A&amp;M",
+      "slate_abbr": "TEXAS A&AMP;M",
+      "name": "Texas A&amp;M",
+      "def_rank": 297,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oral Roberts",
+      "slate_abbr": "ORAL ROBERTS",
+      "name": "Oral Roberts",
+      "def_rank": 298,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Western Carolina",
+      "slate_abbr": "WESTERN CAROLINA",
+      "name": "Western Carolina",
+      "def_rank": 299,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern",
+      "slate_abbr": "SOUTHERN",
+      "name": "Southern",
+      "def_rank": 300,
+      "def_tier": ""
+    },
+    {
+      "def_key": "San Diego",
+      "slate_abbr": "SAN DIEGO",
+      "name": "San Diego",
+      "def_rank": 301,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Arkansas",
+      "slate_abbr": "ARKANSAS",
+      "name": "Arkansas",
+      "def_rank": 302,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Alabama",
+      "slate_abbr": "NORTH ALABAMA",
+      "name": "North Alabama",
+      "def_rank": 303,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Georgia",
+      "slate_abbr": "GEORGIA",
+      "name": "Georgia",
+      "def_rank": 304,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Utah",
+      "slate_abbr": "UTAH",
+      "name": "Utah",
+      "def_rank": 305,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Texas Southern",
+      "slate_abbr": "TEXAS SOUTHERN",
+      "name": "Texas Southern",
+      "def_rank": 306,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Arizona State",
+      "slate_abbr": "ARIZONA STATE",
+      "name": "Arizona State",
+      "def_rank": 307,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Campbell",
+      "slate_abbr": "CAMPBELL",
+      "name": "Campbell",
+      "def_rank": 308,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Radford",
+      "slate_abbr": "RADFORD",
+      "name": "Radford",
+      "def_rank": 309,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Nevada-Las Vegas",
+      "slate_abbr": "NEVADA-LAS VEGAS",
+      "name": "Nevada-Las Vegas",
+      "def_rank": 310,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Detroit Mercy",
+      "slate_abbr": "DETROIT MERCY",
+      "name": "Detroit Mercy",
+      "def_rank": 311,
+      "def_tier": ""
+    },
+    {
+      "def_key": "New Orleans",
+      "slate_abbr": "NEW ORLEANS",
+      "name": "New Orleans",
+      "def_rank": 312,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Portland",
+      "slate_abbr": "PORTLAND",
+      "name": "Portland",
+      "def_rank": 313,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Elon",
+      "slate_abbr": "ELON",
+      "name": "Elon",
+      "def_rank": 314,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cal State Northridge",
+      "slate_abbr": "CAL STATE NORTHRIDGE",
+      "name": "Cal State Northridge",
+      "def_rank": 315,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Xavier",
+      "slate_abbr": "XAVIER",
+      "name": "Xavier",
+      "def_rank": 316,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Murray State",
+      "slate_abbr": "MURRAY STATE",
+      "name": "Murray State",
+      "def_rank": 317,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Auburn",
+      "slate_abbr": "AUBURN",
+      "name": "Auburn",
+      "def_rank": 318,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mississippi State",
+      "slate_abbr": "MISSISSIPPI STATE",
+      "name": "Mississippi State",
+      "def_rank": 319,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Pepperdine",
+      "slate_abbr": "PEPPERDINE",
+      "name": "Pepperdine",
+      "def_rank": 320,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Penn State",
+      "slate_abbr": "PENN STATE",
+      "name": "Penn State",
+      "def_rank": 321,
+      "def_tier": ""
+    },
+    {
+      "def_key": "VMI",
+      "slate_abbr": "VMI",
+      "name": "VMI",
+      "def_rank": 322,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kent State",
+      "slate_abbr": "KENT STATE",
+      "name": "Kent State",
+      "def_rank": 323,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Manhattan",
+      "slate_abbr": "MANHATTAN",
+      "name": "Manhattan",
+      "def_rank": 324,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Eastern Washington",
+      "slate_abbr": "EASTERN WASHINGTON",
+      "name": "Eastern Washington",
+      "def_rank": 325,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Prairie View",
+      "slate_abbr": "PRAIRIE VIEW",
+      "name": "Prairie View",
+      "def_rank": 326,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Georgia Southern",
+      "slate_abbr": "GEORGIA SOUTHERN",
+      "name": "Georgia Southern",
+      "def_rank": 327,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Southern Utah",
+      "slate_abbr": "SOUTHERN UTAH",
+      "name": "Southern Utah",
+      "def_rank": 328,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Western Michigan",
+      "slate_abbr": "WESTERN MICHIGAN",
+      "name": "Western Michigan",
+      "def_rank": 329,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UTSA",
+      "slate_abbr": "UTSA",
+      "name": "UTSA",
+      "def_rank": 330,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Charleston Southern",
+      "slate_abbr": "CHARLESTON SOUTHERN",
+      "name": "Charleston Southern",
+      "def_rank": 331,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Milwaukee",
+      "slate_abbr": "MILWAUKEE",
+      "name": "Milwaukee",
+      "def_rank": 332,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Carolina State",
+      "slate_abbr": "SOUTH CAROLINA STATE",
+      "name": "South Carolina State",
+      "def_rank": 333,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Air Force",
+      "slate_abbr": "AIR FORCE",
+      "name": "Air Force",
+      "def_rank": 334,
+      "def_tier": ""
+    },
+    {
+      "def_key": "West Georgia",
+      "slate_abbr": "WEST GEORGIA",
+      "name": "West Georgia",
+      "def_rank": 335,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Stetson",
+      "slate_abbr": "STETSON",
+      "name": "Stetson",
+      "def_rank": 336,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Coppin State",
+      "slate_abbr": "COPPIN STATE",
+      "name": "Coppin State",
+      "def_rank": 337,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cal State Bakersfield",
+      "slate_abbr": "CAL STATE BAKERSFIELD",
+      "name": "Cal State Bakersfield",
+      "def_rank": 338,
+      "def_tier": ""
+    },
+    {
+      "def_key": "UNC Greensboro",
+      "slate_abbr": "UNC GREENSBORO",
+      "name": "UNC Greensboro",
+      "def_rank": 339,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Northeastern",
+      "slate_abbr": "NORTHEASTERN",
+      "name": "Northeastern",
+      "def_rank": 340,
+      "def_tier": ""
+    },
+    {
+      "def_key": "South Dakota",
+      "slate_abbr": "SOUTH DAKOTA",
+      "name": "South Dakota",
+      "def_rank": 341,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Eastern Kentucky",
+      "slate_abbr": "EASTERN KENTUCKY",
+      "name": "Eastern Kentucky",
+      "def_rank": 342,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Saint Francis (PA)",
+      "slate_abbr": "SAINT FRANCIS (PA)",
+      "name": "Saint Francis (PA)",
+      "def_rank": 343,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kansas State",
+      "slate_abbr": "KANSAS STATE",
+      "name": "Kansas State",
+      "def_rank": 344,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oklahoma State",
+      "slate_abbr": "OKLAHOMA STATE",
+      "name": "Oklahoma State",
+      "def_rank": 345,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Bellarmine",
+      "slate_abbr": "BELLARMINE",
+      "name": "Bellarmine",
+      "def_rank": 346,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Alcorn State",
+      "slate_abbr": "ALCORN STATE",
+      "name": "Alcorn State",
+      "def_rank": 347,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Oakland",
+      "slate_abbr": "OAKLAND",
+      "name": "Oakland",
+      "def_rank": 348,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Denver",
+      "slate_abbr": "DENVER",
+      "name": "Denver",
+      "def_rank": 349,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Arkansas-Pine Bluff",
+      "slate_abbr": "ARKANSAS-PINE BLUFF",
+      "name": "Arkansas-Pine Bluff",
+      "def_rank": 350,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cal State Fullerton",
+      "slate_abbr": "CAL STATE FULLERTON",
+      "name": "Cal State Fullerton",
+      "def_rank": 351,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Sacramento State",
+      "slate_abbr": "SACRAMENTO STATE",
+      "name": "Sacramento State",
+      "def_rank": 352,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Queens (NC)",
+      "slate_abbr": "QUEENS (NC)",
+      "name": "Queens (NC)",
+      "def_rank": 353,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cornell",
+      "slate_abbr": "CORNELL",
+      "name": "Cornell",
+      "def_rank": 354,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Louisiana-Monroe",
+      "slate_abbr": "LOUISIANA-MONROE",
+      "name": "Louisiana-Monroe",
+      "def_rank": 355,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Alabama",
+      "slate_abbr": "ALABAMA",
+      "name": "Alabama",
+      "def_rank": 356,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Kansas City",
+      "slate_abbr": "KANSAS CITY",
+      "name": "Kansas City",
+      "def_rank": 357,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Mississippi Valley State",
+      "slate_abbr": "MISSISSIPPI VALLEY STATE",
+      "name": "Mississippi Valley State",
+      "def_rank": 358,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Providence",
+      "slate_abbr": "PROVIDENCE",
+      "name": "Providence",
+      "def_rank": 359,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cal Poly",
+      "slate_abbr": "CAL POLY",
+      "name": "Cal Poly",
+      "def_rank": 360,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Jackson State",
+      "slate_abbr": "JACKSON STATE",
+      "name": "Jackson State",
+      "def_rank": 361,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Cleveland State",
+      "slate_abbr": "CLEVELAND STATE",
+      "name": "Cleveland State",
+      "def_rank": 362,
+      "def_tier": ""
+    },
+    {
+      "def_key": "Gardner-Webb",
+      "slate_abbr": "GARDNER-WEBB",
+      "name": "Gardner-Webb",
+      "def_rank": 363,
+      "def_tier": ""
+    },
+    {
+      "def_key": "IU Indy",
+      "slate_abbr": "IU INDY",
+      "name": "IU Indy",
+      "def_rank": 364,
+      "def_tier": ""
+    },
+    {
+      "def_key": "North Florida",
+      "slate_abbr": "NORTH FLORIDA",
+      "name": "North Florida",
+      "def_rank": 365,
+      "def_tier": ""
+    }
+  ],
+  "matchups": {},
+  "players_by_team_cat": {},
+  "edge_legend": {
+    "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
+    "OK_EDGE": "Solid vs average-or-softer defense.",
+    "NEUTRAL": "No clear edge.",
+    "AVOID": "Elite defense with below-threshold production."
+  }
+}

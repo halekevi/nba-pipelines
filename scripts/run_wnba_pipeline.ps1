@@ -403,10 +403,10 @@ if ($ok) {
 }
 
 if ($ok) {
-    $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
+    $MeScript = Join-Path $Root "scripts\build_matchup_edge_json.py"
     if (Test-Path -LiteralPath $MeScript) {
         Push-Location $Root
-        try { & py -3.14 $MeScript --slate "$WnbaRunOutDir\step6_wnba_context.csv" | Out-Null } finally { Pop-Location }
+        try { & py -3.14 $MeScript --sport wnba --slate "$WnbaRunOutDir\step6_wnba_context.csv" | Out-Null } finally { Pop-Location }
     }
 }
 

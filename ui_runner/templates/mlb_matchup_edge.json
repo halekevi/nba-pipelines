@@ -1,0 +1,251 @@
+{
+  "sport": "mlb",
+  "display_name": "MLB",
+  "generated_at": "2026-05-28T01:21:00.756328+00:00",
+  "n_teams": 30,
+  "elite_rank_cut": 4,
+  "weak_rank_cut": 20,
+  "opp_metric_label": "Opp pitching rank",
+  "categories": [
+    {
+      "id": "hits",
+      "label": "Hits",
+      "threshold": 1.0
+    },
+    {
+      "id": "total_bases",
+      "label": "Total bases",
+      "threshold": 1.5
+    },
+    {
+      "id": "strikeouts",
+      "label": "Strikeouts (pitcher)",
+      "threshold": 4.0
+    },
+    {
+      "id": "home_runs",
+      "label": "Home runs",
+      "threshold": 0.5
+    }
+  ],
+  "teams": [
+    {
+      "def_key": "NYY",
+      "slate_abbr": "NYY",
+      "name": "NYY",
+      "def_rank": 1,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "ATL",
+      "slate_abbr": "ATL",
+      "name": "ATL",
+      "def_rank": 3,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "LAD",
+      "slate_abbr": "LAD",
+      "name": "LAD",
+      "def_rank": 2,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "MIL",
+      "slate_abbr": "MIL",
+      "name": "MIL",
+      "def_rank": 7,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "TEX",
+      "slate_abbr": "TEX",
+      "name": "TEX",
+      "def_rank": 5,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "TB",
+      "slate_abbr": "TB",
+      "name": "TB",
+      "def_rank": 4,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "PIT",
+      "slate_abbr": "PIT",
+      "name": "PIT",
+      "def_rank": 6,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "SEA",
+      "slate_abbr": "SEA",
+      "name": "SEA",
+      "def_rank": 10,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "DET",
+      "slate_abbr": "DET",
+      "name": "DET",
+      "def_rank": 12,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "MIA",
+      "slate_abbr": "MIA",
+      "name": "MIA",
+      "def_rank": 9,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "SF",
+      "slate_abbr": "SF",
+      "name": "SF",
+      "def_rank": 14,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "NYM",
+      "slate_abbr": "NYM",
+      "name": "NYM",
+      "def_rank": 11,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "CHC",
+      "slate_abbr": "CHC",
+      "name": "CHC",
+      "def_rank": 8,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "CLE",
+      "slate_abbr": "CLE",
+      "name": "CLE",
+      "def_rank": 13,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "BOS",
+      "slate_abbr": "BOS",
+      "name": "BOS",
+      "def_rank": 16,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "CWS",
+      "slate_abbr": "CWS",
+      "name": "CWS",
+      "def_rank": 19,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "TOR",
+      "slate_abbr": "TOR",
+      "name": "TOR",
+      "def_rank": 15,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "SD",
+      "slate_abbr": "SD",
+      "name": "SD",
+      "def_rank": 17,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "KC",
+      "slate_abbr": "KC",
+      "name": "KC",
+      "def_rank": 18,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "CIN",
+      "slate_abbr": "CIN",
+      "name": "CIN",
+      "def_rank": 25,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "MIN",
+      "slate_abbr": "MIN",
+      "name": "MIN",
+      "def_rank": 20,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "STL",
+      "slate_abbr": "STL",
+      "name": "STL",
+      "def_rank": 23,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "LAA",
+      "slate_abbr": "LAA",
+      "name": "LAA",
+      "def_rank": 22,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "ATH",
+      "slate_abbr": "ATH",
+      "name": "ATH",
+      "def_rank": 26,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "COL",
+      "slate_abbr": "COL",
+      "name": "COL",
+      "def_rank": 21,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "PHI",
+      "slate_abbr": "PHI",
+      "name": "PHI",
+      "def_rank": 27,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "BAL",
+      "slate_abbr": "BAL",
+      "name": "BAL",
+      "def_rank": 29,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "WSH",
+      "slate_abbr": "WSH",
+      "name": "WSH",
+      "def_rank": 28,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "AZ",
+      "slate_abbr": "AZ",
+      "name": "AZ",
+      "def_rank": 24,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "HOU",
+      "slate_abbr": "HOU",
+      "name": "HOU",
+      "def_rank": 30,
+      "def_tier": "Weak"
+    }
+  ],
+  "matchups": {},
+  "players_by_team_cat": {},
+  "edge_legend": {
+    "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
+    "OK_EDGE": "Solid vs average-or-softer defense.",
+    "NEUTRAL": "No clear edge.",
+    "AVOID": "Elite defense with below-threshold production."
+  }
+}

@@ -4836,46 +4836,61 @@ def api_slate_sport_single(sport: str):
         return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 500
 
 
-@app.get("/api/wnba/matchup-edge")
-def api_wnba_matchup_edge():
-    """WNBA top-team leaders vs opponent defense ranks (Slate Explorer panel)."""
-    json_name = "wnba_matchup_edge.json"
+def _matchup_edge_payload(sport_key: str) -> dict[str, Any]:
+    sport_key = str(sport_key or "").strip().lower()
+    json_name = f"{sport_key}_matchup_edge.json"
     path = TEMPLATES_DIR / json_name
     if not path.is_file():
-        alt = BASE_DIR / "Sports" / "WNBA" / "data" / json_name
+        alt = BASE_DIR / "Sports" / sport_key.upper() / "data" / json_name
+        if sport_key == "wnba":
+            alt = BASE_DIR / "Sports" / "WNBA" / "data" / json_name
         path = alt if alt.is_file() else path
-
-    def _build():
+    if path.is_file():
+        return json.loads(path.read_text(encoding="utf-8"))
+    build_script = BASE_DIR / "scripts" / "build_matchup_edge_json.py"
+    if build_script.is_file():
+        subprocess.run(
+            [sys.executable, str(build_script), "--sport", sport_key],
+            cwd=str(BASE_DIR),
+            capture_output=True,
+            timeout=180,
+            check=False,
+        )
         if path.is_file():
             return json.loads(path.read_text(encoding="utf-8"))
-        # On-demand build when pipeline artifact missing
-        script = BASE_DIR / "Sports" / "WNBA" / "scripts" / "build_wnba_matchup_edge_json.py"
-        if script.is_file():
-            subprocess.run(
-                [sys.executable, str(script)],
-                cwd=str(BASE_DIR),
-                capture_output=True,
-                timeout=120,
-                check=False,
-            )
-            if path.is_file():
-                return json.loads(path.read_text(encoding="utf-8"))
-        return {
-            "error": "wnba_matchup_edge.json not found — run WNBA pipeline or build_wnba_matchup_edge_json.py",
-            "teams": [],
-            "categories": [],
-            "matchups": {},
-            "players_by_team_cat": {},
-        }
+    return {
+        "sport": sport_key,
+        "error": f"{json_name} not found — run scripts/build_matchup_edge_json.py --sport {sport_key}",
+        "teams": [],
+        "categories": [],
+        "matchups": {},
+        "players_by_team_cat": {},
+    }
+
+
+@app.get("/api/<sport>/matchup-edge")
+def api_matchup_edge(sport: str):
+    """Top-team leaders vs opponent defense (Slate Explorer Matchup Edge panel)."""
+    sport_key = str(sport or "").strip().lower()
+    json_name = f"{sport_key}_matchup_edge.json"
+
+    def _build():
+        return _matchup_edge_payload(sport_key)
 
     try:
         return _gz_json_response(
-            f"wnba-matchup-edge-v1:{_template_json_disk_mtime(json_name) or 0}",
+            f"matchup-edge-v2:{sport_key}:{_template_json_disk_mtime(json_name) or 0}",
             _build,
             ttl=120.0,
         )
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "sport": sport_key}), 500
+
+
+@app.get("/api/wnba/matchup-edge")
+def api_wnba_matchup_edge():
+    """Backward-compatible alias for WNBA matchup edge."""
+    return api_matchup_edge("wnba")
 
 
 @app.get("/api/slate-excel")

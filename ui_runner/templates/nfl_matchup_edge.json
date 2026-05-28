@@ -1,0 +1,260 @@
+{
+  "sport": "nfl",
+  "display_name": "NFL",
+  "generated_at": "2026-05-28T01:21:00.971015+00:00",
+  "n_teams": 32,
+  "elite_rank_cut": 4,
+  "weak_rank_cut": 21,
+  "opp_metric_label": "Opp pass def rank",
+  "categories": [
+    {
+      "id": "pass_yds",
+      "label": "Pass yards",
+      "threshold": 200.0
+    },
+    {
+      "id": "rush_yds",
+      "label": "Rush yards",
+      "threshold": 60.0
+    },
+    {
+      "id": "rec_yds",
+      "label": "Receiving yards",
+      "threshold": 50.0
+    }
+  ],
+  "teams": [
+    {
+      "def_key": "ARI",
+      "slate_abbr": "ARI",
+      "name": "ARI",
+      "def_rank": 24,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ATL",
+      "slate_abbr": "ATL",
+      "name": "ATL",
+      "def_rank": 15,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BAL",
+      "slate_abbr": "BAL",
+      "name": "BAL",
+      "def_rank": 29,
+      "def_tier": ""
+    },
+    {
+      "def_key": "BUF",
+      "slate_abbr": "BUF",
+      "name": "BUF",
+      "def_rank": 1,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CAR",
+      "slate_abbr": "CAR",
+      "name": "CAR",
+      "def_rank": 14,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CHI",
+      "slate_abbr": "CHI",
+      "name": "CHI",
+      "def_rank": 22,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CIN",
+      "slate_abbr": "CIN",
+      "name": "CIN",
+      "def_rank": 26,
+      "def_tier": ""
+    },
+    {
+      "def_key": "CLE",
+      "slate_abbr": "CLE",
+      "name": "CLE",
+      "def_rank": 3,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DAL",
+      "slate_abbr": "DAL",
+      "name": "DAL",
+      "def_rank": 32,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DEN",
+      "slate_abbr": "DEN",
+      "name": "DEN",
+      "def_rank": 11,
+      "def_tier": ""
+    },
+    {
+      "def_key": "DET",
+      "slate_abbr": "DET",
+      "name": "DET",
+      "def_rank": 21,
+      "def_tier": ""
+    },
+    {
+      "def_key": "GB",
+      "slate_abbr": "GB",
+      "name": "GB",
+      "def_rank": 10,
+      "def_tier": ""
+    },
+    {
+      "def_key": "HOU",
+      "slate_abbr": "HOU",
+      "name": "HOU",
+      "def_rank": 9,
+      "def_tier": ""
+    },
+    {
+      "def_key": "IND",
+      "slate_abbr": "IND",
+      "name": "IND",
+      "def_rank": 31,
+      "def_tier": ""
+    },
+    {
+      "def_key": "JAX",
+      "slate_abbr": "JAX",
+      "name": "JAX",
+      "def_rank": 19,
+      "def_tier": ""
+    },
+    {
+      "def_key": "KC",
+      "slate_abbr": "KC",
+      "name": "KC",
+      "def_rank": 8,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LAC",
+      "slate_abbr": "LAC",
+      "name": "LAC",
+      "def_rank": 4,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LAR",
+      "slate_abbr": "LAR",
+      "name": "LAR",
+      "def_rank": 20,
+      "def_tier": ""
+    },
+    {
+      "def_key": "LV",
+      "slate_abbr": "LV",
+      "name": "LV",
+      "def_rank": 13,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MIA",
+      "slate_abbr": "MIA",
+      "name": "MIA",
+      "def_rank": 18,
+      "def_tier": ""
+    },
+    {
+      "def_key": "MIN",
+      "slate_abbr": "MIN",
+      "name": "MIN",
+      "def_rank": 2,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NE",
+      "slate_abbr": "NE",
+      "name": "NE",
+      "def_rank": 7,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NO",
+      "slate_abbr": "NO",
+      "name": "NO",
+      "def_rank": 5,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NYG",
+      "slate_abbr": "NYG",
+      "name": "NYG",
+      "def_rank": 17,
+      "def_tier": ""
+    },
+    {
+      "def_key": "NYJ",
+      "slate_abbr": "NYJ",
+      "name": "NYJ",
+      "def_rank": 16,
+      "def_tier": ""
+    },
+    {
+      "def_key": "PHI",
+      "slate_abbr": "PHI",
+      "name": "PHI",
+      "def_rank": 6,
+      "def_tier": ""
+    },
+    {
+      "def_key": "PIT",
+      "slate_abbr": "PIT",
+      "name": "PIT",
+      "def_rank": 30,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SEA",
+      "slate_abbr": "SEA",
+      "name": "SEA",
+      "def_rank": 12,
+      "def_tier": ""
+    },
+    {
+      "def_key": "SF",
+      "slate_abbr": "SF",
+      "name": "SF",
+      "def_rank": 23,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TB",
+      "slate_abbr": "TB",
+      "name": "TB",
+      "def_rank": 27,
+      "def_tier": ""
+    },
+    {
+      "def_key": "TEN",
+      "slate_abbr": "TEN",
+      "name": "TEN",
+      "def_rank": 25,
+      "def_tier": ""
+    },
+    {
+      "def_key": "WSH",
+      "slate_abbr": "WSH",
+      "name": "WSH",
+      "def_rank": 28,
+      "def_tier": ""
+    }
+  ],
+  "matchups": {},
+  "players_by_team_cat": {},
+  "edge_legend": {
+    "TOP_EDGE": "Avg at/above threshold vs soft defense (high rank = weak).",
+    "OK_EDGE": "Solid vs average-or-softer defense.",
+    "NEUTRAL": "No clear edge.",
+    "AVOID": "Elite defense with below-threshold production."
+  }
+}
