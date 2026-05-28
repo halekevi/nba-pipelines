@@ -2,8 +2,8 @@
  * Multi-sport Matchup Edge panels — Slate Explorer (#sp-{sport})
  */
 (function (global) {
-  const ME_SPORTS = ["nba", "nba1h", "nba1q", "wnba", "nhl", "mlb", "soccer", "cbb", "cfb", "nfl"];
-  const SKIP = new Set(["tennis", "combined", "wcbb"]);
+  const ME_SPORTS = ["nba", "nba1h", "nba1q", "wnba", "nhl", "mlb", "soccer", "cbb", "cfb", "nfl", "tennis"];
+  const SKIP = new Set(["combined", "wcbb"]);
 
   const PROP_SEARCH = {
     pts: ["points", "pts"],
@@ -24,6 +24,11 @@
     pass_yds: ["pass", "passing"],
     rush_yds: ["rush"],
     rec_yds: ["receiving", "rec yds"],
+    match_total_games: ["total games", "games"],
+    games_won: ["games won"],
+    aces: ["aces"],
+    double_faults: ["double fault"],
+    break_points_won: ["break points", "break points won"],
   };
 
   const state = {};
@@ -63,7 +68,12 @@
 
   function fallbackUrl(sport) {
     const rel = "data/" + sport + "_matchup_edge.json";
-    if (global.location && global.location.pathname.includes("/mobile")) return rel;
+    if (
+      global.location &&
+      (global.location.protocol === "file:" || global.location.pathname.includes("/mobile"))
+    ) {
+      return rel;
+    }
     return "/" + rel.replace(/^\//, "");
   }
 
@@ -80,10 +90,14 @@
     panel.dataset.sport = sport;
     panel.open = true;
     const label = sport.toUpperCase().replace("NBA1H", "NBA 1H").replace("NBA1Q", "NBA 1Q");
+    const isPlayer = sport === "tennis";
+    const teamLbl = isPlayer ? "Player" : "Team";
+    const oppLbl = isPlayer ? "Opponent player" : "Opponent";
     panel.innerHTML =
       '<summary>Matchup Edge — ' +
       label +
-      " defense lookup</summary>" +
+      (isPlayer ? " — opponent player lookup" : " defense lookup") +
+      "</summary>" +
       '<div class="me-body">' +
       '<div class="me-loading" id="' +
       pid(sport, "loading") +
@@ -92,13 +106,17 @@
       pid(sport, "content") +
       '" style="display:none">' +
       '<div class="me-controls">' +
-      '<div class="me-field"><label>Team</label><select id="' +
+      '<div class="me-field"><label>' +
+      teamLbl +
+      '</label><select id="' +
       pid(sport, "team") +
       '"></select></div>' +
       '<div class="me-field"><label>Category</label><select id="' +
       pid(sport, "cat") +
       '"></select></div>' +
-      '<div class="me-field"><label>Opponent</label><select id="' +
+      '<div class="me-field"><label>' +
+      oppLbl +
+      '</label><select id="' +
       pid(sport, "opp") +
       '" disabled></select></div>' +
       '<button type="button" class="me-find" id="' +
@@ -177,11 +195,35 @@
     const teamSel = document.getElementById(pid(sport, "team"));
     const catSel = document.getElementById(pid(sport, "cat"));
     if (!teamSel || !catSel) return;
+    const playerMode = data.matchup_mode === "player";
 
-    const teams = (data.teams || []).slice().sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    const blockKeys = Object.keys(data.players_by_team_cat || {});
+    const teamsWithBlocks = new Set(blockKeys.map((k) => k.split("|")[0]));
+    const teams = (data.teams || [])
+      .filter((t) => {
+        const ab = t?.slate_abbr || t?.def_key;
+        return !teamsWithBlocks.size || teamsWithBlocks.has(ab);
+      })
+      .slice()
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
     if (!teams.length && data.matchups) {
       Object.keys(data.matchups).forEach((k) => {
-        teams.push({ slate_abbr: k, name: k });
+        const mu = data.matchups[k] || {};
+        teams.push({
+          slate_abbr: k,
+          name: mu.opponent_name ? k : playerMode ? mu.opponent_name || k : k,
+        });
+      });
+    }
+    if (playerMode && !teams.length && data.players_by_team_cat) {
+      const seen = new Set();
+      Object.keys(data.players_by_team_cat).forEach((key) => {
+        const pk = key.split("|")[0];
+        if (seen.has(pk)) return;
+        seen.add(pk);
+        const block = data.players_by_team_cat[key];
+        const nm = (block.players && block.players[0] && block.players[0].player) || pk;
+        teams.push({ slate_abbr: pk, name: nm });
       });
     }
     teamSel.innerHTML = teams
@@ -204,8 +246,17 @@
   function onTeamChange(sport) {
     const data = state[sport]?.data;
     const team = document.getElementById(pid(sport, "team"))?.value;
+    const catSel = document.getElementById(pid(sport, "cat"));
     const oppSel = document.getElementById(pid(sport, "opp"));
     if (!oppSel || !data || !team) return;
+    if (catSel) {
+      const teamCats = Object.keys(data.players_by_team_cat || {})
+        .filter((k) => k.startsWith(team + "|"))
+        .map((k) => k.split("|")[1]);
+      if (teamCats.length && !teamCats.includes(catSel.value)) {
+        catSel.value = teamCats[0];
+      }
+    }
     const mu = (data.matchups || {})[team] || {};
     const opp = mu.opponent_slate || "";
     const oppName = mu.opponent_name || opp;
@@ -263,7 +314,9 @@
       top +
       '</div></div><div class="me-card"><div class="lbl">OK edge</div><div class="val edge-ok">' +
       ok +
-      '</div></div><div class="me-card"><div class="lbl">Team def rank</div><div class="val">#' +
+      '</div></div><div class="me-card"><div class="lbl">' +
+      (data.matchup_mode === "player" ? "Your rank" : "Team def rank") +
+      '</div><div class="val">#' +
       esc(mu.team_def_rank != null ? mu.team_def_rank : "—") +
       "</div></div>";
 
@@ -366,8 +419,14 @@
 
   function boot() {
     ME_SPORTS.forEach((s) => {
-      if (document.getElementById(panelId(s)) || document.getElementById("sp-" + s)?.classList.contains("open")) {
-        bindEvents(s);
+      ensurePanel(s);
+      bindEvents(s);
+      const card = document.getElementById("sc-" + s);
+      if (card && !card.dataset.meBound) {
+        card.dataset.meBound = "1";
+        card.addEventListener("click", () => {
+          setTimeout(() => onPanelOpen(s), 0);
+        });
       }
       if (document.getElementById("sp-" + s)?.classList.contains("open")) onPanelOpen(s);
     });

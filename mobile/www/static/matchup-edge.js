@@ -24,10 +24,11 @@
     pass_yds: ["pass", "passing"],
     rush_yds: ["rush"],
     rec_yds: ["receiving", "rec yds"],
-    match_total_games: ["total games"],
+    match_total_games: ["total games", "games"],
     games_won: ["games won"],
+    aces: ["aces"],
     double_faults: ["double fault"],
-    break_points_won: ["break point"],
+    break_points_won: ["break points", "break points won"],
   };
 
   const state = {};
@@ -196,7 +197,15 @@
     if (!teamSel || !catSel) return;
     const playerMode = data.matchup_mode === "player";
 
-    const teams = (data.teams || []).slice().sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    const blockKeys = Object.keys(data.players_by_team_cat || {});
+    const teamsWithBlocks = new Set(blockKeys.map((k) => k.split("|")[0]));
+    const teams = (data.teams || [])
+      .filter((t) => {
+        const ab = t?.slate_abbr || t?.def_key;
+        return !teamsWithBlocks.size || teamsWithBlocks.has(ab);
+      })
+      .slice()
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
     if (!teams.length && data.matchups) {
       Object.keys(data.matchups).forEach((k) => {
         const mu = data.matchups[k] || {};
@@ -237,8 +246,17 @@
   function onTeamChange(sport) {
     const data = state[sport]?.data;
     const team = document.getElementById(pid(sport, "team"))?.value;
+    const catSel = document.getElementById(pid(sport, "cat"));
     const oppSel = document.getElementById(pid(sport, "opp"));
     if (!oppSel || !data || !team) return;
+    if (catSel) {
+      const teamCats = Object.keys(data.players_by_team_cat || {})
+        .filter((k) => k.startsWith(team + "|"))
+        .map((k) => k.split("|")[1]);
+      if (teamCats.length && !teamCats.includes(catSel.value)) {
+        catSel.value = teamCats[0];
+      }
+    }
     const mu = (data.matchups || {})[team] || {};
     const opp = mu.opponent_slate || "";
     const oppName = mu.opponent_name || opp;

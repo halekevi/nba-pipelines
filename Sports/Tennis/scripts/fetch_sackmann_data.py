@@ -15,8 +15,8 @@ _TENNIS_ROOT = Path(__file__).resolve().parents[1]
 _OUT = _TENNIS_ROOT / "data" / "sackmann"
 _ATP_BASE = "https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/"
 _WTA_BASE = "https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/"
-_YEARS = (2023, 2024, 2025)
-_MAX_AGE_DAYS = 7
+_YEARS = (2023, 2024, 2025, 2026)
+_MAX_AGE_DAYS = 1
 
 
 def _download(url: str, dest: Path) -> bool:

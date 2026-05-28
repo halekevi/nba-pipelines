@@ -12,10 +12,69 @@ Run from Tennis/ (or pass absolute paths):
 from __future__ import annotations
 
 import argparse
+import json
+import re
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+
+def _norm_name(val: object) -> str:
+    s = str(val or "").lower()
+    s = re.sub(r"[^a-z0-9 ]+", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _load_sackmann_rows(root: Path) -> pd.DataFrame:
+    data_dir = root / "data" / "sackmann"
+    candidates = [
+        data_dir / "atp_matches_2026.csv",
+        data_dir / "wta_matches_2026.csv",
+        data_dir / "atp_matches_combined.csv",
+        data_dir / "wta_matches_combined.csv",
+    ]
+    frames: list[pd.DataFrame] = []
+    for path in candidates:
+        if not path.is_file():
+            continue
+        try:
+            frames.append(pd.read_csv(path, low_memory=False))
+        except Exception:
+            continue
+    if not frames:
+        return pd.DataFrame()
+    src = pd.concat(frames, ignore_index=True)
+    need = {"winner_name", "loser_name", "w_ace", "l_ace", "w_df", "l_df"}
+    if not need.issubset(src.columns):
+        return pd.DataFrame()
+
+    def _side(df: pd.DataFrame, is_winner: bool) -> pd.DataFrame:
+        pcol = "winner_name" if is_winner else "loser_name"
+        ocol = "loser_name" if is_winner else "winner_name"
+        acol = "w_ace" if is_winner else "l_ace"
+        dcol = "w_df" if is_winner else "l_df"
+        out = pd.DataFrame(
+            {
+                "player_key": df[pcol].map(_norm_name),
+                "opponent_key": df[ocol].map(_norm_name),
+                "aces": pd.to_numeric(df[acol], errors="coerce"),
+                "double_faults": pd.to_numeric(df[dcol], errors="coerce"),
+            }
+        )
+        out = out[(out["player_key"] != "") & (out["opponent_key"] != "")]
+        return out
+
+    merged = pd.concat([_side(src, True), _side(src, False)], ignore_index=True)
+    if merged.empty:
+        return merged
+    merged = (
+        merged.groupby(["player_key", "opponent_key"], as_index=False)
+        .agg({"aces": "mean", "double_faults": "mean"})
+        .fillna(0.0)
+    )
+    return merged
 
 
 def main() -> None:
@@ -78,6 +137,58 @@ def main() -> None:
             "Def Tier": ["LEAGUE AVG"] * len(work),
         }
     )
+
+    # Fill tennis serve props from Sackmann winner/loser stat columns.
+    sack = _load_sackmann_rows(root)
+    if not sack.empty:
+        out["player_key"] = out["Player"].map(_norm_name)
+        out["opponent_key"] = out["Opp"].map(_norm_name)
+        out = out.merge(sack, how="left", on=["player_key", "opponent_key"])
+        out["aces"] = pd.to_numeric(out.get("aces"), errors="coerce").fillna(0.0)
+        out["double_faults"] = pd.to_numeric(out.get("double_faults"), errors="coerce").fillna(0.0)
+        is_ace = out["Prop"].astype(str).str.lower().str.contains("aces", na=False)
+        is_df = out["Prop"].astype(str).str.lower().str.contains("double faults?|double_faults", na=False)
+        out.loc[is_ace, "Season Avg"] = out.loc[is_ace, "aces"]
+        out.loc[is_df, "Season Avg"] = out.loc[is_df, "double_faults"]
+        out = out.drop(columns=["player_key", "opponent_key"], errors="ignore")
+
+    # Refresh match cache from ESPN scoreboard, then enrich aces/DF from Sackmann.
+    cache_path = root / "cache" / "tennis_match_games.json"
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    match_cache: dict[str, list[dict[str, object]]] = {}
+    try:
+        import sys
+
+        scripts_dir = root / "scripts"
+        if str(scripts_dir) not in sys.path:
+            sys.path.insert(0, str(scripts_dir))
+        from tennis_shared import refresh_match_games_cache  # noqa: WPS433
+
+        match_cache = refresh_match_games_cache(cache_path)
+    except Exception:
+        if cache_path.is_file():
+            try:
+                match_cache = json.loads(cache_path.read_text(encoding="utf-8"))
+            except Exception:
+                match_cache = {}
+    sack_lookup: dict[tuple[str, str], tuple[float, float]] = {}
+    if not sack.empty:
+        for r in sack.itertuples(index=False):
+            key = (str(getattr(r, "player_key", "")), str(getattr(r, "opponent_key", "")))
+            sack_lookup[key] = (float(getattr(r, "aces", 0.0) or 0.0), float(getattr(r, "double_faults", 0.0) or 0.0))
+    if match_cache:
+        for aid, rows_for_player in match_cache.items():
+            if not isinstance(rows_for_player, list):
+                continue
+            for m in rows_for_player:
+                pkey = _norm_name(m.get("player"))
+                okey = _norm_name(m.get("opponent"))
+                aces_df = sack_lookup.get((pkey, okey))
+                if not aces_df:
+                    continue
+                m["aces"] = aces_df[0]
+                m["double_faults"] = aces_df[1]
+        cache_path.write_text(json.dumps(match_cache, ensure_ascii=False, indent=2), encoding="utf-8")
 
     s7 = Path(args.step7_out)
     if not s7.is_absolute():
