@@ -229,8 +229,8 @@
     teamSel.innerHTML = teams
       .map((t) => {
         const ab = t.slate_abbr || t.def_key;
-        const mu = (data.matchups || {})[ab] || {};
-        const opp = mu.opponent_name || mu.opponent_slate || "";
+        const oppInfo = opponentForTeam(sport, ab);
+        const opp = oppInfo.oppName || oppInfo.opp || "";
         const label = (t.name || ab) + (opp ? " vs " + opp : "");
         return '<option value="' + esc(ab) + '">' + esc(label) + "</option>";
       })
@@ -241,6 +241,23 @@
       .join("");
 
     onTeamChange(sport);
+  }
+
+  function opponentForTeam(sport, team) {
+    const data = state[sport]?.data;
+    if (!data || !team) return { opp: "", oppName: "" };
+    const mu = (data.matchups || {})[team] || {};
+    let opp = mu.opponent_slate || "";
+    let oppName = mu.opponent_name || opp;
+    if (!opp) {
+      const entry = Object.entries(data.players_by_team_cat || {}).find(([k]) =>
+        k.startsWith(team + "|")
+      );
+      const blockOpp = entry ? entry[1].opponent || {} : {};
+      opp = blockOpp.slate_abbr || "";
+      oppName = blockOpp.name || opp;
+    }
+    return { opp, oppName, mu };
   }
 
   function onTeamChange(sport) {
@@ -257,9 +274,7 @@
         catSel.value = teamCats[0];
       }
     }
-    const mu = (data.matchups || {})[team] || {};
-    const opp = mu.opponent_slate || "";
-    const oppName = mu.opponent_name || opp;
+    const { opp, oppName } = opponentForTeam(sport, team);
     oppSel.innerHTML = opp
       ? '<option value="' + esc(opp) + '">' + esc(oppName) + "</option>"
       : '<option value="">—</option>';
@@ -286,11 +301,12 @@
     const legend = document.getElementById(pid(sport, "legend"));
     if (!block || !cards || !tbody || !data) return;
 
-    const mu = (data.matchups || {})[team] || {};
+    const oppMeta = opponentForTeam(sport, team);
+    const mu = oppMeta.mu || {};
     const opp = block.opponent || {};
     const oppRank = opp.def_rank != null ? opp.def_rank : mu.opponent_def_rank;
     const oppTier = opp.def_tier || mu.opponent_def_tier || "";
-    const oppName = opp.name || mu.opponent_name || "—";
+    const oppName = opp.name || oppMeta.oppName || mu.opponent_name || "—";
     const rankLbl = data.opp_metric_label || "Opp def rank";
     let top = 0,
       ok = 0;

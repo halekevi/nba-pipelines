@@ -10,7 +10,7 @@ from __future__ import annotations
 # Slate / PrizePicks abbrev -> ``wnba_defense_summary.csv`` TEAM_ABBREVIATION
 WNBA_DEFENSE_TEAM_KEY_MAP: dict[str, str] = {
     "LVA": "LV",
-    "LAS": "LV",
+    "LAS": "LA",
     "LV": "LV",
     "NYL": "NY",
     "NY": "NY",

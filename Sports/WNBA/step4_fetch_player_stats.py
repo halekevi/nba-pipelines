@@ -79,8 +79,8 @@ ALLSTAR_BREAKS: List[Tuple[str,str]] = [
 
 WNBA_TEAM_KEY_MAP = {
     # slate abbrev -> DB abbrev
-    "LAS": "LV",     # Las Vegas Aces
-    "LVA": "LV",     # alternate Aces code
+    "LAS": "LA",     # Los Angeles Sparks
+    "LVA": "LV",     # Las Vegas Aces
     "NYL": "NY",     # New York Liberty
     "CON": "CON",    # Connecticut Sun (already matches)
     "DAL": "DAL",    # Dallas Wings
@@ -259,7 +259,7 @@ def _minutes_series(df: pd.DataFrame) -> pd.Series:
 
 
 def filter_games_by_minutes(df: pd.DataFrame, min_minutes: float) -> pd.DataFrame:
-    """Drop low-minute outings before rolling L5/L10 (aligns with PrizePicks-style windows)."""
+    """Optionally drop low-minute outings before rolling L5/L10 (--min-minutes-rolling > 0)."""
     if df.empty or min_minutes <= 0:
         return df
     mins = _minutes_series(df)
@@ -578,8 +578,8 @@ def main():
     ap.add_argument(
         "--min-minutes-rolling",
         type=float,
-        default=15.0,
-        help="Only count games with at least this many minutes in stat_g*/L5/L10 (0=disable). Default 15.",
+        default=0.0,
+        help="Only count games with at least this many minutes in stat_g*/L5/L10 (0=include all games).",
     )
     ap.add_argument("--sleep",    type=float, default=0.8)
     ap.add_argument("--retries",  type=int,   default=4)
