@@ -9,7 +9,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from utils.matchup_edge.classify import classify_edge
 from utils.matchup_edge.slate_io import load_slate_rows, norm_prop, build_slate_pp_lookup, lookup_pp_edge
 from utils.matchup_edge.sports_config import SportMatchupConfig
 
@@ -139,6 +138,56 @@ def _player_matchups(rows: list[dict], rankings: list[dict[str, Any]]) -> dict[s
     return out
 
 
+def _classify_tennis_edge(
+    season_avg: float,
+    threshold: float,
+    opp_rank: float | None,
+    *,
+    cat_id: str = "",
+    pp_line: float | None = None,
+    pp_edge: float | None = None,
+    elite_rank_cut: int = 25,
+    weak_rank_cut: int = 100,
+) -> tuple[str, str]:
+    """Tennis ATP rank: lower # = stronger opponent (inverse of team def rank)."""
+    rank = float(opp_rank) if opp_rank is not None and not (isinstance(opp_rank, float) and np.isnan(opp_rank)) else np.nan
+    eff = threshold * 0.55 if cat_id in ("aces", "double_faults", "break_points_won") else threshold
+    rank_lbl = f"#{int(rank)}" if not np.isnan(rank) else "?"
+
+    if pp_edge is not None and not (isinstance(pp_edge, float) and np.isnan(pp_edge)):
+        pe = float(pp_edge)
+        if not np.isnan(rank) and rank <= elite_rank_cut:
+            if pe >= 2.0:
+                return "OK_EDGE", f"PP edge +{pe:.1f} but elite opponent ({rank_lbl}) — tough matchup."
+            if pe >= 1.0:
+                return "NEUTRAL", f"PP edge +{pe:.1f} vs elite opponent ({rank_lbl}) — proceed with caution."
+            if pe <= -2.0:
+                return "AVOID", f"PP edge {pe:.1f} vs elite opponent ({rank_lbl})."
+            if pe < 0:
+                return "AVOID", f"Negative PP edge vs elite opponent ({rank_lbl})."
+        if not np.isnan(rank) and rank >= weak_rank_cut:
+            if pe >= 1.0:
+                return "TOP_EDGE", f"PP edge +{pe:.1f} vs weak opponent ({rank_lbl})."
+            if pe >= 0.5:
+                return "OK_EDGE", f"PP edge +{pe:.1f} vs weak opponent ({rank_lbl})."
+        if pe >= 2.0:
+            return "TOP_EDGE", f"PP edge +{pe:.1f} on board tonight."
+        if pe >= 1.0:
+            return "OK_EDGE", f"PP edge +{pe:.1f} on board tonight."
+        if pe <= -2.0:
+            return "AVOID", f"PP edge {pe:.1f} on board — lean UNDER or skip OVER."
+
+    if not np.isnan(rank) and rank <= elite_rank_cut and season_avg < eff * 0.9:
+        return "AVOID", f"Elite opponent ({rank_lbl}); production below threshold."
+    if not np.isnan(rank) and rank >= weak_rank_cut and season_avg >= eff:
+        return "TOP_EDGE", f"Strong avg vs weak opponent ({rank_lbl})."
+    if not np.isnan(rank) and elite_rank_cut < rank < weak_rank_cut and season_avg >= eff * 0.85:
+        return "OK_EDGE", f"Solid vs average opponent ({rank_lbl})."
+    if not np.isnan(rank) and rank <= elite_rank_cut:
+        return "NEUTRAL", f"Elite opponent ({rank_lbl}) — no clear OVER edge."
+    return "NEUTRAL", "No strong matchup edge either way."
+
+
 def _leaders_by_player(
     rows: list[dict],
     categories: tuple[dict, ...],
@@ -171,25 +220,22 @@ def _leaders_by_player(
         for pk, grp in sub.groupby("player_key", sort=False):
             if not pk:
                 continue
-            top = grp.nlargest(top_n, "season_avg")
-            players = []
-            for i, r in enumerate(top.itertuples(index=False), start=1):
-                players.append(
-                    {
-                        "player": r.player,
-                        "player_norm": pk,
-                        "pos": str(getattr(r, "tour", "") or ""),
-                        "rank_on_team": i,
-                        "season_avg": round(float(r.season_avg), 2),
-                        "game_score": round(float(r.season_avg), 1),
-                        "edge": "NEUTRAL",
-                        "notes": "From slate season average",
-                        "overperform_vs_weak": False,
-                        "def_boost": None,
-                    }
-                )
-            if players:
-                out[f"{pk}|{cid}"] = players
+            best = grp.sort_values("season_avg", ascending=False).iloc[0]
+            players = [
+                {
+                    "player": best.player,
+                    "player_norm": pk,
+                    "pos": str(getattr(best, "tour", "") or ""),
+                    "rank_on_team": 1,
+                    "season_avg": round(float(best.season_avg), 2),
+                    "game_score": round(float(best.season_avg), 1),
+                    "edge": "NEUTRAL",
+                    "notes": "From slate season average",
+                    "overperform_vs_weak": False,
+                    "def_boost": None,
+                }
+            ]
+            out[f"{pk}|{cid}"] = players
     return out
 
 
@@ -206,6 +252,7 @@ def build_tennis_matchup_payload(
 
     matchups_raw = _player_matchups(rows, rankings)
     n_field = max(128, len(rankings) or 128)
+    weak_rank_cut = 100
 
     teams_meta = [
         {
@@ -241,16 +288,15 @@ def build_tennis_matchup_payload(
                 player_norm=p.get("player_norm"),
                 player_mode=True,
             )
-            edge, note = classify_edge(
+            edge, note = _classify_tennis_edge(
                 float(p["season_avg"]),
                 threshold,
                 opp_rank,
-                n_field,
-                elite_rank_cut=cfg.elite_rank_cut,
                 cat_id=cid,
                 pp_line=pp.get("pp_line"),
                 pp_edge=pp.get("pp_edge"),
-                rank_on_team=int(p.get("rank_on_team") or i),
+                elite_rank_cut=cfg.elite_rank_cut,
+                weak_rank_cut=weak_rank_cut,
             )
             pp_edge_val = pp.get("pp_edge")
             enriched.append(
@@ -296,16 +342,16 @@ def build_tennis_matchup_payload(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "n_teams": n_field,
         "elite_rank_cut": cfg.elite_rank_cut,
-        "weak_rank_cut": max(80, int(np.ceil(n_field * 0.65))),
+        "weak_rank_cut": weak_rank_cut,
         "opp_metric_label": cfg.opp_metric_label,
         "categories": list(cfg.categories),
         "teams": teams_meta,
         "matchups": matchups_ui,
         "players_by_team_cat": players_by_key,
         "edge_legend": {
-            "TOP_EDGE": "Positive PP edge (+1.5+) or avg at/above threshold vs weaker opponent (high ATP rank #).",
-            "OK_EDGE": "PP edge on board or solid vs average-or-weaker opponent.",
-            "NEUTRAL": "No clear edge.",
-            "AVOID": "Negative PP edge or top-ranked opponent with below-threshold production.",
+            "TOP_EDGE": "PP edge +1.0+ or strong avg vs weak opponent (ATP rank 100+).",
+            "OK_EDGE": "Positive PP edge or solid vs average opponent (rank 26–99).",
+            "NEUTRAL": "No clear edge, or elite opponent with only modest PP edge.",
+            "AVOID": "Negative PP edge or elite opponent (rank ≤25) with weak production.",
         },
     }
