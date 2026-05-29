@@ -1,0 +1,47 @@
+﻿sport,matchup_slice,metric,n,hit_rate,note
+MLB,bottom×tough,bet_actual_direction,1152,0.2734,
+MLB,bottom×tough,bet_OVER_only,1111,0.2646,
+MLB,bottom×tough,bet_UNDER_only,41,0.5122,
+MLB,bottom×tough,counterfactual_all_OVER,1152,0.2726,HR if every leg in slice were OVER
+MLB,bottom×tough,counterfactual_all_UNDER,1152,0.7274,HR if every leg in slice were UNDER
+MLB,bottom×tough,theory_UNDER_cf,1152,0.7274,
+MLB,top×soft,bet_actual_direction,3426,0.3301,
+MLB,top×soft,bet_OVER_only,3352,0.3258,
+MLB,top×soft,bet_UNDER_only,74,0.527,
+MLB,top×soft,counterfactual_all_OVER,3426,0.329,HR if every leg in slice were OVER
+MLB,top×soft,counterfactual_all_UNDER,3426,0.671,HR if every leg in slice were UNDER
+MLB,top×soft,theory_OVER_cf,3426,0.329,
+NBA,bottom×tough,bet_actual_direction,10,0.5,
+NBA,top×soft,bet_actual_direction,258,0.6589,
+NBA,top×soft,bet_OVER_only,221,0.6561,
+NBA,top×soft,bet_UNDER_only,37,0.6757,
+NBA,top×soft,counterfactual_all_OVER,258,0.6085,HR if every leg in slice were OVER
+NBA,top×soft,counterfactual_all_UNDER,258,0.3915,HR if every leg in slice were UNDER
+NBA,top×soft,theory_OVER_cf,258,0.6085,
+NBA1H,top×soft,bet_actual_direction,17,0.7059,
+NBA1H,top×soft,counterfactual_all_OVER,17,0.6471,HR if every leg in slice were OVER
+NBA1H,top×soft,counterfactual_all_UNDER,17,0.3529,HR if every leg in slice were UNDER
+NBA1H,top×soft,theory_OVER_cf,17,0.6471,
+NBA1Q,bottom×tough,bet_actual_direction,7,0.4286,
+NBA1Q,top×soft,bet_actual_direction,60,0.7333,
+NBA1Q,top×soft,bet_OVER_only,58,0.7586,
+NBA1Q,top×soft,counterfactual_all_OVER,60,0.7667,HR if every leg in slice were OVER
+NBA1Q,top×soft,counterfactual_all_UNDER,60,0.2333,HR if every leg in slice were UNDER
+NBA1Q,top×soft,theory_OVER_cf,60,0.7667,
+NHL,bottom×tough,bet_actual_direction,70,0.4143,
+NHL,bottom×tough,bet_OVER_only,70,0.4143,
+NHL,bottom×tough,counterfactual_all_OVER,70,0.4143,HR if every leg in slice were OVER
+NHL,bottom×tough,counterfactual_all_UNDER,70,0.5857,HR if every leg in slice were UNDER
+NHL,bottom×tough,theory_UNDER_cf,70,0.5857,
+NHL,top×soft,bet_actual_direction,107,0.4019,
+NHL,top×soft,bet_OVER_only,105,0.4095,
+NHL,top×soft,counterfactual_all_OVER,107,0.4206,HR if every leg in slice were OVER
+NHL,top×soft,counterfactual_all_UNDER,107,0.5794,HR if every leg in slice were UNDER
+NHL,top×soft,theory_OVER_cf,107,0.4206,
+WNBA,bottom×tough,bet_actual_direction,13,0.1538,
+WNBA,top×soft,bet_actual_direction,879,0.4243,
+WNBA,top×soft,bet_OVER_only,735,0.415,
+WNBA,top×soft,bet_UNDER_only,144,0.4722,
+WNBA,top×soft,counterfactual_all_OVER,879,0.4334,HR if every leg in slice were OVER
+WNBA,top×soft,counterfactual_all_UNDER,879,0.5666,HR if every leg in slice were UNDER
+WNBA,top×soft,theory_OVER_cf,879,0.4334,
