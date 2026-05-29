@@ -112,22 +112,29 @@ def _resolve_player_rank(player_name: str, rankings: list[dict[str, Any]]) -> in
     return best
 
 
-def _atp_tier_from_rank(
-    rank: int | float | None,
-    *,
-    elite_rank_cut: int = 25,
-    weak_rank_cut: int = 100,
-) -> str:
+# ATP rank → display tier (lower rank # = stronger player)
+_ATP_TIER_ELITE_MAX = 10
+_ATP_TIER_ABOVE_AVG_MAX = 25
+_ATP_TIER_AVG_MAX = 50
+_ATP_TIER_BELOW_AVG_MAX = 100
+
+
+def _atp_tier_from_rank(rank: int | float | None) -> str:
+    """Map ATP/WTA rank to five tiers for YOUR RANK / OPP ATP RANK cards."""
     if rank is None:
         return ""
     try:
         r = int(float(rank))
     except (TypeError, ValueError):
         return ""
-    if r <= elite_rank_cut:
+    if r <= _ATP_TIER_ELITE_MAX:
         return "Elite"
-    if r < weak_rank_cut:
-        return "Average"
+    if r <= _ATP_TIER_ABOVE_AVG_MAX:
+        return "Above Avg"
+    if r <= _ATP_TIER_AVG_MAX:
+        return "Avg"
+    if r <= _ATP_TIER_BELOW_AVG_MAX:
+        return "Below Avg"
     return "Weak"
 
 
