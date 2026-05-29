@@ -118,11 +118,9 @@ def main() -> None:
     incomplete_events: set = set()
     if not cache.empty and "event_id" in cache.columns:
         existing_events = set(cache["event_id"].astype(str).unique())
-        if "PTS" in cache.columns:
-            cache["_pts_num"] = pd.to_numeric(cache["PTS"], errors="coerce")
-            grouped = cache.groupby(cache["event_id"].astype(str))["_pts_num"].apply(lambda s: int(s.notna().sum()))
-            incomplete_events = set(grouped[grouped <= 0].index.tolist())
-            cache = cache.drop(columns=["_pts_num"], errors="ignore")
+        incomplete_events = mod.find_incomplete_wnba_events(cache)
+        if incomplete_events:
+            print(f"[backfill] Re-fetching {len(incomplete_events)} incomplete/partial cached event(s)")
 
     new_rows: list[dict] = []
     events_fetched = events_skipped = 0
@@ -144,7 +142,7 @@ def main() -> None:
             try:
                 url = mod.SUMMARY_URL.format(event_id=eid)
                 summary = mod.espn_get(url, args.timeout, args.retries, args.sleep)
-                df_box = mod.parse_boxscore(summary)
+                df_box = mod.parse_boxscore(summary, scoreboard_date=d.strftime("%Y-%m-%d"))
                 if df_box.empty:
                     events_skipped += 1
                     continue
@@ -246,8 +244,9 @@ def main() -> None:
 
     if new_rows:
         new_df = pd.DataFrame(new_rows)
-        if incomplete_events:
-            cache = cache[~cache["event_id"].astype(str).isin(incomplete_events)].copy()
+        refreshed_eids = set(new_df["event_id"].astype(str).unique())
+        if refreshed_eids and not cache.empty:
+            cache = cache[~cache["event_id"].astype(str).isin(refreshed_eids)].copy()
         cache = pd.concat([cache, new_df], ignore_index=True) if not cache.empty else new_df
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         cache.to_csv(cache_path, index=False, encoding="utf-8-sig")

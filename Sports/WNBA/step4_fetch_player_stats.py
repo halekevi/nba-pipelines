@@ -324,15 +324,15 @@ def fetch_event_ids(date_yyyymmdd: str, timeout: float, retries: int, sleep_s: f
     return out
 
 
-def parse_boxscore(summary: dict) -> pd.DataFrame:
+def parse_boxscore(summary: dict, scoreboard_date: str = "") -> pd.DataFrame:
     """Parse full-game WNBA boxscore → one row per player per game."""
     box   = (summary or {}).get("boxscore") or {}
     rows  = []
 
-    game_date = ""
+    game_date = str(scoreboard_date or "").strip()[:10]
     header    = (summary or {}).get("header") or {}
     comp      = header.get("competitions") or []
-    if comp:
+    if not game_date and comp:
         gd = comp[0].get("date")
         if gd:
             game_date = str(gd)[:10]
@@ -539,6 +539,30 @@ def calc_hit_context(vals: List[float], line: float, k: int = 5) -> Tuple[int,in
     return over, under, push, hr_all, hr_ou, ur_ou
 
 
+def find_incomplete_wnba_events(cache: pd.DataFrame, *, min_team_minutes_sum: float = 300.0) -> set[str]:
+    """
+    Events to re-fetch: missing PTS or clearly partial boxscores (in-game snapshot cached early).
+    A finished WNBA game typically has 300+ total player-minutes across both rosters.
+    """
+    if cache.empty or "event_id" not in cache.columns:
+        return set()
+    incomplete: set[str] = set()
+    eid = cache["event_id"].astype(str)
+    if "PTS" in cache.columns:
+        pts = pd.to_numeric(cache["PTS"], errors="coerce")
+        grouped = cache.assign(_pts=pts).groupby(eid)["_pts"].apply(lambda s: int(s.notna().sum()))
+        incomplete |= set(grouped[grouped <= 0].index.tolist())
+    if "MIN" in cache.columns:
+        mins = _minutes_series(cache)
+
+        def _event_minutes_sum(g: pd.DataFrame) -> float:
+            return float(pd.to_numeric(_minutes_series(g), errors="coerce").sum())
+
+        by_event = cache.groupby(eid, group_keys=False).apply(_event_minutes_sum)
+        incomplete |= set(by_event[by_event < float(min_team_minutes_sum)].index.tolist())
+    return incomplete
+
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -654,11 +678,12 @@ def main():
     incomplete_events: set = set()
     if not cache.empty and "event_id" in cache.columns:
         existing_events = set(cache["event_id"].astype(str).unique())
-        if "PTS" in cache.columns:
-            cache["_pts_num"] = pd.to_numeric(cache["PTS"], errors="coerce")
-            grouped = cache.groupby(cache["event_id"].astype(str))["_pts_num"].apply(lambda s: int(s.notna().sum()))
-            incomplete_events = set(grouped[grouped <= 0].index.tolist())
-            cache = cache.drop(columns=["_pts_num"], errors="ignore")
+        incomplete_events = find_incomplete_wnba_events(cache)
+        if incomplete_events:
+            print(
+                f"→ Re-fetching {len(incomplete_events)} incomplete/partial event(s) in cache "
+                f"(examples: {sorted(incomplete_events)[:5]})"
+            )
 
     new_rows: List[dict] = []
     events_fetched = events_skipped = 0
@@ -677,7 +702,7 @@ def main():
             try:
                 url     = SUMMARY_URL.format(event_id=eid)
                 summary = espn_get(url, args.timeout, args.retries, args.sleep)
-                df_box  = parse_boxscore(summary)
+                df_box  = parse_boxscore(summary, scoreboard_date=d.strftime("%Y-%m-%d"))
                 if df_box.empty:
                     events_skipped += 1
                     continue
@@ -740,8 +765,9 @@ def main():
 
     if new_rows:
         new_df = pd.DataFrame(new_rows)
-        if incomplete_events:
-            cache = cache[~cache["event_id"].astype(str).isin(incomplete_events)].copy()
+        refreshed_eids = set(new_df["event_id"].astype(str).unique())
+        if refreshed_eids and not cache.empty:
+            cache = cache[~cache["event_id"].astype(str).isin(refreshed_eids)].copy()
         cache  = pd.concat([cache, new_df], ignore_index=True) if not cache.empty else new_df
         cache.to_csv(cache_path, index=False, encoding="utf-8-sig")
         print(f"Cache updated → {cache_path}  ({len(cache)} rows)")
