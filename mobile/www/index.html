@@ -1319,6 +1319,11 @@ body > nav.snav.glass-card {
   .slate-table:not(#st-combined) td:nth-child(4){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(5),
   .slate-table:not(#st-combined) td:nth-child(5){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* Tennis: player names used as team/opp — need wider columns */
+  #st-tennis th:nth-child(4),
+  #st-tennis td:nth-child(4){width:140px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis th:nth-child(5),
+  #st-tennis td:nth-child(5){width:140px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(6),
   .slate-table:not(#st-combined) td:nth-child(6){min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .slate-table:not(#st-combined) th:nth-child(7),
@@ -1405,6 +1410,10 @@ body > nav.snav.glass-card {
     .slate-table:not(#st-combined) td:nth-child(4){width:6%;max-width:6%;}
     .slate-table:not(#st-combined) th:nth-child(5),
     .slate-table:not(#st-combined) td:nth-child(5){width:6%;max-width:6%;}
+    #st-tennis th:nth-child(4),
+    #st-tennis td:nth-child(4){width:18%;max-width:18%;}
+    #st-tennis th:nth-child(5),
+    #st-tennis td:nth-child(5){width:18%;max-width:18%;}
     .slate-table:not(#st-combined) th:nth-child(6),
     .slate-table:not(#st-combined) td:nth-child(6){width:13%;max-width:13%;}
     .slate-table:not(#st-combined) th:nth-child(7),
@@ -4798,7 +4807,7 @@ async function fetchSlateSport(sport, opts = {}) {
       if (res.ok) {
         const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
-        if (rows.length) source = "slate_sport_json";
+        if (rows.length) source = "api_slate_sport";
       } else {
         console.warn(`slate-sport/${sport} HTTP ${res.status}`);
       }
@@ -4810,20 +4819,6 @@ async function fetchSlateSport(sport, opts = {}) {
       if (d0 && Array.isArray(d0.rows)) {
         rows = d0.rows;
         if (rows.length) source = "bundled_json";
-      }
-    }
-    if (!rows.length) {
-      try {
-        const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, { cache: "no-store" });
-        if (res.ok) {
-          const d = await res.json();
-          rows = Array.isArray(d.rows) ? d.rows : [];
-          if (rows.length) source = "api_slate_sport";
-        } else {
-          console.warn(`api/slate-sport/${sport} HTTP ${res.status}`);
-        }
-      } catch (e) {
-        console.warn(`api/slate-sport/${sport} fetch failed:`, e);
       }
     }
     if (!rows.length) {
