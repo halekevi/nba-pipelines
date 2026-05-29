@@ -217,9 +217,11 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
         )
 
     if not str(args.tennis).strip():
+        tennis_d = str(getattr(args, "tennis_date", None) or "").strip()[:10] or d
         args.tennis = _first_existing_path(
+            os.path.join(out, f"step8_tennis_direction_clean_{tennis_d}.xlsx"),
+            os.path.join(out, "tennis", f"step8_tennis_direction_clean_{tennis_d}.xlsx"),
             os.path.join(out, "tennis", "step8_tennis_direction_clean.xlsx"),
-            os.path.join(out, f"step8_tennis_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
         )
@@ -3292,6 +3294,32 @@ def _demon_passes_quality_gate(row: pd.Series | dict) -> bool:
     return True
 
 
+def format_hit_window_fraction(n_games: int, raw) -> str:
+    """
+    Format L5/L10 over/under for UI pills.
+
+    step4/8 store integer hit *counts* (0..n). Older formatters treated any
+    value <= 1 as a rate, so l5_under=1 displayed as 5/5 instead of 1/5.
+    """
+    try:
+        x = float(raw)
+    except (TypeError, ValueError):
+        return str(raw)
+    if not math.isfinite(x):
+        return str(raw)
+    xi = int(round(x))
+    if abs(x - xi) < 1e-6 and 0 <= xi <= int(n_games):
+        k = xi
+    elif 0.0 < x <= 1.0:
+        k = int(round(x * n_games))
+    elif float(n_games) < x <= 100.0:
+        k = int(round((x / 100.0) * n_games))
+    else:
+        k = int(round(x))
+    k = max(0, min(int(n_games), k))
+    return f"{k}/{n_games}"
+
+
 def _resolve_l5_cols(row: pd.Series, direction: str) -> tuple[float, float]:
     """
     Return (l5_hits, l5_games_played) for the play direction.
@@ -5338,6 +5366,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             "rank_score": g("rank_score"),
             "player":     g("player") or "",
             "team":       g("team") or "",
+            "pos":        g("pos") or g("Pos"),
             "opp":        str(g("opp") or g("opp_team") or "").strip(),
             "prop":       g("prop_type") or g("prop") or "",
             "pick_type":  g("pick_type") or "",
@@ -5413,8 +5442,18 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             av = safe(g(f"stat_g{_i}") or g(f"g{_i}") or g(f"G{_i}"))
             lv = safe(g(f"line_g{_i}"))
             if av is not None:
-                actuals.append(float(av))
-                line_hist.append(float(lv) if lv is not None else (float(base_line) if base_line is not None else av))
+                try:
+                    av_num = float(av)
+                except (TypeError, ValueError):
+                    continue
+                actuals.append(av_num)
+                if lv is not None:
+                    try:
+                        line_hist.append(float(lv))
+                    except (TypeError, ValueError):
+                        line_hist.append(float(base_line) if base_line is not None else av_num)
+                else:
+                    line_hist.append(float(base_line) if base_line is not None else av_num)
                 row[f"stat_g{_i}"] = av
                 row[f"g{_i}"] = av
                 if lv is not None:
@@ -5464,6 +5503,51 @@ def resolve_default_wnba_step8_path(date_str: str) -> str:
     )
 
 
+def _overlay_wnba_defense_ranks(df: pd.DataFrame) -> pd.DataFrame:
+    """Refresh opp def rank/tier from wnba_defense_summary.csv (slate + matchup panel parity)."""
+    if df is None or len(df) == 0:
+        return df
+    def_path = os.path.join(REPO_ROOT, "Sports", "WNBA", "wnba_defense_summary.csv")
+    if not os.path.isfile(def_path):
+        return df
+    try:
+        from utils.wnba_team_keys import defense_team_key
+    except ImportError:
+        return df
+    try:
+        ddef = pd.read_csv(def_path, encoding="utf-8-sig")
+    except Exception:
+        return df
+    if "TEAM_ABBREVIATION" not in ddef.columns:
+        return df
+    rank_by_key: dict[str, float] = {}
+    tier_by_key: dict[str, str] = {}
+    for r in ddef.itertuples(index=False):
+        key = defense_team_key(getattr(r, "TEAM_ABBREVIATION", ""))
+        if not key:
+            continue
+        rk = pd.to_numeric(getattr(r, "OVERALL_DEF_RANK", np.nan), errors="coerce")
+        if pd.notna(rk):
+            rank_by_key[key] = float(rk)
+        tier = str(getattr(r, "DEF_TIER", "") or "").strip()
+        if tier:
+            tier_by_key[key] = tier
+    if not rank_by_key:
+        return df
+    out = df.copy()
+    opp_col = "opp" if "opp" in out.columns else ("opp_team" if "opp_team" in out.columns else None)
+    if not opp_col:
+        return out
+    opp_keys = out[opp_col].astype(str).str.strip().str.upper().map(defense_team_key)
+    out["opponent_def_rank"] = opp_keys.map(rank_by_key)
+    out["OVERALL_DEF_RANK"] = out["opponent_def_rank"]
+    out["def_rank"] = out["opponent_def_rank"]
+    if tier_by_key:
+        out["def_tier"] = opp_keys.map(tier_by_key)
+        out["DEF_TIER"] = out["def_tier"]
+    return out
+
+
 def publish_wnba_slate_merge_into_web(
     date_str: str,
     web_outdirs: Optional[str | List[str]] = None,
@@ -5492,6 +5576,7 @@ def publish_wnba_slate_merge_into_web(
         print("[wnba-slate-web] WNBA board empty; skip web slate merge")
         return False
 
+    wnba_df = _overlay_wnba_defense_ranks(wnba_df)
     rows = dataframe_to_slate_sport_rows(wnba_df)
     if web_outdirs is None:
         web_outdirs = [os.path.join(REPO_ROOT, "ui_runner", "templates")]
@@ -5537,7 +5622,8 @@ def publish_wnba_slate_merge_into_web(
 
 
 def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None, cfb=None):
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None, cfb=None,
+                     tennis_date=None):
     """Write full per-sport ranked slate to slate_latest.json for the web UI.
 
     Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
@@ -5561,6 +5647,9 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
             "wnba":   dataframe_to_slate_sport_rows(wnba),
         }
     }
+    tennis_rows = payload["sports"].get("tennis") or []
+    if tennis_date and isinstance(tennis_rows, list) and len(tennis_rows) > 0:
+        payload["tennis_date"] = str(tennis_date).strip()[:10]
 
     os.makedirs(outdir, exist_ok=True)
     out_path = os.path.join(outdir, "slate_latest.json")
@@ -6220,10 +6309,10 @@ html[data-theme="light"] .ticket{
                 pills = "".join([
                     _pill("L5 Avg",     l5_avg,     lambda x: f"{x:.1f}"),
                     _pill("Season Avg", season_avg, lambda x: f"{x:.1f}"),
-                    _pill("L5 Over",    l5_over,    lambda x: f"{int(round(x*5)) if x<=1 else int(x)}/5"),
-                    _pill("L5 Under",   l5_under,   lambda x: f"{int(round(x*5)) if x<=1 else int(x)}/5"),
-                    _pill("L10 Over",   l10_over,   lambda x: f"{int(round(x*10)) if x<=1 else int(x)}/10"),
-                    _pill("L10 Under",  l10_under,  lambda x: f"{int(round(x*10)) if x<=1 else int(x)}/10"),
+                    _pill("L5 Over",    l5_over,    lambda x: format_hit_window_fraction(5, x)),
+                    _pill("L5 Under",   l5_under,   lambda x: format_hit_window_fraction(5, x)),
+                    _pill("L10 Over",   l10_over,   lambda x: format_hit_window_fraction(10, x)),
+                    _pill("L10 Under",  l10_under,  lambda x: format_hit_window_fraction(10, x)),
                     _pill("Hit Rate",   hr_val,     lambda x: f"{x*100:.0f}%"),
                 ])
 
@@ -7462,6 +7551,7 @@ def _load_step8_board_like(
         "start_time":         "game_time",
         "opponent":           "opp",
         "opp_team":           "opp",
+        "pos":                "pos",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_board_hit10",
         "hit_rate_over_L10": "l10_over",
@@ -11410,6 +11500,12 @@ def main():
         default="",
         help="Slate date YYYY-MM-DD, or 'today' / 'now' (default: US Eastern calendar date)",
     )
+    ap.add_argument(
+        "--tennis-date",
+        dest="tennis_date",
+        default=None,
+        help="Override date for Tennis slate card (YYYY-MM-DD). Use when Tennis props are for next-day matches.",
+    )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
     ap.add_argument(
         "--high-conviction",
@@ -11665,6 +11761,17 @@ def main():
     if not ds or ds in ("today", "now"):
         args.date = slate_calendar_date_ymd()
 
+    tennis_ds = str(getattr(args, "tennis_date", None) or "").strip()[:10]
+    if not tennis_ds:
+        try:
+            from datetime import date as _date_cls, timedelta as _td
+
+            args.tennis_date = (_date_cls.fromisoformat(args.date) + _td(days=1)).isoformat()
+        except ValueError:
+            args.tennis_date = None
+    else:
+        args.tennis_date = tennis_ds
+
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     if getattr(args, "win_rate_mode", False):
         cap = int(args.max_legs) if args.max_legs is not None else 3
@@ -11828,8 +11935,9 @@ def main():
     if str(args.tennis).strip():
         try:
             tennis = load_tennis(args.tennis)
+            tennis_match_day = str(getattr(args, "tennis_date", None) or args.date).strip()[:10]
             tennis = enforce_target_date(
-                tennis, "Tennis", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+                tennis, "Tennis", tennis_match_day, allow_cross_date_fallback=args.allow_cross_date_fallback
             )
             tennis = attach_standard_refs(tennis)
             print(f"  {len(tennis)} Tennis props loaded")
@@ -11958,7 +12066,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"):
+        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL", "NHL", "MLB"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -13582,7 +13690,8 @@ def main():
             discard_tracker=discard_tracker,
         )
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb)
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb,
+                         tennis_date=getattr(args, "tennis_date", None))
         try:
             ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
             generate_payout_ladder_examples(payload, ex_out)
@@ -14322,23 +14431,14 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
             v = str(val)
         return f'<div class="gstat"><div class="gstat-label">{_h(label)}</div><div class="gstat-val">{_h(v)}</div></div>'
 
-    def _n_over(n_games: int, raw):
-        try:
-            x = float(raw)
-            k = int(round(x * n_games)) if x <= 1.0 else int(round(x))
-            k = max(0, min(n_games, k))
-            return f"{k}/{n_games}"
-        except (TypeError, ValueError):
-            return str(raw)
-
     pills = "".join(
         [
             _pill("L5 Avg", l5_avg, lambda x: f"{float(x):.1f}"),
             _pill("Season Avg", season_avg, lambda x: f"{float(x):.1f}"),
-            _pill("L5 Over", l5_over, lambda x: _n_over(5, x)),
-            _pill("L5 Under", l5_under, lambda x: _n_over(5, x)),
-            _pill("L10 Over", l10_over, lambda x: _n_over(10, x)),
-            _pill("L10 Under", l10_under, lambda x: _n_over(10, x)),
+            _pill("L5 Over", l5_over, lambda x: format_hit_window_fraction(5, x)),
+            _pill("L5 Under", l5_under, lambda x: format_hit_window_fraction(5, x)),
+            _pill("L10 Over", l10_over, lambda x: format_hit_window_fraction(10, x)),
+            _pill("L10 Under", l10_under, lambda x: format_hit_window_fraction(10, x)),
             _pill("Hit Rate", hr_val, lambda x: f"{float(x) * 100:.0f}%"),
         ]
     )

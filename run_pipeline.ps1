@@ -363,12 +363,36 @@ function Invoke-MLBStep1Fetch {
         [string]$PipelineDate,
         [string]$OutputPath = "step1_mlb_props.csv"
     )
-    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)" -ForegroundColor Yellow
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (CDP, then direct API, then Playwright)" -ForegroundColor Yellow
     Push-Location $WorkDir
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
         $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"   # match WNBA — chrome120 hits DataDome 403
+        $cdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
+        $cdpReachable = $false
+        try {
+            $probe = Invoke-RestMethod -Uri "$cdpUrl/json/version" -TimeoutSec 2 -ErrorAction Stop
+            if ($probe) { $cdpReachable = $true }
+        } catch { $cdpReachable = $false }
+
+        if ($cdpReachable) {
+            $cmd0Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --cdp $cdpUrl --date $PipelineDate --output $OutputPath"
+            Write-Host "        CMD: $cmd0Display" -ForegroundColor DarkGray
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --cdp $cdpUrl --timeout 120 --retries 1 --retry_delay 5 `
+                --date $PipelineDate --output $OutputPath 2>&1
+            $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+            if ($exit -eq 0) {
+                Write-Host "      OK (CDP)" -ForegroundColor Green
+                return $true
+            }
+            Write-Host "      MLB CDP fetch failed (exit $exit); falling back to direct API..." -ForegroundColor Yellow
+        } else {
+            Write-Host "      CDP endpoint not reachable at $cdpUrl; using direct API fallback." -ForegroundColor Yellow
+        }
+
         # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
         $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 4 ..."
         Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
@@ -849,7 +873,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --tennis-date $TennisDate --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -876,6 +900,12 @@ function Run-Combined {
         $okWinrate = Run-Step "Win-Rate Tickets" $Root ".\scripts\combined_slate_tickets.py" $WinrateArgs
         if (-not $okWinrate) {
             Write-Host "  [win-rate] WARN: win-rate ticket pass failed (EV tickets unchanged)." -ForegroundColor Yellow
+        }
+        # Keep Matchup Edge JSON in lockstep with combined slate/ticket publish.
+        # This prevents stale per-sport edge panels when a slate_sport_*.json is empty or delayed.
+        $okMatchupEdge = Run-Step "Build Matchup Edge JSON (all sports)" $Root ".\scripts\build_matchup_edge_json.py" "--sport all"
+        if (-not $okMatchupEdge) {
+            Write-Host "  [matchup-edge] WARN: build_matchup_edge_json.py failed; existing matchup JSON may be stale." -ForegroundColor Yellow
         }
         $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
         # REMOVED: HHmmss snapshot caused resolver ambiguity in build_ticket_eval.py.
@@ -1815,9 +1845,32 @@ $MLBJob = Start-Job -ScriptBlock {
     }
     function Invoke-MLBStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
-        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (CDP, then direct API, then Playwright)"
         Push-Location $Dir
         try {
+            $cdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
+            $cdpReachable = $false
+            try {
+                $probe = Invoke-RestMethod -Uri "$cdpUrl/json/version" -TimeoutSec 2 -ErrorAction Stop
+                if ($probe) { $cdpReachable = $true }
+            } catch { $cdpReachable = $false }
+
+            if ($cdpReachable) {
+                Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --cdp $cdpUrl --date $PipelineDate --output $OutputPath"
+                $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                    --cdp $cdpUrl --timeout 120 --retries 1 --retry_delay 5 `
+                    --date $PipelineDate --output $OutputPath 2>&1
+                $exit = $LASTEXITCODE
+                foreach ($line in $output) { Write-Output "        $line" }
+                if ($exit -eq 0) {
+                    Write-Output "[MLB] OK: MLB Step 1 (CDP)"
+                    return $true
+                }
+                Write-Output "[MLB] CDP failed (exit $exit); falling back to direct API"
+            } else {
+                Write-Output "[MLB] CDP endpoint not reachable at $cdpUrl; using direct API fallback"
+            }
+
             Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
             $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                 --date $PipelineDate --output $OutputPath `

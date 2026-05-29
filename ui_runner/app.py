@@ -980,6 +980,33 @@ def _resolve_outputs_artifact(
     return OUTPUTS_ROOT / d0 / fmts[0].format(d=d0)
 
 
+def _resolve_tennis_slate_artifact(
+    bundle_days: list[str],
+    match_date: str | None,
+    *legacy: Path,
+) -> Path:
+    """
+    Tennis step8 is stored under outputs/<bundle_date>/ with the match day in the filename
+    (e.g. outputs/2026-05-29/step8_tennis_direction_clean_2026-05-30.xlsx).
+    """
+    md = (match_date or "").strip()[:10]
+    if len(md) == 10:
+        for bd in bundle_days:
+            for rel in (
+                f"step8_tennis_direction_clean_{md}.xlsx",
+                f"tennis/step8_tennis_direction_clean_{md}.xlsx",
+                "tennis/step8_tennis_direction_clean.xlsx",
+            ):
+                p = OUTPUTS_ROOT / bd / rel
+                if p.exists():
+                    return p
+    return _resolve_outputs_artifact(
+        bundle_days,
+        "step8_tennis_direction_clean_{d}.xlsx",
+        *legacy,
+    )
+
+
 def _count_slate_sport_rows(payload: dict) -> int:
     return sum(len(v or []) for v in (payload.get("sports") or {}).values())
 
@@ -3175,6 +3202,23 @@ def api_pipeline_status():
     _pref_d = (tickets_payload or {}).get("date") or (slate_payload or {}).get("date")
     days = _slate_day_candidates(str(_pref_d)[:10] if _pref_d else None)
 
+    tennis_override_date = str((slate_payload or {}).get("tennis_date") or "").strip()[:10]
+    if len(tennis_override_date) != 10:
+        tennis_override_date = None
+    tennis_cnt = int(slate_counts.get("tennis", 0))
+    if not tennis_override_date and tennis_cnt > 0:
+        bundle_d = str((slate_payload or {}).get("date") or "").strip()[:10]
+        if len(bundle_d) == 10:
+            try:
+                tennis_override_date = (
+                    datetime.strptime(bundle_d, "%Y-%m-%d").date() + timedelta(days=1)
+                ).strftime("%Y-%m-%d")
+            except ValueError:
+                tennis_override_date = None
+    tennis_card_disp = card_disp
+    if tennis_cnt > 0 and tennis_override_date:
+        tennis_card_disp = f"{tennis_override_date} 00:00:00 UTC"
+
     nba_slate_p = _resolve_outputs_artifact(
         days, "step8_nba_direction_clean_{d}.xlsx", NBA_SLATE, NBA_DIR / "step8_nba_direction_clean.xlsx"
     )
@@ -3191,9 +3235,9 @@ def api_pipeline_status():
     nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
     soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
     mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
-    tennis_slate_p = _resolve_outputs_artifact(
+    tennis_slate_p = _resolve_tennis_slate_artifact(
         days,
-        "step8_tennis_direction_clean_{d}.xlsx",
+        tennis_override_date,
         TENNIS_SLATE,
         TENNIS_DIR / "outputs" / "step8_tennis_direction_clean.xlsx",
     )
@@ -3280,7 +3324,9 @@ def api_pipeline_status():
             "tickets": _file_info(MLB_TICKETS),
         },
         "tennis": {
-            "slate": _sport_slate_status(tennis_slate_p, "tennis", slate_counts, slate_disk_info, status_js_ts, card_disp),
+            "slate": _sport_slate_status(
+                tennis_slate_p, "tennis", slate_counts, slate_disk_info, status_js_ts, tennis_card_disp
+            ),
         },
         "wnba": {
             "slate": _sport_slate_status(wnba_slate_p, "wnba", slate_counts, slate_disk_info, status_js_ts, card_disp),
