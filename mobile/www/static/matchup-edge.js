@@ -439,6 +439,13 @@
       if (loading) loading.style.display = "none";
       if (content) content.style.display = "block";
       populateSelectors(sport);
+      // Race guard: if dropdown populated with 0 options, retry once after
+      // a short delay (panel DOM may not have been ready on first paint)
+      const teamSel = document.getElementById(pid(sport, "team"));
+      if (teamSel && teamSel.options.length === 0) {
+        await new Promise((r) => setTimeout(r, 250));
+        populateSelectors(sport);
+      }
       state[sport].ready = true;
     } catch (e) {
       if (loading)
@@ -450,7 +457,13 @@
 
   function onPanelOpen(sport) {
     if (SKIP.has(sport)) return;
-    init(sport);
+    // If data already loaded (e.g. panel closed and reopened), skip fetch
+    // but always re-populate in case DOM was rebuilt
+    if (state[sport]?.ready) {
+      populateSelectors(sport);
+    } else {
+      init(sport);
+    }
   }
 
   const origToggle = global.toggleSlatePanel;
