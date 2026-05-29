@@ -90,6 +90,47 @@ def _resolve_opp_rank(opp_name: str, rankings: list[dict[str, Any]]) -> float:
     return float(resolve_opp_rank(opp_name, rankings))
 
 
+def _resolve_player_rank(player_name: str, rankings: list[dict[str, Any]]) -> int | None:
+    """Player's own ATP/WTA rank from tennis_rankings.json (player_key match)."""
+    if not str(player_name or "").strip():
+        return None
+    pk = _norm_key(player_name)
+    if not pk:
+        return None
+    for r in rankings:
+        if r.get("player_key") == pk:
+            rank = r.get("rank")
+            if rank is not None:
+                return int(rank)
+    best: int | None = None
+    for r in rankings:
+        rk = r.get("player_key") or ""
+        if pk and rk and (pk in rk or rk in pk):
+            rank = int(r.get("rank") or 999)
+            if best is None or rank < best:
+                best = rank
+    return best
+
+
+def _atp_tier_from_rank(
+    rank: int | float | None,
+    *,
+    elite_rank_cut: int = 25,
+    weak_rank_cut: int = 100,
+) -> str:
+    if rank is None:
+        return ""
+    try:
+        r = int(float(rank))
+    except (TypeError, ValueError):
+        return ""
+    if r <= elite_rank_cut:
+        return "Elite"
+    if r < weak_rank_cut:
+        return "Average"
+    return "Weak"
+
+
 def _enrich_opponents(rows: list[dict], match_cache: dict[str, list[dict[str, Any]]]) -> None:
     for row in rows:
         opp = str(row.get("opp_team") or row.get("opp") or "").strip()
@@ -127,13 +168,19 @@ def _player_matchups(rows: list[dict], rankings: list[dict[str, Any]]) -> dict[s
         if opp_rank is None or (isinstance(opp_rank, float) and np.isnan(opp_rank)):
             opp_rank = _resolve_opp_rank(opp, rankings)
         player_rank = row.get("player_atp_rank")
+        if player_rank is None or (isinstance(player_rank, float) and np.isnan(player_rank)):
+            player_rank = _resolve_player_rank(player, rankings)
+        opp_rank_i = int(float(opp_rank)) if opp_rank is not None else None
+        player_rank_i = int(float(player_rank)) if player_rank is not None else None
         out[pk] = {
             "player_name": player,
             "player_key": pk,
             "opponent_slate": _norm_key(opp) or opp.upper(),
             "opponent_name": opp,
-            "opponent_def_rank": int(float(opp_rank)) if opp_rank is not None else None,
-            "player_rank": int(float(player_rank)) if player_rank is not None else None,
+            "opponent_def_rank": opp_rank_i,
+            "opponent_def_tier": _atp_tier_from_rank(opp_rank_i),
+            "player_rank": player_rank_i,
+            "player_tier": _atp_tier_from_rank(player_rank_i),
         }
     return out
 
@@ -260,7 +307,7 @@ def build_tennis_matchup_payload(
             "slate_abbr": pk,
             "name": mu["player_name"],
             "def_rank": mu.get("player_rank"),
-            "def_tier": "",
+            "def_tier": mu.get("player_tier") or "",
         }
         for pk, mu in sorted(matchups_raw.items(), key=lambda x: x[1]["player_name"])
     ]
@@ -318,7 +365,7 @@ def build_tennis_matchup_payload(
                 "slate_abbr": mu.get("opponent_slate", ""),
                 "name": mu.get("opponent_name", ""),
                 "def_rank": opp_rank,
-                "def_tier": "",
+                "def_tier": mu.get("opponent_def_tier") or "",
             },
             "players": enriched,
         }
@@ -328,9 +375,9 @@ def build_tennis_matchup_payload(
             "opponent_slate": mu.get("opponent_slate", ""),
             "opponent_name": mu.get("opponent_name", ""),
             "opponent_def_rank": mu.get("opponent_def_rank"),
-            "opponent_def_tier": "",
+            "opponent_def_tier": mu.get("opponent_def_tier") or "",
             "team_def_rank": mu.get("player_rank"),
-            "team_def_tier": "",
+            "team_def_tier": mu.get("player_tier") or "",
         }
         for pk, mu in matchups_raw.items()
     }

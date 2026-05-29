@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-05-28T23:04:12.407689+00:00",
+  "generated_at": "2026-05-29T12:23:06.134179+00:00",
   "n_teams": 300,
   "elite_rank_cut": 25,
   "weak_rank_cut": 100,
@@ -39,64 +39,64 @@
       "def_key": "alex de minaur",
       "slate_abbr": "alex de minaur",
       "name": "Alex de Minaur",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 7,
+      "def_tier": "Elite"
     },
     {
       "def_key": "alexander zverev",
       "slate_abbr": "alexander zverev",
       "name": "Alexander Zverev",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 3,
+      "def_tier": "Elite"
     },
     {
       "def_key": "andrey rublev",
       "slate_abbr": "andrey rublev",
       "name": "Andrey Rublev",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 13,
+      "def_tier": "Elite"
     },
     {
       "def_key": "belinda bencic",
       "slate_abbr": "belinda bencic",
       "name": "Belinda Bencic",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 11,
+      "def_tier": "Elite"
     },
     {
       "def_key": "casper ruud",
       "slate_abbr": "casper ruud",
       "name": "Casper Ruud",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 16,
+      "def_tier": "Elite"
     },
     {
       "def_key": "elina svitolina",
       "slate_abbr": "elina svitolina",
       "name": "Elina Svitolina",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 7,
+      "def_tier": "Elite"
     },
     {
       "def_key": "iga swiatek",
       "slate_abbr": "iga swiatek",
       "name": "Iga Swiatek",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 3,
+      "def_tier": "Elite"
     },
     {
       "def_key": "jakub mensik",
       "slate_abbr": "jakub mensik",
       "name": "Jakub Mensik",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 27,
+      "def_tier": "Average"
     },
     {
       "def_key": "jesper de jong",
       "slate_abbr": "jesper de jong",
       "name": "Jesper De Jong",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 106,
+      "def_tier": "Weak"
     },
     {
       "def_key": "jil teichmann",
@@ -109,120 +109,120 @@
       "def_key": "joao fonseca",
       "slate_abbr": "joao fonseca",
       "name": "Joao Fonseca",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 30,
+      "def_tier": "Average"
     },
     {
       "def_key": "karen khachanov",
       "slate_abbr": "karen khachanov",
       "name": "Karen Khachanov",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 15,
+      "def_tier": "Elite"
     },
     {
       "def_key": "karolina muchova",
       "slate_abbr": "karolina muchova",
       "name": "Karolina Muchova",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 10,
+      "def_tier": "Elite"
     },
     {
       "def_key": "magda linette",
       "slate_abbr": "magda linette",
       "name": "Magda Linette",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 73,
+      "def_tier": "Average"
     },
     {
       "def_key": "marie bouzkova",
       "slate_abbr": "marie bouzkova",
       "name": "Marie Bouzkova",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 28,
+      "def_tier": "Average"
     },
     {
       "def_key": "marta kostyuk",
       "slate_abbr": "marta kostyuk",
       "name": "Marta Kostyuk",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 15,
+      "def_tier": "Elite"
     },
     {
       "def_key": "mirra andreeva",
       "slate_abbr": "mirra andreeva",
       "name": "Mirra Andreeva",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 8,
+      "def_tier": "Elite"
     },
     {
       "def_key": "novak djokovic",
       "slate_abbr": "novak djokovic",
       "name": "Novak Djokovic",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 4,
+      "def_tier": "Elite"
     },
     {
       "def_key": "nuno borges",
       "slate_abbr": "nuno borges",
       "name": "Nuno Borges",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 51,
+      "def_tier": "Average"
     },
     {
       "def_key": "pablo carreno busta",
       "slate_abbr": "pablo carreno busta",
       "name": "Pablo Carreno Busta",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 89,
+      "def_tier": "Average"
     },
     {
       "def_key": "peyton stearns",
       "slate_abbr": "peyton stearns",
       "name": "Peyton Stearns",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 78,
+      "def_tier": "Average"
     },
     {
       "def_key": "rafael jodar",
       "slate_abbr": "rafael jodar",
       "name": "Rafael Jodar",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 29,
+      "def_tier": "Average"
     },
     {
       "def_key": "solana sierra",
       "slate_abbr": "solana sierra",
       "name": "Solana Sierra",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 68,
+      "def_tier": "Average"
     },
     {
       "def_key": "sorana cirstea",
       "slate_abbr": "sorana cirstea",
       "name": "Sorana Cirstea",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 18,
+      "def_tier": "Elite"
     },
     {
       "def_key": "tamara korpatsch",
       "slate_abbr": "tamara korpatsch",
       "name": "Tamara Korpatsch",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 95,
+      "def_tier": "Average"
     },
     {
       "def_key": "thiago agustin tirante",
       "slate_abbr": "thiago agustin tirante",
       "name": "Thiago Agustin Tirante",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 60,
+      "def_tier": "Average"
     },
     {
       "def_key": "viktorija golubic",
       "slate_abbr": "viktorija golubic",
       "name": "Viktorija Golubic",
-      "def_rank": null,
-      "def_tier": ""
+      "def_rank": 82,
+      "def_tier": "Average"
     }
   ],
   "matchups": {
@@ -230,95 +230,95 @@
       "opponent_slate": "elina svitolina",
       "opponent_name": "ELINA SVITOLINA",
       "opponent_def_rank": 7,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 95,
+      "team_def_tier": "Average"
     },
     "nuno borges": {
       "opponent_slate": "andrey rublev",
       "opponent_name": "ANDREY RUBLEV",
       "opponent_def_rank": 13,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 51,
+      "team_def_tier": "Average"
     },
     "pablo carreno busta": {
       "opponent_slate": "thiago agustin tirante",
       "opponent_name": "THIAGO AGUSTIN TIRANTE",
       "opponent_def_rank": 60,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 89,
+      "team_def_tier": "Average"
     },
     "peyton stearns": {
       "opponent_slate": "belinda bencic",
       "opponent_name": "BELINDA BENCIC",
       "opponent_def_rank": 11,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 78,
+      "team_def_tier": "Average"
     },
     "thiago agustin tirante": {
       "opponent_slate": "pablo carreno busta",
       "opponent_name": "PABLO CARRENO BUSTA",
       "opponent_def_rank": 89,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 60,
+      "team_def_tier": "Average"
     },
     "elina svitolina": {
       "opponent_slate": "tamara korpatsch",
       "opponent_name": "TAMARA KORPATSCH",
       "opponent_def_rank": 95,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 7,
+      "team_def_tier": "Elite"
     },
     "mirra andreeva": {
       "opponent_slate": "marie bouzkova",
       "opponent_name": "MARIE BOUZKOVA",
       "opponent_def_rank": 28,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 8,
+      "team_def_tier": "Elite"
     },
     "marta kostyuk": {
       "opponent_slate": "viktorija golubic",
       "opponent_name": "VIKTORIJA GOLUBIC",
       "opponent_def_rank": 82,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 15,
+      "team_def_tier": "Elite"
     },
     "novak djokovic": {
       "opponent_slate": "joao fonseca",
       "opponent_name": "JOAO FONSECA",
       "opponent_def_rank": 30,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 4,
+      "team_def_tier": "Elite"
     },
     "andrey rublev": {
       "opponent_slate": "nuno borges",
       "opponent_name": "NUNO BORGES",
       "opponent_def_rank": 51,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 13,
+      "team_def_tier": "Elite"
     },
     "jesper de jong": {
       "opponent_slate": "karen khachanov",
       "opponent_name": "KAREN KHACHANOV",
       "opponent_def_rank": 15,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 106,
+      "team_def_tier": "Weak"
     },
     "jil teichmann": {
       "opponent_slate": "karolina muchova",
       "opponent_name": "KAROLINA MUCHOVA",
       "opponent_def_rank": 10,
-      "opponent_def_tier": "",
+      "opponent_def_tier": "Elite",
       "team_def_rank": null,
       "team_def_tier": ""
     },
@@ -326,121 +326,121 @@
       "opponent_slate": "james duckworth",
       "opponent_name": "James Duckworth",
       "opponent_def_rank": 82,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 29,
+      "team_def_tier": "Average"
     },
     "jakub mensik": {
       "opponent_slate": "alex de minaur",
       "opponent_name": "ALEX DE MINAUR",
       "opponent_def_rank": 7,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 27,
+      "team_def_tier": "Average"
     },
     "karolina muchova": {
       "opponent_slate": "jil teichmann",
       "opponent_name": "JIL TEICHMANN",
       "opponent_def_rank": 75,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 10,
+      "team_def_tier": "Elite"
     },
     "casper ruud": {
       "opponent_slate": "hamad medjedovic",
       "opponent_name": "Hamad Medjedovic",
       "opponent_def_rank": 58,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 16,
+      "team_def_tier": "Elite"
     },
     "karen khachanov": {
       "opponent_slate": "jesper de jong",
       "opponent_name": "JESPER DE JONG",
       "opponent_def_rank": 106,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 15,
+      "team_def_tier": "Elite"
     },
     "alexander zverev": {
       "opponent_slate": "tomas machac",
       "opponent_name": "Tomas Machac",
       "opponent_def_rank": 43,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 3,
+      "team_def_tier": "Elite"
     },
     "sorana cirstea": {
       "opponent_slate": "solana sierra",
       "opponent_name": "SOLANA SIERRA",
       "opponent_def_rank": 68,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 18,
+      "team_def_tier": "Elite"
     },
     "iga swiatek": {
       "opponent_slate": "magda linette",
       "opponent_name": "MAGDA LINETTE",
       "opponent_def_rank": 73,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 3,
+      "team_def_tier": "Elite"
     },
     "belinda bencic": {
       "opponent_slate": "peyton stearns",
       "opponent_name": "PEYTON STEARNS",
       "opponent_def_rank": 78,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 11,
+      "team_def_tier": "Elite"
     },
     "alex de minaur": {
       "opponent_slate": "jakub mensik",
       "opponent_name": "JAKUB MENSIK",
       "opponent_def_rank": 27,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Average",
+      "team_def_rank": 7,
+      "team_def_tier": "Elite"
     },
     "solana sierra": {
       "opponent_slate": "sorana cirstea",
       "opponent_name": "SORANA CIRSTEA",
       "opponent_def_rank": 18,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 68,
+      "team_def_tier": "Average"
     },
     "marie bouzkova": {
       "opponent_slate": "mirra andreeva",
       "opponent_name": "MIRRA ANDREEVA",
       "opponent_def_rank": 8,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 28,
+      "team_def_tier": "Average"
     },
     "joao fonseca": {
       "opponent_slate": "novak djokovic",
       "opponent_name": "NOVAK DJOKOVIC",
       "opponent_def_rank": 4,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 30,
+      "team_def_tier": "Average"
     },
     "magda linette": {
       "opponent_slate": "iga swiatek",
       "opponent_name": "IGA SWIATEK",
       "opponent_def_rank": 3,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 73,
+      "team_def_tier": "Average"
     },
     "viktorija golubic": {
       "opponent_slate": "marta kostyuk",
       "opponent_name": "MARTA KOSTYUK",
       "opponent_def_rank": 15,
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 82,
+      "team_def_tier": "Average"
     }
   },
   "players_by_team_cat": {
@@ -453,7 +453,7 @@
         "slate_abbr": "pablo carreno busta",
         "name": "PABLO CARRENO BUSTA",
         "def_rank": 89,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -481,7 +481,7 @@
         "slate_abbr": "tamara korpatsch",
         "name": "TAMARA KORPATSCH",
         "def_rank": 95,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -509,7 +509,7 @@
         "slate_abbr": "marie bouzkova",
         "name": "MARIE BOUZKOVA",
         "def_rank": 28,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -537,7 +537,7 @@
         "slate_abbr": "viktorija golubic",
         "name": "VIKTORIJA GOLUBIC",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -565,7 +565,7 @@
         "slate_abbr": "joao fonseca",
         "name": "JOAO FONSECA",
         "def_rank": 30,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -593,7 +593,7 @@
         "slate_abbr": "nuno borges",
         "name": "NUNO BORGES",
         "def_rank": 51,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1041,7 +1041,7 @@
         "slate_abbr": "james duckworth",
         "name": "James Duckworth",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1069,7 +1069,7 @@
         "slate_abbr": "jil teichmann",
         "name": "JIL TEICHMANN",
         "def_rank": 75,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1097,7 +1097,7 @@
         "slate_abbr": "magda linette",
         "name": "MAGDA LINETTE",
         "def_rank": 73,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1125,7 +1125,7 @@
         "slate_abbr": "hamad medjedovic",
         "name": "Hamad Medjedovic",
         "def_rank": 58,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1153,7 +1153,7 @@
         "slate_abbr": "jesper de jong",
         "name": "JESPER DE JONG",
         "def_rank": 106,
-        "def_tier": ""
+        "def_tier": "Weak"
       },
       "players": [
         {
@@ -1181,7 +1181,7 @@
         "slate_abbr": "tomas machac",
         "name": "Tomas Machac",
         "def_rank": 43,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1209,7 +1209,7 @@
         "slate_abbr": "peyton stearns",
         "name": "PEYTON STEARNS",
         "def_rank": 78,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1237,7 +1237,7 @@
         "slate_abbr": "solana sierra",
         "name": "SOLANA SIERRA",
         "def_rank": 68,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1265,7 +1265,7 @@
         "slate_abbr": "elina svitolina",
         "name": "ELINA SVITOLINA",
         "def_rank": 7,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1293,7 +1293,7 @@
         "slate_abbr": "belinda bencic",
         "name": "BELINDA BENCIC",
         "def_rank": 11,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1321,7 +1321,7 @@
         "slate_abbr": "karen khachanov",
         "name": "KAREN KHACHANOV",
         "def_rank": 15,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1713,7 +1713,7 @@
         "slate_abbr": "jesper de jong",
         "name": "JESPER DE JONG",
         "def_rank": 106,
-        "def_tier": ""
+        "def_tier": "Weak"
       },
       "players": [
         {
@@ -1741,7 +1741,7 @@
         "slate_abbr": "tamara korpatsch",
         "name": "TAMARA KORPATSCH",
         "def_rank": 95,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1769,7 +1769,7 @@
         "slate_abbr": "thiago agustin tirante",
         "name": "THIAGO AGUSTIN TIRANTE",
         "def_rank": 60,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1825,7 +1825,7 @@
         "slate_abbr": "karolina muchova",
         "name": "KAROLINA MUCHOVA",
         "def_rank": 10,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1853,7 +1853,7 @@
         "slate_abbr": "belinda bencic",
         "name": "BELINDA BENCIC",
         "def_rank": 11,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1881,7 +1881,7 @@
         "slate_abbr": "alex de minaur",
         "name": "ALEX DE MINAUR",
         "def_rank": 7,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -1909,7 +1909,7 @@
         "slate_abbr": "jil teichmann",
         "name": "JIL TEICHMANN",
         "def_rank": 75,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1937,7 +1937,7 @@
         "slate_abbr": "tamara korpatsch",
         "name": "TAMARA KORPATSCH",
         "def_rank": 95,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1965,7 +1965,7 @@
         "slate_abbr": "solana sierra",
         "name": "SOLANA SIERRA",
         "def_rank": 68,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -1993,7 +1993,7 @@
         "slate_abbr": "viktorija golubic",
         "name": "VIKTORIJA GOLUBIC",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2021,7 +2021,7 @@
         "slate_abbr": "nuno borges",
         "name": "NUNO BORGES",
         "def_rank": 51,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2049,7 +2049,7 @@
         "slate_abbr": "andrey rublev",
         "name": "ANDREY RUBLEV",
         "def_rank": 13,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -2077,7 +2077,7 @@
         "slate_abbr": "pablo carreno busta",
         "name": "PABLO CARRENO BUSTA",
         "def_rank": 89,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2105,7 +2105,7 @@
         "slate_abbr": "andrey rublev",
         "name": "ANDREY RUBLEV",
         "def_rank": 13,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -2161,7 +2161,7 @@
         "slate_abbr": "karolina muchova",
         "name": "KAROLINA MUCHOVA",
         "def_rank": 10,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -2189,7 +2189,7 @@
         "slate_abbr": "jil teichmann",
         "name": "JIL TEICHMANN",
         "def_rank": 75,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2217,7 +2217,7 @@
         "slate_abbr": "viktorija golubic",
         "name": "VIKTORIJA GOLUBIC",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2245,7 +2245,7 @@
         "slate_abbr": "tamara korpatsch",
         "name": "TAMARA KORPATSCH",
         "def_rank": 95,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2273,7 +2273,7 @@
         "slate_abbr": "solana sierra",
         "name": "SOLANA SIERRA",
         "def_rank": 68,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2301,7 +2301,7 @@
         "slate_abbr": "nuno borges",
         "name": "NUNO BORGES",
         "def_rank": 51,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2329,7 +2329,7 @@
         "slate_abbr": "belinda bencic",
         "name": "BELINDA BENCIC",
         "def_rank": 11,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -2357,7 +2357,7 @@
         "slate_abbr": "pablo carreno busta",
         "name": "PABLO CARRENO BUSTA",
         "def_rank": 89,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2385,7 +2385,7 @@
         "slate_abbr": "alex de minaur",
         "name": "ALEX DE MINAUR",
         "def_rank": 7,
-        "def_tier": ""
+        "def_tier": "Elite"
       },
       "players": [
         {
@@ -2413,7 +2413,7 @@
         "slate_abbr": "james duckworth",
         "name": "James Duckworth",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2441,7 +2441,7 @@
         "slate_abbr": "pablo carreno busta",
         "name": "PABLO CARRENO BUSTA",
         "def_rank": 89,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2469,7 +2469,7 @@
         "slate_abbr": "hamad medjedovic",
         "name": "Hamad Medjedovic",
         "def_rank": 58,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2497,7 +2497,7 @@
         "slate_abbr": "jesper de jong",
         "name": "JESPER DE JONG",
         "def_rank": 106,
-        "def_tier": ""
+        "def_tier": "Weak"
       },
       "players": [
         {
@@ -2525,7 +2525,7 @@
         "slate_abbr": "joao fonseca",
         "name": "JOAO FONSECA",
         "def_rank": 30,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2553,7 +2553,7 @@
         "slate_abbr": "nuno borges",
         "name": "NUNO BORGES",
         "def_rank": 51,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2581,7 +2581,7 @@
         "slate_abbr": "tomas machac",
         "name": "Tomas Machac",
         "def_rank": 43,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2609,7 +2609,7 @@
         "slate_abbr": "jil teichmann",
         "name": "JIL TEICHMANN",
         "def_rank": 75,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2637,7 +2637,7 @@
         "slate_abbr": "tamara korpatsch",
         "name": "TAMARA KORPATSCH",
         "def_rank": 95,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2665,7 +2665,7 @@
         "slate_abbr": "magda linette",
         "name": "MAGDA LINETTE",
         "def_rank": 73,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2693,7 +2693,7 @@
         "slate_abbr": "peyton stearns",
         "name": "PEYTON STEARNS",
         "def_rank": 78,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2721,7 +2721,7 @@
         "slate_abbr": "solana sierra",
         "name": "SOLANA SIERRA",
         "def_rank": 68,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2749,7 +2749,7 @@
         "slate_abbr": "marie bouzkova",
         "name": "MARIE BOUZKOVA",
         "def_rank": 28,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
@@ -2777,7 +2777,7 @@
         "slate_abbr": "viktorija golubic",
         "name": "VIKTORIJA GOLUBIC",
         "def_rank": 82,
-        "def_tier": ""
+        "def_tier": "Average"
       },
       "players": [
         {
