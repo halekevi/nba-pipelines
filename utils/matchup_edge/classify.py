@@ -23,7 +23,14 @@ def classify_edge(
     rank_on_team: int | None = None,
 ) -> tuple[str, str]:
     hist = hist or {}
-    rank = float(opp_rank) if opp_rank is not None and not (isinstance(opp_rank, float) and np.isnan(opp_rank)) else np.nan
+    rank = np.nan
+    if opp_rank is not None and opp_rank != "":
+        try:
+            rank = float(opp_rank)
+            if isinstance(rank, float) and np.isnan(rank):
+                rank = np.nan
+        except (TypeError, ValueError):
+            rank = np.nan
     weak_cut = max(10, int(np.ceil(n_teams * 0.65)))
     mid_cut = max(7, int(n_teams / 2))
     over_weak = hist.get("overperform_vs_weak", False)

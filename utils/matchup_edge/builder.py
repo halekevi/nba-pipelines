@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -16,6 +15,7 @@ from utils.matchup_edge.slate_io import (
     leaders_from_slate,
     load_slate_rows,
     lookup_pp_edge,
+    norm_player_name,
     norm_prop,
     pp_leaders_from_slate,
     tonight_matchups,
@@ -28,8 +28,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _norm_name(s: object) -> str:
-    t = unicodedata.normalize("NFKD", str(s or "").strip().lower())
-    return "".join(c for c in t if not unicodedata.combining(c))
+    return norm_player_name(s)
 
 
 def _team_norm(cfg: SportMatchupConfig, abbr: str) -> str:
@@ -292,7 +291,27 @@ _PIPELINE_SLATES: dict[str, list[str]] = {
         "ui_runner/templates/slate_sport_tennis.json",
         "Sports/Tennis/step8_tennis_direction.csv",
     ],
+    "soccer": [
+        "ui_runner/templates/slate_sport_soccer.json",
+        "mobile/www/slate_sport_soccer.json",
+        "Sports/Soccer/step8_soccer_direction.csv",
+    ],
 }
+
+
+def _slate_row_count(path: Path) -> int:
+    try:
+        if path.suffix.lower() == ".json":
+            raw = json.loads(path.read_text(encoding="utf-8-sig"))
+            rows = raw.get("rows") or raw.get("picks") or []
+            if isinstance(raw, list):
+                rows = raw
+            return int(len(rows))
+        if path.suffix.lower() == ".csv":
+            return max(sum(1 for _ in path.open(encoding="utf-8-sig")) - 1, 0)
+    except Exception:
+        return 0
+    return 0
 
 
 def _resolve_slate_path(cfg: SportMatchupConfig, slate_path: Path | None) -> Path:
@@ -307,23 +326,25 @@ def _resolve_slate_path(cfg: SportMatchupConfig, slate_path: Path | None) -> Pat
         candidates.insert(0, _REPO_ROOT / "Sports/WNBA/step8_wnba_direction.csv")
     for rel in _PIPELINE_SLATES.get(cfg.sport, []):
         candidates.append(_REPO_ROOT / rel)
+    seen: set[Path] = set()
+    unique: list[Path] = []
     for c in candidates:
-        if c.is_file():
-            try:
-                if c.suffix.lower() == ".json":
-                    raw = json.loads(c.read_text(encoding="utf-8-sig"))
-                    rows = raw.get("rows") or raw.get("picks") or []
-                    if isinstance(raw, list):
-                        rows = raw
-                    if not rows:
-                        continue
-                elif c.suffix.lower() == ".csv":
-                    if sum(1 for _ in open(c, encoding="utf-8-sig")) < 2:
-                        continue
-            except Exception:
-                continue
-            return c
-    return candidates[0]
+        if c not in seen:
+            seen.add(c)
+            unique.append(c)
+
+    best_path: Path | None = None
+    best_rows = -1
+    for c in unique:
+        if not c.is_file():
+            continue
+        count = _slate_row_count(c)
+        if count > best_rows:
+            best_rows = count
+            best_path = c
+    if best_path:
+        return best_path
+    return unique[0] if unique else (_REPO_ROOT / "ui_runner/templates" / f"slate_sport_{cfg.sport}.json")
 
 
 def _extend_def_lookup(cfg: SportMatchupConfig, def_lookup: dict[str, dict]) -> None:
@@ -525,6 +546,8 @@ def build_matchup_payload(
         if "|" not in key:
             continue
         team_slate, cid = key.split("|", 1)
+        if teams_on_slate and team_slate not in teams_on_slate:
+            continue
         mu = matchups_ui.get(team_slate, {})
         opp_rank = mu.get("opponent_def_rank")
         cat = next((c for c in cfg.categories if c["id"] == cid), {"threshold": 1.0})
@@ -539,6 +562,7 @@ def build_matchup_payload(
                 team=team_slate,
                 cat_id=cid,
                 player_norm=p.get("player_norm"),
+                slate_teams=teams_on_slate or None,
             )
             rank_on_team = int(p.get("rank_on_team") or i)
             edge, note = classify_edge(

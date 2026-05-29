@@ -53,6 +53,29 @@ def norm_name(s: object) -> str:
     return "".join(c for c in t if not unicodedata.combining(c))
 
 
+_SUFFIX_RE = re.compile(r"\s+(jr|sr|ii|iii|iv)\.?$", re.I)
+
+
+def norm_player_name(s: object) -> str:
+    """Accent-stripped, lowercased name; drops Jr/Sr/II/III/IV suffixes for PP joins."""
+    base = norm_name(s)
+    return _SUFFIX_RE.sub("", base).strip()
+
+
+def _align_prop_category(cid: str, cat_ids: set[str] | None) -> str:
+    if not cat_ids or cid in cat_ids:
+        return cid
+    if cid == "ast" and "assists" in cat_ids:
+        return "assists"
+    if cid == "assists" and "ast" in cat_ids:
+        return "ast"
+    if cid in ("shots_assisted", "shot_assisted") and "assists" in cat_ids:
+        return "assists"
+    if cid in ("shots_on_target", "sot") and "shots" in cat_ids:
+        return "shots"
+    return cid
+
+
 def pick_type_rank(pick_type: object) -> int:
     p = str(pick_type or "").lower()
     if p == "standard":
@@ -81,52 +104,56 @@ def _team_from_row(row: dict) -> str:
     return ""
 
 
-def norm_prop(raw: object) -> str:
+def norm_prop(raw: object, *, cat_ids: set[str] | None = None) -> str:
     s = re.sub(r"\(combo\)\s*$", "", str(raw or "").lower().strip())
     s = re.sub(r"\s+", " ", s)
     if s in PROP_NORM_ALIASES:
-        return PROP_NORM_ALIASES[s]
+        return _align_prop_category(PROP_NORM_ALIASES[s], cat_ids)
     if "3-pt" in s or "3pt" in s:
-        return "fg3m"
+        return _align_prop_category("fg3m", cat_ids)
     if "point" in s and "+" in s:
-        return "pra"
+        return _align_prop_category("pra", cat_ids)
     if "point" in s:
-        return "pts"
+        return _align_prop_category("pts", cat_ids)
     if "rebound" in s:
-        return "reb"
+        return _align_prop_category("reb", cat_ids)
     if "assist" in s:
-        return "ast"
+        return _align_prop_category("ast", cat_ids)
     if "steal" in s:
-        return "stl"
+        return _align_prop_category("stl", cat_ids)
     if "block" in s and "shot" not in s:
-        return "blk"
+        return _align_prop_category("blk", cat_ids)
+    if "shot" in s and "target" in s:
+        return _align_prop_category("shots", cat_ids)
     if "shot" in s and "goal" in s:
-        return "shots"
+        return _align_prop_category("shots", cat_ids)
+    if "goal" in s and "assist" not in s:
+        return _align_prop_category("goals", cat_ids)
     if "strikeout" in s or s == "k's":
-        return "strikeouts"
+        return _align_prop_category("strikeouts", cat_ids)
     if "total base" in s:
-        return "total_bases"
+        return _align_prop_category("total_bases", cat_ids)
     if "home run" in s:
-        return "home_runs"
+        return _align_prop_category("home_runs", cat_ids)
     if "total game" in s and "won" in s:
-        return "games_won"
+        return _align_prop_category("games_won", cat_ids)
     if "total game" in s:
-        return "match_total_games"
+        return _align_prop_category("match_total_games", cat_ids)
     if "double fault" in s:
-        return "double_faults"
+        return _align_prop_category("double_faults", cat_ids)
     if "ace" in s:
-        return "aces"
+        return _align_prop_category("aces", cat_ids)
     if "break point" in s:
-        return "break_points_won"
+        return _align_prop_category("break_points_won", cat_ids)
     if "stock" in s or "stl+blk" in s:
-        return "stocks"
+        return _align_prop_category("stocks", cat_ids)
     if "pass" in s and "yard" in s:
-        return "pass_yds"
+        return _align_prop_category("pass_yds", cat_ids)
     if "rush" in s and "yard" in s:
-        return "rush_yds"
+        return _align_prop_category("rush_yds", cat_ids)
     if "receiv" in s and "yard" in s:
-        return "rec_yds"
-    return s.replace(" ", "_")[:32]
+        return _align_prop_category("rec_yds", cat_ids)
+    return _align_prop_category(s.replace(" ", "_")[:32], cat_ids)
 
 
 def build_slate_pp_lookup(
@@ -152,9 +179,9 @@ def build_slate_pp_lookup(
         player = str(row.get("player") or row.get("player_name") or "").strip()
         if not player:
             continue
-        pnorm = norm_name(player)
+        pnorm = norm_player_name(player)
         prop_raw = row.get("prop") or row.get("prop_type") or row.get("prop_norm")
-        cid = norm_prop(prop_raw)
+        cid = norm_prop(prop_raw, cat_ids=cat_ids)
         if cid not in cat_ids:
             continue
         if player_mode:
@@ -196,12 +223,29 @@ def lookup_pp_edge(
     cat_id: str,
     player_norm: str | None = None,
     player_mode: bool = False,
+    slate_teams: set[str] | None = None,
 ) -> dict:
-    pnorm = player_norm or norm_name(player)
+    pnorm = norm_player_name(player_norm or player)
     if player_mode:
         return pp_lookup.get((pnorm, cat_id), {})
     team_u = str(team or "").upper()
-    return pp_lookup.get((pnorm, team_u, cat_id), {})
+    hit = pp_lookup.get((pnorm, team_u, cat_id), {})
+    if hit:
+        return hit
+    if not slate_teams:
+        return {}
+    best: dict = {}
+    best_edge = -999.0
+    for t in slate_teams:
+        rec = pp_lookup.get((pnorm, str(t).upper(), cat_id), {})
+        if not rec:
+            continue
+        pe = rec.get("pp_edge")
+        val = float(pe) if pe is not None and not (isinstance(pe, float) and np.isnan(pe)) else -999.0
+        if val > best_edge:
+            best_edge = val
+            best = rec
+    return best
 
 
 def load_slate_rows(slate_path: Path) -> list[dict]:
@@ -275,7 +319,7 @@ def pp_leaders_from_slate(
         team = _team(row.get("team") or row.get("team_abbr"))
         if not team:
             continue
-        cid = norm_prop(row.get("prop") or row.get("prop_type") or row.get("prop_norm"))
+        cid = norm_prop(row.get("prop") or row.get("prop_type") or row.get("prop_norm"), cat_ids=cat_ids)
         if cid not in cat_ids:
             continue
         avg = pd.to_numeric(row.get("season_avg") or row.get("stat_season_avg"), errors="coerce")
@@ -287,7 +331,7 @@ def pp_leaders_from_slate(
         buckets.setdefault(f"{team}|{cid}", []).append(
             {
                 "player": player,
-                "player_norm": norm_name(player),
+                "player_norm": norm_player_name(player),
                 "pos": str(row.get("pos") or row.get("position") or "").strip().upper()[:3],
                 "season_avg": round(float(avg), 2) if pd.notna(avg) else round(sort_val, 2),
                 "game_score": round(float(avg), 1) if pd.notna(avg) else round(sort_val, 1),
