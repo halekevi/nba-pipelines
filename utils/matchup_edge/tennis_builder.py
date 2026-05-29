@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -14,6 +16,7 @@ from utils.matchup_edge.sports_config import SportMatchupConfig
 
 _REPO = Path(__file__).resolve().parents[2]
 _TENNIS_SCRIPTS = _REPO / "Sports" / "Tennis" / "scripts"
+_ET = ZoneInfo("America/New_York")
 
 
 def _norm_key(s: object) -> str:
@@ -24,42 +27,135 @@ def _norm_key(s: object) -> str:
     return norm_key(str(s or ""))
 
 
-def _resolve_tennis_slate(slate_path: Path | None) -> Path:
-    if slate_path and slate_path.is_file():
-        return slate_path
-    candidates = (
+def _tennis_match_date() -> str:
+    """
+    ET match day for tennis props (early / next-day boards).
+    Matches run_pipeline.ps1: TennisDate = pipeline calendar day + 1.
+    Override with env PROPORACLE_TENNIS_DATE=YYYY-MM-DD.
+    """
+    override = os.environ.get("PROPORACLE_TENNIS_DATE", "").strip()[:10]
+    if override:
+        return override
+    return (datetime.now(_ET).date() + timedelta(days=1)).isoformat()
+
+
+def _row_et_date(row: dict) -> str:
+    for key in ("start_time", "game_time", "Game Time", "game_datetime", "game_date", "slate_date"):
+        val = row.get(key)
+        if val is None or str(val).strip() in ("", "nan", "None"):
+            continue
+        s = str(val).strip()
+        if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+            d = s[:10]
+        else:
+            try:
+                dt = pd.to_datetime(val)
+                if getattr(dt, "tzinfo", None) is None:
+                    dt = dt.tz_localize("UTC")
+                d = dt.tz_convert(_ET).date().isoformat()
+            except Exception:
+                continue
+        try:
+            y = int(d[:4])
+            if y < 2020 or y > 2035:
+                continue
+        except ValueError:
+            continue
+        return d
+    return ""
+
+
+def _normalize_tennis_slate_rows(rows: list[dict]) -> list[dict]:
+    """Map step8 clean / PP column labels to builder field names."""
+    out: list[dict] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        r = dict(row)
+        if not str(r.get("player") or r.get("player_name") or "").strip():
+            r["player"] = str(r.get("Player") or r.get("PLAYER") or "").strip()
+        if not str(r.get("opp_team") or r.get("opp") or "").strip():
+            r["opp_team"] = str(r.get("Opp") or r.get("opp_team") or r.get("opp") or "").strip()
+            r["opp"] = r["opp_team"]
+        if not str(r.get("prop_type") or r.get("prop") or "").strip():
+            r["prop_type"] = str(r.get("Prop") or r.get("prop_type") or r.get("prop") or "").strip()
+        if not str(r.get("start_time") or r.get("game_time") or "").strip():
+            r["start_time"] = str(r.get("Game Time") or r.get("game_time") or r.get("start_time") or "").strip()
+        if r.get("season_avg") in (None, "") and r.get("Season Avg") not in (None, ""):
+            r["season_avg"] = r.get("Season Avg")
+        if r.get("edge") in (None, "") and r.get("Edge") not in (None, ""):
+            r["edge"] = r.get("Edge")
+        if r.get("abs_edge") in (None, "") and r.get("Abs Edge") not in (None, ""):
+            r["abs_edge"] = r.get("Abs Edge")
+        if r.get("line") in (None, "") and r.get("Line") not in (None, ""):
+            r["line"] = r.get("Line")
+        if not str(r.get("pos") or "").strip():
+            r["pos"] = str(r.get("Pos") or r.get("tour") or "").strip()
+        out.append(r)
+    return out
+
+
+def _filter_tennis_rows_for_date(rows: list[dict], target: str) -> list[dict]:
+    """Keep rows for target ET date; if none, use nearest date on or after target."""
+    if not rows:
+        return []
+    tagged = [(r, _row_et_date(r)) for r in rows]
+    exact = [r for r, d in tagged if d == target]
+    if exact:
+        return exact
+    dates = sorted({d for _, d in tagged if d})
+    future = [d for d in dates if d >= target]
+    pick = future[0] if future else (max(dates) if dates else "")
+    if not pick:
+        return rows
+    return [r for r, d in tagged if d == pick]
+
+
+def _tennis_slate_candidates(match_date: str, bundle_date: str) -> tuple[Path, ...]:
+    """Prefer dated step8 under outputs/<bundle_date>/ (pipeline tomorrow-fetch)."""
+    return (
+        _REPO / "outputs" / bundle_date / f"step8_tennis_direction_clean_{match_date}.xlsx",
+        _REPO / "outputs" / bundle_date / "tennis" / "step8_tennis_direction_clean.xlsx",
+        _REPO / "outputs" / bundle_date / "tennis" / "step8_tennis_direction.csv",
         _REPO / "ui_runner/templates/slate_sport_tennis.json",
         _REPO / "mobile/www/slate_sport_tennis.json",
+        _REPO / "Sports/Tennis/outputs/step8_tennis_direction_clean.xlsx",
         _REPO / "Sports/Tennis/step8_tennis_direction_filled.csv",
         _REPO / "Sports/Tennis/step8_tennis_direction.csv",
         _REPO / "Sports/Tennis/outputs/step6_tennis_role_context.csv",
     )
 
-    def _row_count(path: Path) -> int:
-        try:
-            if path.suffix.lower() == ".json":
-                raw = json.loads(path.read_text(encoding="utf-8-sig"))
-                rows = raw.get("rows") or raw.get("picks") or []
-                if isinstance(raw, list):
-                    rows = raw
-                return int(len(rows))
-            if path.suffix.lower() == ".csv":
-                # Subtract header row, but never return negative.
-                return max(sum(1 for _ in path.open(encoding="utf-8-sig")) - 1, 0)
-        except Exception:
-            return 0
-        return 0
+
+def _load_tennis_slate_rows(slate_path: Path | None) -> tuple[list[dict], str, Path | None]:
+    target = _tennis_match_date()
+    bundle_date = (date.fromisoformat(target) - timedelta(days=1)).isoformat()
+    if slate_path and slate_path.is_file():
+        rows = _normalize_tennis_slate_rows(
+            _filter_tennis_rows_for_date(load_slate_rows(slate_path), target)
+        )
+        return rows, target, slate_path
 
     best_path: Path | None = None
-    best_rows = -1
-    for c in candidates:
+    best_rows: list[dict] = []
+    best_n = -1
+    for c in _tennis_slate_candidates(target, bundle_date):
         if not c.is_file():
             continue
-        count = _row_count(c)
-        if count > best_rows:
-            best_rows = count
+        filtered = _normalize_tennis_slate_rows(
+            _filter_tennis_rows_for_date(load_slate_rows(c), target)
+        )
+        if len(filtered) > best_n:
+            best_n = len(filtered)
             best_path = c
-    return best_path or (_REPO / "ui_runner/templates/slate_sport_tennis.json")
+            best_rows = filtered
+    if best_path is None:
+        fallback = _REPO / "ui_runner/templates/slate_sport_tennis.json"
+        if fallback.is_file():
+            best_path = fallback
+            best_rows = _normalize_tennis_slate_rows(
+                _filter_tennis_rows_for_date(load_slate_rows(fallback), target)
+            )
+    return best_rows, target, best_path
 
 
 def _load_rankings() -> list[dict[str, Any]]:
@@ -251,9 +347,25 @@ def _leaders_by_player(
     if not rows:
         return {}
     df = pd.DataFrame(rows)
-    df["player"] = df.get("player", df.get("player_name", "")).astype(str)
+    if "player" not in df.columns:
+        for col in ("Player", "player_name"):
+            if col in df.columns:
+                df["player"] = df[col]
+                break
+    if "player" not in df.columns:
+        df["player"] = ""
+    df["player"] = df["player"].astype(str)
     df["player_key"] = df["player"].map(_norm_key)
-    prop_src = df.get("prop_norm", df.get("prop_type", df.get("prop", "")))
+    if "prop_norm" in df.columns:
+        prop_src = df["prop_norm"]
+    elif "prop_type" in df.columns:
+        prop_src = df["prop_type"]
+    elif "Prop" in df.columns:
+        prop_src = df["Prop"]
+    elif "prop" in df.columns:
+        prop_src = df["prop"]
+    else:
+        prop_src = pd.Series([""] * len(df))
     df["prop_norm"] = prop_src.map(norm_prop)
     avg_src = df.get("season_avg")
     if avg_src is None or pd.to_numeric(avg_src, errors="coerce").notna().sum() == 0:
@@ -298,8 +410,7 @@ def build_tennis_matchup_payload(
     *,
     slate_path: Path | None = None,
 ) -> dict[str, Any]:
-    slate_file = _resolve_tennis_slate(slate_path)
-    rows = load_slate_rows(slate_file)
+    rows, match_date, slate_file = _load_tennis_slate_rows(slate_path)
     rankings = _load_rankings()
     match_cache = _load_match_cache()
     _enrich_opponents(rows, match_cache)
@@ -389,11 +500,14 @@ def build_tennis_matchup_payload(
         for pk, mu in matchups_raw.items()
     }
 
+    slate_src = str(slate_file.name) if slate_file else ""
     return {
         "sport": cfg.sport,
         "display_name": cfg.display_name,
         "matchup_mode": "player",
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "slate_note": f"Tennis match day {match_date} ET (rows after date filter; source={slate_src})",
+        "tennis_match_date": match_date,
         "n_teams": n_field,
         "elite_rank_cut": cfg.elite_rank_cut,
         "weak_rank_cut": weak_rank_cut,
