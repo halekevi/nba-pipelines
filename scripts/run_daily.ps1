@@ -1355,6 +1355,33 @@ foreach ($cp in $datedStep8Copies) {
 Write-Log "STEP D2b - Dated step8 snapshot backfill: OK"
 
 # =============================================================================
+# STEP D-ME – Rebuild matchup edge JSON for all sports (today's slate)
+# =============================================================================
+$meScript = Join-Path $Root "scripts\build_matchup_edge_json.py"
+if (Test-Path $meScript) {
+    Write-Log "STEP D-ME - Matchup edge rebuild: START"
+    Push-Location $Root
+    try {
+        & py -3.14 -X utf8 $meScript --sport all
+        if ($LASTEXITCODE -ne 0) {
+            Write-Log "STEP D-ME - Matchup edge rebuild: WARN (exit $LASTEXITCODE)"
+        }
+        else {
+            Write-Log "STEP D-ME - Matchup edge rebuild: OK"
+        }
+    }
+    catch {
+        Write-Log "STEP D-ME - Matchup edge rebuild: WARN ($($_.Exception.Message))"
+    }
+    finally {
+        Pop-Location
+    }
+}
+else {
+    Write-Log "STEP D-ME - Matchup edge rebuild: SKIP (script missing)"
+}
+
+# =============================================================================
 # STEP E — Git commit + push
 # =============================================================================
 if ($SkipPush) {
@@ -1419,6 +1446,8 @@ else {
 
         # mobile/www: grader copies graded_props + slate_eval here; many scripts read mobile/www not templates
         git -C $Root add -- "outputs/$Today/" "ui_runner/templates/" "mobile/www/"
+        git -C $Root add -- "ui_runner/templates/*_matchup_edge.json"
+        git -C $Root add -- "mobile/www/data/*_matchup_edge.json"
         $optionalAdds = @(
             "NBA\step8_all_direction_clean.xlsx",
             "NBA\step8_nba1h_direction_clean.xlsx",
