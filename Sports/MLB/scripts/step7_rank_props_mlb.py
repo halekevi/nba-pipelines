@@ -381,6 +381,12 @@ def _def_adjustment(row: pd.Series, n_teams: int = 30) -> float:
 
 
 HITTER_TOP3_PROPS: frozenset[str] = frozenset({"hits", "total_bases", "home_runs", "rbi"})
+TOUGH_DEF_TIERS: frozenset[str] = frozenset({"Elite", "Above Avg"})
+# Opponent pitching rank ≤ this ≈ top-third (matches analyze_top_hitters elite cut)
+ELITE_OPP_RANK_MAX = 8
+# Rank-score multiplier when Goblin/Demon must stay OVER on a bottom×tough hitter fade
+BOTTOM3_TOUGH_OVER_PENALTY = 0.60
+BOTTOM3_TOUGH_HITS_OVER_PENALTY = 0.50
 
 
 def _norm_player_name_top3(s: object) -> str:
@@ -388,18 +394,46 @@ def _norm_player_name_top3(s: object) -> str:
     return "".join(c for c in t if not unicodedata.combining(c))
 
 
-def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
-    """Merge hitter top/bottom-3 vs pitching rank history (mlb_hitter_top3_vs_defense.csv)."""
+def _hitter_top3_prop_mask(df: pd.DataFrame) -> pd.Series:
+    is_hitter = df["prop_norm"].astype(str).str.lower().isin(HITTER_TOP3_PROPS)
+    if "player_type" in df.columns:
+        is_hitter = is_hitter & ~df["player_type"].astype(str).str.lower().eq("pitcher")
+    return is_hitter
+
+
+def _tough_opp_mask(df: pd.DataFrame, *, n_teams: int = 30) -> pd.Series:
+    """Elite / Above Avg pitching (backtest TOUGH_DEF); rank fallback when tier missing."""
+    def_rank = pd.to_numeric(df.get("OVERALL_DEF_RANK", df.get("def_rank")), errors="coerce")
+    elite_rank = def_rank.le(ELITE_OPP_RANK_MAX)
+    for col in ("DEF_TIER", "def_tier"):
+        if col in df.columns:
+            tier = df[col].astype(str).str.strip()
+            return tier.isin(TOUGH_DEF_TIERS) | elite_rank.fillna(False)
+    return elite_rank.fillna(False)
+
+
+def _bottom3_tough_fade_mask(df: pd.DataFrame, *, n_teams: int = 30) -> pd.Series:
+    """Bottom team producer vs tough opponent pitching — backtest favors UNDER (~73% cf)."""
+    bot = pd.to_numeric(df.get("team_bottom3_rank"), errors="coerce").le(3)
+    return bot.fillna(False) & _tough_opp_mask(df, n_teams=n_teams) & _hitter_top3_prop_mask(df)
+
+
+def _merge_hitter_tier_ranks(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    """Attach team top/bottom-3 ranks from mlb_hitter_top3_vs_defense.csv (no context flags)."""
+    if (
+        "team_bottom3_rank" in df.columns
+        and "team_top3_rank" in df.columns
+        and pd.to_numeric(df["team_bottom3_rank"], errors="coerce").notna().any()
+    ):
+        return df
     path = repo_root / "Sports" / "MLB" / "data" / "mlb_hitter_top3_vs_defense.csv"
-    if not path.exists():
+    if not path.is_file():
         for col, default in (
             ("team_top3_rank", np.nan),
             ("team_bottom3_rank", np.nan),
             ("def_boost_hist", np.nan),
             ("top3_weak_overperformer", 0),
             ("top3_elite_fader", 0),
-            ("top3_def_context", 0),
-            ("top3_under_context", 0),
         ):
             if col not in df.columns:
                 df[col] = default
@@ -410,6 +444,15 @@ def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
         return df
     need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak", "fades_vs_elite"}
     if not need.issubset(t3.columns):
+        for col, default in (
+            ("team_top3_rank", np.nan),
+            ("team_bottom3_rank", np.nan),
+            ("def_boost_hist", np.nan),
+            ("top3_weak_overperformer", 0),
+            ("top3_elite_fader", 0),
+        ):
+            if col not in df.columns:
+                df[col] = default
         return df
     if "leader_side" not in t3.columns:
         t3 = t3.copy()
@@ -425,9 +468,10 @@ def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
         .rename(columns={"rank_on_team": "team_bottom3_rank"})
     )
     pc = next((c for c in ("player_name", "player") if c in df.columns), "player_name")
-    df["_player_norm"] = df[pc].map(_norm_player_name_top3)
-    df["_prop_cat"] = df["prop_norm"].astype(str).str.lower().str.strip()
-    merged = df.merge(
+    merged = df.copy()
+    merged["_player_norm"] = merged[pc].map(_norm_player_name_top3)
+    merged["_prop_cat"] = merged["prop_norm"].astype(str).str.lower().str.strip()
+    merged = merged.merge(
         top_sub[["PLAYER_NORM", "category", "team_top3_rank", "def_boost", "overperform_vs_weak", "fades_vs_elite"]],
         left_on=["_player_norm", "_prop_cat"],
         right_on=["PLAYER_NORM", "category"],
@@ -446,19 +490,45 @@ def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
         inplace=True,
         errors="ignore",
     )
+    if "team_bottom3_rank_b3" in merged.columns:
+        merged["team_bottom3_rank"] = merged["team_bottom3_rank_b3"].combine_first(
+            pd.to_numeric(merged.get("team_bottom3_rank"), errors="coerce")
+        )
+        merged.drop(columns=["team_bottom3_rank_b3"], inplace=True, errors="ignore")
+    if "team_top3_rank_t3" in merged.columns:
+        merged["team_top3_rank"] = merged["team_top3_rank_t3"].combine_first(
+            pd.to_numeric(merged.get("team_top3_rank"), errors="coerce")
+        )
+        merged.drop(columns=["team_top3_rank_t3"], inplace=True, errors="ignore")
     merged["def_boost_hist"] = pd.to_numeric(merged.get("def_boost"), errors="coerce")
     merged["top3_weak_overperformer"] = merged.get("overperform_vs_weak", False).fillna(False).astype(int)
     merged["top3_elite_fader"] = merged.get("fades_vs_elite", False).fillna(False).astype(int)
     merged.drop(columns=["def_boost", "overperform_vs_weak", "fades_vs_elite"], inplace=True, errors="ignore")
+    for col, default in (
+        ("team_top3_rank", np.nan),
+        ("team_bottom3_rank", np.nan),
+    ):
+        if col not in merged.columns:
+            merged[col] = default
+    return merged
+
+
+def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    """Set top3_def_context / top3_under_context from ranks + opponent defense."""
+    merged = _merge_hitter_tier_ranks(df, repo_root)
+    for col, default in (
+        ("top3_def_context", 0),
+        ("top3_under_context", 0),
+    ):
+        if col not in merged.columns:
+            merged[col] = default
 
     def_rank = pd.to_numeric(merged.get("OVERALL_DEF_RANK", merged.get("def_rank")), errors="coerce")
     n_def = int(def_rank.max()) if def_rank.notna().any() else 30
     weak_opp = def_rank >= np.ceil(n_def * 0.65)
-    elite_opp = def_rank <= 8
+    elite_opp = def_rank <= ELITE_OPP_RANK_MAX
     direction = merged.get("bet_direction", pd.Series("OVER", index=merged.index)).astype(str).str.upper()
-    is_hitter = merged["prop_norm"].astype(str).str.lower().isin(HITTER_TOP3_PROPS)
-    if "player_type" in merged.columns:
-        is_hitter = is_hitter & ~merged["player_type"].astype(str).str.lower().eq("pitcher")
+    is_hitter = _hitter_top3_prop_mask(merged)
 
     top3_boost = (
         merged["top3_weak_overperformer"].astype(int).eq(1)
@@ -476,12 +546,13 @@ def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
     )
     bottom3_under = (
         direction.eq("UNDER")
-        & elite_opp.fillna(False)
+        & _tough_opp_mask(merged).fillna(False)
         & pd.to_numeric(merged["team_bottom3_rank"], errors="coerce").le(3)
         & is_hitter
     )
     merged["top3_def_context"] = np.where(top3_boost, 1, 0).astype(int)
     merged["top3_under_context"] = np.where(top3_under | bottom3_under, 1, 0).astype(int)
+    merged["bottom3_tough_fade"] = _bottom3_tough_fade_mask(merged).astype(int)
     merged.drop(columns=["team_top3_rank_t3", "team_bottom3_rank_b3"], inplace=True, errors="ignore")
     return merged
 
@@ -554,6 +625,8 @@ def main() -> None:
         lambda x: _PROP_NORM_MAP.get(x, x)
     )
 
+    out = _merge_hitter_tier_ranks(out, REPO_ROOT)
+
     line_num = _to_num(out["line"])
     proj     = out.apply(_projection_from_row, axis=1)
     out["projection"] = proj
@@ -568,8 +641,27 @@ def main() -> None:
     forced = out["pick_type"].apply(_forced_over_only).astype(int)
     out["forced_over_only"] = forced
 
-    bet_dir = np.where(forced.eq(1), "OVER", np.where(out["edge"] >= 0, "OVER", "UNDER"))
+    fade = _bottom3_tough_fade_mask(out, n_teams=args.n_teams)
+    out["bottom3_tough_fade"] = fade.astype(int)
+    # Standard: align direction with fade (UNDER). Goblin/Demon stay OVER but are penalized in rank_score.
+    bet_dir = np.where(
+        forced.eq(1),
+        "OVER",
+        np.where(fade, "UNDER", np.where(out["edge"] >= 0, "OVER", "UNDER")),
+    )
     out["bet_direction"] = bet_dir
+    out["direction_override"] = np.where(
+        fade & forced.eq(0) & pd.Series(bet_dir).eq("UNDER"),
+        "BOTTOM3_TOUGH_UNDER",
+        "",
+    )
+    n_fade = int(fade.sum())
+    n_flip = int((fade & forced.eq(0)).sum())
+    if n_fade:
+        print(
+            f"[MLB step7] bottom×tough fade: {n_fade:,} rows "
+            f"({n_flip:,} Standard→UNDER, {(fade & forced.eq(1)).sum():,} forced-OVER penalized)"
+        )
 
     eligible    = pd.Series(True, index=out.index)
     void_reason = pd.Series("",   index=out.index)
@@ -735,6 +827,16 @@ def main() -> None:
     _series_mult.loc[_series_hr >= 0.70] = 1.10
     _series_mult.loc[_series_hr <= 0.30] = 0.90
     score = score * _series_mult
+    # Goblin/Demon cannot flip to UNDER on bottom×tough — demote instead (Hits strongest).
+    _fade = out.get("bottom3_tough_fade", pd.Series(0, index=out.index)).astype(int).eq(1)
+    _fade_over = _fade & out["bet_direction"].astype(str).str.upper().eq("OVER")
+    _hits_over = _fade_over & out["prop_norm"].astype(str).str.lower().eq("hits")
+    _fade_pen = np.where(
+        _hits_over,
+        BOTTOM3_TOUGH_HITS_OVER_PENALTY,
+        np.where(_fade_over, BOTTOM3_TOUGH_OVER_PENALTY, 1.0),
+    )
+    score = score * _fade_pen
     # Direction-aware edge gate (matches NBA step7). Standard UNDER has no edge gate.
     _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
     _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")

@@ -358,11 +358,24 @@ def main() -> None:
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
     forced    = pick_type.isin(["Goblin", "Demon"])
 
-    model_dir  = np.where(edge >= 0, "OVER", "UNDER")
-    final_dir  = model_dir.copy()
-    reason     = np.where(abs_edge < 0.03, "MODEL_TIEBREAK_DIFF<0.03", "")
-    final_dir  = np.where(forced, "OVER", final_dir)
-    reason     = np.where(forced, "FORCED_OVER_ONLY_GOB_DEM", reason)
+    model_dir = np.where(edge >= 0, "OVER", "UNDER")
+    # Step7 sets bet_direction (bottom×tough Standard→UNDER, Goblin/Demon stay OVER).
+    step7_dir = (
+        out.get("bet_direction", out.get("recommended_side", pd.Series("", index=out.index)))
+        .astype(str)
+        .str.upper()
+        .str.strip()
+    )
+    from_step7 = step7_dir.isin(("OVER", "UNDER"))
+    final_dir = np.where(from_step7, step7_dir, model_dir)
+    _ov = out.get("direction_override", pd.Series("", index=out.index)).astype(str).str.strip()
+    reason = np.where(
+        from_step7 & _ov.eq("BOTTOM3_TOUGH_UNDER"),
+        "BOTTOM3_TOUGH_UNDER",
+        np.where(abs_edge < 0.03, "MODEL_TIEBREAK_DIFF<0.03", ""),
+    )
+    final_dir = np.where(forced, "OVER", final_dir)
+    reason = np.where(forced, "FORCED_OVER_ONLY_GOB_DEM", reason)
 
     out["model_dir"]           = model_dir
     out["final_bet_direction"] = final_dir

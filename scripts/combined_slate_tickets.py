@@ -8167,6 +8167,8 @@ def load_mlb(path: str) -> pd.DataFrame:
         "stat_norm":          "prop_type",
         "line_score":         "line",
         "recommended_side":   "direction",
+        "bet_direction":      "direction",
+        "final_bet_direction": "direction",
         "composite_hit_rate": "hit_rate",
         "avg_L5":             "l5_avg",
         "avg_season":         "season_avg",
