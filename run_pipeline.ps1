@@ -902,7 +902,7 @@ function Run-Combined {
             Write-Host "  [win-rate] WARN: win-rate ticket pass failed (EV tickets unchanged)." -ForegroundColor Yellow
         }
         # Keep Matchup Edge JSON in lockstep with combined slate/ticket publish.
-        # This prevents stale per-sport edge panels when a slate_sport_*.json is empty or delayed.
+        # Includes WNBA (slate_sport_wnba.json) — must run after --write-web writes all slate_sport_*.json.
         $okMatchupEdge = Run-Step "Build Matchup Edge JSON (all sports)" $Root ".\scripts\build_matchup_edge_json.py" "--sport all"
         if (-not $okMatchupEdge) {
             Write-Host "  [matchup-edge] WARN: build_matchup_edge_json.py failed; existing matchup JSON may be stale." -ForegroundColor Yellow

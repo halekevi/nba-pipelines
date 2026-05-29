@@ -402,14 +402,6 @@ if ($ok) {
     }
 }
 
-if ($ok) {
-    $MeScript = Join-Path $Root "scripts\build_matchup_edge_json.py"
-    if (Test-Path -LiteralPath $MeScript) {
-        Push-Location $Root
-        try { & py -3.14 $MeScript --sport wnba --slate "$WnbaRunOutDir\step6_wnba_context.csv" | Out-Null } finally { Pop-Location }
-    }
-}
-
 if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_props.py" `
     "--input `"$WnbaRunOutDir\step6_wnba_context.csv`" --output `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`"" }
 
@@ -437,21 +429,6 @@ if ($ok) {
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
     "--input `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`" --sheet ALL --output `"$WnbaRunOutDir\step8_wnba_direction.csv`" --xlsx `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --date $Date" }
 if ($ok) { Publish-WnbaStep8CleanArtifacts }
-
-# Matchup edge JSON for Slate Explorer panel
-if ($ok) {
-    $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
-    if (Test-Path -LiteralPath $MeScript) {
-        Write-Host "  --> WNBA Matchup edge JSON (Slate Explorer)" -ForegroundColor Yellow
-        Push-Location $Root
-        try {
-            & py -3.14 $MeScript --slate "$WnbaRunOutDir\step8_wnba_direction.csv"
-            if ($LASTEXITCODE -ne 0) {
-                Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
-            }
-        } finally { Pop-Location }
-    }
-}
 
 # Refresh top-3 vs defense with tonight's ranked slate overlay
 if ($ok) {
@@ -485,6 +462,25 @@ if ($ok) {
         }
     } finally {
         Pop-Location
+    }
+}
+
+# Matchup edge JSON — must run after slate_sport_wnba.json is published (opp/def rank come from slate rows).
+if ($ok) {
+    $MeScript = Join-Path $Root "scripts\build_matchup_edge_json.py"
+    if (Test-Path -LiteralPath $MeScript) {
+        Write-Host "  --> WNBA — Rebuild matchup edge JSON (post-slate)" -ForegroundColor Yellow
+        Push-Location $Root
+        try {
+            & py -3.14 $MeScript --sport wnba
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+            } else {
+                Write-Host "      OK" -ForegroundColor Green
+            }
+        } finally {
+            Pop-Location
+        }
     }
 }
 
