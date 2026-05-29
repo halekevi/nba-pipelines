@@ -62,6 +62,21 @@
     return String(edge || "NEUTRAL").replace(/_/g, " ");
   }
 
+  function isOverEdge(edge) {
+    return edge === "TOP_EDGE" || edge === "OK_EDGE";
+  }
+
+  function isUnderEdge(edge) {
+    return edge === "TOP_UNDER" || edge === "OK_UNDER";
+  }
+
+  function edgeRank(edge) {
+    if (edge === "TOP_EDGE" || edge === "TOP_UNDER") return 0;
+    if (edge === "OK_EDGE" || edge === "OK_UNDER") return 1;
+    if (edge === "NEUTRAL") return 2;
+    return 3;
+  }
+
   function apiUrl(sport) {
     return "/api/" + sport + "/matchup-edge";
   }
@@ -119,9 +134,14 @@
       '</label><select id="' +
       pid(sport, "opp") +
       '" disabled></select></div>' +
-      '<button type="button" class="me-find" id="' +
-      pid(sport, "find") +
-      '">Find props ↗</button>' +
+      '<div class="me-find-row">' +
+      '<button type="button" class="me-find me-find-over" id="' +
+      pid(sport, "find-over") +
+      '">Find overs ↗</button>' +
+      '<button type="button" class="me-find me-find-under" id="' +
+      pid(sport, "find-under") +
+      '">Find unders ↗</button>' +
+      "</div>" +
       "</div>" +
       '<div class="me-cards" id="' +
       pid(sport, "cards") +
@@ -148,7 +168,8 @@
   function bindEvents(sport) {
     const teamSel = document.getElementById(pid(sport, "team"));
     const catSel = document.getElementById(pid(sport, "cat"));
-    const findBtn = document.getElementById(pid(sport, "find"));
+    const findOverBtn = document.getElementById(pid(sport, "find-over"));
+    const findUnderBtn = document.getElementById(pid(sport, "find-under"));
     if (teamSel && !teamSel.dataset.meBound) {
       teamSel.dataset.meBound = "1";
       teamSel.addEventListener("change", () => onTeamChange(sport));
@@ -157,9 +178,13 @@
       catSel.dataset.meBound = "1";
       catSel.addEventListener("change", () => render(sport));
     }
-    if (findBtn && !findBtn.dataset.meBound) {
-      findBtn.dataset.meBound = "1";
-      findBtn.addEventListener("click", () => findProps(sport));
+    if (findOverBtn && !findOverBtn.dataset.meBound) {
+      findOverBtn.dataset.meBound = "1";
+      findOverBtn.addEventListener("click", () => findProps(sport, "OVER"));
+    }
+    if (findUnderBtn && !findUnderBtn.dataset.meBound) {
+      findUnderBtn.dataset.meBound = "1";
+      findUnderBtn.addEventListener("click", () => findProps(sport, "UNDER"));
     }
   }
 
@@ -200,7 +225,7 @@
     const blockKeys = Object.keys(data.players_by_team_cat || {});
     const teamsWithBlocks = new Set(blockKeys.map((k) => k.split("|")[0].toUpperCase()));
     const normAbbr = (s) => String(s || "").toUpperCase();
-    const edgeRank = (e) => (e === "TOP_EDGE" ? 0 : e === "OK_EDGE" ? 1 : e === "NEUTRAL" ? 2 : 3);
+    const edgeRankFn = (e) => edgeRank(e);
     const bestEdgeScore = (abbr) => {
       const prefix = normAbbr(abbr);
       const blocks = data.players_by_team_cat || {};
@@ -211,7 +236,7 @@
         const block = blocks[k];
         const players = Array.isArray(block) ? block : block?.players || [];
         players.forEach((p) => {
-          const r = edgeRank(p.edge);
+          const r = edgeRankFn(p.edge);
           if (r < best) best = r;
           const pe = p.pp_edge;
           if (pe != null && !Number.isNaN(Number(pe)) && Number(pe) > maxPp) maxPp = Number(pe);
@@ -337,10 +362,12 @@
     const oppName = opp.name || oppMeta.oppName || mu.opponent_name || "—";
     const rankLbl = data.opp_metric_label || "Opp def rank";
     let top = 0,
-      ok = 0;
+      ok = 0,
+      under = 0;
     (block.players || []).forEach((p) => {
       if (p.edge === "TOP_EDGE") top++;
       else if (p.edge === "OK_EDGE") ok++;
+      else if (isUnderEdge(p.edge)) under++;
     });
 
     cards.innerHTML =
@@ -354,10 +381,12 @@
       tierClass(oppTier) +
       '">' +
       esc(oppTier || "—") +
-      '</div></div><div class="me-card"><div class="lbl">Top edge</div><div class="val edge-top">' +
+      '</div></div><div class="me-card"><div class="lbl">Top over</div><div class="val edge-top">' +
       top +
-      '</div></div><div class="me-card"><div class="lbl">OK edge</div><div class="val edge-ok">' +
+      '</div></div><div class="me-card"><div class="lbl">OK over</div><div class="val edge-ok">' +
       ok +
+      '</div></div><div class="me-card"><div class="lbl">Under edge</div><div class="val edge-under">' +
+      under +
       '</div></div><div class="me-card"><div class="lbl">' +
       (data.matchup_mode === "player" ? "Your rank" : "Team def rank") +
       '</div><div class="val">#' +
@@ -368,10 +397,18 @@
 
     tbody.innerHTML = (block.players || [])
       .map(
-        (p) =>
+        (p) => {
+          const rankBadge = p.team_rank_label
+            ? ' <span class="me-rank-badge">' + esc(p.team_rank_label) + "</span>"
+            : p.bottom3_on_team
+              ? ' <span class="me-rank-badge me-rank-b3">B' + esc(p.bottom_rank_on_team || "?") + "</span>"
+              : "";
+          return (
           "<tr><td><strong>" +
           esc(p.player) +
-          "</strong></td><td>" +
+          "</strong>" +
+          rankBadge +
+          "</td><td>" +
           esc(p.pos || "—") +
           "</td><td>" +
           esc(p.season_avg) +
@@ -384,8 +421,17 @@
           "</span></td><td>" +
           esc(p.notes) +
           "</td></tr>"
+          );
+        }
       )
       .join("");
+
+    const overBtn = document.getElementById(pid(sport, "find-over"));
+    const underBtn = document.getElementById(pid(sport, "find-under"));
+    const hasOver = (block.players || []).some((p) => isOverEdge(p.edge));
+    const hasUnder = (block.players || []).some((p) => isUnderEdge(p.edge));
+    if (overBtn) overBtn.disabled = !hasOver;
+    if (underBtn) underBtn.disabled = !hasUnder;
 
     const panel = document.getElementById(panelId(sport));
     if (panel) {
@@ -409,22 +455,22 @@
     }
   }
 
-  function findProps(sport) {
-    const cat = document.getElementById(pid(sport, "cat"))?.value;
+  function findProps(sport, direction) {
     const block = currentBlock(sport);
-    const terms = PROP_SEARCH[cat] || [cat];
-    const topPlayers = (block?.players || [])
-      .filter((p) => p.edge === "TOP_EDGE" || p.edge === "OK_EDGE")
-      .map((p) => p.player);
-    const search = topPlayers[0] || terms[0] || "";
+    const terms = PROP_SEARCH[document.getElementById(pid(sport, "cat"))?.value] || [];
+    const wantUnder = String(direction || "").toUpperCase() === "UNDER";
+    const overPlayers = (block?.players || []).filter((p) => isOverEdge(p.edge)).map((p) => p.player);
+    const underPlayers = (block?.players || []).filter((p) => isUnderEdge(p.edge)).map((p) => p.player);
+    const pool = wantUnder ? underPlayers : overPlayers;
+    const search = pool[0] || terms[0] || "";
 
     const input = document.getElementById("sf-" + sport);
     if (input) {
       input.value = search;
       if (typeof global.filterSlate === "function") global.filterSlate(sport, search);
     }
-    const overBtn = document.getElementById("sfb-" + sport + "-over");
-    if (overBtn && !overBtn.classList.contains("on")) overBtn.click();
+    const dirBtn = document.getElementById("sfb-" + sport + (wantUnder ? "-under" : "-over"));
+    if (dirBtn && !dirBtn.classList.contains("on")) dirBtn.click();
     document.getElementById("st-" + sport)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 

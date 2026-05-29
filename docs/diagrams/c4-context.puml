@@ -1,0 +1,33 @@
+@startuml PropORACLE_C4_Context
+' C4 Level 1 — System Context
+' Render: PlantUML + C4-PlantUML macros
+' Online: https://www.plantuml.com/plantuml
+' VS Code: PlantUML extension (jebbs.plantuml)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_LEFT_RIGHT()
+skinparam shadowing false
+
+title PropORACLE — C4 Level 1: System Context
+
+Person(bettor,       "Bettor / Analyst",  "Reviews daily props, EV scores,\ntickets, grades, and P&L")
+Person(operator,     "Operator",          "Runs pipelines, retrains ML model,\ngrades slates, publishes artifacts")
+
+System(proporacle,   "PropORACLE",        "Multi-sport prop-betting analytics\nplatform. Ingests lines + stats,\nscores edges with XGBoost,\nand surfaces picks via web + mobile.")
+
+System_Ext(sbApis,   "Sportsbook APIs",   "Odds and lines feed\n(PrizePicks + alternates)")
+System_Ext(statsApis,"Stats APIs",        "NBA / NHL / MLB / Soccer\nplayer + game stats")
+System_Ext(wt,       "WNBA / Tennis",     "Playwright CDP stealth scrape\n(DataDome bypass)")
+System_Ext(railway,  "Railway",           "Cloud hosting platform\n(Gunicorn / Flask)")
+System_Ext(prizepicks,"PrizePicks",       "Bettor places real-money\nentries here (outside system)")
+
+Rel(bettor,       proporacle,  "Views props, tickets,\ngrades, income",   "HTTPS")
+Rel(operator,     proporacle,  "Runs pipelines,\ngrades, publishes",     "PowerShell / HTTPS")
+Rel(proporacle,   sbApis,      "Fetches odds + lines",                    "HTTPS / JSON")
+Rel(proporacle,   statsApis,   "Fetches player + game stats",             "HTTPS / JSON")
+Rel(proporacle,   wt,          "Scrapes slate data",                      "Playwright CDP")
+Rel(proporacle,   railway,     "Deployed on",                             "Git push / Gunicorn")
+Rel(bettor,       prizepicks,  "Places entries\n(external to system)",    "Web / App")
+
+@enduml

@@ -1252,9 +1252,9 @@ body > nav.snav.glass-card {
   .slate-table:not(#st-combined) th:nth-child(3),
   .slate-table:not(#st-combined) td:nth-child(3){min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .slate-table:not(#st-combined) th:nth-child(4),
-  .slate-table:not(#st-combined) td:nth-child(4){width:50px;max-width:50px;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) td:nth-child(4){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(5),
-  .slate-table:not(#st-combined) td:nth-child(5){width:50px;max-width:50px;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) td:nth-child(5){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(6),
   .slate-table:not(#st-combined) td:nth-child(6){min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .slate-table:not(#st-combined) th:nth-child(7),
@@ -2063,7 +2063,10 @@ body > nav.snav.glass-card {
               <div class="wnba-me-field"><label>Team</label><select id="wnba-me-team"></select></div>
               <div class="wnba-me-field"><label>Category</label><select id="wnba-me-cat"></select></div>
               <div class="wnba-me-field"><label>Opponent</label><select id="wnba-me-opp" disabled></select></div>
-              <button type="button" class="wnba-me-find" id="wnba-me-find">Find props ↗</button>
+              <div class="wnba-me-find-row">
+                <button type="button" class="wnba-me-find wnba-me-find-over" id="wnba-me-find-over">Find overs ↗</button>
+                <button type="button" class="wnba-me-find wnba-me-find-under" id="wnba-me-find-under">Find unders ↗</button>
+              </div>
             </div>
             <div class="wnba-me-cards" id="wnba-me-cards"></div>
             <div class="wnba-me-table-wrap">
@@ -2357,6 +2360,18 @@ function mapApiPickToSlateRow(p) {
     season_avg: p.season_avg,
     actual_series: p.actual_series,
     line_series: p.line_series,
+    ...(function () {
+      const hist = {};
+      for (let gi = 1; gi <= 10; gi++) {
+        const gk = `g${gi}`;
+        const sk = `stat_g${gi}`;
+        const lk = `line_g${gi}`;
+        if (p[gk] != null && p[gk] !== "") hist[gk] = p[gk];
+        if (p[sk] != null && p[sk] !== "") hist[sk] = p[sk];
+        if (p[lk] != null && p[lk] !== "") hist[lk] = p[lk];
+      }
+      return hist;
+    })(),
     standard_projection: p.standard_projection,
     opponent_def_rank: p.opponent_def_rank,
     image_url: p.image_url,
@@ -4341,6 +4356,23 @@ function _sportKeyNorm(sp) {
   return x;
 }
 
+/** Per-game history columns for slate table + detail modal charts. */
+function _slateHistoryFieldsFromPick(p) {
+  const out = {};
+  if (!p || typeof p !== "object") return out;
+  if (Array.isArray(p.actual_series) && p.actual_series.length) out.actual_series = p.actual_series;
+  if (Array.isArray(p.line_series) && p.line_series.length) out.line_series = p.line_series;
+  for (let gi = 1; gi <= 10; gi++) {
+    const gk = `g${gi}`;
+    const sk = `stat_g${gi}`;
+    const lk = `line_g${gi}`;
+    if (p[gk] != null && p[gk] !== "") out[gk] = p[gk];
+    if (p[sk] != null && p[sk] !== "") out[sk] = p[sk];
+    if (p[lk] != null && p[lk] !== "") out[lk] = p[lk];
+  }
+  return out;
+}
+
 function _fallbackSlateRowsFromTickets(sport) {
   return ALL_SLATE
     .filter(p => {
@@ -4349,8 +4381,8 @@ function _fallbackSlateRowsFromTickets(sport) {
       return sp === sport;
     })
     .map(p => ({
-      tier:      null,
-      rank_score: p.edge != null ? Math.abs(p.edge) : null,
+      tier:      p.tier ?? null,
+      rank_score: p.rank_score != null ? p.rank_score : (p.edge != null ? Math.abs(p.edge) : null),
       player:    p.player || '',
       team:      p.team   || '',
       opp:       p.opp    || '',
@@ -4360,11 +4392,19 @@ function _fallbackSlateRowsFromTickets(sport) {
       line:      p.line,
       dir:       p.dir    || '',
       edge:      p.edge,
-      hit_rate:  p.hit != null ? p.hit / 100 : null,
+      hit_rate:  p.hit_rate != null ? p.hit_rate : (p.hit != null ? p.hit / 100 : null),
       l5_avg:    p.l5_avg,
       l5_over:   p.l5_over,
       l5_under:  p.l5_under,
-      game_time: '',
+      l5_games_played: p.l5_games_played,
+      l10_over:  p.l10_over,
+      l10_under: p.l10_under,
+      l10_games_played: p.l10_games_played,
+      season_avg: p.season_avg,
+      projection: p.projection,
+      game_time: p.game_time || '',
+      sport:     p.sport || sport.toUpperCase(),
+      ..._slateHistoryFieldsFromPick(p),
     }));
 }
 
@@ -4544,11 +4584,13 @@ async function fetchSlateSport(sport, opts = {}) {
     // Warm picks/edges in parallel — do NOT block the slate table on /api/slate (huge/slow on Railway).
     const slateWarm = loadSlateData().catch((e) => console.warn("loadSlateData (background):", e));
     let rows = [];
+    let source = "";
     try {
       const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: 'no-store'});
       if (res.ok) {
         const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
+        if (rows.length) source = "api_slate_sport";
       } else {
         console.warn(`slate-sport/${sport} HTTP ${res.status}`);
       }
@@ -4557,11 +4599,22 @@ async function fetchSlateSport(sport, opts = {}) {
     }
     if (!rows.length) {
       const d0 = await fetchBundledSlateSportPayload(sport);
-      if (d0 && Array.isArray(d0.rows)) rows = d0.rows;
+      if (d0 && Array.isArray(d0.rows)) {
+        rows = d0.rows;
+        if (rows.length) source = "bundled_json";
+      }
     }
     if (!rows.length) {
       await slateWarm;
       rows = _fallbackSlateRowsFromTickets(sport);
+      if (rows.length) source = "ticket_fallback";
+    }
+    if (source === "ticket_fallback") {
+      console.warn(
+        `[slate] ${sport}: ticket fallback (${rows.length} rows) — detail charts need actual_series/stat_g on ALL_SLATE picks`,
+      );
+    } else if (source) {
+      console.debug(`[slate] ${sport}: ${rows.length} rows from ${source}`);
     }
     _setSlateSportRows(sport, rows);
     SLATE_SPORT_CACHE[sport] = true;
@@ -4680,8 +4733,8 @@ function renderSlateTable(sport) {
       <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span>${confDotHtml(r)}</td>
       <td class="slate-rank-cell">${rankStr}</td>
       <td style="color:var(--text);font-weight:600;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}${l10StreakBadgeHtml(r)}</td>
-      <td style="color:var(--muted);">${r.team || '—'}</td>
-      <td style="color:var(--muted);">${r.opp  || '—'}</td>
+      <td style="color:var(--muted);" title="${r.team || ''}">${r.team || '—'}</td>
+      <td style="color:var(--muted);" title="${r.opp || ''}">${r.opp || '—'}</td>
       <td style="color:var(--text);">${r.prop || '—'}</td>
       <td class="slate-pick-type-cell ${pickCls}">${r.pick_type || '—'}</td>
       <td style="font-family:'Inter',sans-serif;">${r.line != null ? r.line : '—'}</td>

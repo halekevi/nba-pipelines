@@ -203,6 +203,17 @@
     },
     {
       "entry_type": "power",
+      "n_legs": 3,
+      "mix": {"goblin": 1, "standard": 2, "demon": 0},
+      "goblin_distances": [5],
+      "sweep_payout_x": 3.75,
+      "min_payout_x": 3.75,
+      "source": "pp_observed",
+      "confirmed_at": "2026-05-27",
+      "notes": "WNBA submitted Power Play: Gray 2-PT Made 4.5 S + Howard 11.5 PTS G (std 16.5, delta 5) + Carter 15.5 PTS S; $20 to win $75 (3.75x)."
+    },
+    {
+      "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 2, "standard": 0, "demon": 0},
       "goblin_distances": [0.5, 2],

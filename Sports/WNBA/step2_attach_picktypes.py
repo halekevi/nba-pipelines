@@ -15,9 +15,16 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
 from typing import Dict, Tuple
 
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.wnba_team_keys import canonical_team_key
 
 
 # ── normalizers ──────────────────────────────────────────────────────────────
@@ -74,6 +81,31 @@ def split_combo_team(s: str) -> Tuple[str, str]:
     return (parts[0], parts[1]) if len(parts) >= 2 else (str(s).strip(), "")
 
 
+def format_combo_team_display(t1: str, t2: str) -> str:
+    parts = [p.strip() for p in (t1, t2) if str(p or "").strip()]
+    if len(parts) >= 2:
+        if parts[0] == parts[1]:
+            return parts[0]
+        return f"{parts[0]} / {parts[1]}"
+    return parts[0] if parts else ""
+
+
+def build_player_team_lookup(df: pd.DataFrame) -> Dict[str, str]:
+    """Map player name -> team abbrev from single-player rows on today's board."""
+    work = df.copy()
+    work["is_combo_player"] = pd.to_numeric(
+        work.get("is_combo_player", 0), errors="coerce"
+    ).fillna(0).astype(int)
+    singles = work[work["is_combo_player"] == 0]
+    out: Dict[str, str] = {}
+    for player, grp in singles.groupby("player", dropna=False):
+        teams = grp["team"].astype(str).str.strip()
+        teams = teams[(teams != "") & (~teams.str.contains("/", regex=False))]
+        if len(teams):
+            out[str(player).strip()] = str(teams.mode().iloc[0]).strip()
+    return out
+
+
 def build_opp_team(df: pd.DataFrame) -> pd.Series:
     df2 = df.copy()
     df2["pp_game_id"]      = df2["pp_game_id"].astype(str).fillna("")
@@ -85,10 +117,17 @@ def build_opp_team(df: pd.DataFrame) -> pd.Series:
         if not gid or gid.lower() == "nan":
             continue
         singles = g[(g["is_combo_player"] == 0) & (~g["team"].str.contains("/")) & (g["team"].str.strip() != "")]
-        teams = list(singles["team"].dropna().unique())
-        if len(teams) == 2:
-            opp_map[(gid, teams[0])] = teams[1]
-            opp_map[(gid, teams[1])] = teams[0]
+        canon_to_raw: dict[str, str] = {}
+        for raw in singles["team"].dropna().astype(str):
+            raw = raw.strip()
+            if not raw:
+                continue
+            canon_to_raw.setdefault(canonical_team_key(raw), raw)
+        canon_keys = list(canon_to_raw.keys())
+        if len(canon_keys) == 2:
+            a, b = canon_keys
+            opp_map[(gid, canon_to_raw[a])] = canon_to_raw[b]
+            opp_map[(gid, canon_to_raw[b])] = canon_to_raw[a]
     out = []
     for _, row in df2.iterrows():
         gid  = str(row["pp_game_id"])
@@ -133,14 +172,22 @@ def main():
             df[c] = ""
 
     combos = df["is_combo_player"] == 1
+    player_teams = build_player_team_lookup(df) if combos.any() else {}
     if combos.any():
         for idx, row in df.loc[combos, ["player","team"]].iterrows():
             p1, p2 = split_combo_player(row["player"])
             t1, t2 = split_combo_team(row["team"])
+            if not t1 or ("/" not in str(row["team"]) and t1 == str(row["team"]).strip()):
+                t1 = player_teams.get(p1, t1)
+            if not t2:
+                t2 = player_teams.get(p2, t2)
             df.at[idx, "player_1"] = p1
             df.at[idx, "player_2"] = p2
             df.at[idx, "team_1"]   = t1
             df.at[idx, "team_2"]   = t2
+            display_team = format_combo_team_display(t1, t2)
+            if display_team:
+                df.at[idx, "team"] = display_team
 
     df["opp_team"] = build_opp_team(df)
 

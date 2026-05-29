@@ -24,6 +24,7 @@ import json
 import re
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 import joblib
 import numpy as np
@@ -412,6 +413,110 @@ def safe_float(val, default=0.0) -> float:
         return default
 
 
+def _norm_player_name_top3(s: object) -> str:
+    t = unicodedata.normalize("NFKD", str(s or "").strip().lower())
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
+def _top3_category(stat_norm: object) -> str:
+    s = str(stat_norm or "").strip().lower()
+    return {
+        "shots_on_goal": "shots",
+        "sog": "shots",
+    }.get(s, s)
+
+
+def _attach_top3_def_context(df: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    path = repo_root / "Sports" / "NHL" / "data" / "nhl_top3_vs_defense.csv"
+    for col, default in (
+        ("team_top3_rank", np.nan),
+        ("team_bottom3_rank", np.nan),
+        ("def_boost_hist", np.nan),
+        ("top3_weak_overperformer", 0),
+        ("top3_elite_fader", 0),
+        ("top3_def_context", 0),
+        ("top3_under_context", 0),
+    ):
+        if col not in df.columns:
+            df[col] = default
+    if not path.exists():
+        return df
+    try:
+        t3 = pd.read_csv(path, encoding="utf-8-sig")
+    except Exception:
+        return df
+    need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak", "fades_vs_elite"}
+    if not need.issubset(t3.columns):
+        return df
+    if "leader_side" not in t3.columns:
+        t3 = t3.copy()
+        t3["leader_side"] = "top"
+    top_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("top")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_top3_rank"})
+    )
+    bot_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("bottom")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_bottom3_rank"})
+    )
+    pc = next((c for c in ("player_name", "player") if c in df.columns), "player_name")
+    sc = next((c for c in ("stat_norm", "stat_type") if c in df.columns), "stat_norm")
+    df["_player_norm"] = df[pc].map(_norm_player_name_top3)
+    df["_prop_cat"] = df[sc].map(_top3_category)
+    merged = df.merge(
+        top_sub[["PLAYER_NORM", "category", "team_top3_rank", "def_boost", "overperform_vs_weak", "fades_vs_elite"]],
+        left_on=["_player_norm", "_prop_cat"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_t3"),
+    )
+    merged = merged.merge(
+        bot_sub[["PLAYER_NORM", "category", "team_bottom3_rank"]],
+        left_on=["_player_norm", "_prop_cat"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_b3"),
+    )
+    merged.drop(
+        columns=["_player_norm", "_prop_cat", "PLAYER_NORM", "PLAYER_NORM_b3"],
+        inplace=True,
+        errors="ignore",
+    )
+    merged["def_boost_hist"] = pd.to_numeric(merged.get("def_boost"), errors="coerce")
+    merged["top3_weak_overperformer"] = merged.get("overperform_vs_weak", False).fillna(False).astype(int)
+    merged["top3_elite_fader"] = merged.get("fades_vs_elite", False).fillna(False).astype(int)
+    merged.drop(columns=["def_boost", "overperform_vs_weak", "fades_vs_elite"], inplace=True, errors="ignore")
+
+    def_rank = pd.to_numeric(merged.get("def_rank"), errors="coerce")
+    n_def = int(def_rank.max()) if def_rank.notna().any() else 32
+    weak_opp = def_rank >= np.ceil(n_def * 0.65)
+    elite_opp = def_rank <= 6
+    direction = merged.get("recommended_side", merged.get("direction", pd.Series("OVER", index=merged.index)))
+    direction = direction.astype(str).str.upper()
+    top3_boost = (
+        merged["top3_weak_overperformer"].astype(int).eq(1)
+        & direction.eq("OVER")
+        & weak_opp.fillna(False)
+        & pd.to_numeric(merged["team_top3_rank"], errors="coerce").le(3)
+    )
+    top3_under = (
+        merged["top3_elite_fader"].astype(int).eq(1)
+        & direction.eq("UNDER")
+        & elite_opp.fillna(False)
+        & pd.to_numeric(merged["team_top3_rank"], errors="coerce").le(3)
+    )
+    bottom3_under = (
+        direction.eq("UNDER")
+        & elite_opp.fillna(False)
+        & pd.to_numeric(merged["team_bottom3_rank"], errors="coerce").le(3)
+    )
+    merged["top3_def_context"] = np.where(top3_boost, 1, 0).astype(int)
+    merged["top3_under_context"] = np.where(top3_under | bottom3_under, 1, 0).astype(int)
+    return merged
+
+
 def score_prop(row: dict) -> float:
     stat = row.get("stat_norm", "")
     composite = safe_float(row.get("composite_hit_rate"))
@@ -785,6 +890,13 @@ def main():
         )
         _pen_nhl = penalty_series_for_slate(scored_df, _pc_nhl, "team", "NHL", _inj_nhl_path)
         scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) + _pen_nhl.values
+
+    scored_df = _attach_top3_def_context(scored_df, _NHL_REPO)
+    _top3_boost = (
+        _to_num(scored_df["top3_def_context"]).fillna(0.0) * 0.35
+        + _to_num(scored_df["top3_under_context"]).fillna(0.0) * 0.35
+    )
+    scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) + _top3_boost.values
 
     scored_df["prop_score"] = _to_num(scored_df["final_score"]).fillna(_to_num(scored_df["prop_score"]).fillna(0.0))
     # abs_edge: needed by step7b edge scorer and step8 downstream

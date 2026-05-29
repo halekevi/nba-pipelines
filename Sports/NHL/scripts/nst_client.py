@@ -163,14 +163,28 @@ def browser_fetch_html(
         with sync_playwright() as pw:
             browser = pw.chromium.connect_over_cdp(cdp_url)
             ctx = browser.contexts[0] if browser.contexts else browser.new_context()
-            page = ctx.new_page()
-            page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
+            nst_page = None
+            for p in ctx.pages:
+                if "naturalstattrick.com" in p.url:
+                    nst_page = p
+                    break
+
+            if nst_page:
+                log.info("[NST CDP] reusing existing NST tab: %s", nst_page.url)
+                page = nst_page
+                if page.url != url:
+                    page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
+            else:
+                log.info("[NST CDP] no existing NST tab found — opening new page")
+                page = ctx.new_page()
+                page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
             try:
                 page.wait_for_selector("table", timeout=timeout * 1000)
             except Exception:
                 pass
             html = page.content()
-            page.close()
+            if nst_page is None:
+                page.close()
             return html
     except Exception as e:
         log.warning("[NST CDP] browser_fetch_html failed: %s", e)

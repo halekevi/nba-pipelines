@@ -262,33 +262,57 @@ def _attach_top3_def_context(out: pd.DataFrame, repo_root: Path) -> pd.DataFrame
     """
     path = repo_root / "Sports" / "WNBA" / "data" / "wnba_top3_vs_defense.csv"
     out["team_top3_rank"] = np.nan
+    out["team_bottom3_rank"] = np.nan
     out["def_boost_hist"] = np.nan
     out["top3_weak_overperformer"] = 0
+    out["top3_elite_fader"] = 0
     if not path.exists():
         return out
     try:
         t3 = pd.read_csv(path, encoding="utf-8-sig")
     except Exception:
         return out
-    need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak"}
+    need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak", "fades_vs_elite"}
     if not need.issubset(t3.columns):
         return out
-    sub = t3[list(need)].drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+    if "leader_side" not in t3.columns:
+        t3 = t3.copy()
+        t3["leader_side"] = "top"
+    top_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("top")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_top3_rank"})
+    )
+    bot_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("bottom")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_bottom3_rank"})
+    )
     out["_player_norm"] = out.get("player", pd.Series([""] * len(out))).map(_norm_player_name)
     out["_prop_norm"] = out.get("prop_norm", pd.Series([""] * len(out))).astype(str).str.lower().str.strip()
     merged = out.merge(
-        sub,
+        top_sub[["PLAYER_NORM", "category", "team_top3_rank", "def_boost", "overperform_vs_weak", "fades_vs_elite"]],
         left_on=["_player_norm", "_prop_norm"],
         right_on=["PLAYER_NORM", "category"],
         how="left",
         suffixes=("", "_t3"),
     )
-    merged.drop(columns=["_player_norm", "_prop_norm", "PLAYER_NORM"], inplace=True, errors="ignore")
-    merged["team_top3_rank"] = pd.to_numeric(merged.get("rank_on_team"), errors="coerce")
-    merged.drop(columns=["rank_on_team"], inplace=True, errors="ignore")
+    merged = merged.merge(
+        bot_sub[["PLAYER_NORM", "category", "team_bottom3_rank"]],
+        left_on=["_player_norm", "_prop_norm"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_b3"),
+    )
+    merged.drop(
+        columns=["_player_norm", "_prop_norm", "PLAYER_NORM", "PLAYER_NORM_b3"],
+        inplace=True,
+        errors="ignore",
+    )
     merged["def_boost_hist"] = pd.to_numeric(merged.get("def_boost"), errors="coerce")
     merged["top3_weak_overperformer"] = merged.get("overperform_vs_weak", False).fillna(False).astype(int)
-    merged.drop(columns=["overperform_vs_weak"], inplace=True, errors="ignore")
+    merged["top3_elite_fader"] = merged.get("fades_vs_elite", False).fillna(False).astype(int)
+    merged.drop(columns=["def_boost", "overperform_vs_weak", "fades_vs_elite"], inplace=True, errors="ignore")
     return merged
 
 
@@ -424,13 +448,26 @@ def main():
     opp_rank_num = pd.to_numeric(out.get("OVERALL_DEF_RANK"), errors="coerce")
     n_def = int(opp_rank_num.max()) if opp_rank_num.notna().any() else _N_TEAMS_WNBA
     weak_opp_tonight = opp_rank_num >= np.ceil(n_def * 0.65)
+    elite_opp_tonight = opp_rank_num <= 4
     top3_boost = (
         out["top3_weak_overperformer"].astype(int).eq(1)
         & out["bet_direction"].astype(str).str.upper().eq("OVER")
         & weak_opp_tonight.fillna(False)
         & pd.to_numeric(out["team_top3_rank"], errors="coerce").le(3)
     )
+    top3_under = (
+        out["top3_elite_fader"].astype(int).eq(1)
+        & out["bet_direction"].astype(str).str.upper().eq("UNDER")
+        & elite_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_top3_rank"], errors="coerce").le(3)
+    )
+    bottom3_under = (
+        out["bet_direction"].astype(str).str.upper().eq("UNDER")
+        & elite_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_bottom3_rank"], errors="coerce").le(3)
+    )
     out["top3_def_context"] = np.where(top3_boost, 1, 0).astype(int)
+    out["top3_under_context"] = np.where(top3_under | bottom3_under, 1, 0).astype(int)
 
     line_num_filled = line_num.fillna(0)
     for col in ("stat_last5_avg","stat_last10_avg","stat_season_avg"):
@@ -466,6 +503,7 @@ def main():
         + out["avg_vs_line_z"].astype(float).fillna(0.0)  * 0.75
         + out["def_rank_z"].astype(float).fillna(0.0)     * 0.80
         + out["top3_def_context"].astype(float).fillna(0.0) * 0.35
+        + out["top3_under_context"].astype(float).fillna(0.0) * 0.35
         + out["prop_hr_z"].astype(float).fillna(0.0)      * 0.50
         + out["min_z"].astype(float).fillna(0.0)          * 0.25
     )

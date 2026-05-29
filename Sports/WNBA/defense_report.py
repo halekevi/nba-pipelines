@@ -31,7 +31,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-_ROOT = Path(__file__).resolve().parent.parent
+_ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 from utils.defense_tiers import def_tier_from_overall_rank
@@ -150,6 +150,31 @@ def get_team_stats_espn(team_id: str, debug: bool = False) -> Dict[str, float]:
 # Source 2 — CDN standings (has oppPointsPerGame reliably)
 # ---------------------------------------------------------------------------
 
+def _parse_standings_entry(entry: dict) -> tuple[str, Dict[str, float]] | tuple[None, None]:
+    team = entry.get("team") or {}
+    abbr = str(team.get("abbreviation", "")).upper()
+    if not abbr:
+        return None, None
+    row: Dict[str, float] = {}
+    for stat in (entry.get("stats") or []):
+        name = str(stat.get("name", "")).lower().replace(" ", "")
+        try:
+            val = float(stat.get("value", ""))
+        except (TypeError, ValueError):
+            continue
+        if name in ("avgpointsagainst", "pointsagainst", "opponentpointspergame", "oppptspergame"):
+            row["OPP_PPG"] = val
+        elif name in ("avgpointsfor", "pointsfor", "pointspergame", "ppg"):
+            row["PPG"] = val
+        elif name in ("wins", "w"):
+            row["W"] = val
+        elif name in ("losses", "l"):
+            row["L"] = val
+        elif "opp" in name and "point" in name:
+            row["OPP_PPG"] = val
+    return (abbr, row) if row else (None, None)
+
+
 def get_standings_defense(season: str) -> Dict[str, Dict[str, float]]:
     """
     Returns {abbr_upper: {"OPP_PPG": float, "W": float, "L": float}}
@@ -158,43 +183,27 @@ def get_standings_defense(season: str) -> Dict[str, Dict[str, float]]:
     try:
         url  = STANDINGS_URL.format(season=season)
         data = _get(url)
-        # Navigate into standings entries
         content = data.get("content", data)
         standings = content.get("standings", data.get("standings", {}))
-        groups = standings.get("groups") or standings.get("entries") or []
 
-        # ESPN standings: groups → entries → team + stats
-        def walk_groups(groups_list):
-            for g in groups_list:
-                for entry in (g.get("entries") or []):
-                    team = entry.get("team", {})
-                    abbr = str(team.get("abbreviation", "")).upper()
-                    if not abbr:
-                        continue
-                    row: Dict[str, float] = {}
-                    for stat in (entry.get("stats") or []):
-                        name = str(stat.get("name", "")).lower()
-                        try:
-                            val = float(stat.get("value", ""))
-                        except (TypeError, ValueError):
-                            continue
-                        if "opp" in name and "point" in name:
-                            row["OPP_PPG"] = val
-                        elif name in ("wins", "w"):
-                            row["W"] = val
-                        elif name in ("losses", "l"):
-                            row["L"] = val
-                        elif "pointspergame" in name or name == "ppg":
-                            row.setdefault("PPG", val)
-                    if row:
+        def walk_standings(node: Any) -> None:
+            if isinstance(node, dict):
+                for entry in (node.get("entries") or []):
+                    abbr, row = _parse_standings_entry(entry)
+                    if abbr and row:
                         result[abbr] = row
-                # recurse sub-groups
-                walk_groups(g.get("groups") or [])
+                inner = node.get("standings")
+                if isinstance(inner, dict):
+                    walk_standings(inner)
+                for g in (node.get("groups") or []):
+                    walk_standings(g)
+            elif isinstance(node, list):
+                for item in node:
+                    walk_standings(item)
 
-        walk_groups(groups)
+        walk_standings(standings)
 
         if not result:
-            # Brute-force flatten entire standings blob looking for opp pts
             flat = _flatten(data)
             if flat:
                 print("  [INFO] standings flatten found keys:", list(flat.keys())[:15])

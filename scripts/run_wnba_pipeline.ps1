@@ -385,7 +385,7 @@ if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_l
 if ($ok) { $ok = Run-Step "WNBA Step 6 - Team Role Context" $WNBADir ".\step6_team_role_context.py" `
     "--input `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --output `"$WnbaRunOutDir\step6_wnba_context.csv`"" }
 
-# Top-3 team leaders vs opponent defense (feeds step7 top3_def_context rank boost)
+# Top/bottom-3 team leaders vs opponent defense (feeds step7 top3_def_context / top3_under_context)
 if ($ok) {
     $Top3Script = Join-Path $WNBADir "scripts\analyze_top_players_vs_defense.py"
     if (Test-Path -LiteralPath $Top3Script) {
@@ -430,12 +430,12 @@ if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_ad
     "--input `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`" --sheet ALL --output `"$WnbaRunOutDir\step8_wnba_direction.csv`" --xlsx `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --date $Date" }
 if ($ok) { Publish-WnbaStep8CleanArtifacts }
 
-# Refresh top-3 vs defense with tonight's ranked slate overlay
+# Refresh top/bottom-3 vs defense with tonight's ranked slate overlay
 if ($ok) {
     $Top3Script = Join-Path $WNBADir "scripts\analyze_top_players_vs_defense.py"
     $Step8Csv = Join-Path $WnbaRunOutDir "step8_wnba_direction.csv"
     if ((Test-Path -LiteralPath $Top3Script) -and (Test-Path -LiteralPath $Step8Csv)) {
-        Write-Host "  --> WNBA Top-3 vs defense (slate overlay)" -ForegroundColor Yellow
+        Write-Host "  --> WNBA Top/bottom-3 vs defense (slate overlay)" -ForegroundColor Yellow
         Push-Location $Root
         try {
             & py -3.14 $Top3Script --slate $Step8Csv
@@ -465,14 +465,19 @@ if ($ok) {
     }
 }
 
-# Matchup edge JSON — must run after slate_sport_wnba.json is published (opp/def rank come from slate rows).
+# Matchup edge JSON — dedicated WNBA builder (top/bottom-3, UNDER edges). Must run after slate publish.
 if ($ok) {
-    $MeScript = Join-Path $Root "scripts\build_matchup_edge_json.py"
+    $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
+    $SlateJson = Join-Path $Root "ui_runner\templates\slate_sport_wnba.json"
     if (Test-Path -LiteralPath $MeScript) {
-        Write-Host "  --> WNBA — Rebuild matchup edge JSON (post-slate)" -ForegroundColor Yellow
+        Write-Host "  --> WNBA — Rebuild matchup edge JSON (dedicated builder, post-slate)" -ForegroundColor Yellow
         Push-Location $Root
         try {
-            & py -3.14 $MeScript --sport wnba
+            $meArgs = @($MeScript)
+            if (Test-Path -LiteralPath $SlateJson) {
+                $meArgs += @("--slate", $SlateJson)
+            }
+            & py -3.14 @meArgs
             if ($LASTEXITCODE -ne 0) {
                 Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
             } else {

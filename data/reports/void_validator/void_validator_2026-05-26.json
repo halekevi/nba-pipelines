@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-26",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_nba_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 724,
+      "void_rows": 71,
+      "acceptable_void_rows": 71,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_nhl_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 297,
+      "void_rows": 10,
+      "acceptable_void_rows": 10,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_mlb_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 960,
+      "void_rows": 12,
+      "acceptable_void_rows": 12,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_soccer_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 37,
+      "void_rows": 27,
+      "acceptable_void_rows": 27,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_nba1h_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 29,
+      "void_rows": 3,
+      "acceptable_void_rows": 3,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_nba1q_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 72,
+      "void_rows": 10,
+      "acceptable_void_rows": 10,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_tennis_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 1183,
+      "void_rows": 163,
+      "acceptable_void_rows": 163,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-26\\graded_wnba_2026-05-26.xlsx",
+      "status": "ok",
+      "rows": 936,
+      "void_rows": 620,
+      "acceptable_void_rows": 620,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

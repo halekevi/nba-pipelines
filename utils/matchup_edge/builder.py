@@ -230,7 +230,11 @@ def _build_from_game_logs(
         for r in t3.itertuples(index=False):
             top3[(_norm_name(getattr(r, "PLAYER_NORM", "")), str(r.team_slate).upper(), str(r.category).lower())] = {
                 "overperform_vs_weak": bool(getattr(r, "overperform_vs_weak", False)),
+                "fades_vs_elite": bool(getattr(r, "fades_vs_elite", False)),
                 "def_boost": float(r.def_boost) if pd.notna(getattr(r, "def_boost", np.nan)) else None,
+                "avg_delta_vs_elite": float(r.avg_delta_vs_elite)
+                if pd.notna(getattr(r, "avg_delta_vs_elite", np.nan))
+                else None,
             }
 
     defense = _load_defense(cfg)
@@ -425,6 +429,7 @@ def _merge_player_blocks(
 
 
 def _build_wnba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
+    """Delegate to Sports/WNBA/scripts/build_wnba_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
     script = _REPO_ROOT / "Sports" / "WNBA" / "scripts" / "build_wnba_matchup_edge_json.py"
     spec = importlib.util.spec_from_file_location("build_wnba_matchup_edge_json", script)
     if spec is None or spec.loader is None:
@@ -439,6 +444,106 @@ def _build_wnba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
         defense_path=wnba / "wnba_defense_summary.csv",
         top3_path=wnba / "data" / "wnba_top3_vs_defense.csv",
         slate_path=slate_file,
+    )
+
+
+def _resolve_nba_slate(slate_path: Path | None) -> Path:
+    if slate_path and slate_path.is_file():
+        return slate_path
+    for cand in (
+        _REPO_ROOT / "ui_runner/templates/slate_sport_nba.json",
+        _REPO_ROOT / "mobile/www/slate_sport_nba.json",
+        _REPO_ROOT / "Sports/NBA/data/outputs/step8_all_direction.csv",
+    ):
+        if cand.is_file():
+            return cand
+    return _REPO_ROOT / "ui_runner/templates/slate_sport_nba.json"
+
+
+def _build_nba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
+    """Delegate to Sports/NBA/scripts/build_nba_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
+    script = _REPO_ROOT / "Sports" / "NBA" / "scripts" / "build_nba_matchup_edge_json.py"
+    spec = importlib.util.spec_from_file_location("build_nba_matchup_edge_json", script)
+    if spec is None or spec.loader is None:
+        return {"sport": "nba", "error": f"Missing NBA builder: {script}", "teams": [], "categories": [], "matchups": {}, "players_by_team_cat": {}}
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    nba = _REPO_ROOT / "Sports" / "NBA"
+    slate_file = _resolve_nba_slate(slate_path)
+    return mod.build_payload(
+        cache_path=nba / "data/cache/espn_boxscores_cache.csv",
+        defense_path=nba / "data/cache/defense_team_summary.csv",
+        top3_path=nba / "data/nba_top3_vs_defense.csv",
+        slate_path=slate_file,
+    )
+
+
+def _resolve_nhl_slate(slate_path: Path | None) -> Path:
+    if slate_path and slate_path.is_file():
+        return slate_path
+    nhl = _REPO_ROOT / "Sports" / "NHL"
+    for cand in (
+        _REPO_ROOT / "ui_runner/templates/slate_sport_nhl.json",
+        _REPO_ROOT / "mobile/www/slate_sport_nhl.json",
+        nhl / "step8_nhl_direction_clean.csv",
+        nhl / "step8_nhl_direction_clean.xlsx",
+    ):
+        if cand.is_file():
+            return cand
+    return _REPO_ROOT / "ui_runner/templates/slate_sport_nhl.json"
+
+
+def _build_nhl_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
+    """Delegate to Sports/NHL/scripts/build_nhl_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
+    script = _REPO_ROOT / "Sports" / "NHL" / "scripts" / "build_nhl_matchup_edge_json.py"
+    spec = importlib.util.spec_from_file_location("build_nhl_matchup_edge_json", script)
+    if spec is None or spec.loader is None:
+        return {"sport": "nhl", "error": f"Missing NHL builder: {script}", "teams": [], "categories": [], "matchups": {}, "players_by_team_cat": {}}
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    nhl = _REPO_ROOT / "Sports" / "NHL"
+    slate_file = _resolve_nhl_slate(slate_path)
+    return mod.build_payload(
+        db_path=_REPO_ROOT / "data/cache/proporacle_ref.db",
+        defense_path=nhl / "cache/nhl_defense_summary.csv",
+        top3_path=nhl / "data/nhl_top3_vs_defense.csv",
+        slate_path=slate_file,
+    )
+
+
+def _resolve_mlb_slate(slate_path: Path | None) -> Path:
+    if slate_path is not None and slate_path.is_file():
+        return slate_path
+    mlb = _REPO_ROOT / "Sports" / "MLB"
+    for cand in (
+        _REPO_ROOT / "ui_runner/templates/slate_sport_mlb.json",
+        _REPO_ROOT / "mobile/www/slate_sport_mlb.json",
+        mlb / "step8_mlb_direction.csv",
+        mlb / "outputs/step8_mlb_direction.csv",
+    ):
+        if cand.is_file():
+            return cand
+    return _REPO_ROOT / "ui_runner/templates/slate_sport_mlb.json"
+
+
+def _build_mlb_hitter_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
+    """Delegate to Sports/MLB/scripts/build_mlb_hitter_matchup_edge_json.py (hitter top/bottom-3)."""
+    script = _REPO_ROOT / "Sports" / "MLB" / "scripts" / "build_mlb_hitter_matchup_edge_json.py"
+    spec = importlib.util.spec_from_file_location("build_mlb_hitter_matchup_edge_json", script)
+    if spec is None or spec.loader is None:
+        return {"sport": "mlb", "error": f"Missing MLB builder: {script}", "teams": [], "categories": [], "matchups": {}, "players_by_team_cat": {}}
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    mlb = _REPO_ROOT / "Sports" / "MLB"
+    slate_file = _resolve_mlb_slate(slate_path)
+    return mod.build_payload(
+        cache_path=mlb / "mlb_stats_cache.csv",
+        defense_path=mlb / "mlb_defense_summary.csv",
+        top3_path=mlb / "data/mlb_hitter_top3_vs_defense.csv",
+        slate_path=slate_file,
+        id_cache_path=mlb / "mlb_id_cache.csv",
     )
 
 
@@ -463,6 +568,15 @@ def build_matchup_payload(
 
     if cfg.sport == "wnba":
         return _build_wnba_matchup_payload(slate_path)
+
+    if cfg.sport == "nba":
+        return _build_nba_matchup_payload(slate_path)
+
+    if cfg.sport == "nhl":
+        return _build_nhl_matchup_payload(slate_path)
+
+    if cfg.sport == "mlb":
+        return _build_mlb_hitter_matchup_payload(slate_path)
 
     defense = _load_defense(cfg)
     if defense.empty:
@@ -573,7 +687,12 @@ def build_matchup_payload(
 
         enriched = []
         for i, p in enumerate(players, start=1):
-            hist = {"overperform_vs_weak": p.get("overperform_vs_weak"), "def_boost": p.get("def_boost")}
+            hist = {
+                "overperform_vs_weak": p.get("overperform_vs_weak"),
+                "fades_vs_elite": p.get("fades_vs_elite"),
+                "def_boost": p.get("def_boost"),
+                "avg_delta_vs_elite": p.get("avg_delta_vs_elite"),
+            }
             pp = lookup_pp_edge(
                 pp_lookup,
                 player=str(p.get("player") or ""),
@@ -641,8 +760,10 @@ def build_matchup_payload(
         "edge_legend": {
             "TOP_EDGE": "Positive PP edge (+1.5+) or strong avg vs soft defense (high rank = weak).",
             "OK_EDGE": "PP edge on board or solid production vs average-or-softer defense.",
+            "TOP_UNDER": "PP edge -2+ vs elite defense, or historically fades vs elite D.",
+            "OK_UNDER": "Negative PP edge vs elite defense — lean UNDER.",
             "NEUTRAL": "No clear edge.",
-            "AVOID": "Negative PP edge or elite defense with weak production.",
+            "AVOID": "Negative PP edge without elite matchup — skip OVER.",
         },
     }
 
@@ -663,6 +784,12 @@ def publish_payload(payload: dict[str, Any], sport: str, repo_root: Path | None 
     ]
     if sport == "wnba":
         targets.append(root / "Sports/WNBA/data/wnba_matchup_edge.json")
+    if sport == "nba":
+        targets.append(root / "Sports/NBA/data/nba_matchup_edge.json")
+    if sport == "nhl":
+        targets.append(root / "Sports/NHL/data/nhl_matchup_edge.json")
+    if sport == "mlb":
+        targets.append(root / "Sports/MLB/data/mlb_matchup_edge.json")
     text = json.dumps(payload, indent=2)
     for p in targets:
         p.parent.mkdir(parents=True, exist_ok=True)

@@ -11,7 +11,8 @@ Handles:
                   stolen_bases, fantasy_score, hits_runs_rbi, singles, doubles, triples,
                   hitter_strikeouts (game log strikeOuts)
   - Pitcher props: strikeouts, pitching_outs, innings_pitched, hits_allowed,
-                   earned_runs, walks_allowed, batters_faced, pitches_thrown (numberOfPitches)
+                   earned_runs, walks_allowed, batters_faced, pitches_thrown (numberOfPitches),
+                   first_inning_runs_allowed, first_inning_walks_allowed (PBP feed/live)
 
 Outputs:
   step4_mlb_with_stats.csv
@@ -66,12 +67,30 @@ GAMELOG_URL = (
     "https://statsapi.mlb.com/api/v1/people/{player_id}/stats"
     "?stats=gameLog&group={group}&season={season}&language=en"
 )
+LIVE_FEED_URL = "https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live"
 
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
     "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
-    "pitches_thrown",
+    "pitches_thrown", "pitcher_fantasy_score",
+    "first_inning_runs_allowed", "first_inning_walks_allowed",
 }
+
+PROP_ALIASES = {
+    # Safe aliases: preserve existing stat derivations/cache shape.
+    "hitter_fantasy_score": "fantasy_score",
+    "earned_runs_allowed": "earned_runs",
+}
+
+UNSUPPORTED_PROPS = {
+    "strikeouts_combo",
+    "strikeouts_total_bases",
+}
+
+_WARNED_UNSUPPORTED_PROPS: set[str] = set()
+_WARNED_PITCHER_WIN_FALLBACK: set[tuple[str, str]] = set()
+_PITCHER_WIN_FIELD_AVAILABLE: dict[tuple[str, str], bool] = {}
+_FIRST_INNING_BY_GAME: Dict[str, Dict[str, Dict[str, float]]] = {}
 
 # MLB Stats API teamId values (regular season). Common slate abbreviations included.
 MLB_TEAM_ID_MAP: Dict[str, int] = {
@@ -293,6 +312,58 @@ def _ip_to_outs(ip_str) -> float:
         return np.nan
 
 
+def _parse_first_inning_pitcher_stats(feed: dict) -> Dict[str, Dict[str, float]]:
+    """
+    Per-pitcher 1st-inning stats from feed/live allPlays.
+    runs_allowed: RBI on scoring plays while pitcher is on mound in inning 1.
+    walks: walk + intentional_walk events in inning 1.
+    """
+    out: Dict[str, Dict[str, float]] = {}
+    plays = (feed.get("liveData") or {}).get("plays", {}).get("allPlays") or []
+    for play in plays:
+        about = play.get("about") or {}
+        if about.get("inning") != 1:
+            continue
+        pitcher = (play.get("matchup") or {}).get("pitcher") or {}
+        pid = str(pitcher.get("id") or "").strip()
+        if not pid:
+            continue
+        if pid not in out:
+            out[pid] = {"runs_allowed": 0.0, "walks": 0.0}
+        result = play.get("result") or {}
+        ev = str(result.get("eventType") or "").strip().lower()
+        if ev in ("walk", "intent_walk"):
+            out[pid]["walks"] += 1.0
+        if about.get("isScoringPlay"):
+            rbi = result.get("rbi")
+            try:
+                runs = float(rbi) if rbi is not None and str(rbi).strip() != "" else 1.0
+            except (TypeError, ValueError):
+                runs = 1.0
+            out[pid]["runs_allowed"] += max(0.0, runs)
+    return out
+
+
+def fetch_first_inning_pitcher_stats(game_pk: str) -> Dict[str, Dict[str, float]]:
+    """Fetch and cache inning-1 pitcher stats for a gamePk."""
+    key = str(game_pk or "").strip()
+    if not key:
+        return {}
+    if key in _FIRST_INNING_BY_GAME:
+        return _FIRST_INNING_BY_GAME[key]
+    url = LIVE_FEED_URL.format(game_pk=key)
+    data = _get(url)
+    parsed = _parse_first_inning_pitcher_stats(data or {})
+    _FIRST_INNING_BY_GAME[key] = parsed
+    time.sleep(0.12)
+    return parsed
+
+
+def _pitcher_id_from_split(split: dict) -> str:
+    player = split.get("player") or {}
+    return str(player.get("id") or "").strip()
+
+
 def derive_hitter_stat(game: dict, prop_norm: str) -> float:
     """Extract a stat value from a MLB Stats API game log entry (hitter)."""
     s = game.get("stat") or {}
@@ -349,6 +420,17 @@ def derive_hitter_stat(game: dict, prop_norm: str) -> float:
 
 def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
     """Extract a stat value from a MLB Stats API game log entry (pitcher)."""
+    if prop_norm in ("first_inning_runs_allowed", "first_inning_walks_allowed"):
+        game_pk = str((game.get("game") or {}).get("gamePk", "")).strip()
+        pid = _pitcher_id_from_split(game)
+        if not game_pk or not pid:
+            return np.nan
+        by_pitcher = fetch_first_inning_pitcher_stats(game_pk)
+        row = by_pitcher.get(pid) or {}
+        if prop_norm == "first_inning_runs_allowed":
+            return float(row.get("runs_allowed", np.nan))
+        return float(row.get("walks", np.nan))
+
     s = game.get("stat") or {}
 
     def g(key, default=np.nan):
@@ -379,6 +461,15 @@ def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
     er        = g("earnedRuns",      0)
     bb        = g("baseOnBalls",     0)
     bf        = g("battersFaced",    0)
+    wins      = g("wins",            0)
+    quality_start = 1.0 if (float(outs) >= 18.0 and float(er) <= 3.0) else 0.0
+    pitcher_fantasy = (
+        float(outs) * 1.0
+        + float(so) * 3.0
+        + float(er) * -3.0
+        + float(wins) * 6.0
+        + float(quality_start) * 4.0
+    )
 
     mapping = {
         "strikeouts":      so,
@@ -389,6 +480,7 @@ def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
         "walks_allowed":   bb,
         "batters_faced":   bf,
         "pitches_thrown":  pitches,
+        "pitcher_fantasy_score": pitcher_fantasy,
     }
     return mapping.get(prop_norm, np.nan)
 
@@ -514,6 +606,13 @@ def update_cache(
     )
 
     splits  = fetch_game_log(player_id, group, season)
+    if player_type == "pitcher":
+        key = (str(player_id), str(season))
+        _wins_available = any("wins" in (sp.get("stat") or {}) for sp in splits)
+        _PITCHER_WIN_FIELD_AVAILABLE[key] = bool(_wins_available)
+        if not _wins_available and key not in _WARNED_PITCHER_WIN_FALLBACK:
+            print(f"  ⚠ Pitcher FS fallback (wins unavailable -> win=0): player_id={player_id} season={season}")
+            _WARNED_PITCHER_WIN_FALLBACK.add(key)
     # Most-recent first
     splits  = list(reversed(splits))
     added   = 0
@@ -521,7 +620,8 @@ def update_cache(
 
     prop_list = (
         ["strikeouts", "pitching_outs", "innings_pitched",
-         "hits_allowed", "earned_runs", "walks_allowed", "batters_faced", "pitches_thrown"]
+         "hits_allowed", "earned_runs", "walks_allowed", "batters_faced", "pitches_thrown",
+         "pitcher_fantasy_score", "first_inning_runs_allowed", "first_inning_walks_allowed"]
         if player_type == "pitcher" else
         ["hits", "total_bases", "home_runs", "rbi", "runs", "walks",
          "stolen_bases", "fantasy_score", "hits_runs_rbi", "singles", "doubles", "triples",
@@ -529,15 +629,26 @@ def update_cache(
     )
     derive_fn = derive_pitcher_stat if player_type == "pitcher" else derive_hitter_stat
 
+    cached_props_by_game: Dict[str, set[str]] = {}
+    if len(cache) > 0:
+        sub = cache[
+            (cache["MLB_PLAYER_ID"].astype(str) == str(player_id))
+            & (cache["SEASON"].astype(str) == str(season))
+        ]
+        for gid, grp in sub.groupby(sub["GAME_ID"].astype(str)):
+            cached_props_by_game[str(gid)] = set(grp["PROP_NORM"].astype(str).tolist())
+
     for split in splits:
         game_id  = str(split.get("game", {}).get("gamePk", "")).strip()
         date_str = str(split.get("date", "")).strip()
         if not game_id:
             continue
-        if game_id in existing_game_ids:
+        cached_props = cached_props_by_game.get(game_id, set())
+        props_to_write = [p for p in prop_list if p not in cached_props]
+        if not props_to_write:
             continue
 
-        for prop_norm in prop_list:
+        for prop_norm in props_to_write:
             val = derive_fn(split, prop_norm)
             # ── Bouncer: reject impossible/junk values ───────────────────────
             if val is not None and not (isinstance(val, float) and np.isnan(val)):
@@ -562,6 +673,12 @@ def update_cache(
                     continue
                 if prop_norm in ("earned_runs", "hits_allowed", "walks_allowed") and v > 30:
                     continue
+                if prop_norm == "pitcher_fantasy_score" and v > 120:
+                    continue
+                if prop_norm == "first_inning_runs_allowed" and v > 10:
+                    continue
+                if prop_norm == "first_inning_walks_allowed" and v > 5:
+                    continue
 
             new_rows.append({
                 "MLB_PLAYER_ID": str(player_id),
@@ -575,10 +692,11 @@ def update_cache(
                 "OPP_TEAM_ID":   str((split.get("opponent") or {}).get("id", "")).strip(),
             })
 
-        existing_game_ids.add(game_id)
-        added += 1
-        if added >= n_games:
-            break
+        if game_id not in existing_game_ids:
+            existing_game_ids.add(game_id)
+            added += 1
+            if added >= n_games:
+                break
 
     if new_rows:
         cache = pd.concat([cache, pd.DataFrame(new_rows)], ignore_index=True)
@@ -672,7 +790,7 @@ def _row_stat_refresh_keys(row: pd.Series) -> set[tuple[str, str]]:
     )
     if not is_combo:
         return {(ids[0], ptype)}
-    return {(str(pid), "hitter") for pid in ids}
+    return {(str(pid), ptype) for pid in ids}
 
 
 def _db_mirror_player_cache_rows(
@@ -735,6 +853,7 @@ def _process_slate_row_for_stats(
     """Fill stat columns for one slate row. Returns (cache, cache_row_updates)."""
     row = slate.loc[idx]
     prop = str(row.get("prop_norm", "")).lower().strip()
+    prop_for_stats = PROP_ALIASES.get(prop, prop)
     player = str(row.get("player", "")).strip()
     team = str(row.get("team", "")).strip()
     ptype = str(row.get("player_type", "")).lower().strip()
@@ -749,6 +868,16 @@ def _process_slate_row_for_stats(
     is_combo = (len(ids) > 1) or (
         str(row.get("is_combo_player", "")).strip().lower() in ("1", "true", "yes")
     )
+
+    if prop in UNSUPPORTED_PROPS:
+        if prop not in _WARNED_UNSUPPORTED_PROPS:
+            print(f"  ⚠ Unsupported MLB prop in step4 stats attachment: {prop}")
+            _WARNED_UNSUPPORTED_PROPS.add(prop)
+        slate.at[idx, "stat_status"] = "UNSUPPORTED_PROP"
+        slate.at[idx, "stat_coverage"] = "unsupported"
+        return cache, 0
+
+    slate.at[idx, "stat_coverage"] = "aliased" if prop_for_stats != prop else "supported"
 
     if not ids:
         slate.at[idx, "stat_status"] = "NO_MLB_PLAYER_ID"
@@ -773,7 +902,7 @@ def _process_slate_row_for_stats(
 
     if not is_combo:
         pid = ids[0]
-        cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+        cached_vals = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
         if allow_live_refresh:
             if len(cached_vals) < 3:
                 key = (pid, ptype)
@@ -788,24 +917,28 @@ def _process_slate_row_for_stats(
                     cache_updates += added
                     save_cache(cache, cache_path)
                     _db_mirror_player_cache_rows(cache, con, pid, season)
-                cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+                cached_vals = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
         else:
-            cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+            cached_vals = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
 
         if not cached_vals:
             slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
             return cache, cache_updates
         vals = cached_vals
+        if prop_for_stats == "pitcher_fantasy_score":
+            avail = _PITCHER_WIN_FIELD_AVAILABLE.get((str(pid), str(season)))
+            if avail is False:
+                slate.at[idx, "stat_coverage"] = "partial"
         opp_team_code = _infer_opp_team_for_row(slate, idx)
         opp_team_id = _resolve_team_id(opp_team_code)
-        same_opp_vals = get_vals_vs_opp_from_cache(cache, pid, prop, season, opp_team_id, n=5)
+        same_opp_vals = get_vals_vs_opp_from_cache(cache, pid, prop_for_stats, season, opp_team_id, n=5)
 
     else:
         per_player_vals = []
         any_empty = False
         for i, pid in enumerate(ids):
-            sub_ptype = "hitter"
-            cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+            sub_ptype = ptype
+            cv = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
             if allow_live_refresh:
                 if len(cv) < 3:
                     key = (pid, sub_ptype)
@@ -819,9 +952,9 @@ def _process_slate_row_for_stats(
                     if added > 0:
                         cache_updates += added
                         save_cache(cache, cache_path)
-                    cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+                    cv = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
             else:
-                cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+                cv = get_vals_from_cache(cache, pid, prop_for_stats, season, n=n_games)
             if not cv:
                 any_empty = True
                 break
@@ -905,7 +1038,7 @@ def main() -> None:
         "line_hit_rate_over_ou_5", "line_hit_rate_under_ou_5",
         "line_hit_rate_over_ou_10", "line_hit_rate_under_ou_10",
         "same_opp_games_l5", "same_opp_over_rate_l5",
-        "stat_status",
+        "stat_status", "stat_coverage",
     ]
     for c in out_cols:
         if c not in slate.columns:
@@ -1032,12 +1165,15 @@ def main() -> None:
     print(f"Cache updates: {cache_updates}")
     print("\nstat_status breakdown:")
     print(slate["stat_status"].astype(str).value_counts().to_string())
+    print("\nstat_coverage breakdown:")
+    print(slate["stat_coverage"].astype(str).value_counts().to_string())
     _vc = slate["stat_status"].astype(str).value_counts()
     _ok = int(_vc.get("OK", 0))
     _nc = int(_vc.get("NO_CACHE_DATA", 0))
     _nid = int(_vc.get("NO_MLB_PLAYER_ID", 0))
+    _uns = int(_vc.get("UNSUPPORTED_PROP", 0))
     print(
-        f"[MLB step4] stat_attach: OK={_ok} | NO_CACHE_DATA={_nc} | NO_MLB_PLAYER_ID={_nid} | total={len(slate)}"
+        f"[MLB step4] stat_attach: OK={_ok} | NO_CACHE_DATA={_nc} | NO_MLB_PLAYER_ID={_nid} | UNSUPPORTED_PROP={_uns} | total={len(slate)}"
     )
     con.close()
 

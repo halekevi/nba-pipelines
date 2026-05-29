@@ -58,7 +58,10 @@
       '<div class="wnba-me-field"><label>Team</label><select id="wnba-me-team"></select></div>' +
       '<div class="wnba-me-field"><label>Category</label><select id="wnba-me-cat"></select></div>' +
       '<div class="wnba-me-field"><label>Opponent</label><select id="wnba-me-opp" disabled></select></div>' +
-      '<button type="button" class="wnba-me-find" id="wnba-me-find">Find props ↗</button>' +
+      '<div class="wnba-me-find-row">' +
+      '<button type="button" class="wnba-me-find wnba-me-find-over" id="wnba-me-find-over">Find overs ↗</button>' +
+      '<button type="button" class="wnba-me-find wnba-me-find-under" id="wnba-me-find-under">Find unders ↗</button>' +
+      "</div>" +
       "</div>" +
       '<div class="wnba-me-cards" id="wnba-me-cards"></div>' +
       '<div class="wnba-me-table-wrap">' +
@@ -80,7 +83,8 @@
   function bindPanelEvents() {
     const teamSel = document.getElementById("wnba-me-team");
     const catSel = document.getElementById("wnba-me-cat");
-    const findBtn = document.getElementById("wnba-me-find");
+    const findOverBtn = document.getElementById("wnba-me-find-over");
+    const findUnderBtn = document.getElementById("wnba-me-find-under");
     if (teamSel && !teamSel.dataset.bound) {
       teamSel.dataset.bound = "1";
       teamSel.addEventListener("change", onTeamChange);
@@ -89,9 +93,13 @@
       catSel.dataset.bound = "1";
       catSel.addEventListener("change", render);
     }
-    if (findBtn && !findBtn.dataset.bound) {
-      findBtn.dataset.bound = "1";
-      findBtn.addEventListener("click", findProps);
+    if (findOverBtn && !findOverBtn.dataset.bound) {
+      findOverBtn.dataset.bound = "1";
+      findOverBtn.addEventListener("click", () => findProps("OVER"));
+    }
+    if (findUnderBtn && !findUnderBtn.dataset.bound) {
+      findUnderBtn.dataset.bound = "1";
+      findUnderBtn.addEventListener("click", () => findProps("UNDER"));
     }
   }
 
@@ -163,12 +171,14 @@
 
   function countEdges(players) {
     let top = 0,
-      ok = 0;
+      ok = 0,
+      under = 0;
     (players || []).forEach((p) => {
       if (p.edge === "TOP_EDGE") top++;
       else if (p.edge === "OK_EDGE") ok++;
+      else if (p.edge === "TOP_UNDER" || p.edge === "OK_UNDER") under++;
     });
-    return { top, ok };
+    return { top, ok, under };
   }
 
   function render() {
@@ -201,11 +211,14 @@
       '">' +
       esc(oppTier || "—") +
       "</div></div>" +
-      '<div class="wnba-me-card"><div class="lbl">Top edge plays</div><div class="val edge-top">' +
+      '<div class="wnba-me-card"><div class="lbl">Top over</div><div class="val edge-top">' +
       counts.top +
       "</div></div>" +
-      '<div class="wnba-me-card"><div class="lbl">OK edge plays</div><div class="val edge-ok">' +
+      '<div class="wnba-me-card"><div class="lbl">OK over</div><div class="val edge-ok">' +
       counts.ok +
+      "</div></div>" +
+      '<div class="wnba-me-card"><div class="lbl">Under edge</div><div class="val edge-under">' +
+      counts.under +
       "</div></div>" +
       '<div class="wnba-me-card"><div class="lbl">Team def rank</div><div class="val">#' +
       esc(mu.team_def_rank != null ? mu.team_def_rank : "—") +
@@ -215,10 +228,18 @@
 
     tbody.innerHTML = (block.players || [])
       .map(
-        (p) =>
+        (p) => {
+          const rankBadge = p.team_rank_label
+            ? ' <span class="wnba-me-rank-badge">' + esc(p.team_rank_label) + "</span>"
+            : p.bottom3_on_team
+              ? ' <span class="wnba-me-rank-badge wnba-me-rank-b3">B' + esc(p.bottom_rank_on_team || "?") + "</span>"
+              : "";
+          return (
           "<tr><td><strong>" +
           esc(p.player) +
-          "</strong></td><td>" +
+          "</strong>" +
+          rankBadge +
+          "</td><td>" +
           esc(p.pos || "—") +
           "</td><td>" +
           esc(p.season_avg) +
@@ -231,8 +252,17 @@
           "</span></td><td>" +
           esc(p.notes) +
           "</td></tr>"
+          );
+        }
       )
       .join("");
+
+    const overBtn = document.getElementById("wnba-me-find-over");
+    const underBtn = document.getElementById("wnba-me-find-under");
+    const hasOver = (block.players || []).some((p) => p.edge === "TOP_EDGE" || p.edge === "OK_EDGE");
+    const hasUnder = (block.players || []).some((p) => p.edge === "TOP_UNDER" || p.edge === "OK_UNDER");
+    if (overBtn) overBtn.disabled = !hasOver;
+    if (underBtn) underBtn.disabled = !hasUnder;
 
     const title =
       "Top " +
@@ -258,17 +288,22 @@
     }
   }
 
-  function findProps() {
+  function findProps(direction) {
     const team = document.getElementById("wnba-me-team")?.value;
     const cat = document.getElementById("wnba-me-cat")?.value;
     const block = currentBlock();
     if (!team || !cat) return;
 
     const terms = PROP_NORM_SEARCH[cat] || [cat];
-    const topPlayers = (block?.players || [])
+    const wantUnder = String(direction || "").toUpperCase() === "UNDER";
+    const overPlayers = (block?.players || [])
       .filter((p) => p.edge === "TOP_EDGE" || p.edge === "OK_EDGE")
       .map((p) => p.player);
-    const searchParts = [...topPlayers, ...terms];
+    const underPlayers = (block?.players || [])
+      .filter((p) => p.edge === "TOP_UNDER" || p.edge === "OK_UNDER")
+      .map((p) => p.player);
+    const pool = wantUnder ? underPlayers : overPlayers;
+    const searchParts = [...pool, ...terms];
     const search = searchParts[0] || terms[0] || "";
 
     const input = document.getElementById("sf-wnba");
@@ -276,8 +311,8 @@
       input.value = search;
       if (typeof global.filterSlate === "function") global.filterSlate("wnba", search);
     }
-    const overBtn = document.getElementById("sfb-wnba-over");
-    if (overBtn && !overBtn.classList.contains("on")) overBtn.click();
+    const dirBtn = document.getElementById("sfb-wnba-" + (wantUnder ? "under" : "over"));
+    if (dirBtn && !dirBtn.classList.contains("on")) dirBtn.click();
     document.getElementById("st-wnba")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 

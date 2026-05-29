@@ -1097,9 +1097,47 @@ if ($NHLOnly) {
     if ($ok) { Invoke-NHLStep4b $NHLDir "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
+    if ($ok) {
+        $NhlTop3Script = Join-Path $NHLDir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $NhlTop3Script) {
+            Write-Host "  --> NHL Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $NhlTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "NHL" "$NHLRunOutDir\step7_nhl_ranked.xlsx" }
     if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $SportsRoot "NHL\scripts\step8_add_direction_context_nhl.py")  "--input `"$NHLRunOutDir\step7_nhl_ranked.xlsx`" --output `"$NHLRunOutDir\step8_nhl_direction_clean.xlsx`" --date $Date" }
+    if ($ok) {
+        $NhlMeScript = Join-Path $NHLDir "scripts\build_nhl_matchup_edge_json.py"
+        $NhlStep8Csv = Join-Path $NHLDir "step8_nhl_direction_clean.csv"
+        $NhlStep8Xlsx = Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx"
+        if (Test-Path -LiteralPath $NhlMeScript) {
+            Write-Host "  --> NHL — Rebuild matchup edge JSON (dedicated builder, post-step8)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                $meArgs = @($NhlMeScript)
+                if (Test-Path -LiteralPath $NhlStep8Xlsx) {
+                    $meArgs += @("--slate", $NhlStep8Xlsx)
+                } elseif (Test-Path -LiteralPath $NhlStep8Csv) {
+                    $meArgs += @("--slate", $NhlStep8Csv)
+                }
+                & py -3.14 @meArgs
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     Write-Host ""
     if ($ok) { Write-Host "  NHL complete." -ForegroundColor Green } else { Write-Host "  NHL FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after NHL" }
@@ -1152,9 +1190,47 @@ if ($MLBOnly) {
     }
     if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
+    if ($ok) {
+        $MlbTop3Script = Join-Path $MLBDir "scripts\analyze_top_hitters_vs_defense.py"
+        if (Test-Path -LiteralPath $MlbTop3Script) {
+            Write-Host "  --> MLB Top-3 vs pitching analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $MlbTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input `"$MLBRunOutDir\step6_mlb_role_context.csv`" --output `"$MLBRunOutDir\step7_mlb_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "MLB" "$MLBRunOutDir\step7_mlb_ranked.xlsx" }
     if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $SportsRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }
+    if ($ok) {
+        $MlbMeScript = Join-Path $MLBDir "scripts\build_mlb_hitter_matchup_edge_json.py"
+        $MlbStep8Csv = Join-Path $MLBDir "step8_mlb_direction.csv"
+        $MlbStep8Xlsx = Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx"
+        if (Test-Path -LiteralPath $MlbMeScript) {
+            Write-Host "  --> MLB — Rebuild hitter matchup edge JSON (dedicated builder, post-step8)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                $meArgs = @($MlbMeScript)
+                if (Test-Path -LiteralPath $MlbStep8Xlsx) {
+                    $meArgs += @("--slate", $MlbStep8Xlsx)
+                } elseif (Test-Path -LiteralPath $MlbStep8Csv) {
+                    $meArgs += @("--slate", $MlbStep8Csv)
+                }
+                & py -3.14 @meArgs
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
@@ -1330,6 +1406,22 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 6e - Attach Intel"           $NBADir ".\scripts\step6e_attach_intel.py"                 "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step6e_with_intel.csv`"" }
+    # Top/bottom-3 team leaders vs opponent defense (feeds step7 top3_def_context / top3_under_context)
+    if ($ok) {
+        $NbaTop3Script = Join-Path $NBADir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $NbaTop3Script) {
+            Write-Host "  --> NBA Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $NbaTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6e_with_intel.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "NBA" "$NBARunOutDir\step7_ranked_props.xlsx" }
     if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
@@ -1337,6 +1429,30 @@ if ($NBAOnly) {
         $nbaMainStep8 = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
         if (Test-Path $nbaMainStep8) {
             Copy-DatedSlateOutput -SourcePath $nbaMainStep8 -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
+        }
+    }
+    # Matchup edge JSON — dedicated NBA builder (top/bottom-3, UNDER edges). Run after step8.
+    if ($ok) {
+        $NbaMeScript = Join-Path $NBADir "scripts\build_nba_matchup_edge_json.py"
+        $NbaStep8Csv = Join-Path $NBARunOutDir "step8_all_direction.csv"
+        if (Test-Path -LiteralPath $NbaMeScript) {
+            Write-Host "  --> NBA — Rebuild matchup edge JSON (dedicated builder, post-step8)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                $meArgs = @($NbaMeScript)
+                if (Test-Path -LiteralPath $NbaStep8Csv) {
+                    $meArgs += @("--slate", $NbaStep8Csv)
+                } else {
+                    $SlateJson = Join-Path $Root "ui_runner\templates\slate_sport_nba.json"
+                    if (Test-Path -LiteralPath $SlateJson) { $meArgs += @("--slate", $SlateJson) }
+                }
+                & py -3.14 @meArgs
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      matchup-edge WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
         }
     }
     if ($ok) { $ok = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch }
@@ -1533,6 +1649,21 @@ $NBAJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 6e - Attach Intel"           $NBADir ".\scripts\step6e_attach_intel.py"                 "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step6e_with_intel.csv`"" }
+    if ($ok) {
+        $NbaTop3Script = Join-Path $NBADir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $NbaTop3Script) {
+            Write-Host "  --> NBA Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $NbaTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6e_with_intel.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot "$NBARunOutDir\step7_ranked_props.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "Sports\NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
@@ -1709,9 +1840,39 @@ $NHLJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-NHLStep4b-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
+    if ($ok) {
+        $NhlTop3Script = Join-Path $NHLDir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $NhlTop3Script) {
+            Write-Host "  --> NHL Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $NhlTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "      top3-vs-defense WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NHL" $RepoRoot "$NHLRunOutDir\step7_nhl_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $RepoRoot "Sports\NHL\scripts\step8_add_direction_context_nhl.py")  "--input `"$NHLRunOutDir\step7_nhl_ranked.xlsx`" --output `"$NHLRunOutDir\step8_nhl_direction_clean.xlsx`" --date $Date" }
+    if ($ok) {
+        $NhlMeScript = Join-Path $NHLDir "scripts\build_nhl_matchup_edge_json.py"
+        $NhlStep8Xlsx = Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx"
+        if (Test-Path -LiteralPath $NhlMeScript) {
+            Write-Output "[NHL] --> Rebuild matchup edge JSON (post-step8)"
+            Push-Location $RepoRoot
+            try {
+                $meArgs = @($NhlMeScript)
+                if (Test-Path -LiteralPath $NhlStep8Xlsx) { $meArgs += @("--slate", $NhlStep8Xlsx) }
+                & py -3.14 @meArgs
+                if ($LASTEXITCODE -ne 0) { Write-Output "[NHL] matchup-edge WARN (exit $LASTEXITCODE)" }
+                else { Write-Output "[NHL] matchup-edge OK" }
+            } finally { Pop-Location }
+        }
+    }
     return $ok
 } -ArgumentList $NHLDir, $SkipFetch, $Root, $Date, $NHLRunOutDir
 
@@ -1987,6 +2148,19 @@ $MLBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season $MlbSeasonYear" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
+    if ($ok) {
+        $MlbTop3Script = Join-Path $MLBDir "scripts\analyze_top_hitters_vs_defense.py"
+        if (Test-Path -LiteralPath $MlbTop3Script) {
+            Write-Output "[MLB] Top-3 vs pitching analysis (step7 input)"
+            Push-Location $RepoRoot
+            try {
+                & py -3.14 $MlbTop3Script
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Output "[MLB] top3-vs-defense WARN (exit $LASTEXITCODE) — continuing"
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input `"$MLBRunOutDir\step6_mlb_role_context.csv`" --output `"$MLBRunOutDir\step7_mlb_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot "$MLBRunOutDir\step7_mlb_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "Sports\MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }

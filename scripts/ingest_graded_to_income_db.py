@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import logging
 import re
 import sys
 from pathlib import Path
@@ -33,6 +34,7 @@ from proporacle.monitoring.dashboard_queries import load_income_db  # noqa: E402
 MODEL_VERSION = "graded_props_ingest_v1"
 PRICING_VERSION = "graded_props_json"
 SPORT_SLATE = "MULTI"
+_log = logging.getLogger(__name__)
 
 
 def _templates_dir() -> Path:
@@ -119,17 +121,18 @@ def _ensure_model_version(conn) -> None:
     conn.commit()
 
 
-def ingest_file(conn, path: Path) -> tuple[int, str | None]:
+def ingest_file(conn, path: Path) -> tuple[int, dict[str, int], str | None]:
     grade_date = _parse_date_from_path(path)
     if not grade_date:
-        return 0, "skip: bad filename"
+        return 0, {}, "skip: bad filename"
     try:
         data = json.loads(path.read_text(encoding="utf-8-sig"))
     except Exception as e:
-        return 0, f"read error: {e}"
+        return 0, {}, f"read error: {e}"
     props = data.get("props") or []
     slate_id = f"graded_props_{grade_date}"
     inserted = 0
+    sport_counts: dict[str, int] = {}
 
     cur = conn.cursor()
     cur.execute(
@@ -182,9 +185,11 @@ def ingest_file(conn, path: Path) -> tuple[int, str | None]:
             (slate_id, mid, res, pnl, -110, -110, None, settled),
         )
         inserted += 1
+        sport_key = sport.upper()
+        sport_counts[sport_key] = sport_counts.get(sport_key, 0) + 1
 
     conn.commit()
-    return inserted, None
+    return inserted, sport_counts, None
 
 
 def main() -> None:
@@ -204,8 +209,18 @@ def main() -> None:
         print("No graded_props_*.json files found.", file=sys.stderr)
         sys.exit(1)
 
+    logs_dir = _REPO / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    log_path = logs_dir / "ingest_income_db.log"
+    _log.setLevel(logging.INFO)
+    if not any(isinstance(h, logging.FileHandler) and Path(getattr(h, "baseFilename", "")) == log_path for h in _log.handlers):
+        handler = logging.FileHandler(log_path, mode="a", encoding="utf-8")
+        handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+        _log.addHandler(handler)
+
     conn = load_income_db()
     try:
+        _log.info("[INGEST] Starting income DB ingest")
         _ensure_model_version(conn)
         if args.purge_demo:
             n = _purge_demo_slates(conn)
@@ -214,13 +229,21 @@ def main() -> None:
         _delete_graded_props_slates(conn, slate_ids)
 
         total = 0
+        sport_totals: dict[str, int] = {}
         for p in paths:
-            n, err = ingest_file(conn, p)
+            n, by_sport, err = ingest_file(conn, p)
             if err:
                 print(f"{p.name}: {err}")
             else:
                 print(f"{p.name}: inserted {n} bet_result row(s)")
+                for sport, count in by_sport.items():
+                    sport_totals[sport] = sport_totals.get(sport, 0) + int(count)
                 total += n
+        for sport in sorted(sport_totals):
+            n = int(sport_totals[sport])
+            _log.info(f"[INGEST] {sport}: {n} rows")
+            print(f"[INGEST] {sport}: {n} rows, total={total}")
+        _log.info(f"[INGEST] Complete — total={total} rows")
         print(f"Done. Total HIT/MISS rows with ml_prob: {total}")
     finally:
         conn.close()

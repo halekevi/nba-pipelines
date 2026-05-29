@@ -1,0 +1,16 @@
+TEAM_ABBREVIATION,TEAM_NAME,TEAM_ID,OVERALL_DEF_SCORE,OVERALL_DEF_RANK,DEF_TIER
+ATL,Atlanta Dream,20,,1,Elite
+CHI,Chicago Sky,19,,2,Elite
+CON,Connecticut Sun,18,,3,Elite
+DAL,Dallas Wings,3,,4,Above Avg
+GS,Golden State Valkyries,129689,,5,Above Avg
+IND,Indiana Fever,5,,6,Above Avg
+LV,Las Vegas Aces,17,,7,Avg
+LA,Los Angeles Sparks,6,,8,Avg
+MIN,Minnesota Lynx,8,,9,Avg
+NY,New York Liberty,9,,10,Below Avg
+PHX,Phoenix Mercury,11,,11,Below Avg
+POR,Portland Fire,132052,,12,Below Avg
+SEA,Seattle Storm,14,,13,Weak
+TOR,Toronto Tempo,131935,,14,Weak
+WSH,Washington Mystics,16,,15,Weak

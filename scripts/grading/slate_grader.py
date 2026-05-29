@@ -960,7 +960,7 @@ def apply_actuals(df, actuals_path):
         print(f"  ⚠️  Prop types in slate with NO actuals matches: {sorted(unmatched_props)}")
 
     # Upstream void_reason (NBA step7, etc.) marks eligibility / strategy filters
-    # (BLOCKED_STD_OVER_LOW_HR, DROPPED_NEG_EDGE_GOBDEM, NO_PROJECTION_OR_LINE, …).
+    # (BLOCKED_STD_OVER_LOW_HR, FORCED_OVER_NEG_EDGE, DROPPED_NEG_EDGE_GOBDEM, NO_PROJECTION_OR_LINE, …).
     # It must NOT force VOID when we have a real line + box-score actual — otherwise
     # Prop Evaluation and archives show Actual filled but Result VOID and Margin empty.
 

@@ -45,19 +45,28 @@ PROP_NORM_MAP = {
     "home runs":               "home_runs",
     "homeruns":                "home_runs",
     "rbi":                     "rbi",
+    "rbis":                    "rbi",
     "runs":                    "runs",
     "walks":                   "walks",
     "stolen bases":            "stolen_bases",
     "stolenbases":             "stolen_bases",
     "hitter strikeouts":       "hitter_strikeouts",
     "hitterstrikeouts":        "hitter_strikeouts",
+    "hitter ks":               "hitter_strikeouts",
     "batter strikeouts":       "hitter_strikeouts",
     "batterstrikeouts":        "hitter_strikeouts",
     "fantasy score":           "fantasy_score",
     "fantasyscore":            "fantasy_score",
+    "hitter fantasy score":    "hitter_fantasy_score",
+    "hitterfantasyscore":      "hitter_fantasy_score",
+    "pitcher fantasy score":   "pitcher_fantasy_score",
+    "pitcherfantasyscore":     "pitcher_fantasy_score",
     "hits+runs+rbi":           "hits_runs_rbi",
+    "hits+runs+rbis":          "hits_runs_rbi",
     "hitsrunsrbi":             "hits_runs_rbi",
+    "hitsrunsrbis":            "hits_runs_rbi",
     "hits + runs + rbi":       "hits_runs_rbi",
+    "hits + runs + rbis":      "hits_runs_rbi",
     "singles":                 "singles",
     "doubles":                 "doubles",
     "triples":                 "triples",
@@ -74,10 +83,20 @@ PROP_NORM_MAP = {
     "hits allowed":            "hits_allowed",
     "hitsallowed":             "hits_allowed",
     "earned runs":             "earned_runs",
+    "earned runs allowed":     "earned_runs_allowed",
+    "earnedrunsallowed":       "earned_runs_allowed",
     "earnedrun":               "earned_runs",
     "earnedrunsr":             "earned_runs",
     "walks allowed":           "walks_allowed",
     "walksallowed":            "walks_allowed",
+    "1st inning runs allowed": "first_inning_runs_allowed",
+    "1stinningrunsallowed":    "first_inning_runs_allowed",
+    "1st inning walks allowed":"first_inning_walks_allowed",
+    "1stinningwalksallowed":   "first_inning_walks_allowed",
+    "pitcher strikeouts + total bases": "strikeouts_total_bases",
+    "pitcherstrikeouts+totalbases": "strikeouts_total_bases",
+    "pitcher strikeouts (combo)": "strikeouts_combo",
+    "pitcherstrikeouts(combo)": "strikeouts_combo",
     "batters faced":           "batters_faced",
     "battersfaced":            "batters_faced",
     "pitches thrown":          "pitches_thrown",
@@ -86,13 +105,14 @@ PROP_NORM_MAP = {
 
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
-    "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
-    "pitches_thrown",
+    "hits_allowed", "earned_runs", "earned_runs_allowed", "walks_allowed", "batters_faced",
+    "pitches_thrown", "first_inning_runs_allowed", "first_inning_walks_allowed",
+    "strikeouts_combo", "strikeouts_total_bases", "pitcher_fantasy_score",
 }
 
 HITTER_PROPS = {
     "hits", "total_bases", "home_runs", "rbi", "runs",
-    "walks", "stolen_bases", "fantasy_score", "hits_runs_rbi",
+    "walks", "stolen_bases", "fantasy_score", "hitter_fantasy_score", "hits_runs_rbi",
     "singles", "doubles", "triples",
     "hitter_strikeouts", "plate_appearances",
 }
@@ -127,9 +147,9 @@ def norm_pick_type(s: str) -> str:
 
 def norm_prop(s: str) -> str:
     raw = str(s or "").lower().strip()
-    flat = raw.replace("-", "").replace("_", "").replace(" ", "").replace("+", "")
+    flat = re.sub(r"[^a-z0-9]", "", raw)
     for k, v in PROP_NORM_MAP.items():
-        if flat == k.replace("-", "").replace("_", "").replace(" ", ""):
+        if flat == re.sub(r"[^a-z0-9]", "", k):
             return v
     return raw
 

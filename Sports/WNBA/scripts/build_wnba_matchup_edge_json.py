@@ -56,6 +56,7 @@ CATEGORIES: list[dict] = [
 ]
 
 TOP_N = 5
+BOTTOM_N = 3
 MIN_MPG = 14.0
 ELITE_RANK_CUT = 4
 PROP_LABEL_TO_NORM: dict[str, str] = {
@@ -95,20 +96,39 @@ def _load_defense(path: Path) -> pd.DataFrame:
     return d
 
 
-def _load_top3(path: Path) -> dict[tuple[str, str, str], dict]:
+def _load_leader_lookups(path: Path) -> tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str, str], dict]]:
+    """Top and bottom leader hist keyed by (player_norm, team_slate, category)."""
+    empty: dict[tuple[str, str, str], dict] = {}
     if not path.exists():
-        return {}
+        return empty, empty
     t3 = pd.read_csv(path, encoding="utf-8-sig")
-    out: dict[tuple[str, str, str], dict] = {}
+    top_out: dict[tuple[str, str, str], dict] = {}
+    bottom_out: dict[tuple[str, str, str], dict] = {}
     for r in t3.itertuples(index=False):
         key = (_norm_name(r.PLAYER_NORM), str(r.team_slate).upper(), str(r.category).lower())
-        out[key] = {
+        hist = {
             "rank_on_team": int(r.rank_on_team) if pd.notna(getattr(r, "rank_on_team", np.nan)) else None,
             "def_boost": float(r.def_boost) if pd.notna(getattr(r, "def_boost", np.nan)) else None,
             "overperform_vs_weak": bool(getattr(r, "overperform_vs_weak", False)),
+            "fades_vs_elite": bool(getattr(r, "fades_vs_elite", False)),
             "avg_delta_vs_weak": float(r.avg_delta_vs_weak) if pd.notna(getattr(r, "avg_delta_vs_weak", np.nan)) else None,
+            "avg_delta_vs_elite": float(r.avg_delta_vs_elite) if pd.notna(getattr(r, "avg_delta_vs_elite", np.nan)) else None,
         }
-    return out
+        side = str(getattr(r, "leader_side", "top") or "top").lower()
+        if side == "bottom":
+            bottom_out[key] = hist
+        else:
+            top_out[key] = hist
+    return top_out, bottom_out
+
+
+def _team_rank_label(top_rank: int | None, bottom_rank: int | None) -> str:
+    parts: list[str] = []
+    if top_rank is not None and top_rank <= 5:
+        parts.append(f"T{top_rank}")
+    if bottom_rank is not None and bottom_rank <= 3:
+        parts.append(f"B{bottom_rank}")
+    return "/".join(parts)
 
 
 def _load_slate_rows(slate_path: Path) -> list[dict]:
@@ -221,7 +241,7 @@ def build_payload(
     defense = _load_defense(defense_path)
     n_teams = int(defense["OVERALL_DEF_RANK"].notna().sum()) or 15
     def_by_key = defense.set_index("def_key")
-    top3_lookup = _load_top3(top3_path)
+    top3_lookup, bottom3_lookup = _load_leader_lookups(top3_path)
     matchups_raw = _tonight_matchups(slate_path)
     slate_rows = _load_slate_rows(slate_path)
     pp_by_player = build_slate_pp_lookup(slate_rows, CATEGORIES, team_normalize=_slate_team)
@@ -300,6 +320,7 @@ def build_payload(
             if grp.empty:
                 continue
             top = grp.nlargest(TOP_N, "season_avg")
+            bottom = grp.nsmallest(BOTTOM_N, "season_avg")
             mu_ui = matchups_ui.get(team_slate, {})
             opp_slate = mu_ui.get("opponent_slate", "")
             opp_rank = mu_ui.get("opponent_def_rank")
@@ -308,9 +329,17 @@ def build_payload(
             opp_ppg = mu_ui.get("opponent_opp_ppg")
 
             plist: list[dict] = []
-            for i, r in enumerate(top.itertuples(index=False), start=1):
+            seen_norm: set[str] = set()
+
+            def _append_player(r, *, top_rank: int | None, bottom_rank: int | None) -> None:
                 pnorm = _norm_name(r.PLAYER_NORM)
-                hist = top3_lookup.get((pnorm, str(team_slate).upper(), cid), {})
+                if pnorm in seen_norm:
+                    return
+                seen_norm.add(pnorm)
+                key = (pnorm, str(team_slate).upper(), cid)
+                hist_top = top3_lookup.get(key, {})
+                hist_bot = bottom3_lookup.get(key, {})
+                hist = {**hist_top, **{k: v for k, v in hist_bot.items() if v is not None}}
                 pp = lookup_pp_edge(
                     pp_by_player,
                     player=r.PLAYER_NAME,
@@ -329,24 +358,44 @@ def build_payload(
                     cat_id=cid,
                     pp_line=pp.get("pp_line"),
                     pp_edge=pp.get("pp_edge"),
-                    rank_on_team=i,
+                    rank_on_team=top_rank,
+                    bottom_rank_on_team=bottom_rank,
                 )
+                rank_lbl = _team_rank_label(top_rank, bottom_rank)
                 plist.append(
                     {
                         "player": r.PLAYER_NAME,
                         "player_norm": pnorm,
                         "pos": pos_by_player.get(pnorm, ""),
-                        "rank_on_team": i,
+                        "rank_on_team": top_rank,
+                        "bottom_rank_on_team": bottom_rank,
+                        "team_rank_label": rank_lbl,
+                        "bottom3_on_team": bottom_rank is not None and bottom_rank <= 3,
                         "season_avg": round(avg, 2),
                         "game_score": round(float(r.game_score), 1) if pd.notna(r.game_score) else round(avg, 1),
                         "pp_line": pp.get("pp_line"),
                         "pp_edge": round(float(pp["pp_edge"]), 2) if pp.get("pp_edge") is not None else None,
                         "edge": edge,
-                        "notes": note or _player_notes(r.PLAYER_NAME, cid, i, hist),
+                        "notes": note or _player_notes(r.PLAYER_NAME, cid, top_rank, hist),
                         "overperform_vs_weak": hist.get("overperform_vs_weak", False),
+                        "fades_vs_elite": hist.get("fades_vs_elite", False),
                         "def_boost": hist.get("def_boost"),
+                        "avg_delta_vs_elite": hist.get("avg_delta_vs_elite"),
                     }
                 )
+
+            for i, r in enumerate(top.itertuples(index=False), start=1):
+                bot_hist = bottom3_lookup.get(
+                    (_norm_name(r.PLAYER_NORM), str(team_slate).upper(), cid), {}
+                )
+                bot_rank = bot_hist.get("rank_on_team")
+                _append_player(r, top_rank=i, bottom_rank=bot_rank)
+
+            for i, r in enumerate(bottom.itertuples(index=False), start=1):
+                pnorm = _norm_name(r.PLAYER_NORM)
+                if pnorm in seen_norm:
+                    continue
+                _append_player(r, top_rank=None, bottom_rank=i)
 
             key = f"{team_slate}|{cid}"
             players_by_key[key] = {
@@ -381,8 +430,10 @@ def build_payload(
         "edge_legend": {
             "TOP_EDGE": "Positive PP edge (+1.5+) or strong avg vs soft defense (rank 10+).",
             "OK_EDGE": "PP edge on board or team leader vs soft/average defense.",
+            "TOP_UNDER": "PP edge -2+ vs elite defense, or historically fades vs elite D.",
+            "OK_UNDER": "Negative PP edge vs elite defense or bottom-3 producer vs elite D — lean UNDER.",
             "NEUTRAL": "No clear edge.",
-            "AVOID": "Negative PP edge or elite defense with weak production — skip OVER.",
+            "AVOID": "Negative PP edge without elite matchup — skip OVER.",
         },
     }
 

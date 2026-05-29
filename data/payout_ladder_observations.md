@@ -34,9 +34,11 @@ For Leaderboard/reverted payout screenshots, keep rows in `data/payout_ladder_re
 
 ### 3-Leg All Goblin
 
-| date       | flex_sweep | flex_partial | power_first | notes |
-|------------|------------|--------------|-------------|-------|
-| 2026-04-13 | 3.0x       | 0.5x         | 3.75x       | 3 goblin, distances unknown — need step8 confirmation |
+| date       | flex_sweep | flex_partial | power_first | power_3/3 | notes |
+|------------|------------|--------------|-------------|-----------|-------|
+| 2026-05-27 | 3.0x       | 1.7x (2/3)   | 6.0x        | 2.0x      | WNBA **reversion** slip: Clark 17.5 G / std 19.5 (Δ2), Thomas 11.5 G / std 16.5 (Δ5), Copper 14.5 G / std 19 (Δ4.5). `goblin_distances` **[2, 4.5, 5]**. |
+| 2026-05-27 | —          | —            | —           | **3.75x** | WNBA **standard** 2S+1G Power (submitted): Gray 4.5 2PT S, Howard 11.5 PTS G (std **16.5**, Δ5), Carter 15.5 PTS S. Promoted to `payout_ladder.json` `[5]`. |
+| 2026-04-13 | 3.0x       | 0.5x         | 3.75x       | —         | 3 goblin, distances unknown — need step8 confirmation |
 
 ### 2 Goblin + 1 Standard (flex)
 

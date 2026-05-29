@@ -539,6 +539,141 @@ def calc_hit_context(vals: List[float], line: float, k: int = 5) -> Tuple[int,in
     return over, under, push, hr_all, hr_ou, ur_ou
 
 
+def _lookup_espn_id(player_name: str, name_to_id: Dict[str, str]) -> str:
+    p_norm = _norm_name(player_name)
+    if p_norm in name_to_id:
+        return str(name_to_id[p_norm])
+    # Last-resort: unique last-token match when slate spelling differs slightly.
+    parts = p_norm.split()
+    if not parts:
+        return ""
+    last = parts[-1]
+    hits = [v for k, v in name_to_id.items() if k.split()[-1:] == [last]]
+    return str(hits[0]) if len(hits) == 1 else ""
+
+
+def _player_games_for_athlete(
+    cache_filt: pd.DataFrame, ath_id: str, min_minutes: float
+) -> pd.DataFrame:
+    player_games = cache_filt[cache_filt["ESPN_ATHLETE_ID"].astype(str) == str(ath_id)].copy()
+    if player_games.empty:
+        return player_games
+    player_games = player_games.sort_values("game_date", ascending=False)
+    return filter_games_by_minutes(player_games, float(min_minutes))
+
+
+def _stat_values_for_athlete(
+    cache_filt: pd.DataFrame,
+    ath_id: str,
+    prop_n: str,
+    n: int,
+    min_minutes: float,
+) -> Tuple[List[float], pd.DataFrame]:
+    player_games = _player_games_for_athlete(cache_filt, ath_id, min_minutes)
+    if player_games.empty:
+        return [], player_games
+    stat_series = derive_stat(player_games, prop_n)
+    if stat_series.isna().all():
+        return [], player_games
+    vals = [float(v) if not pd.isna(v) else np.nan for v in stat_series.tolist()][:n]
+    return vals, player_games
+
+
+def _combo_stat_values(
+    cache_filt: pd.DataFrame,
+    ath_ids: List[str],
+    prop_n: str,
+    n: int,
+    min_minutes: float,
+) -> Tuple[List[float], List[pd.DataFrame]]:
+    """
+    Sum stats across combo legs, aligned by recent-game index (same as NBA get_vals_combo).
+    Only counts games where every leg has a value at that index.
+    """
+    per_player: List[List[float]] = []
+    game_frames: List[pd.DataFrame] = []
+    for ath_id in ath_ids:
+        vals, games = _stat_values_for_athlete(cache_filt, ath_id, prop_n, n, min_minutes)
+        if not vals:
+            return [], game_frames
+        per_player.append(vals)
+        game_frames.append(games)
+    min_games = min(len(v) for v in per_player)
+    if min_games <= 0:
+        return [], game_frames
+    summed = [
+        float(sum(v[i] for v in per_player))
+        for i in range(min_games)
+    ]
+    while len(summed) < n:
+        summed.append(np.nan)
+    return summed[:n], game_frames
+
+
+def _append_empty_stat_row(new_cols: Dict[str, List], *, reason: str = "") -> None:
+    for k in new_cols:
+        new_cols[k].append(np.nan if "rate" in k or "avg" in k else ("" if k == "unsupported_reason" else np.nan))
+    new_cols["unsupported_prop"][-1] = 0
+    new_cols["unsupported_reason"][-1] = reason
+    new_cols["espn_athlete_id"][-1] = ""
+
+
+def _append_stat_row(
+    new_cols: Dict[str, List],
+    vals_mr: List[float],
+    line_val: float,
+    n: int,
+    ath_id: str,
+    player_games: pd.DataFrame,
+) -> None:
+    for i in range(n):
+        new_cols[f"stat_g{i+1}"].append(vals_mr[i] if i < len(vals_mr) else np.nan)
+
+    valid_vals = [v for v in vals_mr if not (isinstance(v, float) and np.isnan(v))]
+    new_cols["stat_last5_avg"].append(float(np.mean(valid_vals[:5])) if valid_vals[:5] else np.nan)
+    new_cols["stat_last10_avg"].append(float(np.mean(valid_vals[:10])) if valid_vals[:10] else np.nan)
+
+    if not player_games.empty and "SEASON_AVG" in player_games.columns:
+        sv = pd.to_numeric(player_games["SEASON_AVG"], errors="coerce").dropna()
+        new_cols["stat_season_avg"].append(float(sv.mean()) if len(sv) else np.nan)
+    else:
+        new_cols["stat_season_avg"].append(float(np.mean(valid_vals)) if valid_vals else np.nan)
+
+    if not np.isnan(line_val):
+        o5, u5, p5, hr5, hr5_ou, ur5_ou = calc_hit_context(vals_mr, line_val, 5)
+        _o10, _u10, _p10, _hr10, hr10_ou, ur10_ou = calc_hit_context(vals_mr, line_val, 10)
+        new_cols["last5_over"].append(o5)
+        new_cols["last5_under"].append(u5)
+        new_cols["last5_push"].append(p5)
+        new_cols["last5_hit_rate"].append(hr5)
+        new_cols["line_hit_rate_over_ou_5"].append(hr5_ou)
+        new_cols["line_hit_rate_under_ou_5"].append(ur5_ou)
+        new_cols["line_hit_rate_over_ou_10"].append(hr10_ou)
+        new_cols["line_hit_rate_under_ou_10"].append(ur10_ou)
+    else:
+        for k in [
+            "last5_over", "last5_under", "last5_push", "last5_hit_rate",
+            "line_hit_rate_over_ou_5", "line_hit_rate_under_ou_5",
+            "line_hit_rate_over_ou_10", "line_hit_rate_under_ou_10",
+        ]:
+            new_cols[k].append(np.nan)
+
+    new_cols["unsupported_prop"].append(0)
+    new_cols["unsupported_reason"].append("")
+    new_cols["espn_athlete_id"].append(ath_id)
+
+
+def _is_combo_row(row: pd.Series) -> bool:
+    if pd.to_numeric(row.get("is_combo_player", 0), errors="coerce") == 1:
+        return True
+    return "+" in str(row.get("player", ""))
+
+
+def split_combo_name(player: str) -> Tuple[str, str]:
+    parts = [p.strip() for p in str(player or "").split("+")]
+    return (parts[0], parts[1]) if len(parts) >= 2 else (str(player).strip(), "")
+
+
 def find_incomplete_wnba_events(cache: pd.DataFrame, *, min_team_minutes_sum: float = 300.0) -> set[str]:
     """
     Events to re-fetch: missing PTS or clearly partial boxscores (in-game snapshot cached early).
@@ -829,78 +964,70 @@ def main():
         player   = str(row.get("player","")).strip()
         prop_n   = resolve_prop_slug(row)
         line_val = pd.to_numeric(row.get("line",""), errors="coerce")
-        p_norm   = _norm_name(player)
 
-        # Resolve ESPN athlete ID
+        if _is_combo_row(row):
+            p1 = str(row.get("player_1", "")).strip() or split_combo_name(player)[0]
+            p2 = str(row.get("player_2", "")).strip() or split_combo_name(player)[1]
+            if not p1 or not p2:
+                misses.append({"player": player, "reason": "COMBO_SPLIT_FAILED"})
+                _append_empty_stat_row(new_cols)
+                continue
+            e1 = _lookup_espn_id(p1, name_to_id)
+            e2 = _lookup_espn_id(p2, name_to_id)
+            if not e1 or not e2:
+                misses.append({"player": player, "reason": "NO_ESPN_ID_COMBO"})
+                _append_empty_stat_row(new_cols)
+                continue
+            vals_mr, game_frames = _combo_stat_values(
+                cache_filt, [e1, e2], prop_n, N, float(args.min_minutes_rolling)
+            )
+            if not vals_mr:
+                misses.append({"player": player, "reason": "NO_CACHE_GAMES_COMBO"})
+                _append_empty_stat_row(new_cols)
+                new_cols["espn_athlete_id"][-1] = f"{e1}|{e2}"
+                continue
+            if all(isinstance(v, float) and np.isnan(v) for v in vals_mr):
+                misses.append({"player": player, "reason": f"UNSUPPORTED_PROP:{prop_n}"})
+                for k in new_cols:
+                    new_cols[k].append(np.nan)
+                new_cols["unsupported_prop"][-1] = 1
+                new_cols["unsupported_reason"][-1] = f"UNSUPPORTED_PROP:{prop_n}"
+                new_cols["espn_athlete_id"][-1] = f"{e1}|{e2}"
+                continue
+            ref_games = game_frames[0] if game_frames else pd.DataFrame()
+            _append_stat_row(new_cols, vals_mr, line_val, N, f"{e1}|{e2}", ref_games)
+            continue
+
+        p_norm   = _norm_name(player)
         ath_id = name_to_id.get(p_norm, "")
 
         if not ath_id:
             misses.append({"player": player, "reason": "NO_ESPN_ID"})
-            for k in new_cols: new_cols[k].append(np.nan if "rate" in k or "avg" in k else ("" if k == "unsupported_reason" else np.nan))
-            new_cols["unsupported_prop"][-1]   = 0
-            new_cols["unsupported_reason"][-1] = ""
-            new_cols["espn_athlete_id"][-1]    = ""
-            # overwrite rate/avg with nan already done; just fix string cols
+            _append_empty_stat_row(new_cols)
             continue
 
-        player_games = cache_filt[cache_filt["ESPN_ATHLETE_ID"].astype(str) == str(ath_id)].copy()
-        if not player_games.empty:
-            player_games = player_games.sort_values("game_date", ascending=False)
-            player_games = filter_games_by_minutes(player_games, float(args.min_minutes_rolling))
+        vals_mr, player_games = _stat_values_for_athlete(
+            cache_filt, ath_id, prop_n, N, float(args.min_minutes_rolling)
+        )
 
-        if player_games.empty:
+        if not vals_mr:
             misses.append({"player": player, "reason": "NO_CACHE_GAMES"})
-            for k in new_cols: new_cols[k].append(np.nan)
+            for k in new_cols:
+                new_cols[k].append(np.nan)
             new_cols["unsupported_prop"][-1]   = 0
             new_cols["unsupported_reason"][-1] = ""
             new_cols["espn_athlete_id"][-1]    = ath_id
             continue
 
-        stat_series = derive_stat(player_games, prop_n)
-
-        if stat_series.isna().all():
-            for k in new_cols: new_cols[k].append(np.nan)
+        if all(isinstance(v, float) and np.isnan(v) for v in vals_mr):
+            for k in new_cols:
+                new_cols[k].append(np.nan)
             new_cols["unsupported_prop"][-1]   = 1
             new_cols["unsupported_reason"][-1] = f"UNSUPPORTED_PROP:{prop_n}"
             new_cols["espn_athlete_id"][-1]    = ath_id
             continue
 
-        vals_mr = [float(v) if not pd.isna(v) else np.nan for v in stat_series.tolist()][:N]
-
-        for i in range(N):
-            new_cols[f"stat_g{i+1}"].append(vals_mr[i] if i < len(vals_mr) else np.nan)
-
-        valid_vals = [v for v in vals_mr if not (isinstance(v, float) and np.isnan(v))]
-        new_cols["stat_last5_avg"].append(float(np.mean(valid_vals[:5])) if valid_vals[:5] else np.nan)
-        new_cols["stat_last10_avg"].append(float(np.mean(valid_vals[:10])) if valid_vals[:10] else np.nan)
-
-        season_col = "stat_season_avg"
-        if "SEASON_AVG" in player_games.columns:
-            sv = pd.to_numeric(player_games["SEASON_AVG"], errors="coerce").dropna()
-            new_cols[season_col].append(float(sv.mean()) if len(sv) else np.nan)
-        else:
-            new_cols[season_col].append(float(np.mean(valid_vals)) if valid_vals else np.nan)
-
-        if not np.isnan(line_val):
-            o5, u5, p5, hr5, hr5_ou, ur5_ou = calc_hit_context(vals_mr, line_val, 5)
-            o10, u10, p10, hr10, hr10_ou, ur10_ou = calc_hit_context(vals_mr, line_val, 10)
-            new_cols["last5_over"].append(o5)
-            new_cols["last5_under"].append(u5)
-            new_cols["last5_push"].append(p5)
-            new_cols["last5_hit_rate"].append(hr5)
-            new_cols["line_hit_rate_over_ou_5"].append(hr5_ou)
-            new_cols["line_hit_rate_under_ou_5"].append(ur5_ou)
-            new_cols["line_hit_rate_over_ou_10"].append(hr10_ou)
-            new_cols["line_hit_rate_under_ou_10"].append(ur10_ou)
-        else:
-            for k in ["last5_over","last5_under","last5_push","last5_hit_rate",
-                      "line_hit_rate_over_ou_5","line_hit_rate_under_ou_5",
-                      "line_hit_rate_over_ou_10","line_hit_rate_under_ou_10"]:
-                new_cols[k].append(np.nan)
-
-        new_cols["unsupported_prop"].append(0)
-        new_cols["unsupported_reason"].append("")
-        new_cols["espn_athlete_id"].append(ath_id)
+        _append_stat_row(new_cols, vals_mr, line_val, N, ath_id, player_games)
 
     out = slate.copy()
     for k, v in new_cols.items():

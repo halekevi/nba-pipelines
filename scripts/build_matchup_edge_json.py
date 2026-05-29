@@ -2,6 +2,8 @@
 """
 Build Matchup Edge JSON for Slate Explorer (all supported sports).
 
+WNBA uses the dedicated builder (top/bottom-3, UNDER edges) via utils.matchup_edge.builder.
+
   py -3 scripts/build_matchup_edge_json.py
   py -3 scripts/build_matchup_edge_json.py --sport nba
   py -3 scripts/build_matchup_edge_json.py --sport all

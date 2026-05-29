@@ -35,46 +35,46 @@
   "stephon castle_fantasy score": {
     "player": "Stephon Castle",
     "prop_type": "fantasy score",
-    "h1_hit_rate_over": 0.6666666666666666,
+    "h1_hit_rate_over": 0.7,
     "h1_hit_rate_under": 0.0,
-    "h1_mean_actual": 19.93,
-    "h1_line_mean": 17.25,
-    "h1_sample_n": 10,
-    "h1_consistency": 0.6574284023827435,
-    "h1_line_value_ratio": 0.865529352734571
+    "h1_mean_actual": 20.527272727272727,
+    "h1_line_mean": 17.227272727272727,
+    "h1_sample_n": 11,
+    "h1_consistency": 0.669796089820892,
+    "h1_line_value_ratio": 0.8392382639503986
   },
   "devin vassell_fantasy score": {
     "player": "Devin Vassell",
     "prop_type": "fantasy score",
     "h1_hit_rate_over": 0.5,
-    "h1_hit_rate_under": 0.2,
-    "h1_mean_actual": 13.444444444444445,
-    "h1_line_mean": 12.38888888888889,
-    "h1_sample_n": 9,
-    "h1_consistency": 0.7217145393249709,
-    "h1_line_value_ratio": 0.9214876033057852
+    "h1_hit_rate_under": 0.3333333333333333,
+    "h1_mean_actual": 12.959999999999999,
+    "h1_line_mean": 12.45,
+    "h1_sample_n": 10,
+    "h1_consistency": 0.7040575672748612,
+    "h1_line_value_ratio": 0.9606481481481481
   },
   "victor wembanyama_fantasy score": {
     "player": "Victor Wembanyama",
     "prop_type": "fantasy score",
     "h1_hit_rate_over": 0.0,
-    "h1_hit_rate_under": 0.8,
-    "h1_mean_actual": 18.400000000000002,
-    "h1_line_mean": 28.72222222222222,
-    "h1_sample_n": 9,
-    "h1_consistency": 0.5644707497902355,
-    "h1_line_value_ratio": 1.560990338164251
+    "h1_hit_rate_under": 0.8333333333333334,
+    "h1_mean_actual": 17.98,
+    "h1_line_mean": 28.75,
+    "h1_sample_n": 10,
+    "h1_consistency": 0.57140126296768,
+    "h1_line_value_ratio": 1.5989988876529477
   },
   "de'aaron fox_fantasy score": {
     "player": "De'Aaron Fox",
     "prop_type": "fantasy score",
-    "h1_hit_rate_over": 0.4,
+    "h1_hit_rate_over": 0.5,
     "h1_hit_rate_under": 0.3333333333333333,
-    "h1_mean_actual": 16.3125,
-    "h1_line_mean": 16.6875,
-    "h1_sample_n": 8,
-    "h1_consistency": 0.6895662584207006,
-    "h1_line_value_ratio": 1.0229885057471264
+    "h1_mean_actual": 16.98888888888889,
+    "h1_line_mean": 16.444444444444443,
+    "h1_sample_n": 9,
+    "h1_consistency": 0.6972505704963184,
+    "h1_line_value_ratio": 0.9679529103989534
   },
   "amen thompson_pts+rebs+asts": {
     "player": "Amen Thompson",
@@ -134,13 +134,13 @@
   "devin vassell_points": {
     "player": "Devin Vassell",
     "prop_type": "points",
-    "h1_hit_rate_over": 0.46153846153846156,
+    "h1_hit_rate_over": 0.42857142857142855,
     "h1_hit_rate_under": 0.6666666666666666,
-    "h1_mean_actual": 6.6875,
-    "h1_line_mean": 6.4375,
-    "h1_sample_n": 16,
-    "h1_consistency": 0.5399628233929358,
-    "h1_line_value_ratio": 0.9626168224299065
+    "h1_mean_actual": 6.294117647058823,
+    "h1_line_mean": 6.470588235294118,
+    "h1_sample_n": 17,
+    "h1_consistency": 0.46393905047850514,
+    "h1_line_value_ratio": 1.0280373831775702
   },
   "nickeil alexander-walker_pts+rebs+asts": {
     "player": "Nickeil Alexander-Walker",
@@ -167,13 +167,13 @@
   "de'aaron fox_points": {
     "player": "De'Aaron Fox",
     "prop_type": "points",
-    "h1_hit_rate_over": 0.5555555555555556,
+    "h1_hit_rate_over": 0.5,
     "h1_hit_rate_under": 0.5,
-    "h1_mean_actual": 9.545454545454545,
-    "h1_line_mean": 8.545454545454545,
-    "h1_sample_n": 11,
-    "h1_consistency": 0.5285954792089682,
-    "h1_line_value_ratio": 0.8952380952380953
+    "h1_mean_actual": 8.916666666666666,
+    "h1_line_mean": 8.458333333333334,
+    "h1_sample_n": 12,
+    "h1_consistency": 0.46320633716731296,
+    "h1_line_value_ratio": 0.9485981308411217
   },
   "kevin durant_points": {
     "player": "Kevin Durant",
@@ -223,23 +223,23 @@
     "player": "Julian Champagnie",
     "prop_type": "points",
     "h1_hit_rate_over": 0.5555555555555556,
-    "h1_hit_rate_under": 1.0,
-    "h1_mean_actual": 5.2727272727272725,
-    "h1_line_mean": 4.954545454545454,
-    "h1_sample_n": 11,
-    "h1_consistency": 0.41075836239189445,
-    "h1_line_value_ratio": 0.939655172413793
+    "h1_hit_rate_under": 0.6666666666666666,
+    "h1_mean_actual": 6.25,
+    "h1_line_mean": 4.916666666666667,
+    "h1_sample_n": 12,
+    "h1_consistency": 0.296106068596506,
+    "h1_line_value_ratio": 0.7866666666666667
   },
   "stephon castle_pts+rebs+asts": {
     "player": "Stephon Castle",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.75,
+    "h1_hit_rate_over": 0.7647058823529411,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 17.75,
-    "h1_line_mean": 14.8125,
-    "h1_sample_n": 16,
-    "h1_consistency": 0.689820907809222,
-    "h1_line_value_ratio": 0.8345070422535211
+    "h1_mean_actual": 17.88235294117647,
+    "h1_line_mean": 14.794117647058824,
+    "h1_sample_n": 17,
+    "h1_consistency": 0.6998456652757792,
+    "h1_line_value_ratio": 0.8273026315789473
   },
   "tobias harris_fantasy score": {
     "player": "Tobias Harris",
@@ -333,12 +333,12 @@
     "player": "Victor Wembanyama",
     "prop_type": "points",
     "h1_hit_rate_over": 0.125,
-    "h1_hit_rate_under": 0.42857142857142855,
-    "h1_mean_actual": 11.533333333333333,
-    "h1_line_mean": 13.266666666666667,
-    "h1_sample_n": 15,
-    "h1_consistency": 0.45266494502817045,
-    "h1_line_value_ratio": 1.1502890173410405
+    "h1_hit_rate_under": 0.5,
+    "h1_mean_actual": 11.5,
+    "h1_line_mean": 13.25,
+    "h1_sample_n": 16,
+    "h1_consistency": 0.46839046692880504,
+    "h1_line_value_ratio": 1.1521739130434783
   },
   "cj mccollum_pts+rebs+asts": {
     "player": "CJ McCollum",
@@ -365,13 +365,13 @@
   "devin vassell_pts+rebs+asts": {
     "player": "Devin Vassell",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.6428571428571429,
+    "h1_hit_rate_over": 0.6,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 11.714285714285714,
-    "h1_line_mean": 10.107142857142858,
-    "h1_sample_n": 14,
-    "h1_consistency": 0.681522808360961,
-    "h1_line_value_ratio": 0.8628048780487806
+    "h1_mean_actual": 11.266666666666667,
+    "h1_line_mean": 10.133333333333333,
+    "h1_sample_n": 15,
+    "h1_consistency": 0.6472459512239319,
+    "h1_line_value_ratio": 0.8994082840236686
   },
   "wendell carter_pts+rebs+asts": {
     "player": "Wendell Carter",
@@ -486,24 +486,24 @@
   "stephon castle_points": {
     "player": "Stephon Castle",
     "prop_type": "points",
-    "h1_hit_rate_over": 0.7647058823529411,
+    "h1_hit_rate_over": 0.7777777777777778,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 10.882352941176471,
+    "h1_mean_actual": 10.944444444444445,
     "h1_line_mean": 8.5,
-    "h1_sample_n": 17,
-    "h1_consistency": 0.5843809127191117,
-    "h1_line_value_ratio": 0.7810810810810811
+    "h1_sample_n": 18,
+    "h1_consistency": 0.5977017248512779,
+    "h1_line_value_ratio": 0.7766497461928934
   },
   "victor wembanyama_pts+rebs+asts": {
     "player": "Victor Wembanyama",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.35714285714285715,
+    "h1_hit_rate_over": 0.3333333333333333,
     "h1_hit_rate_under": 1.0,
-    "h1_mean_actual": 19.333333333333332,
-    "h1_line_mean": 21.2,
-    "h1_sample_n": 15,
-    "h1_consistency": 0.5669701358358454,
-    "h1_line_value_ratio": 1.096551724137931
+    "h1_mean_actual": 18.875,
+    "h1_line_mean": 21.21875,
+    "h1_sample_n": 16,
+    "h1_consistency": 0.560362653488669,
+    "h1_line_value_ratio": 1.1241721854304636
   },
   "josh giddey_points": {
     "player": "Josh Giddey",
@@ -629,13 +629,13 @@
   "julian champagnie_pts+rebs+asts": {
     "player": "Julian Champagnie",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.6,
+    "h1_hit_rate_over": 0.6363636363636364,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 9.3,
-    "h1_line_mean": 8.5,
-    "h1_sample_n": 10,
-    "h1_consistency": 0.5697580855109128,
-    "h1_line_value_ratio": 0.9139784946236559
+    "h1_mean_actual": 10.454545454545455,
+    "h1_line_mean": 8.454545454545455,
+    "h1_sample_n": 11,
+    "h1_consistency": 0.4949031049927789,
+    "h1_line_value_ratio": 0.808695652173913
   },
   "keldon johnson_points": {
     "player": "Keldon Johnson",
@@ -982,12 +982,12 @@
     "player": "Chet Holmgren",
     "prop_type": "fantasy score",
     "h1_hit_rate_over": 0.25,
-    "h1_hit_rate_under": 0.6666666666666666,
-    "h1_mean_actual": 14.420000000000002,
-    "h1_line_mean": 17.0,
-    "h1_sample_n": 10,
-    "h1_consistency": 0.7699815540457379,
-    "h1_line_value_ratio": 1.1789181692094313
+    "h1_hit_rate_under": 0.5714285714285714,
+    "h1_mean_actual": 15.172727272727274,
+    "h1_line_mean": 16.727272727272727,
+    "h1_sample_n": 11,
+    "h1_consistency": 0.7391232706071651,
+    "h1_line_value_ratio": 1.102456560814859
   },
   "bam adebayo_points": {
     "player": "Bam Adebayo",
@@ -1004,12 +1004,12 @@
     "player": "Chet Holmgren",
     "prop_type": "points",
     "h1_hit_rate_over": 0.42857142857142855,
-    "h1_hit_rate_under": 0.5,
-    "h1_mean_actual": 8.4375,
-    "h1_line_mean": 7.875,
-    "h1_sample_n": 16,
-    "h1_consistency": 0.5297025428340747,
-    "h1_line_value_ratio": 0.9333333333333333
+    "h1_hit_rate_under": 0.3333333333333333,
+    "h1_mean_actual": 8.647058823529411,
+    "h1_line_mean": 7.823529411764706,
+    "h1_sample_n": 17,
+    "h1_consistency": 0.5443700122546843,
+    "h1_line_value_ratio": 0.9047619047619048
   },
   "olivier-maxence prosper_points": {
     "player": "Olivier-Maxence Prosper",
@@ -1091,24 +1091,24 @@
   "isaiah hartenstein_fantasy score": {
     "player": "Isaiah Hartenstein",
     "prop_type": "fantasy score",
-    "h1_hit_rate_over": 0.4,
+    "h1_hit_rate_over": 0.3333333333333333,
     "h1_hit_rate_under": 0.5,
-    "h1_mean_actual": 12.81111111111111,
-    "h1_line_mean": 13.277777777777779,
-    "h1_sample_n": 9,
-    "h1_consistency": 0.5984210599272294,
-    "h1_line_value_ratio": 1.0364267129228102
+    "h1_mean_actual": 12.559999999999999,
+    "h1_line_mean": 13.0,
+    "h1_sample_n": 10,
+    "h1_consistency": 0.6068104061444444,
+    "h1_line_value_ratio": 1.035031847133758
   },
   "chet holmgren_pts+rebs+asts": {
     "player": "Chet Holmgren",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.5714285714285714,
+    "h1_hit_rate_over": 0.6,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 14.642857142857142,
-    "h1_line_mean": 12.964285714285714,
-    "h1_sample_n": 14,
-    "h1_consistency": 0.661862891207349,
-    "h1_line_value_ratio": 0.8853658536585366
+    "h1_mean_actual": 14.933333333333334,
+    "h1_line_mean": 12.833333333333334,
+    "h1_sample_n": 15,
+    "h1_consistency": 0.6715183546580865,
+    "h1_line_value_ratio": 0.859375
   },
   "andrew wiggins_points": {
     "player": "Andrew Wiggins",
@@ -1355,13 +1355,13 @@
   "isaiah hartenstein_pts+rebs+asts": {
     "player": "Isaiah Hartenstein",
     "prop_type": "pts+rebs+asts",
-    "h1_hit_rate_over": 0.5,
+    "h1_hit_rate_over": 0.5333333333333333,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 10.357142857142858,
-    "h1_line_mean": 9.678571428571429,
-    "h1_sample_n": 14,
-    "h1_consistency": 0.6093238885994884,
-    "h1_line_value_ratio": 0.9344827586206896
+    "h1_mean_actual": 10.266666666666667,
+    "h1_line_mean": 9.6,
+    "h1_sample_n": 15,
+    "h1_consistency": 0.6178197670243595,
+    "h1_line_value_ratio": 0.9350649350649349
   },
   "naji marshall_points": {
     "player": "Naji Marshall",
@@ -1432,13 +1432,13 @@
   "isaiah hartenstein_points": {
     "player": "Isaiah Hartenstein",
     "prop_type": "points",
-    "h1_hit_rate_over": 0.46153846153846156,
+    "h1_hit_rate_over": 0.5,
     "h1_hit_rate_under": null,
-    "h1_mean_actual": 5.076923076923077,
-    "h1_line_mean": 3.769230769230769,
-    "h1_sample_n": 13,
-    "h1_consistency": 0.342347441993615,
-    "h1_line_value_ratio": 0.7424242424242424
+    "h1_mean_actual": 5.0,
+    "h1_line_mean": 3.75,
+    "h1_sample_n": 14,
+    "h1_consistency": 0.3541340254024391,
+    "h1_line_value_ratio": 0.75
   },
   "de'anthony melton_pts+rebs+asts": {
     "player": "De'Anthony Melton",
@@ -1521,34 +1521,34 @@
     "player": "Shai Gilgeous-Alexander",
     "prop_type": "fantasy score",
     "h1_hit_rate_over": 0.0,
-    "h1_hit_rate_under": 0.8333333333333334,
-    "h1_mean_actual": 19.375,
-    "h1_line_mean": 24.0625,
-    "h1_sample_n": 8,
-    "h1_consistency": 0.7572855550878963,
-    "h1_line_value_ratio": 1.2419354838709677
+    "h1_hit_rate_under": 0.7142857142857143,
+    "h1_mean_actual": 20.077777777777776,
+    "h1_line_mean": 24.166666666666668,
+    "h1_sample_n": 9,
+    "h1_consistency": 0.7579987613369247,
+    "h1_line_value_ratio": 1.2036524626452685
   },
   "shai gilgeous-alexander_points": {
     "player": "Shai Gilgeous-Alexander",
     "prop_type": "points",
     "h1_hit_rate_over": 0.1,
-    "h1_hit_rate_under": 0.4,
-    "h1_mean_actual": 12.666666666666666,
-    "h1_line_mean": 14.766666666666667,
-    "h1_sample_n": 15,
-    "h1_consistency": 0.7050752478711179,
-    "h1_line_value_ratio": 1.1657894736842107
+    "h1_hit_rate_under": 0.3333333333333333,
+    "h1_mean_actual": 13.0625,
+    "h1_line_mean": 14.75,
+    "h1_sample_n": 16,
+    "h1_consistency": 0.6992488970369815,
+    "h1_line_value_ratio": 1.1291866028708133
   },
   "shai gilgeous-alexander_pts+rebs+asts": {
     "player": "Shai Gilgeous-Alexander",
     "prop_type": "pts+rebs+asts",
     "h1_hit_rate_over": 0.1,
-    "h1_hit_rate_under": 0.6,
-    "h1_mean_actual": 17.6,
-    "h1_line_mean": 20.3,
-    "h1_sample_n": 15,
-    "h1_consistency": 0.7546928051713306,
-    "h1_line_value_ratio": 1.1534090909090908
+    "h1_hit_rate_under": 0.5,
+    "h1_mean_actual": 17.9375,
+    "h1_line_mean": 20.3125,
+    "h1_sample_n": 16,
+    "h1_consistency": 0.7558239464049201,
+    "h1_line_value_ratio": 1.132404181184669
   },
   "darius garland_points": {
     "player": "Darius Garland",

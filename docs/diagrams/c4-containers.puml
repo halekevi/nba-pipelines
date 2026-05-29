@@ -1,0 +1,47 @@
+@startuml PropORACLE_C4_Containers
+' C4 Level 2 — Containers
+' Render: PlantUML + C4-PlantUML macros
+' Online: https://www.plantuml.com/plantuml
+' VS Code: PlantUML extension (jebbs.plantuml)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_LEFT_RIGHT()
+skinparam shadowing false
+
+title PropORACLE — C4 Level 2: Containers
+
+Person(bettor,    "Bettor / Analyst", "Reviews picks daily")
+Person(operator,  "Operator",         "Runs pipeline, retrains model")
+
+System_Boundary(sys, "PropORACLE") {
+
+  Container(webapp,    "Web App",         "Jinja2 + JS\nRailway / Gunicorn",   "Tickets, grades, income,\npayout tools, slate browser")
+  Container(mobile,    "Mobile App",      "Capacitor · server.url mode",        "Top edges, sparklines,\ntier badges, OTA updates")
+  Container(flaskapi,  "Flask API",       "Python · Gunicorn · Railway",        "/api/props  /api/grades\n/api/tickets  /api/run")
+  Container(pipeline,  "Pipeline",        "Python · run_daily.ps1",             "Steps 1–8 per sport\nDaily PS1 orchestration")
+  Container(mlmodel,   "ML Model",        "XGBoost · edge_model_unified.pkl",   "AUC 0.7743 overall\nPlatt + isotonic calibration")
+  ContainerDb(cache,   "JSON Cache",      "Flat-file store · Railway",          "Per-sport step8 output\nDaily snapshot archives")
+  Container(ps1,       "run_daily.ps1",   "PowerShell · local",                 "Orchestrates full daily run\nand step8 snapshot archival")
+}
+
+System_Ext(sbApis,    "Sportsbook APIs", "Odds + lines")
+System_Ext(statsApis, "Stats APIs",      "Player + game stats")
+System_Ext(wt,        "WNBA/Tennis CDP", "Playwright stealth scrape")
+
+Rel(bettor,    webapp,   "Views picks, grades,\nincome, payout tools",  "HTTPS")
+Rel(bettor,    mobile,   "Views top edges\non mobile",                  "HTTPS · server.url")
+Rel(operator,  ps1,      "Triggers daily run",                          "PowerShell")
+Rel(operator,  webapp,   "Views pipeline status,\nruns step from UI",   "HTTPS")
+
+Rel(webapp,    flaskapi, "Reads props, grades,\ntickets",               "JSON / HTTP")
+Rel(mobile,    flaskapi, "Reads top edges,\nsparklines",                "JSON / HTTP")
+Rel(flaskapi,  cache,    "Reads cached output",                         "File I/O")
+Rel(ps1,       pipeline, "Triggers sport pipelines",                    "subprocess")
+Rel(pipeline,  mlmodel,  "Scores props via step7",                      "pkl · predict_proba")
+Rel(pipeline,  cache,    "Writes step8 JSON output",                    "File I/O")
+Rel(pipeline,  sbApis,   "Fetches odds + lines",                        "HTTPS")
+Rel(pipeline,  statsApis,"Fetches player + game stats",                 "HTTPS")
+Rel(pipeline,  wt,       "Scrapes WNBA / Tennis slate",                 "Playwright CDP")
+
+@enduml

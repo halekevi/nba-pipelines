@@ -6,6 +6,11 @@ PERF: All 12 .apply() calls and 2 row-by-row list comprehensions replaced with
       vectorized pandas/NumPy operations. Estimated 3-4x faster on 8,000+ row slates.
       Excel write engine switched from openpyxl → xlsxwriter (~5x faster write).
 
+PATCH (2026-05-27):
+- Neg-edge Goblin/Demon stay on ALL (board parity with PrizePicks / Slate Explorer).
+  Mark ineligible with FORCED_OVER_NEG_EDGE and no rank_score — same as WNBA step7.
+  DROPPED sheet kept for audit (same rows).
+
 PATCH (2026-03-28):
 - Hard edge gate now uses edge_adj_dr (direction-aware), not raw edge_adj.
   Previously UNDER plays with projection below line had edge_adj < 0 and were
@@ -27,6 +32,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -1051,6 +1057,72 @@ def _attach_nba_tier2_strat_columns(out: pd.DataFrame) -> pd.DataFrame:
     return o
 
 
+def _norm_player_name_top3(s: object) -> str:
+    t = unicodedata.normalize("NFKD", str(s or "").strip().lower())
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
+def _attach_top3_def_context(out: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
+    """
+    Merge team top/bottom-3 vs defense history from analyze_top_players_vs_defense.py
+    when that CSV exists (run before step7 in the pipeline).
+    """
+    path = repo_root / "Sports" / "NBA" / "data" / "nba_top3_vs_defense.csv"
+    out["team_top3_rank"] = np.nan
+    out["team_bottom3_rank"] = np.nan
+    out["def_boost_hist"] = np.nan
+    out["top3_weak_overperformer"] = 0
+    out["top3_elite_fader"] = 0
+    if not path.exists():
+        return out
+    try:
+        t3 = pd.read_csv(path, encoding="utf-8-sig")
+    except Exception:
+        return out
+    need = {"PLAYER_NORM", "category", "rank_on_team", "def_boost", "overperform_vs_weak", "fades_vs_elite"}
+    if not need.issubset(t3.columns):
+        return out
+    if "leader_side" not in t3.columns:
+        t3 = t3.copy()
+        t3["leader_side"] = "top"
+    top_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("top")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_top3_rank"})
+    )
+    bot_sub = (
+        t3[t3["leader_side"].astype(str).str.lower().eq("bottom")]
+        .drop_duplicates(subset=["PLAYER_NORM", "category"], keep="first")
+        .rename(columns={"rank_on_team": "team_bottom3_rank"})
+    )
+    out["_player_norm"] = out.get("player", pd.Series([""] * len(out))).map(_norm_player_name_top3)
+    out["_prop_norm"] = out.get("prop_norm", pd.Series([""] * len(out))).astype(str).str.lower().str.strip()
+    merged = out.merge(
+        top_sub[["PLAYER_NORM", "category", "team_top3_rank", "def_boost", "overperform_vs_weak", "fades_vs_elite"]],
+        left_on=["_player_norm", "_prop_norm"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_t3"),
+    )
+    merged = merged.merge(
+        bot_sub[["PLAYER_NORM", "category", "team_bottom3_rank"]],
+        left_on=["_player_norm", "_prop_norm"],
+        right_on=["PLAYER_NORM", "category"],
+        how="left",
+        suffixes=("", "_b3"),
+    )
+    merged.drop(
+        columns=["_player_norm", "_prop_norm", "PLAYER_NORM", "PLAYER_NORM_b3"],
+        inplace=True,
+        errors="ignore",
+    )
+    merged["def_boost_hist"] = pd.to_numeric(merged.get("def_boost"), errors="coerce")
+    merged["top3_weak_overperformer"] = merged.get("overperform_vs_weak", False).fillna(False).astype(int)
+    merged["top3_elite_fader"] = merged.get("fades_vs_elite", False).fillna(False).astype(int)
+    merged.drop(columns=["def_boost", "overperform_vs_weak", "fades_vs_elite"], inplace=True, errors="ignore")
+    return merged
+
+
 # -------------------- main --------------------
 
 def main() -> None:
@@ -1223,14 +1295,15 @@ def main() -> None:
 
     # ── ELIGIBILITY ───────────────────────────────────────────────────────────
     miss       = line_num.isna() | proj.isna()
-    # Goblin/Demon with negative edge: drop to audit sheet, exclude from scoring
+    # Goblin/Demon forced OVER with negative edge: void (no rank), keep on ALL for UI parity
     neg_forced = forced.eq(1) & (_to_num(out["edge"]) < 0)
-    drop_mask  = neg_forced  # rows that go to DROPPED tab only
+    audit_mask = neg_forced  # copied to DROPPED sheet for hit/miss audit
 
-    eligible    = (~miss & ~drop_mask).astype(int)
+    eligible    = (~miss).astype(int)
+    eligible    = eligible.where(~neg_forced, 0)
     void_reason = pd.Series("", index=out.index)
-    void_reason = void_reason.where(~miss,      "NO_PROJECTION_OR_LINE")
-    void_reason = void_reason.where(~drop_mask, "DROPPED_NEG_EDGE_GOBDEM")
+    void_reason = void_reason.where(~miss,       "NO_PROJECTION_OR_LINE")
+    void_reason = void_reason.where(~neg_forced, "FORCED_OVER_NEG_EDGE")
 
     # ── HARD BLOCKS: prop+direction combinations with <45% hit rate on Standard ──
     # Derived from 9-day calibration (2026-03-06 → 2026-03-14, 19,461 props).
@@ -1514,6 +1587,32 @@ def main() -> None:
     out["avg_vs_line_z"] = zcol(out["avg_vs_line"],      direction_aware=True)
     out["prop_hr_z"]     = zcol(out["prop_hr_prior"],    direction_aware=True)
 
+    out = _attach_top3_def_context(out, _repo_root_pc())
+    opp_rank_num = pd.to_numeric(out.get("OVERALL_DEF_RANK"), errors="coerce")
+    n_def = int(opp_rank_num.max()) if opp_rank_num.notna().any() else 30
+    weak_opp_tonight = opp_rank_num >= np.ceil(n_def * 0.65)
+    elite_opp_tonight = opp_rank_num <= 4
+    bet_dir_s = out["bet_direction"].astype(str).str.upper()
+    top3_boost = (
+        out["top3_weak_overperformer"].astype(int).eq(1)
+        & bet_dir_s.eq("OVER")
+        & weak_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_top3_rank"], errors="coerce").le(3)
+    )
+    top3_under = (
+        out["top3_elite_fader"].astype(int).eq(1)
+        & bet_dir_s.eq("UNDER")
+        & elite_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_top3_rank"], errors="coerce").le(3)
+    )
+    bottom3_under = (
+        bet_dir_s.eq("UNDER")
+        & elite_opp_tonight.fillna(False)
+        & pd.to_numeric(out["team_bottom3_rank"], errors="coerce").le(3)
+    )
+    out["top3_def_context"] = np.where(top3_boost, 1, 0).astype(int)
+    out["top3_under_context"] = np.where(top3_under | bottom3_under, 1, 0).astype(int)
+
     # ── Intel signals (from step6e) ───────────────────────────────────────────
     # intel_season_hit_rate: % of season games OVER this line (0-100 scale → normalise)
     intel_shr_raw  = _to_num(out.get("intel_season_hit_rate", pd.Series(np.nan, index=out.index))).fillna(50.0) / 100.0
@@ -1571,6 +1670,8 @@ def main() -> None:
         + pd.Series(blowout_penalty, index=out.index)
         + pd.Series(low_total_pen, index=out.index)
         + _inj_pen.reindex(out.index).fillna(0.0)
+        + _to_num(out["top3_def_context"]).fillna(0.0) * 0.35
+        + _to_num(out["top3_under_context"]).fillna(0.0) * 0.35
     )
 
     # L5/L10 support is bounded and cannot dominate edge/rank.
@@ -1670,16 +1771,16 @@ def main() -> None:
         out = reattach_enrichment_carry(out, carry_df, carry_cols, label=args.input)
 
     # Split here — after all scoring/tier columns are populated
-    dropped_df = out.loc[drop_mask].copy()
-    out_active = out.loc[~drop_mask].copy()
+    dropped_df = out.loc[audit_mask].copy()
+    out_active = out.copy()
 
     # ── WRITE XLSX (with explicit UTF-8 handling) ──────────────────────────────
     # Sheets:
-    #   ALL        — all active rows (neg-edge Gob/Dem excluded)
+    #   ALL        — full board (includes voided neg-edge Gob/Dem with tier D, no rank)
     #   STANDARD   — Standard pick type only
-    #   GOB_DEM    — Goblin + Demon (positive-edge only)
-    #   ELIGIBLE   — active rows that passed scoring
-    #   DROPPED    — neg-edge Goblin/Demon, for hit/miss audit only
+    #   GOB_DEM    — Goblin + Demon
+    #   ELIGIBLE   — rows that passed eligibility (excludes FORCED_OVER_NEG_EDGE, etc.)
+    #   DROPPED    — neg-edge Goblin/Demon audit copy (same rows as voided on ALL)
 
     std_mask_active  = out_active["pick_type"].astype(str).str.strip().str.lower().str.contains("standard")
     gobdem_mask      = ~std_mask_active
@@ -1711,7 +1812,7 @@ def main() -> None:
     print(f"ALL rows (active) : {len(out_active)}")
     print(f"STANDARD rows     : {int(std_mask_active.sum())}")
     print(f"GOB_DEM rows      : {int(gobdem_mask.sum())}")
-    print(f"DROPPED rows      : {len(dropped_df)}  (neg-edge Gob/Dem, audit only)")
+    print(f"DROPPED rows      : {len(dropped_df)}  (neg-edge Gob/Dem audit; also on ALL as FORCED_OVER_NEG_EDGE)")
     print()
     print("Tier counts (ALL active):")
     print(out_active["tier"].value_counts().to_string())

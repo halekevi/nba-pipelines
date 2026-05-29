@@ -1,0 +1,157 @@
+@startuml PropORACLE_Use_Case_Diagram
+' UML use case diagram — PropORACLE user-facing system
+' Render: PlantUML extension, https://www.plantuml.com/plantuml, or: plantuml docs/diagrams/proporacle-use-cases.puml
+
+left to right direction
+skinparam shadowing false
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #1a1a2e
+  BorderColor #d4af37
+  FontColor #ffffff
+}
+skinparam rectangle {
+  BackgroundColor #0d0d14
+  BorderColor #7fc7d9
+  FontColor #e8e8f0
+}
+
+title PropORACLE — UML Use Case Diagram (User Interactions)
+
+actor "Bettor /\nAnalyst" as Bettor
+actor Operator as Operator
+actor "Task\nScheduler" as Scheduler <<system>>
+actor "PrizePicks\n(betting site)" as PPExt <<external>>
+
+rectangle "PropORACLE" as System {
+
+  package "Slate & research" as P_Slate {
+    usecase "View home slate" as UC_Home
+    usecase "Browse slate by sport" as UC_SportSlate
+    usecase "View hot players &\nplayer consistency" as UC_Consistency
+    usecase "View model performance" as UC_ModelPerf
+    usecase "Export slate (Excel)" as UC_SlateExcel
+  }
+
+  package "Tickets" as P_Tickets {
+    usecase "View built tickets\n(latest)" as UC_TixLatest
+    usecase "Browse tickets by date" as UC_TixDate
+    usecase "View ticket EV &\nwin-rate summaries" as UC_TixEV
+    usecase "View ticket backtest" as UC_TixBacktest
+  }
+
+  package "Grades & evaluation" as P_Grades {
+    usecase "Open grades hub" as UC_GradesHub
+    usecase "Browse graded props" as UC_GradedProps
+    usecase "Open slate evaluation\nreport" as UC_SlateEval
+    usecase "Open ticket evaluation\nreport" as UC_TixEval
+  }
+
+  package "Income & tracking" as P_Income {
+    usecase "View income / P&L\ndashboard" as UC_Income
+    usecase "View grade history\n& sport breakdown" as UC_GradeHist
+  }
+
+  package "Payout tools" as P_Payout {
+    usecase "Estimate payout\nmultiplier" as UC_PayEst
+    usecase "View payout rate cards\n& combo table" as UC_PayRates
+    usecase "Log payout observation" as UC_PayLog
+    usecase "View payout ladder\n& examples" as UC_PayLadder
+    usecase "Export payout logs" as UC_PayExport
+  }
+
+  package "Mobile app" as P_Mobile {
+    usecase "Use bundled offline UI" as UC_MobBundle
+    usecase "Use remote web UI\nin app shell" as UC_MobRemote
+    usecase "Check & apply OTA\nbundle update" as UC_MobOTA
+  }
+
+  package "Pipeline & operations" as P_Ops {
+    usecase "Run pipeline step\nfrom Home UI" as UC_RunUI
+    usecase "Monitor pipeline job" as UC_MonitorJob
+    usecase "Check pipeline status" as UC_PipeStatus
+    usecase "Run daily pipeline\n(scheduled)" as UC_DailyRun
+    usecase "Run sport pipeline\n(PowerShell)" as UC_SportRun
+    usecase "Grade completed slate" as UC_Grade
+    usecase "Publish UI artifacts" as UC_Publish
+    usecase "Fetch PrizePicks slate" as UC_FetchPP
+    usecase "Enrich & rank props" as UC_Enrich
+    usecase "Build combined tickets" as UC_Combine
+  }
+
+  package "General UI" as P_UI {
+    usecase "Toggle theme\n(light/dark)" as UC_Theme
+    usecase "Verify deploy / health" as UC_Health
+  }
+}
+
+' --- Bettor (primary consumer) ---
+Bettor --> UC_Home
+Bettor --> UC_SportSlate
+Bettor --> UC_Consistency
+Bettor --> UC_ModelPerf
+Bettor --> UC_SlateExcel
+Bettor --> UC_TixLatest
+Bettor --> UC_TixDate
+Bettor --> UC_TixEV
+Bettor --> UC_TixBacktest
+Bettor --> UC_GradesHub
+Bettor --> UC_GradedProps
+Bettor --> UC_SlateEval
+Bettor --> UC_TixEval
+Bettor --> UC_Income
+Bettor --> UC_GradeHist
+Bettor --> UC_PayEst
+Bettor --> UC_PayRates
+Bettor --> UC_PayLog
+Bettor --> UC_PayLadder
+Bettor --> UC_PayExport
+Bettor --> UC_MobBundle
+Bettor --> UC_MobRemote
+Bettor --> UC_MobOTA
+Bettor --> UC_Theme
+Bettor --> UC_Health
+Bettor --> PPExt : Places entries\n(outside system)
+
+' --- Operator ---
+Operator --> UC_RunUI
+Operator --> UC_MonitorJob
+Operator --> UC_PipeStatus
+Operator --> UC_DailyRun
+Operator --> UC_SportRun
+Operator --> UC_Grade
+Operator --> UC_Publish
+Operator --> UC_Home
+Operator --> UC_TixLatest
+Operator --> UC_GradesHub
+Operator --> UC_Income
+
+' --- Scheduler (automated operator) ---
+Scheduler --> UC_DailyRun
+Scheduler --> UC_Grade
+
+' --- Include / extend (pipeline dependencies) ---
+UC_DailyRun ..> UC_SportRun : <<include>>
+UC_SportRun ..> UC_FetchPP : <<include>>
+UC_SportRun ..> UC_Enrich : <<include>>
+UC_SportRun ..> UC_Combine : <<include>>
+UC_DailyRun ..> UC_Combine : <<include>>
+UC_DailyRun ..> UC_Publish : <<include>>
+UC_Grade ..> UC_Publish : <<include>>
+UC_RunUI ..> UC_MonitorJob : <<include>>
+UC_MobOTA ..> UC_Health : <<extend>>
+
+note right of PPExt
+  Real-money entries happen
+  on PrizePicks; PropORACLE
+  only supports research &
+  ticket building.
+end note
+
+note bottom of System
+  Web: Flask ui_runner (/, /tickets, /grades, /income, /payout)
+  Mobile: Capacitor — bundled www/ or remote Railway URL
+  Batch: run_pipeline.ps1, run_daily.ps1, run_grader.ps1
+end note
+
+@enduml

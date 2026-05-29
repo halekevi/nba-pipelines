@@ -120,10 +120,13 @@
   font-weight: 700;
   letter-spacing: 0.5px;
 }
+.wnba-me-card .val.edge-under { color: #f0b429; }
 .wnba-me-edge.TOP_EDGE { background: rgba(57, 255, 110, 0.15); color: #7ee787; border: 1px solid rgba(57, 255, 110, 0.35); }
 .wnba-me-edge.OK_EDGE { background: rgba(110, 181, 255, 0.15); color: #6eb5ff; border: 1px solid rgba(110, 181, 255, 0.35); }
 .wnba-me-edge.NEUTRAL { background: rgba(255, 255, 255, 0.06); color: #aaa; border: 1px solid rgba(255, 255, 255, 0.1); }
 .wnba-me-edge.AVOID { background: rgba(255, 90, 90, 0.15); color: #ff8a8a; border: 1px solid rgba(255, 90, 90, 0.35); }
+.wnba-me-edge.TOP_UNDER { background: rgba(240, 180, 41, 0.18); color: #f0b429; border: 1px solid rgba(240, 180, 41, 0.4); }
+.wnba-me-edge.OK_UNDER { background: rgba(200, 140, 255, 0.15); color: #c88cff; border: 1px solid rgba(200, 140, 255, 0.35); }
 .wnba-me-legend {
   margin-top: 10px;
   font-size: 10px;

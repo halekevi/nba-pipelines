@@ -1,0 +1,1860 @@
+{
+  "date": "2026-05-26",
+  "sport_key": "basketball_nba",
+  "snapshot": {
+    "shai gilgeous-alexander|player_assists|6.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_assists|7.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_assists|9.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "stephon castle|player_assists|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_assists|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_assists|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_assists|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_assists|4.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_assists|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_assists|2.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_blocks|2.5": {
+      "open_line": 3.5,
+      "current_line": 4.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor wembanyama|player_blocks|3.5": {
+      "open_line": 3.5,
+      "current_line": 4.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor wembanyama|player_blocks|4.5": {
+      "open_line": 3.5,
+      "current_line": 4.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_blocks|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shai gilgeous-alexander|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shai gilgeous-alexander|player_points|25.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|26.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|27.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|28.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|29.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|30.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|31.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|32.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|33.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points|34.5": {
+      "open_line": 29.5,
+      "current_line": 28.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|22.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|23.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|24.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|25.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|26.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|27.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|28.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|29.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points|30.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "stephon castle|player_points|14.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|15.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|16.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|17.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|18.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|19.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points|20.5": {
+      "open_line": 17.5,
+      "current_line": 18.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jalen williams|player_points|11.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|12.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|13.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|15.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|16.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points|17.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|11.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|12.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|13.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|15.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|16.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "de'aaron fox|player_points|17.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "devin vassell|player_points|11.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|12.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|14.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|15.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|16.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points|17.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_points|10.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|11.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|12.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|14.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|15.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points|16.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|9.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|10.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|12.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|13.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jared mccain|player_points|14.5": {
+      "open_line": 11.5,
+      "current_line": 10.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dylan harper|player_points|6.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points|7.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points|9.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points|10.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points|11.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_points|6.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points|7.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points|9.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points|10.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points|11.5": {
+      "open_line": 8.5,
+      "current_line": 9.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_points|6.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_points|7.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_points|9.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_points|10.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_points|6.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points|7.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points|9.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points|10.5": {
+      "open_line": 8.5,
+      "current_line": 7.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "isaiah hartenstein|player_points|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points|8.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_points|4.5": {
+      "open_line": 6.5,
+      "current_line": 8.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points|5.5": {
+      "open_line": 6.5,
+      "current_line": 8.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points|6.5": {
+      "open_line": 6.5,
+      "current_line": 8.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points|7.5": {
+      "open_line": 6.5,
+      "current_line": 8.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points|8.5": {
+      "open_line": 6.5,
+      "current_line": 8.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points|4.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_points|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_points|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_points|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_points|8.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_points|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_points|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_points|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke kornet|player_points|2.5": {
+      "open_line": 3.5,
+      "current_line": 5.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luke kornet|player_points|3.5": {
+      "open_line": 3.5,
+      "current_line": 5.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luke kornet|player_points|4.5": {
+      "open_line": 3.5,
+      "current_line": 5.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luke kornet|player_points|5.5": {
+      "open_line": 3.5,
+      "current_line": 5.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor wembanyama|player_points_rebounds_assists|40.5": {
+      "open_line": 43.5,
+      "current_line": 42.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points_rebounds_assists|41.5": {
+      "open_line": 43.5,
+      "current_line": 42.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points_rebounds_assists|42.5": {
+      "open_line": 43.5,
+      "current_line": 42.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points_rebounds_assists|43.5": {
+      "open_line": 43.5,
+      "current_line": 42.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor wembanyama|player_points_rebounds_assists|44.5": {
+      "open_line": 43.5,
+      "current_line": 42.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points_rebounds_assists|40.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points_rebounds_assists|41.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points_rebounds_assists|42.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points_rebounds_assists|43.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shai gilgeous-alexander|player_points_rebounds_assists|44.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "stephon castle|player_points_rebounds_assists|27.5": {
+      "open_line": 29.5,
+      "current_line": 30.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points_rebounds_assists|28.5": {
+      "open_line": 29.5,
+      "current_line": 30.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points_rebounds_assists|29.5": {
+      "open_line": 29.5,
+      "current_line": 30.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points_rebounds_assists|30.5": {
+      "open_line": 29.5,
+      "current_line": 30.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "stephon castle|player_points_rebounds_assists|31.5": {
+      "open_line": 29.5,
+      "current_line": 30.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "de'aaron fox|player_points_rebounds_assists|21.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "de'aaron fox|player_points_rebounds_assists|22.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "de'aaron fox|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "de'aaron fox|player_points_rebounds_assists|24.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "de'aaron fox|player_points_rebounds_assists|25.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jalen williams|player_points_rebounds_assists|20.5": {
+      "open_line": 22.5,
+      "current_line": 21.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points_rebounds_assists|21.5": {
+      "open_line": 22.5,
+      "current_line": 21.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points_rebounds_assists|22.5": {
+      "open_line": 22.5,
+      "current_line": 21.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points_rebounds_assists|23.5": {
+      "open_line": 22.5,
+      "current_line": 21.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jalen williams|player_points_rebounds_assists|24.5": {
+      "open_line": 22.5,
+      "current_line": 21.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chet holmgren|player_points_rebounds_assists|19.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_points_rebounds_assists|20.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_points_rebounds_assists|21.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_points_rebounds_assists|22.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chet holmgren|player_points_rebounds_assists|23.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_points_rebounds_assists|18.5": {
+      "open_line": 21.5,
+      "current_line": 20.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "devin vassell|player_points_rebounds_assists|19.5": {
+      "open_line": 21.5,
+      "current_line": 20.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "devin vassell|player_points_rebounds_assists|20.5": {
+      "open_line": 21.5,
+      "current_line": 20.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "devin vassell|player_points_rebounds_assists|21.5": {
+      "open_line": 21.5,
+      "current_line": 20.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "devin vassell|player_points_rebounds_assists|22.5": {
+      "open_line": 21.5,
+      "current_line": 20.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "isaiah hartenstein|player_points_rebounds_assists|14.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points_rebounds_assists|15.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points_rebounds_assists|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points_rebounds_assists|17.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_points_rebounds_assists|18.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_points_rebounds_assists|13.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jared mccain|player_points_rebounds_assists|14.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jared mccain|player_points_rebounds_assists|15.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jared mccain|player_points_rebounds_assists|16.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jared mccain|player_points_rebounds_assists|17.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points_rebounds_assists|13.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points_rebounds_assists|14.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points_rebounds_assists|15.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points_rebounds_assists|16.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_points_rebounds_assists|17.5": {
+      "open_line": 15.5,
+      "current_line": 17.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "dylan harper|player_points_rebounds_assists|12.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points_rebounds_assists|13.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points_rebounds_assists|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points_rebounds_assists|15.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_points_rebounds_assists|16.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_points_rebounds_assists|11.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points_rebounds_assists|12.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points_rebounds_assists|13.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points_rebounds_assists|14.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cason wallace|player_points_rebounds_assists|15.5": {
+      "open_line": 14.5,
+      "current_line": 13.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "alex caruso|player_points_rebounds_assists|11.5": {
+      "open_line": 13.5,
+      "current_line": 15.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_points_rebounds_assists|12.5": {
+      "open_line": 13.5,
+      "current_line": 15.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_points_rebounds_assists|13.5": {
+      "open_line": 13.5,
+      "current_line": 15.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_points_rebounds_assists|14.5": {
+      "open_line": 13.5,
+      "current_line": 15.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_points_rebounds_assists|15.5": {
+      "open_line": 13.5,
+      "current_line": 15.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points_rebounds_assists|10.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points_rebounds_assists|11.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points_rebounds_assists|12.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points_rebounds_assists|13.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_points_rebounds_assists|14.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points_rebounds_assists|7.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points_rebounds_assists|8.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points_rebounds_assists|9.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points_rebounds_assists|10.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_points_rebounds_assists|11.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_points_rebounds_assists|6.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_points_rebounds_assists|7.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_points_rebounds_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_points_rebounds_assists|9.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_points_rebounds_assists|10.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor wembanyama|player_rebounds|11.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_rebounds|12.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_rebounds|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_rebounds|14.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_rebounds|6.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_rebounds|8.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_rebounds|5.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_rebounds|6.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_rebounds|8.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_rebounds|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_rebounds|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_rebounds|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_rebounds|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_rebounds|3.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jaylin williams|player_rebounds|5.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "devin vassell|player_rebounds|3.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_rebounds|5.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shai gilgeous-alexander|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 4.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "shai gilgeous-alexander|player_rebounds|4.5": {
+      "open_line": 3.5,
+      "current_line": 4.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jalen williams|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_rebounds|4.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_rebounds|4.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_rebounds|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_rebounds|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke kornet|player_rebounds|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke kornet|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "alex caruso|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "keldon johnson|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jared mccain|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luguentz dort|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shai gilgeous-alexander|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_steals|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_steals|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaiah hartenstein|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "devin vassell|player_threes|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_threes|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared mccain|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julian champagnie|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "julian champagnie|player_threes|2.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor wembanyama|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor wembanyama|player_threes|2.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shai gilgeous-alexander|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cason wallace|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "stephon castle|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex caruso|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "de'aaron fox|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luguentz dort|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jaylin williams|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_threes|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chet holmgren|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jalen williams|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan harper|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keldon johnson|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke kornet|player_points_rebounds_assists|6.5": {
+      "open_line": 7.5,
+      "current_line": 6.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luke kornet|player_points_rebounds_assists|7.5": {
+      "open_line": 7.5,
+      "current_line": 6.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    }
+  }
+}

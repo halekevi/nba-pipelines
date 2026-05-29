@@ -66,6 +66,7 @@ CATEGORIES: tuple[str, ...] = (
 
 MIN_MPG_DEFAULT = 15.0
 TOP_N_DEFAULT = 3
+BOTTOM_N_DEFAULT = 3
 
 
 def _norm_name(s: object) -> str:
@@ -209,11 +210,19 @@ def build_leaderboard_and_splits(
     avgs["team_def_key"] = avgs["TEAM"].map(defense_team_key)
 
     top_rows: list[pd.DataFrame] = []
+    bottom_rows: list[pd.DataFrame] = []
     for (team_key, cat), grp in avgs.groupby(["team_def_key", "category"], sort=False):
         top = grp.nlargest(top_n, "season_avg").copy()
         top["rank_on_team"] = range(1, len(top) + 1)
+        top["leader_side"] = "top"
         top_rows.append(top)
-    leaders = pd.concat(top_rows, ignore_index=True) if top_rows else pd.DataFrame()
+        bottom_n = min(BOTTOM_N_DEFAULT, len(grp))
+        if bottom_n > 0:
+            bottom = grp.nsmallest(bottom_n, "season_avg").copy()
+            bottom["rank_on_team"] = range(1, len(bottom) + 1)
+            bottom["leader_side"] = "bottom"
+            bottom_rows.append(bottom)
+    leaders = pd.concat(top_rows + bottom_rows, ignore_index=True) if top_rows else pd.DataFrame()
 
     # Historical delta splits for each player×category
     split_rows: list[dict] = []
@@ -278,7 +287,9 @@ def build_leaderboard_and_splits(
         & (out["n_elite"].fillna(0) >= 2)
     )
     out["PLAYER_NORM"] = out["PLAYER_NORM"].astype(str)
-    return out.sort_values(["team_slate", "category", "rank_on_team"])
+    if "leader_side" not in out.columns:
+        out["leader_side"] = "top"
+    return out.sort_values(["team_slate", "category", "leader_side", "rank_on_team"])
 
 
 def _dedupe_slate(slate: pd.DataFrame) -> pd.DataFrame:

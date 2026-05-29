@@ -1,0 +1,50 @@
+@startuml PropORACLE_C4_Components
+' C4 Level 3 — Components (Flask API container)
+' Render: PlantUML + C4-PlantUML macros
+' Online: https://www.plantuml.com/plantuml
+' VS Code: PlantUML extension (jebbs.plantuml)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_TOP_DOWN()
+skinparam shadowing false
+
+title PropORACLE — C4 Level 3: Flask API Components
+
+Container_Boundary(api, "Flask API  ·  Python / Gunicorn / Railway") {
+
+  Component(route_home,    "Home route",          "Flask Blueprint\n/  · /api/run",          "Serves slate UI,\ntriggers pipeline step")
+  Component(route_tickets, "Tickets route",       "Flask Blueprint\n/tickets  /api/tickets",  "EV-sorted ticket list,\nHIDE SKIP toggle,\nToday's Best panel")
+  Component(route_grades,  "Grades route",        "Flask Blueprint\n/grades  /api/grades",    "Grades hub iframe,\ngraded props JSON feed")
+  Component(route_income,  "Income route",        "Flask Blueprint\n/income",                 "P&L dashboard,\nrolling demo + real data")
+  Component(route_payout,  "Payout route",        "Flask Blueprint\n/payout",                 "Multiplier estimator,\nrate cards, log, export")
+
+  Component(step8edge,     "step8_edge_direction","utils/step8_edge\n_direction.py",           "Computes edge = projection − line\nCanonical signed edge")
+  Component(tier,          "tier_assignment",     "utils/tier_assignment.py",                 "A–D tier per group\n5-label defense tier")
+  Component(ticket_eval,   "build_ticket_eval",   "utils/build_ticket_eval.py",               "Pool-exhaustion ticket builder\nVOID / LOSS / WIN outcome split")
+  Component(train_model,   "train_edge_model",    "utils/train_edge_model.py",                "XGBoost retrain\n--temporal-split flag")
+}
+
+ContainerDb(cache,    "JSON Cache",      "Flat-file store",  "Step8 output per sport")
+Container(mlmodel,    "ML Model",        "XGBoost pkl",      "edge_model_unified.pkl\nAUC 0.7743")
+Container(webapp,     "Web App",         "Jinja2 + JS",      "Renders HTML UI")
+Container(mobile,     "Mobile App",      "Capacitor",        "server.url mode")
+
+Rel(webapp,       route_home,    "GET /",               "HTTP")
+Rel(webapp,       route_tickets, "GET /tickets",        "HTTP")
+Rel(webapp,       route_grades,  "GET /grades",         "HTTP")
+Rel(webapp,       route_income,  "GET /income",         "HTTP")
+Rel(webapp,       route_payout,  "GET /payout",         "HTTP")
+Rel(mobile,       route_tickets, "GET /api/tickets",    "JSON")
+Rel(mobile,       route_grades,  "GET /api/grades",     "JSON")
+
+Rel(route_tickets, step8edge,    "reads edge direction")
+Rel(route_tickets, tier,         "reads tier labels")
+Rel(route_tickets, ticket_eval,  "builds ticket pool")
+Rel(route_home,    train_model,  "triggers retrain via /api/run")
+Rel(step8edge,     cache,        "reads step8 JSON")
+Rel(tier,          cache,        "reads step8 JSON")
+Rel(ticket_eval,   cache,        "reads step8 JSON")
+Rel(train_model,   mlmodel,      "writes new pkl")
+
+@enduml

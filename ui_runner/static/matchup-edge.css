@@ -97,6 +97,49 @@
   border-color: rgba(255, 105, 180, 0.45);
   color: #ffc2e0;
 }
+.me-find-row,
+.wnba-me-find-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-end;
+}
+.me-find:disabled,
+.wnba-me-find:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.me-find-under,
+.wnba-me-find-under {
+  background: rgba(240, 180, 41, 0.15);
+  border-color: rgba(240, 180, 41, 0.45);
+  color: #f0b429;
+}
+.me-sport-wnba .me-find-under,
+.wnba-me-find-under {
+  background: rgba(240, 180, 41, 0.15);
+  border-color: rgba(240, 180, 41, 0.45);
+  color: #f0b429;
+}
+.me-rank-badge,
+.wnba-me-rank-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #aaa;
+  background: rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+.me-rank-badge.me-rank-b3,
+.wnba-me-rank-badge.wnba-me-rank-b3 {
+  color: #f0b429;
+  background: rgba(240, 180, 41, 0.12);
+  border: 1px solid rgba(240, 180, 41, 0.25);
+}
 .me-cards,
 .wnba-me-cards {
   display: grid;
@@ -141,6 +184,10 @@
 .me-card .val.edge-ok,
 .wnba-me-card .val.edge-ok {
   color: #6eb5ff;
+}
+.me-card .val.edge-under,
+.wnba-me-card .val.edge-under {
+  color: #f0b429;
 }
 .me-table-wrap,
 .wnba-me-table-wrap {
@@ -199,6 +246,18 @@
   background: rgba(255, 90, 90, 0.15);
   color: #ff8a8a;
   border: 1px solid rgba(255, 90, 90, 0.35);
+}
+.me-edge.TOP_UNDER,
+.wnba-me-edge.TOP_UNDER {
+  background: rgba(240, 180, 41, 0.18);
+  color: #f0b429;
+  border: 1px solid rgba(240, 180, 41, 0.4);
+}
+.me-edge.OK_UNDER,
+.wnba-me-edge.OK_UNDER {
+  background: rgba(200, 140, 255, 0.15);
+  color: #c88cff;
+  border: 1px solid rgba(200, 140, 255, 0.35);
 }
 .me-legend,
 .wnba-me-legend {

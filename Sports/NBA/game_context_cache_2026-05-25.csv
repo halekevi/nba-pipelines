@@ -1,0 +1,4 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+CLE/NYK,NYK,217.5,2.5,107.5,False,False,NORMAL,live
+CLE,NYK,217.5,2.5,107.5,False,False,NORMAL,live
+NYK,CLE,217.5,-2.5,110.0,False,False,NORMAL,live

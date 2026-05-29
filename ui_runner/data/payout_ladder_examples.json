@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-05-19T21:13:54.945950+00:00",
+  "generated_at": "2026-05-29T15:52:41.489632+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -162,22 +162,22 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -188,34 +188,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -224,34 +224,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -260,34 +260,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -296,34 +296,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -332,34 +332,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -368,34 +368,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -404,34 +404,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Assists",
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -440,32 +440,32 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "Ayo Dosunmu",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -476,32 +476,32 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -512,44 +512,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -558,44 +558,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -604,44 +604,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -650,44 +650,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -696,44 +696,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -742,44 +742,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -788,44 +788,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
           "player": "Stephon Castle",
-          "prop_type": "Assists",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -834,42 +834,42 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
+          "player": "Stephon Castle",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -880,42 +880,42 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -926,54 +926,54 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -982,54 +982,54 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1038,54 +1038,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1094,54 +1094,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1150,54 +1150,54 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1206,54 +1206,54 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1262,54 +1262,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Assists",
+          "player": "Josh Hart",
+          "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1318,52 +1318,52 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Jalen Williams",
+          "player": "VJ Edgecombe",
           "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -1374,52 +1374,52 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Satou Sabally",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -1430,64 +1430,64 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1496,64 +1496,64 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1562,64 +1562,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1628,64 +1628,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1694,64 +1694,64 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1760,64 +1760,64 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1826,64 +1826,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Victor Wembanyama",
+          "player": "Keldon Johnson",
           "prop_type": "Points",
-          "line": 3.5,
-          "standard_line": 6.0,
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1892,62 +1892,62 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Stephon Castle",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "VJ Edgecombe",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "player": "Satou Sabally",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }
@@ -1958,62 +1958,62 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 19.5,
-          "standard_line": null,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 4.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         },
         {
-          "player": "Chet Holmgren",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": null,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
           "player": "Dylan Harper",
-          "prop_type": "Pts+Rebs",
-          "line": 14.5,
+          "prop_type": "Points",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
+          "player": "Keldon Johnson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Satou Sabally",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 28.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Asts",
-          "line": 20.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "Pts+Rebs",
-          "line": 19.5,
-          "standard_line": 23.5,
+          "line": 14.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 7.0,
           "direction": "OVER",
           "hit_rate": 0.6
         }

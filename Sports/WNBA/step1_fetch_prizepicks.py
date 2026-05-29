@@ -843,8 +843,20 @@ def main():
         home = away = start_time = ""
         if isinstance(game_obj, dict):
             ga = game_obj.get("attributes") or {}
-            home       = _norm_team(ga.get("home_team", ""))
-            away       = _norm_team(ga.get("away_team", ""))
+            home = _norm_team(
+                ga.get("home_team")
+                or ga.get("home_team_abbreviation")
+                or ga.get("home_team_abbr")
+                or ga.get("home")
+                or ""
+            )
+            away = _norm_team(
+                ga.get("away_team")
+                or ga.get("away_team_abbreviation")
+                or ga.get("away_team_abbr")
+                or ga.get("away")
+                or ""
+            )
             start_time = str(ga.get("start_time", "")).strip()
 
         if not start_time:

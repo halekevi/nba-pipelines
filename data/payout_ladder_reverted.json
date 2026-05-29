@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-04-30",
+  "updated_at": "2026-05-27",
   "notes": "Leaderboard/reverted payout observations. Keep separate from canonical standard ladder.",
   "entries": [
     {
@@ -32,6 +32,28 @@
       "source": "pp_reverted_observed",
       "confirmed_at": "2026-04-30",
       "notes": "Observed on Leaderboard/reverted payout UI: 6-pick power $20 to pay $210 (10.5x)."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 3,
+      "mix": {"goblin": 3, "standard": 0, "demon": 0},
+      "goblin_distances": [2, 4.5, 5],
+      "sweep_payout_x": 6.0,
+      "min_payout_x": 2.0,
+      "source": "pp_reverted_observed",
+      "confirmed_at": "2026-05-27",
+      "notes": "WNBA reversion lineup (banner shown). Power Play $20 to win $40 (2.0x for 3/3); 1st place tier 6x. Goblin vs Standard: Clark 17.5 vs 19.5 (2.0), Copper 14.5 vs 19.0 (4.5), Thomas 11.5 vs 16.5 (5.0)."
+    },
+    {
+      "entry_type": "flex",
+      "n_legs": 3,
+      "mix": {"goblin": 3, "standard": 0, "demon": 0},
+      "goblin_distances": [2, 4.5, 5],
+      "sweep_payout_x": 3.0,
+      "min_payout_x": 1.7,
+      "source": "pp_reverted_observed",
+      "confirmed_at": "2026-05-27",
+      "notes": "Same WNBA reversion 3-leg all-Goblin slip. Flex: 2/3 pays 1.7x; 1st place 3x. goblin_distances [2, 4.5, 5] from PP Standard board screenshots."
     }
   ]
 }

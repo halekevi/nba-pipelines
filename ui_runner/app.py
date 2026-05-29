@@ -1068,7 +1068,7 @@ def _selected_slate_sport_payload() -> dict:
     raise ValueError("no slate json available")
 
 
-# Home slate explorer table only reads these keys (see templates/index.html renderSlateTable).
+# Home slate explorer table + detail modal charts (see templates/index.html).
 _SLATE_SPORT_UI_KEYS = frozenset(
     {
         "tier",
@@ -1084,10 +1084,13 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "abs_edge",
         "projection",
         "hit_rate",
+        "l5_avg",
         "l5_over",
         "l5_under",
+        "l5_games_played",
         "l10_over",
         "l10_under",
+        "l10_games_played",
         "season_avg",
         "ml_prob",
         "def_tier",
@@ -1102,6 +1105,11 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "line_draftkings",
         "cross_edge_vs_pp",
         "best_cross_book",
+        "actual_series",
+        "line_series",
+        *(f"g{i}" for i in range(1, 11)),
+        *(f"stat_g{i}" for i in range(1, 11)),
+        *(f"line_g{i}" for i in range(1, 11)),
     }
 )
 

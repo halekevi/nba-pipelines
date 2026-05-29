@@ -68,6 +68,27 @@ def _wnba_team_norm(abbr: str) -> str:
     return slate_map.get(a, a)
 
 
+_NBA_ESPN_TO_DEF = {
+    "GS": "GSW", "NO": "NOP", "NY": "NYK", "SA": "SAS", "PHO": "PHX",
+    "WSH": "WAS", "UTAH": "UTA", "BRK": "BKN",
+}
+
+
+def _nba_team_norm(abbr: str) -> str:
+    s = str(abbr or "").strip().upper()
+    return _NBA_ESPN_TO_DEF.get(s, s)
+
+
+_NHL_SLATE_TO_DEF = {
+    "LA": "LAK", "NJ": "NJD", "SJ": "SJS", "TB": "TBL", "CLB": "CBJ", "ARZ": "UTA",
+}
+
+
+def _nhl_team_norm(abbr: str) -> str:
+    s = str(abbr or "").strip().upper()
+    return _NHL_SLATE_TO_DEF.get(s, s)
+
+
 SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
     "nba": SportMatchupConfig(
         sport="nba",
@@ -79,7 +100,9 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
         defense_name_col="TEAM_ABBREVIATION",
         categories=_basketball_categories(),
         cache_path=_REPO / "Sports/NBA/data/cache/espn_boxscores_cache.csv",
+        top3_path=_REPO / "Sports/NBA/data/nba_top3_vs_defense.csv",
         min_mpg=10.0,
+        team_normalize=_nba_team_norm,
     ),
     "nba1h": SportMatchupConfig(
         sport="nba1h",
@@ -142,8 +165,10 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
             {"id": "shots", "label": "Shots", "threshold": 2.5},
         ),
         cache_path=_REPO / "Sports/NHL/data/nst_player_pp_cache.csv",
+        top3_path=_REPO / "Sports/NHL/data/nhl_top3_vs_defense.csv",
         opp_metric_label="Opp def rank (GAA)",
         elite_rank_cut=6,
+        team_normalize=_nhl_team_norm,
     ),
     "mlb": SportMatchupConfig(
         sport="mlb",
@@ -156,11 +181,13 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
         categories=(
             {"id": "hits", "label": "Hits", "threshold": 1.0},
             {"id": "total_bases", "label": "Total bases", "threshold": 1.5},
-            {"id": "strikeouts", "label": "Strikeouts (pitcher)", "threshold": 4.0},
             {"id": "home_runs", "label": "Home runs", "threshold": 0.5},
+            {"id": "rbi", "label": "RBI", "threshold": 0.8},
         ),
         cache_path=_REPO / "Sports/MLB/mlb_stats_cache.csv",
+        top3_path=_REPO / "Sports/MLB/data/mlb_hitter_top3_vs_defense.csv",
         opp_metric_label="Opp pitching rank",
+        elite_rank_cut=8,
     ),
     "soccer": SportMatchupConfig(
         sport="soccer",
