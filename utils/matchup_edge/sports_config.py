@@ -41,6 +41,23 @@ def _basketball_categories() -> tuple[dict, ...]:
     )
 
 
+def _nba1h_categories() -> tuple[dict, ...]:
+    """PP 1H board: points + pts+reb+ast only (no reb/ast/fg3m/stl/blk 1H lines)."""
+    return (
+        {"id": "pts", "label": "Points (1H)", "threshold": 10.0},
+        {"id": "pra", "label": "Pts+Reb+Ast (1H)", "threshold": 16.0},
+    )
+
+
+def _nba1q_categories() -> tuple[dict, ...]:
+    """PP 1Q board: points, rebounds, assists (no pra / fg3m / stl / blk 1Q lines)."""
+    return (
+        {"id": "pts", "label": "Points (1Q)", "threshold": 5.0},
+        {"id": "reb", "label": "Rebounds (1Q)", "threshold": 2.0},
+        {"id": "ast", "label": "Assists (1Q)", "threshold": 1.5},
+    )
+
+
 def _wnba_team_norm(abbr: str) -> str:
     from utils.wnba_team_keys import defense_team_key
 
@@ -72,7 +89,7 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
         defense_rank_col="OVERALL_DEF_RANK",
         defense_tier_col="DEF_TIER",
         defense_name_col="TEAM_ABBREVIATION",
-        categories=_basketball_categories(),
+        categories=_nba1h_categories(),
         cache_path=_REPO / "Sports/NBA/data/cache/espn_boxscores_cache.csv",
         min_mpg=10.0,
     ),
@@ -84,7 +101,7 @@ SPORT_CONFIGS: dict[str, SportMatchupConfig] = {
         defense_rank_col="OVERALL_DEF_RANK",
         defense_tier_col="DEF_TIER",
         defense_name_col="TEAM_ABBREVIATION",
-        categories=_basketball_categories(),
+        categories=_nba1q_categories(),
         cache_path=_REPO / "Sports/NBA/data/cache/espn_boxscores_cache.csv",
         min_mpg=10.0,
     ),

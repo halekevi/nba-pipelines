@@ -2,7 +2,7 @@
   "sport": "nba1q",
   "display_name": "NBA 1Q",
   "matchup_mode": "team",
-  "generated_at": "2026-05-29T01:07:52.112046+00:00",
+  "generated_at": "2026-05-29T01:56:12.137593+00:00",
   "slate_note": "",
   "n_teams": 30,
   "elite_rank_cut": 4,
@@ -11,38 +11,18 @@
   "categories": [
     {
       "id": "pts",
-      "label": "Points",
-      "threshold": 18.0
+      "label": "Points (1Q)",
+      "threshold": 5.0
     },
     {
       "id": "reb",
-      "label": "Rebounds",
-      "threshold": 6.0
+      "label": "Rebounds (1Q)",
+      "threshold": 2.0
     },
     {
       "id": "ast",
-      "label": "Assists",
-      "threshold": 4.0
-    },
-    {
-      "id": "fg3m",
-      "label": "3-Pointers made",
+      "label": "Assists (1Q)",
       "threshold": 1.5
-    },
-    {
-      "id": "stl",
-      "label": "Steals",
-      "threshold": 1.0
-    },
-    {
-      "id": "blk",
-      "label": "Blocks",
-      "threshold": 1.0
-    },
-    {
-      "id": "pra",
-      "label": "Pts+Reb+Ast",
-      "threshold": 28.0
     }
   ],
   "teams": [
@@ -62,14 +42,6 @@
     }
   ],
   "matchups": {
-    "OKC": {
-      "opponent_slate": "SAS",
-      "opponent_name": "SAS",
-      "opponent_def_rank": 10,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 4,
-      "team_def_tier": "Elite"
-    },
     "SAS": {
       "opponent_slate": "OKC",
       "opponent_name": "OKC",
@@ -77,14 +49,106 @@
       "opponent_def_tier": "Elite",
       "team_def_rank": 10,
       "team_def_tier": "Above Avg"
+    },
+    "OKC": {
+      "opponent_slate": "SAS",
+      "opponent_name": "SAS",
+      "opponent_def_rank": 10,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 4,
+      "team_def_tier": "Elite"
     }
   },
   "players_by_team_cat": {
+    "OKC|ast": {
+      "team_slate": "OKC",
+      "category": "ast",
+      "category_label": "Assists (1Q)",
+      "threshold": 1.5,
+      "opponent": {
+        "slate_abbr": "SAS",
+        "name": "SAS",
+        "def_rank": 10,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Shai Gilgeous-Alexander",
+          "player_norm": "shai gilgeous-alexander",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.67,
+          "game_score": 8.0,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.1
+        },
+        {
+          "player": "Jalen Williams",
+          "player_norm": "jalen williams",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 5.42,
+          "game_score": 6.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 0.85
+        },
+        {
+          "player": "Ajay Mitchell",
+          "player_norm": "ajay mitchell",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 3.73,
+          "game_score": 4.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "player_norm": "isaiah hartenstein",
+          "pos": "",
+          "rank_on_team": 4,
+          "season_avg": 3.46,
+          "game_score": 4.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": -0.05
+        },
+        {
+          "player": "Cason Wallace",
+          "player_norm": "cason wallace",
+          "pos": "",
+          "rank_on_team": 5,
+          "season_avg": 2.65,
+          "game_score": 3.2,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
     "OKC|reb": {
       "team_slate": "OKC",
       "category": "reb",
-      "category_label": "Rebounds",
-      "threshold": 6.0,
+      "category_label": "Rebounds (1Q)",
+      "threshold": 2.0,
       "opponent": {
         "slate_abbr": "SAS",
         "name": "SAS",
@@ -167,8 +231,8 @@
     "SAS|pts": {
       "team_slate": "SAS",
       "category": "pts",
-      "category_label": "Points",
-      "threshold": 18.0,
+      "category_label": "Points (1Q)",
+      "threshold": 5.0,
       "opponent": {
         "slate_abbr": "OKC",
         "name": "OKC",
@@ -248,263 +312,11 @@
         }
       ]
     },
-    "OKC|ast": {
-      "team_slate": "OKC",
-      "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.67,
-          "game_score": 8.0,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.1 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": 1.1
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 5.42,
-          "game_score": 6.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": 0.85
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 3.73,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Isaiah Hartenstein",
-          "player_norm": "isaiah hartenstein",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 3.46,
-          "game_score": 4.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.05
-        },
-        {
-          "player": "Cason Wallace",
-          "player_norm": "cason wallace",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 2.65,
-          "game_score": 3.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "OKC|stl": {
-      "team_slate": "OKC",
-      "category": "stl",
-      "category_label": "Steals",
-      "threshold": 1.0,
-      "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Cason Wallace",
-          "player_norm": "cason wallace",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.02,
-          "game_score": 2.4,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 1.41,
-          "game_score": 1.7,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Alex Caruso",
-          "player_norm": "alex caruso",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.37,
-          "game_score": 1.6,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 1.35,
-          "game_score": 1.6,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 1.27,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "OKC|blk": {
-      "team_slate": "OKC",
-      "category": "blk",
-      "category_label": "Blocks",
-      "threshold": 1.0,
-      "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Chet Holmgren",
-          "player_norm": "chet holmgren",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.93,
-          "game_score": 2.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Isaiah Hartenstein",
-          "player_norm": "isaiah hartenstein",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 0.8,
-          "game_score": 1.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 0.8,
-          "game_score": 1.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Jaylin Williams",
-          "player_norm": "jaylin williams",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 0.69,
-          "game_score": 0.8,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Branden Carlson",
-          "player_norm": "branden carlson",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 0.51,
-          "game_score": 0.6,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "SAS|ast": {
       "team_slate": "SAS",
       "category": "ast",
-      "category_label": "Assists",
-      "threshold": 4.0,
+      "category_label": "Assists (1Q)",
+      "threshold": 1.5,
       "opponent": {
         "slate_abbr": "OKC",
         "name": "OKC",
@@ -535,8 +347,8 @@
           "pp_line": 1.5,
           "pp_edge": 0.6,
           "rank_on_team": 2,
-          "edge": "AVOID",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
@@ -570,179 +382,11 @@
         }
       ]
     },
-    "OKC|pts": {
-      "team_slate": "OKC",
-      "category": "pts",
-      "category_label": "Points",
-      "threshold": 18.0,
-      "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 31.7,
-          "game_score": 38.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -0.15
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 17.5,
-          "game_score": 21.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +4.5 on board tonight vs #10 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": 4.48
-        },
-        {
-          "player": "Chet Holmgren",
-          "player_norm": "chet holmgren",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 17.04,
-          "game_score": 20.4,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +3.0 on board tonight vs #10 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": 3.0
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 14.3,
-          "game_score": 17.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Isaiah Joe",
-          "player_norm": "isaiah joe",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 10.9,
-          "game_score": 13.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "OKC|pra": {
-      "team_slate": "OKC",
-      "category": "pra",
-      "category_label": "Pts+Reb+Ast",
-      "threshold": 28.0,
-      "opponent": {
-        "slate_abbr": "SAS",
-        "name": "SAS",
-        "def_rank": 10,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Shai Gilgeous-Alexander",
-          "player_norm": "shai gilgeous-alexander",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 42.87,
-          "game_score": 51.4,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Chet Holmgren",
-          "player_norm": "chet holmgren",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 27.8,
-          "game_score": 33.4,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Jalen Williams",
-          "player_norm": "jalen williams",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 27.62,
-          "game_score": 33.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Isaiah Hartenstein",
-          "player_norm": "isaiah hartenstein",
-          "pos": "",
-          "rank_on_team": 4,
-          "season_avg": 23.06,
-          "game_score": 27.7,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Ajay Mitchell",
-          "player_norm": "ajay mitchell",
-          "pos": "",
-          "rank_on_team": 5,
-          "season_avg": 21.5,
-          "game_score": 25.8,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "SAS|reb": {
       "team_slate": "SAS",
       "category": "reb",
-      "category_label": "Rebounds",
-      "threshold": 6.0,
+      "category_label": "Rebounds (1Q)",
+      "threshold": 2.0,
       "opponent": {
         "slate_abbr": "OKC",
         "name": "OKC",
@@ -822,11 +466,11 @@
         }
       ]
     },
-    "OKC|fg3m": {
+    "OKC|pts": {
       "team_slate": "OKC",
-      "category": "fg3m",
-      "category_label": "3-Pointers made",
-      "threshold": 1.5,
+      "category": "pts",
+      "category_label": "Points (1Q)",
+      "threshold": 5.0,
       "opponent": {
         "slate_abbr": "SAS",
         "name": "SAS",
@@ -835,54 +479,54 @@
       },
       "players": [
         {
-          "player": "Isaiah Joe",
-          "player_norm": "isaiah joe",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.45,
-          "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Luguentz Dort",
-          "player_norm": "luguentz dort",
-          "pos": "",
-          "rank_on_team": 2,
-          "season_avg": 1.93,
-          "game_score": 2.3,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
-          "player": "Jared McCain",
-          "player_norm": "jared mccain",
-          "pos": "",
-          "rank_on_team": 3,
-          "season_avg": 1.88,
-          "game_score": 2.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        },
-        {
           "player": "Shai Gilgeous-Alexander",
           "player_norm": "shai gilgeous-alexander",
           "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 31.7,
+          "game_score": 38.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -0.15
+        },
+        {
+          "player": "Jalen Williams",
+          "player_norm": "jalen williams",
+          "pos": "",
+          "rank_on_team": 2,
+          "season_avg": 17.5,
+          "game_score": 21.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.5 on board tonight vs #10 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 4.48
+        },
+        {
+          "player": "Chet Holmgren",
+          "player_norm": "chet holmgren",
+          "pos": "",
+          "rank_on_team": 3,
+          "season_avg": 17.04,
+          "game_score": 20.4,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.0 on board tonight vs #10 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 3.0
+        },
+        {
+          "player": "Ajay Mitchell",
+          "player_norm": "ajay mitchell",
+          "pos": "",
           "rank_on_team": 4,
-          "season_avg": 1.74,
-          "game_score": 2.1,
+          "season_avg": 14.3,
+          "game_score": 17.2,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -891,12 +535,12 @@
           "pp_edge": null
         },
         {
-          "player": "Aaron Wiggins",
-          "player_norm": "aaron wiggins",
+          "player": "Isaiah Joe",
+          "player_norm": "isaiah joe",
           "pos": "",
           "rank_on_team": 5,
-          "season_avg": 1.57,
-          "game_score": 1.9,
+          "season_avg": 10.9,
+          "game_score": 13.1,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
