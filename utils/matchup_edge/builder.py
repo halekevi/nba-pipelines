@@ -21,7 +21,7 @@ from utils.matchup_edge.slate_io import (
     tonight_matchups,
 )
 from utils.matchup_edge.sports_config import SPORT_CONFIGS, SportMatchupConfig
-from utils.matchup_edge.team_aliases import cbb_defense_alias_keys, cbb_slate_to_defense_key
+from utils.matchup_edge.team_aliases import cbb_defense_alias_keys, cbb_slate_to_defense_key, mlb_display_name
 from utils.matchup_edge.tennis_builder import build_tennis_matchup_payload
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -57,6 +57,8 @@ def _load_defense(cfg: SportMatchupConfig) -> pd.DataFrame:
         d["_def_tier"] = ""
     name_col = cfg.defense_name_col if cfg.defense_name_col in d.columns else tcol
     d["_def_name"] = d[name_col].astype(str)
+    if cfg.sport == "mlb":
+        d["_def_name"] = d["def_key"].map(mlb_display_name)
     return d
 
 

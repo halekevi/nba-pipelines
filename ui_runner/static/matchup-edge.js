@@ -198,31 +198,41 @@
     const playerMode = data.matchup_mode === "player";
 
     const blockKeys = Object.keys(data.players_by_team_cat || {});
-    const teamsWithBlocks = new Set(blockKeys.map((k) => k.split("|")[0]));
+    const teamsWithBlocks = new Set(blockKeys.map((k) => k.split("|")[0].toUpperCase()));
+    const normAbbr = (s) => String(s || "").toUpperCase();
+    const edgeRank = (e) => (e === "TOP_EDGE" ? 0 : e === "OK_EDGE" ? 1 : e === "NEUTRAL" ? 2 : 3);
+    const bestEdgeScore = (abbr) => {
+      const prefix = normAbbr(abbr);
+      const blocks = data.players_by_team_cat || {};
+      let best = 3;
+      let maxPp = -Infinity;
+      Object.keys(blocks).forEach((k) => {
+        if (normAbbr(k.split("|")[0]) !== prefix) return;
+        const block = blocks[k];
+        const players = Array.isArray(block) ? block : block?.players || [];
+        players.forEach((p) => {
+          const r = edgeRank(p.edge);
+          if (r < best) best = r;
+          const pe = p.pp_edge;
+          if (pe != null && !Number.isNaN(Number(pe)) && Number(pe) > maxPp) maxPp = Number(pe);
+        });
+      });
+      return { rank: best, maxPp: maxPp === -Infinity ? -999 : maxPp };
+    };
     const teams = (data.teams || [])
       .filter((t) => {
-        const ab = t?.slate_abbr || t?.def_key;
+        const ab = normAbbr(t?.slate_abbr || t?.def_key);
         return !teamsWithBlocks.size || teamsWithBlocks.has(ab);
       })
       .slice()
       .sort((a, b) => {
-        const edgeRank = (e) => (e === "TOP_EDGE" ? 0 : e === "OK_EDGE" ? 1 : e === "NEUTRAL" ? 2 : 3);
-        const bestEdge = (abbr) => {
-          const keys = Object.keys(data.players_by_team_cat || {}).filter((k) => k.startsWith(abbr + "|"));
-          let best = 3;
-          keys.forEach((k) => {
-            const players = data.players_by_team_cat[k]?.players || [];
-            players.forEach((p) => {
-              const r = edgeRank(p.edge);
-              if (r < best) best = r;
-            });
-          });
-          return best;
-        };
         const abA = a.slate_abbr || a.def_key || "";
         const abB = b.slate_abbr || b.def_key || "";
-        const diff = bestEdge(abA) - bestEdge(abB);
-        return diff !== 0 ? diff : String(a.name).localeCompare(String(b.name));
+        const scoreA = bestEdgeScore(abA);
+        const scoreB = bestEdgeScore(abB);
+        if (scoreA.rank !== scoreB.rank) return scoreA.rank - scoreB.rank;
+        if (scoreB.maxPp !== scoreA.maxPp) return scoreB.maxPp - scoreA.maxPp;
+        return String(a.name).localeCompare(String(b.name));
       });
     if (!teams.length && data.matchups) {
       Object.keys(data.matchups).forEach((k) => {
