@@ -127,6 +127,9 @@ def norm_prop(raw: object, *, cat_ids: set[str] | None = None) -> str:
         return _align_prop_category("shots", cat_ids)
     if "shot" in s and "goal" in s:
         return _align_prop_category("shots", cat_ids)
+    # GK saves lines (prop_type "Goalie Saves") — keep under goals bucket for matchup panel
+    if "goalie" in s and "save" in s:
+        return _align_prop_category("goals", cat_ids)
     if "goal" in s and "assist" not in s:
         return _align_prop_category("goals", cat_ids)
     if "strikeout" in s or s == "k's":
@@ -248,6 +251,67 @@ def lookup_pp_edge(
     return best
 
 
+def _season_avg_from_row(row: dict) -> float:
+    """Best available per-game rate from slate / step8 columns."""
+    for key in (
+        "season_avg",
+        "stat_season_avg",
+        "stat_season_avg_num",
+        "stat_last5_avg",
+        "stat_last10_avg",
+        "stat_last5_avg_num",
+        "stat_last10_avg_num",
+        "projection",
+        "projection_adj",
+    ):
+        v = pd.to_numeric(row.get(key), errors="coerce")
+        if pd.notna(v):
+            return float(v)
+    return float("nan")
+
+
+def _row_stat_quality(row: dict) -> float:
+    """Higher = richer stat columns (for deduping merged slate sources)."""
+    avg = _season_avg_from_row(row)
+    score = float(avg) if pd.notna(avg) else 0.0
+    if str(row.get("stat_status") or "").upper() == "OK":
+        score += 10.0
+    if str(row.get("has_real_stats") or "") in ("1", "True", "true"):
+        score += 5.0
+    edge = pd.to_numeric(row.get("edge") or row.get("abs_edge"), errors="coerce")
+    if pd.notna(edge):
+        score += abs(float(edge))
+    return score
+
+
+def merge_slate_rows(paths: list[Path], *, cat_ids: set[str] | None = None) -> list[dict]:
+    """Union slate rows from multiple files; keep the richest row per player+team+prop."""
+    best: dict[tuple[str, str, str], dict] = {}
+    for path in paths:
+        if not path.is_file():
+            continue
+        for row in load_slate_rows(path):
+            if not isinstance(row, dict):
+                continue
+            player = str(row.get("player") or row.get("player_name") or "").strip()
+            if not player or _is_combo_player(player):
+                continue
+            team = _team_from_row(row)
+            if not team:
+                continue
+            cid = norm_prop(
+                row.get("prop") or row.get("prop_type") or row.get("prop_norm"),
+                cat_ids=cat_ids,
+            )
+            if cat_ids and cid not in cat_ids:
+                continue
+            key = (norm_player_name(player), team, cid)
+            prev = best.get(key)
+            if prev is None or _row_stat_quality(row) > _row_stat_quality(prev):
+                best[key] = row
+    return list(best.values())
+
+
 def load_slate_rows(slate_path: Path) -> list[dict]:
     if not slate_path.exists():
         return []
@@ -322,19 +386,20 @@ def pp_leaders_from_slate(
         cid = norm_prop(row.get("prop") or row.get("prop_type") or row.get("prop_norm"), cat_ids=cat_ids)
         if cid not in cat_ids:
             continue
-        avg = pd.to_numeric(row.get("season_avg") or row.get("stat_season_avg"), errors="coerce")
+        avg = _season_avg_from_row(row)
         edge = pd.to_numeric(row.get("edge") or row.get("abs_edge"), errors="coerce")
         line = pd.to_numeric(row.get("line") or row.get("standard_line"), errors="coerce")
         if pd.isna(avg) and pd.isna(edge):
             continue
         sort_val = float(edge) if pd.notna(edge) else float(avg)
+        avg_out = round(float(avg), 2) if pd.notna(avg) else round(sort_val, 2)
         buckets.setdefault(f"{team}|{cid}", []).append(
             {
                 "player": player,
                 "player_norm": norm_player_name(player),
-                "pos": str(row.get("pos") or row.get("position") or "").strip().upper()[:3],
-                "season_avg": round(float(avg), 2) if pd.notna(avg) else round(sort_val, 2),
-                "game_score": round(float(avg), 1) if pd.notna(avg) else round(sort_val, 1),
+                "pos": str(row.get("pos") or row.get("position") or row.get("position_group") or "").strip().upper()[:3],
+                "season_avg": avg_out,
+                "game_score": round(avg_out, 1),
                 "pp_line": float(line) if pd.notna(line) else None,
                 "pp_edge": round(float(edge), 2) if pd.notna(edge) else None,
                 "_sort": sort_val,

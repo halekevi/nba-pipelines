@@ -15,6 +15,7 @@ from utils.matchup_edge.slate_io import (
     leaders_from_slate,
     load_slate_rows,
     lookup_pp_edge,
+    merge_slate_rows,
     norm_player_name,
     norm_prop,
     pp_leaders_from_slate,
@@ -314,6 +315,19 @@ def _slate_row_count(path: Path) -> int:
     return 0
 
 
+def _load_soccer_slate_rows(slate_path: Path | None) -> list[dict]:
+    """Merge UI JSON (outfield shots/assists) with step8 CSV (GK saves + season stats)."""
+    if slate_path and slate_path.is_file():
+        return load_slate_rows(slate_path)
+    cat_ids = {c["id"] for c in SPORT_CONFIGS["soccer"].categories}
+    paths = [
+        _REPO_ROOT / "ui_runner/templates/slate_sport_soccer.json",
+        _REPO_ROOT / "mobile/www/slate_sport_soccer.json",
+        _REPO_ROOT / "Sports/Soccer/step8_soccer_direction.csv",
+    ]
+    return merge_slate_rows(paths, cat_ids=cat_ids)
+
+
 def _resolve_slate_path(cfg: SportMatchupConfig, slate_path: Path | None) -> Path:
     if slate_path and slate_path.is_file():
         return slate_path
@@ -463,8 +477,12 @@ def build_matchup_payload(
         }
 
     n_teams = int(defense["_def_rank"].notna().sum()) or max(len(defense), 10)
-    slate_file = _resolve_slate_path(cfg, slate_path)
-    slate_rows = load_slate_rows(slate_file)
+    if cfg.sport == "soccer":
+        slate_rows = _load_soccer_slate_rows(slate_path)
+        slate_file = _REPO_ROOT / "ui_runner/templates/slate_sport_soccer.json"
+    else:
+        slate_file = _resolve_slate_path(cfg, slate_path)
+        slate_rows = load_slate_rows(slate_file)
     matchups_raw = tonight_matchups(slate_rows)
 
     # Map defense keys (soccer pp_name etc.)
