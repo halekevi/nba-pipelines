@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-28T04:23:47.278154+00:00",
+  "generated_at": "2026-05-28T17:32:38.279431+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -8,7 +8,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -16,14 +16,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -34,7 +34,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -42,14 +42,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -60,7 +60,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -68,14 +68,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -86,7 +86,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -94,14 +94,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -112,7 +112,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -120,14 +120,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -138,7 +138,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -146,14 +146,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -164,7 +164,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -172,14 +172,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -190,7 +190,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -208,14 +208,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -226,7 +226,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -244,14 +244,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -262,7 +262,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -280,14 +280,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -298,7 +298,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -316,14 +316,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -334,7 +334,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -352,14 +352,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -370,7 +370,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -388,14 +388,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -406,7 +406,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -414,24 +414,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Adolfo Daniel Vallejo",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -442,7 +442,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -450,24 +450,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -478,7 +478,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -496,14 +496,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -514,7 +514,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -532,9 +532,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -542,14 +542,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -560,7 +560,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -578,9 +578,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -588,14 +588,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -606,7 +606,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -624,9 +624,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -634,14 +634,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -652,7 +652,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -670,9 +670,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -680,14 +680,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -698,7 +698,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -716,9 +716,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -726,14 +726,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -744,7 +744,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -762,9 +762,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -772,14 +772,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -790,7 +790,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -808,24 +808,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Adolfo Daniel Vallejo",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -836,7 +836,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -854,24 +854,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -882,7 +882,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -900,9 +900,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -910,14 +910,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -928,7 +928,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -946,34 +946,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -984,7 +984,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1002,34 +1002,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1040,7 +1040,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1058,34 +1058,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1096,7 +1096,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1114,34 +1114,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1152,7 +1152,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1170,34 +1170,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1208,7 +1208,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1226,34 +1226,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1264,7 +1264,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1282,9 +1282,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1292,24 +1292,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Adolfo Daniel Vallejo",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1320,7 +1320,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1338,9 +1338,9 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
+          "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 11.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1348,24 +1348,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6625
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -1376,7 +1376,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1394,34 +1394,34 @@
           "hit_rate": 0.8
         },
         {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "De'Aaron Fox",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
+          "line": 19.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 10.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.6
         }
       ]
     },
@@ -1432,7 +1432,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1450,26 +1450,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1480,14 +1460,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1498,7 +1498,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1516,26 +1516,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1546,14 +1526,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1564,7 +1564,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1582,26 +1582,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1612,14 +1592,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1630,7 +1630,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1648,26 +1648,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1678,14 +1658,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1696,7 +1696,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1714,26 +1714,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1744,14 +1724,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1762,7 +1762,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1780,26 +1780,6 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Dylan Harper",
           "prop_type": "Pts+Rebs+Asts",
           "line": 11.5,
@@ -1810,14 +1790,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1828,7 +1828,7 @@
         {
           "player": "Jalen Williams",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
+          "line": 20.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1839,158 +1839,6 @@
           "player": "Alex Caruso",
           "prop_type": "Pts+Asts",
           "line": 12.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.5125
-        },
-        {
-          "player": "Adolfo Daniel Vallejo",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.5125
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+1D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jalen Williams",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Alex Caruso",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Adam Walton",
-          "prop_type": "Total Sets",
-          "line": 3.5,
-          "standard_line": 4.5,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 0.5125
-        },
-        {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
-          "direction": "OVER",
-          "hit_rate": 0.5125
-        }
-      ]
-    },
-    {
-      "composition": "5S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jalen Williams",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.0,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Alex Caruso",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Ajay Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -2008,14 +1856,166 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Moise Kouame",
-          "prop_type": "Total Games Won",
-          "line": 21.5,
-          "standard_line": 16.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.5125
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jalen Williams",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": 4.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
+          "pick_type": "Demon",
+          "delta": 10.0,
+          "direction": "OVER",
+          "hit_rate": 0.6
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jalen Williams",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alex Caruso",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 11.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 19.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "A'ja Wilson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 29.5,
+          "standard_line": 39.5,
+          "pick_type": "Demon",
+          "delta": 10.0,
+          "direction": "OVER",
+          "hit_rate": 0.6
         }
       ]
     }
