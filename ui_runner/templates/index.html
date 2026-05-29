@@ -1255,13 +1255,13 @@ body > nav.snav.glass-card {
   .slate-table:not(#st-combined) td:nth-child(4){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(5),
   .slate-table:not(#st-combined) td:nth-child(5){width:80px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  /* Tennis: player names used as team/opp — need wider columns */
+  /* Tennis: player names used as team/opp — beat .slate-table:not(#st-combined) specificity */
   #st-tennis th:nth-child(4),
-  #st-tennis td:nth-child(4){width:190px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(4){width:190px!important;max-width:210px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   #st-tennis th:nth-child(5),
-  #st-tennis td:nth-child(5){width:190px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(5){width:190px!important;max-width:210px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   #st-tennis th:nth-child(3),
-  #st-tennis td:nth-child(3){max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(3){max-width:240px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slate-table:not(#st-combined) th:nth-child(6),
   .slate-table:not(#st-combined) td:nth-child(6){min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .slate-table:not(#st-combined) th:nth-child(7),
@@ -1313,12 +1313,13 @@ body > nav.snav.glass-card {
   .slate-table:not(#st-combined) td:nth-child(5) { width: 100px; max-width: 120px; }
   .slate-table:not(#st-combined) th:nth-child(6),
   .slate-table:not(#st-combined) td:nth-child(6) { min-width: 140px; }
+  /* Tennis overrides after global ultra-wide rules */
   #st-tennis th:nth-child(3),
-  #st-tennis td:nth-child(3){max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(3){max-width:260px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   #st-tennis th:nth-child(4),
-  #st-tennis td:nth-child(4){width:210px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(4){width:210px!important;max-width:230px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   #st-tennis th:nth-child(5),
-  #st-tennis td:nth-child(5){width:210px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #st-tennis td:nth-child(5){width:210px!important;max-width:230px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 }
 @media(max-width:768px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}}
 @media(max-width:640px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
