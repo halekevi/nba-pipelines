@@ -332,37 +332,86 @@ def _load_soccer_slate_rows(slate_path: Path | None) -> list[dict]:
     return merge_slate_rows(paths, cat_ids=cat_ids)
 
 
+def _dated_pipeline_step8_paths(sport: str) -> list[Path]:
+    """outputs/<date>/<sport>/step8_* — newest slate day first."""
+    out: list[Path] = []
+    root = _REPO_ROOT / "outputs"
+    if not root.is_dir():
+        return out
+    day_dirs = sorted(
+        (p for p in root.iterdir() if p.is_dir() and len(p.name) == 10),
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    names = (
+        f"step8_{sport}_direction.csv",
+        f"step8_{sport}_direction_clean.xlsx",
+    )
+    for day_dir in day_dirs:
+        sport_dir = day_dir / sport
+        for fname in names:
+            p = sport_dir / fname
+            if p.is_file():
+                out.append(p)
+        dated_xlsx = day_dir / f"step8_{sport}_direction_clean_{day_dir.name}.xlsx"
+        if dated_xlsx.is_file():
+            out.append(dated_xlsx)
+    return out
+
+
 def _resolve_slate_path(cfg: SportMatchupConfig, slate_path: Path | None) -> Path:
     if slate_path and slate_path.is_file():
         return slate_path
-    candidates: list[Path] = [
-        _REPO_ROOT / "ui_runner/templates" / f"slate_sport_{cfg.sport}.json",
-        _REPO_ROOT / "mobile/www" / f"slate_sport_{cfg.sport}.json",
-        _REPO_ROOT / f"Sports/{cfg.sport.upper()}/step8_{cfg.sport}_direction.csv",
+    sport = cfg.sport
+    pipeline_first: list[Path] = []
+    pipeline_first.extend(_dated_pipeline_step8_paths(sport))
+    sport_upper = sport.upper()
+    if sport_upper == "NBA":
+        sport_dir = _REPO_ROOT / "Sports" / "NBA"
+    else:
+        sport_dir = _REPO_ROOT / "Sports" / sport_upper
+    pipeline_first.extend(
+        [
+            sport_dir / f"step8_{sport}_direction.csv",
+            sport_dir / f"step8_{sport}_direction_clean.xlsx",
+        ]
+    )
+    if sport == "wnba":
+        pipeline_first.insert(0, _REPO_ROOT / "Sports/WNBA/step8_wnba_direction.csv")
+    for rel in _PIPELINE_SLATES.get(sport, []):
+        pipeline_first.append(_REPO_ROOT / rel)
+
+    ui_json: list[Path] = [
+        _REPO_ROOT / "ui_runner/templates" / f"slate_sport_{sport}.json",
+        _REPO_ROOT / "mobile/www" / f"slate_sport_{sport}.json",
     ]
-    if cfg.sport == "wnba":
-        candidates.insert(0, _REPO_ROOT / "Sports/WNBA/step8_wnba_direction.csv")
-    for rel in _PIPELINE_SLATES.get(cfg.sport, []):
-        candidates.append(_REPO_ROOT / rel)
+
+    def _pick_newest(paths: list[Path]) -> Path | None:
+        best: Path | None = None
+        best_mt = -1.0
+        for c in paths:
+            if not c.is_file():
+                continue
+            if _slate_row_count(c) <= 0:
+                continue
+            mt = c.stat().st_mtime
+            if mt > best_mt:
+                best_mt = mt
+                best = c
+        return best
+
     seen: set[Path] = set()
-    unique: list[Path] = []
-    for c in candidates:
+    pipe_unique: list[Path] = []
+    for c in pipeline_first:
         if c not in seen:
             seen.add(c)
-            unique.append(c)
-
-    best_path: Path | None = None
-    best_rows = -1
-    for c in unique:
-        if not c.is_file():
-            continue
-        count = _slate_row_count(c)
-        if count > best_rows:
-            best_rows = count
-            best_path = c
-    if best_path:
-        return best_path
-    return unique[0] if unique else (_REPO_ROOT / "ui_runner/templates" / f"slate_sport_{cfg.sport}.json")
+            pipe_unique.append(c)
+    hit = _pick_newest(pipe_unique)
+    if hit:
+        return hit
+    return _pick_newest(ui_json) or (
+        ui_json[0] if ui_json else _REPO_ROOT / "ui_runner/templates" / f"slate_sport_{sport}.json"
+    )
 
 
 def _extend_def_lookup(cfg: SportMatchupConfig, def_lookup: dict[str, dict]) -> None:
