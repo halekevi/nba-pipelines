@@ -465,7 +465,7 @@ if ($ok) {
     }
 }
 
-# Matchup edge JSON — dedicated WNBA builder (top/bottom-3, UNDER edges). Must run after slate publish.
+# Matchup edge JSON — dedicated WNBA builder (top/bottom-5, UNDER edges). Must run after slate publish.
 if ($ok) {
     $MeScript = Join-Path $WNBADir "scripts\build_wnba_matchup_edge_json.py"
     $SlateJson = Join-Path $Root "ui_runner\templates\slate_sport_wnba.json"

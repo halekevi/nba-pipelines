@@ -22,6 +22,7 @@ class SportMatchupConfig:
     slate_glob: str = "slate_sport_{sport}.json"
     min_mpg: float = 12.0
     top_n: int = 5
+    bottom_n: int = 5
     elite_rank_cut: int = 4
     opp_metric_label: str = "Opp def rank"
     enabled: bool = True

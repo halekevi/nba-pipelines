@@ -172,15 +172,25 @@ def _load_cache_leaders(cfg: SportMatchupConfig) -> dict[str, list[dict]] | None
             sub = sub[sub["_stat"].notna()]
             for team, grp in sub.groupby("TEAM", sort=False):
                 top = grp.nlargest(cfg.top_n, "_stat")
+                bottom = grp.nsmallest(cfg.bottom_n, "_stat")
                 plist = []
-                for i, (_, r) in enumerate(top.iterrows(), start=1):
+                seen: set[str] = set()
+
+                def _nhl_row(r, *, top_rank: int | None, bottom_rank: int | None, leader_slice: str) -> None:
+                    pn = _norm_name(r["Player"])
+                    if pn in seen:
+                        return
+                    seen.add(pn)
                     stat_v = float(r["_stat"])
                     plist.append(
                         {
                             "player": r["Player"],
-                            "player_norm": _norm_name(r["Player"]),
+                            "player_norm": pn,
                             "pos": str(r.get("Position", "") or ""),
-                            "rank_on_team": i,
+                            "rank_on_team": top_rank,
+                            "bottom_rank_on_team": bottom_rank,
+                            "leader_slice": leader_slice,
+                            "bottom3_on_team": bottom_rank is not None and bottom_rank <= 3,
                             "season_avg": round(stat_v, 2),
                             "game_score": round(stat_v * 3, 1),
                             "edge": "NEUTRAL",
@@ -189,9 +199,42 @@ def _load_cache_leaders(cfg: SportMatchupConfig) -> dict[str, list[dict]] | None
                             "def_boost": None,
                         }
                     )
+
+                for i, (_, r) in enumerate(top.iterrows(), start=1):
+                    _nhl_row(r, top_rank=i, bottom_rank=None, leader_slice="top")
+                for i, (_, r) in enumerate(bottom.iterrows(), start=1):
+                    _nhl_row(r, top_rank=None, bottom_rank=i, leader_slice="bottom")
                 if plist:
                     out[f"{_team_norm(cfg, team)}|{cid}"] = plist
         return out
+
+    if sport == "cbb":
+        df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+        master = _REPO_ROOT / "Sports/CBB/data/reference/ncaa_mbb_athletes_master.csv"
+        if master.is_file():
+            m = pd.read_csv(master, encoding="utf-8-sig", usecols=["team_id", "team_abbr"])
+            m = m.drop_duplicates(subset=["team_id"], keep="first")
+            tid_map = {
+                str(tid): str(abbr).upper()
+                for tid, abbr in zip(m["team_id"], m["team_abbr"], strict=False)
+                if str(abbr).strip()
+            }
+            df["TEAM"] = df["team_id"].astype(str).map(tid_map)
+        else:
+            df["TEAM"] = df["team_id"].astype(str).str.upper()
+        df = df[df["TEAM"].notna() & (df["TEAM"].astype(str).str.len() > 0)]
+        df["PLAYER_NAME"] = df["player_norm"].astype(str)
+        df["MIN"] = pd.to_numeric(df["MIN"], errors="coerce")
+        df = df[df["MIN"] >= cfg.min_mpg * 0.4]
+        return _build_from_game_logs(
+            cfg,
+            df,
+            _derive_basketball_stat,
+            "PLAYER_NAME",
+            "TEAM",
+            "game_date",
+            player_norm_col="player_norm",
+        )
 
     if sport == "cfb":
         df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
@@ -258,9 +301,15 @@ def _build_from_game_logs(
 
         for team_slate, grp in agg.groupby("team_slate", sort=False):
             top = grp.nlargest(cfg.top_n, "season_avg")
+            bottom = grp.nsmallest(cfg.bottom_n, "season_avg")
             plist: list[dict] = []
-            for i, r in enumerate(top.itertuples(index=False), start=1):
+            seen_norm: set[str] = set()
+
+            def _append_row(r, *, top_rank: int | None, bottom_rank: int | None, leader_slice: str) -> None:
                 pnorm_val = _norm_name(getattr(r, pnorm, ""))
+                if pnorm_val in seen_norm:
+                    return
+                seen_norm.add(pnorm_val)
                 hist = top3.get((pnorm_val, str(team_slate).upper(), cid), {})
                 avg = float(r.season_avg)
                 plist.append(
@@ -268,7 +317,10 @@ def _build_from_game_logs(
                         "player": getattr(r, player_col),
                         "player_norm": pnorm_val,
                         "pos": "",
-                        "rank_on_team": i,
+                        "rank_on_team": top_rank,
+                        "bottom_rank_on_team": bottom_rank,
+                        "leader_slice": leader_slice,
+                        "bottom3_on_team": bottom_rank is not None and bottom_rank <= 3,
                         "season_avg": round(avg, 2),
                         "game_score": round(avg * 1.2, 1),
                         "edge": "NEUTRAL",
@@ -277,6 +329,11 @@ def _build_from_game_logs(
                         "def_boost": hist.get("def_boost"),
                     }
                 )
+
+            for i, r in enumerate(top.itertuples(index=False), start=1):
+                _append_row(r, top_rank=i, bottom_rank=None, leader_slice="top")
+            for i, r in enumerate(bottom.itertuples(index=False), start=1):
+                _append_row(r, top_rank=None, bottom_rank=i, leader_slice="bottom")
             if plist:
                 out_blocks[f"{team_slate}|{cid}"] = plist
     return out_blocks
@@ -448,37 +505,63 @@ def _resolve_wnba_slate(slate_path: Path | None) -> Path:
     return _REPO_ROOT / "ui_runner/templates/slate_sport_wnba.json"
 
 
+def _infer_leader_slice(p: dict) -> str:
+    ls = str(p.get("leader_slice") or "").lower()
+    if ls in ("top", "bottom"):
+        return ls
+    br = p.get("bottom_rank_on_team")
+    tr = p.get("rank_on_team")
+    if br is not None and (tr is None or int(tr) > 5):
+        return "bottom"
+    return "top"
+
+
 def _merge_player_blocks(
     cache_blocks: dict[str, list[dict]],
     slate_blocks: dict[str, list[dict]],
     *,
     top_n: int,
+    bottom_n: int,
 ) -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = {}
     keys = set(cache_blocks) | set(slate_blocks)
     for key in keys:
-        merged: list[dict] = []
-        seen: set[str] = set()
+        tops: list[dict] = []
+        bots: list[dict] = []
+        seen_top: set[str] = set()
+        seen_bot: set[str] = set()
         for src in (cache_blocks.get(key, []), slate_blocks.get(key, [])):
             for p in src:
                 pn = str(p.get("player_norm") or _norm_name(p.get("player", ""))).lower()
-                if not pn or pn in seen:
+                if not pn:
                     continue
-                seen.add(pn)
-                merged.append(p)
-                if len(merged) >= top_n:
-                    break
-            if len(merged) >= top_n:
-                break
-        if merged:
-            for i, p in enumerate(merged, start=1):
+                rec = dict(p)
+                if _infer_leader_slice(rec) == "bottom":
+                    if pn in seen_bot or len(bots) >= bottom_n:
+                        continue
+                    seen_bot.add(pn)
+                    bots.append(rec)
+                else:
+                    if pn in seen_top or len(tops) >= top_n:
+                        continue
+                    seen_top.add(pn)
+                    tops.append(rec)
+        merged = tops + bots
+        for i, p in enumerate(tops, start=1):
+            p.setdefault("leader_slice", "top")
+            if p.get("rank_on_team") is None:
                 p["rank_on_team"] = i
+        for i, p in enumerate(bots, start=1):
+            p.setdefault("leader_slice", "bottom")
+            if p.get("bottom_rank_on_team") is None:
+                p["bottom_rank_on_team"] = i
+        if merged:
             out[key] = merged
     return out
 
 
 def _build_wnba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
-    """Delegate to Sports/WNBA/scripts/build_wnba_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
+    """Delegate to Sports/WNBA/scripts/build_wnba_matchup_edge_json.py (top/bottom-5 + UNDER edges)."""
     script = _REPO_ROOT / "Sports" / "WNBA" / "scripts" / "build_wnba_matchup_edge_json.py"
     spec = importlib.util.spec_from_file_location("build_wnba_matchup_edge_json", script)
     if spec is None or spec.loader is None:
@@ -510,7 +593,7 @@ def _resolve_nba_slate(slate_path: Path | None) -> Path:
 
 
 def _build_nba_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
-    """Delegate to Sports/NBA/scripts/build_nba_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
+    """Delegate to Sports/NBA/scripts/build_nba_matchup_edge_json.py (top/bottom-5 + UNDER edges)."""
     script = _REPO_ROOT / "Sports" / "NBA" / "scripts" / "build_nba_matchup_edge_json.py"
     spec = importlib.util.spec_from_file_location("build_nba_matchup_edge_json", script)
     if spec is None or spec.loader is None:
@@ -544,7 +627,7 @@ def _resolve_nhl_slate(slate_path: Path | None) -> Path:
 
 
 def _build_nhl_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
-    """Delegate to Sports/NHL/scripts/build_nhl_matchup_edge_json.py (top/bottom-3 + UNDER edges)."""
+    """Delegate to Sports/NHL/scripts/build_nhl_matchup_edge_json.py (top/bottom-5 + UNDER edges)."""
     script = _REPO_ROOT / "Sports" / "NHL" / "scripts" / "build_nhl_matchup_edge_json.py"
     spec = importlib.util.spec_from_file_location("build_nhl_matchup_edge_json", script)
     if spec is None or spec.loader is None:
@@ -578,7 +661,7 @@ def _resolve_mlb_slate(slate_path: Path | None) -> Path:
 
 
 def _build_mlb_hitter_matchup_payload(slate_path: Path | None) -> dict[str, Any]:
-    """Delegate to Sports/MLB/scripts/build_mlb_hitter_matchup_edge_json.py (hitter top/bottom-3)."""
+    """Delegate to Sports/MLB/scripts/build_mlb_hitter_matchup_edge_json.py (hitter top/bottom-5)."""
     script = _REPO_ROOT / "Sports" / "MLB" / "scripts" / "build_mlb_hitter_matchup_edge_json.py"
     spec = importlib.util.spec_from_file_location("build_mlb_hitter_matchup_edge_json", script)
     if spec is None or spec.loader is None:
@@ -708,14 +791,30 @@ def build_matchup_payload(
             for t in sorted(teams_on_slate)
         ]
 
-    slate_blocks = pp_leaders_from_slate(
+    slate_pp = pp_leaders_from_slate(
         slate_rows,
         list(cfg.categories),
         top_n=cfg.top_n,
+        bottom_n=cfg.bottom_n,
         team_normalize=cfg.team_normalize,
     )
+    slate_avg = (
+        leaders_from_slate(
+            slate_rows,
+            list(cfg.categories),
+            top_n=cfg.top_n,
+            bottom_n=cfg.bottom_n,
+        )
+        if slate_rows
+        else {}
+    )
+    slate_blocks = _merge_player_blocks(
+        slate_avg, slate_pp, top_n=cfg.top_n, bottom_n=cfg.bottom_n
+    )
     cache_blocks = _load_cache_leaders(cfg) or {}
-    player_blocks = _merge_player_blocks(cache_blocks, slate_blocks, top_n=cfg.top_n)
+    player_blocks = _merge_player_blocks(
+        cache_blocks, slate_blocks, top_n=cfg.top_n, bottom_n=cfg.bottom_n
+    )
     pp_lookup = build_slate_pp_lookup(
         slate_rows,
         list(cfg.categories),
@@ -750,7 +849,9 @@ def build_matchup_payload(
                 player_norm=p.get("player_norm"),
                 slate_teams=teams_on_slate or None,
             )
-            rank_on_team = int(p.get("rank_on_team") or i)
+            leader_slice = _infer_leader_slice(p)
+            top_rank = p.get("rank_on_team")
+            bottom_rank = p.get("bottom_rank_on_team")
             edge, note = classify_edge(
                 float(p["season_avg"]),
                 threshold,
@@ -761,7 +862,10 @@ def build_matchup_payload(
                 cat_id=cid,
                 pp_line=pp.get("pp_line"),
                 pp_edge=pp.get("pp_edge"),
-                rank_on_team=rank_on_team,
+                rank_on_team=int(top_rank) if top_rank is not None and leader_slice == "top" else None,
+                bottom_rank_on_team=int(bottom_rank)
+                if bottom_rank is not None and leader_slice == "bottom"
+                else None,
             )
             pp_edge_val = pp.get("pp_edge")
             enriched.append(
@@ -839,6 +943,8 @@ def publish_payload(payload: dict[str, Any], sport: str, repo_root: Path | None 
         targets.append(root / "Sports/NHL/data/nhl_matchup_edge.json")
     if sport == "mlb":
         targets.append(root / "Sports/MLB/data/mlb_matchup_edge.json")
+    if sport in ("nba1h", "nba1q"):
+        targets.append(root / "Sports/NBA/data" / f"{sport}_matchup_edge.json")
     text = json.dumps(payload, indent=2)
     for p in targets:
         p.parent.mkdir(parents=True, exist_ok=True)

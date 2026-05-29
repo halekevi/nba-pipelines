@@ -2,7 +2,8 @@
 """
 Build Matchup Edge JSON for Slate Explorer (all supported sports).
 
-WNBA uses the dedicated builder (top/bottom-3, UNDER edges) via utils.matchup_edge.builder.
+Each sport emits top-5 + bottom-5 leaders per team/category (leader_slice in JSON).
+WNBA/NBA/NHL/MLB use dedicated builders; nba1h/nba1q/soccer/cbb/cfb/nfl use the generic path.
 
   py -3 scripts/build_matchup_edge_json.py
   py -3 scripts/build_matchup_edge_json.py --sport nba

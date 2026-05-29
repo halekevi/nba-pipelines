@@ -77,6 +77,81 @@
     return 3;
   }
 
+  const LEADER_N = 5;
+
+  function leaderSlice(p) {
+    const ls = String(p.leader_slice || "").toLowerCase();
+    if (ls === "top" || ls === "bottom") return ls;
+    const br = p.bottom_rank_on_team;
+    const tr = p.rank_on_team;
+    if (br != null && br <= LEADER_N && (tr == null || tr > LEADER_N)) return "bottom";
+    if (tr != null && tr <= LEADER_N) return "top";
+    return "top";
+  }
+
+  function leaderView(sport) {
+    state[sport] = state[sport] || {};
+    if (!state[sport].leaderView) state[sport].leaderView = "top";
+    return state[sport].leaderView;
+  }
+
+  function setLeaderView(sport, view) {
+    state[sport] = state[sport] || {};
+    state[sport].leaderView = view;
+    updateSliceButtons(sport);
+    render(sport);
+  }
+
+  function updateSliceButtons(sport) {
+    const view = leaderView(sport);
+    const panel = document.getElementById(panelId(sport));
+    if (!panel) return;
+    panel.querySelectorAll(".me-slice-btn").forEach((btn) => {
+      btn.classList.toggle("me-slice-on", btn.dataset.slice === view);
+    });
+  }
+
+  function filteredPlayers(players, view) {
+    const list = players || [];
+    if (view === "all") return list;
+    if (view === "bottom") {
+      return list
+        .filter((p) => leaderSlice(p) === "bottom")
+        .sort((a, b) => (a.bottom_rank_on_team || 99) - (b.bottom_rank_on_team || 99))
+        .slice(0, LEADER_N);
+    }
+    return list
+      .filter((p) => leaderSlice(p) === "top")
+      .sort((a, b) => (a.rank_on_team || 99) - (b.rank_on_team || 99))
+      .slice(0, LEADER_N);
+  }
+
+  function playerRankBadge(p) {
+    const slice = leaderSlice(p);
+    if (slice === "bottom") {
+      const n = p.bottom_rank_on_team;
+      const fade =
+        p.edge === "TOP_UNDER" || p.edge === "OK_UNDER" || p.fades_vs_elite ? "FADE" : "LOW";
+      return (
+        ' <span class="me-rank-badge me-rank-fade" title="Fade candidate">' +
+        esc(fade) +
+        " #" +
+        esc(n != null ? n : "?") +
+        "</span>"
+      );
+    }
+    if (p.team_rank_label) {
+      return ' <span class="me-rank-badge">' + esc(p.team_rank_label) + "</span>";
+    }
+    if (p.bottom3_on_team) {
+      return ' <span class="me-rank-badge me-rank-b3">B' + esc(p.bottom_rank_on_team || "?") + "</span>";
+    }
+    if (p.rank_on_team != null && p.rank_on_team <= LEADER_N) {
+      return ' <span class="me-rank-badge me-rank-top">T' + esc(p.rank_on_team) + "</span>";
+    }
+    return "";
+  }
+
   function apiUrl(sport) {
     return "/api/" + sport + "/matchup-edge";
   }
@@ -142,6 +217,12 @@
       pid(sport, "find-under") +
       '">Find unders ↗</button>' +
       "</div>" +
+      '<div class="me-slice-row">' +
+      '<span class="me-slice-label">Leaders</span>' +
+      '<button type="button" class="me-slice-btn me-slice-on" data-slice="top">Top 5</button>' +
+      '<button type="button" class="me-slice-btn" data-slice="bottom">Bottom 5</button>' +
+      '<button type="button" class="me-slice-btn" data-slice="all">All</button>' +
+      "</div>" +
       "</div>" +
       '<div class="me-cards" id="' +
       pid(sport, "cards") +
@@ -185,6 +266,13 @@
     if (findUnderBtn && !findUnderBtn.dataset.meBound) {
       findUnderBtn.dataset.meBound = "1";
       findUnderBtn.addEventListener("click", () => findProps(sport, "UNDER"));
+    }
+    const panel = document.getElementById(panelId(sport));
+    if (panel && !panel.dataset.meSliceBound) {
+      panel.dataset.meSliceBound = "1";
+      panel.querySelectorAll(".me-slice-btn").forEach((btn) => {
+        btn.addEventListener("click", () => setLeaderView(sport, btn.dataset.slice || "top"));
+      });
     }
   }
 
@@ -361,14 +449,25 @@
     const oppTier = opp.def_tier || mu.opponent_def_tier || "";
     const oppName = opp.name || oppMeta.oppName || mu.opponent_name || "—";
     const rankLbl = data.opp_metric_label || "Opp def rank";
+    const view = leaderView(sport);
+    const displayed = filteredPlayers(block.players || [], view);
     let top = 0,
       ok = 0,
-      under = 0;
-    (block.players || []).forEach((p) => {
+      under = 0,
+      fades = 0;
+    displayed.forEach((p) => {
       if (p.edge === "TOP_EDGE") top++;
       else if (p.edge === "OK_EDGE") ok++;
       else if (isUnderEdge(p.edge)) under++;
+      if (leaderSlice(p) === "bottom") fades++;
     });
+
+    const fadeCard =
+      view !== "top"
+        ? '<div class="me-card"><div class="lbl">Fade rows</div><div class="val edge-fade">' +
+          fades +
+          "</div></div>"
+        : "";
 
     cards.innerHTML =
       '<div class="me-card"><div class="lbl">' +
@@ -387,7 +486,9 @@
       ok +
       '</div></div><div class="me-card"><div class="lbl">Under edge</div><div class="val edge-under">' +
       under +
-      '</div></div><div class="me-card"><div class="lbl">' +
+      '</div></div>' +
+      fadeCard +
+      '<div class="me-card"><div class="lbl">' +
       (data.matchup_mode === "player" ? "Your rank" : "Team def rank") +
       '</div><div class="val">#' +
       esc(mu.team_def_rank != null ? mu.team_def_rank : "—") +
@@ -395,14 +496,12 @@
 
     if (avgH) avgH.textContent = (catLabel || "Stat").split(" ")[0] + " avg";
 
-    tbody.innerHTML = (block.players || [])
+    updateSliceButtons(sport);
+
+    tbody.innerHTML = displayed
       .map(
         (p) => {
-          const rankBadge = p.team_rank_label
-            ? ' <span class="me-rank-badge">' + esc(p.team_rank_label) + "</span>"
-            : p.bottom3_on_team
-              ? ' <span class="me-rank-badge me-rank-b3">B' + esc(p.bottom_rank_on_team || "?") + "</span>"
-              : "";
+          const rankBadge = playerRankBadge(p);
           return (
           "<tr><td><strong>" +
           esc(p.player) +
@@ -428,8 +527,8 @@
 
     const overBtn = document.getElementById(pid(sport, "find-over"));
     const underBtn = document.getElementById(pid(sport, "find-under"));
-    const hasOver = (block.players || []).some((p) => isOverEdge(p.edge));
-    const hasUnder = (block.players || []).some((p) => isUnderEdge(p.edge));
+    const hasOver = displayed.some((p) => isOverEdge(p.edge));
+    const hasUnder = displayed.some((p) => isUnderEdge(p.edge));
     if (overBtn) overBtn.disabled = !hasOver;
     if (underBtn) underBtn.disabled = !hasUnder;
 
@@ -437,13 +536,16 @@
     if (panel) {
       const sum = panel.querySelector("summary");
       if (sum)
+        const viewLbl =
+          view === "bottom" ? " (bottom 5)" : view === "all" ? " (all leaders)" : "";
         sum.textContent =
           "Matchup Edge — " +
           (data.display_name || sport.toUpperCase()) +
           " | " +
           catLabel +
           " vs " +
-          oppName;
+          oppName +
+          viewLbl;
     }
 
     if (legend && data.edge_legend) {

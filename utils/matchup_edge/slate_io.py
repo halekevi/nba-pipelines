@@ -360,9 +360,10 @@ def pp_leaders_from_slate(
     categories: list[dict],
     *,
     top_n: int = 5,
+    bottom_n: int = 5,
     team_normalize: Callable[[str], str] | None = None,
 ) -> dict[str, list[dict]]:
-    """Top single-player props on tonight's board keyed team|category."""
+    """Top and bottom single-player props on tonight's board keyed team|category."""
     if not rows:
         return {}
 
@@ -410,20 +411,41 @@ def pp_leaders_from_slate(
     for key, items in buckets.items():
         items.sort(key=lambda x: x["_sort"], reverse=True)
         players: list[dict] = []
-        seen: set[str] = set()
+        seen_top: set[str] = set()
         for item in items:
             pn = item["player_norm"]
-            if pn in seen:
+            if pn in seen_top:
                 continue
-            seen.add(pn)
+            seen_top.add(pn)
             rec = {k: v for k, v in item.items() if k != "_sort"}
-            rec["rank_on_team"] = len(players) + 1
+            rec["rank_on_team"] = len(seen_top)
+            rec["leader_slice"] = "top"
             rec["edge"] = "NEUTRAL"
             rec["notes"] = "From tonight's PP board"
             rec["overperform_vs_weak"] = False
             rec["def_boost"] = None
             players.append(rec)
             if len(players) >= top_n:
+                break
+        seen_bot: set[str] = set()
+        bottom_items = sorted(items, key=lambda x: x["_sort"])
+        bot_rank = 0
+        for item in bottom_items:
+            pn = item["player_norm"]
+            if pn in seen_top or pn in seen_bot:
+                continue
+            seen_bot.add(pn)
+            bot_rank += 1
+            rec = {k: v for k, v in item.items() if k != "_sort"}
+            rec["bottom_rank_on_team"] = bot_rank
+            rec["leader_slice"] = "bottom"
+            rec["bottom3_on_team"] = bot_rank <= 3
+            rec["edge"] = "NEUTRAL"
+            rec["notes"] = "From tonight's PP board (lowest edge)"
+            rec["overperform_vs_weak"] = False
+            rec["def_boost"] = None
+            players.append(rec)
+            if bot_rank >= bottom_n:
                 break
         if players:
             out[key] = players
@@ -435,30 +457,54 @@ def leaders_from_slate(
     categories: list[dict],
     *,
     top_n: int = 5,
+    bottom_n: int = 5,
 ) -> dict[str, list[dict]]:
-    """Fallback leaders keyed team|category from slate season_avg."""
+    """Fallback leaders keyed team|category from slate season_avg (top + bottom)."""
     if not rows:
         return {}
     df = pd.DataFrame(rows)
     if df.empty:
         return {}
-    team_src = df.get("team", df.get("team_abbr", pd.Series([""] * len(df))))
+    if "team" in df.columns:
+        team_src = df["team"]
+    elif "team_abbr" in df.columns:
+        team_src = df["team_abbr"]
+    else:
+        team_src = pd.Series([""] * len(df))
     df["team"] = team_src.astype(str).str.upper().str.split("/").str[0]
-    prop_src = df.get("prop_norm", df.get("prop_type", df.get("prop", "")))
-    df["prop_norm"] = prop_src.map(norm_prop)
-    avg_src = df.get("season_avg")
+    cat_ids = {c["id"] for c in categories}
+    if "prop_norm" in df.columns:
+        prop_src = df["prop_norm"]
+    elif "prop_type" in df.columns:
+        prop_src = df["prop_type"]
+    elif "prop" in df.columns:
+        prop_src = df["prop"]
+    elif "Prop" in df.columns:
+        prop_src = df["Prop"]
+    else:
+        prop_src = pd.Series([""] * len(df))
+    df["prop_norm"] = prop_src.map(lambda x: norm_prop(x, cat_ids=cat_ids))
+    avg_src = df["season_avg"] if "season_avg" in df.columns else None
     if avg_src is None or pd.to_numeric(avg_src, errors="coerce").notna().sum() == 0:
         for alt in ("stat_season_avg", "projection", "stat_last10_avg", "stat_last5_avg"):
             if alt in df.columns:
                 avg_src = df[alt]
                 break
     df["season_avg"] = pd.to_numeric(avg_src, errors="coerce")
-    df["player"] = df.get("player", "").astype(str)
+    if "player" in df.columns:
+        df["player"] = df["player"].astype(str)
+    elif "player_name" in df.columns:
+        df["player"] = df["player_name"].astype(str)
+    else:
+        df["player"] = ""
     df = df[df["season_avg"].notna() & df["player"].astype(bool)]
+    if df.empty:
+        return {}
     df = df[~df["player"].map(_is_combo_player)]
+    if df.empty:
+        return {}
 
     out: dict[str, list[dict]] = {}
-    cat_ids = {c["id"] for c in categories}
     for cat in categories:
         cid = cat["id"]
         sub = df[df["prop_norm"] == cid]
@@ -466,18 +512,44 @@ def leaders_from_slate(
             sub = df[df["prop_norm"].astype(str).str.contains(cid[:3], na=False)]
         for team, grp in sub.groupby("team", sort=False):
             top = grp.nlargest(top_n, "season_avg")
-            players = []
+            bottom = grp.nsmallest(bottom_n, "season_avg")
+            players: list[dict] = []
+            seen: set[str] = set()
             for i, r in enumerate(top.itertuples(index=False), start=1):
+                pn = norm_player_name(r.player)
+                seen.add(pn)
                 players.append(
                     {
                         "player": r.player,
-                        "player_norm": str(r.player).lower(),
+                        "player_norm": pn,
                         "pos": "",
                         "rank_on_team": i,
+                        "leader_slice": "top",
                         "season_avg": round(float(r.season_avg), 2),
                         "game_score": round(float(r.season_avg), 1),
                         "edge": "NEUTRAL",
                         "notes": "From slate season average",
+                        "overperform_vs_weak": False,
+                        "def_boost": None,
+                    }
+                )
+            for i, r in enumerate(bottom.itertuples(index=False), start=1):
+                pn = norm_player_name(r.player)
+                if pn in seen:
+                    continue
+                seen.add(pn)
+                players.append(
+                    {
+                        "player": r.player,
+                        "player_norm": pn,
+                        "pos": "",
+                        "bottom_rank_on_team": i,
+                        "leader_slice": "bottom",
+                        "bottom3_on_team": i <= 3,
+                        "season_avg": round(float(r.season_avg), 2),
+                        "game_score": round(float(r.season_avg), 1),
+                        "edge": "NEUTRAL",
+                        "notes": "From slate season average (lowest)",
                         "overperform_vs_weak": False,
                         "def_boost": None,
                     }

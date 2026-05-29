@@ -56,7 +56,7 @@ CATEGORIES: list[dict] = [
 ]
 
 TOP_N = 5
-BOTTOM_N = 3
+BOTTOM_N = 5
 MIN_GAMES = 8
 ELITE_RANK_CUT = 4
 
@@ -370,6 +370,9 @@ def build_payload(
                         "pos": pos_by_player.get(pnorm, ""),
                         "rank_on_team": top_rank,
                         "bottom_rank_on_team": bottom_rank,
+                        "leader_slice": "bottom"
+                        if bottom_rank is not None and top_rank is None
+                        else "top",
                         "team_rank_label": _team_rank_label(top_rank, bottom_rank),
                         "bottom3_on_team": bottom_rank is not None and bottom_rank <= 3,
                         "season_avg": round(avg, 2),

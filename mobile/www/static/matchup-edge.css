@@ -140,6 +140,54 @@
   background: rgba(240, 180, 41, 0.12);
   border: 1px solid rgba(240, 180, 41, 0.25);
 }
+.me-rank-badge.me-rank-top {
+  color: #6ee7b7;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+}
+.me-rank-badge.me-rank-fade,
+.wnba-me-rank-badge.me-rank-fade {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+.me-slice-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+}
+.me-slice-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-right: 4px;
+}
+.me-slice-btn {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  color: #bbb;
+  cursor: pointer;
+}
+.me-slice-btn.me-slice-on {
+  border-color: rgba(110, 231, 183, 0.45);
+  color: #6ee7b7;
+  background: rgba(110, 231, 183, 0.1);
+}
+.me-slice-btn[data-slice="bottom"].me-slice-on {
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.1);
+}
+.me-card .val.edge-fade {
+  color: #fca5a5;
+}
 .me-cards,
 .wnba-me-cards {
   display: grid;

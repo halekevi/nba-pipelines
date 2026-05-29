@@ -107,3 +107,23 @@ function Run-NBAPeriodOnly {
 
 Run-NBAPeriodOnly -Tag "nba1h" -LeagueId "84"
 Run-NBAPeriodOnly -Tag "nba1q" -LeagueId "192"
+
+foreach ($tag in @("nba1h", "nba1q")) {
+    $step8 = Join-Path $OutDir "$tag\step8_${tag}_direction.csv"
+    Write-Host "  --> Matchup edge JSON ($tag)" -ForegroundColor Yellow
+    Push-Location $Root
+    try {
+        $meArgs = @(".\scripts\build_matchup_edge_json.py", "--sport", $tag)
+        if (Test-Path -LiteralPath $step8) {
+            $meArgs += @("--slate", $step8)
+        }
+        & py -3 @meArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "      matchup-edge WARN ($tag exit $LASTEXITCODE)" -ForegroundColor Yellow
+        } else {
+            Write-Host "      OK" -ForegroundColor Green
+        }
+    } finally {
+        Pop-Location
+    }
+}
