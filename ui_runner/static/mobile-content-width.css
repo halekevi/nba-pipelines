@@ -6,7 +6,7 @@
 :root {
   --po-page-edge: 5%;
   --po-content-width: 100%;
-  --po-content-max: min(98vw, 1920px);
+  --po-content-max: min(98vw, 2400px);
   --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
   --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
   --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
@@ -17,7 +17,7 @@
 /* Home only uses .shell — 98% band on all viewports (loads after index.html inline CSS) */
 .shell {
   width: 98% !important;
-  max-width: 1680px !important;
+  max-width: var(--po-content-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
@@ -26,7 +26,7 @@
 nav.snav,
 nav.snav.glass-card {
   width: 98% !important;
-  max-width: 1680px !important;
+  max-width: var(--po-content-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
@@ -113,10 +113,10 @@ nav.snav.glass-card {
     font-size: max(16px, 1rem) !important;
   }
 
-  /* Home — shell: reinforce 98% / 1680px; no width:100% or side padding */
+  /* Home — shell: reinforce 98% / content max; no width:100% or side padding */
   .shell {
     width: 98% !important;
-    max-width: 1680px !important;
+    max-width: var(--po-content-max) !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;
@@ -129,7 +129,7 @@ nav.snav.glass-card {
   nav.snav,
   nav.snav.glass-card {
     width: 98% !important;
-    max-width: 1680px !important;
+    max-width: var(--po-content-max) !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;

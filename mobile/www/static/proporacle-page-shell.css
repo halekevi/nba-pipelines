@@ -43,7 +43,7 @@ body::after{
   position:relative;
   z-index:1;
   width:100%;
-  max-width:min(1920px,98vw);
+  max-width:min(2400px,98vw);
   margin:0 auto;
   padding:0 clamp(10px,2.5vw,28px) 24px;
   box-sizing:border-box;
