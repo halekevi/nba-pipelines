@@ -2,7 +2,7 @@
   "sport": "nhl",
   "display_name": "NHL",
   "matchup_mode": "team",
-  "generated_at": "2026-05-29T20:18:04.179688+00:00",
+  "generated_at": "2026-05-30T09:35:39.861950+00:00",
   "season": 2026,
   "n_teams": 32,
   "elite_rank_cut": 6,
@@ -4049,8 +4049,8 @@
           "notes": "Historically underperforms vs elite defenses (#4). Avg -0.2 vs elite D.",
           "overperform_vs_weak": true,
           "fades_vs_elite": true,
-          "def_boost": 0.2607387839991458,
-          "avg_delta_vs_elite": -0.1834494067097685
+          "def_boost": 0.2948415773424374,
+          "avg_delta_vs_elite": -0.2175522000530601
         },
         {
           "player": "Juraj Slafkovsky",
@@ -4069,8 +4069,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.447013779270337,
-          "avg_delta_vs_elite": 0.1062994935560513
+          "def_boost": -0.4080306333206893,
+          "avg_delta_vs_elite": 0.0673163476064036
         },
         {
           "player": "Nick Suzuki",
@@ -4087,10 +4087,10 @@
           "pp_edge": null,
           "edge": "NEUTRAL",
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
+          "overperform_vs_weak": true,
           "fades_vs_elite": false,
-          "def_boost": 0.194174554890694,
-          "avg_delta_vs_elite": -0.0522697929859321
+          "def_boost": 0.2199435936285098,
+          "avg_delta_vs_elite": -0.0780388317237479
         },
         {
           "player": "Alex Newhook",
@@ -4149,8 +4149,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-1 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.0229177371876696,
-          "avg_delta_vs_elite": 0.0086320229019553
+          "def_boost": -0.019908134539034,
+          "avg_delta_vs_elite": 0.0056224202533197
         },
         {
           "player": "Noah Dobson",
@@ -6629,8 +6629,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.2223613709866907,
-          "avg_delta_vs_elite": -0.2478620235973177
+          "def_boost": 0.2548812062026043,
+          "avg_delta_vs_elite": -0.2803818588132314
         },
         {
           "player": "Martin Necas",
@@ -6649,8 +6649,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.1664260585551584,
-          "avg_delta_vs_elite": -0.4230839068796734
+          "def_boost": 0.1691243379077093,
+          "avg_delta_vs_elite": -0.4257821862322243
         },
         {
           "player": "Gabriel Landeskog",
@@ -6669,8 +6669,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0118920922601015,
-          "avg_delta_vs_elite": 0.0531257330518414
+          "def_boost": -0.0580800943342247,
+          "avg_delta_vs_elite": 0.1230979196461676
         },
         {
           "player": "Cale Makar",
@@ -6844,8 +6844,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.2069647575688395,
-          "avg_delta_vs_elite": -0.2438004911689122
+          "def_boost": 0.2350847084519483,
+          "avg_delta_vs_elite": -0.271920442052021
         },
         {
           "player": "Mark Stone",
@@ -6864,8 +6864,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": null,
-          "avg_delta_vs_elite": null
+          "def_boost": 0.0490585337770935,
+          "avg_delta_vs_elite": 0.2918411330049261
         },
         {
           "player": "Mitch Marner",
@@ -6884,8 +6884,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.2236128215246969,
-          "avg_delta_vs_elite": -0.2083511142721669
+          "def_boost": 0.243197740451721,
+          "avg_delta_vs_elite": -0.2279360331991911
         },
         {
           "player": "Brett Howden",
@@ -6904,8 +6904,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.1110428468947329,
-          "avg_delta_vs_elite": 0.1027178466694595
+          "def_boost": null,
+          "avg_delta_vs_elite": null
         },
         {
           "player": "Reilly Smith",
@@ -6984,8 +6984,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0778583067819097,
-          "avg_delta_vs_elite": -0.0695646774594143
+          "def_boost": 0.072977901024311,
+          "avg_delta_vs_elite": -0.0646842717018155
         },
         {
           "player": "Jeremy Lauzon",
@@ -10929,8 +10929,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.2086635895423488,
-          "avg_delta_vs_elite": -0.0206221247433654
+          "def_boost": -0.1360741247150199,
+          "avg_delta_vs_elite": -0.0932115895706943
         },
         {
           "player": "Lane Hutson",
@@ -10949,8 +10949,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.1451497928444518,
-          "avg_delta_vs_elite": -0.0106259833206423
+          "def_boost": 0.2045140038743519,
+          "avg_delta_vs_elite": -0.0699901943505423
         },
         {
           "player": "Juraj Slafkovsky",
@@ -10969,8 +10969,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0996814941128223,
-          "avg_delta_vs_elite": -0.0830148274461556
+          "def_boost": 0.1429716831922706,
+          "avg_delta_vs_elite": -0.1263050165256039
         },
         {
           "player": "Cole Caufield",
@@ -11029,8 +11029,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-1 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.2320233867045461,
-          "avg_delta_vs_elite": -0.0457543910732316
+          "def_boost": -0.2294278924832765,
+          "avg_delta_vs_elite": -0.0483498852945012
         },
         {
           "player": "Josh Anderson",
@@ -11049,8 +11049,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-2 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.1510986340773197,
-          "avg_delta_vs_elite": 0.0322346992560136
+          "def_boost": 0.161303081714327,
+          "avg_delta_vs_elite": 0.0220302516190062
         },
         {
           "player": "Kirby Dach",
@@ -13509,8 +13509,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.6382105804779337,
-          "avg_delta_vs_elite": 0.0919363300370165
+          "def_boost": -0.6426153157369786,
+          "avg_delta_vs_elite": 0.0963410652960614
         },
         {
           "player": "Nathan MacKinnon",
@@ -13529,8 +13529,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.0998533163814494,
-          "avg_delta_vs_elite": -0.4199717765894236
+          "def_boost": 0.1402768727363782,
+          "avg_delta_vs_elite": -0.4603953329443525
         },
         {
           "player": "Cale Makar",
@@ -13549,8 +13549,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": true,
           "fades_vs_elite": true,
-          "def_boost": 0.5452619934386042,
-          "avg_delta_vs_elite": -0.4181094767301664
+          "def_boost": 0.5816400980925709,
+          "avg_delta_vs_elite": -0.4544875813841331
         },
         {
           "player": "Devon Toews",
@@ -13609,8 +13609,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.0316510386137579,
-          "avg_delta_vs_elite": -0.0850328947368421
+          "def_boost": -0.0412502101537189,
+          "avg_delta_vs_elite": -0.075433723196881
         },
         {
           "player": "Nick Blankenburg",
@@ -13724,8 +13724,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.426630225934452,
-          "avg_delta_vs_elite": -0.0275524114339903
+          "def_boost": 0.5147369380543221,
+          "avg_delta_vs_elite": -0.1156591235538603
         },
         {
           "player": "Mitch Marner",
@@ -13743,9 +13743,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "fades_vs_elite": false,
-          "def_boost": 0.1453299016084802,
-          "avg_delta_vs_elite": -0.0861617726749305
+          "fades_vs_elite": true,
+          "def_boost": 0.2155284510833454,
+          "avg_delta_vs_elite": -0.1563603221497958
         },
         {
           "player": "Ivan Barbashev",
@@ -13764,8 +13764,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.1754225447461692,
-          "avg_delta_vs_elite": -0.0168759418759418
+          "def_boost": 0.223734950558575,
+          "avg_delta_vs_elite": -0.0651883476883476
         },
         {
           "player": "Shea Theodore",
@@ -13824,8 +13824,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.1263334960667862,
-          "avg_delta_vs_elite": 0.0903401791559686
+          "def_boost": -0.1147994781511893,
+          "avg_delta_vs_elite": 0.0788061612403717
         },
         {
           "player": "Cole Smith",
@@ -13844,8 +13844,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.0014995715985899,
-          "avg_delta_vs_elite": -0.0202801485696222
+          "def_boost": 0.0019450842583466,
+          "avg_delta_vs_elite": -0.0237248044265588
         },
         {
           "player": "Ben Hutton",
@@ -17809,8 +17809,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.0144890346516547,
-          "avg_delta_vs_elite": -0.0728919177292976
+          "def_boost": 0.0838694689134899,
+          "avg_delta_vs_elite": -0.1712504212944423
         },
         {
           "player": "Cole Caufield",
@@ -17825,12 +17825,12 @@
           "game_score": 1.02,
           "pp_line": null,
           "pp_edge": null,
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "edge": "TOP_UNDER",
+          "notes": "Historically underperforms vs elite defenses (#4). Avg -0.2 vs elite D.",
           "overperform_vs_weak": false,
-          "fades_vs_elite": false,
-          "def_boost": 0.1500271808139074,
-          "avg_delta_vs_elite": -0.1842396350263616
+          "fades_vs_elite": true,
+          "def_boost": 0.1804563982202472,
+          "avg_delta_vs_elite": -0.2146688524327014
         },
         {
           "player": "Juraj Slafkovsky",
@@ -17849,8 +17849,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.3473322851575147,
-          "avg_delta_vs_elite": 0.0232846661098956
+          "def_boost": -0.2650589501284187,
+          "avg_delta_vs_elite": -0.0589886689192003
         },
         {
           "player": "Lane Hutson",
@@ -17909,8 +17909,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-1 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.2085200778823967,
-          "avg_delta_vs_elite": -0.1248132554509366
+          "def_boost": -0.2072472627697956,
+          "avg_delta_vs_elite": -0.1260860705635377
         },
         {
           "player": "Josh Anderson",
@@ -20389,8 +20389,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": -0.4717845219227751,
-          "avg_delta_vs_elite": -0.3311475768426569
+          "def_boost": -0.4734909778292691,
+          "avg_delta_vs_elite": -0.3294411209361629
         },
         {
           "player": "Nathan MacKinnon",
@@ -20409,8 +20409,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.32221468736814,
-          "avg_delta_vs_elite": -0.6678338001867413
+          "def_boost": 0.3951580789389826,
+          "avg_delta_vs_elite": -0.7407771917575839
         },
         {
           "player": "Cale Makar",
@@ -20429,8 +20429,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.1672197735718606,
-          "avg_delta_vs_elite": -0.3327586206896551
+          "def_boost": 0.2806680494339295,
+          "avg_delta_vs_elite": -0.4462068965517241
         },
         {
           "player": "Gabriel Landeskog",
@@ -20489,8 +20489,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0978090338835952,
-          "avg_delta_vs_elite": -0.1700657894736842
+          "def_boost": 0.0786106908036732,
+          "avg_delta_vs_elite": -0.1508674463937621
         },
         {
           "player": "Gavin Brindley",
@@ -20604,8 +20604,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.3689427231331771,
-          "avg_delta_vs_elite": -0.2945128869470975
+          "def_boost": 0.4587261915350666,
+          "avg_delta_vs_elite": -0.384296355348987
         },
         {
           "player": "Jack Eichel",
@@ -20624,8 +20624,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0399558376399432,
-          "avg_delta_vs_elite": 0.2556180710785974
+          "def_boost": 0.1823179594976791,
+          "avg_delta_vs_elite": 0.1132559492208615
         },
         {
           "player": "Pavel Dorofeyev",
@@ -20643,9 +20643,9 @@
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
-          "fades_vs_elite": false,
-          "def_boost": 0.0548368359488918,
-          "avg_delta_vs_elite": -0.1786021989969358
+          "fades_vs_elite": true,
+          "def_boost": 0.1219766160491982,
+          "avg_delta_vs_elite": -0.2457419790972422
         },
         {
           "player": "Ivan Barbashev",
@@ -20704,8 +20704,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.1790873038480017,
-          "avg_delta_vs_elite": 0.1610222386538176
+          "def_boost": -0.15548507998262,
+          "avg_delta_vs_elite": 0.1374200147884358
         },
         {
           "player": "Ben Hutton",
@@ -24689,8 +24689,8 @@
           "notes": "Team leader; PP edge +0.9.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.7505479821182384,
-          "avg_delta_vs_elite": -0.8405113520816083
+          "def_boost": 0.7689962231033076,
+          "avg_delta_vs_elite": -0.8589595930666776
         },
         {
           "player": "Juraj Slafkovsky",
@@ -24709,8 +24709,8 @@
           "notes": "PP edge +1.1 on board tonight.",
           "overperform_vs_weak": true,
           "fades_vs_elite": false,
-          "def_boost": 0.8017000301910229,
-          "avg_delta_vs_elite": -0.02384288733388
+          "def_boost": 0.935262871267826,
+          "avg_delta_vs_elite": -0.1574057284106831
         },
         {
           "player": "Nick Suzuki",
@@ -24729,8 +24729,8 @@
           "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.8339162324054734,
-          "avg_delta_vs_elite": -0.0689409104516693
+          "def_boost": -0.8105285169485327,
+          "avg_delta_vs_elite": -0.0923286259086101
         },
         {
           "player": "Ivan Demidov",
@@ -24789,8 +24789,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-1 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.0272345775255752,
-          "avg_delta_vs_elite": -0.1537178034268056
+          "def_boost": -0.0008390147927746,
+          "avg_delta_vs_elite": -0.1801133661596063
         },
         {
           "player": "Jayden Struble",
@@ -24809,8 +24809,8 @@
           "notes": "Bottom-3 producer vs elite defense \u2014 lean UNDER. Team bottom-2 in category.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": null,
-          "avg_delta_vs_elite": null
+          "def_boost": 0.0242356905799449,
+          "avg_delta_vs_elite": -0.135346801691056
         },
         {
           "player": "Phillip Danault",
@@ -25803,9 +25803,9 @@
           "edge": "OK_EDGE",
           "notes": "Solid vs average-or-softer opponent defense.",
           "overperform_vs_weak": false,
-          "fades_vs_elite": false,
-          "def_boost": null,
-          "avg_delta_vs_elite": null
+          "fades_vs_elite": true,
+          "def_boost": 1.2904798502624588,
+          "avg_delta_vs_elite": -0.7212157809983896
         },
         {
           "player": "Sebastian Aho",
@@ -25824,8 +25824,8 @@
           "notes": "Solid vs average-or-softer opponent defense.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -2.813131313131313,
-          "avg_delta_vs_elite": 1.333333333333333
+          "def_boost": null,
+          "avg_delta_vs_elite": null
         },
         {
           "player": "Nikolaj Ehlers",
@@ -27269,8 +27269,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": 0.049826506140445,
-          "avg_delta_vs_elite": -1.4705346532552417
+          "def_boost": 0.1176649981210937,
+          "avg_delta_vs_elite": -1.5383731452358904
         },
         {
           "player": "Martin Necas",
@@ -27289,8 +27289,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": true,
-          "def_boost": -0.1714946149728758,
-          "avg_delta_vs_elite": -0.5482805173022565
+          "def_boost": 0.1009186608824289,
+          "avg_delta_vs_elite": -0.8206937931575613
         },
         {
           "player": "Nazem Kadri",
@@ -27309,8 +27309,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -1.2288443489158454,
-          "avg_delta_vs_elite": -0.1520534647550776
+          "def_boost": null,
+          "avg_delta_vs_elite": null
         },
         {
           "player": "Cale Makar",
@@ -27329,8 +27329,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": null,
-          "avg_delta_vs_elite": null
+          "def_boost": -0.5136501319435758,
+          "avg_delta_vs_elite": 0.400514428100635
         },
         {
           "player": "Gabriel Landeskog",
@@ -27484,8 +27484,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": true,
           "fades_vs_elite": true,
-          "def_boost": 0.699184064513805,
-          "avg_delta_vs_elite": -0.4257779866332498
+          "def_boost": 0.8655506130075464,
+          "avg_delta_vs_elite": -0.5921445351269913
         },
         {
           "player": "Pavel Dorofeyev",
@@ -27504,8 +27504,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.1230615647273624,
-          "avg_delta_vs_elite": -0.0800480116269589
+          "def_boost": -0.0460663658900583,
+          "avg_delta_vs_elite": -0.1570432104642631
         },
         {
           "player": "Mitch Marner",
@@ -27524,8 +27524,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0439018512978791,
-          "avg_delta_vs_elite": 0.2094445008918692
+          "def_boost": 0.0928144881491124,
+          "avg_delta_vs_elite": 0.1605318640406359
         },
         {
           "player": "Mark Stone",
@@ -27584,8 +27584,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": -0.4809876298987499,
-          "avg_delta_vs_elite": 0.2971216443566674
+          "def_boost": -0.3930661743541664,
+          "avg_delta_vs_elite": 0.2092001888120839
         },
         {
           "player": "Keegan Kolesar",
@@ -27604,8 +27604,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.0170070139408656,
-          "avg_delta_vs_elite": 0.0684861513808882
+          "def_boost": 0.0888556290789545,
+          "avg_delta_vs_elite": -0.0033624637572006
         },
         {
           "player": "Cole Smith",
@@ -27624,8 +27624,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "fades_vs_elite": false,
-          "def_boost": 0.207000177229405,
-          "avg_delta_vs_elite": -0.0992516482648061
+          "def_boost": 0.0478240681629451,
+          "avg_delta_vs_elite": 0.0599244608016538
         },
         {
           "player": "Nic Dowd",

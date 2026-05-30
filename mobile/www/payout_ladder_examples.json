@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-29T15:52:41.489632+00:00",
+  "generated_at": "2026-05-29T17:50:00.496717+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -172,14 +172,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -460,14 +460,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -496,14 +496,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -864,14 +864,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -910,14 +910,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1358,14 +1358,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1414,14 +1414,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1942,14 +1942,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     },
@@ -2008,14 +2008,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Satou Sabally",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 21.5,
+          "player": "Skylar Diggins",
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.6
+          "hit_rate": 0.8
         }
       ]
     }
