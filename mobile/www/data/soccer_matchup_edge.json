@@ -2,7 +2,7 @@
   "sport": "soccer",
   "display_name": "Soccer",
   "matchup_mode": "team",
-  "generated_at": "2026-05-30T09:37:07.743211+00:00",
+  "generated_at": "2026-05-30T12:01:07.809707+00:00",
   "slate_note": "",
   "n_teams": 374,
   "elite_rank_cut": 5,
@@ -71,38 +71,6 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "PALMEIRAS": {
-      "opponent_slate": "CRISTAL",
-      "opponent_name": "CRISTAL",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 1,
-      "team_def_tier": "Elite"
-    },
-    "UCV": {
-      "opponent_slate": "IND. DEL VALLE",
-      "opponent_name": "IND. DEL VALLE",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "BARCELONA": {
-      "opponent_slate": "BOCA",
-      "opponent_name": "BOCA",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 17,
-      "team_def_tier": "Avg"
-    },
-    "RACING LOU": {
-      "opponent_slate": "DENVER SUMMIT",
-      "opponent_name": "Denver Summit FC",
-      "opponent_def_rank": 9,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
     "ROSARIO": {
       "opponent_slate": "LIBERTAD",
       "opponent_name": "LIBERTAD",
@@ -111,18 +79,26 @@
       "team_def_rank": 17,
       "team_def_tier": "Avg"
     },
-    "DENVER": {
-      "opponent_slate": "RACING CLUB DE LENS",
-      "opponent_name": "RACING CLUB DE LENS",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
+    "ALWAYS READY": {
+      "opponent_slate": "LAN\u00daS",
+      "opponent_name": "Lan\u00fas",
+      "opponent_def_rank": 11,
+      "opponent_def_tier": "Above Avg",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "IND. DEL VALLE": {
-      "opponent_slate": "UCV",
-      "opponent_name": "UCV",
+    "PALMEIRAS": {
+      "opponent_slate": "CRISTAL",
+      "opponent_name": "CRISTAL",
       "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": 1,
+      "team_def_tier": "Elite"
+    },
+    "BAY": {
+      "opponent_slate": "PRIDE",
+      "opponent_name": "PRIDE",
+      "opponent_def_rank": null,
       "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
@@ -135,11 +111,27 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "PRIDE": {
-      "opponent_slate": "BAYER LEVERKUSEN",
-      "opponent_name": "BAYER LEVERKUSEN",
-      "opponent_def_rank": null,
+    "BARCELONA": {
+      "opponent_slate": "BOCA",
+      "opponent_name": "BOCA",
+      "opponent_def_rank": "",
       "opponent_def_tier": "",
+      "team_def_rank": 17,
+      "team_def_tier": "Avg"
+    },
+    "IND. DEL VALLE": {
+      "opponent_slate": "UCV",
+      "opponent_name": "UCV",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "RACING LOU": {
+      "opponent_slate": "DENVER SUMMIT",
+      "opponent_name": "Denver Summit FC",
+      "opponent_def_rank": 9,
+      "opponent_def_tier": "Avg",
       "team_def_rank": null,
       "team_def_tier": ""
     },
@@ -151,19 +143,27 @@
       "team_def_rank": 11,
       "team_def_tier": "Above Avg"
     },
-    "BAY": {
-      "opponent_slate": "PRIDE",
-      "opponent_name": "PRIDE",
+    "UCV": {
+      "opponent_slate": "IND. DEL VALLE",
+      "opponent_name": "IND. DEL VALLE",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "PRIDE": {
+      "opponent_slate": "BAYER LEVERKUSEN",
+      "opponent_name": "BAYER LEVERKUSEN",
       "opponent_def_rank": null,
       "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "ALWAYS READY": {
-      "opponent_slate": "LAN\u00daS",
-      "opponent_name": "Lan\u00fas",
-      "opponent_def_rank": 11,
-      "opponent_def_tier": "Above Avg",
+    "DENVER": {
+      "opponent_slate": "RACING CLUB DE LENS",
+      "opponent_name": "RACING CLUB DE LENS",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
@@ -177,6 +177,35 @@
     }
   },
   "players_by_team_cat": {
+    "UCV|goals": {
+      "team_slate": "UCV",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "IND. DEL VALLE",
+        "name": "IND. DEL VALLE",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Giancarlo Schiavone",
+          "player_norm": "giancarlo schiavone",
+          "pos": "GOA",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
     "CRISTAL|goals": {
       "team_slate": "CRISTAL",
       "category": "goals",
@@ -206,25 +235,172 @@
         }
       ]
     },
-    "LIBERTAD|goals": {
-      "team_slate": "LIBERTAD",
+    "RACING LOU|goals": {
+      "team_slate": "RACING LOU",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "ROSARIO",
-        "name": "Rosario Central",
-        "def_rank": 17,
+        "slate_abbr": "DENVER SUMMIT",
+        "name": "Denver Summit FC",
+        "def_rank": 9,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Rodrigo Mor\u00ednigo",
-          "player_norm": "rodrigo morinigo",
+          "player": "Jordyn Bloomer",
+          "player_norm": "jordyn bloomer",
           "pos": "GOA",
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "pp_line": 4.0,
+          "season_avg": 4.2,
+          "game_score": 4.2,
+          "pp_line": 3.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.7.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "RACING LOU|shots": {
+      "team_slate": "RACING LOU",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "DENVER SUMMIT",
+        "name": "Denver Summit FC",
+        "def_rank": 9,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Arin Wright",
+          "player_norm": "arin wright",
+          "pos": "DEF",
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "pp_line": 0.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Quincy McMahon",
+          "player_norm": "quincy mcmahon",
+          "pos": "DEF",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Taylor Flint",
+          "player_norm": "taylor flint",
+          "pos": "MID",
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 1.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Emma Sears",
+          "player_norm": "emma sears",
+          "pos": "ATT",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 1.5,
+          "pp_edge": -0.5,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kayla Fischer",
+          "player_norm": "kayla fischer",
+          "pos": "MID",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 2.0,
+          "pp_edge": -0.6,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.6 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PALMEIRAS|goals": {
+      "team_slate": "PALMEIRAS",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CRISTAL",
+        "name": "CRISTAL",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Carlos Miguel",
+          "player_norm": "carlos miguel",
+          "pos": "GOA",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ALWAYS READY|goals": {
+      "team_slate": "ALWAYS READY",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "LAN\u00daS",
+        "name": "Lan\u00fas",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Alain Baroja",
+          "player_norm": "alain baroja",
+          "pos": "GOA",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
           "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
@@ -264,88 +440,59 @@
         }
       ]
     },
-    "LAN\u00daS|goals": {
-      "team_slate": "LAN\u00daS",
+    "BAY|goals": {
+      "team_slate": "BAY",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "ALWAYS READY",
-        "name": "ALWAYS READY",
-        "def_rank": "",
+        "slate_abbr": "PRIDE",
+        "name": "PRIDE",
+        "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Nahuel Losada",
-          "player_norm": "nahuel losada",
+          "player": "Jordan Silkowitz",
+          "player_norm": "jordan silkowitz",
           "pos": "GOA",
-          "season_avg": 2.57,
-          "game_score": 2.6,
-          "pp_line": 3.0,
-          "pp_edge": 0.2,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALWAYS READY|goals": {
-      "team_slate": "ALWAYS READY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "LAN\u00daS",
-        "name": "Lan\u00fas",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Alain Baroja",
-          "player_norm": "alain baroja",
-          "pos": "GOA",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOCA|goals": {
-      "team_slate": "BOCA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BARCELONA",
-        "name": "Barcelona",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Leandro Brey",
-          "player_norm": "leandro brey",
-          "pos": "GOA",
-          "season_avg": 0.67,
-          "game_score": 0.7,
-          "pp_line": 2.5,
+          "season_avg": 5.2,
+          "game_score": 5.2,
+          "pp_line": 3.5,
           "pp_edge": 1.7,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "TOP_EDGE",
           "notes": "PP edge +1.7 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DENVER|assists": {
+      "team_slate": "DENVER",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "RACING CLUB DE LENS",
+        "name": "RACING CLUB DE LENS",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Yazmeen Ryan",
+          "player_norm": "yazmeen ryan",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -375,6 +522,64 @@
           "leader_slice": "top",
           "edge": "OK_EDGE",
           "notes": "PP edge +1.2 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PRIDE|goals": {
+      "team_slate": "PRIDE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BAYER LEVERKUSEN",
+        "name": "BAYER LEVERKUSEN",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Anna Moorhouse",
+          "player_norm": "anna moorhouse",
+          "pos": "GOA",
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "IND. DEL VALLE|goals": {
+      "team_slate": "IND. DEL VALLE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "UCV",
+        "name": "UCV",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Aldair Quintana",
+          "player_norm": "aldair quintana",
+          "pos": "GOA",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 3.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -439,30 +644,30 @@
         }
       ]
     },
-    "RACING LOU|goals": {
-      "team_slate": "RACING LOU",
+    "LIBERTAD|goals": {
+      "team_slate": "LIBERTAD",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
+        "slate_abbr": "ROSARIO",
+        "name": "Rosario Central",
+        "def_rank": 17,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Jordyn Bloomer",
-          "player_norm": "jordyn bloomer",
+          "player": "Rodrigo Mor\u00ednigo",
+          "player_norm": "rodrigo morinigo",
           "pos": "GOA",
-          "season_avg": 4.2,
-          "game_score": 4.2,
-          "pp_line": 3.5,
-          "pp_edge": 0.7,
+          "season_avg": 4.0,
+          "game_score": 4.0,
+          "pp_line": 4.0,
+          "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "Team leader; PP edge +0.7.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -497,139 +702,22 @@
         }
       ]
     },
-    "PRIDE|shots": {
-      "team_slate": "PRIDE",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
+    "BAY|assists": {
+      "team_slate": "BAY",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "BAYER LEVERKUSEN",
-        "name": "BAYER LEVERKUSEN",
+        "slate_abbr": "PRIDE",
+        "name": "PRIDE",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Haley McCutcheon",
-          "player_norm": "haley mccutcheon",
-          "pos": "DEF",
-          "season_avg": 2.2,
-          "game_score": 2.2,
-          "pp_line": 1.5,
-          "pp_edge": 0.7,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "Team leader; PP edge +0.7.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Barbra Banda",
-          "player_norm": "barbra banda",
-          "pos": "ATT",
-          "season_avg": 4.8,
-          "game_score": 4.8,
-          "pp_line": 4.5,
-          "pp_edge": 0.3,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "RACING LOU|assists": {
-      "team_slate": "RACING LOU",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Kayla Fischer",
-          "player_norm": "kayla fischer",
+          "player": "Claire Hutton",
+          "player_norm": "claire hutton",
           "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Lauren Milliet",
-          "player_norm": "lauren milliet",
-          "pos": "MID",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PALMEIRAS|goals": {
-      "team_slate": "PALMEIRAS",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CRISTAL",
-        "name": "CRISTAL",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Carlos Miguel",
-          "player_norm": "carlos miguel",
-          "pos": "GOA",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 2.5,
-          "pp_edge": 0.3,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "DENVER|assists": {
-      "team_slate": "DENVER",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "RACING CLUB DE LENS",
-        "name": "RACING CLUB DE LENS",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Yazmeen Ryan",
-          "player_norm": "yazmeen ryan",
-          "pos": "ATT",
           "season_avg": 1.5,
           "game_score": 1.5,
           "pp_line": 1.5,
@@ -732,11 +820,84 @@
         }
       ]
     },
-    "PRIDE|goals": {
-      "team_slate": "PRIDE",
+    "RACING LOU|assists": {
+      "team_slate": "RACING LOU",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "DENVER SUMMIT",
+        "name": "Denver Summit FC",
+        "def_rank": 9,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Kayla Fischer",
+          "player_norm": "kayla fischer",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lauren Milliet",
+          "player_norm": "lauren milliet",
+          "pos": "MID",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "LAN\u00daS|goals": {
+      "team_slate": "LAN\u00daS",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ALWAYS READY",
+        "name": "ALWAYS READY",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Nahuel Losada",
+          "player_norm": "nahuel losada",
+          "pos": "GOA",
+          "season_avg": 2.57,
+          "game_score": 2.6,
+          "pp_line": 3.0,
+          "pp_edge": 0.2,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PRIDE|shots": {
+      "team_slate": "PRIDE",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
       "opponent": {
         "slate_abbr": "BAYER LEVERKUSEN",
         "name": "BAYER LEVERKUSEN",
@@ -745,14 +906,29 @@
       },
       "players": [
         {
-          "player": "Anna Moorhouse",
-          "player_norm": "anna moorhouse",
-          "pos": "GOA",
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "pp_line": 2.5,
+          "player": "Haley McCutcheon",
+          "player_norm": "haley mccutcheon",
+          "pos": "DEF",
+          "season_avg": 2.2,
+          "game_score": 2.2,
+          "pp_line": 1.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.7.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Barbra Banda",
+          "player_norm": "barbra banda",
+          "pos": "ATT",
+          "season_avg": 4.8,
+          "game_score": 4.8,
+          "pp_line": 4.5,
           "pp_edge": 0.3,
-          "rank_on_team": 1,
+          "rank_on_team": 2,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
@@ -761,54 +937,25 @@
         }
       ]
     },
-    "UCV|goals": {
-      "team_slate": "UCV",
+    "BOCA|goals": {
+      "team_slate": "BOCA",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "IND. DEL VALLE",
-        "name": "IND. DEL VALLE",
-        "def_rank": "",
-        "def_tier": ""
+        "slate_abbr": "BARCELONA",
+        "name": "Barcelona",
+        "def_rank": 17,
+        "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Giancarlo Schiavone",
-          "player_norm": "giancarlo schiavone",
+          "player": "Leandro Brey",
+          "player_norm": "leandro brey",
           "pos": "GOA",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 3.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BAY|goals": {
-      "team_slate": "BAY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PRIDE",
-        "name": "PRIDE",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jordan Silkowitz",
-          "player_norm": "jordan silkowitz",
-          "pos": "GOA",
-          "season_avg": 5.2,
-          "game_score": 5.2,
-          "pp_line": 3.5,
+          "season_avg": 0.67,
+          "game_score": 0.7,
+          "pp_line": 2.5,
           "pp_edge": 1.7,
           "rank_on_team": 1,
           "leader_slice": "top",
@@ -870,153 +1017,6 @@
           "pp_line": 1.5,
           "pp_edge": 0.0,
           "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "RACING LOU|shots": {
-      "team_slate": "RACING LOU",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Arin Wright",
-          "player_norm": "arin wright",
-          "pos": "DEF",
-          "season_avg": 0.6,
-          "game_score": 0.6,
-          "pp_line": 0.5,
-          "pp_edge": 0.1,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Quincy McMahon",
-          "player_norm": "quincy mcmahon",
-          "pos": "DEF",
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Taylor Flint",
-          "player_norm": "taylor flint",
-          "pos": "MID",
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "pp_line": 1.5,
-          "pp_edge": -0.3,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Emma Sears",
-          "player_norm": "emma sears",
-          "pos": "ATT",
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "pp_line": 1.5,
-          "pp_edge": -0.5,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kayla Fischer",
-          "player_norm": "kayla fischer",
-          "pos": "MID",
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "pp_line": 2.0,
-          "pp_edge": -0.6,
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.6 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BAY|assists": {
-      "team_slate": "BAY",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "PRIDE",
-        "name": "PRIDE",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Claire Hutton",
-          "player_norm": "claire hutton",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "IND. DEL VALLE|goals": {
-      "team_slate": "IND. DEL VALLE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "UCV",
-        "name": "UCV",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Aldair Quintana",
-          "player_norm": "aldair quintana",
-          "pos": "GOA",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 3.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
