@@ -2,7 +2,7 @@
   "sport": "soccer",
   "display_name": "Soccer",
   "matchup_mode": "team",
-  "generated_at": "2026-05-30T12:01:07.809707+00:00",
+  "generated_at": "2026-05-31T09:34:36.620496+00:00",
   "slate_note": "",
   "n_teams": 374,
   "elite_rank_cut": 5,
@@ -48,11 +48,67 @@
       "def_tier": "Elite"
     },
     {
+      "def_key": "FLUMINENSE",
+      "slate_abbr": "FLUMINENSE",
+      "name": "Fluminense",
+      "def_rank": 10,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "CRUZEIRO",
+      "slate_abbr": "CRUZEIRO",
+      "name": "Cruzeiro",
+      "def_rank": 15,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "INTERNACIONAL",
+      "slate_abbr": "INTERNACIONAL",
+      "name": "Internacional",
+      "def_rank": 6,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "VASCO",
+      "slate_abbr": "VASCO",
+      "name": "Vasco da Gama",
+      "def_rank": 16,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "REMO",
+      "slate_abbr": "REMO",
+      "name": "Remo",
+      "def_rank": 18,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "CHAPECOENSE",
+      "slate_abbr": "CHAPECOENSE",
+      "name": "Chapecoense",
+      "def_rank": 20,
+      "def_tier": "Weak"
+    },
+    {
       "def_key": "BARCELONA",
       "slate_abbr": "BARCELONA",
       "name": "Barcelona",
       "def_rank": 2,
       "def_tier": "Elite"
+    },
+    {
+      "def_key": "ANGEL CITY",
+      "slate_abbr": "ANGEL CITY",
+      "name": "Angel City FC",
+      "def_rank": 7,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "CHICAGO STARS",
+      "slate_abbr": "CHICAGO STARS",
+      "name": "Chicago Stars FC",
+      "def_rank": 16,
+      "def_tier": "Weak"
     },
     {
       "def_key": "BARCELONA",
@@ -63,20 +119,28 @@
     }
   ],
   "matchups": {
-    "BOCA": {
-      "opponent_slate": "BARCELONA",
-      "opponent_name": "Barcelona",
-      "opponent_def_rank": 17,
-      "opponent_def_tier": "Avg",
+    "LAN\u00daS": {
+      "opponent_slate": "ALWAYS READY",
+      "opponent_name": "ALWAYS READY",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": 11,
+      "team_def_tier": "Above Avg"
+    },
+    "S\u00c3O PAULO": {
+      "opponent_slate": "REMO",
+      "opponent_name": "Remo",
+      "opponent_def_rank": 18,
+      "opponent_def_tier": "Weak",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "ROSARIO": {
-      "opponent_slate": "LIBERTAD",
-      "opponent_name": "LIBERTAD",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 17,
+    "FLUMINENSE": {
+      "opponent_slate": "CRUZEIRO",
+      "opponent_name": "Cruzeiro",
+      "opponent_def_rank": 15,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 10,
       "team_def_tier": "Avg"
     },
     "ALWAYS READY": {
@@ -87,33 +151,57 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "PALMEIRAS": {
-      "opponent_slate": "CRISTAL",
-      "opponent_name": "CRISTAL",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 1,
-      "team_def_tier": "Elite"
+    "CHAPECOENSE": {
+      "opponent_slate": "PALMEIRAS",
+      "opponent_name": "Palmeiras",
+      "opponent_def_rank": 1,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 20,
+      "team_def_tier": "Weak"
     },
-    "BAY": {
-      "opponent_slate": "PRIDE",
-      "opponent_name": "PRIDE",
+    "COURAGE": {
+      "opponent_slate": "ANGEL CITY",
+      "opponent_name": "Angel City FC",
+      "opponent_def_rank": 7,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "DASH": {
+      "opponent_slate": "GOTHAM FC",
+      "opponent_name": "GOTHAM FC",
       "opponent_def_rank": null,
       "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "LIBERTAD": {
-      "opponent_slate": "ROSARIO",
-      "opponent_name": "Rosario Central",
-      "opponent_def_rank": 17,
-      "opponent_def_tier": "Avg",
+    "SAN DIEGO WAVE": {
+      "opponent_slate": "CHICAGO STARS",
+      "opponent_name": "Chicago Stars FC",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Weak",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "BARCELONA": {
-      "opponent_slate": "BOCA",
-      "opponent_name": "BOCA",
+    "ATL\u00c9TICO MG": {
+      "opponent_slate": "VASCO",
+      "opponent_name": "Vasco da Gama",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "CHICAGO STARS": {
+      "opponent_slate": "SAN DIEGO WAVE",
+      "opponent_name": "SAN DIEGO WAVE",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": 16,
+      "team_def_tier": "Weak"
+    },
+    "ROSARIO": {
+      "opponent_slate": "LIBERTAD",
+      "opponent_name": "LIBERTAD",
       "opponent_def_rank": "",
       "opponent_def_tier": "",
       "team_def_rank": 17,
@@ -127,21 +215,13 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "RACING LOU": {
-      "opponent_slate": "DENVER SUMMIT",
-      "opponent_name": "Denver Summit FC",
-      "opponent_def_rank": 9,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "LAN\u00daS": {
-      "opponent_slate": "ALWAYS READY",
-      "opponent_name": "ALWAYS READY",
+    "BARCELONA": {
+      "opponent_slate": "BOCA",
+      "opponent_name": "BOCA",
       "opponent_def_rank": "",
       "opponent_def_tier": "",
-      "team_def_rank": 11,
-      "team_def_tier": "Above Avg"
+      "team_def_rank": 17,
+      "team_def_tier": "Avg"
     },
     "UCV": {
       "opponent_slate": "IND. DEL VALLE",
@@ -151,21 +231,69 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "PRIDE": {
-      "opponent_slate": "BAYER LEVERKUSEN",
-      "opponent_name": "BAYER LEVERKUSEN",
-      "opponent_def_rank": null,
-      "opponent_def_tier": "",
+    "LIBERTAD": {
+      "opponent_slate": "ROSARIO",
+      "opponent_name": "Rosario Central",
+      "opponent_def_rank": 17,
+      "opponent_def_tier": "Avg",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "DENVER": {
-      "opponent_slate": "RACING CLUB DE LENS",
-      "opponent_name": "RACING CLUB DE LENS",
+    "INTERNACIONAL": {
+      "opponent_slate": "BRAGANTINO",
+      "opponent_name": "BRAGANTINO",
       "opponent_def_rank": null,
       "opponent_def_tier": "",
+      "team_def_rank": 6,
+      "team_def_tier": "Above Avg"
+    },
+    "PALMEIRAS": {
+      "opponent_slate": "CHAPECOENSE",
+      "opponent_name": "Chapecoense",
+      "opponent_def_rank": 20,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 1,
+      "team_def_tier": "Elite"
+    },
+    "REMO": {
+      "opponent_slate": "S\u00c3O PAULO",
+      "opponent_name": "S\u00c3O PAULO",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": 18,
+      "team_def_tier": "Weak"
+    },
+    "CRUZEIRO": {
+      "opponent_slate": "FLUMINENSE",
+      "opponent_name": "Fluminense",
+      "opponent_def_rank": 10,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 15,
+      "team_def_tier": "Below Avg"
+    },
+    "VASCO": {
+      "opponent_slate": "ATL\u00c9TICO MG",
+      "opponent_name": "ATL\u00c9TICO MG",
+      "opponent_def_rank": null,
+      "opponent_def_tier": "",
+      "team_def_rank": 16,
+      "team_def_tier": "Below Avg"
+    },
+    "GOTHAM FC": {
+      "opponent_slate": "HOUSTON DASH",
+      "opponent_name": "Houston Dash",
+      "opponent_def_rank": 13,
+      "opponent_def_tier": "Below Avg",
       "team_def_rank": null,
       "team_def_tier": ""
+    },
+    "ANGEL CITY": {
+      "opponent_slate": "NC COURAGE",
+      "opponent_name": "North Carolina Courage",
+      "opponent_def_rank": 7,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 7,
+      "team_def_tier": "Above Avg"
     },
     "CRISTAL": {
       "opponent_slate": "PALMEIRAS",
@@ -174,317 +302,41 @@
       "opponent_def_tier": "Elite",
       "team_def_rank": null,
       "team_def_tier": ""
+    },
+    "BOCA": {
+      "opponent_slate": "BARCELONA",
+      "opponent_name": "Barcelona",
+      "opponent_def_rank": 17,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "BRAGANTINO": {
+      "opponent_slate": "INTERNACIONAL",
+      "opponent_name": "Internacional",
+      "opponent_def_rank": 6,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
     }
   },
   "players_by_team_cat": {
-    "UCV|goals": {
-      "team_slate": "UCV",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "IND. DEL VALLE",
-        "name": "IND. DEL VALLE",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Giancarlo Schiavone",
-          "player_norm": "giancarlo schiavone",
-          "pos": "GOA",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 3.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRISTAL|goals": {
-      "team_slate": "CRISTAL",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PALMEIRAS",
-        "name": "Palmeiras",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Diego Enr\u00edquez",
-          "player_norm": "diego enriquez",
-          "pos": "GOA",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 3.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "RACING LOU|goals": {
-      "team_slate": "RACING LOU",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Jordyn Bloomer",
-          "player_norm": "jordyn bloomer",
-          "pos": "GOA",
-          "season_avg": 4.2,
-          "game_score": 4.2,
-          "pp_line": 3.5,
-          "pp_edge": 0.7,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "Team leader; PP edge +0.7.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "RACING LOU|shots": {
-      "team_slate": "RACING LOU",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Arin Wright",
-          "player_norm": "arin wright",
-          "pos": "DEF",
-          "season_avg": 0.6,
-          "game_score": 0.6,
-          "pp_line": 0.5,
-          "pp_edge": 0.1,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Quincy McMahon",
-          "player_norm": "quincy mcmahon",
-          "pos": "DEF",
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Taylor Flint",
-          "player_norm": "taylor flint",
-          "pos": "MID",
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "pp_line": 1.5,
-          "pp_edge": -0.3,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Emma Sears",
-          "player_norm": "emma sears",
-          "pos": "ATT",
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "pp_line": 1.5,
-          "pp_edge": -0.5,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kayla Fischer",
-          "player_norm": "kayla fischer",
-          "pos": "MID",
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "pp_line": 2.0,
-          "pp_edge": -0.6,
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.6 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PALMEIRAS|goals": {
+    "PALMEIRAS|assists": {
       "team_slate": "PALMEIRAS",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CRISTAL",
-        "name": "CRISTAL",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Carlos Miguel",
-          "player_norm": "carlos miguel",
-          "pos": "GOA",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 2.5,
-          "pp_edge": 0.3,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALWAYS READY|goals": {
-      "team_slate": "ALWAYS READY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "LAN\u00daS",
-        "name": "Lan\u00fas",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Alain Baroja",
-          "player_norm": "alain baroja",
-          "pos": "GOA",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "DENVER|goals": {
-      "team_slate": "DENVER",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "RACING CLUB DE LENS",
-        "name": "RACING CLUB DE LENS",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Abby Smith",
-          "player_norm": "abby smith",
-          "pos": "GOA",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 3.0,
-          "pp_edge": -1.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -1.0 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BAY|goals": {
-      "team_slate": "BAY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PRIDE",
-        "name": "PRIDE",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jordan Silkowitz",
-          "player_norm": "jordan silkowitz",
-          "pos": "GOA",
-          "season_avg": 5.2,
-          "game_score": 5.2,
-          "pp_line": 3.5,
-          "pp_edge": 1.7,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +1.7 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "DENVER|assists": {
-      "team_slate": "DENVER",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "RACING CLUB DE LENS",
-        "name": "RACING CLUB DE LENS",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "CHAPECOENSE",
+        "name": "Chapecoense",
+        "def_rank": 20,
+        "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Yazmeen Ryan",
-          "player_norm": "yazmeen ryan",
-          "pos": "ATT",
+          "player": "Marlon Freitas",
+          "player_norm": "marlon freitas",
+          "pos": "MID",
           "season_avg": 1.5,
           "game_score": 1.5,
           "pp_line": 1.5,
@@ -498,55 +350,26 @@
         }
       ]
     },
-    "ROSARIO|goals": {
-      "team_slate": "ROSARIO",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
+    "S\u00c3O PAULO|assists": {
+      "team_slate": "S\u00c3O PAULO",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "LIBERTAD",
-        "name": "LIBERTAD",
-        "def_rank": "",
-        "def_tier": ""
+        "slate_abbr": "REMO",
+        "name": "Remo",
+        "def_rank": 18,
+        "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Jerem\u00edas Ledesma",
-          "player_norm": "jeremias ledesma",
-          "pos": "GOA",
-          "season_avg": 1.43,
-          "game_score": 1.4,
-          "pp_line": 2.0,
-          "pp_edge": 1.2,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.2 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PRIDE|goals": {
-      "team_slate": "PRIDE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BAYER LEVERKUSEN",
-        "name": "BAYER LEVERKUSEN",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Anna Moorhouse",
-          "player_norm": "anna moorhouse",
-          "pos": "GOA",
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "pp_line": 2.5,
-          "pp_edge": 0.3,
+          "player": "Artur",
+          "player_norm": "artur",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "NEUTRAL",
@@ -585,26 +408,1126 @@
         }
       ]
     },
-    "BAY|shots": {
-      "team_slate": "BAY",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
+    "CHICAGO STARS|goals": {
+      "team_slate": "CHICAGO STARS",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "PRIDE",
-        "name": "PRIDE",
+        "slate_abbr": "SAN DIEGO WAVE",
+        "name": "SAN DIEGO WAVE",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Racheal Kundananji",
-          "player_norm": "racheal kundananji",
+          "player": "Katie Atkinson",
+          "player_norm": "katie atkinson",
+          "pos": "GOA",
+          "season_avg": 8.0,
+          "game_score": 8.0,
+          "pp_line": 4.0,
+          "pp_edge": 4.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +4.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PALMEIRAS|shots": {
+      "team_slate": "PALMEIRAS",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "CHAPECOENSE",
+        "name": "Chapecoense",
+        "def_rank": 20,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Maur\u00edcio Magalh\u00e3es Prado",
+          "player_norm": "mauricio magalhaes prado",
+          "pos": "MID",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 1.5,
+          "pp_edge": 1.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Luis Pacheco",
+          "player_norm": "luis pacheco",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gustavo G\u00f3mez",
+          "player_norm": "gustavo gomez",
+          "pos": "DEF",
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "pp_line": 0.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Felipe Anderson",
+          "player_norm": "felipe anderson",
+          "pos": "MID",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lucas Evangelista",
+          "player_norm": "lucas evangelista",
+          "pos": "MID",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Luighi Hanri",
+          "player_norm": "luighi hanri",
+          "pos": "ATT",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 2.5,
+          "pp_edge": -2.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "OK_UNDER",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Allan",
+          "player_norm": "allan",
+          "pos": "ATT",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 2.5,
+          "pp_edge": -2.1,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "OK_UNDER",
+          "notes": "PP edge -2.1 on board \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jos\u00e9 Manuel L\u00f3pez",
+          "player_norm": "jose manuel lopez",
+          "pos": "ATT",
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "pp_line": 3.5,
+          "pp_edge": -1.5,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Andreas Pereira",
+          "player_norm": "andreas pereira",
+          "pos": "MID",
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "pp_line": 1.5,
+          "pp_edge": -0.9,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jhon Arias",
+          "player_norm": "jhon arias",
+          "pos": "MID",
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "pp_line": 2.5,
+          "pp_edge": -0.9,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CHAPECOENSE|shots": {
+      "team_slate": "CHAPECOENSE",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "PALMEIRAS",
+        "name": "Palmeiras",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Yannick Bolasie",
+          "player_norm": "yannick bolasie",
           "pos": "ATT",
           "season_avg": 1.6,
           "game_score": 1.6,
-          "pp_line": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "\u00canio",
+          "player_norm": "enio",
+          "pos": "MID",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 0.5,
+          "pp_edge": 1.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Rafael Carvalheira",
+          "player_norm": "rafael carvalheira",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marcinho",
+          "player_norm": "marcinho",
+          "pos": "ATT",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Maur\u00edcio Garcez",
+          "player_norm": "mauricio garcez",
+          "pos": "ATT",
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "pp_line": 0.5,
           "pp_edge": 0.1,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "OK_UNDER",
+          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jo\u00e3o Vitor",
+          "player_norm": "joao vitor",
+          "pos": "MID",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "TOP_UNDER",
+          "notes": "Bottom-1 producer; PP edge -0.5 vs #1. Team bottom-1 in category.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kevin Ram\u00edrez",
+          "player_norm": "kevin ramirez",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "TOP_UNDER",
+          "notes": "Bottom-2 producer; PP edge -0.5 vs #1. Team bottom-2 in category.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ANGEL CITY|goals": {
+      "team_slate": "ANGEL CITY",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "NC COURAGE",
+        "name": "North Carolina Courage",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Angelina Anderson",
+          "player_norm": "angelina anderson",
+          "pos": "GOA",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 3.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "GOTHAM FC|shots": {
+      "team_slate": "GOTHAM FC",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "HOUSTON DASH",
+        "name": "Houston Dash",
+        "def_rank": 13,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Rose Lavelle",
+          "player_norm": "rose lavelle",
+          "pos": "MID",
+          "season_avg": 5.7,
+          "game_score": 5.7,
+          "pp_line": 3.0,
+          "pp_edge": 2.67,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.7 on board tonight vs #13 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jaedyn Shaw",
+          "player_norm": "jaedyn shaw",
+          "pos": "MID",
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Esther Gonz\u00e1lez",
+          "player_norm": "esther gonzalez",
+          "pos": "ATT",
+          "season_avg": 2.4,
+          "game_score": 2.4,
+          "pp_line": 2.5,
+          "pp_edge": -0.1,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "GOTHAM FC|assists": {
+      "team_slate": "GOTHAM FC",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "HOUSTON DASH",
+        "name": "Houston Dash",
+        "def_rank": 13,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Rose Lavelle",
+          "player_norm": "rose lavelle",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ATL\u00c9TICO MG|goals": {
+      "team_slate": "ATL\u00c9TICO MG",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "VASCO",
+        "name": "Vasco da Gama",
+        "def_rank": 16,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Everson",
+          "player_norm": "everson",
+          "pos": "GOA",
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "pp_line": 3.5,
+          "pp_edge": -1.9,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -1.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ATL\u00c9TICO MG|shots": {
+      "team_slate": "ATL\u00c9TICO MG",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "VASCO",
+        "name": "Vasco da Gama",
+        "def_rank": 16,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tom\u00e1s Cuello",
+          "player_norm": "tomas cuello",
+          "pos": "ATT",
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "pp_line": 1.5,
+          "pp_edge": 1.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alan Minda",
+          "player_norm": "alan minda",
+          "pos": "ATT",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mateo Cassierra",
+          "player_norm": "mateo cassierra",
+          "pos": "ATT",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Maycon",
+          "player_norm": "maycon",
+          "pos": "MID",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Victor Hugo",
+          "player_norm": "victor hugo",
+          "pos": "MID",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alan Franco",
+          "player_norm": "alan franco",
+          "pos": "MID",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Tom\u00e1s P\u00e9rez",
+          "player_norm": "tomas perez",
+          "pos": "MID",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Bernard",
+          "player_norm": "bernard",
+          "pos": "MID",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BRAGANTINO|goals": {
+      "team_slate": "BRAGANTINO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "INTERNACIONAL",
+        "name": "Internacional",
+        "def_rank": 6,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Tiago Volpi",
+          "player_norm": "tiago volpi",
+          "pos": "GOA",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 2.5,
+          "pp_edge": -0.9,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ALWAYS READY|goals": {
+      "team_slate": "ALWAYS READY",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "LAN\u00daS",
+        "name": "Lan\u00fas",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Alain Baroja",
+          "player_norm": "alain baroja",
+          "pos": "GOA",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "FLUMINENSE|goals": {
+      "team_slate": "FLUMINENSE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CRUZEIRO",
+        "name": "Cruzeiro",
+        "def_rank": 15,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "F\u00e1bio",
+          "player_norm": "fabio",
+          "pos": "GOA",
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "pp_line": 3.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRUZEIRO|shots": {
+      "team_slate": "CRUZEIRO",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "FLUMINENSE",
+        "name": "Fluminense",
+        "def_rank": 10,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "N\u00e9iser Villarreal",
+          "player_norm": "neiser villarreal",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gerson",
+          "player_norm": "gerson",
+          "pos": "MID",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 0.5,
+          "pp_edge": 0.9,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lucas Romero",
+          "player_norm": "lucas romero",
+          "pos": "MID",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 0.5,
+          "pp_edge": 0.5,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Wanderson",
+          "player_norm": "wanderson",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lucas Silva",
+          "player_norm": "lucas silva",
+          "pos": "MID",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kaio Jorge",
+          "player_norm": "kaio jorge",
+          "pos": "ATT",
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 2.5,
+          "pp_edge": -1.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Chico da Costa",
+          "player_norm": "chico da costa",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 1.5,
+          "pp_edge": -1.5,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Bruno Rodrigues",
+          "player_norm": "bruno rodrigues",
+          "pos": "ATT",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 1.5,
+          "pp_edge": -1.1,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Luis Sinisterra",
+          "player_norm": "luis sinisterra",
+          "pos": "ATT",
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "pp_line": 1.5,
+          "pp_edge": -0.7,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.7 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matheus Pereira",
+          "player_norm": "matheus pereira",
+          "pos": "MID",
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "pp_line": 2.0,
+          "pp_edge": -0.6,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.6 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRUZEIRO|goals": {
+      "team_slate": "CRUZEIRO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "FLUMINENSE",
+        "name": "Fluminense",
+        "def_rank": 10,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Matheus Cunha",
+          "player_norm": "matheus cunha",
+          "pos": "GOA",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ot\u00e1vio",
+          "player_norm": "otavio",
+          "pos": "GOA",
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "pp_line": 2.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "VASCO|shots": {
+      "team_slate": "VASCO",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "ATL\u00c9TICO MG",
+        "name": "ATL\u00c9TICO MG",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Cuiabano",
+          "player_norm": "cuiabano",
+          "pos": "DEF",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 0.5,
+          "pp_edge": 0.9,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.9.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Andr\u00e9s G\u00f3mez",
+          "player_norm": "andres gomez",
+          "pos": "ATT",
+          "season_avg": 3.6,
+          "game_score": 3.6,
+          "pp_line": 2.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Thiago Mendes",
+          "player_norm": "thiago mendes",
+          "pos": "MID",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Johan Rojas",
+          "player_norm": "johan rojas",
+          "pos": "ATT",
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "pp_line": 2.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Hugo Moura",
+          "player_norm": "hugo moura",
+          "pos": "MID",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ramon Rique",
+          "player_norm": "ramon rique",
+          "pos": "MID",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Tch\u00ea Tch\u00ea",
+          "player_norm": "tche tche",
+          "pos": "MID",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "David",
+          "player_norm": "david",
+          "pos": "ATT",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 1.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Adson",
+          "player_norm": "adson",
+          "pos": "ATT",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 1.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lucas Piton",
+          "player_norm": "lucas piton",
+          "pos": "DEF",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRUZEIRO|assists": {
+      "team_slate": "CRUZEIRO",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "FLUMINENSE",
+        "name": "Fluminense",
+        "def_rank": 10,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Matheus Pereira",
+          "player_norm": "matheus pereira",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DASH|shots": {
+      "team_slate": "DASH",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "GOTHAM FC",
+        "name": "GOTHAM FC",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Kat Rader",
+          "player_norm": "kat rader",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.0,
+          "pp_edge": 0.4,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "NEUTRAL",
@@ -613,14 +1536,73 @@
           "def_boost": null
         },
         {
-          "player": "Joelle Anderson",
-          "player_norm": "joelle anderson",
+          "player": "Kiki Van Zanten",
+          "player_norm": "kiki van zanten",
+          "pos": "MID",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 1.5,
+          "pp_edge": -0.5,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "S\u00c3O PAULO|shots": {
+      "team_slate": "S\u00c3O PAULO",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "REMO",
+        "name": "Remo",
+        "def_rank": 18,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Djhordney",
+          "player_norm": "djhordney",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Dami\u00e1n Bobadilla",
+          "player_norm": "damian bobadilla",
+          "pos": "MID",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marcos Ant\u00f4nio",
+          "player_norm": "marcos antonio",
           "pos": "MID",
           "season_avg": 0.4,
           "game_score": 0.4,
           "pp_line": 0.5,
           "pp_edge": -0.1,
-          "rank_on_team": 2,
+          "rank_on_team": 3,
           "leader_slice": "top",
           "edge": "AVOID",
           "notes": "PP edge -0.1 on board \u2014 skip OVER.",
@@ -628,17 +1610,77 @@
           "def_boost": null
         },
         {
-          "player": "Taylor Huff",
-          "player_norm": "taylor huff",
-          "pos": "MID",
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "pp_line": 1.5,
+          "player": "Lucca Marques",
+          "player_norm": "lucca marques",
+          "pos": "ATT",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
           "pp_edge": -0.3,
-          "rank_on_team": 3,
+          "rank_on_team": 4,
           "leader_slice": "top",
           "edge": "AVOID",
           "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Pablo Maia",
+          "player_norm": "pablo maia",
+          "pos": "MID",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Andr\u00e9 Silva",
+          "player_norm": "andre silva",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 1.5,
+          "pp_edge": -0.9,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "SAN DIEGO WAVE|goals": {
+      "team_slate": "SAN DIEGO WAVE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CHICAGO STARS",
+        "name": "Chicago Stars FC",
+        "def_rank": 16,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "DiDi Haracic",
+          "player_norm": "didi haracic",
+          "pos": "GOA",
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "pp_line": 2.0,
+          "pp_edge": -0.25,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -673,99 +1715,41 @@
         }
       ]
     },
-    "BARCELONA|goals": {
-      "team_slate": "BARCELONA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BOCA",
-        "name": "BOCA",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jos\u00e9 Contreras",
-          "player_norm": "jose contreras",
-          "pos": "GOA",
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "pp_line": 4.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BAY|assists": {
-      "team_slate": "BAY",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "PRIDE",
-        "name": "PRIDE",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Claire Hutton",
-          "player_norm": "claire hutton",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "DENVER|shots": {
-      "team_slate": "DENVER",
+    "INTERNACIONAL|shots": {
+      "team_slate": "INTERNACIONAL",
       "category": "shots",
       "category_label": "Shots",
       "threshold": 2.0,
       "opponent": {
-        "slate_abbr": "RACING CLUB DE LENS",
-        "name": "RACING CLUB DE LENS",
+        "slate_abbr": "BRAGANTINO",
+        "name": "BRAGANTINO",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Natasha Flint",
-          "player_norm": "natasha flint",
-          "pos": "ATT",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 2.0,
-          "pp_edge": 1.0,
+          "player": "Alexandro Bernab\u00e9i",
+          "player_norm": "alexandro bernabei",
+          "pos": "DEF",
+          "season_avg": 2.6,
+          "game_score": 2.6,
+          "pp_line": 1.5,
+          "pp_edge": 1.1,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
+          "notes": "PP edge +1.1 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Yazmeen Ryan",
-          "player_norm": "yazmeen ryan",
+          "player": "Johan Carbonero",
+          "player_norm": "johan carbonero",
           "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.0,
-          "pp_edge": 0.5,
+          "season_avg": 2.4,
+          "game_score": 2.4,
+          "pp_line": 1.5,
+          "pp_edge": 0.9,
           "rank_on_team": 2,
           "leader_slice": "top",
           "edge": "NEUTRAL",
@@ -774,13 +1758,13 @@
           "def_boost": null
         },
         {
-          "player": "Melissa K\u00f6ssler",
-          "player_norm": "melissa kossler",
-          "pos": "ATT",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 2.0,
-          "pp_edge": 0.0,
+          "player": "Bruno Henrique",
+          "player_norm": "bruno henrique",
+          "pos": "MID",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 0.9,
           "rank_on_team": 3,
           "leader_slice": "top",
           "edge": "NEUTRAL",
@@ -789,13 +1773,13 @@
           "def_boost": null
         },
         {
-          "player": "Janine Sonis",
-          "player_norm": "janine sonis",
+          "player": "Rafael Borr\u00e9",
+          "player_norm": "rafael borre",
           "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
+          "season_avg": 1.4,
+          "game_score": 1.4,
           "pp_line": 1.5,
-          "pp_edge": 0.0,
+          "pp_edge": 0.1,
           "rank_on_team": 4,
           "leader_slice": "top",
           "edge": "NEUTRAL",
@@ -804,38 +1788,131 @@
           "def_boost": null
         },
         {
-          "player": "Carson Pickett",
-          "player_norm": "carson pickett",
-          "pos": "DEF",
-          "season_avg": 0.0,
-          "game_score": 0.0,
+          "player": "Rodrigo Villagra",
+          "player_norm": "rodrigo villagra",
+          "pos": "MID",
+          "season_avg": 0.7,
+          "game_score": 0.7,
           "pp_line": 0.5,
-          "pp_edge": -0.5,
+          "pp_edge": 0.1,
           "rank_on_team": 5,
           "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Vitinho",
+          "player_norm": "vitinho",
+          "pos": "ATT",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 1.5,
+          "pp_edge": -1.3,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
           "edge": "AVOID",
-          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "notes": "PP edge -1.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alan Patrick",
+          "player_norm": "alan patrick",
+          "pos": "MID",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 1.5,
+          "pp_edge": -0.9,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kayky",
+          "player_norm": "kayky",
+          "pos": "ATT",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.25,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Braian Aguirre",
+          "player_norm": "braian aguirre",
+          "pos": "DEF",
+          "season_avg": 0.8,
+          "game_score": 0.8,
+          "pp_line": 0.5,
+          "pp_edge": 0.1,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
       ]
     },
-    "RACING LOU|assists": {
-      "team_slate": "RACING LOU",
+    "DASH|goals": {
+      "team_slate": "DASH",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "GOTHAM FC",
+        "name": "GOTHAM FC",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jane Campbell",
+          "player_norm": "jane campbell",
+          "pos": "GOA",
+          "season_avg": 3.8,
+          "game_score": 3.8,
+          "pp_line": 4.0,
+          "pp_edge": -0.8,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.8 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ANGEL CITY|assists": {
+      "team_slate": "ANGEL CITY",
       "category": "assists",
       "category_label": "Assists",
       "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "DENVER SUMMIT",
-        "name": "Denver Summit FC",
-        "def_rank": 9,
-        "def_tier": "Avg"
+        "slate_abbr": "NC COURAGE",
+        "name": "North Carolina Courage",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
-          "player": "Kayla Fischer",
-          "player_norm": "kayla fischer",
-          "pos": "MID",
+          "player": "Sveind\u00eds J\u00f3nsd\u00f3ttir",
+          "player_norm": "sveindis jonsdottir",
+          "pos": "ATT",
           "season_avg": 1.5,
           "game_score": 1.5,
           "pp_line": 1.5,
@@ -846,14 +1923,43 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
+        }
+      ]
+    },
+    "VASCO|assists": {
+      "team_slate": "VASCO",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "ATL\u00c9TICO MG",
+        "name": "ATL\u00c9TICO MG",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Johan Rojas",
+          "player_norm": "johan rojas",
+          "pos": "ATT",
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "pp_line": 2.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
         },
         {
-          "player": "Lauren Milliet",
-          "player_norm": "lauren milliet",
+          "player": "Thiago Mendes",
+          "player_norm": "thiago mendes",
           "pos": "MID",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
           "pp_edge": 0.0,
           "rank_on_team": 2,
           "leader_slice": "top",
@@ -893,24 +1999,562 @@
         }
       ]
     },
-    "PRIDE|shots": {
-      "team_slate": "PRIDE",
+    "ANGEL CITY|shots": {
+      "team_slate": "ANGEL CITY",
       "category": "shots",
       "category_label": "Shots",
       "threshold": 2.0,
       "opponent": {
-        "slate_abbr": "BAYER LEVERKUSEN",
-        "name": "BAYER LEVERKUSEN",
+        "slate_abbr": "NC COURAGE",
+        "name": "North Carolina Courage",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Sveind\u00eds J\u00f3nsd\u00f3ttir",
+          "player_norm": "sveindis jonsdottir",
+          "pos": "ATT",
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "pp_line": 1.5,
+          "pp_edge": 1.17,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.2 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRISTAL|goals": {
+      "team_slate": "CRISTAL",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "PALMEIRAS",
+        "name": "Palmeiras",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Diego Enr\u00edquez",
+          "player_norm": "diego enriquez",
+          "pos": "GOA",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "REMO|goals": {
+      "team_slate": "REMO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "S\u00c3O PAULO",
+        "name": "S\u00c3O PAULO",
         "def_rank": null,
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Haley McCutcheon",
-          "player_norm": "haley mccutcheon",
+          "player": "Marcelo Rangel",
+          "player_norm": "marcelo rangel",
+          "pos": "GOA",
+          "season_avg": 3.7,
+          "game_score": 3.7,
+          "pp_line": 1.5,
+          "pp_edge": 3.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "REMO|shots": {
+      "team_slate": "REMO",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "S\u00c3O PAULO",
+        "name": "S\u00c3O PAULO",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Marcelinho",
+          "player_norm": "marcelinho",
           "pos": "DEF",
-          "season_avg": 2.2,
-          "game_score": 2.2,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 0.5,
+          "pp_edge": 1.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jo\u00e3o Pedro",
+          "player_norm": "joao pedro",
+          "pos": "ATT",
+          "season_avg": 2.6,
+          "game_score": 2.6,
+          "pp_line": 1.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Patrick",
+          "player_norm": "patrick",
+          "pos": "MID",
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Leonel Picco",
+          "player_norm": "leonel picco",
+          "pos": "MID",
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "pp_line": 0.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Diego Hern\u00e1ndez",
+          "player_norm": "diego hernandez",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.17,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Gabriel Poveda",
+          "player_norm": "gabriel poveda",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 1.5,
+          "pp_edge": -1.1,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Franco Catarozzi",
+          "player_norm": "franco catarozzi",
+          "pos": "MID",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "J\u00e1derson",
+          "player_norm": "jaderson",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "SAN DIEGO WAVE|assists": {
+      "team_slate": "SAN DIEGO WAVE",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "CHICAGO STARS",
+        "name": "Chicago Stars FC",
+        "def_rank": 16,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Kenza Dali",
+          "player_norm": "kenza dali",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "FLUMINENSE|shots": {
+      "team_slate": "FLUMINENSE",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "CRUZEIRO",
+        "name": "Cruzeiro",
+        "def_rank": 15,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "David Terans",
+          "player_norm": "david terans",
+          "pos": "MID",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 2.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Facundo Bernal",
+          "player_norm": "facundo bernal",
+          "pos": "MID",
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 0.5,
+          "pp_edge": 0.9,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jefferson Savarino",
+          "player_norm": "jefferson savarino",
+          "pos": "ATT",
+          "season_avg": 3.1,
+          "game_score": 3.1,
+          "pp_line": 2.0,
+          "pp_edge": 0.8,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Guilherme Arana",
+          "player_norm": "guilherme arana",
+          "pos": "DEF",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "H\u00e9rcules",
+          "player_norm": "hercules",
+          "pos": "MID",
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "pp_line": 0.5,
+          "pp_edge": 0.5,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Matheus Reis",
+          "player_norm": "matheus reis",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 1.5,
+          "pp_edge": -1.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Agust\u00edn Canobbio",
+          "player_norm": "agustin canobbio",
+          "pos": "ATT",
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "pp_line": 1.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Germ\u00e1n Cano",
+          "player_norm": "german cano",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Riquelme",
+          "player_norm": "riquelme",
+          "pos": "ATT",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alisson",
+          "player_norm": "alisson",
+          "pos": "MID",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "UCV|goals": {
+      "team_slate": "UCV",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "IND. DEL VALLE",
+        "name": "IND. DEL VALLE",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Giancarlo Schiavone",
+          "player_norm": "giancarlo schiavone",
+          "pos": "GOA",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BARCELONA|goals": {
+      "team_slate": "BARCELONA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BOCA",
+        "name": "BOCA",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jos\u00e9 Contreras",
+          "player_norm": "jose contreras",
+          "pos": "GOA",
+          "season_avg": 4.0,
+          "game_score": 4.0,
+          "pp_line": 4.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "REMO|assists": {
+      "team_slate": "REMO",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "S\u00c3O PAULO",
+        "name": "S\u00c3O PAULO",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Vitor Bueno",
+          "player_norm": "vitor bueno",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "INTERNACIONAL|assists": {
+      "team_slate": "INTERNACIONAL",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "BRAGANTINO",
+        "name": "BRAGANTINO",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Alexandro Bernab\u00e9i",
+          "player_norm": "alexandro bernabei",
+          "pos": "DEF",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BRAGANTINO|shots": {
+      "team_slate": "BRAGANTINO",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "INTERNACIONAL",
+        "name": "Internacional",
+        "def_rank": 6,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Isidro Pitta",
+          "player_norm": "isidro pitta",
+          "pos": "ATT",
+          "season_avg": 1.8,
+          "game_score": 1.8,
           "pp_line": 1.5,
           "pp_edge": 0.7,
           "rank_on_team": 1,
@@ -921,17 +2565,445 @@
           "def_boost": null
         },
         {
-          "player": "Barbra Banda",
-          "player_norm": "barbra banda",
+          "player": "Gustavo Marques",
+          "player_norm": "gustavo marques",
+          "pos": "DEF",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 0.5,
+          "pp_edge": 0.7,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lucas Barbosa",
+          "player_norm": "lucas barbosa",
+          "pos": "MID",
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "pp_line": 2.5,
+          "pp_edge": 0.1,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ignacio Sosa",
+          "player_norm": "ignacio sosa",
+          "pos": "MID",
+          "season_avg": 0.2,
+          "game_score": 0.2,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Henry Mosquera",
+          "player_norm": "henry mosquera",
           "pos": "ATT",
-          "season_avg": 4.8,
-          "game_score": 4.8,
-          "pp_line": 4.5,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "pp_line": 1.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Fernando",
+          "player_norm": "fernando",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 1.5,
+          "pp_edge": -1.1,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Vinicinho",
+          "player_norm": "vinicinho",
+          "pos": "ATT",
+          "season_avg": 0.1,
+          "game_score": 0.1,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Cau\u00ea Santos",
+          "player_norm": "caue santos",
+          "pos": "DEF",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "COURAGE|assists": {
+      "team_slate": "COURAGE",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "ANGEL CITY",
+        "name": "Angel City FC",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Manaka Matsukubo",
+          "player_norm": "manaka matsukubo",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "INTERNACIONAL|goals": {
+      "team_slate": "INTERNACIONAL",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BRAGANTINO",
+        "name": "BRAGANTINO",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Anthoni",
+          "player_norm": "anthoni",
+          "pos": "GOA",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 3.0,
+          "pp_edge": -0.2,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "COURAGE|goals": {
+      "team_slate": "COURAGE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ANGEL CITY",
+        "name": "Angel City FC",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Kailen Sheridan",
+          "player_norm": "kailen sheridan",
+          "pos": "GOA",
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 2.5,
+          "pp_edge": -1.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -1.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PALMEIRAS|goals": {
+      "team_slate": "PALMEIRAS",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CHAPECOENSE",
+        "name": "Chapecoense",
+        "def_rank": 20,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Carlos Miguel",
+          "player_norm": "carlos miguel",
+          "pos": "GOA",
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marcelo Lomba",
+          "player_norm": "marcelo lomba",
+          "pos": "GOA",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 2.0,
+          "pp_edge": -2.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_UNDER",
+          "notes": "PP edge -2.0 on board \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "S\u00c3O PAULO|goals": {
+      "team_slate": "S\u00c3O PAULO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "REMO",
+        "name": "Remo",
+        "def_rank": 18,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Rafael",
+          "player_norm": "rafael",
+          "pos": "GOA",
+          "season_avg": 2.2,
+          "game_score": 2.2,
+          "pp_line": 1.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Carlos Coronel",
+          "player_norm": "carlos coronel",
+          "pos": "GOA",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "pp_line": 2.5,
+          "pp_edge": -2.5,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_UNDER",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "DASH|assists": {
+      "team_slate": "DASH",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "GOTHAM FC",
+        "name": "GOTHAM FC",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Kat Rader",
+          "player_norm": "kat rader",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "GOTHAM FC|goals": {
+      "team_slate": "GOTHAM FC",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "HOUSTON DASH",
+        "name": "Houston Dash",
+        "def_rank": 13,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ann-Katrin Berger",
+          "player_norm": "ann-katrin berger",
+          "pos": "GOA",
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "pp_line": 2.0,
+          "pp_edge": -0.4,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.4 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "VASCO|goals": {
+      "team_slate": "VASCO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ATL\u00c9TICO MG",
+        "name": "ATL\u00c9TICO MG",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "L\u00e9o Jardim",
+          "player_norm": "leo jardim",
+          "pos": "GOA",
+          "season_avg": 2.6,
+          "game_score": 2.6,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "COURAGE|shots": {
+      "team_slate": "COURAGE",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "ANGEL CITY",
+        "name": "Angel City FC",
+        "def_rank": 7,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Manaka Matsukubo",
+          "player_norm": "manaka matsukubo",
+          "pos": "MID",
+          "season_avg": 5.4,
+          "game_score": 5.4,
+          "pp_line": 3.5,
+          "pp_edge": 1.9,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.9 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ashley Sanchez",
+          "player_norm": "ashley sanchez",
+          "pos": "MID",
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "pp_line": 2.5,
           "pp_edge": 0.3,
           "rank_on_team": 2,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CHAPECOENSE|goals": {
+      "team_slate": "CHAPECOENSE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "PALMEIRAS",
+        "name": "Palmeiras",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Rafael Santos",
+          "player_norm": "rafael santos",
+          "pos": "GOA",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 4.0,
+          "pp_edge": -3.2,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_UNDER",
+          "notes": "PP edge -3.2 vs elite defense (#1) \u2014 lean UNDER.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -966,60 +3038,30 @@
         }
       ]
     },
-    "PRIDE|assists": {
-      "team_slate": "PRIDE",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
+    "ROSARIO|goals": {
+      "team_slate": "ROSARIO",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "BAYER LEVERKUSEN",
-        "name": "BAYER LEVERKUSEN",
-        "def_rank": null,
+        "slate_abbr": "LIBERTAD",
+        "name": "LIBERTAD",
+        "def_rank": "",
         "def_tier": ""
       },
       "players": [
         {
-          "player": "Ally Lemos",
-          "player_norm": "ally lemos",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
+          "player": "Jerem\u00edas Ledesma",
+          "player_norm": "jeremias ledesma",
+          "pos": "GOA",
+          "season_avg": 1.43,
+          "game_score": 1.4,
+          "pp_line": 2.0,
+          "pp_edge": 1.2,
           "rank_on_team": 1,
           "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Barbra Banda",
-          "player_norm": "barbra banda",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Haley McCutcheon",
-          "player_norm": "haley mccutcheon",
-          "pos": "DEF",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.2 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         }

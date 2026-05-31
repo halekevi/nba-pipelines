@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-05-29T17:50:00.496717+00:00",
+  "generated_at": "2026-05-31T06:14:45.123664+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
@@ -32,19 +32,19 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
@@ -58,19 +58,19 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
@@ -84,19 +84,19 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
@@ -110,19 +110,19 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
@@ -136,19 +136,19 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
@@ -162,20 +162,20 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -188,27 +188,27 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -224,27 +224,27 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -260,27 +260,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -296,27 +296,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -332,27 +332,27 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -368,27 +368,27 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -404,19 +404,19 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
@@ -424,10 +424,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Chet Holmgren",
           "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -440,19 +440,19 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
-          "line": 1.5,
+          "line": 0.5,
           "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
@@ -460,10 +460,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -476,30 +476,30 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -512,27 +512,27 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -542,7 +542,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -558,27 +558,27 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -588,7 +588,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -604,27 +604,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -634,7 +634,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -650,27 +650,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -680,7 +680,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -696,27 +696,27 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -726,7 +726,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -742,27 +742,27 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -772,7 +772,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -788,27 +788,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -818,10 +818,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Josh Hart",
+          "player": "Chet Holmgren",
           "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -834,27 +834,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -864,10 +864,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -880,27 +880,27 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -910,10 +910,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -926,37 +926,7 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -966,7 +936,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -982,37 +982,7 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1022,7 +992,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1038,37 +1038,7 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1078,7 +1048,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1094,37 +1094,7 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1134,7 +1104,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1150,37 +1150,7 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1190,7 +1160,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1206,37 +1206,7 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1246,7 +1216,37 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Alex Caruso",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1262,27 +1262,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1292,7 +1292,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1302,10 +1302,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Josh Hart",
+          "player": "Chet Holmgren",
           "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1318,27 +1318,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1348,7 +1348,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1358,10 +1358,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -1374,37 +1374,7 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Stephon Castle",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Dylan Harper",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Keldon Johnson",
+          "player": "Jalen Williams",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
@@ -1414,10 +1384,40 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Paige Bueckers",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -1430,27 +1430,27 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1460,17 +1460,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1480,7 +1470,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1496,27 +1496,27 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1526,17 +1526,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1546,7 +1536,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1562,27 +1562,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1592,17 +1592,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1612,7 +1602,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1628,27 +1628,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1658,17 +1658,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1678,7 +1668,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1694,27 +1694,27 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1724,17 +1724,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1744,7 +1734,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1760,27 +1760,27 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1790,17 +1790,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -1810,7 +1800,17 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1826,27 +1826,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1856,8 +1856,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1866,7 +1866,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1876,10 +1876,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Josh Hart",
+          "player": "Chet Holmgren",
           "prop_type": "Points",
           "line": 0.5,
-          "standard_line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1892,27 +1892,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1922,8 +1922,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
+          "player": "De'Aaron Fox",
+          "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1932,7 +1932,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "VJ Edgecombe",
+          "player": "Julian Champagnie",
           "prop_type": "Points",
           "line": 0.5,
           "standard_line": 2.5,
@@ -1942,10 +1942,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
@@ -1958,27 +1958,27 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Stephon Castle",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Ayo Dosunmu",
+          "player": "Alex Caruso",
           "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6625
         },
         {
-          "player": "Dylan Harper",
+          "player": "Isaiah Hartenstein",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1988,17 +1988,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Keldon Johnson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "De'Aaron Fox",
           "prop_type": "Assists",
           "line": 0.5,
           "standard_line": null,
@@ -2008,10 +1998,20 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Paige Bueckers",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
           "delta": 5.0,
           "direction": "OVER",
