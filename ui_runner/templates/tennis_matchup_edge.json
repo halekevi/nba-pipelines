@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-05-31T09:34:44.614401+00:00",
+  "generated_at": "2026-05-31T12:02:37.986995+00:00",
   "slate_note": "Tennis match day 2026-06-01 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-01.xlsx)",
   "tennis_match_date": "2026-06-01",
   "n_teams": 300,
@@ -169,14 +169,6 @@
       "team_def_rank": 85,
       "team_def_tier": "Below Avg"
     },
-    "juan manuel cerundolo": {
-      "opponent_slate": "matteo berrettini",
-      "opponent_name": "MATTEO BERRETTINI",
-      "opponent_def_rank": 105,
-      "opponent_def_tier": "Weak",
-      "team_def_rank": 56,
-      "team_def_tier": "Below Avg"
-    },
     "matteo berrettini": {
       "opponent_slate": "juan manuel cerundolo",
       "opponent_name": "JUAN MANUEL CERUNDOLO",
@@ -184,6 +176,14 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 105,
       "team_def_tier": "Weak"
+    },
+    "juan manuel cerundolo": {
+      "opponent_slate": "matteo berrettini",
+      "opponent_name": "MATTEO BERRETTINI",
+      "opponent_def_rank": 105,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 56,
+      "team_def_tier": "Below Avg"
     },
     "aryna sabalenka": {
       "opponent_slate": "naomi osaka",
@@ -755,34 +755,6 @@
         }
       ]
     },
-    "juan manuel cerundolo|games_won": {
-      "team_slate": "juan manuel cerundolo",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 105,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Juan Manuel Cerundolo",
-          "player_norm": "juan manuel cerundolo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 20.0,
-          "game_score": 20.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +5.5 vs weak opponent (#105).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 14.5,
-          "pp_edge": 5.5
-        }
-      ]
-    },
     "matteo berrettini|games_won": {
       "team_slate": "matteo berrettini",
       "category": "games_won",
@@ -808,6 +780,34 @@
           "def_boost": null,
           "pp_line": 15.5,
           "pp_edge": 9.5
+        }
+      ]
+    },
+    "juan manuel cerundolo|games_won": {
+      "team_slate": "juan manuel cerundolo",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "matteo berrettini",
+        "name": "MATTEO BERRETTINI",
+        "def_rank": 105,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Juan Manuel Cerundolo",
+          "player_norm": "juan manuel cerundolo",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.0,
+          "game_score": 20.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +5.5 vs weak opponent (#105).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": 5.5
         }
       ]
     },
@@ -1194,12 +1194,12 @@
           "rank_on_team": 1,
           "season_avg": 3.0,
           "game_score": 3.0,
-          "edge": "NEUTRAL",
-          "notes": "PP edge +1.5 vs elite opponent (#16) \u2014 proceed with caution.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +2.5 but elite opponent (#16) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": 1.5
+          "pp_line": 0.5,
+          "pp_edge": 2.5
         }
       ]
     },
@@ -1251,11 +1251,39 @@
           "season_avg": 0.0,
           "game_score": 0.0,
           "edge": "AVOID",
-          "notes": "PP edge -3.5 vs elite opponent (#1).",
+          "notes": "PP edge -2.5 vs elite opponent (#1).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -3.5
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "juan manuel cerundolo|aces": {
+      "team_slate": "juan manuel cerundolo",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "matteo berrettini",
+        "name": "MATTEO BERRETTINI",
+        "def_rank": 105,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Juan Manuel Cerundolo",
+          "player_norm": "juan manuel cerundolo",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -4.5
         }
       ]
     },
@@ -1284,34 +1312,6 @@
           "def_boost": null,
           "pp_line": 5.5,
           "pp_edge": -5.5
-        }
-      ]
-    },
-    "juan manuel cerundolo|aces": {
-      "team_slate": "juan manuel cerundolo",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 105,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Juan Manuel Cerundolo",
-          "player_norm": "juan manuel cerundolo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -6.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": -6.5
         }
       ]
     },
@@ -1791,6 +1791,34 @@
         }
       ]
     },
+    "naomi osaka|double_faults": {
+      "team_slate": "naomi osaka",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "aryna sabalenka",
+        "name": "ARYNA SABALENKA",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Naomi Osaka",
+          "player_norm": "naomi osaka",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#1).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
     "flavio cobolli|double_faults": {
       "team_slate": "flavio cobolli",
       "category": "double_faults",
@@ -1844,34 +1872,6 @@
           "def_boost": null,
           "pp_line": 1.5,
           "pp_edge": -0.5
-        }
-      ]
-    },
-    "naomi osaka|double_faults": {
-      "team_slate": "naomi osaka",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Naomi Osaka",
-          "player_norm": "naomi osaka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#1).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -1.5
         }
       ]
     },
