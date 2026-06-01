@@ -30,6 +30,30 @@ cursor-profile/
 
 # Logs
 *.log
+*.tmp
+
+# Pipeline output churn
+data/rosters/
+data/NFL/
+data/MLB/
+data/NBA/
+data/NHL/
+data/Soccer/
+data/WNBA/
+data/Tennis/
+data/CFB/
+Sports/*/data/output/
+Sports/*/data/outputs/
+Sports/*/data/step*/
+Sports/*/logs/
+
+# Keep reference baselines (force-added with git add -f when needed)
+!data/reference/
+!Sports/CFB/data/reference/
+!Sports/NFL/data/reference/
+
+# Keep graded JSON exports
+!data/graded/
 
 # Environment / secrets
 .env
