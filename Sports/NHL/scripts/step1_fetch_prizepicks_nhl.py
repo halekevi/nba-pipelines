@@ -21,6 +21,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
+from zoneinfo import ZoneInfo
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -45,6 +53,31 @@ NHL_STAT_KEYWORDS = {
     "goals", "assists", "shots", "saves", "hits", "blocks",
     "time on ice", "points", "goals allowed", "fantasy"
 }
+
+DEFAULT_TZ = "America/New_York"
+
+NHL_CSV_FIELDNAMES = [
+    "projection_id",
+    "player_id",
+    "player_name",
+    "team",
+    "position",
+    "stat_type",
+    "line_score",
+    "standard_line",
+    "pick_type",
+    "is_promo",
+    "description",
+    "away_team",
+    "home_team",
+    "game_start",
+    "game_id",
+    "fetched_at",
+]
+
+
+def _default_et_date_str() -> str:
+    return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
 
 
 def _to_float(x) -> float | None:
@@ -378,13 +411,19 @@ def fetch_via_playwright() -> list:
     return rows
 
 
-def write_csv(rows, path):
-    fieldnames = list(rows[0].keys())
+def write_csv(rows, path, *, fieldnames: list[str] | None = None):
+    names = fieldnames or (list(rows[0].keys()) if rows else NHL_CSV_FIELDNAMES)
     with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=names)
         writer.writeheader()
-        writer.writerows(rows)
+        if rows:
+            writer.writerows(rows)
     print(f"✅ Saved {len(rows)} rows -> {path}")
+
+
+def _write_empty_nhl(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_csv([], str(path), fieldnames=NHL_CSV_FIELDNAMES)
 
 
 def _archive_nhl_lines(df: pd.DataFrame) -> None:
@@ -453,6 +492,17 @@ def main():
         action="store_true",
         help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
     )
+    parser.add_argument(
+        "--date",
+        default=_default_et_date_str(),
+        help=f"Target slate date in {DEFAULT_TZ} (YYYY-MM-DD).",
+    )
+    parser.add_argument("--tz", default=DEFAULT_TZ)
+    parser.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="Skip same-day date filter (keep full API board; explicit opt-in only).",
+    )
     args = parser.parse_args()
     out_path = Path(args.output)
 
@@ -479,7 +529,29 @@ def main():
         if args.append and out_path.is_file():
             print("   (--append: left existing output file unchanged)")
             sys.exit(1)
+        _write_empty_nhl(out_path)
         sys.exit(0)
+
+    fetch_date = str(args.date).strip()[:10]
+    n_before_date = len(rows)
+    df_nhl = pd.DataFrame(rows)
+    filtered, _ = apply_game_date_filter(
+        df_nhl,
+        target_date=fetch_date,
+        tz_name=str(args.tz).strip() or DEFAULT_TZ,
+        allow_nearest_future=bool(args.allow_nearest_future),
+        start_time_col="game_start",
+    )
+    print(
+        f"[NHL step1] Date filter {fetch_date}: fetched={n_before_date} survived={len(filtered)}"
+    )
+    if args.allow_nearest_future:
+        print("[NHL step1] allow-nearest-future: skipping date filter")
+    if len(filtered) == 0:
+        print(no_props_log_line("NHL", fetch_date))
+        _write_empty_nhl(out_path)
+        sys.exit(0)
+    rows = filtered.to_dict("records")
 
     rows, n_missing_std = enrich_standard_lines(rows)
     if n_missing_std:

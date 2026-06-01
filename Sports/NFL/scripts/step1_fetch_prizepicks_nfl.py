@@ -42,6 +42,10 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _NFL_ROOT = _SCRIPT_DIR.parent
 _REPO_ROOT = _SCRIPT_DIR.resolve().parents[2]
 _NFL_DATA_DIR = _NFL_ROOT / "data"
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
 
 LEAGUE_ID = "9"
 DEFAULT_TZ = "America/New_York"
@@ -443,35 +447,6 @@ def build_nfl_rows(data: List[dict], included: List[dict], *, fetch_date: str) -
     return rows
 
 
-def _apply_game_date_filter(
-    df: pd.DataFrame,
-    target_date: str,
-    tz_name: str,
-    allow_nearest_future: bool,
-) -> tuple[pd.DataFrame, str | None]:
-    if df is None or len(df) == 0:
-        out = df.copy() if isinstance(df, pd.DataFrame) else pd.DataFrame()
-        if "game_date" not in out.columns:
-            out["game_date"] = ""
-        return out, None
-    tz = ZoneInfo(tz_name)
-    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
-    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
-    out = df.copy()
-    out["game_date"] = game_date.fillna("")
-    keep = out["game_date"].eq(target_date)
-    if keep.any():
-        return out.loc[keep].copy(), None
-    if not allow_nearest_future:
-        return out.head(0).copy(), None
-    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
-    future = [d for d in available if d >= target_date]
-    if not future:
-        return out.head(0).copy(), None
-    chosen = future[0]
-    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
-
-
 def _write_empty(out_path: Path) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(columns=OUTPUT_COLS).to_csv(out_path, index=False, encoding="utf-8-sig")
@@ -496,7 +471,11 @@ def main() -> int:
     ap.add_argument("--per_page", type=int, default=250)
     ap.add_argument("--max_pages", type=int, default=10)
     ap.add_argument("--retries", type=int, default=5)
-    ap.add_argument("--allow-nearest-future", action="store_true")
+    ap.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="Skip same-day date filter (keep full API board; explicit opt-in only).",
+    )
     ap.add_argument(
         "--merge",
         "--merge-existing",
@@ -549,7 +528,7 @@ def main() -> int:
 
     # Date filter
     fetched_rows = len(df)
-    filtered_df, fallback_date = _apply_game_date_filter(
+    filtered_df, _fallback = apply_game_date_filter(
         df,
         target_date=fetch_date,
         tz_name=str(args.tz).strip() or DEFAULT_TZ,
@@ -558,12 +537,12 @@ def main() -> int:
     print(
         f"[NFL step1] Date filter {fetch_date}: fetched={fetched_rows} survived={len(filtered_df)}"
     )
-    if fallback_date:
-        print(f"[NFL step1] WARN: using nearest future game_date={fallback_date}")
+    if args.allow_nearest_future:
+        print("[NFL step1] allow-nearest-future: skipping date filter")
     df = filtered_df
 
     if len(df) == 0:
-        print("[NFL step1] WARN: empty board after date filter — writing 0-row CSV")
+        print(no_props_log_line("NFL", fetch_date))
         _write_empty(out_path)
         return 0
 

@@ -32,6 +32,12 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+
 API_URL   = "https://api.prizepicks.com/projections"
 WARMUP_URL = "https://api.prizepicks.com/leagues"
 
@@ -234,9 +240,6 @@ def _rotate_session_headers(session: Any) -> None:
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 WNBA_LEAGUE_ID_DEFAULT = "3"
-# When the API returns a full board, skip ET --date row pruning in step1 (write all rows + game_date).
-# Downstream steps enforce slate scope once game_date / start_time alignment is stable.
-FULL_BOARD_PRE_SLATE_MIN = 100
 SNAPSHOT_DIR = Path(__file__).resolve().parent / "outputs" / "step1_snapshots"
 SNAPSHOT_LATEST_NAME = "step1_wnba_props_latest.csv"
 BROWSER_PROFILE_DIR = Path.home() / ".pp_browser_profile"
@@ -659,42 +662,33 @@ def _wnba_start_time_to_et_date_str(ser: pd.Series) -> pd.Series:
     return et.dt.strftime("%Y-%m-%d").fillna("").astype(str)
 
 
-def _apply_wnba_slate_date(df: pd.DataFrame, args: Any, *, skip_row_filter: bool = False) -> pd.DataFrame:
-    """Optionally filter to --date (ET); set game_date for downstream + combined_slate_tickets."""
+def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
+    """Filter to --date (ET) unless --allow-nearest-future or --no-slate-filter."""
     if df is None or df.empty:
         return df
-    df = df.copy()
-    if "start_time" not in df.columns:
-        df["start_time"] = ""
     slate = str(args.date).strip()[:10]
-    cal = _wnba_start_time_to_et_date_str(df["start_time"])
-    if (
-        not skip_row_filter
-        and not bool(getattr(args, "no_slate_filter", False))
-        and slate
-    ):
-        keep = cal.eq(slate)
-        n0 = len(df)
-        df = df.loc[keep].copy().reset_index(drop=True)
-        n1 = len(df)
-        if n0 != n1:
-            print(
-                f"  [slate-date] kept {n1}/{n0} rows for slate {slate} "
-                f"(start_time ET calendar must match --date)"
-            )
-    cal = _wnba_start_time_to_et_date_str(df["start_time"])
-    if skip_row_filter and slate:
-        # Full PrizePicks board spans multiple ET calendar days. combined_slate_tickets keeps rows
-        # where game_date == pipeline --date; anchor to that date so props are not dropped there.
-        # True tip-off remains in start_time for audits and ESPN alignment.
-        df["game_date"] = slate
+    skip_filter = bool(getattr(args, "allow_nearest_future", False)) or bool(
+        getattr(args, "no_slate_filter", False)
+    )
+    n0 = len(df)
+    filtered, _ = apply_game_date_filter(
+        df,
+        target_date=slate,
+        tz_name="America/New_York",
+        allow_nearest_future=skip_filter,
+    )
+    if not skip_filter and n0 != len(filtered):
         print(
-            f"  [slate-date] full board: game_date anchored to pipeline date {slate!r} "
-            f"(start_time still carries ET tip-off)"
+            f"  [slate-date] kept {len(filtered)}/{n0} rows for slate {slate} "
+            f"(start_time ET calendar must match --date)"
         )
-    else:
-        df["game_date"] = cal.where(cal.str.len() > 0, slate)
-    return df
+    if skip_filter:
+        print("  [slate-date] date filter skipped (--allow-nearest-future or --no-slate-filter)")
+    if "game_date" not in filtered.columns:
+        cal = _wnba_start_time_to_et_date_str(filtered.get("start_time", pd.Series([], dtype=object)))
+        filtered = filtered.copy()
+        filtered["game_date"] = cal.where(cal.str.len() > 0, slate)
+    return filtered
 
 
 def _write_snapshots(df: pd.DataFrame, date_tag: str) -> None:
@@ -731,7 +725,12 @@ def main():
     ap.add_argument(
         "--no-slate-filter",
         action="store_true",
-        help="Keep all PrizePicks rows (multi-day board). Default: keep rows for --date ET calendar only.",
+        help="Alias: skip same-day date filter (same as --allow-nearest-future).",
+    )
+    ap.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="Skip same-day date filter (keep full API board; explicit opt-in only).",
     )
     ap.add_argument("--playwright",       action="store_true")
     ap.add_argument("--cdp",              default="", help="Attach to existing Chrome via CDP URL")
@@ -898,16 +897,18 @@ def main():
     if before != after:
         print(f"  Deduped: {before} → {after}")
 
-    n_pre_slate = len(df)
-    skip_slate_row_filter = n_pre_slate >= FULL_BOARD_PRE_SLATE_MIN
-    if skip_slate_row_filter:
-        print(
-            f"  [slate-date] skipping ET date row filter (rows={n_pre_slate} >= {FULL_BOARD_PRE_SLATE_MIN}); "
-            "writing full API board — downstream may filter by game_date"
-        )
-    df = _apply_wnba_slate_date(df, args, skip_row_filter=skip_slate_row_filter)
+    df = _apply_wnba_slate_date(df, args)
 
-    rows_n  = len(df)
+    rows_n = len(df)
+    if rows_n == 0:
+        print(no_props_log_line("WNBA", str(args.date).strip()[:10]))
+        empty_cols = [
+            "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
+            "player", "pos", "team", "opp_team", "prop_type", "line", "pick_type", "game_date",
+        ]
+        pd.DataFrame(columns=empty_cols).to_csv(out_path, index=False, encoding="utf-8-sig")
+        sys.exit(0)
+
     teams_n = df["team"].astype(str).nunique()
 
     if rows_n < args.min_rows or teams_n < args.min_teams:

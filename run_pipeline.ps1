@@ -367,7 +367,7 @@ function Invoke-NBAStep1Fetch {
         $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
             --league_id 7 --game_mode pickem --per_page 250 --max_pages 5 `
             --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
-            --replace --date $PipelineDate --allow-nearest-future `
+            --replace --date $PipelineDate `
             --output $OutputPath 2>&1
         $exit = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
@@ -1114,7 +1114,7 @@ if ($NHLOnly) {
     Write-Host "[ NHL PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output `"$NHLRunOutDir\step1_nhl_props.csv`"" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing $NHLRunOutDir\step1_nhl_props.csv" -ForegroundColor DarkGray }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output `"$NHLRunOutDir\step1_nhl_props.csv`" --date $Date" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing $NHLRunOutDir\step1_nhl_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }
@@ -1398,7 +1398,7 @@ if ($NBAOnly) {
     if (-not $SkipFetch) {
         if ($ok) {
             $ok = Run-Step "NBA Step 1 - Fetch PrizePicks" $NBADir ".\scripts\step1_fetch_prizepicks_api.py" `
-                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1Solo`" --date $Date --allow-nearest-future"
+                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1Solo`" --date $Date"
         }
     } else {
         Write-Host "  [NBA] Skipping step1 fetch -- using existing $nbaStep1Solo" -ForegroundColor DarkGray
@@ -1606,7 +1606,7 @@ $NBAJob = Start-Job -ScriptBlock {
             $output = & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" `
                 --league_id 7 --game_mode pickem --per_page 250 --max_pages 5 `
                 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 `
-                --replace --date $PipelineDate --allow-nearest-future `
+                --replace --date $PipelineDate `
                 --output $OutputPath 2>&1
             $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
@@ -1642,7 +1642,7 @@ $NBAJob = Start-Job -ScriptBlock {
     if (-not $SkipFetch) {
         if ($ok) {
             $ok = Run-Step-Job "NBA Step 1 - Fetch PrizePicks" $NBADir ".\scripts\step1_fetch_prizepicks_api.py" `
-                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1`" --date $Date --allow-nearest-future"
+                "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$nbaStep1`" --date $Date"
         }
     } else {
         Write-Output "[NBA] Skipping step1 fetch"
@@ -1866,7 +1866,7 @@ $NHLJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$NHLRunOutDir\step1_nhl_props.csv`"" } } else { Write-Output "[NHL] Skipping step1 fetch" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$NHLRunOutDir\step1_nhl_props.csv`" --date $Date" } } else { Write-Output "[NHL] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }

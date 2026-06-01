@@ -42,6 +42,7 @@ if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
 from scripts.db_utils import log_pipeline_health
+from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
 
 MLB_LEAGUE_ID = "2"
 BOARD_URL     = f"https://app.prizepicks.com/board?league_id={MLB_LEAGUE_ID}"
@@ -165,35 +166,6 @@ def _ensure_utf8_stdio() -> None:
 
 def _default_et_date_str() -> str:
     return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
-
-
-def _apply_game_date_filter(
-    df: pd.DataFrame,
-    target_date: str,
-    tz_name: str,
-    allow_nearest_future: bool,
-) -> tuple[pd.DataFrame, str | None]:
-    if df is None or len(df) == 0:
-        out = df.copy() if isinstance(df, pd.DataFrame) else pd.DataFrame()
-        if isinstance(out, pd.DataFrame) and "game_date" not in out.columns:
-            out["game_date"] = ""
-        return out, None
-    tz = ZoneInfo(tz_name)
-    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
-    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
-    out = df.copy()
-    out["game_date"] = game_date.fillna("")
-    keep = out["game_date"].eq(target_date)
-    if keep.any():
-        return out.loc[keep].copy(), None
-    if not allow_nearest_future:
-        return out.head(0).copy(), None
-    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
-    future = [d for d in available if d >= target_date]
-    if not future:
-        return out.head(0).copy(), None
-    chosen = future[0]
-    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
 
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
@@ -722,7 +694,11 @@ def main():
     ap.add_argument("--all_props",      action="store_true",   help="Keep all prop types unfiltered")
     ap.add_argument("--date", default=_default_et_date_str(), help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD).")
     ap.add_argument("--tz", default=DEFAULT_TZ, help="Timezone used to derive game_date from start_time.")
-    ap.add_argument("--allow-nearest-future", action="store_true", help="If no rows match --date, keep nearest future game_date.")
+    ap.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="Skip same-day date filter (keep full API board; explicit opt-in only).",
+    )
     # Compat aliases — accepted silently so existing pipeline calls don't break
     ap.add_argument("--gentle",         action="store_true",   help="(compat) no-op")
     ap.add_argument("--manual-seconds", type=int, default=None, help="(compat) no-op — manual window removed")
@@ -994,7 +970,7 @@ def main():
             print(f"  [WARN] --append merge failed ({e}); writing new fetch only")
 
     fetched_rows = len(df)
-    filtered_df, fallback_date = _apply_game_date_filter(
+    filtered_df, fallback_date = apply_game_date_filter(
         df,
         target_date=str(args.date).strip(),
         tz_name=str(args.tz).strip() or DEFAULT_TZ,
@@ -1008,17 +984,14 @@ def main():
     if game_dates:
         print(f"[INFO] MLB step1 filtered_game_dates={game_dates}")
     if fallback_date:
-        print(f"[WARNING] MLB step1 no rows for requested date; using nearest future game_date={fallback_date}")
+        print("[WARNING] MLB step1 allow-nearest-future: skipping date filter")
     df = filtered_df
 
     if len(df) == 0:
-        print(
-            "❌ FETCH_FAILED: No rows after date filter — stale snapshot fallback disabled. "
-            "Adjust --date, use --allow-nearest-future if appropriate, or fix the live fetch."
-        )
+        print(no_props_log_line("MLB", str(args.date).strip()))
         pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False, encoding="utf-8-sig")
-        print(f"\n[WARNING] Saved empty date-filtered MLB step1 CSV -> {out_path}")
-        sys.exit(1)
+        print(f"\n[INFO] Saved empty date-filtered MLB step1 CSV -> {out_path}")
+        sys.exit(0)
 
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
     try:

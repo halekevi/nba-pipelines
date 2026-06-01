@@ -48,6 +48,12 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
+_PROPORACLE_ROOT = Path(__file__).resolve().parents[3]
+if str(_PROPORACLE_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROPORACLE_ROOT))
+
+from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+
 # PrizePicks sits behind Cloudflare; stdlib TLS (requests) is often JA3-flagged.
 # curl_cffi impersonates a real browser TLS + HTTP/2 fingerprint (see _make_session).
 _CURL_IMPERSONATE = (os.environ.get("PROPORACLE_CURL_IMPERSONATE") or "chrome120").strip()
@@ -281,34 +287,6 @@ def _rotate_session_headers(session: Any) -> None:
 def _default_et_date_str() -> str:
     return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
 
-
-def _apply_game_date_filter(
-    df: pd.DataFrame,
-    target_date: str,
-    tz_name: str,
-    allow_nearest_future: bool,
-) -> tuple[pd.DataFrame, str | None]:
-    if df is None or len(df) == 0:
-        out = df.copy() if isinstance(df, pd.DataFrame) else pd.DataFrame()
-        if isinstance(out, pd.DataFrame) and "game_date" not in out.columns:
-            out["game_date"] = ""
-        return out, None
-    tz = ZoneInfo(tz_name)
-    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
-    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
-    out = df.copy()
-    out["game_date"] = game_date.fillna("")
-    keep = out["game_date"].eq(target_date)
-    if keep.any():
-        return out.loc[keep].copy(), None
-    if not allow_nearest_future:
-        return out.head(0).copy(), None
-    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
-    future = [d for d in available if d >= target_date]
-    if not future:
-        return out.head(0).copy(), None
-    chosen = future[0]
-    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
 
 # ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -775,7 +753,11 @@ def main() -> None:
     ap.add_argument("--history",    default="",            help="Optional path template for history CSV (use {ts})")
     ap.add_argument("--date", default=_default_et_date_str(), help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD).")
     ap.add_argument("--tz", default=DEFAULT_TZ, help="Timezone used to derive game_date from start_time.")
-    ap.add_argument("--allow-nearest-future", action="store_true", help="If no rows match --date, keep nearest future game_date.")
+    ap.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="Skip same-day date filter (keep full API board; explicit opt-in only).",
+    )
     ap.add_argument(
         "--merge-existing",
         action="store_true",
@@ -957,7 +939,7 @@ def main() -> None:
             if x and str(x) != "nan"
         }
     )
-    filtered_df, fallback_date = _apply_game_date_filter(
+    filtered_df, fallback_date = apply_game_date_filter(
         df,
         target_date=str(args.date).strip(),
         tz_name=str(args.tz).strip() or DEFAULT_TZ,
@@ -975,36 +957,15 @@ def main() -> None:
     if board_dates:
         print(f"[INFO] NBA step1 filtered_game_dates={board_dates}")
     if fallback_date:
-        print(f"[WARNING] NBA step1 no rows for requested date; using nearest future game_date={fallback_date}")
-
-    if len(filtered_df) == 0 and fetched_rows > 0 and out_path.is_file():
-        try:
-            prev = pd.read_csv(out_path, encoding="utf-8-sig")
-            if len(prev) > 0:
-                print(
-                    f"[WARNING] Date filter would write 0 rows over {len(prev)} existing rows in {args.output}; "
-                    "keeping existing file. Pass --allow-nearest-future or fix --date."
-                )
-                sys.exit(0)
-        except Exception as e:
-            print(f"  [WARN] Could not read existing output for empty-filter guard: {e}")
+        print(f"[WARNING] NBA step1 allow-nearest-future: skipping date filter")
 
     df = filtered_df
 
     if len(df) == 0:
-        print(
-            f"\n[ERROR] NBA step1 has 0 rows for date={args.date}; "
-            "not writing line_history or overwriting a healthy step1 file."
-        )
-        if out_path.is_file():
-            try:
-                prev = pd.read_csv(out_path, encoding="utf-8-sig")
-                if len(prev) == 0:
-                    out_path.unlink(missing_ok=True)
-                    print(f"  Removed empty step1 placeholder: {args.output}")
-            except Exception:
-                pass
-        sys.exit(1)
+        print(no_props_log_line("NBA", str(args.date).strip()))
+        if not (args.append and out_path.is_file()):
+            pd.DataFrame(columns=EMPTY_COLS).to_csv(args.output, index=False, encoding="utf-8-sig")
+        sys.exit(0)
 
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
