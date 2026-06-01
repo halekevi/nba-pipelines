@@ -1,445 +1,544 @@
 {
-  "generated_at": "2026-04-12T01:41:40Z",
-  "date": "2026-04-11",
+  "generated_at": "2026-05-31T18:28:25Z",
+  "date": "2026-05-30",
   "mode": "balanced",
-  "total_combos_evaluated": 103076,
+  "total_combos_evaluated": 101724,
+  "groups": [
+    {
+      "group_name": "X-Sport Bracket",
+      "n_legs": 2,
+      "power_payout": 3.0,
+      "flex_payout": 3.0,
+      "tickets": [
+        {
+          "web_group_name": "X-Sport Bracket",
+          "ticket_group": "xsport_bracket",
+          "ticket_id": "2026-05-30|X-Sport Bracket|1",
+          "ticket_no": 1,
+          "n_legs": 2,
+          "legs": [
+            {
+              "player": "Riley Greene",
+              "sport": "MLB",
+              "prop_type": "Hitter Fantasy Score",
+              "line": 4.5,
+              "direction": "OVER",
+              "pick_type": "standard",
+              "tier": "B",
+              "blended_score": 0.6671,
+              "hit_prob": 0.5999,
+              "line_distance": 0.0,
+              "def_tier": "Below Avg",
+              "ml_prob": 0.5999,
+              "player_tier": "top",
+              "matchup_cat": "A",
+              "ticket_group": "xsport_bracket"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "def_tier": "Above Avg",
+              "ml_prob": 0.9135,
+              "player_tier": "",
+              "matchup_cat": "D",
+              "ticket_group": "xsport_bracket"
+            }
+          ],
+          "rows": [
+            {
+              "player": "Riley Greene",
+              "sport": "MLB",
+              "prop_type": "Hitter Fantasy Score",
+              "line": 4.5,
+              "direction": "OVER",
+              "pick_type": "standard",
+              "tier": "B",
+              "blended_score": 0.6671,
+              "hit_prob": 0.5999,
+              "line_distance": 0.0,
+              "def_tier": "Below Avg",
+              "ml_prob": 0.5999,
+              "player_tier": "top",
+              "matchup_cat": "A",
+              "ticket_group": "xsport_bracket"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "def_tier": "Above Avg",
+              "ml_prob": 0.9135,
+              "player_tier": "",
+              "matchup_cat": "D",
+              "ticket_group": "xsport_bracket"
+            }
+          ],
+          "legs_detail": [
+            {
+              "player": "Riley Greene",
+              "sport": "MLB",
+              "prop_type": "Hitter Fantasy Score",
+              "line": 4.5,
+              "direction": "OVER",
+              "pick_type": "standard",
+              "tier": "B",
+              "blended_score": 0.6671,
+              "hit_prob": 0.5999,
+              "line_distance": 0.0,
+              "def_tier": "Below Avg",
+              "ml_prob": 0.5999,
+              "player_tier": "top",
+              "matchup_cat": "A",
+              "ticket_group": "xsport_bracket"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "def_tier": "Above Avg",
+              "ml_prob": 0.9135,
+              "player_tier": "",
+              "matchup_cat": "D",
+              "ticket_group": "xsport_bracket"
+            }
+          ],
+          "legs_text": [
+            "Riley Greene Hitter Fantasy Score 4.5 OVER",
+            "Helinho Shots 2.5 UNDER"
+          ],
+          "player_keys": [
+            "Riley Greene",
+            "Helinho"
+          ],
+          "sports": [
+            "MLB",
+            "Soccer"
+          ],
+          "p_win": 0.548,
+          "p_win_pct": 54.8,
+          "payout": 3.0,
+          "power_payout": 3.0,
+          "flex_payout": 3.0,
+          "ev": 0.644,
+          "ev_power": 0.644,
+          "recommendation": "SKIP",
+          "pick_types": [
+            "standard",
+            "standard"
+          ],
+          "n_goblins": 0,
+          "n_demons": 0,
+          "bracket_over_sports": [
+            "MLB",
+            "NBA",
+            "NBA1H",
+            "NBA1Q"
+          ],
+          "bracket_under_sports": [
+            "CBB",
+            "NBA",
+            "SOCCER",
+            "WNBA"
+          ]
+        }
+      ]
+    },
+    {
+      "group_name": "Best Locks",
+      "n_legs": 3,
+      "power_payout": 6.0,
+      "flex_payout": 2.25,
+      "tickets": [
+        {
+          "web_group_name": "Best Locks",
+          "ticket_group": "best_locks",
+          "ticket_id": "2026-05-30|Best Locks|1",
+          "ticket_no": 1,
+          "n_legs": 3,
+          "legs": [
+            {
+              "player": "Reilyn Turner",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Ally Sentnor",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "ml_prob": 0.9135,
+              "abs_edge": 0.5,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            }
+          ],
+          "rows": [
+            {
+              "player": "Reilyn Turner",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Ally Sentnor",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "ml_prob": 0.9135,
+              "abs_edge": 0.5,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            }
+          ],
+          "legs_detail": [
+            {
+              "player": "Reilyn Turner",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Ally Sentnor",
+              "sport": "Soccer",
+              "prop_type": "Shots On Target",
+              "line": 0.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "D",
+              "blended_score": 0.8185,
+              "hit_prob": 0.9235,
+              "line_distance": 0.0,
+              "ml_prob": 0.9235,
+              "abs_edge": 0.3,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            },
+            {
+              "player": "Helinho",
+              "sport": "Soccer",
+              "prop_type": "Shots",
+              "line": 2.5,
+              "direction": "UNDER",
+              "pick_type": "standard",
+              "tier": "A",
+              "blended_score": 0.7806,
+              "hit_prob": 0.9135,
+              "line_distance": 0.0,
+              "ml_prob": 0.9135,
+              "abs_edge": 0.5,
+              "qualified_category": "SOCCER UNDER 0.70+",
+              "category_key": "SOCCER|UNDER|0.70+",
+              "ticket_group": "best_locks"
+            }
+          ],
+          "legs_text": [
+            "Reilyn Turner Shots On Target 0.5 UNDER",
+            "Ally Sentnor Shots On Target 0.5 UNDER",
+            "Helinho Shots 2.5 UNDER"
+          ],
+          "player_keys": [
+            "Reilyn Turner",
+            "Ally Sentnor",
+            "Helinho"
+          ],
+          "sports": [
+            "Soccer"
+          ],
+          "p_win": 0.7791,
+          "p_win_pct": 77.9,
+          "payout": 6.0,
+          "power_payout": 6.0,
+          "flex_payout": 2.25,
+          "ev": 3.6745,
+          "ev_power": 3.6745,
+          "recommendation": "STRONG",
+          "pick_types": [
+            "standard",
+            "standard",
+            "standard"
+          ],
+          "n_goblins": 0,
+          "n_demons": 0,
+          "wf_qualified_categories": [
+            "MLB UNDER 0.70+",
+            "NBA UNDER 0.60-0.65",
+            "NBA UNDER 0.70+",
+            "NBA1Q OVER 0.70+",
+            "SOCCER UNDER 0.70+",
+            "TENNIS OVER 0.60-0.65"
+          ],
+          "wf_n_past_dates": 64,
+          "wf_pool_size": 30
+        }
+      ]
+    }
+  ],
   "tickets": [
     {
-      "rank": 1,
+      "rank": 0,
+      "ticket_group": "xsport_bracket",
+      "group_name": "X-Sport Bracket",
       "legs": [
-        "Logan Mailloux hits 1.5 UNDER",
-        "Connelly Early Pitcher Strikeouts 3.5 OVER",
-        "Jes\u00fas Luzardo Pitcher Strikeouts 4.5 OVER"
+        "Riley Greene Hitter Fantasy Score 4.5 OVER",
+        "Helinho Shots 2.5 UNDER"
       ],
       "sports": [
         "MLB",
-        "NHL"
+        "Soccer"
       ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3621,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
+      "n_legs": 2,
+      "p_win_pct": 54.8,
+      "payout": 3.0,
+      "min_guarantee": 0.0,
+      "ev": 0.644,
+      "recommendation": "SKIP",
+      "n_goblins": 0,
       "n_demons": 0,
       "pick_types": [
         "standard",
+        "standard"
+      ],
+      "player_keys": [
+        "Riley Greene",
+        "Helinho"
+      ]
+    },
+    {
+      "rank": 0,
+      "ticket_group": "best_locks",
+      "group_name": "Best Locks",
+      "legs": [
+        "Reilyn Turner Shots On Target 0.5 UNDER",
+        "Ally Sentnor Shots On Target 0.5 UNDER",
+        "Helinho Shots 2.5 UNDER"
+      ],
+      "sports": [
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 77.9,
+      "payout": 6.0,
+      "min_guarantee": 0.0,
+      "ev": 3.6745,
+      "recommendation": "STRONG",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ],
+      "player_keys": [
+        "Reilyn Turner",
+        "Ally Sentnor",
+        "Helinho"
+      ]
+    },
+    {
+      "rank": 1,
+      "legs": [
+        "Dylan Harper Rebounds 1.5 OVER",
+        "Ajay Mitchell Assists 1.5 OVER",
+        "Rosemonde Kouassi Shots 1.5 UNDER",
+        "Otto Lopez Hitter Fantasy Score 2.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NBA",
+        "Soccer"
+      ],
+      "n_legs": 4,
+      "p_win_pct": 39.2,
+      "payout": 10.0,
+      "min_guarantee": 2.5,
+      "ev": -0.0187,
+      "recommendation": "SKIP",
+      "n_goblins": 3,
+      "n_demons": 0,
+      "pick_types": [
         "goblin",
+        "goblin",
+        "standard",
         "goblin"
+      ],
+      "player_keys": [
+        "Dylan Harper",
+        "Ajay Mitchell",
+        "Rosemonde Kouassi",
+        "Otto Lopez"
       ]
     },
     {
       "rank": 2,
       "legs": [
-        "Logan Mailloux hits 1.5 UNDER",
-        "Connelly Early Pitcher Strikeouts 3.5 OVER",
-        "Nolan McLean Pitcher Strikeouts 4.5 OVER"
+        "Dylan Harper Rebounds 1.5 OVER",
+        "Ajay Mitchell Assists 1.5 OVER",
+        "Rosemonde Kouassi Shots 1.5 UNDER",
+        "Brandon Marsh Hitter Fantasy Score 2.5 OVER"
       ],
       "sports": [
         "MLB",
-        "NHL"
+        "NBA",
+        "Soccer"
       ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3621,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
+      "n_legs": 4,
+      "p_win_pct": 39.2,
+      "payout": 10.0,
+      "min_guarantee": 2.5,
+      "ev": -0.0187,
+      "recommendation": "SKIP",
+      "n_goblins": 3,
       "n_demons": 0,
       "pick_types": [
-        "standard",
         "goblin",
+        "goblin",
+        "standard",
         "goblin"
+      ],
+      "player_keys": [
+        "Dylan Harper",
+        "Ajay Mitchell",
+        "Rosemonde Kouassi",
+        "Brandon Marsh"
       ]
     },
     {
       "rank": 3,
       "legs": [
-        "Logan Mailloux hits 1.5 UNDER",
-        "Connelly Early Pitcher Strikeouts 3.5 OVER",
-        "Jes\u00fas Luzardo Pitcher Strikeouts 5.5 OVER"
+        "Dylan Harper Rebounds 1.5 OVER",
+        "Ajay Mitchell Assists 1.5 OVER",
+        "Rosemonde Kouassi Shots 1.5 UNDER",
+        "Jake Bauers Hitter Fantasy Score 2.5 OVER"
       ],
       "sports": [
         "MLB",
-        "NHL"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3621,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 4,
-      "legs": [
-        "Thomas Harley blocked_shots 1.5 UNDER",
-        "Jes\u00fas Luzardo Pitcher Strikeouts 4.5 OVER",
-        "Nolan McLean Pitcher Strikeouts 4.5 OVER"
-      ],
-      "sports": [
-        "MLB",
-        "NHL"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3616,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 5,
-      "legs": [
-        "Thomas Harley blocked_shots 1.5 UNDER",
-        "Nolan McLean Pitcher Strikeouts 4.5 OVER",
-        "Dustin May Pitcher Strikeouts 2.5 OVER"
-      ],
-      "sports": [
-        "MLB",
-        "NHL"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3616,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 6,
-      "legs": [
-        "Thomas Harley blocked_shots 1.5 UNDER",
-        "Dustin May Pitcher Strikeouts 2.5 OVER",
-        "Bailey Ober Pitching Outs 14.5 OVER"
-      ],
-      "sports": [
-        "MLB",
-        "NHL"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 48.0,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3616,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 7,
-      "legs": [
-        "Aaron Wiggins Pts+Asts 24.5 UNDER",
-        "Dustin May Pitcher Strikeouts 2.5 OVER",
-        "Bailey Ober Pitching Outs 14.5 OVER"
-      ],
-      "sports": [
-        "MLB",
-        "NBA"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 47.8,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3428,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 8,
-      "legs": [
-        "Aaron Wiggins Pts+Asts 24.5 UNDER",
-        "Bailey Ober Pitching Outs 14.5 OVER",
-        "Slade Cecconi Pitching Outs 14.5 OVER"
-      ],
-      "sports": [
-        "MLB",
-        "NBA"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 47.8,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 2.3428,
-      "recommendation": "STRONG",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 9,
-      "legs": [
-        "Colin Blackwell hits 1.5 UNDER",
-        "Samuel Helenius hits 3.0 UNDER",
-        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER"
-      ],
-      "sports": [
-        "NHL",
-        "Soccer"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 36.4,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.5455,
-      "recommendation": "STRONG",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 10,
-      "legs": [
-        "Colin Blackwell hits 1.5 UNDER",
-        "Marcus Foligno hits 3.0 UNDER",
-        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER"
-      ],
-      "sports": [
-        "NHL",
-        "Soccer"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 36.4,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.5455,
-      "recommendation": "STRONG",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 11,
-      "legs": [
-        "Aaron Wiggins Pts+Asts 24.5 UNDER",
-        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER",
-        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER"
-      ],
-      "sports": [
         "NBA",
         "Soccer"
       ],
-      "n_legs": 3,
-      "p_win_pct": 36.1,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.5241,
-      "recommendation": "STRONG",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 12,
-      "legs": [
-        "Jared McCain Rebs+Asts 8.5 UNDER",
-        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER",
-        "Matt Turner Goalie Saves 2.0 OVER"
-      ],
-      "sports": [
-        "NBA",
-        "Soccer"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 35.7,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.499,
-      "recommendation": "OK",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 13,
-      "legs": [
-        "Jared McCain Rebs+Asts 8.5 UNDER",
-        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER",
-        "Jonathan Sirois Goalie Saves 3.0 UNDER"
-      ],
-      "sports": [
-        "NBA",
-        "Soccer"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 35.7,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.4972,
-      "recommendation": "OK",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 14,
-      "legs": [
-        "Jared McCain Rebs+Asts 8.5 UNDER",
-        "Matt Turner Goalie Saves 2.0 OVER",
-        "Jonathan Sirois Goalie Saves 3.0 UNDER"
-      ],
-      "sports": [
-        "NBA",
-        "Soccer"
-      ],
-      "n_legs": 3,
-      "p_win_pct": 35.6,
-      "payout": 6.0,
-      "min_guarantee": 6.0,
-      "ev": 1.4951,
-      "recommendation": "OK",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 15,
-      "legs": [
-        "Matt Turner Goalie Saves 2.0 OVER",
-        "Jonathan Sirois Goalie Saves 3.0 UNDER"
-      ],
-      "sports": [
-        "Soccer"
-      ],
-      "n_legs": 2,
-      "p_win_pct": 50.6,
-      "payout": 3.0,
-      "min_guarantee": 3.0,
-      "ev": 1.0229,
-      "recommendation": "OK",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 16,
-      "legs": [
-        "Gabriel Pec Shots 4.0 OVER",
-        "Rodolfo Cota Goalie Saves 3.0 UNDER"
-      ],
-      "sports": [
-        "Soccer"
-      ],
-      "n_legs": 2,
-      "p_win_pct": 50.5,
-      "payout": 3.0,
-      "min_guarantee": 3.0,
-      "ev": 1.0209,
-      "recommendation": "OK",
-      "n_goblins": 0,
-      "n_demons": 0,
-      "pick_types": [
-        "standard",
-        "standard"
-      ]
-    },
-    {
-      "rank": 17,
-      "legs": [
-        "Victor Wembanyama Points 14.5 OVER",
-        "Nikola Joki\u0107 Pts+Rebs 29.5 OVER"
-      ],
-      "sports": [
-        "NBA"
-      ],
-      "n_legs": 2,
-      "p_win_pct": 65.2,
-      "payout": 0.27,
-      "min_guarantee": 0.27,
-      "ev": -0.1718,
+      "n_legs": 4,
+      "p_win_pct": 39.2,
+      "payout": 10.0,
+      "min_guarantee": 2.5,
+      "ev": -0.0187,
       "recommendation": "SKIP",
-      "n_goblins": 2,
+      "n_goblins": 3,
       "n_demons": 0,
       "pick_types": [
         "goblin",
-        "goblin"
-      ]
-    },
-    {
-      "rank": 18,
-      "legs": [
-        "Victor Wembanyama Points 14.5 OVER",
-        "Jamal Murray Pts+Asts 24.5 OVER"
-      ],
-      "sports": [
-        "NBA"
-      ],
-      "n_legs": 2,
-      "p_win_pct": 65.1,
-      "payout": 0.27,
-      "min_guarantee": 0.27,
-      "ev": -0.1734,
-      "recommendation": "SKIP",
-      "n_goblins": 2,
-      "n_demons": 0,
-      "pick_types": [
         "goblin",
+        "standard",
         "goblin"
+      ],
+      "player_keys": [
+        "Dylan Harper",
+        "Ajay Mitchell",
+        "Rosemonde Kouassi",
+        "Jake Bauers"
       ]
     }
   ]

@@ -31,10 +31,10 @@
     },
     {
       "sport": "MLB",
-      "decided": 161438,
-      "paid": 47858,
-      "win_rate": 0.29644817205366764,
-      "net_dollars": -657220.0
+      "decided": 161643,
+      "paid": 47871,
+      "win_rate": 0.29615263265344,
+      "net_dollars": -659010.0
     },
     {
       "sport": "SOCCER",
@@ -66,5 +66,5 @@
     }
   ],
   "source": "graded_props_json",
-  "signature": "n=98:mt=1780205035464136700"
+  "signature": "n=98:mt=1780250948694960300"
 }

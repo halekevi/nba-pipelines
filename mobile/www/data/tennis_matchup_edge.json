@@ -2,9 +2,9 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-05-31T12:02:37.986995+00:00",
-  "slate_note": "Tennis match day 2026-06-01 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-01.xlsx)",
-  "tennis_match_date": "2026-06-01",
+  "generated_at": "2026-06-01T09:01:23.789000+00:00",
+  "slate_note": "Tennis match day 2026-06-02 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-02.xlsx)",
+  "tennis_match_date": "2026-06-02",
   "n_teams": 300,
   "elite_rank_cut": 25,
   "weak_rank_cut": 100,
@@ -38,800 +38,1500 @@
   ],
   "teams": [
     {
-      "def_key": "alejandro tabilo",
-      "slate_abbr": "alejandro tabilo",
-      "name": "Alejandro Tabilo",
-      "def_rank": 36,
+      "def_key": "ajla tomljanovic",
+      "slate_abbr": "ajla tomljanovic",
+      "name": "Ajla Tomljanovic",
+      "def_rank": 100,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "alexander zverev",
+      "slate_abbr": "alexander zverev",
+      "name": "Alexander Zverev",
+      "def_rank": 3,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "alexandra eala",
+      "slate_abbr": "alexandra eala",
+      "name": "Alexandra Eala",
+      "def_rank": 37,
       "def_tier": "Avg"
     },
     {
-      "def_key": "anastasia potapova",
-      "slate_abbr": "anastasia potapova",
-      "name": "Anastasia Potapova",
+      "def_key": "alice tubello",
+      "slate_abbr": "alice tubello",
+      "name": "Alice Tubello",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "alicia dudeney",
+      "slate_abbr": "alicia dudeney",
+      "name": "Alicia Dudeney",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "alina charaeva",
+      "slate_abbr": "alina charaeva",
+      "name": "Alina Charaeva",
+      "def_rank": 130,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "ashlyn krueger",
+      "slate_abbr": "ashlyn krueger",
+      "name": "Ashlyn Krueger",
+      "def_rank": 120,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "carole monnet",
+      "slate_abbr": "carole monnet",
+      "name": "Carole Monnet",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "chloe paquet",
+      "slate_abbr": "chloe paquet",
+      "name": "Chloe Paquet",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "despina papamichail",
+      "slate_abbr": "despina papamichail",
+      "name": "Despina Papamichail",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "ekaterine gorgodze",
+      "slate_abbr": "ekaterine gorgodze",
+      "name": "Ekaterine Gorgodze",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "elina svitolina",
+      "slate_abbr": "elina svitolina",
+      "name": "Elina Svitolina",
+      "def_rank": 7,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "giorgia pedone",
+      "slate_abbr": "giorgia pedone",
+      "name": "Giorgia Pedone",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "greet minnen",
+      "slate_abbr": "greet minnen",
+      "name": "Greet Minnen",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "hanne vandewinkel",
+      "slate_abbr": "hanne vandewinkel",
+      "name": "Hanne Vandewinkel",
+      "def_rank": 99,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "harriet dart",
+      "slate_abbr": "harriet dart",
+      "name": "Harriet Dart",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "himeno sakatsume",
+      "slate_abbr": "himeno sakatsume",
+      "name": "Himeno Sakatsume",
+      "def_rank": 131,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "jakub mensik",
+      "slate_abbr": "jakub mensik",
+      "name": "Jakub Mensik",
+      "def_rank": 27,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "janice tjen",
+      "slate_abbr": "janice tjen",
+      "name": "Janice Tjen",
+      "def_rank": 40,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "joao fonseca",
+      "slate_abbr": "joao fonseca",
+      "name": "Joao Fonseca",
       "def_rank": 30,
       "def_tier": "Avg"
     },
     {
-      "def_key": "anna kalinskaya",
-      "slate_abbr": "anna kalinskaya",
-      "name": "Anna Kalinskaya",
-      "def_rank": 24,
-      "def_tier": "Above Avg"
+      "def_key": "katie swan",
+      "slate_abbr": "katie swan",
+      "name": "Katie Swan",
+      "def_rank": null,
+      "def_tier": ""
     },
     {
-      "def_key": "aryna sabalenka",
-      "slate_abbr": "aryna sabalenka",
-      "name": "Aryna Sabalenka",
-      "def_rank": 1,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "diana shnaider",
-      "slate_abbr": "diana shnaider",
-      "name": "Diana Shnaider",
-      "def_rank": 23,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "diane parry",
-      "slate_abbr": "diane parry",
-      "name": "Diane Parry",
-      "def_rank": 92,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "felix augeraliassime",
-      "slate_abbr": "felix augeraliassime",
-      "name": "Felix Auger-Aliassime",
-      "def_rank": 6,
-      "def_tier": "Elite"
-    },
-    {
-      "def_key": "flavio cobolli",
-      "slate_abbr": "flavio cobolli",
-      "name": "Flavio Cobolli",
-      "def_rank": 14,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "juan manuel cerundolo",
-      "slate_abbr": "juan manuel cerundolo",
-      "name": "Juan Manuel Cerundolo",
-      "def_rank": 56,
-      "def_tier": "Below Avg"
-    },
-    {
-      "def_key": "madison keys",
-      "slate_abbr": "madison keys",
-      "name": "Madison Keys",
-      "def_rank": 19,
-      "def_tier": "Above Avg"
-    },
-    {
-      "def_key": "maja chwalinska",
-      "slate_abbr": "maja chwalinska",
-      "name": "Maja Chwalinska",
-      "def_rank": 114,
+      "def_key": "kayla day",
+      "slate_abbr": "kayla day",
+      "name": "Kayla Day",
+      "def_rank": 145,
       "def_tier": "Weak"
     },
     {
-      "def_key": "matteo berrettini",
-      "slate_abbr": "matteo berrettini",
-      "name": "Matteo Berrettini",
-      "def_rank": 105,
+      "def_key": "leyre romero gormaz",
+      "slate_abbr": "leyre romero gormaz",
+      "name": "Leyre Romero Gormaz",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "linda fruhvirtova",
+      "slate_abbr": "linda fruhvirtova",
+      "name": "Linda Fruhvirtova",
+      "def_rank": 149,
       "def_tier": "Weak"
     },
     {
-      "def_key": "naomi osaka",
-      "slate_abbr": "naomi osaka",
-      "name": "Naomi Osaka",
-      "def_rank": 16,
+      "def_key": "lisa zaar",
+      "slate_abbr": "lisa zaar",
+      "name": "Lisa Zaar",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "lucia bronzetti",
+      "slate_abbr": "lucia bronzetti",
+      "name": "Lucia Bronzetti",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "marta kostyuk",
+      "slate_abbr": "marta kostyuk",
+      "name": "Marta Kostyuk",
+      "def_rank": 15,
       "def_tier": "Above Avg"
     },
     {
-      "def_key": "zachary svajda",
-      "slate_abbr": "zachary svajda",
-      "name": "Zachary Svajda",
-      "def_rank": 85,
+      "def_key": "mirra andreeva",
+      "slate_abbr": "mirra andreeva",
+      "name": "Mirra Andreeva",
+      "def_rank": 8,
+      "def_tier": "Elite"
+    },
+    {
+      "def_key": "nao hibino",
+      "slate_abbr": "nao hibino",
+      "name": "Nao Hibino",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "nikola bartunkova",
+      "slate_abbr": "nikola bartunkova",
+      "name": "Nikola Bartunkova",
+      "def_rank": 69,
       "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "nuria brancaccio",
+      "slate_abbr": "nuria brancaccio",
+      "name": "Nuria Brancaccio",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "priscilla hon",
+      "slate_abbr": "priscilla hon",
+      "name": "Priscilla Hon",
+      "def_rank": 143,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "rafael jodar",
+      "slate_abbr": "rafael jodar",
+      "name": "Rafael Jodar",
+      "def_rank": 29,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "rebeka masarova",
+      "slate_abbr": "rebeka masarova",
+      "name": "Rebeka Masarova",
+      "def_rank": 132,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "sorana cirstea",
+      "slate_abbr": "sorana cirstea",
+      "name": "Sorana Cirstea",
+      "def_rank": 18,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "tatiana prozorova",
+      "slate_abbr": "tatiana prozorova",
+      "name": "Tatiana Prozorova",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "tatjana maria",
+      "slate_abbr": "tatjana maria",
+      "name": "Tatjana Maria",
+      "def_rank": 54,
+      "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "taylah preston",
+      "slate_abbr": "taylah preston",
+      "name": "Taylah Preston",
+      "def_rank": 127,
+      "def_tier": "Weak"
+    },
+    {
+      "def_key": "tereza martincova",
+      "slate_abbr": "tereza martincova",
+      "name": "Tereza Martincova",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "tyra caterina grant",
+      "slate_abbr": "tyra caterina grant",
+      "name": "Tyra Caterina Grant",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "vittoria paganetti",
+      "slate_abbr": "vittoria paganetti",
+      "name": "Vittoria Paganetti",
+      "def_rank": null,
+      "def_tier": ""
+    },
+    {
+      "def_key": "xiaodi you",
+      "slate_abbr": "xiaodi you",
+      "name": "Xiaodi You",
+      "def_rank": null,
+      "def_tier": ""
     }
   ],
   "matchups": {
-    "diane parry": {
-      "opponent_slate": "maja chwalinska",
-      "opponent_name": "MAJA CHWALINSKA",
-      "opponent_def_rank": 114,
-      "opponent_def_tier": "Weak",
-      "team_def_rank": 92,
+    "priscilla hon": {
+      "opponent_slate": "alexandra eala",
+      "opponent_name": "ALEXANDRA EALA",
+      "opponent_def_rank": 37,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 143,
+      "team_def_tier": "Weak"
+    },
+    "rebeka masarova": {
+      "opponent_slate": "tereza martincova",
+      "opponent_name": "TEREZA MARTINCOVA",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 132,
+      "team_def_tier": "Weak"
+    },
+    "kayla day": {
+      "opponent_slate": "hanne vandewinkel",
+      "opponent_name": "HANNE VANDEWINKEL",
+      "opponent_def_rank": 99,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 145,
+      "team_def_tier": "Weak"
+    },
+    "ajla tomljanovic": {
+      "opponent_slate": "katie swan",
+      "opponent_name": "KATIE SWAN",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 100,
       "team_def_tier": "Below Avg"
     },
-    "anastasia potapova": {
-      "opponent_slate": "anna kalinskaya",
-      "opponent_name": "ANNA KALINSKAYA",
-      "opponent_def_rank": 24,
-      "opponent_def_tier": "Above Avg",
+    "rafael jodar": {
+      "opponent_slate": "alexander zverev",
+      "opponent_name": "ALEXANDER ZVEREV",
+      "opponent_def_rank": 3,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 29,
+      "team_def_tier": "Avg"
+    },
+    "joao fonseca": {
+      "opponent_slate": "jakub mensik",
+      "opponent_name": "JAKUB MENSIK",
+      "opponent_def_rank": 27,
+      "opponent_def_tier": "Avg",
       "team_def_rank": 30,
       "team_def_tier": "Avg"
     },
-    "maja chwalinska": {
-      "opponent_slate": "diane parry",
-      "opponent_name": "DIANE PARRY",
-      "opponent_def_rank": 92,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 114,
-      "team_def_tier": "Weak"
-    },
-    "zachary svajda": {
-      "opponent_slate": "flavio cobolli",
-      "opponent_name": "FLAVIO COBOLLI",
-      "opponent_def_rank": 14,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 85,
-      "team_def_tier": "Below Avg"
-    },
-    "matteo berrettini": {
-      "opponent_slate": "juan manuel cerundolo",
-      "opponent_name": "JUAN MANUEL CERUNDOLO",
-      "opponent_def_rank": 56,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 105,
-      "team_def_tier": "Weak"
-    },
-    "juan manuel cerundolo": {
-      "opponent_slate": "matteo berrettini",
-      "opponent_name": "MATTEO BERRETTINI",
-      "opponent_def_rank": 105,
-      "opponent_def_tier": "Weak",
-      "team_def_rank": 56,
-      "team_def_tier": "Below Avg"
-    },
-    "aryna sabalenka": {
-      "opponent_slate": "naomi osaka",
-      "opponent_name": "NAOMI OSAKA",
-      "opponent_def_rank": 16,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 1,
-      "team_def_tier": "Elite"
-    },
-    "anna kalinskaya": {
-      "opponent_slate": "anastasia potapova",
-      "opponent_name": "ANASTASIA POTAPOVA",
+    "jakub mensik": {
+      "opponent_slate": "joao fonseca",
+      "opponent_name": "JOAO FONSECA",
       "opponent_def_rank": 30,
       "opponent_def_tier": "Avg",
-      "team_def_rank": 24,
-      "team_def_tier": "Above Avg"
+      "team_def_rank": 27,
+      "team_def_tier": "Avg"
     },
-    "naomi osaka": {
-      "opponent_slate": "aryna sabalenka",
-      "opponent_name": "ARYNA SABALENKA",
-      "opponent_def_rank": 1,
+    "sorana cirstea": {
+      "opponent_slate": "mirra andreeva",
+      "opponent_name": "MIRRA ANDREEVA",
+      "opponent_def_rank": 8,
       "opponent_def_tier": "Elite",
-      "team_def_rank": 16,
+      "team_def_rank": 18,
       "team_def_tier": "Above Avg"
     },
-    "diana shnaider": {
-      "opponent_slate": "madison keys",
-      "opponent_name": "MADISON KEYS",
-      "opponent_def_rank": 19,
+    "mirra andreeva": {
+      "opponent_slate": "sorana cirstea",
+      "opponent_name": "SORANA CIRSTEA",
+      "opponent_def_rank": 18,
       "opponent_def_tier": "Above Avg",
-      "team_def_rank": 23,
-      "team_def_tier": "Above Avg"
-    },
-    "madison keys": {
-      "opponent_slate": "diana shnaider",
-      "opponent_name": "DIANA SHNAIDER",
-      "opponent_def_rank": 23,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 19,
-      "team_def_tier": "Above Avg"
-    },
-    "felix augeraliassime": {
-      "opponent_slate": "alejandro tabilo",
-      "opponent_name": "ALEJANDRO TABILO",
-      "opponent_def_rank": 36,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 6,
+      "team_def_rank": 8,
       "team_def_tier": "Elite"
     },
-    "flavio cobolli": {
-      "opponent_slate": "zachary svajda",
-      "opponent_name": "ZACHARY SVAJDA",
-      "opponent_def_rank": 85,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 14,
+    "elina svitolina": {
+      "opponent_slate": "marta kostyuk",
+      "opponent_name": "MARTA KOSTYUK",
+      "opponent_def_rank": 15,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 7,
+      "team_def_tier": "Elite"
+    },
+    "marta kostyuk": {
+      "opponent_slate": "elina svitolina",
+      "opponent_name": "ELINA SVITOLINA",
+      "opponent_def_rank": 7,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 15,
       "team_def_tier": "Above Avg"
     },
-    "alejandro tabilo": {
-      "opponent_slate": "felix augeraliassime",
-      "opponent_name": "FELIX AUGER-ALIASSIME",
-      "opponent_def_rank": 6,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 36,
+    "linda fruhvirtova": {
+      "opponent_slate": "tatjana maria",
+      "opponent_name": "TATJANA MARIA",
+      "opponent_def_rank": 54,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 149,
+      "team_def_tier": "Weak"
+    },
+    "himeno sakatsume": {
+      "opponent_slate": "ashlyn krueger",
+      "opponent_name": "ASHLYN KRUEGER",
+      "opponent_def_rank": 120,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 131,
+      "team_def_tier": "Weak"
+    },
+    "giorgia pedone": {
+      "opponent_slate": "ekaterine gorgodze",
+      "opponent_name": "EKATERINE GORGODZE",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "alice tubello": {
+      "opponent_slate": "carole monnet",
+      "opponent_name": "CAROLE MONNET",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "lisa zaar": {
+      "opponent_slate": "tyra caterina grant",
+      "opponent_name": "TYRA CATERINA GRANT",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "ekaterine gorgodze": {
+      "opponent_slate": "giorgia pedone",
+      "opponent_name": "GIORGIA PEDONE",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "vittoria paganetti": {
+      "opponent_slate": "lucia bronzetti",
+      "opponent_name": "LUCIA BRONZETTI",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "nuria brancaccio": {
+      "opponent_slate": "tatiana prozorova",
+      "opponent_name": "TATIANA PROZOROVA",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "katie swan": {
+      "opponent_slate": "ajla tomljanovic",
+      "opponent_name": "AJLA TOMLJANOVIC",
+      "opponent_def_rank": 100,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "alicia dudeney": {
+      "opponent_slate": "taylah preston",
+      "opponent_name": "TAYLAH PRESTON",
+      "opponent_def_rank": 127,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "leyre romero gormaz": {
+      "opponent_slate": "xiaodi you",
+      "opponent_name": "XIAODI YOU",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "xiaodi you": {
+      "opponent_slate": "leyre romero gormaz",
+      "opponent_name": "LEYRE ROMERO GORMAZ",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "tyra caterina grant": {
+      "opponent_slate": "lisa zaar",
+      "opponent_name": "LISA ZAAR",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "chloe paquet": {
+      "opponent_slate": "despina papamichail",
+      "opponent_name": "DESPINA PAPAMICHAIL",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "lucia bronzetti": {
+      "opponent_slate": "vittoria paganetti",
+      "opponent_name": "VITTORIA PAGANETTI",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "carole monnet": {
+      "opponent_slate": "alice tubello",
+      "opponent_name": "ALICE TUBELLO",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "tatiana prozorova": {
+      "opponent_slate": "nuria brancaccio",
+      "opponent_name": "NURIA BRANCACCIO",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "harriet dart": {
+      "opponent_slate": "nikola bartunkova",
+      "opponent_name": "NIKOLA BARTUNKOVA",
+      "opponent_def_rank": 69,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "despina papamichail": {
+      "opponent_slate": "chloe paquet",
+      "opponent_name": "CHLOE PAQUET",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "tereza martincova": {
+      "opponent_slate": "rebeka masarova",
+      "opponent_name": "REBEKA MASAROVA",
+      "opponent_def_rank": 132,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "nao hibino": {
+      "opponent_slate": "janice tjen",
+      "opponent_name": "JANICE TJEN",
+      "opponent_def_rank": 40,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "greet minnen": {
+      "opponent_slate": "alina charaeva",
+      "opponent_name": "ALINA CHARAEVA",
+      "opponent_def_rank": 130,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "taylah preston": {
+      "opponent_slate": "alicia dudeney",
+      "opponent_name": "ALICIA DUDENEY",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 127,
+      "team_def_tier": "Weak"
+    },
+    "tatjana maria": {
+      "opponent_slate": "linda fruhvirtova",
+      "opponent_name": "LINDA FRUHVIRTOVA",
+      "opponent_def_rank": 149,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 54,
+      "team_def_tier": "Below Avg"
+    },
+    "alexandra eala": {
+      "opponent_slate": "priscilla hon",
+      "opponent_name": "PRISCILLA HON",
+      "opponent_def_rank": 143,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 37,
       "team_def_tier": "Avg"
+    },
+    "hanne vandewinkel": {
+      "opponent_slate": "kayla day",
+      "opponent_name": "KAYLA DAY",
+      "opponent_def_rank": 145,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 99,
+      "team_def_tier": "Below Avg"
+    },
+    "nikola bartunkova": {
+      "opponent_slate": "harriet dart",
+      "opponent_name": "HARRIET DART",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 69,
+      "team_def_tier": "Below Avg"
+    },
+    "janice tjen": {
+      "opponent_slate": "nao hibino",
+      "opponent_name": "NAO HIBINO",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 40,
+      "team_def_tier": "Avg"
+    },
+    "ashlyn krueger": {
+      "opponent_slate": "himeno sakatsume",
+      "opponent_name": "HIMENO SAKATSUME",
+      "opponent_def_rank": 131,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 120,
+      "team_def_tier": "Weak"
+    },
+    "alexander zverev": {
+      "opponent_slate": "rafael jodar",
+      "opponent_name": "RAFAEL JODAR",
+      "opponent_def_rank": 29,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 3,
+      "team_def_tier": "Elite"
+    },
+    "alina charaeva": {
+      "opponent_slate": "greet minnen",
+      "opponent_name": "GREET MINNEN",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 130,
+      "team_def_tier": "Weak"
     }
   },
   "players_by_team_cat": {
-    "matteo berrettini|match_total_games": {
-      "team_slate": "matteo berrettini",
+    "rebeka masarova|match_total_games": {
+      "team_slate": "rebeka masarova",
       "category": "match_total_games",
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "juan manuel cerundolo",
-        "name": "JUAN MANUEL CERUNDOLO",
-        "def_rank": 56,
+        "slate_abbr": "tereza martincova",
+        "name": "TEREZA MARTINCOVA",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
+          "player": "Rebeka Masarova",
+          "player_norm": "rebeka masarova",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 40.0,
-          "game_score": 40.0,
+          "season_avg": 28.0,
+          "game_score": 28.0,
           "edge": "TOP_EDGE",
-          "notes": "PP edge +6.5 on board tonight.",
+          "notes": "PP edge +7.5 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 33.5,
-          "pp_edge": 6.5
+          "pp_line": 20.5,
+          "pp_edge": 7.5
         }
       ]
     },
-    "aryna sabalenka|match_total_games": {
-      "team_slate": "aryna sabalenka",
+    "ajla tomljanovic|match_total_games": {
+      "team_slate": "ajla tomljanovic",
       "category": "match_total_games",
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "naomi osaka",
-        "name": "NAOMI OSAKA",
-        "def_rank": 16,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 18.0,
-          "game_score": 18.0,
-          "edge": "NEUTRAL",
-          "notes": "PP edge +1.5 vs elite opponent (#16) \u2014 proceed with caution.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 16.5,
-          "pp_edge": 1.5
-        }
-      ]
-    },
-    "frances tiafoe|match_total_games": {
-      "team_slate": "frances tiafoe",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Frances Tiafoe",
-          "player_norm": "frances tiafoe",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 41.0,
-          "game_score": 41.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +9.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 31.5,
-          "pp_edge": 9.5
-        }
-      ]
-    },
-    "felix augeraliassime|match_total_games": {
-      "team_slate": "felix augeraliassime",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "alejandro tabilo",
-        "name": "ALEJANDRO TABILO",
-        "def_rank": 36,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Felix Auger-Aliassime",
-          "player_norm": "felix augeraliassime",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 50.0,
-          "game_score": 50.0,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#36).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "flavio cobolli|match_total_games": {
-      "team_slate": "flavio cobolli",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "zachary svajda",
-        "name": "ZACHARY SVAJDA",
-        "def_rank": 85,
+        "slate_abbr": "katie swan",
+        "name": "KATIE SWAN",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Flavio Cobolli",
-          "player_norm": "flavio cobolli",
+          "player": "Ajla Tomljanovic",
+          "player_norm": "ajla tomljanovic",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 31.0,
           "game_score": 31.0,
           "edge": "TOP_EDGE",
-          "notes": "PP edge +3.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 27.5,
-          "pp_edge": 3.5
-        }
-      ]
-    },
-    "heliovaara h  patten h|match_total_games": {
-      "team_slate": "heliovaara h  patten h",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Heliovaara H / Patten H",
-          "player_norm": "heliovaara h  patten h",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 22.5,
-          "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "arevalo m  pavic m|match_total_games": {
-      "team_slate": "arevalo m  pavic m",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Arevalo M / Pavic M",
-          "player_norm": "arevalo m  pavic m",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 22.5,
-          "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "perez e  schuurs d|match_total_games": {
-      "team_slate": "perez e  schuurs d",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Perez E / Schuurs D",
-          "player_norm": "perez e  schuurs d",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 22.5,
-          "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "mertens e  zhang s|match_total_games": {
-      "team_slate": "mertens e  zhang s",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Mertens E / Zhang S",
-          "player_norm": "mertens e  zhang s",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 22.5,
-          "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "dabrowski g  stefani l|match_total_games": {
-      "team_slate": "dabrowski g  stefani l",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Dabrowski G / Stefani L",
-          "player_norm": "dabrowski g  stefani l",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 21.5,
-          "game_score": 21.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "aoyama s  liang e|match_total_games": {
-      "team_slate": "aoyama s  liang e",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Aoyama S / Liang E",
-          "player_norm": "aoyama s  liang e",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 22.5,
-          "game_score": 22.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "maja chwalinska|match_total_games": {
-      "team_slate": "maja chwalinska",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "diane parry",
-        "name": "DIANE PARRY",
-        "def_rank": 92,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Maja Chwalinska",
-          "player_norm": "maja chwalinska",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 17.2,
-          "game_score": 17.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 17.5,
-          "pp_edge": -0.25
-        }
-      ]
-    },
-    "anastasia potapova|match_total_games": {
-      "team_slate": "anastasia potapova",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "anna kalinskaya",
-        "name": "ANNA KALINSKAYA",
-        "def_rank": 24,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Anastasia Potapova",
-          "player_norm": "anastasia potapova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 15.0,
-          "game_score": 15.0,
-          "edge": "AVOID",
-          "notes": "PP edge -2.5 vs elite opponent (#24).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 17.5,
-          "pp_edge": -2.5
-        }
-      ]
-    },
-    "madison keys|match_total_games": {
-      "team_slate": "madison keys",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "diana shnaider",
-        "name": "DIANA SHNAIDER",
-        "def_rank": 23,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Madison Keys",
-          "player_norm": "madison keys",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 15.0,
-          "game_score": 15.0,
-          "edge": "AVOID",
-          "notes": "PP edge -3.5 vs elite opponent (#23).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 18.5,
-          "pp_edge": -3.5
-        }
-      ]
-    },
-    "diane parry|games_won": {
-      "team_slate": "diane parry",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "maja chwalinska",
-        "name": "MAJA CHWALINSKA",
-        "def_rank": 114,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Diane Parry",
-          "player_norm": "diane parry",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.0,
-          "game_score": 12.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +5.5 vs weak opponent (#114).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": 5.5
-        }
-      ]
-    },
-    "anastasia potapova|games_won": {
-      "team_slate": "anastasia potapova",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "anna kalinskaya",
-        "name": "ANNA KALINSKAYA",
-        "def_rank": 24,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Anastasia Potapova",
-          "player_norm": "anastasia potapova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.0,
-          "game_score": 12.0,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +2.5 but elite opponent (#24) \u2014 tough matchup.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": 2.5
-        }
-      ]
-    },
-    "maja chwalinska|games_won": {
-      "team_slate": "maja chwalinska",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "diane parry",
-        "name": "DIANE PARRY",
-        "def_rank": 92,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Maja Chwalinska",
-          "player_norm": "maja chwalinska",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.5,
-          "game_score": 12.5,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +3.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": 3.0
-        }
-      ]
-    },
-    "zachary svajda|games_won": {
-      "team_slate": "zachary svajda",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "flavio cobolli",
-        "name": "FLAVIO COBOLLI",
-        "def_rank": 14,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Zachary Svajda",
-          "player_norm": "zachary svajda",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 23.5,
-          "game_score": 23.5,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +14.0 but elite opponent (#14) \u2014 tough matchup.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": 14.0
-        }
-      ]
-    },
-    "matteo berrettini|games_won": {
-      "team_slate": "matteo berrettini",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "juan manuel cerundolo",
-        "name": "JUAN MANUEL CERUNDOLO",
-        "def_rank": 56,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 25.0,
-          "game_score": 25.0,
-          "edge": "TOP_EDGE",
           "notes": "PP edge +9.5 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 15.5,
+          "pp_line": 21.5,
           "pp_edge": 9.5
         }
       ]
     },
-    "juan manuel cerundolo|games_won": {
-      "team_slate": "juan manuel cerundolo",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
+    "joao fonseca|match_total_games": {
+      "team_slate": "joao fonseca",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 105,
+        "slate_abbr": "jakub mensik",
+        "name": "JAKUB MENSIK",
+        "def_rank": 27,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Joao Fonseca",
+          "player_norm": "joao fonseca",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 37.0,
+          "game_score": 37.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 30.5,
+          "pp_edge": 6.5
+        }
+      ]
+    },
+    "mirra andreeva|match_total_games": {
+      "team_slate": "mirra andreeva",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "sorana cirstea",
+        "name": "SORANA CIRSTEA",
+        "def_rank": 18,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Mirra Andreeva",
+          "player_norm": "mirra andreeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +3.0 but elite opponent (#18) \u2014 tough matchup.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": 3.0
+        }
+      ]
+    },
+    "king e  dabrowski g|match_total_games": {
+      "team_slate": "king e  dabrowski g",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "King E / Dabrowski G",
+          "player_norm": "king e  dabrowski g",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.0,
+          "game_score": 20.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "siniakova k  townsend t|match_total_games": {
+      "team_slate": "siniakova k  townsend t",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Siniakova K / Townsend T",
+          "player_norm": "siniakova k  townsend t",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 18.5,
+          "game_score": 18.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "skupski n  krawczyk d|match_total_games": {
+      "team_slate": "skupski n  krawczyk d",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Skupski N / Krawczyk D",
+          "player_norm": "skupski n  krawczyk d",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.0,
+          "game_score": 20.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "giorgia pedone|match_total_games": {
+      "team_slate": "giorgia pedone",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "ekaterine gorgodze",
+        "name": "EKATERINE GORGODZE",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Giorgia Pedone",
+          "player_norm": "giorgia pedone",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "leyre romero gormaz|match_total_games": {
+      "team_slate": "leyre romero gormaz",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "xiaodi you",
+        "name": "XIAODI YOU",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Leyre Romero Gormaz",
+          "player_norm": "leyre romero gormaz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "lucia bronzetti|match_total_games": {
+      "team_slate": "lucia bronzetti",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "vittoria paganetti",
+        "name": "VITTORIA PAGANETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lucia Bronzetti",
+          "player_norm": "lucia bronzetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 18.5,
+          "game_score": 18.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 18.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "alice tubello|match_total_games": {
+      "team_slate": "alice tubello",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "carole monnet",
+        "name": "CAROLE MONNET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alice Tubello",
+          "player_norm": "alice tubello",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tatiana prozorova|match_total_games": {
+      "team_slate": "tatiana prozorova",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "nuria brancaccio",
+        "name": "NURIA BRANCACCIO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tatiana Prozorova",
+          "player_norm": "tatiana prozorova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tyra caterina grant|match_total_games": {
+      "team_slate": "tyra caterina grant",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "lisa zaar",
+        "name": "LISA ZAAR",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tyra Caterina Grant",
+          "player_norm": "tyra caterina grant",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 19.5,
+          "game_score": 19.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 19.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "harriet dart|match_total_games": {
+      "team_slate": "harriet dart",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "nikola bartunkova",
+        "name": "NIKOLA BARTUNKOVA",
+        "def_rank": 69,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Harriet Dart",
+          "player_norm": "harriet dart",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 21.5,
+          "game_score": 21.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#69).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 21.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "chloe paquet|match_total_games": {
+      "team_slate": "chloe paquet",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "despina papamichail",
+        "name": "DESPINA PAPAMICHAIL",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Chloe Paquet",
+          "player_norm": "chloe paquet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "greet minnen|match_total_games": {
+      "team_slate": "greet minnen",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "alina charaeva",
+        "name": "ALINA CHARAEVA",
+        "def_rank": 130,
         "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Juan Manuel Cerundolo",
-          "player_norm": "juan manuel cerundolo",
+          "player": "Greet Minnen",
+          "player_norm": "greet minnen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.5,
+          "game_score": 20.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "ashlyn krueger|match_total_games": {
+      "team_slate": "ashlyn krueger",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "himeno sakatsume",
+        "name": "HIMENO SAKATSUME",
+        "def_rank": 131,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Ashlyn Krueger",
+          "player_norm": "ashlyn krueger",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 23.0,
+          "game_score": 23.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.5 vs weak opponent (#131).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 19.5,
+          "pp_edge": 3.5
+        }
+      ]
+    },
+    "marta kostyuk|match_total_games": {
+      "team_slate": "marta kostyuk",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "elina svitolina",
+        "name": "ELINA SVITOLINA",
+        "def_rank": 7,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 24.0,
+          "game_score": 24.0,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +5.5 but elite opponent (#7) \u2014 tough matchup.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 18.5,
+          "pp_edge": 5.5
+        }
+      ]
+    },
+    "taylah preston|match_total_games": {
+      "team_slate": "taylah preston",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "alicia dudeney",
+        "name": "ALICIA DUDENEY",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Taylah Preston",
+          "player_norm": "taylah preston",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 21.0,
+          "game_score": 21.0,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 21.5,
+          "pp_edge": -0.5
+        }
+      ]
+    },
+    "alexander zverev|match_total_games": {
+      "team_slate": "alexander zverev",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "rafael jodar",
+        "name": "RAFAEL JODAR",
+        "def_rank": 29,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Alexander Zverev",
+          "player_norm": "alexander zverev",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 26.5,
+          "game_score": 26.5,
+          "edge": "AVOID",
+          "notes": "PP edge -5.0 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 31.5,
+          "pp_edge": -5.0
+        }
+      ]
+    },
+    "tatjana maria|match_total_games": {
+      "team_slate": "tatjana maria",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "linda fruhvirtova",
+        "name": "LINDA FRUHVIRTOVA",
+        "def_rank": 149,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Tatjana Maria",
+          "player_norm": "tatjana maria",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 18.0,
+          "game_score": 18.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "alexandra eala|match_total_games": {
+      "team_slate": "alexandra eala",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "priscilla hon",
+        "name": "PRISCILLA HON",
+        "def_rank": 143,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alexandra Eala",
+          "player_norm": "alexandra eala",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 18.0,
+          "game_score": 18.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 18.5,
+          "pp_edge": -0.5
+        }
+      ]
+    },
+    "hanne vandewinkel|match_total_games": {
+      "team_slate": "hanne vandewinkel",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "kayla day",
+        "name": "KAYLA DAY",
+        "def_rank": 145,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Hanne Vandewinkel",
+          "player_norm": "hanne vandewinkel",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 15.0,
+          "game_score": 15.0,
+          "edge": "AVOID",
+          "notes": "PP edge -6.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 21.5,
+          "pp_edge": -6.5
+        }
+      ]
+    },
+    "janice tjen|match_total_games": {
+      "team_slate": "janice tjen",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "nao hibino",
+        "name": "NAO HIBINO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Janice Tjen",
+          "player_norm": "janice tjen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 19.0,
+          "game_score": 19.0,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
+    "priscilla hon|games_won": {
+      "team_slate": "priscilla hon",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "alexandra eala",
+        "name": "ALEXANDRA EALA",
+        "def_rank": 37,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Priscilla Hon",
+          "player_norm": "priscilla hon",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.0,
+          "game_score": 7.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": 0.5
+        }
+      ]
+    },
+    "kayla day|games_won": {
+      "team_slate": "kayla day",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "hanne vandewinkel",
+        "name": "HANNE VANDEWINKEL",
+        "def_rank": 99,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Kayla Day",
+          "player_norm": "kayla day",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 16.0,
+          "game_score": 16.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 3.5
+        }
+      ]
+    },
+    "ajla tomljanovic|games_won": {
+      "team_slate": "ajla tomljanovic",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "katie swan",
+        "name": "KATIE SWAN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ajla Tomljanovic",
+          "player_norm": "ajla tomljanovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 15.0,
+          "game_score": 15.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 2.5
+        }
+      ]
+    },
+    "rafael jodar|games_won": {
+      "team_slate": "rafael jodar",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "alexander zverev",
+        "name": "ALEXANDER ZVEREV",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Rafael Jodar",
+          "player_norm": "rafael jodar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 21.5,
+          "game_score": 21.5,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +9.0 but elite opponent (#3) \u2014 tough matchup.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 9.0
+        }
+      ]
+    },
+    "joao fonseca|games_won": {
+      "team_slate": "joao fonseca",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "jakub mensik",
+        "name": "JAKUB MENSIK",
+        "def_rank": 27,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Joao Fonseca",
+          "player_norm": "joao fonseca",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 22.0,
+          "game_score": 22.0,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +5.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 16.5,
+          "pp_edge": 5.5
+        }
+      ]
+    },
+    "jakub mensik|games_won": {
+      "team_slate": "jakub mensik",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "joao fonseca",
+        "name": "JOAO FONSECA",
+        "def_rank": 30,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Jakub Mensik",
+          "player_norm": "jakub mensik",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 20.0,
           "game_score": 20.0,
           "edge": "TOP_EDGE",
-          "notes": "PP edge +5.5 vs weak opponent (#105).",
+          "notes": "PP edge +6.5 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 14.5,
-          "pp_edge": 5.5
+          "pp_line": 13.5,
+          "pp_edge": 6.5
         }
       ]
     },
-    "anna kalinskaya|games_won": {
-      "team_slate": "anna kalinskaya",
+    "sorana cirstea|games_won": {
+      "team_slate": "sorana cirstea",
       "category": "games_won",
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "anastasia potapova",
-        "name": "ANASTASIA POTAPOVA",
-        "def_rank": 30,
-        "def_tier": "Avg"
+        "slate_abbr": "mirra andreeva",
+        "name": "MIRRA ANDREEVA",
+        "def_rank": 8,
+        "def_tier": "Elite"
       },
       "players": [
         {
-          "player": "Anna Kalinskaya",
-          "player_norm": "anna kalinskaya",
+          "player": "Sorana Cirstea",
+          "player_norm": "sorana cirstea",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 12.0,
           "game_score": 12.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +5.5 on board tonight.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +5.5 but elite opponent (#8) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 6.5,
@@ -839,643 +1539,643 @@
         }
       ]
     },
-    "naomi osaka|games_won": {
-      "team_slate": "naomi osaka",
+    "mirra andreeva|games_won": {
+      "team_slate": "mirra andreeva",
       "category": "games_won",
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Naomi Osaka",
-          "player_norm": "naomi osaka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 13.0,
-          "game_score": 13.0,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +7.5 but elite opponent (#1) \u2014 tough matchup.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 5.5,
-          "pp_edge": 7.5
-        }
-      ]
-    },
-    "diana shnaider|games_won": {
-      "team_slate": "diana shnaider",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "madison keys",
-        "name": "MADISON KEYS",
-        "def_rank": 19,
+        "slate_abbr": "sorana cirstea",
+        "name": "SORANA CIRSTEA",
+        "def_rank": 18,
         "def_tier": "Above Avg"
       },
       "players": [
         {
-          "player": "Diana Shnaider",
-          "player_norm": "diana shnaider",
+          "player": "Mirra Andreeva",
+          "player_norm": "mirra andreeva",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 12.0,
-          "game_score": 12.0,
+          "season_avg": 13.5,
+          "game_score": 13.5,
           "edge": "OK_EDGE",
-          "notes": "PP edge +4.5 but elite opponent (#19) \u2014 tough matchup.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 7.5,
-          "pp_edge": 4.5
-        }
-      ]
-    },
-    "madison keys|games_won": {
-      "team_slate": "madison keys",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "diana shnaider",
-        "name": "DIANA SHNAIDER",
-        "def_rank": 23,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Madison Keys",
-          "player_norm": "madison keys",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.0,
-          "game_score": 12.0,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +2.5 but elite opponent (#23) \u2014 tough matchup.",
+          "notes": "PP edge +4.0 but elite opponent (#18) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 9.5,
-          "pp_edge": 2.5
+          "pp_edge": 4.0
         }
       ]
     },
-    "heliovaara h  patten h|games_won": {
-      "team_slate": "heliovaara h  patten h",
+    "elina svitolina|games_won": {
+      "team_slate": "elina svitolina",
       "category": "games_won",
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Heliovaara H / Patten H",
-          "player_norm": "heliovaara h  patten h",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 13.0,
-          "game_score": 13.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "arevalo m  pavic m|games_won": {
-      "team_slate": "arevalo m  pavic m",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Arevalo M / Pavic M",
-          "player_norm": "arevalo m  pavic m",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 13.0,
-          "game_score": 13.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "perez e  schuurs d|games_won": {
-      "team_slate": "perez e  schuurs d",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Perez E / Schuurs D",
-          "player_norm": "perez e  schuurs d",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.5,
-          "game_score": 12.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "mertens e  zhang s|games_won": {
-      "team_slate": "mertens e  zhang s",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Mertens E / Zhang S",
-          "player_norm": "mertens e  zhang s",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.5,
-          "game_score": 12.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "dabrowski g  stefani l|games_won": {
-      "team_slate": "dabrowski g  stefani l",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Dabrowski G / Stefani L",
-          "player_norm": "dabrowski g  stefani l",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.5,
-          "game_score": 12.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "aoyama s  liang e|games_won": {
-      "team_slate": "aoyama s  liang e",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Aoyama S / Liang E",
-          "player_norm": "aoyama s  liang e",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 12.5,
-          "game_score": 12.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "flavio cobolli|games_won": {
-      "team_slate": "flavio cobolli",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "zachary svajda",
-        "name": "ZACHARY SVAJDA",
-        "def_rank": 85,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Flavio Cobolli",
-          "player_norm": "flavio cobolli",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 18.5,
-          "game_score": 18.5,
-          "edge": "AVOID",
-          "notes": "PP edge -3.0 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 21.5,
-          "pp_edge": -3.0
-        }
-      ]
-    },
-    "aryna sabalenka|games_won": {
-      "team_slate": "aryna sabalenka",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "naomi osaka",
-        "name": "NAOMI OSAKA",
-        "def_rank": 16,
+        "slate_abbr": "marta kostyuk",
+        "name": "MARTA KOSTYUK",
+        "def_rank": 15,
         "def_tier": "Above Avg"
       },
       "players": [
         {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
+          "player": "Elina Svitolina",
+          "player_norm": "elina svitolina",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 12.0,
-          "game_score": 12.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#16).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -0.5
-        }
-      ]
-    },
-    "diane parry|aces": {
-      "team_slate": "diane parry",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "maja chwalinska",
-        "name": "MAJA CHWALINSKA",
-        "def_rank": 114,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Diane Parry",
-          "player_norm": "diane parry",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.0 vs weak opponent (#114).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": 2.0
-        }
-      ]
-    },
-    "aryna sabalenka|aces": {
-      "team_slate": "aryna sabalenka",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "naomi osaka",
-        "name": "NAOMI OSAKA",
-        "def_rank": 16,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
+          "season_avg": 14.0,
+          "game_score": 14.0,
           "edge": "OK_EDGE",
-          "notes": "PP edge +2.5 but elite opponent (#16) \u2014 tough matchup.",
+          "notes": "PP edge +5.5 but elite opponent (#15) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": 2.5
+          "pp_line": 8.5,
+          "pp_edge": 5.5
         }
       ]
     },
-    "anastasia potapova|aces": {
-      "team_slate": "anastasia potapova",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "marta kostyuk|games_won": {
+      "team_slate": "marta kostyuk",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "anna kalinskaya",
-        "name": "ANNA KALINSKAYA",
-        "def_rank": 24,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Anastasia Potapova",
-          "player_norm": "anastasia potapova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -2.5 vs elite opponent (#24).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -2.5
-        }
-      ]
-    },
-    "naomi osaka|aces": {
-      "team_slate": "naomi osaka",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
+        "slate_abbr": "elina svitolina",
+        "name": "ELINA SVITOLINA",
+        "def_rank": 7,
         "def_tier": "Elite"
       },
       "players": [
         {
-          "player": "Naomi Osaka",
-          "player_norm": "naomi osaka",
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -2.5 vs elite opponent (#1).",
+          "season_avg": 15.0,
+          "game_score": 15.0,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +5.5 but elite opponent (#7) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -2.5
+          "pp_line": 9.5,
+          "pp_edge": 5.5
         }
       ]
     },
-    "juan manuel cerundolo|aces": {
-      "team_slate": "juan manuel cerundolo",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "linda fruhvirtova|games_won": {
+      "team_slate": "linda fruhvirtova",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 105,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Juan Manuel Cerundolo",
-          "player_norm": "juan manuel cerundolo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -4.5
-        }
-      ]
-    },
-    "alejandro tabilo|aces": {
-      "team_slate": "alejandro tabilo",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "felix augeraliassime",
-        "name": "FELIX AUGER-ALIASSIME",
-        "def_rank": 6,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Alejandro Tabilo",
-          "player_norm": "alejandro tabilo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -5.5 vs elite opponent (#6).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 5.5,
-          "pp_edge": -5.5
-        }
-      ]
-    },
-    "flavio cobolli|aces": {
-      "team_slate": "flavio cobolli",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "zachary svajda",
-        "name": "ZACHARY SVAJDA",
-        "def_rank": 85,
+        "slate_abbr": "tatjana maria",
+        "name": "TATJANA MARIA",
+        "def_rank": 54,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Flavio Cobolli",
-          "player_norm": "flavio cobolli",
+          "player": "Linda Fruhvirtova",
+          "player_norm": "linda fruhvirtova",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -6.5 on board \u2014 lean UNDER or skip OVER.",
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": -6.5
+          "pp_line": 11.5,
+          "pp_edge": 1.0
         }
       ]
     },
-    "zachary svajda|aces": {
-      "team_slate": "zachary svajda",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "himeno sakatsume|games_won": {
+      "team_slate": "himeno sakatsume",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "flavio cobolli",
-        "name": "FLAVIO COBOLLI",
-        "def_rank": 14,
-        "def_tier": "Above Avg"
+        "slate_abbr": "ashlyn krueger",
+        "name": "ASHLYN KRUEGER",
+        "def_rank": 120,
+        "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Zachary Svajda",
-          "player_norm": "zachary svajda",
+          "player": "Himeno Sakatsume",
+          "player_norm": "himeno sakatsume",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -6.5 vs elite opponent (#14).",
+          "season_avg": 9.7,
+          "game_score": 9.7,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.2 vs weak opponent (#120).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": -6.5
+          "pp_line": 8.5,
+          "pp_edge": 1.17
         }
       ]
     },
-    "anna kalinskaya|aces": {
-      "team_slate": "anna kalinskaya",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "alicia dudeney|games_won": {
+      "team_slate": "alicia dudeney",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "anastasia potapova",
-        "name": "ANASTASIA POTAPOVA",
-        "def_rank": 30,
+        "slate_abbr": "taylah preston",
+        "name": "TAYLAH PRESTON",
+        "def_rank": 127,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alicia Dudeney",
+          "player_norm": "alicia dudeney",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "ekaterine gorgodze|games_won": {
+      "team_slate": "ekaterine gorgodze",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "giorgia pedone",
+        "name": "GIORGIA PEDONE",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ekaterine Gorgodze",
+          "player_norm": "ekaterine gorgodze",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "harriet dart|games_won": {
+      "team_slate": "harriet dart",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "nikola bartunkova",
+        "name": "NIKOLA BARTUNKOVA",
+        "def_rank": 69,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Harriet Dart",
+          "player_norm": "harriet dart",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#69).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "despina papamichail|games_won": {
+      "team_slate": "despina papamichail",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "chloe paquet",
+        "name": "CHLOE PAQUET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Despina Papamichail",
+          "player_norm": "despina papamichail",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "katie swan|games_won": {
+      "team_slate": "katie swan",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "ajla tomljanovic",
+        "name": "AJLA TOMLJANOVIC",
+        "def_rank": 100,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Katie Swan",
+          "player_norm": "katie swan",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 10.5,
+          "game_score": 10.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "xiaodi you|games_won": {
+      "team_slate": "xiaodi you",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "leyre romero gormaz",
+        "name": "LEYRE ROMERO GORMAZ",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Xiaodi You",
+          "player_norm": "xiaodi you",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "carole monnet|games_won": {
+      "team_slate": "carole monnet",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "alice tubello",
+        "name": "ALICE TUBELLO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Carole Monnet",
+          "player_norm": "carole monnet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nuria brancaccio|games_won": {
+      "team_slate": "nuria brancaccio",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "tatiana prozorova",
+        "name": "TATIANA PROZOROVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Nuria Brancaccio",
+          "player_norm": "nuria brancaccio",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 10.5,
+          "game_score": 10.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nao hibino|games_won": {
+      "team_slate": "nao hibino",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "janice tjen",
+        "name": "JANICE TJEN",
+        "def_rank": 40,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Anna Kalinskaya",
-          "player_norm": "anna kalinskaya",
+          "player": "Nao Hibino",
+          "player_norm": "nao hibino",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#40).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.5
+          "pp_line": 11.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "diana shnaider|aces": {
-      "team_slate": "diana shnaider",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "vittoria paganetti|games_won": {
+      "team_slate": "vittoria paganetti",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "madison keys",
-        "name": "MADISON KEYS",
-        "def_rank": 19,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Diana Shnaider",
-          "player_norm": "diana shnaider",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#19).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.5
-        }
-      ]
-    },
-    "maja chwalinska|aces": {
-      "team_slate": "maja chwalinska",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "diane parry",
-        "name": "DIANE PARRY",
-        "def_rank": 92,
+        "slate_abbr": "lucia bronzetti",
+        "name": "LUCIA BRONZETTI",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Maja Chwalinska",
-          "player_norm": "maja chwalinska",
+          "player": "Vittoria Paganetti",
+          "player_norm": "vittoria paganetti",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
+          "season_avg": 6.5,
+          "game_score": 6.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.5
+          "pp_line": 6.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "matteo berrettini|aces": {
-      "team_slate": "matteo berrettini",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "lisa zaar|games_won": {
+      "team_slate": "lisa zaar",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "juan manuel cerundolo",
-        "name": "JUAN MANUEL CERUNDOLO",
-        "def_rank": 56,
+        "slate_abbr": "tyra caterina grant",
+        "name": "TYRA CATERINA GRANT",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
+          "player": "Lisa Zaar",
+          "player_norm": "lisa zaar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 8.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "giorgia pedone|games_won": {
+      "team_slate": "giorgia pedone",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "ekaterine gorgodze",
+        "name": "EKATERINE GORGODZE",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Giorgia Pedone",
+          "player_norm": "giorgia pedone",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "leyre romero gormaz|games_won": {
+      "team_slate": "leyre romero gormaz",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "xiaodi you",
+        "name": "XIAODI YOU",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Leyre Romero Gormaz",
+          "player_norm": "leyre romero gormaz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "lucia bronzetti|games_won": {
+      "team_slate": "lucia bronzetti",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "vittoria paganetti",
+        "name": "VITTORIA PAGANETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lucia Bronzetti",
+          "player_norm": "lucia bronzetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "chloe paquet|games_won": {
+      "team_slate": "chloe paquet",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "despina papamichail",
+        "name": "DESPINA PAPAMICHAIL",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Chloe Paquet",
+          "player_norm": "chloe paquet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "greet minnen|games_won": {
+      "team_slate": "greet minnen",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "alina charaeva",
+        "name": "ALINA CHARAEVA",
+        "def_rank": 130,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Greet Minnen",
+          "player_norm": "greet minnen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 12.5,
+          "game_score": 12.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#130).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "ashlyn krueger|games_won": {
+      "team_slate": "ashlyn krueger",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "himeno sakatsume",
+        "name": "HIMENO SAKATSUME",
+        "def_rank": 131,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Ashlyn Krueger",
+          "player_norm": "ashlyn krueger",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 13.0,
+          "game_score": 13.0,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +0.5 vs weak opponent (#131).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": 0.5
+        }
+      ]
+    },
+    "alina charaeva|games_won": {
+      "team_slate": "alina charaeva",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "greet minnen",
+        "name": "GREET MINNEN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alina Charaeva",
+          "player_norm": "alina charaeva",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 9.0,
           "game_score": 9.0,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#56).",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 10.5,
@@ -1483,357 +2183,833 @@
         }
       ]
     },
-    "felix augeraliassime|aces": {
-      "team_slate": "felix augeraliassime",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
+    "taylah preston|games_won": {
+      "team_slate": "taylah preston",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "alejandro tabilo",
-        "name": "ALEJANDRO TABILO",
-        "def_rank": 36,
+        "slate_abbr": "alicia dudeney",
+        "name": "ALICIA DUDENEY",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Taylah Preston",
+          "player_norm": "taylah preston",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.0,
+          "game_score": 8.0,
+          "edge": "AVOID",
+          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -4.5
+        }
+      ]
+    },
+    "alexander zverev|games_won": {
+      "team_slate": "alexander zverev",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "rafael jodar",
+        "name": "RAFAEL JODAR",
+        "def_rank": 29,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Felix Auger-Aliassime",
-          "player_norm": "felix augeraliassime",
+          "player": "Alexander Zverev",
+          "player_norm": "alexander zverev",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 6.2,
-          "game_score": 6.2,
+          "season_avg": 18.0,
+          "game_score": 18.0,
           "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#36).",
+          "notes": "Solid vs average opponent (#29).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "madison keys|aces": {
-      "team_slate": "madison keys",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "diana shnaider",
-        "name": "DIANA SHNAIDER",
-        "def_rank": 23,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Madison Keys",
-          "player_norm": "madison keys",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -3.5 vs elite opponent (#23).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -3.5
-        }
-      ]
-    },
-    "anastasia potapova|double_faults": {
-      "team_slate": "anastasia potapova",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "anna kalinskaya",
-        "name": "ANNA KALINSKAYA",
-        "def_rank": 24,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Anastasia Potapova",
-          "player_norm": "anastasia potapova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -3.5 vs elite opponent (#24).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -3.5
-        }
-      ]
-    },
-    "anna kalinskaya|double_faults": {
-      "team_slate": "anna kalinskaya",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "anastasia potapova",
-        "name": "ANASTASIA POTAPOVA",
-        "def_rank": 30,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Anna Kalinskaya",
-          "player_norm": "anna kalinskaya",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -3.5
-        }
-      ]
-    },
-    "diana shnaider|double_faults": {
-      "team_slate": "diana shnaider",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "madison keys",
-        "name": "MADISON KEYS",
-        "def_rank": 19,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Diana Shnaider",
-          "player_norm": "diana shnaider",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#19).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -1.5
-        }
-      ]
-    },
-    "madison keys|double_faults": {
-      "team_slate": "madison keys",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "diana shnaider",
-        "name": "DIANA SHNAIDER",
-        "def_rank": 23,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Madison Keys",
-          "player_norm": "madison keys",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -2.5 vs elite opponent (#23).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -2.5
-        }
-      ]
-    },
-    "diane parry|double_faults": {
-      "team_slate": "diane parry",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "maja chwalinska",
-        "name": "MAJA CHWALINSKA",
-        "def_rank": 114,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Diane Parry",
-          "player_norm": "diane parry",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
+          "pp_line": 18.5,
           "pp_edge": -0.5
         }
       ]
     },
-    "juan manuel cerundolo|double_faults": {
-      "team_slate": "juan manuel cerundolo",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
+    "tatjana maria|games_won": {
+      "team_slate": "tatjana maria",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 105,
+        "slate_abbr": "linda fruhvirtova",
+        "name": "LINDA FRUHVIRTOVA",
+        "def_rank": 149,
         "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Juan Manuel Cerundolo",
-          "player_norm": "juan manuel cerundolo",
+          "player": "Tatjana Maria",
+          "player_norm": "tatjana maria",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
+          "season_avg": 5.0,
+          "game_score": 5.0,
           "edge": "AVOID",
-          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -7.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -3.5
+          "pp_line": 12.5,
+          "pp_edge": -7.5
         }
       ]
     },
-    "matteo berrettini|double_faults": {
-      "team_slate": "matteo berrettini",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
+    "alexandra eala|games_won": {
+      "team_slate": "alexandra eala",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "juan manuel cerundolo",
-        "name": "JUAN MANUEL CERUNDOLO",
-        "def_rank": 56,
+        "slate_abbr": "priscilla hon",
+        "name": "PRISCILLA HON",
+        "def_rank": 143,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alexandra Eala",
+          "player_norm": "alexandra eala",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.0,
+          "game_score": 6.0,
+          "edge": "AVOID",
+          "notes": "PP edge -6.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -6.5
+        }
+      ]
+    },
+    "nikola bartunkova|games_won": {
+      "team_slate": "nikola bartunkova",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "harriet dart",
+        "name": "HARRIET DART",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
+          "player": "Nikola Bartunkova",
+          "player_norm": "nikola bartunkova",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "edge": "AVOID",
+          "notes": "PP edge -9.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -9.5
+        }
+      ]
+    },
+    "janice tjen|games_won": {
+      "team_slate": "janice tjen",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "nao hibino",
+        "name": "NAO HIBINO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Janice Tjen",
+          "player_norm": "janice tjen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.0,
+          "game_score": 7.0,
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -5.5
+        }
+      ]
+    },
+    "carlota martinez cirez|aces": {
+      "team_slate": "carlota martinez cirez",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Carlota Martinez Cirez",
+          "player_norm": "carlota martinez cirez",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -1.5
-        }
-      ]
-    },
-    "felix augeraliassime|double_faults": {
-      "team_slate": "felix augeraliassime",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "alejandro tabilo",
-        "name": "ALEJANDRO TABILO",
-        "def_rank": 36,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Felix Auger-Aliassime",
-          "player_norm": "felix augeraliassime",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.2,
-          "game_score": 2.2,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#36).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "alejandro tabilo|double_faults": {
-      "team_slate": "alejandro tabilo",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "felix augeraliassime",
-        "name": "FELIX AUGER-ALIASSIME",
-        "def_rank": 6,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Alejandro Tabilo",
-          "player_norm": "alejandro tabilo",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -2.5 vs elite opponent (#6).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
           "pp_line": 2.5,
-          "pp_edge": -2.5
+          "pp_edge": 0.0
         }
       ]
     },
-    "naomi osaka|double_faults": {
-      "team_slate": "naomi osaka",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
+    "giorgia pedone|aces": {
+      "team_slate": "giorgia pedone",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Naomi Osaka",
-          "player_norm": "naomi osaka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#1).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -1.5
-        }
-      ]
-    },
-    "flavio cobolli|double_faults": {
-      "team_slate": "flavio cobolli",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "zachary svajda",
-        "name": "ZACHARY SVAJDA",
-        "def_rank": 85,
+        "slate_abbr": "ekaterine gorgodze",
+        "name": "EKATERINE GORGODZE",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Flavio Cobolli",
-          "player_norm": "flavio cobolli",
+          "player": "Giorgia Pedone",
+          "player_norm": "giorgia pedone",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "alice tubello|aces": {
+      "team_slate": "alice tubello",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "carole monnet",
+        "name": "CAROLE MONNET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alice Tubello",
+          "player_norm": "alice tubello",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "lisa zaar|aces": {
+      "team_slate": "lisa zaar",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "tyra caterina grant",
+        "name": "TYRA CATERINA GRANT",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lisa Zaar",
+          "player_norm": "lisa zaar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "ekaterine gorgodze|aces": {
+      "team_slate": "ekaterine gorgodze",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "giorgia pedone",
+        "name": "GIORGIA PEDONE",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ekaterine Gorgodze",
+          "player_norm": "ekaterine gorgodze",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "vittoria paganetti|aces": {
+      "team_slate": "vittoria paganetti",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "lucia bronzetti",
+        "name": "LUCIA BRONZETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Vittoria Paganetti",
+          "player_norm": "vittoria paganetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nuria brancaccio|aces": {
+      "team_slate": "nuria brancaccio",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "tatiana prozorova",
+        "name": "TATIANA PROZOROVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Nuria Brancaccio",
+          "player_norm": "nuria brancaccio",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "katie swan|aces": {
+      "team_slate": "katie swan",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "ajla tomljanovic",
+        "name": "AJLA TOMLJANOVIC",
+        "def_rank": 100,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Katie Swan",
+          "player_norm": "katie swan",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.5,
+          "game_score": 7.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#100).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "alicia dudeney|aces": {
+      "team_slate": "alicia dudeney",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "taylah preston",
+        "name": "TAYLAH PRESTON",
+        "def_rank": 127,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alicia Dudeney",
+          "player_norm": "alicia dudeney",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.5,
+          "game_score": 7.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#127).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "xiaodi you|aces": {
+      "team_slate": "xiaodi you",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "leyre romero gormaz",
+        "name": "LEYRE ROMERO GORMAZ",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Xiaodi You",
+          "player_norm": "xiaodi you",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "leyre romero gormaz|aces": {
+      "team_slate": "leyre romero gormaz",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "xiaodi you",
+        "name": "XIAODI YOU",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Leyre Romero Gormaz",
+          "player_norm": "leyre romero gormaz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "lucia bronzetti|aces": {
+      "team_slate": "lucia bronzetti",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "vittoria paganetti",
+        "name": "VITTORIA PAGANETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lucia Bronzetti",
+          "player_norm": "lucia bronzetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "carole monnet|aces": {
+      "team_slate": "carole monnet",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alice tubello",
+        "name": "ALICE TUBELLO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Carole Monnet",
+          "player_norm": "carole monnet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tatiana prozorova|aces": {
+      "team_slate": "tatiana prozorova",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "nuria brancaccio",
+        "name": "NURIA BRANCACCIO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tatiana Prozorova",
+          "player_norm": "tatiana prozorova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tyra caterina grant|aces": {
+      "team_slate": "tyra caterina grant",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "lisa zaar",
+        "name": "LISA ZAAR",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tyra Caterina Grant",
+          "player_norm": "tyra caterina grant",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "harriet dart|aces": {
+      "team_slate": "harriet dart",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "nikola bartunkova",
+        "name": "NIKOLA BARTUNKOVA",
+        "def_rank": 69,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Harriet Dart",
+          "player_norm": "harriet dart",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#69).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "chloe paquet|aces": {
+      "team_slate": "chloe paquet",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "despina papamichail",
+        "name": "DESPINA PAPAMICHAIL",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Chloe Paquet",
+          "player_norm": "chloe paquet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "despina papamichail|aces": {
+      "team_slate": "despina papamichail",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "chloe paquet",
+        "name": "CHLOE PAQUET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Despina Papamichail",
+          "player_norm": "despina papamichail",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tereza martincova|aces": {
+      "team_slate": "tereza martincova",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "rebeka masarova",
+        "name": "REBEKA MASAROVA",
+        "def_rank": 132,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Tereza Martincova",
+          "player_norm": "tereza martincova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#132).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nao hibino|aces": {
+      "team_slate": "nao hibino",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "janice tjen",
+        "name": "JANICE TJEN",
+        "def_rank": 40,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Nao Hibino",
+          "player_norm": "nao hibino",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#40).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "greet minnen|aces": {
+      "team_slate": "greet minnen",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alina charaeva",
+        "name": "ALINA CHARAEVA",
+        "def_rank": 130,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Greet Minnen",
+          "player_norm": "greet minnen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#130).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "elina svitolina|aces": {
+      "team_slate": "elina svitolina",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "marta kostyuk",
+        "name": "MARTA KOSTYUK",
+        "def_rank": 15,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Elina Svitolina",
+          "player_norm": "elina svitolina",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "edge": "AVOID",
+          "notes": "Elite opponent (#15); production below threshold.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 0.7
+        }
+      ]
+    },
+    "sorana cirstea|aces": {
+      "team_slate": "sorana cirstea",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "mirra andreeva",
+        "name": "MIRRA ANDREEVA",
+        "def_rank": 8,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Sorana Cirstea",
+          "player_norm": "sorana cirstea",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "edge": "NEUTRAL",
+          "notes": "PP edge +1.8 vs elite opponent (#8) \u2014 proceed with caution.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.83
+        }
+      ]
+    },
+    "taylah preston|aces": {
+      "team_slate": "taylah preston",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alicia dudeney",
+        "name": "ALICIA DUDENEY",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Taylah Preston",
+          "player_norm": "taylah preston",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.0,
@@ -1847,49 +3023,49 @@
         }
       ]
     },
-    "aryna sabalenka|double_faults": {
-      "team_slate": "aryna sabalenka",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
+    "alina charaeva|aces": {
+      "team_slate": "alina charaeva",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "naomi osaka",
-        "name": "NAOMI OSAKA",
-        "def_rank": 16,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.0,
-          "game_score": 1.0,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#16).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -0.5
-        }
-      ]
-    },
-    "maja chwalinska|double_faults": {
-      "team_slate": "maja chwalinska",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "diane parry",
-        "name": "DIANE PARRY",
-        "def_rank": 92,
+        "slate_abbr": "greet minnen",
+        "name": "GREET MINNEN",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Maja Chwalinska",
-          "player_norm": "maja chwalinska",
+          "player": "Alina Charaeva",
+          "player_norm": "alina charaeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "himeno sakatsume|aces": {
+      "team_slate": "himeno sakatsume",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "ashlyn krueger",
+        "name": "ASHLYN KRUEGER",
+        "def_rank": 120,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Himeno Sakatsume",
+          "player_norm": "himeno sakatsume",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.0,
@@ -1903,27 +3079,111 @@
         }
       ]
     },
-    "zachary svajda|double_faults": {
-      "team_slate": "zachary svajda",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
+    "priscilla hon|aces": {
+      "team_slate": "priscilla hon",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "flavio cobolli",
-        "name": "FLAVIO COBOLLI",
-        "def_rank": 14,
-        "def_tier": "Above Avg"
+        "slate_abbr": "alexandra eala",
+        "name": "ALEXANDRA EALA",
+        "def_rank": 37,
+        "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Zachary Svajda",
-          "player_norm": "zachary svajda",
+          "player": "Priscilla Hon",
+          "player_norm": "priscilla hon",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.0,
           "game_score": 0.0,
           "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#14).",
+          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -4.5
+        }
+      ]
+    },
+    "rebeka masarova|aces": {
+      "team_slate": "rebeka masarova",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "tereza martincova",
+        "name": "TEREZA MARTINCOVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Rebeka Masarova",
+          "player_norm": "rebeka masarova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -4.5
+        }
+      ]
+    },
+    "ajla tomljanovic|aces": {
+      "team_slate": "ajla tomljanovic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "katie swan",
+        "name": "KATIE SWAN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ajla Tomljanovic",
+          "player_norm": "ajla tomljanovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "alexandra eala|aces": {
+      "team_slate": "alexandra eala",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "priscilla hon",
+        "name": "PRISCILLA HON",
+        "def_rank": 143,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alexandra Eala",
+          "player_norm": "alexandra eala",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 1.5,
@@ -1931,123 +3191,459 @@
         }
       ]
     },
-    "matteo berrettini|break_points_won": {
-      "team_slate": "matteo berrettini",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "nikola bartunkova|aces": {
+      "team_slate": "nikola bartunkova",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "juan manuel cerundolo",
-        "name": "JUAN MANUEL CERUNDOLO",
-        "def_rank": 56,
+        "slate_abbr": "harriet dart",
+        "name": "HARRIET DART",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
+          "player": "Nikola Bartunkova",
+          "player_norm": "nikola bartunkova",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 2.5,
+          "pp_edge": -2.5
         }
       ]
     },
-    "anastasia potapova|break_points_won": {
-      "team_slate": "anastasia potapova",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "janice tjen|aces": {
+      "team_slate": "janice tjen",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "anna kalinskaya",
-        "name": "ANNA KALINSKAYA",
-        "def_rank": 24,
+        "slate_abbr": "nao hibino",
+        "name": "NAO HIBINO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Janice Tjen",
+          "player_norm": "janice tjen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "rafael jodar|aces": {
+      "team_slate": "rafael jodar",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alexander zverev",
+        "name": "ALEXANDER ZVEREV",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Rafael Jodar",
+          "player_norm": "rafael jodar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 vs elite opponent (#3).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
+    "ashlyn krueger|aces": {
+      "team_slate": "ashlyn krueger",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "himeno sakatsume",
+        "name": "HIMENO SAKATSUME",
+        "def_rank": 131,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Ashlyn Krueger",
+          "player_norm": "ashlyn krueger",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
+    "mirra andreeva|aces": {
+      "team_slate": "mirra andreeva",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "sorana cirstea",
+        "name": "SORANA CIRSTEA",
+        "def_rank": 18,
         "def_tier": "Above Avg"
       },
       "players": [
         {
-          "player": "Anastasia Potapova",
-          "player_norm": "anastasia potapova",
+          "player": "Mirra Andreeva",
+          "player_norm": "mirra andreeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#18).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
+    "marta kostyuk|aces": {
+      "team_slate": "marta kostyuk",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "elina svitolina",
+        "name": "ELINA SVITOLINA",
+        "def_rank": 7,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
           "edge": "AVOID",
-          "notes": "Elite opponent (#24); production below threshold.",
+          "notes": "Negative PP edge vs elite opponent (#7).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 1.5,
+          "pp_edge": -1.0
         }
       ]
     },
-    "maja chwalinska|break_points_won": {
-      "team_slate": "maja chwalinska",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "joao fonseca|aces": {
+      "team_slate": "joao fonseca",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "diane parry",
-        "name": "DIANE PARRY",
-        "def_rank": 92,
+        "slate_abbr": "jakub mensik",
+        "name": "JAKUB MENSIK",
+        "def_rank": 27,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Joao Fonseca",
+          "player_norm": "joao fonseca",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -5.5
+        }
+      ]
+    },
+    "alexander zverev|aces": {
+      "team_slate": "alexander zverev",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "rafael jodar",
+        "name": "RAFAEL JODAR",
+        "def_rank": 29,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Alexander Zverev",
+          "player_norm": "alexander zverev",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -7.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -7.5
+        }
+      ]
+    },
+    "jakub mensik|aces": {
+      "team_slate": "jakub mensik",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "joao fonseca",
+        "name": "JOAO FONSECA",
+        "def_rank": 30,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Jakub Mensik",
+          "player_norm": "jakub mensik",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "AVOID",
+          "notes": "PP edge -6.0 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -6.0
+        }
+      ]
+    },
+    "giorgia pedone|double_faults": {
+      "team_slate": "giorgia pedone",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "ekaterine gorgodze",
+        "name": "EKATERINE GORGODZE",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Maja Chwalinska",
-          "player_norm": "maja chwalinska",
+          "player": "Giorgia Pedone",
+          "player_norm": "giorgia pedone",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "madison keys|break_points_won": {
-      "team_slate": "madison keys",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "leyre romero gormaz|double_faults": {
+      "team_slate": "leyre romero gormaz",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "diana shnaider",
-        "name": "DIANA SHNAIDER",
-        "def_rank": 23,
-        "def_tier": "Above Avg"
+        "slate_abbr": "xiaodi you",
+        "name": "XIAODI YOU",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Madison Keys",
-          "player_norm": "madison keys",
+          "player": "Leyre Romero Gormaz",
+          "player_norm": "leyre romero gormaz",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "AVOID",
-          "notes": "Elite opponent (#23); production below threshold.",
+          "season_avg": 7.5,
+          "game_score": 7.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 7.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "frances tiafoe|break_points_won": {
-      "team_slate": "frances tiafoe",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "xiaodi you|double_faults": {
+      "team_slate": "xiaodi you",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "leyre romero gormaz",
+        "name": "LEYRE ROMERO GORMAZ",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Xiaodi You",
+          "player_norm": "xiaodi you",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "vittoria paganetti|double_faults": {
+      "team_slate": "vittoria paganetti",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "lucia bronzetti",
+        "name": "LUCIA BRONZETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Vittoria Paganetti",
+          "player_norm": "vittoria paganetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tyra caterina grant|double_faults": {
+      "team_slate": "tyra caterina grant",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "lisa zaar",
+        "name": "LISA ZAAR",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tyra Caterina Grant",
+          "player_norm": "tyra caterina grant",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "chloe paquet|double_faults": {
+      "team_slate": "chloe paquet",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "despina papamichail",
+        "name": "DESPINA PAPAMICHAIL",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Chloe Paquet",
+          "player_norm": "chloe paquet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "katie swan|double_faults": {
+      "team_slate": "katie swan",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "ajla tomljanovic",
+        "name": "AJLA TOMLJANOVIC",
+        "def_rank": 100,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Katie Swan",
+          "player_norm": "katie swan",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#100).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "carlota martinez cirez|double_faults": {
+      "team_slate": "carlota martinez cirez",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
       "opponent": {
         "slate_abbr": "",
         "name": "",
@@ -2056,102 +3652,942 @@
       },
       "players": [
         {
-          "player": "Frances Tiafoe",
-          "player_norm": "frances tiafoe",
+          "player": "Carlota Martinez Cirez",
+          "player_norm": "carlota martinez cirez",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
+          "season_avg": 7.5,
+          "game_score": 7.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 7.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "flavio cobolli|break_points_won": {
-      "team_slate": "flavio cobolli",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "ekaterine gorgodze|double_faults": {
+      "team_slate": "ekaterine gorgodze",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "zachary svajda",
-        "name": "ZACHARY SVAJDA",
-        "def_rank": 85,
+        "slate_abbr": "giorgia pedone",
+        "name": "GIORGIA PEDONE",
+        "def_rank": 75,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Flavio Cobolli",
-          "player_norm": "flavio cobolli",
+          "player": "Ekaterine Gorgodze",
+          "player_norm": "ekaterine gorgodze",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 2.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "felix augeraliassime|break_points_won": {
-      "team_slate": "felix augeraliassime",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "lucia bronzetti|double_faults": {
+      "team_slate": "lucia bronzetti",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "alejandro tabilo",
-        "name": "ALEJANDRO TABILO",
-        "def_rank": 36,
+        "slate_abbr": "vittoria paganetti",
+        "name": "VITTORIA PAGANETTI",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lucia Bronzetti",
+          "player_norm": "lucia bronzetti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "alice tubello|double_faults": {
+      "team_slate": "alice tubello",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "carole monnet",
+        "name": "CAROLE MONNET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alice Tubello",
+          "player_norm": "alice tubello",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nuria brancaccio|double_faults": {
+      "team_slate": "nuria brancaccio",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "tatiana prozorova",
+        "name": "TATIANA PROZOROVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Nuria Brancaccio",
+          "player_norm": "nuria brancaccio",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tatiana prozorova|double_faults": {
+      "team_slate": "tatiana prozorova",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "nuria brancaccio",
+        "name": "NURIA BRANCACCIO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Tatiana Prozorova",
+          "player_norm": "tatiana prozorova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "lisa zaar|double_faults": {
+      "team_slate": "lisa zaar",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "tyra caterina grant",
+        "name": "TYRA CATERINA GRANT",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Lisa Zaar",
+          "player_norm": "lisa zaar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "harriet dart|double_faults": {
+      "team_slate": "harriet dart",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "nikola bartunkova",
+        "name": "NIKOLA BARTUNKOVA",
+        "def_rank": 69,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Harriet Dart",
+          "player_norm": "harriet dart",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#69).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "despina papamichail|double_faults": {
+      "team_slate": "despina papamichail",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "chloe paquet",
+        "name": "CHLOE PAQUET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Despina Papamichail",
+          "player_norm": "despina papamichail",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "tereza martincova|double_faults": {
+      "team_slate": "tereza martincova",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "rebeka masarova",
+        "name": "REBEKA MASAROVA",
+        "def_rank": 132,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Tereza Martincova",
+          "player_norm": "tereza martincova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#132).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "nao hibino|double_faults": {
+      "team_slate": "nao hibino",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "janice tjen",
+        "name": "JANICE TJEN",
+        "def_rank": 40,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Felix Auger-Aliassime",
-          "player_norm": "felix augeraliassime",
+          "player": "Nao Hibino",
+          "player_norm": "nao hibino",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#40).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 4.5,
+          "pp_edge": 0.0
         }
       ]
     },
-    "aryna sabalenka|break_points_won": {
-      "team_slate": "aryna sabalenka",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
+    "greet minnen|double_faults": {
+      "team_slate": "greet minnen",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "naomi osaka",
-        "name": "NAOMI OSAKA",
-        "def_rank": 16,
+        "slate_abbr": "alina charaeva",
+        "name": "ALINA CHARAEVA",
+        "def_rank": 130,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Greet Minnen",
+          "player_norm": "greet minnen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#130).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "alicia dudeney|double_faults": {
+      "team_slate": "alicia dudeney",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "taylah preston",
+        "name": "TAYLAH PRESTON",
+        "def_rank": 127,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alicia Dudeney",
+          "player_norm": "alicia dudeney",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#127).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "carole monnet|double_faults": {
+      "team_slate": "carole monnet",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "alice tubello",
+        "name": "ALICE TUBELLO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Carole Monnet",
+          "player_norm": "carole monnet",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 10.5,
+          "game_score": 10.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 8.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "marta kostyuk|double_faults": {
+      "team_slate": "marta kostyuk",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "elina svitolina",
+        "name": "ELINA SVITOLINA",
+        "def_rank": 7,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "NEUTRAL",
+          "notes": "PP edge +1.0 vs elite opponent (#7) \u2014 proceed with caution.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 1.0
+        }
+      ]
+    },
+    "elina svitolina|double_faults": {
+      "team_slate": "elina svitolina",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "marta kostyuk",
+        "name": "MARTA KOSTYUK",
+        "def_rank": 15,
         "def_tier": "Above Avg"
       },
       "players": [
         {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
+          "player": "Elina Svitolina",
+          "player_norm": "elina svitolina",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "AVOID",
-          "notes": "Elite opponent (#16); production below threshold.",
+          "season_avg": 2.1,
+          "game_score": 2.1,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#15) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
+          "pp_line": 1.5,
+          "pp_edge": 0.6
+        }
+      ]
+    },
+    "sorana cirstea|double_faults": {
+      "team_slate": "sorana cirstea",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "mirra andreeva",
+        "name": "MIRRA ANDREEVA",
+        "def_rank": 8,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Sorana Cirstea",
+          "player_norm": "sorana cirstea",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#8).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -0.67
+        }
+      ]
+    },
+    "priscilla hon|double_faults": {
+      "team_slate": "priscilla hon",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "alexandra eala",
+        "name": "ALEXANDRA EALA",
+        "def_rank": 37,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Priscilla Hon",
+          "player_norm": "priscilla hon",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "taylah preston|double_faults": {
+      "team_slate": "taylah preston",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "alicia dudeney",
+        "name": "ALICIA DUDENEY",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Taylah Preston",
+          "player_norm": "taylah preston",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "alina charaeva|double_faults": {
+      "team_slate": "alina charaeva",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "greet minnen",
+        "name": "GREET MINNEN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alina Charaeva",
+          "player_norm": "alina charaeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
+    "himeno sakatsume|double_faults": {
+      "team_slate": "himeno sakatsume",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "ashlyn krueger",
+        "name": "ASHLYN KRUEGER",
+        "def_rank": 120,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Himeno Sakatsume",
+          "player_norm": "himeno sakatsume",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
+    "rebeka masarova|double_faults": {
+      "team_slate": "rebeka masarova",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "tereza martincova",
+        "name": "TEREZA MARTINCOVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Rebeka Masarova",
+          "player_norm": "rebeka masarova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -4.5
+        }
+      ]
+    },
+    "janice tjen|double_faults": {
+      "team_slate": "janice tjen",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "nao hibino",
+        "name": "NAO HIBINO",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Janice Tjen",
+          "player_norm": "janice tjen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
+    "alexander zverev|double_faults": {
+      "team_slate": "alexander zverev",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "rafael jodar",
+        "name": "RAFAEL JODAR",
+        "def_rank": 29,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Alexander Zverev",
+          "player_norm": "alexander zverev",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "rafael jodar|double_faults": {
+      "team_slate": "rafael jodar",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "alexander zverev",
+        "name": "ALEXANDER ZVEREV",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Rafael Jodar",
+          "player_norm": "rafael jodar",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 vs elite opponent (#3).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "mirra andreeva|double_faults": {
+      "team_slate": "mirra andreeva",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "sorana cirstea",
+        "name": "SORANA CIRSTEA",
+        "def_rank": 18,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Mirra Andreeva",
+          "player_norm": "mirra andreeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -2.5 vs elite opponent (#18).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -2.5
+        }
+      ]
+    },
+    "ashlyn krueger|double_faults": {
+      "team_slate": "ashlyn krueger",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "himeno sakatsume",
+        "name": "HIMENO SAKATSUME",
+        "def_rank": 131,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Ashlyn Krueger",
+          "player_norm": "ashlyn krueger",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
+    "alexandra eala|double_faults": {
+      "team_slate": "alexandra eala",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "priscilla hon",
+        "name": "PRISCILLA HON",
+        "def_rank": 143,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Alexandra Eala",
+          "player_norm": "alexandra eala",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
+    "joao fonseca|double_faults": {
+      "team_slate": "joao fonseca",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "jakub mensik",
+        "name": "JAKUB MENSIK",
+        "def_rank": 27,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Joao Fonseca",
+          "player_norm": "joao fonseca",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
+    "ajla tomljanovic|double_faults": {
+      "team_slate": "ajla tomljanovic",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "katie swan",
+        "name": "KATIE SWAN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ajla Tomljanovic",
+          "player_norm": "ajla tomljanovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -5.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -5.5
+        }
+      ]
+    },
+    "jakub mensik|double_faults": {
+      "team_slate": "jakub mensik",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "joao fonseca",
+        "name": "JOAO FONSECA",
+        "def_rank": 30,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Jakub Mensik",
+          "player_norm": "jakub mensik",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -3.0
+        }
+      ]
+    },
+    "nikola bartunkova|double_faults": {
+      "team_slate": "nikola bartunkova",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "harriet dart",
+        "name": "HARRIET DART",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Nikola Bartunkova",
+          "player_norm": "nikola bartunkova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -6.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": -6.5
+        }
+      ]
+    },
+    "marta kostyuk|break_points_won": {
+      "team_slate": "marta kostyuk",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "elina svitolina",
+        "name": "ELINA SVITOLINA",
+        "def_rank": 7,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.0,
+          "game_score": 5.0,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#7) \u2014 no clear OVER edge.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.0,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "elina svitolina|break_points_won": {
+      "team_slate": "elina svitolina",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "marta kostyuk",
+        "name": "MARTA KOSTYUK",
+        "def_rank": 15,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Elina Svitolina",
+          "player_norm": "elina svitolina",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#15) \u2014 no clear OVER edge.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
         }
       ]
     }
