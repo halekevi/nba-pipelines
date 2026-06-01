@@ -246,6 +246,31 @@ function Check-AutoRefreshCache {
     }
 }
 
+# -- Helper: weekly NFL/CFB rankings refresh (in-season only) -----------------
+function Invoke-RankingsRefresh {
+    param(
+        [ValidateSet("nfl", "cfb")]
+        [string]$Sport,
+        [string]$PipelineDate = $Date,
+        [int]$CfbSeason = 0
+    )
+    try {
+        $d = [datetime]::ParseExact($PipelineDate, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)
+        $month = $d.Month
+    } catch {
+        $month = (Get-Date).Month
+    }
+    $inSeason = if ($Sport -eq "nfl") { ($month -ge 9 -or $month -le 1) } else { ($month -ge 8 -or $month -le 1) }
+    if (-not $inSeason) {
+        $tag = $Sport.ToUpper()
+        Write-Host "  [$tag] off-season, skipping rankings refresh" -ForegroundColor DarkGray
+        return $true
+    }
+    $refreshArgs = "--sport $Sport"
+    if ($Sport -eq "cfb" -and $CfbSeason -gt 0) { $refreshArgs += " --season $CfbSeason" }
+    return Run-Step "Refresh $($Sport.ToUpper()) Rankings" $Root ".\scripts\refresh_rankings.py" $refreshArgs
+}
+
 # -- Helper: run one step synchronously ---------------------------------------
 function Run-Step {
     param(
@@ -1315,8 +1340,8 @@ if ($CFBOnly) {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CFB Step 1 - Fetch PrizePicks"      $CFBDir ".\scripts\pipeline\step1_pp_cfb_scraper.py"      "--out `"$CFBRunOutDir\step1_cfb.csv`"" } } else { Write-Host "  [CFB] Skipping step1 fetch -- using existing $CFBRunOutDir\step1_cfb.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "CFB Step 2 - Normalize"               $CFBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CFBRunOutDir\step1_cfb.csv`" --output `"$CFBRunOutDir\step2_cfb.csv`"" }
-    if ($ok) { $ok = Run-Step "CFB Step 3a - Build Unit Rankings"      $CFBDir ".\scripts\build_cfb_unit_rankings.py"                             "--season $CFBSeasonYear --out data\reference\cfb_team_unit_rankings.csv" }
-    if ($ok) { $ok = Run-Step "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
+    if ($ok) { $ok = Invoke-RankingsRefresh -Sport cfb -PipelineDate $Date -CfbSeason $CFBSeasonYear }
+    if ($ok) { $ok = Run-Step "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --season $CFBSeasonYear --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
     if ($ok) { $ok = Run-Step "CFB Step 4 - Attach ESPN IDs"         $CFBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`" --output `"$CFBRunOutDir\step3_cfb.csv`" --master data/reference/ncaa_football_athletes_master.csv" }
     if ($ok) { $ok = Run-Step "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --date $Date --days 200 --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { $ok = Run-Step "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
@@ -1766,8 +1791,17 @@ $CFBJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CFB Step 1 - Fetch PrizePicks"      $CFBDir ".\scripts\pipeline\step1_pp_cfb_scraper.py"      "--out `"$CFBRunOutDir\step1_cfb.csv`"" } } else { Write-Output "[CFB] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "CFB Step 2 - Normalize"               $CFBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CFBRunOutDir\step1_cfb.csv`" --output `"$CFBRunOutDir\step2_cfb.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "CFB Step 3a - Build Unit Rankings"      $CFBDir ".\scripts\build_cfb_unit_rankings.py"                             "--season $cfbSeason --out data\reference\cfb_team_unit_rankings.csv" }
-    if ($ok) { $ok = Run-Step-Job "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
+    try {
+        $cfbMonth = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).Month
+    } catch {
+        $cfbMonth = (Get-Date).Month
+    }
+    if ($cfbMonth -ge 8 -or $cfbMonth -le 1) {
+        if ($ok) { $ok = Run-Step-Job "CFB Refresh Rankings" $RepoRoot ".\scripts\refresh_rankings.py" "--sport cfb --season $cfbSeason" }
+    } else {
+        Write-Output "[CFB] off-season, skipping rankings refresh"
+    }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 3b - Attach Pass/Run Ranks"    $CFBDir ".\scripts\pipeline\step3_attach_unit_rankings.py"               "--input `"$CFBRunOutDir\step2_cfb.csv`" --rankings data\reference\cfb_team_unit_rankings.csv --season $cfbSeason --output `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`"" }
     if ($ok) { $ok = Run-Step-Job "CFB Step 4 - Attach ESPN IDs"         $CFBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CFBRunOutDir\step3_with_unit_rankings_cfb.csv`" --output `"$CFBRunOutDir\step3_cfb.csv`" --master data/reference/ncaa_football_athletes_master.csv" }
     if ($ok) { $ok = Run-Step-Job "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --date $Date --days 200 --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { $ok = Run-Step-Job "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
@@ -2245,8 +2279,18 @@ $NFLJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NFL Step 1 - Fetch PrizePicks" $NFLDir ".\scripts\step1_fetch_prizepicks_nfl.py" "--output `"$NFLRunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Output "[NFL] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 2 - Clean Props" $NFLDir ".\scripts\step2_clean_props.py" "" }
+    try {
+        $nflMonth = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).Month
+    } catch {
+        $nflMonth = (Get-Date).Month
+    }
+    if ($nflMonth -ge 9 -or $nflMonth -le 1) {
+        if ($ok) { $ok = Run-Step-Job "NFL Refresh Rankings" $RepoRoot ".\scripts\refresh_rankings.py" "--sport nfl" }
+    } else {
+        Write-Output "[NFL] off-season, skipping rankings refresh"
+    }
     if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--defense-source auto" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output `"$NFLRunOutDir\step7_nfl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NFL" $RepoRoot "$NFLRunOutDir\step7_nfl_ranked.xlsx" }

@@ -15,7 +15,9 @@ Output: NFL/data/defense_rankings.csv
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -23,10 +25,16 @@ import pandas as pd
 import requests
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
+_NFL_ROOT = _SCRIPT_DIR.parent
+_REPO_ROOT = _SCRIPT_DIR.resolve().parents[2]
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from _nfl_pipeline_active import require_nfl_pipeline_active_or_exit
+
+REFERENCE_DEFENSE_CSV = _REPO_ROOT / "data" / "reference" / "nfl_team_defense.csv"
+PULL_DEFENSE_SCRIPT = _REPO_ROOT / "Sports" / "NFL" / "scripts" / "pull_nfl_defense_stats.py"
+REFERENCE_MAX_AGE_DAYS = 7
 
 HEADERS = {
     "User-Agent": (
@@ -169,6 +177,51 @@ def fetch_defense_table(season: int) -> pd.DataFrame:
         return _fallback_df()
 
 
+def maybe_refresh_reference_defense() -> None:
+    """Refresh data/reference/nfl_team_defense.csv when missing or older than 7 days."""
+    refresh_script = _REPO_ROOT / "scripts" / "refresh_rankings.py"
+    if refresh_script.is_file():
+        cmd = [sys.executable, str(refresh_script), "--sport", "nfl"]
+        proc = subprocess.run(cmd, cwd=str(_REPO_ROOT), capture_output=True, text=True)
+        if proc.stdout:
+            print(proc.stdout.rstrip())
+        if proc.returncode != 0 and proc.stderr:
+            print(proc.stderr.rstrip(), file=sys.stderr)
+        return
+
+    ref = REFERENCE_DEFENSE_CSV
+    if ref.is_file():
+        age_days = (time.time() - ref.stat().st_mtime) / 86400.0
+        if age_days <= REFERENCE_MAX_AGE_DAYS:
+            print(
+                f"[NFL step4] Reference defense fresh ({age_days:.1f}d): {ref} — skip pull"
+            )
+            return
+        print(
+            f"[NFL step4] Reference defense stale ({age_days:.1f}d) — running pull_nfl_defense_stats.py"
+        )
+    else:
+        print(f"[NFL step4] Reference defense missing — running pull_nfl_defense_stats.py")
+
+    if not PULL_DEFENSE_SCRIPT.is_file():
+        print(f"[NFL step4] WARN: pull script not found: {PULL_DEFENSE_SCRIPT}")
+        return
+
+    cmd = [sys.executable, str(PULL_DEFENSE_SCRIPT)]
+    proc = subprocess.run(cmd, cwd=str(_REPO_ROOT), capture_output=True, text=True)
+    if proc.stdout:
+        print(proc.stdout.rstrip())
+    if proc.returncode != 0:
+        print(
+            f"[NFL step4] WARN: pull_nfl_defense_stats.py exit {proc.returncode}",
+            file=sys.stderr,
+        )
+        if proc.stderr:
+            print(proc.stderr.rstrip(), file=sys.stderr)
+    elif ref.is_file():
+        print(f"[NFL step4] Reference defense updated: {ref}")
+
+
 def main() -> None:
     require_nfl_pipeline_active_or_exit()
 
@@ -182,6 +235,9 @@ def main() -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8-sig")
     print(f"[NFL step4] Wrote {out} rows={len(df)} (season={args.season})")
+
+    maybe_refresh_reference_defense()
+    # TODO Phase 2: attach def_tier via utils.defense_tiers on reference merge / step7 features
 
 
 if __name__ == "__main__":

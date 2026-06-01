@@ -10,17 +10,21 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from pathlib import Path
 
 import pandas as pd
 
 _REPO = Path(__file__).resolve().parents[4]
+_CFB_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
+REFRESH_SCRIPT = _REPO / "scripts" / "refresh_rankings.py"
+
 from utils.cfb_playoff_metadata import CFB_TEAM_ALIASES, norm_cfb_team_abbr
-from utils.defense_tiers import normalize_def_tier_label
+from utils.defense_tiers import def_tier_from_overall_rank, normalize_def_tier_label
 
 # Conference-scoped (existing column names on rankings CSV)
 CONF_RANK_FIELDS = (
@@ -53,8 +57,83 @@ def _norm_key(x: object) -> str:
     return norm_cfb_team_abbr(x)
 
 
+def _normalize_rankings_csv(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Map build_cfb_unit_rankings.py national schema (off_*/def_*) to legacy attach keys.
+    Conference ranks are not produced anymore; national ranks are mirrored for compat.
+    """
+    if "off_pass_rank" not in df.columns:
+        return df
+
+    out = df.copy()
+    n = len(out)
+    rank_map = (
+        ("off_pass_rank", "pass_off_rank_nat", "pass_off_tier_nat", "pass_off_rank", "pass_off_tier"),
+        ("off_rush_rank", "rush_off_rank_nat", "rush_off_tier_nat", "rush_off_rank", "rush_off_tier"),
+        ("def_pass_rank", "pass_def_rank_nat", "pass_def_tier_nat", "pass_def_rank", "pass_def_tier"),
+        ("def_rush_rank", "rush_def_rank_nat", "rush_def_tier_nat", "rush_def_rank", "rush_def_tier"),
+        ("off_points_rank", "overall_off_rank_nat", "overall_off_tier_nat", None, None),
+        ("def_points_rank", "overall_def_rank_nat", "overall_def_tier_nat", None, None),
+    )
+    ypg_pairs = (
+        ("off_pass_ypg", "pass_off_yds_pg"),
+        ("off_rush_ypg", "rush_off_yds_pg"),
+        ("def_pass_ypg_allowed", "pass_def_yds_pg"),
+        ("def_rush_ypg_allowed", "rush_def_yds_pg"),
+        ("off_points_pg", "total_off_yds_pg"),
+        ("def_points_allowed_pg", "total_def_yds_pg"),
+    )
+
+    def _tier_from_rank(r: object) -> str:
+        if str(r).strip() in ("", "nan"):
+            return ""
+        return def_tier_from_overall_rank(int(float(r)), n)
+
+    for src, nat_r, nat_t, conf_r, conf_t in rank_map:
+        if src not in out.columns:
+            continue
+        out[nat_r] = out[src]
+        out[nat_t] = out[src].map(_tier_from_rank)
+        if conf_r and conf_t:
+            out[conf_r] = out[src]
+            out[conf_t] = out[nat_t]
+
+    for src, dst in ypg_pairs:
+        if src in out.columns:
+            out[dst] = out[src]
+
+    return out
+
+
+def _maybe_refresh_cfb_rankings(rank_path: Path, season: int = 0) -> None:
+    """Refresh reference rankings via scripts/refresh_rankings.py when stale (>7 days)."""
+    if REFRESH_SCRIPT.is_file():
+        cmd = [sys.executable, str(REFRESH_SCRIPT), "--sport", "cfb"]
+        if season:
+            cmd.extend(["--season", str(int(season))])
+        proc = subprocess.run(cmd, cwd=str(_REPO), capture_output=True, text=True)
+        if proc.stdout:
+            print(proc.stdout.rstrip())
+        if proc.returncode != 0 and proc.stderr:
+            print(proc.stderr.rstrip(), file=sys.stderr)
+        return
+
+    build_script = _CFB_ROOT / "scripts" / "build_cfb_unit_rankings.py"
+    if not rank_path.is_file() and build_script.is_file():
+        print("[CFB step3] Rankings missing — running build_cfb_unit_rankings.py")
+        cmd = [sys.executable, str(build_script)]
+        if season:
+            cmd.extend(["--season", str(int(season))])
+        cmd.extend(["--out", str(rank_path)])
+        proc = subprocess.run(cmd, cwd=str(_REPO), capture_output=True, text=True)
+        if proc.stdout:
+            print(proc.stdout.rstrip())
+        if proc.returncode != 0 and proc.stderr:
+            print(proc.stderr.rstrip(), file=sys.stderr)
+
+
 def _load_lookup(path: Path) -> dict[str, dict]:
-    df = pd.read_csv(path, dtype=str).fillna("")
+    df = _normalize_rankings_csv(pd.read_csv(path, dtype=str).fillna(""))
     by_abbr: dict[str, dict] = {}
     for _, r in df.iterrows():
         abbr = _norm_key(r.get("team_abbr", ""))
@@ -176,12 +255,20 @@ def main() -> None:
         help="Unit rankings CSV from build_cfb_unit_rankings.py",
     )
     ap.add_argument("--output", required=True)
+    ap.add_argument("--season", type=int, default=0, help="CFB season for rankings refresh (0 = auto).")
+    ap.add_argument(
+        "--skip-refresh",
+        action="store_true",
+        help="Do not auto-refresh stale cfb_team_unit_rankings.csv.",
+    )
     args = ap.parse_args()
 
     cfb_root = Path(__file__).resolve().parents[2]
     rank_path = Path(args.rankings)
     if not rank_path.is_absolute():
         rank_path = cfb_root / rank_path
+    if not args.skip_refresh:
+        _maybe_refresh_cfb_rankings(rank_path, season=int(args.season))
     if not rank_path.exists():
         raise SystemExit(
             f"Missing rankings file: {rank_path}\n"
