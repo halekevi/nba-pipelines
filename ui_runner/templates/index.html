@@ -5204,7 +5204,7 @@ function sortSlateDynamic(sport, key) {
     let observer = null;
 
     const hasCards = () => Boolean(
-      hotCat.querySelector(".hp-card")
+      hotCat.querySelector(".hp-card, .hot-player-card")
     );
     const getHost = () => hotCat.querySelector(".hot-players-grid, .hp-grid, [data-hot-players-grid]") || body;
 

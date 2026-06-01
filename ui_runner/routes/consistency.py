@@ -151,6 +151,29 @@ def player_consistency():
     )
 
 
+def _load_live_today_slate() -> tuple[set[str], set[tuple[str, str]]]:
+    """Reload slate_latest with strict ET game_date (no stale fallback)."""
+    import sys
+
+    root = REPO_ROOT
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    try:
+        from scripts.build_player_consistency_ui import load_today_slate
+
+        return load_today_slate()
+    except Exception:
+        return set(), set()
+
+
+def _player_on_live_slate(p: dict, slate_pairs: set[tuple[str, str]]) -> bool:
+    if not slate_pairs:
+        return False
+    name = str(p.get("player") or "").strip().lower()
+    sport = str(p.get("sport") or "").upper().strip()
+    return bool(name and sport and (name, sport) in slate_pairs)
+
+
 @consistency_bp.route("/api/hot-players")
 def hot_players():
     sport = request.args.get("sport")
@@ -159,9 +182,12 @@ def hot_players():
     data = load_consistency_cache(force_reload=True)
     players = data.get("players", [])
 
-    today = [p for p in players if p.get("on_today_slate") and p.get("tier") in ("high", "medium")]
-    if not today:
-        today = [p for p in players if p.get("tier") == "high"]
+    _slate_names, slate_pairs = _load_live_today_slate()
+    today = [
+        p
+        for p in players
+        if p.get("tier") in ("high", "medium") and _player_on_live_slate(p, slate_pairs)
+    ]
 
     if sport:
         today = [p for p in today if str(p.get("sport", "")).upper() == sport.upper()]

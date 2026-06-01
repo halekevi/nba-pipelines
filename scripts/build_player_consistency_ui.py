@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date, datetime, timedelta, timezone
 from itertools import groupby
@@ -330,9 +331,13 @@ def _normalize_slate_sport(raw: str) -> str:
     return SPORT_ALIASES.get(key, str(raw or "").strip().upper())
 
 
-def _players_from_slate_json(data: dict) -> tuple[set[str], set[tuple[str, str]]]:
+def _players_from_slate_json(
+    data: dict,
+    today_str: str | None = None,
+) -> tuple[set[str], set[tuple[str, str]]]:
     players: set[str] = set()
     pairs: set[tuple[str, str]] = set()
+    td = str(today_str or date.today())[:10]
     sports = data.get("sports") or {}
     if not isinstance(sports, dict):
         return players, pairs
@@ -343,6 +348,14 @@ def _players_from_slate_json(data: dict) -> tuple[set[str], set[tuple[str, str]]
         for row in rows:
             if not isinstance(row, dict):
                 continue
+            gd = str(row.get("game_date") or "").strip()[:10]
+            if gd and gd != td:
+                continue
+            if not gd:
+                gt = str(row.get("game_time") or "").strip()
+                m = re.match(r"^(\d{4}-\d{2}-\d{2})", gt)
+                if m and m.group(1) != td:
+                    continue
             name = row.get("player") or row.get("player_name") or ""
             if not name:
                 continue
@@ -357,8 +370,6 @@ def load_today_slate() -> tuple[set[str], set[tuple[str, str]]]:
     players: set[str] = set()
     pairs: set[tuple[str, str]] = set()
     today_str = str(date.today())
-    fallback_names: set[str] = set()
-    fallback_pairs: set[tuple[str, str]] = set()
 
     for path in SLATE_PATHS:
         if not path.is_file():
@@ -367,21 +378,10 @@ def load_today_slate() -> tuple[set[str], set[tuple[str, str]]]:
             data = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             continue
-        file_date = str(data.get("date", ""))[:10]
-        names, slate_pairs = _players_from_slate_json(data)
-        if not names:
-            continue
-        if file_date == today_str:
+        names, slate_pairs = _players_from_slate_json(data, today_str)
+        if names:
             players.update(names)
             pairs.update(slate_pairs)
-        elif not fallback_names:
-            fallback_names = names
-            fallback_pairs = slate_pairs
-
-    if not players and fallback_names:
-        players = fallback_names
-        pairs = fallback_pairs
-        print(f"[consistency-ui] Using slate_latest ({len(players)} players; date not today)")
 
     step8_dir = CACHE_DIR
     for sport_file in step8_dir.glob("step8_*.json"):
