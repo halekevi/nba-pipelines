@@ -12068,7 +12068,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL", "MLB"):
+        if sport_label in ("NBA", "WNBA", "NFL", "MLB"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -12104,7 +12104,7 @@ def main():
         elif sport_label == "Combined" and "sport" in df.columns:
             # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"])
+            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "WNBA", "NFL"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -13418,7 +13418,7 @@ def main():
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"])
+                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "WNBA", "NFL"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]
