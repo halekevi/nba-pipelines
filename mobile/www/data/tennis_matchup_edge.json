@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-01T09:01:23.789000+00:00",
+  "generated_at": "2026-06-01T11:58:40.121313+00:00",
   "slate_note": "Tennis match day 2026-06-02 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-02.xlsx)",
   "tennis_match_date": "2026-06-02",
   "n_teams": 300,
@@ -1052,13 +1052,13 @@
           "player_norm": "harriet dart",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 21.5,
-          "game_score": 21.5,
+          "season_avg": 20.5,
+          "game_score": 20.5,
           "edge": "OK_EDGE",
           "notes": "Solid vs average opponent (#69).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 21.5,
+          "pp_line": 20.5,
           "pp_edge": 0.0
         }
       ]
@@ -1116,6 +1116,34 @@
           "def_boost": null,
           "pp_line": 20.5,
           "pp_edge": 0.0
+        }
+      ]
+    },
+    "bolelli s  vavassori a|match_total_games": {
+      "team_slate": "bolelli s  vavassori a",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Bolelli S / Vavassori A",
+          "player_norm": "bolelli s  vavassori a",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 22.5,
+          "game_score": 22.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
         }
       ]
     },
@@ -1447,11 +1475,11 @@
           "season_avg": 21.5,
           "game_score": 21.5,
           "edge": "OK_EDGE",
-          "notes": "PP edge +9.0 but elite opponent (#3) \u2014 tough matchup.",
+          "notes": "PP edge +10.0 but elite opponent (#3) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": 9.0
+          "pp_line": 11.5,
+          "pp_edge": 10.0
         }
       ]
     },
@@ -1707,6 +1735,34 @@
         }
       ]
     },
+    "despina papamichail|games_won": {
+      "team_slate": "despina papamichail",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "chloe paquet",
+        "name": "CHLOE PAQUET",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Despina Papamichail",
+          "player_norm": "despina papamichail",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
     "ekaterine gorgodze|games_won": {
       "team_slate": "ekaterine gorgodze",
       "category": "games_won",
@@ -1763,34 +1819,6 @@
         }
       ]
     },
-    "despina papamichail|games_won": {
-      "team_slate": "despina papamichail",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "chloe paquet",
-        "name": "CHLOE PAQUET",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Despina Papamichail",
-          "player_norm": "despina papamichail",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 11.5,
-          "game_score": 11.5,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#75).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 11.5,
-          "pp_edge": 0.0
-        }
-      ]
-    },
     "katie swan|games_won": {
       "team_slate": "katie swan",
       "category": "games_won",
@@ -1815,34 +1843,6 @@
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 10.5,
-          "pp_edge": 0.0
-        }
-      ]
-    },
-    "xiaodi you|games_won": {
-      "team_slate": "xiaodi you",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "leyre romero gormaz",
-        "name": "LEYRE ROMERO GORMAZ",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Xiaodi You",
-          "player_norm": "xiaodi you",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 9.5,
-          "game_score": 9.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
           "pp_edge": 0.0
         }
       ]
@@ -1927,6 +1927,62 @@
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 11.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "bolelli s  vavassori a|games_won": {
+      "team_slate": "bolelli s  vavassori a",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Bolelli S / Vavassori A",
+          "player_norm": "bolelli s  vavassori a",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 13.0,
+          "game_score": 13.0,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "xiaodi you|games_won": {
+      "team_slate": "xiaodi you",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "leyre romero gormaz",
+        "name": "LEYRE ROMERO GORMAZ",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Xiaodi You",
+          "player_norm": "xiaodi you",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 8.5,
           "pp_edge": 0.0
         }
       ]
@@ -2178,8 +2234,8 @@
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 10.5,
-          "pp_edge": -1.5
+          "pp_line": 9.5,
+          "pp_edge": -0.5
         }
       ]
     },
@@ -4059,6 +4115,34 @@
         }
       ]
     },
+    "sorana cirstea|double_faults": {
+      "team_slate": "sorana cirstea",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "mirra andreeva",
+        "name": "MIRRA ANDREEVA",
+        "def_rank": 8,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Sorana Cirstea",
+          "player_norm": "sorana cirstea",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.8,
+          "game_score": 1.8,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#8) \u2014 no clear OVER edge.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.33
+        }
+      ]
+    },
     "elina svitolina|double_faults": {
       "team_slate": "elina svitolina",
       "category": "double_faults",
@@ -4084,34 +4168,6 @@
           "def_boost": null,
           "pp_line": 1.5,
           "pp_edge": 0.6
-        }
-      ]
-    },
-    "sorana cirstea|double_faults": {
-      "team_slate": "sorana cirstea",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "mirra andreeva",
-        "name": "MIRRA ANDREEVA",
-        "def_rank": 8,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Sorana Cirstea",
-          "player_norm": "sorana cirstea",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.8,
-          "game_score": 1.8,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#8).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -0.67
         }
       ]
     },
@@ -4171,6 +4227,34 @@
         }
       ]
     },
+    "rebeka masarova|double_faults": {
+      "team_slate": "rebeka masarova",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "tereza martincova",
+        "name": "TEREZA MARTINCOVA",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Rebeka Masarova",
+          "player_norm": "rebeka masarova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.0,
+          "game_score": 0.0,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
     "alina charaeva|double_faults": {
       "team_slate": "alina charaeva",
       "category": "double_faults",
@@ -4224,34 +4308,6 @@
           "def_boost": null,
           "pp_line": 1.5,
           "pp_edge": -1.5
-        }
-      ]
-    },
-    "rebeka masarova|double_faults": {
-      "team_slate": "rebeka masarova",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "tereza martincova",
-        "name": "TEREZA MARTINCOVA",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Rebeka Masarova",
-          "player_norm": "rebeka masarova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "AVOID",
-          "notes": "PP edge -4.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -4.5
         }
       ]
     },
