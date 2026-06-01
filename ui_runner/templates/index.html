@@ -3428,7 +3428,7 @@ function parsePipelineModifiedAsUtc(s) {
 }
 
 /** Sports where FRESH requires at least one prop on today's ET calendar day (not tomorrow's board). */
-const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q"]);
+const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer"]);
 
 function slateRowsFromPayload(data) {
   if (!data) return [];
@@ -3565,7 +3565,7 @@ async function refreshStatus() {
   applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
   applyStatusCard("cfb",      d.cfb?.slate,      "CFB Slate");
   applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate", statusOpts("nhl"));
-  applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
+  applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate", statusOpts("soccer"));
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate", statusOpts("mlb"));
   applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate", statusOpts("nfl"));
   applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");

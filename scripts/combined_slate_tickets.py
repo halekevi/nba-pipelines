@@ -12080,10 +12080,10 @@ def main():
                     f"  [{sport_label}] date fallback: no props on {td}, "
                     f"using nearest date {chosen} ({int((~stale).sum())} rows)"
                 )
-        # Soccer/Tennis: boards may not carry the pipeline calendar day (late refresh / ET drift).
+        # Tennis: boards may not carry the pipeline calendar day (late refresh / ET drift).
         # If a strict "drop everything before td" would empty the slate, keep the nearest available
         # slate date (same idea as NBA), otherwise PP-only runs lose Tennis entirely.
-        elif sport_label in ("Soccer", "Tennis"):
+        elif sport_label == "Tennis":
             stale_strict = dated & (gd_str < td)
             # If there is no dated row on/after the pipeline day, the board is from a nearby slate only.
             if dated.any() and not (dated & (gd_str >= td)).any():
@@ -12102,9 +12102,9 @@ def main():
             else:
                 stale = stale_strict
         elif sport_label == "Combined" and "sport" in df.columns:
-            # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
+            # Tennis allows future ET days; other sports (incl. Soccer) must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "WNBA", "NFL"])
+            is_roll = su.isin(["TENNIS", "NBA", "WNBA", "NFL"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -13412,13 +13412,13 @@ def main():
                 continue
             dated = sdf["game_date"].notna()
             gd = sdf["game_date"].astype(str).str[:10]
-            if label in ("Soccer", "Tennis"):
+            if label == "Tennis":
                 bad = sdf[dated & (gd < td)]
             elif label in ("NBA", "NBA1Q", "NBA1H"):
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "WNBA", "NFL"])
+                is_roll = su.isin(["TENNIS", "NBA", "WNBA", "NFL"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]
