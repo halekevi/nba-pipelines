@@ -1,300 +1,334 @@
 #!/usr/bin/env python3
 """
-Build FBS team unit rankings (regular season): pass/rush offense and pass/rush defense.
+Build FBS national offensive + defensive unit rankings (pass/rush/points).
 
-Ranks and quintile tiers (Elite → Weak) are computed **within each conference**
-and **nationally across all FBS teams**, using ESPN regular-season byteam YDS/G averages.
+Uses ESPN team statistics per FBS school (~130 from standings). National ranks only
+(conference metadata stored for reference; no conference-relative ranks).
 
 Output: Sports/CFB/data/reference/cfb_team_unit_rankings.csv
 
   py -3.14 scripts/build_cfb_unit_rankings.py --season 2025
-  py -3.14 scripts/build_cfb_unit_rankings.py --season 2025 --out data/reference/cfb_team_unit_rankings.csv
 """
 
 from __future__ import annotations
 
 import argparse
+import datetime
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import requests
 
-_REPO = Path(__file__).resolve().parents[3]
-if str(_REPO) not in sys.path:
-    sys.path.insert(0, str(_REPO))
-
-from utils.defense_tiers import def_tier_from_overall_rank
+_CFB_ROOT = Path(__file__).resolve().parents[1]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     ),
     "Accept": "application/json, text/plain, */*",
 }
 
-BYTEAM_URL = (
-    "https://site.web.api.espn.com/apis/common/v3/sports/football/college-football"
-    "/statistics/byteam?season={season}&seasontype={seasontype}"
+FBS_TEAMS_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
+    "?limit=500&groups=80"
 )
 STANDINGS_URL = (
     "https://site.api.espn.com/apis/v2/sports/football/college-football/standings"
     "?season={season}&type=0"
 )
+TEAM_STATS_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/football/college-football"
+    "/teams/{team_id}/statistics"
+)
+
+REQUEST_DELAY_S = 0.25
+MAX_RETRIES = 5
+
+OUTPUT_COLS = [
+    "team_id",
+    "team_abbr",
+    "team_name",
+    "conference_id",
+    "conference_name",
+    "season",
+    "off_pass_ypg",
+    "off_pass_rank",
+    "off_rush_ypg",
+    "off_rush_rank",
+    "off_points_pg",
+    "off_points_rank",
+    "def_pass_ypg_allowed",
+    "def_pass_rank",
+    "def_rush_ypg_allowed",
+    "def_rush_rank",
+    "def_points_allowed_pg",
+    "def_points_rank",
+    "updated_at",
+]
 
 
-def _get_json(url: str, timeout: int = 60) -> dict[str, Any]:
-    r = requests.get(url, headers=HEADERS, timeout=timeout)
-    r.raise_for_status()
-    return r.json()
+def get_json(session: requests.Session, url: str) -> dict[str, Any]:
+    last_err: Exception | None = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            resp = session.get(url, headers=HEADERS, timeout=60)
+            if resp.status_code == 429:
+                print(f"  [429] retry in 1s ({url[:72]}...)", file=sys.stderr)
+                time.sleep(1.0)
+                continue
+            resp.raise_for_status()
+            return resp.json()
+        except requests.RequestException as exc:
+            last_err = exc
+            if attempt < MAX_RETRIES:
+                time.sleep(1.0 * attempt)
+    raise RuntimeError(f"GET failed: {url}") from last_err
 
 
-def _standings_conference_map(season: int) -> dict[str, str]:
-    """team_abbr -> conference abbrev (e.g. SEC, ACC)."""
-    j = _get_json(STANDINGS_URL.format(season=season))
-    out: dict[str, str] = {}
+def fetch_fbs_teams_from_standings(session: requests.Session, season: int) -> list[dict[str, str]]:
+    """
+    FBS team list from conference standings (~130 teams).
+    ESPN groups=80 on the teams endpoint still returns hundreds of schools; standings
+  is the reliable FBS filter.
+    """
+    j = get_json(session, STANDINGS_URL.format(season=season))
+    by_id: dict[str, dict[str, str]] = {}
     for child in j.get("children") or []:
-        conf = str(child.get("abbreviation") or child.get("name") or "").strip()
-        if not conf:
+        if not isinstance(child, dict):
             continue
+        conf_id = str(child.get("id") or "").strip()
+        conf_name = str(child.get("name") or "").strip()
         entries = (child.get("standings") or {}).get("entries") or []
         for entry in entries:
+            if not isinstance(entry, dict):
+                continue
             team = entry.get("team") or {}
-            abbr = str(team.get("abbreviation") or "").strip().upper()
-            if abbr:
-                out[abbr] = conf
+            tid = str(team.get("id") or "").strip()
+            if not tid:
+                continue
+            by_id[tid] = {
+                "team_id": tid,
+                "team_abbr": str(team.get("abbreviation") or "").strip().upper(),
+                "team_name": str(team.get("displayName") or team.get("name") or "").strip(),
+                "conference_id": conf_id,
+                "conference_name": conf_name,
+            }
+    return list(by_id.values())
+
+
+def _stat_value(blocks: list[dict[str, Any]], category: str, stat_names: tuple[str, ...]) -> float | None:
+    for block in blocks:
+        bname = str(block.get("name") or "").lower()
+        bdisp = str(block.get("displayName") or "").lower()
+        if category.lower() not in (bname, bdisp):
+            continue
+        for st in block.get("stats") or []:
+            if str(st.get("name") or "") in stat_names:
+                try:
+                    return float(st.get("value"))
+                except (TypeError, ValueError):
+                    return None
+    return None
+
+
+def parse_team_unit_stats(payload: dict[str, Any]) -> dict[str, Any]:
+    results = payload.get("results") or {}
+    season = int(
+        (results.get("requestedSeason") or {}).get("year")
+        or (results.get("season") or {}).get("year")
+        or 0
+    )
+    own = (results.get("stats") or {}).get("categories") or []
+    opp = results.get("opponent") or []
+
+    off_pass = _stat_value(
+        own,
+        "passing",
+        ("netPassingYardsPerGame", "passingYardsPerGame", "yardsPerGame"),
+    )
+    off_rush = _stat_value(own, "rushing", ("rushingYardsPerGame", "yardsPerGame"))
+    off_pts = _stat_value(own, "scoring", ("totalPointsPerGame",))
+
+    def_pass = _stat_value(
+        opp,
+        "passing",
+        ("netPassingYardsPerGame", "passingYardsPerGame", "yardsPerGame"),
+    )
+    def_rush = _stat_value(opp, "rushing", ("rushingYardsPerGame", "yardsPerGame"))
+    def_pts = _stat_value(opp, "scoring", ("totalPointsPerGame",))
+
+    return {
+        "season": season,
+        "off_pass_ypg": off_pass,
+        "off_rush_ypg": off_rush,
+        "off_points_pg": off_pts,
+        "def_pass_ypg_allowed": def_pass,
+        "def_rush_ypg_allowed": def_rush,
+        "def_points_allowed_pg": def_pts,
+    }
+
+
+def _has_stats(row: dict[str, Any]) -> bool:
+    keys = (
+        "off_pass_ypg",
+        "off_rush_ypg",
+        "off_points_pg",
+        "def_pass_ypg_allowed",
+        "def_rush_ypg_allowed",
+        "def_points_allowed_pg",
+    )
+    return any(row.get(k) is not None and pd.notna(row.get(k)) for k in keys)
+
+
+def resolve_season(session: requests.Session, teams: list[dict[str, str]], hint: int) -> int:
+    """Pick season year with populated team stats (off-season fallback)."""
+    candidates: list[int] = []
+    if hint:
+        candidates.append(hint)
+    y = datetime.date.today().year
+    candidates.extend([y, y - 1, y - 2])
+    seen: set[int] = set()
+    sample = teams[: min(8, len(teams))]
+    for yr in candidates:
+        if yr in seen:
+            continue
+        seen.add(yr)
+        if not sample:
+            continue
+        filled = 0
+        for t in sample:
+            url = TEAM_STATS_URL.format(team_id=t["team_id"])
+            try:
+                payload = get_json(session, url)
+                parsed = parse_team_unit_stats(payload)
+                if int(parsed.get("season") or yr) == yr and _has_stats(parsed):
+                    filled += 1
+            except Exception:
+                pass
+            time.sleep(REQUEST_DELAY_S)
+        if filled >= max(2, len(sample) // 2):
+            return yr
+    return hint or (y - 1)
+
+
+def pull_all_team_stats(
+    session: requests.Session,
+    teams: list[dict[str, str]],
+    season: int,
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for team in teams:
+        name = team.get("team_name") or team.get("team_abbr") or team.get("team_id")
+        print(f"CFB rankings: fetching {name}...")
+        url = TEAM_STATS_URL.format(team_id=team["team_id"])
+        payload = get_json(session, url)
+        time.sleep(REQUEST_DELAY_S)
+        parsed = parse_team_unit_stats(payload)
+        row = {**team, **parsed, "season": season}
+        rows.append(row)
+    return rows
+
+
+def _rank_series(values: pd.Series, *, ascending: bool) -> pd.Series:
+    return values.rank(method="min", ascending=ascending).astype("Int64")
+
+
+def add_national_ranks(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    out["off_pass_rank"] = _rank_series(
+        pd.to_numeric(out["off_pass_ypg"], errors="coerce"), ascending=False
+    )
+    out["off_rush_rank"] = _rank_series(
+        pd.to_numeric(out["off_rush_ypg"], errors="coerce"), ascending=False
+    )
+    out["off_points_rank"] = _rank_series(
+        pd.to_numeric(out["off_points_pg"], errors="coerce"), ascending=False
+    )
+    out["def_pass_rank"] = _rank_series(
+        pd.to_numeric(out["def_pass_ypg_allowed"], errors="coerce"), ascending=True
+    )
+    out["def_rush_rank"] = _rank_series(
+        pd.to_numeric(out["def_rush_ypg_allowed"], errors="coerce"), ascending=True
+    )
+    out["def_points_rank"] = _rank_series(
+        pd.to_numeric(out["def_points_allowed_pg"], errors="coerce"), ascending=True
+    )
     return out
 
 
-def _label_index(labels: list[str], name: str) -> int | None:
-    try:
-        return labels.index(name)
-    except ValueError:
-        return None
+def build_rankings_table(session: requests.Session, season_hint: int) -> tuple[pd.DataFrame, int]:
+    teams = fetch_fbs_teams_from_standings(session, season_hint)
+    if not teams:
+        raise RuntimeError(f"No FBS teams from standings for season {season_hint}")
 
+    season = resolve_season(session, teams, season_hint)
+    if season != season_hint:
+        print(f"[CFB rankings] Using season {season} (stats empty for {season_hint})")
+        teams = fetch_fbs_teams_from_standings(session, season)
+        if not teams:
+            raise RuntimeError(f"No FBS teams from standings for season {season}")
 
-def _val_at(vals: list[Any], idx: int | None) -> float:
-    if idx is None or idx >= len(vals):
-        return float("nan")
-    v = vals[idx]
-    if v is None:
-        return float("nan")
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        return float("nan")
+    rows = pull_all_team_stats(session, teams, season)
+    df = pd.DataFrame(rows)
+    if df.empty:
+        return df, season
 
-
-def fetch_byteam_units(season: int, seasontype: int = 2) -> pd.DataFrame:
-    """
-    seasontype 2 = regular season on ESPN college football.
-    Returns one row per team with yds/g offense and defense (pass + rush).
-    """
-    j = _get_json(BYTEAM_URL.format(season=season, seasontype=seasontype))
-    root_labels: dict[str, list[str]] = {}
-    for cat in j.get("categories") or []:
-        name = str(cat.get("name") or "")
-        if name in ("passing", "rushing") and cat.get("labels"):
-            root_labels[name] = [str(x) for x in cat["labels"]]
-
-    pass_labs = root_labels.get("passing", [])
-    rush_labs = root_labels.get("rushing", [])
-    pass_yds_g_i = _label_index(pass_labs, "YDS/G")
-    rush_yds_g_i = _label_index(rush_labs, "YDS/G")
-
-    rows: list[dict[str, Any]] = []
-    for t in j.get("teams") or []:
-        team = t.get("team") or {}
-        abbr = str(team.get("abbreviation") or "").strip().upper()
-        if not abbr:
-            continue
-        pass_off = pass_def = rush_off = rush_def = float("nan")
-        for cat in t.get("categories") or []:
-            disp = str(cat.get("displayName") or "")
-            vals = cat.get("values") or []
-            if disp == "Own Passing":
-                pass_off = _val_at(vals, pass_yds_g_i)
-            elif disp == "Opponent Passing":
-                pass_def = _val_at(vals, pass_yds_g_i)
-            elif disp == "Own Rushing":
-                rush_off = _val_at(vals, rush_yds_g_i)
-            elif disp == "Opponent Rushing":
-                rush_def = _val_at(vals, rush_yds_g_i)
-        rows.append(
-            {
-                "team_abbr": abbr,
-                "pass_off_yds_pg": pass_off,
-                "rush_off_yds_pg": rush_off,
-                "pass_def_yds_pg": pass_def,
-                "rush_def_yds_pg": rush_def,
-            }
+    with_stats = df[df.apply(_has_stats, axis=1)]
+    if len(with_stats) < max(20, len(df) * 0.25):
+        print(
+            f"[CFB rankings] WARN: only {len(with_stats)}/{len(df)} teams with stats "
+            f"for season {season}"
         )
-    return pd.DataFrame(rows)
 
-
-def _rank_and_tier_fbs(
-    df: pd.DataFrame,
-    value_col: str,
-    rank_col: str,
-    tier_col: str,
-    *,
-    ascending: bool,
-) -> None:
-    """Rank across all FBS teams; rank 1 = best unit nationally."""
-    vals = pd.to_numeric(df[value_col], errors="coerce")
-    n = int(vals.notna().sum())
-    df[rank_col] = pd.NA
-    df[tier_col] = ""
-    if n < 2:
-        return
-    ranks = vals.rank(method="min", ascending=ascending)
-    df[rank_col] = ranks
-    for idx, r in ranks.items():
-        if pd.notna(r):
-            df.at[idx, tier_col] = def_tier_from_overall_rank(int(r), n)
-
-
-def _rank_and_tier(
-    df: pd.DataFrame,
-    value_col: str,
-    rank_col: str,
-    tier_col: str,
-    *,
-    ascending: bool,
-) -> None:
-    """Rank within conference; rank 1 = best unit in that conference."""
-    df[rank_col] = pd.NA
-    df[tier_col] = ""
-    for conf, grp in df.groupby("conference", dropna=False):
-        if not str(conf).strip():
-            continue
-        sub = grp.copy()
-        vals = pd.to_numeric(sub[value_col], errors="coerce")
-        n = int(vals.notna().sum())
-        if n < 2:
-            continue
-        ranks = vals.rank(method="min", ascending=ascending)
-        df.loc[sub.index, rank_col] = ranks
-        for idx, r in ranks.items():
-            if pd.notna(r):
-                df.at[idx, tier_col] = def_tier_from_overall_rank(int(r), n)
-
-
-def build_rankings_table(season: int, seasontype: int = 2) -> pd.DataFrame:
-    conf_map = _standings_conference_map(season)
-    stats = fetch_byteam_units(season, seasontype=seasontype)
-    if stats.empty:
-        return stats
-
-    stats["conference"] = stats["team_abbr"].map(conf_map)
-    stats = stats[stats["conference"].notna() & (stats["conference"].astype(str).str.strip() != "")].copy()
-    stats = stats.reset_index(drop=True)
-
-    # Offense: higher yds/g = better (rank 1 = highest)
-    _rank_and_tier(
-        stats, "pass_off_yds_pg", "pass_off_rank", "pass_off_tier", ascending=False
+    df = add_national_ranks(df)
+    df["updated_at"] = datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
     )
-    _rank_and_tier(
-        stats, "rush_off_yds_pg", "rush_off_rank", "rush_off_tier", ascending=False
-    )
-    # Defense: lower yds allowed/g = better (rank 1 = lowest)
-    _rank_and_tier(
-        stats, "pass_def_yds_pg", "pass_def_rank", "pass_def_tier", ascending=True
-    )
-    _rank_and_tier(
-        stats, "rush_def_yds_pg", "rush_def_rank", "rush_def_tier", ascending=True
-    )
-
-    # National (FBS-wide) ranks + tiers on the same YDS/G averages
-    _rank_and_tier_fbs(
-        stats, "pass_off_yds_pg", "pass_off_rank_nat", "pass_off_tier_nat", ascending=False
-    )
-    _rank_and_tier_fbs(
-        stats, "rush_off_yds_pg", "rush_off_rank_nat", "rush_off_tier_nat", ascending=False
-    )
-    _rank_and_tier_fbs(
-        stats, "pass_def_yds_pg", "pass_def_rank_nat", "pass_def_tier_nat", ascending=True
-    )
-    _rank_and_tier_fbs(
-        stats, "rush_def_yds_pg", "rush_def_rank_nat", "rush_def_tier_nat", ascending=True
-    )
-
-    stats["total_off_yds_pg"] = (
-        pd.to_numeric(stats["pass_off_yds_pg"], errors="coerce")
-        + pd.to_numeric(stats["rush_off_yds_pg"], errors="coerce")
-    )
-    stats["total_def_yds_pg"] = (
-        pd.to_numeric(stats["pass_def_yds_pg"], errors="coerce")
-        + pd.to_numeric(stats["rush_def_yds_pg"], errors="coerce")
-    )
-    _rank_and_tier_fbs(
-        stats, "total_off_yds_pg", "overall_off_rank_nat", "overall_off_tier_nat", ascending=False
-    )
-    _rank_and_tier_fbs(
-        stats, "total_def_yds_pg", "overall_def_rank_nat", "overall_def_tier_nat", ascending=True
-    )
-
-    col_order = [
-        "team_abbr",
-        "conference",
-        "pass_off_yds_pg",
-        "pass_off_rank",
-        "pass_off_tier",
-        "pass_off_rank_nat",
-        "pass_off_tier_nat",
-        "rush_off_yds_pg",
-        "rush_off_rank",
-        "rush_off_tier",
-        "rush_off_rank_nat",
-        "rush_off_tier_nat",
-        "pass_def_yds_pg",
-        "pass_def_rank",
-        "pass_def_tier",
-        "pass_def_rank_nat",
-        "pass_def_tier_nat",
-        "rush_def_yds_pg",
-        "rush_def_rank",
-        "rush_def_tier",
-        "rush_def_rank_nat",
-        "rush_def_tier_nat",
-        "total_off_yds_pg",
-        "overall_off_rank_nat",
-        "overall_off_tier_nat",
-        "total_def_yds_pg",
-        "overall_def_rank_nat",
-        "overall_def_tier_nat",
-    ]
-    return stats[col_order].sort_values(["conference", "team_abbr"]).reset_index(drop=True)
+    for col in OUTPUT_COLS:
+        if col not in df.columns:
+            df[col] = pd.NA
+    return df[OUTPUT_COLS].sort_values(["conference_name", "team_abbr"]).reset_index(drop=True), season
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--season", type=int, default=2025, help="ESPN season year (e.g. 2025)")
-    ap.add_argument("--seasontype", type=int, default=2, help="2=regular season")
+    ap = argparse.ArgumentParser(description="Build FBS national CFB unit rankings CSV.")
+    ap.add_argument("--season", type=int, default=0, help="ESPN season year (0 = auto).")
     ap.add_argument(
         "--out",
         default="",
-        help="Output CSV (default: data/reference/cfb_team_unit_rankings.csv)",
+        help="Output CSV (default: data/reference/cfb_team_unit_rankings.csv).",
     )
     args = ap.parse_args()
 
-    cfb_root = Path(__file__).resolve().parents[1]
-    out_path = Path(args.out) if args.out else cfb_root / "data" / "reference" / "cfb_team_unit_rankings.csv"
+    out_path = (
+        Path(args.out)
+        if args.out
+        else _CFB_ROOT / "data" / "reference" / "cfb_team_unit_rankings.csv"
+    )
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    print(f"→ ESPN CFB byteam season={args.season} seasontype={args.seasontype}")
-    df = build_rankings_table(args.season, seasontype=args.seasontype)
+    season_hint = int(args.season) if args.season else datetime.date.today().year
+    session = requests.Session()
+
+    print(f"→ CFB FBS unit rankings (national) | season hint={season_hint}")
+    df, season = build_rankings_table(session, season_hint)
     if df.empty:
-        print("❌ No FBS conference teams ranked — check season / network.")
+        print("❌ No FBS teams ranked — check season / network.")
         raise SystemExit(1)
 
-    df.to_csv(out_path, index=False)
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    updated = df["updated_at"].iloc[0] if len(df) else ""
     print(f"✅ Wrote {len(df)} teams → {out_path}")
-    for conf in sorted(df["conference"].unique()):
-        n = len(df[df["conference"] == conf])
-        print(f"   {conf}: {n} teams")
+    print(f"   season:    {season}")
+    print(f"   updated:   {updated}")
+    print(f"   conferences: {df['conference_name'].nunique()}")
 
 
 if __name__ == "__main__":
