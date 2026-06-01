@@ -3427,7 +3427,41 @@ function parsePipelineModifiedAsUtc(s) {
   return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]));
 }
 
-function applyStatusCard(id, info, _label) {
+/** Sports where FRESH requires at least one prop on today's ET calendar day (not tomorrow's board). */
+const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb"]);
+
+function slateRowsFromPayload(data) {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.rows)) return data.rows;
+  if (Array.isArray(data.props)) return data.props;
+  return [];
+}
+
+function rowGameDateEt(row) {
+  const gd = String(row?.game_date || "").trim().slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(gd)) return gd;
+  const m = String(row?.game_time || "").trim().match(/^(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : null;
+}
+
+async function sportSlateHasTodayGames(sportId) {
+  if (!SLATE_STRICT_GAME_DAY_SPORTS.has(sportId)) return null;
+  try {
+    let res = await fetch(`/api/slate-sport/${encodeURIComponent(sportId)}`, { cache: "no-store" });
+    if (!res.ok) res = await fetch(`slate_sport_${sportId}.json`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const rows = slateRowsFromPayload(data);
+    if (!rows.length) return false;
+    const todayEt = ymdInEastern(new Date());
+    return rows.some((r) => rowGameDateEt(r) === todayEt);
+  } catch {
+    return null;
+  }
+}
+
+function applyStatusCard(id, info, _label, opts) {
   const card = document.getElementById(`sc-${id}`),
         val = document.getElementById(`sc-${id}-val`),
         badge = document.getElementById(`sc-${id}-badge`);
@@ -3444,7 +3478,8 @@ function applyStatusCard(id, info, _label) {
   const modUtc = parsePipelineModifiedAsUtc(info.modified || "");
   const modEt = modUtc ? ymdInEastern(modUtc) : null;
   const todayEt = ymdInEastern(new Date());
-  const fresh = Boolean(modEt && todayEt && modEt === todayEt);
+  let fresh = Boolean(modEt && todayEt && modEt === todayEt);
+  if (fresh && opts?.requireTodayGames && opts.hasTodayGames === false) fresh = false;
   const cls = fresh ? "fresh" : "stale";
   card.classList.add(cls); badge.classList.add(cls);
   val.textContent = formatSlateModifiedDisplay(info.modified || "—");
@@ -3517,10 +3552,22 @@ async function refreshStatus() {
   applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
   applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
   applyStatusCard("cfb",      d.cfb?.slate,      "CFB Slate");
-  applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
+  const strictGameDay = {};
+  await Promise.all(
+    [...SLATE_STRICT_GAME_DAY_SPORTS].map(async (sid) => {
+      const v = await sportSlateHasTodayGames(sid);
+      if (v !== null) strictGameDay[sid] = v;
+    })
+  );
+  const statusOpts = (sid) => (
+    SLATE_STRICT_GAME_DAY_SPORTS.has(sid)
+      ? { requireTodayGames: true, hasTodayGames: strictGameDay[sid] }
+      : null
+  );
+  applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate", statusOpts("nhl"));
   applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
-  applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
-  applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate");
+  applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate", statusOpts("mlb"));
+  applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate", statusOpts("nfl"));
   applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
   applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");

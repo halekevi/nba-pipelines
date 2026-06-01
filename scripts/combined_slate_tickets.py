@@ -4920,7 +4920,7 @@ def enforce_target_date(
     # NBA/MLB period boards and Soccer should not silently roll dates.
     sport_u = str(sport).upper()
     fallback_sports = {"TENNIS"}
-    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC", "WNBA", "NFL"}:
+    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC", "WNBA", "NFL", "NHL"}:
         use_date_fallback = False
     else:
         use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
@@ -12068,7 +12068,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL", "NHL", "MLB"):
+        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL", "MLB"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
