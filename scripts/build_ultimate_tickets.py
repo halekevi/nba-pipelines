@@ -2,6 +2,10 @@
 """
 Cross-sport ranked ticket generator (2–4 legs) using empirical payout EV from combined_slate_tickets.
 
+Also emits conditional ticket groups when pools qualify:
+  - **X-Sport Bracket** (2-leg Cat-A OVER + Cat-D UNDER) — ``build_xsport_bracket_group``
+  - **Best Locks** (3-leg WF-qualified global pool) — ``build_best_locks_group``
+
   py -3.14 scripts/build_ultimate_tickets.py --date 2026-04-11 --mode balanced
 
 score_to_hit_prob matches fetch_prizepicks_payouts.py (no import — avoids playwright dependency).
@@ -24,8 +28,25 @@ ROOT = Path(__file__).resolve().parent.parent
 _SCRIPTS = ROOT / "scripts"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
+import backtest_matchup_parlay as mp  # noqa: E402
+import backtest_player_tier_vs_defense as bt  # noqa: E402
 from combined_slate_tickets import compute_ticket_ev  # noqa: E402
+from utils.defense_tiers import normalize_def_tier_label  # noqa: E402
+
+BRACKET_OVER_SPORTS = mp.BRACKET_OVER_SPORTS
+BRACKET_UNDER_SPORTS = mp.BRACKET_UNDER_SPORTS
+BRACKET_SPORT_LOAD_ORDER = (
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "MLB",
+    "SOCCER",
+    "WNBA",
+    "CBB",
+)
 
 # ── Mirrors fetch_prizepicks_payouts.score_to_hit_prob (avoid importing playwright stack) ──
 MIN_REALISTIC_HIT_PROB = 0.50
@@ -82,6 +103,269 @@ def norm_pick_type(pt: str) -> str:
     if "demon" in s:
         return "demon"
     return "standard"
+
+
+def norm_bracket_sport(s: object) -> str:
+    u = str(s or "").strip().upper()
+    if u in ("SOC", "FOOTBALL", "SOCCER"):
+        return "SOCCER"
+    return u or "UNKNOWN"
+
+
+def display_sport(s: object) -> str:
+    sp = norm_bracket_sport(s)
+    if sp == "SOCCER":
+        return "Soccer"
+    return sp
+
+
+def _first_existing_path(*candidates: Path) -> Path | None:
+    for p in candidates:
+        if p.is_file():
+            return p
+    return None
+
+
+def bracket_source_path(sport: str, date_str: str) -> Path | None:
+    """Resolve step8 / step6 workbook for bracket pool loading."""
+    sp = norm_bracket_sport(sport)
+    od = ROOT / "outputs" / date_str
+    common: dict[str, list[Path]] = {
+        "NBA": [
+            od / "nba" / "step8_all_direction_clean.xlsx",
+            od / f"step8_all_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        ],
+        "NBA1H": [
+            od / "nba1h" / "step8_nba1h_direction_clean.xlsx",
+            od / f"step8_nba1h_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+        ],
+        "NBA1Q": [
+            od / "nba1q" / "step8_nba1q_direction_clean.xlsx",
+            od / f"step8_nba1q_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+        ],
+        "MLB": [
+            od / "mlb" / "step8_mlb_direction_clean.xlsx",
+            od / f"step8_mlb_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+            ROOT / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+        ],
+        "SOCCER": [
+            od / "soccer" / "step8_soccer_direction_clean.xlsx",
+            od / f"step8_soccer_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            ROOT / "Sports" / "Soccer" / "step8_soccer_direction_clean.xlsx",
+        ],
+        "WNBA": [
+            od / "wnba" / "step8_wnba_direction_clean.xlsx",
+            od / f"step8_wnba_direction_clean_{date_str}.xlsx",
+            ROOT / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx",
+            ROOT / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
+        ],
+        "CBB": [
+            od / "cbb" / "step6_ranked_cbb.xlsx",
+            ROOT / "Sports" / "CBB" / "step6_ranked_cbb.xlsx",
+            ROOT / "CBB" / "step6_ranked_cbb.xlsx",
+        ],
+    }
+    return _first_existing_path(*common.get(sp, []))
+
+
+def _leg_hit_prob(leg: dict[str, Any]) -> float:
+    ml = leg.get("ml_prob")
+    try:
+        if ml is not None and float(ml) > 0:
+            return round(min(0.95, float(ml)), 4)
+    except (TypeError, ValueError):
+        pass
+    blend = leg.get("blended_score")
+    try:
+        bs = float(blend) if blend is not None else 0.5
+    except (TypeError, ValueError):
+        bs = 0.5
+    return score_to_hit_prob(bs, str(leg.get("pick_type") or "standard"))
+
+
+def load_bracket_rows_from_workbook(path: Path, sport: str, date_str: str) -> list[dict[str, Any]]:
+    sp = norm_bracket_sport(sport)
+    try:
+        df = pd.read_excel(path)
+    except Exception:
+        return []
+    if df.empty:
+        return []
+
+    player_col = find_col(df, ["Player", "player", "player_name", "Name"])
+    prop_col = find_col(df, ["Prop", "prop_type", "Prop Type", "prop"])
+    line_col = find_col(df, ["Line", "line", "line_score"])
+    dir_col = find_col(df, ["Direction", "direction", "bet_direction", "final_bet_direction", "Bet Direction"])
+    pick_col = find_col(df, ["Pick Type", "pick_type", "PickType"])
+    def_col = find_col(df, ["Def Tier", "def_tier", "opp_def_tier", "DEF_TIER"])
+    ml_col = find_col(df, ["ML Prob", "ml_prob"])
+    team_col = find_col(df, ["Team", "team"])
+    blend_col = find_col(df, ["Blended Score", "blended_score", "Rank Score", "rank_score"])
+    tier_col = find_col(df, ["Tier", "tier"])
+    edge_col = find_col(df, ["Abs Edge", "abs_edge", "Edge", "edge"])
+    eligible_col = find_col(df, ["eligible", "ELIGIBLE", "Eligible"])
+
+    if not all([player_col, prop_col, line_col, dir_col, def_col]):
+        return []
+
+    rows: list[dict[str, Any]] = []
+    for _, r in df.iterrows():
+        if eligible_col is not None:
+            elig = str(r.get(eligible_col, "")).strip().upper()
+            if elig in ("FALSE", "0", "NO", "N", "INELIGIBLE"):
+                continue
+        pick_raw = str(r.get(pick_col, "Standard") or "Standard") if pick_col else "Standard"
+        if norm_pick_type(pick_raw) != "standard":
+            continue
+        direction = str(r.get(dir_col, "") or "").strip().upper()
+        if direction not in ("OVER", "UNDER"):
+            continue
+        def_tier = normalize_def_tier_label(r.get(def_col)) or ""
+        if not def_tier:
+            continue
+        player = str(r.get(player_col, "") or "").strip()
+        if not player:
+            continue
+        try:
+            line_val = float(r.get(line_col))
+        except (TypeError, ValueError):
+            continue
+        ml_prob = pd.to_numeric(r.get(ml_col), errors="coerce") if ml_col else pd.NA
+        abs_edge = pd.to_numeric(r.get(edge_col), errors="coerce") if edge_col else pd.NA
+        blend = pd.to_numeric(r.get(blend_col), errors="coerce") if blend_col else pd.NA
+        rows.append(
+            {
+                "player": player,
+                "player_key": player.strip().lower(),
+                "sport": sp,
+                "team": str(r.get(team_col, "") or "").strip().upper() if team_col else "",
+                "prop_type": str(r.get(prop_col, "") or "").strip(),
+                "prop_raw": str(r.get(prop_col, "") or "").strip(),
+                "line": line_val,
+                "direction": direction,
+                "pick_type": "standard",
+                "def_tier": def_tier,
+                "def_tier_norm": def_tier,
+                "ml_prob": float(ml_prob) if pd.notna(ml_prob) else None,
+                "abs_edge": float(abs_edge) if pd.notna(abs_edge) else None,
+                "blended_score": float(blend) if pd.notna(blend) else None,
+                "tier": str(r.get(tier_col, "") or "").strip().upper() if tier_col else "",
+                "file_date": date_str,
+                "hit_prob": None,
+                "line_distance": 0.0,
+            }
+        )
+    return rows
+
+
+def load_all_bracket_rows(date_str: str) -> pd.DataFrame:
+    parts: list[dict[str, Any]] = []
+    for sport in BRACKET_SPORT_LOAD_ORDER:
+        path = bracket_source_path(sport, date_str)
+        if path is None:
+            continue
+        parts.extend(load_bracket_rows_from_workbook(path, sport, date_str))
+    if not parts:
+        return pd.DataFrame()
+    df = pd.DataFrame(parts)
+    lookups = mp.build_lookups(df)
+    df = bt.attach_player_tier(df, lookups)
+    df["matchup_cat"] = df.apply(mp.tag_category, axis=1)
+    for i, row in df.iterrows():
+        hp = _leg_hit_prob(row.to_dict())
+        df.at[i, "hit_prob"] = hp
+    return df
+
+
+def build_xsport_bracket_group(date_str: str) -> dict[str, Any] | None:
+    """
+    Best 1 OVER (Cat A) + best 1 UNDER (Cat D), cross-sport, unique players.
+    Returns tickets_latest-style group dict, or None to skip silently.
+    """
+    df = load_all_bracket_rows(date_str)
+    if df.empty:
+        return None
+
+    over_p = mp.bracket_over_pool(df)
+    under_p = mp.bracket_under_pool(df)
+    if over_p.empty or under_p.empty:
+        return None
+
+    legs_raw = mp.select_bracket_legs(over_p, under_p, n_over=1, n_under=1, min_sports=2)
+    if len(legs_raw) < 2:
+        return None
+
+    legs: list[dict[str, Any]] = []
+    for raw in legs_raw:
+        leg = dict(raw)
+        leg["sport"] = display_sport(leg.get("sport"))
+        leg["hit_prob"] = _leg_hit_prob(leg)
+        legs.append(leg)
+
+    legs_for_ev = [
+        {
+            "pick_type": "standard",
+            "line_distance": float(l.get("line_distance") or 0.0),
+            "hit_prob": float(l.get("hit_prob") or 0.5),
+        }
+        for l in legs
+    ]
+    ev_result = compute_ticket_ev(legs_for_ev, "power", 2)
+    p_win = float(ev_result["p_all_win"])
+    payout = float(ev_result["first_place_payout"])
+    flex_ev = compute_ticket_ev(legs_for_ev, "flex", 2)
+    flex_payout = float(flex_ev["first_place_payout"])
+
+    leg_strs = [
+        f"{l['player']} {l['prop_type']} {l['line']} {l['direction']}" for l in legs
+    ]
+    json_legs = leg_detail_to_jsonable(legs)
+    for jl, leg in zip(json_legs, legs):
+        jl["def_tier"] = leg.get("def_tier")
+        jl["ml_prob"] = leg.get("ml_prob")
+        jl["player_tier"] = leg.get("player_tier")
+        jl["matchup_cat"] = leg.get("matchup_cat")
+        jl["ticket_group"] = "xsport_bracket"
+
+    ticket = {
+        "web_group_name": "X-Sport Bracket",
+        "ticket_group": "xsport_bracket",
+        "ticket_id": f"{date_str}|X-Sport Bracket|1",
+        "ticket_no": 1,
+        "n_legs": 2,
+        "legs": json_legs,
+        "rows": json_legs,
+        "legs_detail": json_legs,
+        "legs_text": leg_strs,
+        "player_keys": [str(l["player"]).strip() for l in legs],
+        "sports": sorted({str(l["sport"]) for l in legs}),
+        "p_win": round(p_win, 4),
+        "p_win_pct": round(p_win * 100, 1),
+        "payout": round(payout, 2),
+        "power_payout": round(payout, 2),
+        "flex_payout": round(flex_payout, 2),
+        "ev": round(float(ev_result["ev"]), 4),
+        "ev_power": round(float(ev_result["ev"]), 4),
+        "recommendation": ev_result["recommendation"],
+        "pick_types": ["standard", "standard"],
+        "n_goblins": 0,
+        "n_demons": 0,
+        "bracket_over_sports": sorted(BRACKET_OVER_SPORTS),
+        "bracket_under_sports": sorted(BRACKET_UNDER_SPORTS),
+    }
+
+    return {
+        "group_name": "X-Sport Bracket",
+        "n_legs": 2,
+        "power_payout": ticket["power_payout"],
+        "flex_payout": ticket["flex_payout"],
+        "tickets": [ticket],
+    }
 
 
 def step8_path_for_sport(sport: str, date_str: str) -> Path | None:
@@ -218,6 +502,17 @@ def load_sport_legs(
 
         raw_blend = float(r.get("__blend") or 0.0)
         hit_prob = score_to_hit_prob(raw_blend, pt)
+        tier_val = str(r.get(tier_col8, "") or "").strip().upper()
+
+        # Guardrail: Goblin/Demon are OVER-only products in this pipeline.
+        if pt in ("goblin", "demon") and direction != "OVER":
+            continue
+        # Demon legs must clear stricter quality filters before ticketing.
+        if pt == "demon":
+            if tier_val not in DEMON_ALLOWED_TIERS:
+                continue
+            if raw_blend < DEMON_MIN_BLEND_SCORE or hit_prob < DEMON_MIN_HIT_PROB:
+                continue
 
         std_line_val: float | None = None
         if match:
@@ -244,7 +539,7 @@ def load_sport_legs(
                 "pick_type": pt,
                 "line_distance": line_distance,
                 "hit_prob": hit_prob,
-                "tier": str(r.get(tier_col8, "") or "").strip().upper(),
+                "tier": tier_val,
                 "blended_score": raw_blend,
                 "team": team,
             }
@@ -378,6 +673,10 @@ def format_ticket_players_line(r: dict[str, Any], max_len: int = 52) -> str:
 
 
 MAX_PLAYER_IN_TOP20 = 3
+MAX_DEMONS_PER_TICKET = 1
+DEMON_MIN_HIT_PROB = 0.62
+DEMON_MIN_BLEND_SCORE = 0.70
+DEMON_ALLOWED_TIERS = {"A", "B"}
 
 
 def get_top_n(
@@ -495,6 +794,22 @@ def main() -> int:
 
     date_str = str(args.date or "").strip()[:10] or date.today().strftime("%Y-%m-%d")
 
+    from locks_ticket_production import build_best_locks_group
+
+    bracket_group = build_xsport_bracket_group(date_str)
+    if bracket_group:
+        bt = bracket_group["tickets"][0]
+        print(
+            f"[ULTIMATE] X-Sport Bracket: built 2-leg "
+            f"({' + '.join(bt['sports'])}) P(win)={bt['p_win_pct']}%"
+        )
+    else:
+        print("[ULTIMATE] X-Sport Bracket: skipped (pools empty or no cross-sport pair)")
+
+    best_locks_group = build_best_locks_group(date_str)
+    if not best_locks_group:
+        pass  # build_best_locks_group logs skip reason
+
     all_legs: list[dict[str, Any]] = []
     counts: dict[str, int] = {}
     for sport in ("NBA", "NHL", "Soccer", "MLB"):
@@ -507,7 +822,7 @@ def main() -> int:
         f"Soccer={counts.get('Soccer', 0)}, MLB={counts.get('MLB', 0)}"
     )
     print(f"[ULTIMATE] Total candidates: {len(all_legs)}")
-    if len(all_legs) < 2:
+    if len(all_legs) < 2 and not bracket_group and not best_locks_group:
         print("[ULTIMATE] ERROR: need at least 2 legs across sports — build step8 outputs first.")
         return 1
 
@@ -527,104 +842,108 @@ def main() -> int:
     all_results: list[dict[str, Any]] = []
     total_combos_evaluated = 0
 
-    for n_legs in range(int(args.min_legs), int(args.max_legs) + 1):
-        combos_tested = 0
-        combos_kept = 0
-        for combo in itertools.combinations(all_legs, n_legs):
-            players = [l["player"] for l in combo]
-            if len(players) != len(set(players)):
-                continue
+    if len(all_legs) >= 2:
+        for n_legs in range(int(args.min_legs), int(args.max_legs) + 1):
+            combos_tested = 0
+            combos_kept = 0
+            for combo in itertools.combinations(all_legs, n_legs):
+                players = [l["player"] for l in combo]
+                if len(players) != len(set(players)):
+                    continue
 
-            sport_counts: dict[str, int] = {}
-            for l in combo:
-                sp = str(l["sport"])
-                sport_counts[sp] = sport_counts.get(sp, 0) + 1
-            if max(sport_counts.values()) > 2:
-                continue
+                sport_counts: dict[str, int] = {}
+                for l in combo:
+                    sp = str(l["sport"])
+                    sport_counts[sp] = sport_counts.get(sp, 0) + 1
+                if max(sport_counts.values()) > 2:
+                    continue
+                n_demons_combo = sum(1 for l in combo if l["pick_type"] == "demon")
+                if n_demons_combo > MAX_DEMONS_PER_TICKET:
+                    continue
 
-            p_win_est = 1.0
-            for l in combo:
-                p_win_est *= float(l["hit_prob"])
-            base = float(BASE_PAYOUT.get(n_legs, 6.0))
-            est_ev = p_win_est * base - (1.0 - p_win_est)
-            if est_ev < prefilter_ev:
-                continue
+                p_win_est = 1.0
+                for l in combo:
+                    p_win_est *= float(l["hit_prob"])
+                base = float(BASE_PAYOUT.get(n_legs, 6.0))
+                est_ev = p_win_est * base - (1.0 - p_win_est)
+                if est_ev < prefilter_ev:
+                    continue
 
-            combos_tested += 1
-            if combos_tested > int(args.max_combos):
-                break
+                combos_tested += 1
+                if combos_tested > int(args.max_combos):
+                    break
 
-            legs_for_ev = [
-                {
-                    "pick_type": l["pick_type"],
-                    "line_distance": float(l.get("line_distance") or 0.0),
-                    "hit_prob": float(l["hit_prob"]),
-                }
-                for l in combo
-            ]
-            ev_result = compute_ticket_ev(legs_for_ev, "power", n_legs)
+                legs_for_ev = [
+                    {
+                        "pick_type": l["pick_type"],
+                        "line_distance": float(l.get("line_distance") or 0.0),
+                        "hit_prob": float(l["hit_prob"]),
+                    }
+                    for l in combo
+                ]
+                ev_result = compute_ticket_ev(legs_for_ev, "power", n_legs)
 
-            p_win = float(ev_result["p_all_win"])
-            payout = float(ev_result["first_place_payout"])
-            ev = float(ev_result["ev"])
-            min_g = float(ev_result["min_guarantee"])
-            adj = float(ev_result["min_guarantee_adjustment"])
+                p_win = float(ev_result["p_all_win"])
+                payout = float(ev_result["first_place_payout"])
+                ev = float(ev_result["ev"])
+                min_g = float(ev_result["min_guarantee"])
+                adj = float(ev_result["min_guarantee_adjustment"])
 
-            score_pure_ev = ev
-            score_safe = p_win if ev > 1.0 else 0.0
-            score_balanced = p_win * payout
+                score_pure_ev = ev
+                score_safe = p_win if ev > 1.0 else 0.0
+                score_balanced = p_win * payout
 
-            w1, w2, w3 = 0.4, 0.4, 0.2
-            score_composite = (
-                w1 * p_win
-                + w2 * min(ev / 5.0, 1.0)
-                + w3 * min(adj, 3.0) / 3.0
-            )
-
-            leg_strs = [
-                f"{l['player']} {l['prop_type']} {l['line']} {l['direction']}" for l in combo
-            ]
-            ticket_key = frozenset(
-                (
-                    _exposure_player_key(str(l["player"])),
-                    str(l.get("prop_type", "")).strip().lower(),
-                    round(float(l["line"]), 4),
-                    str(l.get("direction", "")).strip().upper(),
+                w1, w2, w3 = 0.4, 0.4, 0.2
+                score_composite = (
+                    w1 * p_win
+                    + w2 * min(ev / 5.0, 1.0)
+                    + w3 * min(adj, 3.0) / 3.0
                 )
-                for l in combo
-            )
-            player_keys = [str(l["player"]).strip() for l in combo]
-            all_results.append(
-                {
-                    "rank": 0,
-                    "n_legs": n_legs,
-                    "legs": leg_strs,
-                    "legs_detail": leg_detail_to_jsonable(combo),
-                    "player_keys": player_keys,
-                    "_ticket_key": ticket_key,
-                    "sports": sorted({str(l["sport"]) for l in combo}),
-                    "n_sports": len({l["sport"] for l in combo}),
-                    "pick_types": [l["pick_type"] for l in combo],
-                    "n_goblins": sum(1 for l in combo if l["pick_type"] == "goblin"),
-                    "n_demons": sum(1 for l in combo if l["pick_type"] == "demon"),
-                    "p_win": round(p_win, 4),
-                    "p_win_pct": round(p_win * 100, 1),
-                    "payout": round(payout, 2),
-                    "min_guarantee": round(min_g, 2),
-                    "payout_adjustment": round(adj, 4),
-                    "ev": round(ev, 4),
-                    "score_pure_ev": round(score_pure_ev, 4),
-                    "score_safe": round(score_safe, 4),
-                    "score_balanced": round(score_balanced, 4),
-                    "score_composite": round(score_composite, 4),
-                    "recommendation": ev_result["recommendation"],
-                    "tiers": [l["tier"] for l in combo],
-                }
-            )
-            combos_kept += 1
 
-        total_combos_evaluated += combos_tested
-        print(f"[ULTIMATE] {n_legs}-leg: tested={combos_tested} kept={combos_kept}")
+                leg_strs = [
+                    f"{l['player']} {l['prop_type']} {l['line']} {l['direction']}" for l in combo
+                ]
+                ticket_key = frozenset(
+                    (
+                        _exposure_player_key(str(l["player"])),
+                        str(l.get("prop_type", "")).strip().lower(),
+                        round(float(l["line"]), 4),
+                        str(l.get("direction", "")).strip().upper(),
+                    )
+                    for l in combo
+                )
+                player_keys = [str(l["player"]).strip() for l in combo]
+                all_results.append(
+                    {
+                        "rank": 0,
+                        "n_legs": n_legs,
+                        "legs": leg_strs,
+                        "legs_detail": leg_detail_to_jsonable(combo),
+                        "player_keys": player_keys,
+                        "_ticket_key": ticket_key,
+                        "sports": sorted({str(l["sport"]) for l in combo}),
+                        "n_sports": len({l["sport"] for l in combo}),
+                        "pick_types": [l["pick_type"] for l in combo],
+                        "n_goblins": sum(1 for l in combo if l["pick_type"] == "goblin"),
+                        "n_demons": sum(1 for l in combo if l["pick_type"] == "demon"),
+                        "p_win": round(p_win, 4),
+                        "p_win_pct": round(p_win * 100, 1),
+                        "payout": round(payout, 2),
+                        "min_guarantee": round(min_g, 2),
+                        "payout_adjustment": round(adj, 4),
+                        "ev": round(ev, 4),
+                        "score_pure_ev": round(score_pure_ev, 4),
+                        "score_safe": round(score_safe, 4),
+                        "score_balanced": round(score_balanced, 4),
+                        "score_composite": round(score_composite, 4),
+                        "recommendation": ev_result["recommendation"],
+                        "tiers": [l["tier"] for l in combo],
+                    }
+                )
+                combos_kept += 1
+
+            total_combos_evaluated += combos_tested
+            print(f"[ULTIMATE] {n_legs}-leg: tested={combos_tested} kept={combos_kept}")
 
     top = get_top_n(all_results, int(args.top_n), args.mode, verbose=bool(args.verbose))
     mode_label = str(args.mode).upper()
@@ -650,11 +969,18 @@ def main() -> int:
             print(f"  rank {t['rank']}: key={canonical_ticket_key(t)}")
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    groups: list[dict[str, Any]] = []
+    if bracket_group:
+        groups.append(bracket_group)
+    if best_locks_group:
+        groups.append(best_locks_group)
+
     ui_payload = {
         "generated_at": generated_at,
         "date": date_str,
         "mode": args.mode,
         "total_combos_evaluated": total_combos_evaluated,
+        "groups": groups,
         "tickets": [
             {
                 "rank": t["rank"],
@@ -674,6 +1000,51 @@ def main() -> int:
             for t in top
         ],
     }
+    if bracket_group:
+        bt0 = bracket_group["tickets"][0]
+        ui_payload["tickets"].insert(
+            0,
+            {
+                "rank": 0,
+                "ticket_group": "xsport_bracket",
+                "group_name": "X-Sport Bracket",
+                "legs": bt0.get("legs_text") or bt0.get("legs"),
+                "sports": bt0["sports"],
+                "n_legs": 2,
+                "p_win_pct": bt0["p_win_pct"],
+                "payout": bt0["payout"],
+                "min_guarantee": 0.0,
+                "ev": bt0["ev"],
+                "recommendation": bt0["recommendation"],
+                "n_goblins": 0,
+                "n_demons": 0,
+                "pick_types": bt0["pick_types"],
+                "player_keys": bt0.get("player_keys"),
+            },
+        )
+    if best_locks_group:
+        bl0 = best_locks_group["tickets"][0]
+        insert_at = 1 if bracket_group else 0
+        ui_payload["tickets"].insert(
+            insert_at,
+            {
+                "rank": 0,
+                "ticket_group": "best_locks",
+                "group_name": "Best Locks",
+                "legs": bl0.get("legs_text") or bl0.get("legs"),
+                "sports": bl0["sports"],
+                "n_legs": bl0["n_legs"],
+                "p_win_pct": bl0["p_win_pct"],
+                "payout": bl0["payout"],
+                "min_guarantee": 0.0,
+                "ev": bl0["ev"],
+                "recommendation": bl0["recommendation"],
+                "n_goblins": 0,
+                "n_demons": 0,
+                "pick_types": bl0["pick_types"],
+                "player_keys": bl0.get("player_keys"),
+            },
+        )
 
     if args.dry_run:
         print("\n[ULTIMATE] dry-run: no files written.")
@@ -716,6 +1087,9 @@ def main() -> int:
                 "date": date_str,
                 "mode": args.mode,
                 "total_combos_evaluated": total_combos_evaluated,
+                "groups": groups,
+                "bracket": bracket_group,
+                "best_locks": best_locks_group,
                 "results": [
                     {k: v for k, v in t.items() if not str(k).startswith("_")}
                     for t in all_results

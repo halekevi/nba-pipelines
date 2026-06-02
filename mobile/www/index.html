@@ -2410,16 +2410,11 @@ body > nav.snav.glass-card {
     SECTION.style.display = '';
   }
 
-  function fetchJson(path) {
-    if (typeof fetch_smart === 'function') return fetch_smart(path);
-    return fetch(path, { cache: 'no-store' });
-  }
-
   function fetchTrackRecord() {
     const urls = [TRACK_API, 'hot_players_track_record.json'];
     (function tryNext(i) {
       if (i >= urls.length) return;
-      fetchJson(urls[i])
+      fetch(urls[i], { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
         .then(renderTrackRecord)
         .catch(function () { tryNext(i + 1); });
@@ -2428,7 +2423,7 @@ body > nav.snav.glass-card {
 
   function initHotPlayers() {
     fetchTrackRecord();
-    fetchJson(API)
+    fetch(API)
       .then(function (r) { return r.json(); })
       .then(function (data) {
         allCardsBySport = data.sports || {};
@@ -3728,7 +3723,8 @@ function rowGameDateEt(row) {
 async function sportSlateHasTodayGames(sportId) {
   if (!SLATE_STRICT_GAME_DAY_SPORTS.has(sportId)) return null;
   try {
-    const res = await fetch_smart(`slate_sport_${sportId}.json`);
+    let res = await fetch(`/api/slate-sport/${encodeURIComponent(sportId)}`, { cache: "no-store" });
+    if (!res.ok) res = await fetch(`slate_sport_${sportId}.json`, { cache: "no-store" });
     if (!res.ok) return null;
     const data = await res.json();
     const rows = slateRowsFromPayload(data);

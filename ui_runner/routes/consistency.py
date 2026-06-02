@@ -209,3 +209,26 @@ def hot_players():
             "total_featured": sum(len(v) for v in by_sport.values()),
         }
     )
+
+
+@consistency_bp.route("/api/hot-players/track-record")
+def hot_players_track_record():
+    """Rolling Hot Players leg grades (snapshot day -> next-day graded_props)."""
+    path = REPO_ROOT / "data" / "hot_players" / "track_record.json"
+    ui_path = REPO_ROOT / "ui_runner" / "data" / "hot_players_track_record.json"
+    for candidate in (path, ui_path):
+        if candidate.is_file():
+            try:
+                return jsonify(json.loads(candidate.read_text(encoding="utf-8")))
+            except (OSError, json.JSONDecodeError):
+                break
+    return jsonify(
+        {
+            "updated_at": None,
+            "days_tracked": 0,
+            "aggregate": {},
+            "aggregate_hit_rate": None,
+            "recent": [],
+            "latest_graded_date": None,
+        }
+    )
