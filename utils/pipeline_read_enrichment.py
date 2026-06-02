@@ -380,13 +380,62 @@ def _def_matchup_signal(direction: str, def_tier: str) -> float:
     return 0.0
 
 
-def _pick_type_eligible(row: pd.Series, pick_rules: dict[str, Any]) -> bool:
-    pt = norm_pick_type(row.get("pick_type"))
-    direction = norm_direction(row.get("direction"))
+def _sport_spec_for(sport: str, sport_specs: dict[str, Any]) -> dict[str, Any] | None:
+    su = norm_sport(sport)
+    if su in sport_specs:
+        return sport_specs[su]
+    for key, val in sport_specs.items():
+        aliases = [str(a).upper() for a in (val.get("aliases") or [])]
+        if su == key or su in aliases:
+            return val
+    return None
+
+
+def _min_hit_prob_actionable_for_row(
+    row: pd.Series,
+    pick_rules: dict[str, Any],
+    sport_specs: dict[str, Any],
+) -> float | None:
+    pt = norm_pick_type(row.get("pick_type") or row.get("pick_type_norm"))
+    if pt not in ("goblin", "demon"):
+        return None
+    rules = pick_rules.get(pt) or {}
+    sport = norm_sport(row.get("sport_norm") or row.get("sport"))
+    spec = _sport_spec_for(sport, sport_specs)
+    overrides = (spec or {}).get("pick_type_overrides") or {}
+    pt_over = overrides.get(pt) if isinstance(overrides, dict) else {}
+    if isinstance(pt_over, dict) and pt_over.get("min_hit_prob_actionable") is not None:
+        return float(pt_over["min_hit_prob_actionable"])
+    if rules.get("min_hit_prob_actionable") is not None:
+        return float(rules["min_hit_prob_actionable"])
+    if pt == "demon" and rules.get("min_hit_prob_over") is not None:
+        return float(rules["min_hit_prob_over"])
+    return None
+
+
+def _pick_type_eligible(
+    row: pd.Series,
+    pick_rules: dict[str, Any],
+    sport_specs: dict[str, Any] | None = None,
+) -> bool:
+    pt = norm_pick_type(row.get("pick_type") or row.get("pick_type_norm"))
+    direction = norm_direction(row.get("direction") or row.get("direction_norm"))
     rules = pick_rules.get(pt) or pick_rules.get("standard") or {}
     allowed = [str(x).upper() for x in (rules.get("allowed_directions") or ["OVER", "UNDER"])]
     if direction not in allowed:
         return False
+
+    specs = sport_specs if sport_specs is not None else (_load_checklist()[1])
+    min_act = _min_hit_prob_actionable_for_row(row, pick_rules, specs)
+    if min_act is not None:
+        p_act = _to_prob_0_1(row.get("hit_prob_actionable"))
+        if p_act is None:
+            p_act = _to_prob_0_1(row.get("hit_prob_over_at_line"))
+        if p_act is None:
+            p_act = _to_prob_0_1(row.get("hit_prob_over"))
+        if p_act is None or p_act < min_act:
+            return False
+
     if pt == "demon":
         tier = str(row.get("tier") or "").strip().upper()
         allowed_tiers = {str(t).upper() for t in (rules.get("allowed_tiers") or ["A", "B"])}
@@ -398,9 +447,6 @@ def _pick_type_eligible(row: pd.Series, pick_rules: dict[str, Any]) -> bool:
             blend = 0.0
         min_blend = float(rules.get("min_blend_score", 0.7))
         if blend < min_blend:
-            return False
-        p_over = _to_prob_0_1(row.get("hit_prob_over"))
-        if p_over is not None and p_over < float(rules.get("min_hit_prob_over", 0.62)):
             return False
     return True
 
@@ -449,6 +495,7 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         return df
     pick_rules, sport_specs = _load_checklist()
     out = normalize_slate_column_names(_alias_sport_fields(df)).copy()
+    out = out.loc[:, ~out.columns.duplicated()].copy()
 
     if "sport" not in out.columns:
         out["sport"] = ""
@@ -586,7 +633,7 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         miss = _missing_fields(r, sport, sport_specs)
         core_n = 10
         comp = 1.0 - (len(miss) / core_n)
-        eligible.append(_pick_type_eligible(r, pick_rules))
+        eligible.append(_pick_type_eligible(r, pick_rules, sport_specs))
         missing_json.append(json.dumps(miss))
         completeness.append(float(np.clip(comp, 0, 1)))
 

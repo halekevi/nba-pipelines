@@ -8,7 +8,8 @@
     },
     "goblin": {
       "allowed_directions": ["OVER"],
-      "actionable_probability": "hit_prob_over"
+      "actionable_probability": "hit_prob_actionable",
+      "min_hit_prob_actionable": 0.50
     },
     "demon": {
       "allowed_directions": ["OVER"],
@@ -65,7 +66,10 @@
     },
     "TENNIS": {
       "required_extra": ["surface"],
-      "recommended_extra": ["hold_rate_surface", "break_rate_surface"]
+      "recommended_extra": ["hold_rate_surface", "break_rate_surface"],
+      "pick_type_overrides": {
+        "goblin": { "min_hit_prob_actionable": 0.45 }
+      }
     },
     "NFL": {
       "required_extra": ["snap_pct", "target_share"],

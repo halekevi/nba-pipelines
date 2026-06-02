@@ -8999,6 +8999,7 @@ class FunnelTracker:
             "after_fantasy_score",
             "after_directional_l5_hr",
             "after_pick_type",
+            "after_pick_type_eligible",
             "after_void_reason",
             "after_prop_quality",
         ]
@@ -9146,6 +9147,8 @@ def filter_eligible(
         return pd.concat(result, axis=0)
 
     df = add_prop_quality_score(df)
+    if "pick_type_eligible" not in df.columns:
+        df = enrich_read_fields_dataframe(df)
     mask = pd.Series([True] * len(df), index=df.index)
     sport_hint = str(discard_sport or "").strip().upper() or "ALL"
     if funnel_tracker is not None:
@@ -9221,6 +9224,9 @@ def filter_eligible(
     _apply_gate(policy_cond, "picktype_direction_tier_policy_fail", "after_picktype_direction_tier_policy")
     if pick_types and "pick_type" in df.columns:
         _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
+    if "pick_type_eligible" in df.columns:
+        elig = df["pick_type_eligible"].fillna(True).astype(bool)
+        _apply_gate(elig, "pick_type_not_eligible", "after_pick_type_eligible")
     if "void_reason" in df.columns:
         vs = df["void_reason"]
         void_str = vs.astype(str).str.strip()
@@ -9233,17 +9239,19 @@ def filter_eligible(
     if len(out) > 0:
         out["effective_edge"] = _directional_edge_series(out)
         edge_s = pd.to_numeric(out["effective_edge"], errors="coerce").fillna(-1e9)
-        win_s = pd.to_numeric(out.get("win_probability"), errors="coerce")
-        if not isinstance(win_s, pd.Series):
-            win_s = pd.Series([np.nan] * len(out), index=out.index)
+        def _pool_sort_series(col: str) -> pd.Series:
+            if col not in out.columns:
+                return pd.Series(np.nan, index=out.index, dtype=float)
+            val = out[col]
+            if isinstance(val, pd.DataFrame):
+                val = val.iloc[:, 0]
+            return pd.to_numeric(val, errors="coerce")
+
+        win_s = _pool_sort_series("win_probability")
         if not win_s.notna().any():
-            win_s = pd.to_numeric(out.get("ml_prob"), errors="coerce")
-            if not isinstance(win_s, pd.Series):
-                win_s = pd.Series([np.nan] * len(out), index=out.index)
+            win_s = _pool_sort_series("ml_prob")
         if not win_s.notna().any():
-            win_s = pd.to_numeric(out.get("hit_rate"), errors="coerce")
-            if not isinstance(win_s, pd.Series):
-                win_s = pd.Series([np.nan] * len(out), index=out.index)
+            win_s = _pool_sort_series("hit_rate")
         win_s = win_s.fillna(0.0)
         out = out.assign(_edge_sort=edge_s, _win_sort=win_s).sort_values(
             ["_edge_sort", "_win_sort"], ascending=[False, False]
