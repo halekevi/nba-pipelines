@@ -59,6 +59,52 @@ def _first_existing(paths: list[Path]) -> Path | None:
     return None
 
 
+def _backfill_mlb_opponent_def_rank(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    """Full Slate export omits Def Rank; merge from step8 MLB for checklist reads."""
+    if df is None or len(df) == 0 or "sport" not in df.columns:
+        return df
+    sport_u = df["sport"].astype(str).str.upper()
+    mlb_mask = sport_u.isin(["MLB", "BASEBALL"])
+    if not mlb_mask.any():
+        return df
+    if "opponent_def_rank" in df.columns:
+        filled = pd.to_numeric(df.loc[mlb_mask, "opponent_def_rank"], errors="coerce").notna()
+        if bool(filled.all()):
+            return df
+
+    d = date_str.strip()[:10]
+    src = _first_existing(
+        [
+            OUTPUTS_DIR / d / "mlb" / "step8_mlb_direction_clean.xlsx",
+            REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+        ]
+    )
+    if src is None:
+        return df
+    try:
+        s8 = normalize_slate_column_names(pd.read_excel(src))
+    except Exception:
+        return df
+    if "opponent_def_rank" not in s8.columns:
+        return df
+
+    merge_keys = ["player", "prop_type", "line"]
+    if not all(k in df.columns and k in s8.columns for k in merge_keys):
+        return df
+
+    lookup = s8[merge_keys + ["opponent_def_rank"]].drop_duplicates(subset=merge_keys)
+    lookup = lookup.rename(columns={"opponent_def_rank": "_s8_def_rank"})
+    lookup["_s8_def_rank"] = pd.to_numeric(lookup["_s8_def_rank"], errors="coerce")
+    out = df.merge(lookup, on=merge_keys, how="left")
+    if "opponent_def_rank" not in out.columns:
+        out["opponent_def_rank"] = out["_s8_def_rank"]
+    else:
+        out["opponent_def_rank"] = pd.to_numeric(
+            out["opponent_def_rank"], errors="coerce"
+        ).fillna(out["_s8_def_rank"])
+    return out.drop(columns=["_s8_def_rank"], errors="ignore")
+
+
 def _load_combined_slate(date_str: str) -> pd.DataFrame | None:
     d = date_str.strip()[:10]
     candidates = [
@@ -69,12 +115,13 @@ def _load_combined_slate(date_str: str) -> pd.DataFrame | None:
     if path is None:
         return None
     try:
-        return normalize_slate_column_names(pd.read_excel(path, sheet_name="Full Slate"))
+        df = normalize_slate_column_names(pd.read_excel(path, sheet_name="Full Slate"))
     except Exception:
         try:
-            return normalize_slate_column_names(pd.read_excel(path, sheet_name=0))
+            df = normalize_slate_column_names(pd.read_excel(path, sheet_name=0))
         except Exception:
             return None
+    return _backfill_mlb_opponent_def_rank(df, date_str)
 
 
 def _load_step8_fallback(date_str: str) -> pd.DataFrame:

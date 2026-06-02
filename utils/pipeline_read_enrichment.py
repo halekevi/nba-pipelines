@@ -129,7 +129,8 @@ _SLATE_HEADER_RENAME: dict[str, str] = {
     "L5 Match %": "l5_consistency",
     "L10 Over": "l10_over",
     "L10 Under": "l10_under",
-    "Def Tier": "def_tier",
+    "Def Rank": "opponent_def_rank",
+    "Def Tier": "opponent_def_tier",
     "Min Tier": "min_tier",
     "Shot Role": "shot_role",
     "Usage Role": "usage_role",
@@ -174,7 +175,19 @@ def normalize_slate_column_names(df: pd.DataFrame) -> pd.DataFrame:
         return df
     rename = {h: c for h, c in _SLATE_HEADER_RENAME.items() if h in df.columns}
     if rename:
-        return df.rename(columns=rename)
+        df = df.rename(columns=rename)
+    for src in ("def_rank", "OVERALL_DEF_RANK", "opp_def_rank"):
+        if src not in df.columns:
+            continue
+        rank = pd.to_numeric(df[src], errors="coerce")
+        if "opponent_def_rank" not in df.columns:
+            df = df.copy()
+            df["opponent_def_rank"] = rank
+        else:
+            df = df.copy()
+            df["opponent_def_rank"] = pd.to_numeric(
+                df["opponent_def_rank"], errors="coerce"
+            ).fillna(rank)
     return df
 
 
@@ -496,6 +509,11 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
     pick_rules, sport_specs = _load_checklist()
     out = normalize_slate_column_names(_alias_sport_fields(df)).copy()
     out = out.loc[:, ~out.columns.duplicated()].copy()
+    if "opponent_def_tier" in out.columns:
+        if "def_tier" not in out.columns:
+            out["def_tier"] = out["opponent_def_tier"]
+        else:
+            out["def_tier"] = out["def_tier"].fillna(out["opponent_def_tier"])
 
     if "sport" not in out.columns:
         out["sport"] = ""
@@ -592,7 +610,10 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         mask = pd.to_numeric(out["leg_prob_used"], errors="coerce").isna()
         out.loc[mask, "leg_prob_used"] = out.loc[mask, "hit_prob_actionable"]
 
-    def_tier = out.get("def_tier", out.get("Def Tier", pd.Series("", index=out.index)))
+    def_tier = out.get(
+        "opponent_def_tier",
+        out.get("def_tier", out.get("Def Tier", pd.Series("", index=out.index))),
+    )
     def_tier_s = def_tier.astype(str) if def_tier is not None else pd.Series("", index=out.index)
     out["def_matchup_signal"] = [
         _def_matchup_signal(d, dt) for d, dt in zip(out["direction_norm"], def_tier_s, strict=False)
