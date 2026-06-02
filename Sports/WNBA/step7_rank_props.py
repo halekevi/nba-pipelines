@@ -519,9 +519,33 @@ def main():
     _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
     _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")
     _is_std_under = (out["pick_type"].apply(_norm_pick_type) == "Standard") & out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
-    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem | _is_std_under), np.nan)
+    _rank_gate = elig_mask & ((_eadr > 0.0) | _is_dem | _is_std_under)
+    raw_score = score.copy()
+    score = score.where(_rank_gate, np.nan)
 
     out["rank_score"] = score
+    out["rank_score_penalized"] = False
+
+    # Eligible rows that failed the edge gate still get the raw composite score.
+    edge_gate_miss = elig_mask & out["rank_score"].isna()
+    if edge_gate_miss.any():
+        out.loc[edge_gate_miss, "rank_score"] = raw_score.loc[edge_gate_miss]
+
+    # Ineligible (void) rows: penalized rank strictly below the eligible floor for sorting/display.
+    void_mask = ~elig_mask
+    if void_mask.any():
+        eligible_rs = pd.to_numeric(out.loc[elig_mask, "rank_score"], errors="coerce")
+        eligible_min = float(eligible_rs.min()) if eligible_rs.notna().any() else np.nan
+        void_cap = float(eligible_min) - 0.01 if pd.notna(eligible_min) else -5.0
+
+        edge_v = pd.to_numeric(out.loc[void_mask, "edge"], errors="coerce").fillna(0.0).clip(upper=0.0)
+        hr_v = pd.to_numeric(out.loc[void_mask, "line_hit_rate"], errors="coerce").fillna(0.0).clip(0.0, 1.0)
+        void_proxy = (edge_v * 0.15 + hr_v * 0.85).clip(0.0, 1.0)
+        # Spread penalized scores in (void_cap - 1.0, void_cap] so none outrank eligible rows.
+        void_score = void_cap - (1.0 - void_proxy) * min(1.0, abs(void_cap) + 1.0)
+        out.loc[void_mask, "rank_score"] = void_score
+        out.loc[void_mask, "rank_score_penalized"] = True
+
     _rs_wnba = pd.to_numeric(out["rank_score"], errors="coerce")
     _pct_wnba = _rs_wnba.rank(method="average", pct=True)
     out["ml_prob"] = (0.45 + 0.40 * _pct_wnba.fillna(0.5)).clip(0.35, 0.90)
@@ -540,6 +564,9 @@ def main():
     print(f"✅ Saved → {args.output}  ALL={len(out)}  ELIGIBLE={int(elig_mask.sum())}")
     print("Tier counts:", out["tier"].value_counts().to_dict())
     print("Void reasons:", out.loc[~elig_mask,"void_reason"].value_counts().to_dict())
+    _pen = int(out["rank_score_penalized"].astype(bool).sum()) if "rank_score_penalized" in out.columns else 0
+    _rs_nn = int(pd.to_numeric(out["rank_score"], errors="coerce").notna().sum())
+    print(f"rank_score non-null: {_rs_nn}/{len(out)}  penalized: {_pen}")
 
 
 if __name__ == "__main__":

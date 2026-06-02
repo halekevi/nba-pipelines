@@ -431,6 +431,16 @@ def _pick_type_eligible(
     pick_rules: dict[str, Any],
     sport_specs: dict[str, Any] | None = None,
 ) -> bool:
+    penalized = row.get("rank_score_penalized")
+    if penalized is True or str(penalized).strip().lower() in ("true", "1", "yes"):
+        return False
+    elig = pd.to_numeric(row.get("eligible"), errors="coerce")
+    if pd.notna(elig) and int(elig) == 0:
+        return False
+    void_reason = str(row.get("void_reason") or "").strip()
+    if void_reason and void_reason.lower() not in ("", "nan", "none"):
+        return False
+
     pt = norm_pick_type(row.get("pick_type") or row.get("pick_type_norm"))
     direction = norm_direction(row.get("direction") or row.get("direction_norm"))
     rules = pick_rules.get(pt) or pick_rules.get("standard") or {}

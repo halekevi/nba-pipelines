@@ -203,7 +203,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
             df2["game_time"] = ""
 
     keep = [
-        'tier', 'rank_score',
+        'tier', 'rank_score', 'rank_score_penalized',
         'player', 'pos', 'team', 'opp_team', 'days_rest', 'is_back_to_back', 'opp_days_rest', 'opp_b2b',
         'h2h_avg', 'h2h_over_pct', 'h2h_games', 'h2h_last',
         'game_total', 'spread', 'game_date', 'game_time',
@@ -253,7 +253,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     clean = clean.sort_values(['_tier_sort', 'rank_score'], ascending=[True, False]).drop(columns='_tier_sort')
 
     rename = {
-        'tier': 'Tier', 'rank_score': 'Rank Score',
+        'tier': 'Tier', 'rank_score': 'Rank Score', 'rank_score_penalized': 'Rank Score Penalized',
         'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp',
         'days_rest': 'Days Rest',
         'is_back_to_back': 'B2B',
