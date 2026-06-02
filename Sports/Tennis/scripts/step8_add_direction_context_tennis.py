@@ -335,40 +335,38 @@ def main() -> None:
         print("ERROR [Tennis-S8] Empty input from S7 — aborting.")
         sys.exit(1)
 
-    # ── Date filter: keep only target date's games ───────────────────────────
+    # ── Date filter: keep only target date's games (America/New_York) ─────────
     eastern = zoneinfo.ZoneInfo("America/New_York")
     target_str = (args.date.strip()[:10] if args.date
                   else _dt.datetime.now(tz=eastern).date().isoformat())
     if "start_time" in df.columns:
         before_filter = len(df)
-        def _to_et_date(val):
-            try:
-                dt = pd.to_datetime(val)          # handles -04:00 offset natively
-                if dt.tzinfo is None:
-                    dt = dt.tz_localize("UTC")
-                return dt.tz_convert(eastern).date().isoformat()
-            except Exception:
-                return ""
-        df["_et_date"] = df["start_time"].apply(_to_et_date)
+        et_dates = pd.to_datetime(df["start_time"], utc=True, errors="coerce").dt.tz_convert(eastern)
+        df["_et_date"] = et_dates.dt.date.apply(
+            lambda d: d.isoformat() if isinstance(d, _dt.date) else ""
+        )
         mask = df["_et_date"] == target_str
         if not mask.any():
-            ed = df["_et_date"].astype(str)
-            ok = ed.str.len() >= 10
-            future = ed[ok & (ed >= target_str)]
-            if future.empty:
-                fallback = ed[ok]
-                pick = str(fallback.mode().iloc[0]) if len(fallback) else target_str
+            valid = df["_et_date"].astype(str).str.match(r"^\d{4}-\d{2}-\d{2}$")
+            avail = sorted(df.loc[valid, "_et_date"].unique().tolist())
+            past_or_equal = [d for d in avail if d <= target_str]
+            if past_or_equal:
+                fallback_date = past_or_equal[-1]  # latest date <= target
             else:
-                pick = str(future.min())
-            if pick != target_str:
+                fallback_date = avail[0] if avail else None
+
+            if fallback_date:
                 print(
-                    f"[DateFilter] Kept 0/{before_filter} for {target_str} ET; "
-                    f"using nearest slate date {pick} (>= target)"
+                    f"[DateFilter] No exact ET match — falling back to {fallback_date} "
+                    f"({(df['_et_date'] == fallback_date).sum()} rows)"
                 )
-            mask = df["_et_date"] == pick
+                mask = df["_et_date"] == fallback_date
+            else:
+                print(f"[DateFilter] No valid ET dates found — keeping all {before_filter} rows")
+                mask = pd.Series(True, index=df.index)
         df = df.loc[mask].drop(columns="_et_date")
         dropped = before_filter - len(df)
-        print(f"[DateFilter] Kept {len(df)}/{before_filter} rows for slate ET (dropped {dropped} rows)")
+        print(f"[DateFilter] Kept {len(df)}/{before_filter} rows for {target_str} ET (dropped {dropped} rows)")
     else:
         print("[DateFilter] WARNING: no start_time column — skipping date filter")
 
