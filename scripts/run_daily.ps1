@@ -8,7 +8,7 @@
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
          → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (E1) optional payout hand CSV pull from Railway
          → (F) optional night poll of historical actuals.
-         Tennis: -TennisDate defaults to tomorrow (match-day for step8); forwarded to run_pipeline.ps1 with -Date (pipeline folder = today).
+         Tennis: -TennisDate defaults to slate -Date (ET match-day for step8); override when needed.
          Set env PROPORACLE_PAYOUT_EXPORT_URL (e.g. https://<app>.up.railway.app/api/payout/export-log-hand) to merge Railway volume logs into data\payout_samples\payout_log_hand.csv after STEP E.
          Combined slate (STEP D via run_pipeline.ps1) fetches Underdog + DraftKings by default; set PROPORACLE_SKIP_ALT_BOOKS=1 or pass -SkipAltBooks to run_pipeline to disable.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
@@ -95,9 +95,9 @@ function Get-TimeStamp { return Get-Date -Format "HH:mm:ss" }
 
 $Today = if ($Date.Trim()) { $Date.Trim() } else { (Get-Date).ToString("yyyy-MM-dd") }
 $Yesterday = if ($GradeDate.Trim()) { $GradeDate.Trim() } else { (Get-Date).AddDays(-1).ToString("yyyy-MM-dd") }
-# Tennis targets tomorrow by default (early ET matches before a typical daily run).
-# Override with -TennisDate "yyyy-MM-dd". Must match run_pipeline.ps1 / run_daily pipeline args.
-$TennisDate = if ($TennisDate -and $TennisDate.Trim()) { $TennisDate.Trim() } else { (Get-Date).AddDays(1).ToString("yyyy-MM-dd") }
+# Tennis step8 ET filter + dated filename use the same calendar day as -Date by default.
+# Override with -TennisDate "yyyy-MM-dd" when the match-day differs from the pipeline folder date.
+$TennisDate = if ($TennisDate -and $TennisDate.Trim()) { $TennisDate.Trim() } else { $Today }
 $TicketModelModeEffective = if ($TicketModelMode.Trim()) { $TicketModelMode.Trim().ToLowerInvariant() } elseif ([string]$env:TICKET_MODEL_MODE) { ([string]$env:TICKET_MODEL_MODE).Trim().ToLowerInvariant() } else { "shadow" }
 if (@("off", "shadow", "on") -notcontains $TicketModelModeEffective) {
     Write-Warning "Invalid TicketModelMode '$TicketModelModeEffective' (expected off|shadow|on); defaulting to shadow"

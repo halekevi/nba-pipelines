@@ -223,9 +223,10 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.tennis).strip():
         tennis_d = str(getattr(args, "tennis_date", None) or "").strip()[:10] or d
         args.tennis = _first_existing_path(
-            os.path.join(out, f"step8_tennis_direction_clean_{tennis_d}.xlsx"),
             os.path.join(out, "tennis", f"step8_tennis_direction_clean_{tennis_d}.xlsx"),
+            os.path.join(out, f"step8_tennis_direction_clean_{tennis_d}.xlsx"),
             os.path.join(out, "tennis", "step8_tennis_direction_clean.xlsx"),
+            os.path.join(out, "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
         )
@@ -3368,8 +3369,16 @@ def _resolve_l5_cols(row: pd.Series, direction: str) -> tuple[float, float]:
 def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     """
     Selection / est_win_prob leg probability.
-    Prefer empirical hit_rate when L5 sample is sufficient; else ML (capped), rank, edge, shrunk HR.
+    Prefer pipeline_read enrichment (hit_prob_actionable); else empirical/ML/rank/edge chain.
     """
+    for key, src in (
+        ("hit_prob_actionable", "hit_prob_actionable"),
+        ("hit_prob_selected", "hit_prob_selected"),
+    ):
+        p = _to_prob_0_1(row.get(key))
+        if p is not None:
+            return _clip_prob(p, src), src
+
     direction = str(
         row.get("bet_direction") or row.get("direction_used") or row.get("direction") or "OVER"
     ).strip().upper()
@@ -5106,6 +5115,43 @@ def compute_image_url(leg: dict) -> Optional[str]:
     return None
 
 
+_READ_EXPORT_BOOL_KEYS = frozenset({"pick_type_eligible"})
+_READ_EXPORT_STR_KEYS = frozenset({"prob_over_source", "prob_under_source"})
+
+
+def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
+    """Pass pipeline read enrichment columns from source row onto ticket leg dict."""
+    for rk in READ_SLATE_EXPORT_KEYS:
+        val = gv(rk)
+        if val is None or val == "":
+            continue
+        try:
+            if pd.isna(val):
+                continue
+        except (TypeError, ValueError):
+            pass
+        if rk in _READ_EXPORT_BOOL_KEYS:
+            leg[rk] = bool(val)
+        elif rk in _READ_EXPORT_STR_KEYS:
+            leg[rk] = str(val).strip()
+        else:
+            leg[rk] = _safe_float(val)
+    gd = gv("game_date")
+    if gd is not None and str(gd).strip() not in ("", "nan", "None"):
+        leg["game_date"] = str(gd)[:10]
+    miss_raw = gv("read_fields_missing")
+    if miss_raw:
+        try:
+            leg["read_fields_missing"] = (
+                json.loads(str(miss_raw)) if isinstance(miss_raw, str) else miss_raw
+            )
+        except json.JSONDecodeError:
+            pass
+    proj = gv("projection")
+    if proj is not None and str(proj).strip() not in ("", "nan", "None"):
+        leg["projection"] = _safe_float(proj)
+
+
 def ticket_groups_to_payload(
     all_ticket_groups, date_str, thresholds, bankroll: float = 0.0, curve_stake_usd: float = 1.0
 ):
@@ -5300,6 +5346,7 @@ def ticket_groups_to_payload(
                     _line_hist_v = _safe_float(_lv)
                     if _line_hist_v is not None:
                         leg[f"line_g{_i}"] = _line_hist_v
+                _merge_read_export_fields_into_leg(leg, gv)
                 leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport", "")).upper() == "NBA1Q" else None
                 leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
                 leg["leg_prob_used"] = _safe_float(leg_prob_used)
@@ -11563,7 +11610,7 @@ def main():
         "--tennis-date",
         dest="tennis_date",
         default=None,
-        help="Override date for Tennis slate card (YYYY-MM-DD). Use when Tennis props are for next-day matches.",
+        help="Override date for Tennis step8 path + ET match-day filter (default: same as --date).",
     )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
     ap.add_argument(
@@ -11821,15 +11868,11 @@ def main():
         args.date = slate_calendar_date_ymd()
 
     tennis_ds = str(getattr(args, "tennis_date", None) or "").strip()[:10]
-    if not tennis_ds:
-        try:
-            from datetime import date as _date_cls, timedelta as _td
-
-            args.tennis_date = (_date_cls.fromisoformat(args.date) + _td(days=1)).isoformat()
-        except ValueError:
-            args.tennis_date = None
-    else:
+    if tennis_ds:
         args.tennis_date = tennis_ds
+    else:
+        # Match step8 ET date filter and outputs/<slate>/step8_tennis_direction_clean_<slate>.xlsx
+        args.tennis_date = str(args.date).strip()[:10]
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     if getattr(args, "win_rate_mode", False):
