@@ -1,0 +1,94 @@
+{
+  "date": "2026-06-01",
+  "generated_at": "2026-06-02 15:41:30 UTC",
+  "source": "combined_slate_full",
+  "rows": 3634,
+  "pick_type_ineligible_rows": 0,
+  "sports": {
+    "MLB": {
+      "rows": 1358,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 0.9,
+      "avg_hit_prob_over": 0.529,
+      "avg_hit_prob_under": 0.435,
+      "avg_hit_prob_actionable": 0.587,
+      "avg_rank_read_score": 0.473,
+      "avg_prop_quality_score": 0.455,
+      "pct_missing_hit_prob_over": 0.0
+    },
+    "NBA1H": {
+      "rows": 51,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 0.992,
+      "avg_hit_prob_over": 0.525,
+      "avg_hit_prob_under": 0.463,
+      "avg_hit_prob_actionable": 0.6,
+      "avg_rank_read_score": 0.462,
+      "avg_prop_quality_score": 0.507,
+      "pct_missing_hit_prob_over": 0.0
+    },
+    "NBA1Q": {
+      "rows": 65,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 0.988,
+      "avg_hit_prob_over": 0.671,
+      "avg_hit_prob_under": 0.329,
+      "avg_hit_prob_actionable": 0.646,
+      "avg_rank_read_score": 0.468,
+      "avg_prop_quality_score": 0.535,
+      "pct_missing_hit_prob_over": 0.0
+    },
+    "TENNIS": {
+      "rows": 467,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 0.9,
+      "avg_hit_prob_over": 0.249,
+      "avg_hit_prob_under": 0.438,
+      "avg_hit_prob_actionable": 0.254,
+      "avg_rank_read_score": 0.295,
+      "avg_prop_quality_score": 0.458,
+      "pct_missing_hit_prob_over": 0.0
+    },
+    "WNBA": {
+      "rows": 1693,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 0.944,
+      "avg_hit_prob_over": 0.38,
+      "avg_hit_prob_under": 0.607,
+      "avg_hit_prob_actionable": 0.398,
+      "avg_rank_read_score": 0.396,
+      "avg_prop_quality_score": 0.452,
+      "pct_missing_hit_prob_over": 0.0
+    }
+  },
+  "expected_sports": [
+    "CBB",
+    "CFB",
+    "MLB",
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "TENNIS",
+    "WCBB",
+    "WNBA"
+  ],
+  "inactive_sports": [
+    "CBB",
+    "CFB",
+    "NBA",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "WCBB"
+  ],
+  "top_missing_fields": {
+    "opponent_def_rank": 1358,
+    "rank_score": 959,
+    "surface": 467
+  },
+  "checklist_path": "data\\pipeline_read_checklist.json",
+  "schema_path": "data\\schemas\\pipeline_read_fields.schema.json"
+}

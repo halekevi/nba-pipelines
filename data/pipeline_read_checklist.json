@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "description": "Required and sport-specific fields for reliable rank, edge, and probability reads per pipeline.",
+  "pick_type_rules": {
+    "standard": {
+      "allowed_directions": ["OVER", "UNDER"],
+      "actionable_probability": "hit_prob_selected"
+    },
+    "goblin": {
+      "allowed_directions": ["OVER"],
+      "actionable_probability": "hit_prob_over"
+    },
+    "demon": {
+      "allowed_directions": ["OVER"],
+      "actionable_probability": "hit_prob_over",
+      "min_blend_score": 0.7,
+      "min_hit_prob_over": 0.62,
+      "allowed_tiers": ["A", "B"]
+    }
+  },
+  "core_fields": {
+    "identity": ["sport", "player", "team", "opp", "game_date", "game_time"],
+    "market": ["prop_type", "direction", "pick_type", "line", "standard_line"],
+    "model": ["projection", "edge", "abs_edge", "rank_score", "tier", "ml_prob"],
+    "form": ["l5_over", "l5_under", "l10_over", "l10_under", "season_avg"],
+    "matchup": ["def_tier", "opponent_def_rank", "pace_tier"],
+    "probabilities": [
+      "hit_prob_over",
+      "hit_prob_under",
+      "hit_prob_selected",
+      "leg_prob_used",
+      "leg_prob_source"
+    ],
+    "quality": ["prop_quality_score", "data_completeness_score", "read_fields_missing"]
+  },
+  "sports": {
+    "NBA": {
+      "required_extra": ["minutes_tier", "usage_role", "pace_tier"],
+      "recommended_extra": ["intel_l5_vs_season", "intel_opp_vs_league_pct", "line_underdog", "line_draftkings"]
+    },
+    "NBA1H": {
+      "required_extra": ["minutes_tier"],
+      "recommended_extra": ["pace_tier"]
+    },
+    "NBA1Q": {
+      "required_extra": ["minutes_tier"],
+      "recommended_extra": ["pace_tier"]
+    },
+    "WNBA": {
+      "required_extra": ["minutes_tier", "usage_role"],
+      "recommended_extra": ["intel_opp_vs_league_pct"]
+    },
+    "MLB": {
+      "required_extra": ["opponent_def_rank"],
+      "recommended_extra": ["park_factor", "weather_flag", "handedness_split"]
+    },
+    "NHL": {
+      "required_extra": ["def_tier", "line_combo"],
+      "recommended_extra": ["power_play_unit", "expected_toi"]
+    },
+    "SOCCER": {
+      "aliases": ["SOC", "Soccer"],
+      "required_extra": ["minutes_tier", "league"],
+      "recommended_extra": ["set_piece_role", "possession_tier"]
+    },
+    "TENNIS": {
+      "required_extra": ["surface"],
+      "recommended_extra": ["hold_rate_surface", "break_rate_surface"]
+    },
+    "NFL": {
+      "required_extra": ["snap_pct", "target_share"],
+      "recommended_extra": ["red_zone_share", "neutral_pass_rate"]
+    },
+    "CFB": {
+      "required_extra": ["snap_pct"],
+      "recommended_extra": ["pace_tier"]
+    },
+    "CBB": {
+      "required_extra": ["minutes_tier"],
+      "recommended_extra": ["pace_tier"]
+    },
+    "WCBB": {
+      "required_extra": ["minutes_tier"],
+      "recommended_extra": ["pace_tier"]
+    }
+  }
+}

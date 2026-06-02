@@ -99,6 +99,10 @@ from utils.goblin_demon_multiplier import (
     multiplier_summary as gd_multiplier_summary,
 )
 from utils.ticket_diversity import apply_diversity_filter
+from utils.pipeline_read_enrichment import (
+    READ_SLATE_EXPORT_KEYS,
+    enrich_read_fields_dataframe,
+)
 from utils.ticket_ev_tiers import (
     apply_slate_ev_tier_recommendations,
     recommendation_from_ev,
@@ -5338,6 +5342,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
 
     if df is None or len(df) == 0:
         return []
+    df = enrich_read_fields_dataframe(df)
 
     def safe(v):
         if v is None:
@@ -5420,6 +5425,30 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             row["leg_prob_source"] = prob_src
         except Exception:
             pass
+
+        for rk in READ_SLATE_EXPORT_KEYS:
+            if rk not in df.columns:
+                continue
+            val = g(rk)
+            if val is None:
+                continue
+            if rk == "pick_type_eligible":
+                row[rk] = bool(val)
+            elif rk == "read_fields_missing":
+                continue
+            else:
+                row[rk] = val
+        miss_raw = g("read_fields_missing")
+        if miss_raw:
+            try:
+                row["read_fields_missing"] = (
+                    json.loads(str(miss_raw)) if isinstance(miss_raw, str) else miss_raw
+                )
+            except json.JSONDecodeError:
+                row["read_fields_missing"] = []
+        mt = g("minutes_tier") or g("min_tier")
+        if mt:
+            row["minutes_tier"] = mt
 
         img = g("image_url")
         if img and str(img).strip().lower() not in ("nan", "none"):
@@ -10707,6 +10736,14 @@ _SLATE_WIDTH_BY_COL = dict(zip(SLATE_COLS, SLATE_WIDTHS))
 
 # Full Slate only: scan order, pace + STRONG/LEAN/RISK beside Def Tier (per-sport sheets keep SLATE_COLS).
 FULL_SLATE_EXTRA_HDRS = {
+    "hit_prob_over": "Hit Prob Over",
+    "hit_prob_under": "Hit Prob Under",
+    "hit_prob_selected": "Hit Prob Selected",
+    "hit_prob_actionable": "Hit Prob Actionable",
+    "rank_read_score": "Rank Read Score",
+    "prop_quality_score": "Prop Quality Score",
+    "data_completeness_score": "Data Completeness Score",
+    "pick_type_eligible": "Pick Type Eligible",
     "pace_tier": "Pace Tier",
     "bet_strong": "STRONG",
     "bet_lean": "LEAN",
@@ -10778,6 +10815,15 @@ FULL_SLATE_COLS = [
     "l5_consistency",
     "l10_over",
     "l10_under",
+    "hit_prob_over",
+    "hit_prob_under",
+    "hit_prob_selected",
+    "hit_prob_actionable",
+    "leg_prob_used",
+    "rank_read_score",
+    "prop_quality_score",
+    "data_completeness_score",
+    "pick_type_eligible",
     "def_tier",
     "pace_tier",
     "bet_strong",
@@ -12068,7 +12114,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "WNBA", "NFL", "MLB"):
+        if sport_label in ("NBA", "NFL", "MLB"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -12104,7 +12150,7 @@ def main():
         elif sport_label == "Combined" and "sport" in df.columns:
             # Tennis allows future ET days; other sports (incl. Soccer) must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["TENNIS", "NBA", "WNBA", "NFL"])
+            is_roll = su.isin(["TENNIS", "NBA", "NFL"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -12181,6 +12227,7 @@ def main():
     combined = add_cross_platform_best_lines(combined)
 
     combined = drop_stale_rows(combined, args.date, "Combined")
+    combined = enrich_read_fields_dataframe(combined)
 
     # Per-sport Excel sheets use SLATE_COLS — propagate UD/DK lines from combined onto each.
     nba = propagate_alt_book_lines_to_sport_frame(nba, combined, ("NBA",))
@@ -13418,7 +13465,7 @@ def main():
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["TENNIS", "NBA", "WNBA", "NFL"])
+                is_roll = su.isin(["TENNIS", "NBA", "NFL"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]

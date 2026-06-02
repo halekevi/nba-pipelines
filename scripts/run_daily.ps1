@@ -386,6 +386,18 @@ if (-not $SkipGrader) {
             }
             else {
                 Write-Log "STEP A - Grader ($graderDate): OK"
+                $hotTrackerScript = Join-Path $Root "scripts\hot_players_tracker.py"
+                if (Test-Path $hotTrackerScript) {
+                    & py -3.14 $hotTrackerScript grade --date $graderDate
+                    $htg = $LASTEXITCODE
+                    if ($htg -ne 0) {
+                        Write-Warning "Hot Players grade failed for $graderDate (non-fatal, exit $htg)"
+                        Write-Log "STEP A1 - Hot Players grade ($graderDate): FAILED (py exit $htg)"
+                    }
+                    else {
+                        Write-Log "STEP A1 - Hot Players grade ($graderDate): OK"
+                    }
+                }
             }
         }
         catch {
@@ -599,6 +611,18 @@ else {
             }
             else {
                 Write-Log "STEP A2b - Player consistency UI JSON: OK"
+            }
+        }
+        $hotTrackerScript = Join-Path $Root "scripts\hot_players_tracker.py"
+        if (Test-Path $hotTrackerScript) {
+            & py -3.14 $hotTrackerScript snapshot --date $Today --limit 8
+            $hte = $LASTEXITCODE
+            if ($hte -ne 0) {
+                Write-Warning "Hot Players snapshot failed (non-fatal, exit $hte)"
+                Write-Log "STEP A2c - Hot Players snapshot: FAILED (py exit $hte)"
+            }
+            else {
+                Write-Log "STEP A2c - Hot Players snapshot ($Today): OK"
             }
         }
     }
@@ -1203,6 +1227,26 @@ else {
         }
         else {
             Write-Log "STEP D1g3 - Prop population state report: SKIP (script missing)"
+        }
+
+        $pipelineReadScript = Join-Path $Root "scripts\enrich_pipeline_read_fields.py"
+        if (Test-Path $pipelineReadScript) {
+            try {
+                Write-Log "STEP D1g4 - Pipeline read-field audit: START"
+                & py -3.14 -X utf8 $pipelineReadScript --date $Today --out-dir $uiReportsDir
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log "STEP D1g4 - Pipeline read-field audit: OK"
+                }
+                else {
+                    Write-Log "STEP D1g4 - Pipeline read-field audit: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            catch {
+                Write-Log "STEP D1g4 - Pipeline read-field audit: WARN ($($_.Exception.Message))"
+            }
+        }
+        else {
+            Write-Log "STEP D1g4 - Pipeline read-field audit: SKIP (script missing)"
         }
 
         # Optional PQ control artifact (small pq0 slice) for drift tracking.
