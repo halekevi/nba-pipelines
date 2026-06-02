@@ -190,6 +190,9 @@ COLUMN_ALIASES = {
     "goalie_sv_pct":        ["goalie_sv_pct"],
     "player_avg_shots_L5":  ["player_avg_shots_L5"],
     "player_avg_shots_L10": ["player_avg_shots_L10"],
+    "line_combo":         ["line_combo", "Line Combo"],
+    "line_combo_toi_pct": ["line_combo_toi_pct", "Line Combo TOI%"],
+    "on_pp1_line":        ["on_pp1_line", "On PP1 Line"],
 }
 
 # Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
@@ -422,6 +425,9 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "back_to_back": "1" if str(r("back_to_back") or "").strip() in ("1", "1.0", "true", "True") else "0",
         "goalie_name": str(r("goalie_name") or ""),
         "goalie_sv_pct": fmt_num(r("goalie_sv_pct"), 3),
+        "line_combo": str(r("line_combo") or ""),
+        "line_combo_toi_pct": fmt_num(r("line_combo_toi_pct"), 1),
+        "on_pp1_line": str(r("on_pp1_line") or ""),
     }
 
 

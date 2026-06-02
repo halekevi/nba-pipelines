@@ -132,7 +132,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
                 cell.fill = PatternFill("solid", start_color="F9F9F9" if ri % 2 == 0 else "FFFFFF")
 
     col_widths = {
-        "Tier": 6, "Rank Score": 10, "Player": 20, "Pos": 6, "Pos Group": 9,
+        "Tier": 6, "Rank Score": 10, "Surface": 10, "Player": 20, "Pos": 6, "Pos Group": 9,
         "Team": 12, "Opp": 12, "League": 12, "Game Time": 16,
         "ESPN ID": 10,
         "Prop": 18, "Pick Type": 10, "Line": 7,
@@ -212,8 +212,14 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     else:
         df2["game_script_note"] = df2["game_script_note"].replace("", np.nan).fillna("N/A")
 
+    if "surface" not in df2.columns:
+        df2["surface"] = ""
+    else:
+        df2["surface"] = df2["surface"].astype(str).str.strip().replace({"nan": "", "None": ""})
+
     keep = [
         "tier", "rank_score",
+        "surface",
         "player", "pos", "position_group", "team", "opp_team", "league", "game_time",
         "espn_player_id",
         "prop_type", "pick_type", "line",
@@ -269,6 +275,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     rename = {
         "tier": "Tier", "rank_score": "Rank Score",
+        "surface": "Surface",
         "player": "Player", "pos": "Pos", "position_group": "Pos Group",
         "team": "Team", "opp_team": "Opp", "league": "League", "game_time": "Game Time",
         "espn_player_id": "ESPN ID",

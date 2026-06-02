@@ -105,6 +105,159 @@ def _backfill_mlb_opponent_def_rank(df: pd.DataFrame, date_str: str) -> pd.DataF
     return out.drop(columns=["_s8_def_rank"], errors="ignore")
 
 
+def _backfill_wnba_rank_score(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    """Full Slate may omit Rank Score on penalized void legs; merge from WNBA step8."""
+    if df is None or len(df) == 0 or "sport" not in df.columns:
+        return df
+    sport_u = df["sport"].astype(str).str.upper()
+    wnba_mask = sport_u.isin(["WNBA", "BASKETBALL_WNBA"])
+    if not wnba_mask.any():
+        return df
+    rs = pd.to_numeric(df.get("rank_score"), errors="coerce")
+    if rs is not None and bool(rs.loc[wnba_mask].notna().all()):
+        return df
+
+    d = date_str.strip()[:10]
+    src = _first_existing(
+        [
+            OUTPUTS_DIR / d / "wnba" / "step8_wnba_direction_clean.xlsx",
+            REPO_ROOT / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx",
+        ]
+    )
+    if src is None:
+        return df
+    try:
+        s8 = normalize_slate_column_names(pd.read_excel(src))
+    except Exception:
+        return df
+    if "rank_score" not in s8.columns:
+        return df
+
+    merge_keys = ["player", "prop_type", "line"]
+    if not all(k in df.columns and k in s8.columns for k in merge_keys):
+        return df
+
+    extra = ["rank_score"]
+    if "rank_score_penalized" in s8.columns:
+        extra.append("rank_score_penalized")
+    lookup = s8[merge_keys + extra].drop_duplicates(subset=merge_keys)
+    lookup = lookup.rename(columns={c: f"_s8_{c}" for c in extra})
+    for c in extra:
+        if c == "rank_score":
+            lookup[f"_s8_{c}"] = pd.to_numeric(lookup[f"_s8_{c}"], errors="coerce")
+    out = df.merge(lookup, on=merge_keys, how="left")
+    for c in extra:
+        s8c = f"_s8_{c}"
+        if c not in out.columns:
+            out[c] = out[s8c]
+        elif c == "rank_score":
+            out[c] = pd.to_numeric(out[c], errors="coerce").fillna(out[s8c])
+        else:
+            out[c] = out[c].fillna(out[s8c])
+    return out.drop(columns=[f"_s8_{c}" for c in extra], errors="ignore")
+
+
+def _backfill_tennis_surface(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    if df is None or len(df) == 0 or "sport" not in df.columns:
+        return df
+    sport_u = df["sport"].astype(str).str.upper()
+    t_mask = sport_u.isin(["TENNIS"])
+    if not t_mask.any():
+        return df
+    if "surface" in df.columns:
+        filled = df.loc[t_mask, "surface"].astype(str).str.strip().ne("")
+        if bool(filled.all()):
+            return df
+
+    d = date_str.strip()[:10]
+    patterns = [
+        OUTPUTS_DIR / d / "tennis" / "step8_tennis_direction_clean.xlsx",
+        OUTPUTS_DIR / d / f"step8_tennis_direction_clean_{d}.xlsx",
+        OUTPUTS_DIR / d / "step8_tennis_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+    ]
+    src = _first_existing(patterns)
+    if src is None:
+        return df
+    try:
+        xl = pd.ExcelFile(src, engine="openpyxl")
+        sheet = next(
+            (s for s in ("Tennis", "ALL") if s in xl.sheet_names),
+            xl.sheet_names[0],
+        )
+        s8 = normalize_slate_column_names(pd.read_excel(src, sheet_name=sheet, engine="openpyxl"))
+    except Exception:
+        return df
+    if "surface" not in s8.columns:
+        return df
+
+    merge_keys = ["player", "prop_type", "line"]
+    if not all(k in df.columns and k in s8.columns for k in merge_keys):
+        return df
+
+    lookup = s8[merge_keys + ["surface"]].drop_duplicates(subset=merge_keys)
+    lookup = lookup.rename(columns={"surface": "_s8_surface"})
+    out = df.merge(lookup, on=merge_keys, how="left")
+    if "surface" not in out.columns:
+        out["surface"] = out["_s8_surface"]
+    else:
+        empty = out["surface"].isna() | (out["surface"].astype(str).str.strip() == "")
+        out.loc[empty, "surface"] = out.loc[empty, "_s8_surface"]
+    return out.drop(columns=["_s8_surface"], errors="ignore")
+
+
+def _backfill_nhl_line_combo(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    if df is None or len(df) == 0 or "sport" not in df.columns:
+        return df
+    sport_u = df["sport"].astype(str).str.upper()
+    nhl_mask = sport_u.isin(["NHL", "ICEHOCKEY_NHL"])
+    if not nhl_mask.any():
+        return df
+    if "line_combo" in df.columns:
+        filled = df.loc[nhl_mask, "line_combo"].astype(str).str.strip().ne("")
+        if bool(filled.all()):
+            return df
+
+    d = date_str.strip()[:10]
+    src = _first_existing(
+        [
+            OUTPUTS_DIR / d / "nhl" / "step8_nhl_direction_clean.xlsx",
+            OUTPUTS_DIR / d / f"step8_nhl_direction_clean_{d}.xlsx",
+            REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        ]
+    )
+    if src is None:
+        return df
+    try:
+        s8 = normalize_slate_column_names(pd.read_excel(src))
+    except Exception:
+        return df
+    if "line_combo" not in s8.columns:
+        return df
+
+    merge_keys = ["player", "prop_type", "line"]
+    if not all(k in df.columns and k in s8.columns for k in merge_keys):
+        return df
+
+    lookup = s8[merge_keys + ["line_combo"]].drop_duplicates(subset=merge_keys)
+    lookup = lookup.rename(columns={"line_combo": "_s8_line_combo"})
+    out = df.merge(lookup, on=merge_keys, how="left")
+    if "line_combo" not in out.columns:
+        out["line_combo"] = out["_s8_line_combo"]
+    else:
+        empty = out["line_combo"].isna() | (out["line_combo"].astype(str).str.strip() == "")
+        out.loc[empty, "line_combo"] = out.loc[empty, "_s8_line_combo"]
+    return out.drop(columns=["_s8_line_combo"], errors="ignore")
+
+
+def _apply_slate_backfills(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    df = _backfill_mlb_opponent_def_rank(df, date_str)
+    df = _backfill_wnba_rank_score(df, date_str)
+    df = _backfill_tennis_surface(df, date_str)
+    df = _backfill_nhl_line_combo(df, date_str)
+    return df
+
+
 def _load_combined_slate(date_str: str) -> pd.DataFrame | None:
     d = date_str.strip()[:10]
     candidates = [
@@ -121,7 +274,7 @@ def _load_combined_slate(date_str: str) -> pd.DataFrame | None:
             df = normalize_slate_column_names(pd.read_excel(path, sheet_name=0))
         except Exception:
             return None
-    return _backfill_mlb_opponent_def_rank(df, date_str)
+    return _apply_slate_backfills(df, date_str)
 
 
 def _load_step8_fallback(date_str: str) -> pd.DataFrame:

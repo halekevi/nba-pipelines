@@ -90,6 +90,9 @@ _SLATE_HEADER_RENAME: dict[str, str] = {
     "Sport": "sport",
     "Tier": "tier",
     "Rank Score": "rank_score",
+    "Rank Score Penalized": "rank_score_penalized",
+    "Surface": "surface",
+    "Line Combo": "line_combo",
     "Player": "player",
     "Team": "team",
     "Opp": "opp",
@@ -489,6 +492,12 @@ def _missing_fields(row: pd.Series, sport: str, checklist_sports: dict[str, Any]
         v = row.get(c)
         if v is None or (isinstance(v, float) and not math.isfinite(v)) or str(v).strip() == "":
             missing.append(c)
+
+    # WNBA void legs: step8 rank is penalized but still numeric; audit accepts rank_read_score fallback.
+    if "rank_score" in missing and sport in ("WNBA", "BASKETBALL_WNBA"):
+        rr = pd.to_numeric(row.get("rank_read_score"), errors="coerce")
+        if pd.notna(rr):
+            missing.remove("rank_score")
 
     if pd.isna(row.get("hit_prob_over")):
         missing.append("hit_prob_over")
