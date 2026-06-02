@@ -2247,6 +2247,13 @@ body > nav.snav.glass-card {
     <span class="hot-players-badge">TODAY</span>
     <span class="hot-players-updated" id="hot-players-updated"></span>
   </div>
+  <div id="hot-track-wrap" class="hot-track-wrap" style="display:none" aria-label="Yesterday's Hot Players results">
+    <div class="hot-track-header">
+      <span class="hot-track-label" id="hot-track-label">Yesterday</span>
+      <span class="hot-track-summary" id="hot-track-summary"></span>
+    </div>
+    <div class="hot-players-scroll hot-players-grid hot-track-grid" id="hot-track-scroll"></div>
+  </div>
   <div id="hot-sport-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
   <div class="hot-players-scroll hot-players-grid" id="hot-players-scroll"></div>
   <div class="hot-players-empty" id="hot-players-empty" style="display:none">
@@ -2257,11 +2264,16 @@ body > nav.snav.glass-card {
 <script>
 (function () {
   const API = '/api/hot-players?limit=8&_v=2';
+  const TRACK_API = '/api/hot-players/track-record';
   const SECTION = document.getElementById('hot-players-section');
   const SCROLL = document.getElementById('hot-players-scroll');
   const FILTERS = document.getElementById('hot-sport-filters');
   const EMPTY = document.getElementById('hot-players-empty');
   const UPDATED = document.getElementById('hot-players-updated');
+  const TRACK_WRAP = document.getElementById('hot-track-wrap');
+  const TRACK_SCROLL = document.getElementById('hot-track-scroll');
+  const TRACK_LABEL = document.getElementById('hot-track-label');
+  const TRACK_SUMMARY = document.getElementById('hot-track-summary');
   if (!SECTION || !SCROLL) return;
 
   let allCardsBySport = {};
@@ -2288,7 +2300,15 @@ body > nav.snav.glass-card {
     return null;
   }
 
-  function bestPropBlock(p) {
+  function gradeBadge(result) {
+    const r = String(result || '').toUpperCase();
+    if (!r || r === 'PENDING' || r === 'NO_MATCH') return '';
+    const cls = r === 'HIT' ? 'hit' : (r === 'MISS' ? 'miss' : 'void');
+    return '<span class="card-grade-badge ' + cls + '">' + r + '</span>';
+  }
+
+  function bestPropBlock(p, opts) {
+    opts = opts || {};
     const bp = resolveBestProp(p);
     if (!bp || !bp.prop_type) {
       const dir = (p.direction || 'BOTH').toString().toUpperCase();
@@ -2300,31 +2320,40 @@ body > nav.snav.glass-card {
     }
     const dir = bp.direction || '';
     const tip = (bp.prop_type || '') + ' ' + dir + ' — ' + fmtPct(bp.hit_rate) + ' (' + (bp.total || 0) + ' props)';
+    let lineMeta = '';
+    if (opts.showLine && p.slate_line != null) {
+      lineMeta = '<div class="card-slice-meta">Line ' + p.slate_line + (p.actual != null ? ' · actual ' + p.actual : '') + '</div>';
+    } else {
+      lineMeta = '<div class="card-slice-meta">' + (bp.hits || 0) + '/' + (bp.total || 0) + ' on this prop</div>';
+    }
     return '<div class="card-best-prop" title="' + tip + '">' +
       '<div class="card-prop-name">' + (bp.prop_type || '') + '</div>' +
       '<div class="card-best-prop-row">' +
       '<span class="card-dir-badge ' + dirClass(dir) + '">' + dir + '</span>' +
       '<span class="card-slice-rate">' + fmtPct(bp.hit_rate) + '</span>' +
       '</div>' +
-      '<div class="card-slice-meta">' + (bp.hits || 0) + '/' + (bp.total || 0) + ' on this prop</div>' +
+      lineMeta +
       '</div>';
   }
 
-  function buildCard(p) {
+  function buildCard(p, opts) {
+    opts = opts || {};
     const slate = p.on_today_slate ? '<span class="card-on-slate" title="On today\'s slate"></span>' : '';
     const bp = resolveBestProp(p);
     const rateLabel = bp && bp.prop_type
       ? tierDot(p.tier) + 'overall · ' + (p.total || 0) + ' props'
       : tierDot(p.tier) + 'hit rate · ' + (p.total || 0) + ' props';
     const tip = (p.player || '') + ' — ' + (p.sport || '') +
-      (bp && bp.prop_type ? ' · best: ' + bp.prop_type + ' ' + (bp.direction || '') : '');
-    return '<div class="hot-player-card" data-sport="' + (p.sport || '') + '" title="' + tip + '">' +
+      (bp && bp.prop_type ? ' · best: ' + bp.prop_type + ' ' + (bp.direction || '') : '') +
+      (p.result ? ' · ' + p.result : '');
+    return '<div class="hot-player-card' + (opts.graded ? ' hot-player-card--graded' : '') + '" data-sport="' + (p.sport || '') + '" title="' + tip + '">' +
       slate +
+      gradeBadge(p.result) +
       '<div class="card-sport">' + (p.sport || '') + '</div>' +
       '<div class="card-name">' + (p.player || '') + '</div>' +
       '<div class="card-rate">' + fmtPct(p.hit_rate) + '</div>' +
       '<div class="card-rate-label">' + rateLabel + '</div>' +
-      bestPropBlock(p) +
+      bestPropBlock(p, opts) +
       '</div>';
   }
 
@@ -2338,7 +2367,7 @@ body > nav.snav.glass-card {
     }
     EMPTY.style.display = 'none';
     SCROLL.style.display = 'grid';
-    SCROLL.innerHTML = list.map(buildCard).join('');
+    SCROLL.innerHTML = list.map(function (p) { return buildCard(p); }).join('');
   }
 
   function buildFilters(sports) {
@@ -2357,15 +2386,58 @@ body > nav.snav.glass-card {
     });
   }
 
+  function renderTrackRecord(data) {
+    if (!TRACK_WRAP || !TRACK_SCROLL || !data || !Array.isArray(data.recent) || !data.recent.length) return;
+    const day = data.recent[0];
+    const results = (day.results || []).filter(function (r) {
+      const res = String(r.result || '').toUpperCase();
+      return res === 'HIT' || res === 'MISS' || res === 'VOID' || res === 'PUSH';
+    });
+    if (!results.length) return;
+
+    const s = day.summary || {};
+    const decided = (Number(s.hit) || 0) + (Number(s.miss) || 0);
+    const hr = day.hit_rate != null ? fmtPct(day.hit_rate) : (decided ? fmtPct((Number(s.hit) || 0) / decided) : '—');
+
+    if (TRACK_LABEL) TRACK_LABEL.textContent = 'Yesterday (' + (day.slate_date || '') + ')';
+    if (TRACK_SUMMARY) {
+      TRACK_SUMMARY.textContent = (s.hit || 0) + ' hit / ' + (s.miss || 0) + ' miss · ' + hr + ' on featured legs';
+    }
+    TRACK_SCROLL.innerHTML = results.map(function (p) {
+      return buildCard(p, { graded: true, showLine: true });
+    }).join('');
+    TRACK_WRAP.style.display = '';
+    SECTION.style.display = '';
+  }
+
+  function fetchJson(path) {
+    if (typeof fetch_smart === 'function') return fetch_smart(path);
+    return fetch(path, { cache: 'no-store' });
+  }
+
+  function fetchTrackRecord() {
+    const urls = [TRACK_API, 'hot_players_track_record.json'];
+    (function tryNext(i) {
+      if (i >= urls.length) return;
+      fetchJson(urls[i])
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(renderTrackRecord)
+        .catch(function () { tryNext(i + 1); });
+    })(0);
+  }
+
   function initHotPlayers() {
-    fetch(API)
+    fetchTrackRecord();
+    fetchJson(API)
       .then(function (r) { return r.json(); })
       .then(function (data) {
         allCardsBySport = data.sports || {};
         const sports = Object.keys(allCardsBySport).sort();
         if (!sports.length) {
           SECTION.style.display = '';
-          EMPTY.style.display = '';
+          if (!TRACK_WRAP || TRACK_WRAP.style.display !== '') {
+            EMPTY.style.display = '';
+          }
           return;
         }
         SECTION.style.display = '';
@@ -3636,7 +3708,7 @@ function parsePipelineModifiedAsUtc(s) {
 }
 
 /** Sports where FRESH requires at least one prop on today's ET calendar day (not tomorrow's board). */
-const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer"]);
+const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer", "wnba"]);
 
 function slateRowsFromPayload(data) {
   if (!data) return [];
@@ -3776,7 +3848,7 @@ async function refreshStatus() {
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate", statusOpts("mlb"));
   applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate", statusOpts("nfl"));
   applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
-  applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
+  applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate", statusOpts("wnba"));
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
   updatePipelineStatusBar();
 }

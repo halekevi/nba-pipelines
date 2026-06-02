@@ -230,6 +230,70 @@
   font-family: "Inter", sans-serif;
 }
 
+.hot-track-wrap {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hot-track-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.hot-track-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted2, #8b8b99);
+  font-family: "Inter", sans-serif;
+}
+
+.hot-track-summary {
+  font-size: 12px;
+  color: var(--accent-gold, #d4af37);
+  font-family: "Inter", sans-serif;
+}
+
+.hot-player-card--graded {
+  opacity: 0.92;
+}
+
+.card-grade-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+  z-index: 1;
+}
+
+.card-grade-badge.hit {
+  background: rgba(76, 175, 125, 0.2);
+  color: var(--green, #9fd8a7);
+  border: 1px solid rgba(76, 175, 125, 0.35);
+}
+
+.card-grade-badge.miss {
+  background: rgba(220, 80, 80, 0.15);
+  color: #f08080;
+  border: 1px solid rgba(220, 80, 80, 0.35);
+}
+
+.card-grade-badge.void {
+  background: rgba(160, 160, 168, 0.15);
+  color: var(--muted, #a0a0a8);
+  border: 1px solid rgba(160, 160, 168, 0.3);
+}
+
 /* Hot Players grid: 8 cols desktop → 2 cols portrait / narrow mobile */
 @media (max-width: 900px), (pointer: coarse) and (max-width: 1200px) {
   .hot-players-scroll {

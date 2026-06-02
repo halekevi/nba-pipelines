@@ -3428,7 +3428,7 @@ function parsePipelineModifiedAsUtc(s) {
 }
 
 /** Sports where FRESH requires at least one prop on today's ET calendar day (not tomorrow's board). */
-const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer"]);
+const SLATE_STRICT_GAME_DAY_SPORTS = new Set(["nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer", "wnba"]);
 
 function slateRowsFromPayload(data) {
   if (!data) return [];
@@ -3569,7 +3569,7 @@ async function refreshStatus() {
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate", statusOpts("mlb"));
   applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate", statusOpts("nfl"));
   applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
-  applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
+  applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate", statusOpts("wnba"));
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
   updatePipelineStatusBar();
 }
