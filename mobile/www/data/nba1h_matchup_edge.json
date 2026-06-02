@@ -2,7 +2,7 @@
   "sport": "nba1h",
   "display_name": "NBA 1H",
   "matchup_mode": "team",
-  "generated_at": "2026-06-02T09:27:55.668986+00:00",
+  "generated_at": "2026-06-02T11:38:55.571559+00:00",
   "slate_note": "",
   "n_teams": 30,
   "elite_rank_cut": 4,
@@ -37,14 +37,6 @@
     }
   ],
   "matchups": {
-    "SAS": {
-      "opponent_slate": "OKC",
-      "opponent_name": "OKC",
-      "opponent_def_rank": 4,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": 10,
-      "team_def_tier": "Above Avg"
-    },
     "OKC": {
       "opponent_slate": "SAS",
       "opponent_name": "SAS",
@@ -52,14 +44,22 @@
       "opponent_def_tier": "Above Avg",
       "team_def_rank": 4,
       "team_def_tier": "Elite"
+    },
+    "SAS": {
+      "opponent_slate": "OKC",
+      "opponent_name": "OKC",
+      "opponent_def_rank": 4,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": 10,
+      "team_def_tier": "Above Avg"
     }
   },
   "players_by_team_cat": {
-    "SAS|pts": {
+    "SAS|pra": {
       "team_slate": "SAS",
-      "category": "pts",
-      "category_label": "Points (1H)",
-      "threshold": 10.0,
+      "category": "pra",
+      "category_label": "Pts+Reb+Ast (1H)",
+      "threshold": 16.0,
       "opponent": {
         "slate_abbr": "OKC",
         "name": "OKC",
@@ -73,14 +73,14 @@
           "pos": "",
           "rank_on_team": 1,
           "leader_slice": "top",
-          "season_avg": 13.1,
-          "game_score": 13.1,
+          "season_avg": 20.6,
+          "game_score": 20.6,
           "edge": "OK_UNDER",
-          "notes": "Negative PP edge vs elite defense (#4) \u2014 lean UNDER.",
+          "notes": "PP edge -1.2 vs #4 defense \u2014 lean UNDER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 13.5,
-          "pp_edge": -0.55
+          "pp_line": 22.5,
+          "pp_edge": -1.21
         },
         {
           "player": "Stephon Castle",
@@ -88,14 +88,14 @@
           "pos": "",
           "rank_on_team": 2,
           "leader_slice": "top",
-          "season_avg": 10.9,
-          "game_score": 10.9,
+          "season_avg": 17.5,
+          "game_score": 17.5,
           "edge": "TOP_EDGE",
-          "notes": "PP edge +2.1 on board tonight vs #4 defense.",
+          "notes": "PP edge +3.1 on board tonight vs #4 defense.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 8.5,
-          "pp_edge": 2.05
+          "pp_line": 15.0,
+          "pp_edge": 3.14
         },
         {
           "player": "De'Aaron Fox",
@@ -103,14 +103,14 @@
           "pos": "",
           "rank_on_team": 3,
           "leader_slice": "top",
-          "season_avg": 8.6,
-          "game_score": 8.6,
-          "edge": "OK_UNDER",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
+          "season_avg": 14.6,
+          "game_score": 14.6,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.2 on board tonight vs #4 defense.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 7.5,
-          "pp_edge": 0.8
+          "pp_line": 12.5,
+          "pp_edge": 3.23
         },
         {
           "player": "Devin Vassell",
@@ -118,14 +118,14 @@
           "pos": "",
           "rank_on_team": 4,
           "leader_slice": "top",
-          "season_avg": 5.8,
-          "game_score": 5.8,
+          "season_avg": 10.5,
+          "game_score": 10.5,
           "edge": "OK_UNDER",
-          "notes": "Negative PP edge vs elite defense (#4) \u2014 lean UNDER.",
+          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 7.0,
-          "pp_edge": -0.9
+          "pp_line": 10.5,
+          "pp_edge": 0.79
         },
         {
           "player": "Julian Champagnie",
@@ -133,14 +133,14 @@
           "pos": "",
           "rank_on_team": 5,
           "leader_slice": "top",
-          "season_avg": 4.7,
-          "game_score": 4.7,
-          "edge": "OK_UNDER",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
+          "season_avg": 9.8,
+          "game_score": 9.8,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.4 on board tonight vs #4 defense.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 5.0,
-          "pp_edge": 0.25
+          "pp_line": 8.5,
+          "pp_edge": 2.41
         }
       ]
     },
@@ -328,95 +328,6 @@
         }
       ]
     },
-    "SAS|pra": {
-      "team_slate": "SAS",
-      "category": "pra",
-      "category_label": "Pts+Reb+Ast (1H)",
-      "threshold": 16.0,
-      "opponent": {
-        "slate_abbr": "OKC",
-        "name": "OKC",
-        "def_rank": 4,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Victor Wembanyama",
-          "player_norm": "victor wembanyama",
-          "pos": "",
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "season_avg": 20.6,
-          "game_score": 20.6,
-          "edge": "OK_UNDER",
-          "notes": "PP edge -1.2 vs #4 defense \u2014 lean UNDER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 22.5,
-          "pp_edge": -1.21
-        },
-        {
-          "player": "Stephon Castle",
-          "player_norm": "stephon castle",
-          "pos": "",
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "season_avg": 17.5,
-          "game_score": 17.5,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +3.1 on board tonight vs #4 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 15.0,
-          "pp_edge": 3.14
-        },
-        {
-          "player": "De'Aaron Fox",
-          "player_norm": "de'aaron fox",
-          "pos": "",
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "season_avg": 14.6,
-          "game_score": 14.6,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +3.2 on board tonight vs #4 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": 3.23
-        },
-        {
-          "player": "Devin Vassell",
-          "player_norm": "devin vassell",
-          "pos": "",
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "season_avg": 10.5,
-          "game_score": 10.5,
-          "edge": "OK_UNDER",
-          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 10.5,
-          "pp_edge": 0.79
-        },
-        {
-          "player": "Julian Champagnie",
-          "player_norm": "julian champagnie",
-          "pos": "",
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "season_avg": 9.8,
-          "game_score": 9.8,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.4 on board tonight vs #4 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 8.5,
-          "pp_edge": 2.41
-        }
-      ]
-    },
     "OKC|pra": {
       "team_slate": "OKC",
       "category": "pra",
@@ -598,6 +509,95 @@
           "def_boost": null,
           "pp_line": null,
           "pp_edge": null
+        }
+      ]
+    },
+    "SAS|pts": {
+      "team_slate": "SAS",
+      "category": "pts",
+      "category_label": "Points (1H)",
+      "threshold": 10.0,
+      "opponent": {
+        "slate_abbr": "OKC",
+        "name": "OKC",
+        "def_rank": 4,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Victor Wembanyama",
+          "player_norm": "victor wembanyama",
+          "pos": "",
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "season_avg": 13.1,
+          "game_score": 13.1,
+          "edge": "OK_UNDER",
+          "notes": "Negative PP edge vs elite defense (#4) \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": -0.55
+        },
+        {
+          "player": "Stephon Castle",
+          "player_norm": "stephon castle",
+          "pos": "",
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "season_avg": 10.9,
+          "game_score": 10.9,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.1 on board tonight vs #4 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 8.5,
+          "pp_edge": 2.05
+        },
+        {
+          "player": "De'Aaron Fox",
+          "player_norm": "de'aaron fox",
+          "pos": "",
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "season_avg": 8.6,
+          "game_score": 8.6,
+          "edge": "OK_UNDER",
+          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": 0.8
+        },
+        {
+          "player": "Devin Vassell",
+          "player_norm": "devin vassell",
+          "pos": "",
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "season_avg": 5.8,
+          "game_score": 5.8,
+          "edge": "OK_UNDER",
+          "notes": "Negative PP edge vs elite defense (#4) \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.0,
+          "pp_edge": -0.9
+        },
+        {
+          "player": "Julian Champagnie",
+          "player_norm": "julian champagnie",
+          "pos": "",
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "season_avg": 4.7,
+          "game_score": 4.7,
+          "edge": "OK_UNDER",
+          "notes": "Elite defense; production below threshold \u2014 lean UNDER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.0,
+          "pp_edge": 0.25
         }
       ]
     }
