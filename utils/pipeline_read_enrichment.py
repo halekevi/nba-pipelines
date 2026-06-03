@@ -6,7 +6,9 @@ Used by combined_slate_tickets (dataframe) and scripts/enrich_pipeline_read_fiel
 from __future__ import annotations
 
 import json
+import logging
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -15,9 +17,13 @@ import pandas as pd
 
 from utils.goblin_demon_multiplier import leg_delta_pct
 
+logger = logging.getLogger(__name__)
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CHECKLIST_PATH = REPO_ROOT / "data" / "pipeline_read_checklist.json"
 SCHEMA_PATH = REPO_ROOT / "data" / "schemas" / "pipeline_read_fields.schema.json"
+_CALIBRATION_PATH = REPO_ROOT / "data" / "calibration" / "calibration_curves_latest.json"
+_CALIB_EXCLUDED_SPORTS = frozenset({"NBA1H", "NBA1Q"})
 
 _PICK_RULES: dict[str, Any] | None = None
 _SPORT_SPECS: dict[str, Any] | None = None
@@ -220,7 +226,163 @@ READ_SLATE_EXPORT_KEYS = [
     "edge_pct_vs_line",
     "line_delta_vs_standard",
     "effective_hit_rate",
+    "distribution_std",
+    "distribution_n",
+    "std_norm",
+    "confidence_score",
+    "calibration_bucket",
+    "calibration_actual_hit_rate",
+    "calibration_n",
 ]
+
+_CALIBRATION_CURVES: dict[str, Any] = {}
+
+
+def _load_calibration_curves_on_import() -> None:
+    global _CALIBRATION_CURVES
+    path = _CALIBRATION_PATH
+    if not path.is_file():
+        logger.warning(
+            "Calibration curves missing (%s); calibration_bucket will be null.",
+            path,
+        )
+        _CALIBRATION_CURVES = {}
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        _CALIBRATION_CURVES = data if isinstance(data, dict) else {}
+    except Exception as exc:
+        logger.warning("Failed to load calibration curves from %s: %s", path, exc)
+        _CALIBRATION_CURVES = {}
+
+
+_load_calibration_curves_on_import()
+
+
+def _assign_calibration_bucket(df: pd.DataFrame) -> pd.DataFrame:
+    """Map hit_prob_selected to offline calibration bins (sport-level curves)."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    sport_norm = out.get("sport_norm")
+    if sport_norm is None:
+        sport_norm = out["sport"].map(norm_sport) if "sport" in out.columns else pd.Series("", index=out.index)
+    prob = pd.to_numeric(out.get("hit_prob_selected"), errors="coerce")
+
+    out["calibration_bucket"] = pd.Series(pd.NA, index=out.index, dtype="Int64")
+    out["calibration_actual_hit_rate"] = np.nan
+    out["calibration_n"] = np.nan
+
+    curves = (_CALIBRATION_CURVES.get("sports") or {}) if _CALIBRATION_CURVES else {}
+    if not curves:
+        return out
+
+    for sport_key, curve in curves.items():
+        sp = norm_sport(sport_key)
+        if sp in _CALIB_EXCLUDED_SPORTS:
+            continue
+        bins = curve.get("bins") or []
+        if not bins:
+            continue
+        mask = sport_norm.eq(sp) & prob.notna()
+        if not mask.any():
+            continue
+
+        edges = [float(bins[0]["lower"])] + [float(b["upper"]) for b in bins]
+        labels = [int(b["bin"]) for b in bins]
+        rate_by_bin = {int(b["bin"]): float(b["actual_hit_rate"]) for b in bins}
+        n_by_bin = {int(b["bin"]): int(b["n"]) for b in bins}
+
+        cut = pd.cut(
+            prob.loc[mask],
+            bins=edges,
+            labels=labels,
+            include_lowest=True,
+            duplicates="drop",
+        )
+        valid = cut.notna()
+        idx = cut[valid].astype(int)
+        loc = idx.index
+        out.loc[loc, "calibration_bucket"] = idx.values
+        out.loc[loc, "calibration_actual_hit_rate"] = idx.map(rate_by_bin).values
+        out.loc[loc, "calibration_n"] = idx.map(n_by_bin).values
+
+    return out
+
+
+def _compute_confidence_score(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Unified pre-ticket confidence: completeness + quality + low variance bonus.
+    NHL / Tennis rows without distribution_std use std_norm=0.5 (neutral; no DB fallback).
+    """
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    dcs = pd.to_numeric(out.get("data_completeness_score"), errors="coerce").fillna(0.0)
+
+    pq = pd.to_numeric(out.get("prop_quality_score"), errors="coerce")
+    rrs = pd.to_numeric(out.get("rank_read_score"), errors="coerce")
+    pq_component = pq.where(pq.notna(), rrs.where(rrs.notna(), 0.5))
+
+    dist_std = pd.to_numeric(out.get("distribution_std"), errors="coerce")
+    prop_key = out.get("prop_type", pd.Series("", index=out.index)).astype(str)
+
+    p95 = dist_std.groupby(prop_key, dropna=False).transform(
+        lambda s: float(s.quantile(0.95)) if s.notna().any() else float("nan")
+    )
+    p95_safe = p95.replace(0, np.nan)
+    std_norm = (dist_std / p95_safe).clip(0, 1)
+    # Missing distribution_std (NHL step8 has no G1–G10; sparse Tennis): neutral, no variance adj.
+    std_norm = std_norm.where(dist_std.notna(), 0.5).fillna(0.5)
+
+    out["std_norm"] = std_norm
+    out["confidence_score"] = (
+        0.40 * dcs + 0.35 * pq_component + 0.25 * (1.0 - std_norm)
+    ).clip(0, 1)
+    return out
+
+
+def _mirror_stat_g_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Map G1..G10 title-case step8 columns to stat_g1..stat_g10."""
+    if df is None or len(df) == 0:
+        return df
+    out = df
+    for i in range(1, 11):
+        gcol, scol = f"G{i}", f"stat_g{i}"
+        if gcol in out.columns and scol not in out.columns:
+            out = out.copy()
+            out[scol] = out[gcol]
+        elif scol in out.columns and gcol not in out.columns:
+            out = out.copy()
+            out[gcol] = out[scol]
+    return out
+
+
+def _compute_distribution_std(df: pd.DataFrame) -> pd.DataFrame:
+    """Population std of last-N game stat actuals (stat_g1..stat_g10 or g1..g10)."""
+    if df is None or len(df) == 0:
+        return df
+    out = _mirror_stat_g_columns(df)
+    stat_cols = [f"stat_g{i}" for i in range(1, 11) if f"stat_g{i}" in out.columns]
+    if not stat_cols:
+        stat_cols = sorted(
+            [
+                c
+                for c in out.columns
+                if re.match(r"^g\d+$", str(c), re.I) and int(re.search(r"\d+", str(c)).group()) <= 10
+            ],
+            key=lambda c: int(re.search(r"\d+", str(c)).group()),
+        )
+    if stat_cols:
+        numeric = out[stat_cols].apply(pd.to_numeric, errors="coerce")
+        out = out.copy()
+        out["distribution_std"] = numeric.std(axis=1, ddof=0)
+        out["distribution_n"] = numeric.notna().sum(axis=1).astype(int)
+    else:
+        out = out.copy()
+        out["distribution_std"] = np.nan
+        out["distribution_n"] = 0
+    return out
 
 
 def _alias_sport_fields(df: pd.DataFrame) -> pd.DataFrame:
@@ -516,7 +678,9 @@ def _missing_fields(row: pd.Series, sport: str, checklist_sports: dict[str, Any]
                 missing.append(c)
                 continue
             v = row.get(c)
-            if v is None or (isinstance(v, str) and not str(v).strip()):
+            if v is None or (isinstance(v, float) and not math.isfinite(v)):
+                missing.append(c)
+            elif isinstance(v, str) and not str(v).strip():
                 missing.append(c)
     return missing
 
@@ -587,6 +751,8 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
     out["consistency_score"] = (
         0.6 * out["l5_side_hit_rate"].fillna(0.5) + 0.4 * out["l10_side_hit_rate"].fillna(0.5)
     ).clip(0, 1)
+
+    out = _compute_distribution_std(out)
 
     p_over_list: list[float | None] = []
     p_under_list: list[float | None] = []
@@ -685,6 +851,9 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
     bad_pick_dir = out["pick_type_norm"].isin(["goblin", "demon"]) & out["direction_norm"].eq("UNDER")
     out.loc[bad_pick_dir, "pick_type_eligible"] = False
 
+    out = _compute_confidence_score(out)
+    out = _assign_calibration_bucket(out)
+
     return out
 
 
@@ -714,6 +883,22 @@ def audit_read_fields_dataframe(df: pd.DataFrame | None, sport: str | None = Non
             "pct_missing_hit_prob_over": round(
                 100.0 * pd.to_numeric(g["hit_prob_over"], errors="coerce").isna().mean(), 2
             ),
+            "pct_filled_distribution_std": round(
+                100.0 * pd.to_numeric(g.get("distribution_std"), errors="coerce").notna().mean(), 2
+            )
+            if "distribution_std" in g.columns
+            else 0.0,
+            "avg_distribution_std": round(
+                float(pd.to_numeric(g.get("distribution_std"), errors="coerce").mean()), 3
+            )
+            if "distribution_std" in g.columns
+            else None,
+            "pct_filled_calibration_bucket": round(
+                100.0 * pd.to_numeric(g.get("calibration_bucket"), errors="coerce").notna().mean(),
+                2,
+            )
+            if "calibration_bucket" in g.columns
+            else 0.0,
         }
     return {
         "rows": int(len(enriched)),

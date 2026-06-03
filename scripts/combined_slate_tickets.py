@@ -2792,14 +2792,13 @@ NHL_LEG_MIN_HIT_RATE = {
 SOCCER_OVER_MIN_EDGE = 0.0  # Edge is leaky for Soccer; gate disabled until replacement signal exists
 
 # ── Model-performance ticket gates (Track A + auto-gate from tracker) ─────────
-# REVERT NBA1H WHEN: track_model_performance.py shows NBA1H AUC >= 0.52 for 3
-# consecutive days in data/model_performance_log.jsonl
-# HOW TO REVERT: Set NBA1H_TICKET_GATE = False below, or clear NBA1H in
-# data/model_gate_recommendations.json (auto-gate lifts when AUC recovers).
+# REVERT NBA1H WHEN: model_gate_recommendations.json NBA1H block has
+# consecutive_days_above_052 >= 3 (written by track_model_performance.py --nba1h-monitor).
+# HOW TO REVERT: Set gate false on NBA1H in model_gate_recommendations.json, or wait for streak.
 # NBA1H props still flow through pipeline, slate explorer, and graded archive.
 ALWAYS_ALLOW_SPORTS = frozenset({"NBA", "MLB"})
-NBA1H_TICKET_GATE = True
-NBA1H_TICKET_GATE_MIN_AUC = 0.52  # revert when model_performance_log shows >= this for 3 days
+NBA1H_TICKET_GATE = True  # kept for reference; ticket block driven by _nba1h_gated() + JSON
+NBA1H_TICKET_GATE_MIN_AUC = 0.52  # revert threshold; streak tracked in consecutive_days_above_052
 _MODEL_GATE_RECOMMENDATIONS_PATH = os.path.join(REPO_ROOT, "data", "model_gate_recommendations.json")
 _MODEL_GATE_CACHE: dict[str, dict] | None = None
 _MODEL_GATE_LOGGED: set[str] = set()
@@ -2817,7 +2816,7 @@ def _load_model_gate_recommendations() -> dict[str, dict]:
 
 
 def _nba1h_ticket_gate_reason() -> str:
-    """Reason string for hardcoded NBA1H ticket gate (reads live AUC from gate JSON)."""
+    """Reason string for NBA1H ticket gate (reads live AUC from gate JSON)."""
     global _MODEL_GATE_CACHE
     if _MODEL_GATE_CACHE is None:
         _MODEL_GATE_CACHE = _load_model_gate_recommendations()
@@ -2830,6 +2829,16 @@ def _nba1h_ticket_gate_reason() -> str:
     return f"below {NBA1H_TICKET_GATE_MIN_AUC:.2f} revert threshold (see model_performance_log)"
 
 
+def _nba1h_gated(gate_recs: dict) -> bool:
+    """True when NBA1H legs must not enter ticket pools (JSON + streak/AUC unblock)."""
+    block = (gate_recs or {}).get("NBA1H") or {}
+    streak = int(block.get("consecutive_days_above_052") or 0)
+    auc = block.get("rolling_30d_auc")
+    if streak >= 3 and auc is not None and float(auc) >= NBA1H_TICKET_GATE_MIN_AUC:
+        return False
+    return bool(block.get("gate", True))
+
+
 def _sport_ticket_gated(sport: str) -> tuple[bool, str]:
     """True if sport must not enter EV / win-rate ticket pools (slate unchanged)."""
     su = str(sport or "").strip().upper()
@@ -2837,11 +2846,11 @@ def _sport_ticket_gated(sport: str) -> tuple[bool, str]:
         return False, ""
     if su == "NFL" and NFL_TICKET_GATE:
         return True, NFL_TICKET_GATE_REASON
-    if NBA1H_TICKET_GATE and su == "NBA1H":
-        return True, _nba1h_ticket_gate_reason()
     global _MODEL_GATE_CACHE
     if _MODEL_GATE_CACHE is None:
         _MODEL_GATE_CACHE = _load_model_gate_recommendations()
+    if _nba1h_gated(_MODEL_GATE_CACHE or {}) and su == "NBA1H":
+        return True, _nba1h_ticket_gate_reason()
     rec = (_MODEL_GATE_CACHE or {}).get(su)
     if isinstance(rec, dict) and rec.get("gate"):
         return True, str(rec.get("reason") or "model performance gate")
@@ -7613,6 +7622,8 @@ def _load_step8_board_like(
         "Rank Score Penalized": "rank_score_penalized",
         "Surface":          "surface",
         "Line Combo":       "line_combo",
+        "G1": "stat_g1", "G2": "stat_g2", "G3": "stat_g3", "G4": "stat_g4", "G5": "stat_g5",
+        "G6": "stat_g6", "G7": "stat_g7", "G8": "stat_g8", "G9": "stat_g9", "G10": "stat_g10",
         # snake_case fallbacks
         "rank_score_penalized": "rank_score_penalized",
         "surface":          "surface",
@@ -8851,6 +8862,16 @@ def build_combined_slate(
         "espn_player_id",
         "league",
         "position_group",
+        "stat_g1",
+        "stat_g2",
+        "stat_g3",
+        "stat_g4",
+        "stat_g5",
+        "stat_g6",
+        "stat_g7",
+        "stat_g8",
+        "stat_g9",
+        "stat_g10",
     ]
 
     def safe_keep(df, cols):
@@ -12350,9 +12371,9 @@ def main():
     if _MODEL_GATE_CACHE:
         for sp, rec in _MODEL_GATE_CACHE.items():
             if isinstance(rec, dict) and rec.get("gate") and sp not in ALWAYS_ALLOW_SPORTS:
-                if not (NBA1H_TICKET_GATE and sp == "NBA1H"):
+                if not (_nba1h_gated(_MODEL_GATE_CACHE or {}) and sp == "NBA1H"):
                     _log_auto_gate_once(sp, str(rec.get("reason") or "AUC gate"))
-    if NBA1H_TICKET_GATE:
+    if _nba1h_gated(_MODEL_GATE_CACHE or {}):
         print(f"  [ticket-gate] NBA1H excluded from tickets — {_nba1h_ticket_gate_reason()}")
 
     def pool(df, pt=None):
@@ -12364,7 +12385,9 @@ def main():
 
         gated, gate_reason = _sport_ticket_gated(sport)
         if gated:
-            if sport and sport not in ALWAYS_ALLOW_SPORTS and not (NBA1H_TICKET_GATE and sport == "NBA1H"):
+            if sport and sport not in ALWAYS_ALLOW_SPORTS and not (
+                _nba1h_gated(_MODEL_GATE_CACHE or {}) and sport == "NBA1H"
+            ):
                 _log_auto_gate_once(sport, gate_reason)
             gate_reason_key = "NBA1H_AUC_GATE" if sport == "NBA1H" else "MODEL_AUC_GATE"
             discard_tracker.log_count(sport or "ALL", gate_reason_key, total_loaded)

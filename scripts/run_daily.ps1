@@ -1229,6 +1229,27 @@ else {
             Write-Log "STEP D1g3 - Prop population state report: SKIP (script missing)"
         }
 
+        $trackPerf = Join-Path $Root "scripts\track_model_performance.py"
+        if (Test-Path $trackPerf) {
+            try {
+                Write-Host "  [D1g3b] NBA1H AUC monitor" -ForegroundColor DarkGray
+                Write-Log "STEP D1g3b - NBA1H AUC monitor: START"
+                & py -3.14 -X utf8 $trackPerf --nba1h-monitor --date $Yesterday
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log "STEP D1g3b - NBA1H AUC monitor: OK"
+                }
+                else {
+                    Write-Log "STEP D1g3b - NBA1H AUC monitor: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            catch {
+                Write-Log "STEP D1g3b - NBA1H AUC monitor: WARN ($($_.Exception.Message))"
+            }
+        }
+        else {
+            Write-Log "STEP D1g3b - NBA1H AUC monitor: SKIP (script missing)"
+        }
+
         $pipelineReadScript = Join-Path $Root "scripts\enrich_pipeline_read_fields.py"
         if (Test-Path $pipelineReadScript) {
             try {

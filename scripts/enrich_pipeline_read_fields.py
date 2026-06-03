@@ -15,6 +15,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -24,6 +25,7 @@ if str(REPO_ROOT) not in sys.path:
 from utils.pipeline_read_enrichment import (  # noqa: E402
     CHECKLIST_PATH,
     SCHEMA_PATH,
+    _mirror_stat_g_columns,
     audit_read_fields_dataframe,
     enrich_read_fields_dataframe,
     normalize_slate_column_names,
@@ -31,6 +33,40 @@ from utils.pipeline_read_enrichment import (  # noqa: E402
 
 OUTPUTS_DIR = REPO_ROOT / "outputs"
 REPORTS_DIR = REPO_ROOT / "data" / "reports"
+
+_STAT_G_COLS = [f"stat_g{i}" for i in range(1, 11)]
+_G_TO_STAT = {f"G{i}": f"stat_g{i}" for i in range(1, 11)}
+
+STEP8_STAT_G_CANDIDATES: dict[str, list[Path]] = {
+    **{
+        k: [Path(str(p)) for p in v]
+        for k, v in {
+            "NBA": [
+                OUTPUTS_DIR / "{d}" / "step8_nba_direction_clean_{d}.xlsx",
+            ],
+            "NBA1Q": [
+                OUTPUTS_DIR / "{d}" / "step8_nba1q_direction_clean_{d}.xlsx",
+            ],
+            "NBA1H": [
+                OUTPUTS_DIR / "{d}" / "step8_nba1h_direction_clean_{d}.xlsx",
+            ],
+            "MLB": [
+                OUTPUTS_DIR / "{d}" / "mlb" / "step8_mlb_direction_clean.xlsx",
+            ],
+            "NHL": [
+                OUTPUTS_DIR / "{d}" / "nhl" / "step8_nhl_direction_clean.xlsx",
+                OUTPUTS_DIR / "{d}" / "step8_nhl_direction_clean_{d}.xlsx",
+            ],
+            "WNBA": [
+                OUTPUTS_DIR / "{d}" / "wnba" / "step8_wnba_direction_clean.xlsx",
+            ],
+            "TENNIS": [
+                OUTPUTS_DIR / "{d}" / "tennis" / "step8_tennis_direction_clean.xlsx",
+                OUTPUTS_DIR / "{d}" / "step8_tennis_direction_clean_{d}.xlsx",
+            ],
+        }.items()
+    },
+}
 
 STEP8_CANDIDATES: dict[str, list[Path]] = {
     "NBA": [
@@ -250,11 +286,84 @@ def _backfill_nhl_line_combo(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
     return out.drop(columns=["_s8_line_combo"], errors="ignore")
 
 
+def _read_step8_stat_g_lookup(path: Path) -> pd.DataFrame | None:
+    """Load step8 board with stat_g1..10 for merge into Full Slate audit rows."""
+    try:
+        xl = pd.ExcelFile(path, engine="openpyxl")
+        sheet = next(
+            (s for s in ("ALL", "WNBA", "MLB", "NHL", "Tennis", "NBA1Q", "NBA1H", "NBA") if s in xl.sheet_names),
+            xl.sheet_names[0],
+        )
+        part = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+    except Exception:
+        return None
+    part = part.rename(columns={k: v for k, v in _G_TO_STAT.items() if k in part.columns})
+    part = normalize_slate_column_names(part)
+    part = _mirror_stat_g_columns(part)
+    merge_keys = ["player", "prop_type", "line"]
+    have_g = [c for c in _STAT_G_COLS if c in part.columns]
+    if not have_g or not all(k in part.columns for k in merge_keys):
+        return None
+    lookup = part[merge_keys + have_g].drop_duplicates(subset=merge_keys)
+    for c in have_g:
+        lookup[c] = pd.to_numeric(lookup[c], errors="coerce")
+    return lookup
+
+
+def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    """
+    Full Slate export omits stat_g* until Tier 3 export; merge from step8 for enrich audit.
+    """
+    if df is None or len(df) == 0 or "sport" not in df.columns:
+        return df
+    out = _mirror_stat_g_columns(df)
+    if "stat_g1" in out.columns:
+        filled = pd.to_numeric(out["stat_g1"], errors="coerce").notna().mean()
+        if filled >= 0.5:
+            return out
+
+    d = date_str.strip()[:10]
+    merge_keys = ["player", "prop_type", "line"]
+    if not all(k in out.columns for k in merge_keys):
+        return out
+
+    sport_aliases: dict[str, tuple[str, ...]] = {
+        "NBA": ("NBA",),
+        "NBA1Q": ("NBA1Q",),
+        "NBA1H": ("NBA1H",),
+        "MLB": ("MLB", "BASEBALL"),
+        "NHL": ("NHL", "ICEHOCKEY_NHL"),
+        "WNBA": ("WNBA", "BASKETBALL_WNBA"),
+        "TENNIS": ("TENNIS",),
+    }
+
+    for sport_key, aliases in sport_aliases.items():
+        mask = out["sport"].astype(str).str.upper().isin(aliases)
+        if not mask.any():
+            continue
+        patterns = [Path(str(p).format(d=d)) for p in STEP8_STAT_G_CANDIDATES.get(sport_key, [])]
+        src = _first_existing(patterns)
+        if src is None:
+            continue
+        lookup = _read_step8_stat_g_lookup(src)
+        if lookup is None or len(lookup) == 0:
+            continue
+        have_g = [c for c in _STAT_G_COLS if c in lookup.columns]
+        sub = out.loc[mask, merge_keys]
+        merged = sub.merge(lookup[merge_keys + have_g], on=merge_keys, how="left")
+        for c in have_g:
+            # merge resets index; assign by mask position order, not merged.index labels
+            out.loc[mask, c] = pd.to_numeric(merged[c], errors="coerce").to_numpy()
+
+    return _mirror_stat_g_columns(out.loc[:, ~out.columns.duplicated()].copy())
+
+
 def _apply_slate_backfills(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
     df = _backfill_mlb_opponent_def_rank(df, date_str)
     df = _backfill_wnba_rank_score(df, date_str)
     df = _backfill_tennis_surface(df, date_str)
     df = _backfill_nhl_line_combo(df, date_str)
+    df = _backfill_stat_g_columns(df, date_str)
     return df
 
 
@@ -409,6 +518,10 @@ def run_audit(
                 "rank_read_score",
                 "data_completeness_score",
                 "pick_type_eligible",
+                "distribution_std",
+                "distribution_n",
+                "std_norm",
+                "confidence_score",
                 "read_fields_missing",
             ]
             if c in enriched.columns

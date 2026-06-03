@@ -32,59 +32,84 @@
       "leg_prob_used",
       "leg_prob_source"
     ],
-    "quality": ["prop_quality_score", "data_completeness_score", "read_fields_missing"]
+    "quality": [
+      "prop_quality_score",
+      "data_completeness_score",
+      "confidence_score",
+      "calibration_bucket",
+      "calibration_actual_hit_rate",
+      "read_fields_missing"
+    ]
   },
   "sports": {
     "NBA": {
-      "required_extra": ["minutes_tier", "usage_role", "pace_tier"],
+      "required_extra": ["minutes_tier", "usage_role", "pace_tier", "distribution_std", "confidence_score", "calibration_bucket"],
       "recommended_extra": ["intel_l5_vs_season", "intel_opp_vs_league_pct", "line_underdog", "line_draftkings"]
     },
     "NBA1H": {
-      "required_extra": ["minutes_tier"],
-      "recommended_extra": ["pace_tier"]
+      "required_extra": ["minutes_tier", "confidence_score"],
+      "recommended_extra": ["pace_tier"],
+      "excluded_extra": {
+        "calibration_bucket": "v1 — too few graded rows; excluded from offline calibration fit."
+      }
     },
     "NBA1Q": {
-      "required_extra": ["minutes_tier"],
-      "recommended_extra": ["pace_tier"]
+      "required_extra": ["minutes_tier", "confidence_score"],
+      "recommended_extra": ["pace_tier"],
+      "excluded_extra": {
+        "calibration_bucket": "v1 — too few graded rows; excluded from offline calibration fit."
+      }
     },
     "WNBA": {
-      "required_extra": ["minutes_tier", "usage_role"],
+      "required_extra": ["minutes_tier", "usage_role", "distribution_std", "confidence_score", "calibration_bucket"],
       "recommended_extra": ["intel_opp_vs_league_pct"]
     },
     "MLB": {
-      "required_extra": ["opponent_def_rank"],
+      "required_extra": ["opponent_def_rank", "distribution_std", "confidence_score", "calibration_bucket"],
       "recommended_extra": ["park_factor", "weather_flag", "handedness_split"]
     },
     "NHL": {
-      "required_extra": ["def_tier", "line_combo"],
-      "recommended_extra": ["power_play_unit", "expected_toi"]
+      "required_extra": ["def_tier", "line_combo", "confidence_score"],
+      "recommended_extra": ["power_play_unit", "expected_toi"],
+      "blocked_extra": {
+        "distribution_std": "Blocked pending step8 NHL game-log export (G1–G10); confidence_score uses std_norm=0.5 neutral for NHL rows.",
+        "confidence_score": "Provisional until NHL distribution_std is wired from step8 game-log export; std_norm=0.5 neutral compresses NHL confidence (re-check Tier 3c weights after export)."
+      },
+      "provisional_extra": {
+        "calibration_bucket": "Fitted with 5 equal-width bins on borderline sample; re-check ECE after game-log export and larger graded window."
+      }
     },
     "SOCCER": {
       "aliases": ["SOC", "Soccer"],
-      "required_extra": ["minutes_tier", "league"],
+      "required_extra": ["minutes_tier", "league", "confidence_score", "calibration_bucket"],
       "recommended_extra": ["set_piece_role", "possession_tier"]
     },
     "TENNIS": {
-      "required_extra": ["surface"],
-      "recommended_extra": ["hold_rate_surface", "break_rate_surface"],
-      "pick_type_overrides": {
-        "goblin": { "min_hit_prob_actionable": 0.50 }
+      "required_extra": ["surface", "confidence_score"],
+      "recommended_extra": ["hold_rate_surface", "break_rate_surface", "distribution_std", "calibration_bucket"],
+      "blocked_extra": {
+        "distribution_std": "Blocked pending Tennis step8 game-log export (G1–G10); confidence_score uses std_norm=0.5 neutral until stat_g columns are on the board.",
+        "std_norm": "Neutral 0.5 when distribution_std is missing; do not treat Tennis confidence_score as variance-adjusted until game-log export is wired.",
+        "confidence_score": "Provisional until Tennis distribution_std is wired from step8 game-log export; std_norm=0.5 neutral compresses Tennis confidence (re-check Tier 3c calibration after export)."
+      },
+      "provisional_extra": {
+        "calibration_bucket": "Optional until Tennis volume in retrain_dataset; sparse game-log fill for distribution_std."
       }
     },
     "NFL": {
-      "required_extra": ["snap_pct", "target_share"],
+      "required_extra": ["snap_pct", "target_share", "confidence_score"],
       "recommended_extra": ["red_zone_share", "neutral_pass_rate"]
     },
     "CFB": {
-      "required_extra": ["snap_pct"],
+      "required_extra": ["snap_pct", "confidence_score"],
       "recommended_extra": ["pace_tier"]
     },
     "CBB": {
-      "required_extra": ["minutes_tier"],
+      "required_extra": ["minutes_tier", "confidence_score"],
       "recommended_extra": ["pace_tier"]
     },
     "WCBB": {
-      "required_extra": ["minutes_tier"],
+      "required_extra": ["minutes_tier", "confidence_score"],
       "recommended_extra": ["pace_tier"]
     }
   }
