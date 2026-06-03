@@ -348,6 +348,12 @@ def main():
                 fetched += 1
                 time.sleep(0.2)
 
+        # Write game-log actuals for downstream distribution_std
+        for i, v in enumerate(values[:10], 1):
+            row[f"stat_g{i}"] = v
+        for i in range(len(values) + 1, 11):
+            row[f"stat_g{i}"] = ""
+
         hr_L5, s5, over_L5 = compute_hit_rate(values, line, 5)
         hr_L10, s10, over_L10 = compute_hit_rate(values, line, 10)
         hr_L20, s20, over_L20 = compute_hit_rate(values, line, 20)
