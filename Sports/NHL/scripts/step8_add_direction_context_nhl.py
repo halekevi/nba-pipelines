@@ -231,6 +231,23 @@ def resolve(row: dict, canonical: str, available_cols: set) -> str:
     return ""
 
 
+def _game_log_g_columns(raw: dict, available_cols: set, n_games: int = 10) -> dict[str, str]:
+    """
+    Passthrough rolling game values for combined slate / Tier 3 distribution_std.
+    Step 7 carries stat_g1..stat_g10 from step5; export as G1..G10 (NBA step8 convention).
+    """
+    out: dict[str, str] = {}
+    for i in range(1, n_games + 1):
+        gcol = f"G{i}"
+        val = ""
+        for col in (f"stat_g{i}", gcol):
+            if col in available_cols and raw.get(col) not in (None, ""):
+                val = fmt_num(raw.get(col), 2)
+                break
+        out[gcol] = val
+    return out
+
+
 def get_last_n_raw(raw: dict, available_cols: set, n: int) -> str:
     """
     Find the last-N raw game value for the prop's stat type.
@@ -431,6 +448,7 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "line_combo": str(r("line_combo") or ""),
         "line_combo_toi_pct": fmt_num(r("line_combo_toi_pct"), 1),
         "on_pp1_line": str(r("on_pp1_line") or ""),
+        **_game_log_g_columns(raw, available_cols),
     }
 
 
