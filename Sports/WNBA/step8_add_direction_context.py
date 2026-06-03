@@ -137,7 +137,7 @@ def write_sheet(wb, name, data):
                 cell.fill = PatternFill('solid', start_color='F9F9F9' if ri % 2 == 0 else 'FFFFFF')
 
     col_widths = {
-        'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
+        'Tier': 6, 'Rank Score': 10, 'Rank Score Penalized': 14, 'Player': 18, 'Pos': 6,
         'Team': 6, 'Opp': 6, 'Days Rest': 9, 'B2B': 6, 'Opp Rest': 9, 'Opp B2B': 8, 'Game Total': 10, 'Spread': 8, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7,
         'Direction': 9, 'Edge': 7, 'Abs Edge': 7, 'Projection': 10,

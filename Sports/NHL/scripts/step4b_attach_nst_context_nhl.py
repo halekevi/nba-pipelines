@@ -66,6 +66,19 @@ def _norm_team(v: object) -> str:
     return str(v or "").strip().upper()
 
 
+def _slate_teams(df: pd.DataFrame) -> list[str]:
+    """Unique NHL tricodes on today's board (team + opponent/home/away)."""
+    teams: set[str] = set()
+    for col in ("team", "opponent", "home_team", "away_team"):
+        if col not in df.columns:
+            continue
+        for raw in df[col].dropna().astype(str):
+            t = _norm_team(raw)
+            if t and t not in ("NAN", "NONE", "NULL") and len(t) <= 4:
+                teams.add(t)
+    return sorted(teams)
+
+
 def _to_float(v: object) -> Optional[float]:
     try:
         x = float(v)
@@ -166,6 +179,9 @@ def main() -> None:
     else:
         season_id = current_season_id()
 
+    df = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig")
+    slate_teams = _slate_teams(df)
+
     if args.refresh_pp:
         print(f"→ Refreshing NHL PP cache (season_id={season_id})...")
         refresh_pp_cache(season_id)
@@ -174,11 +190,13 @@ def main() -> None:
         if not nst_key():
             print("⚠️  NST_ACCESS_KEY not set — skip NST refresh")
         else:
-            teams = ["all"]
-            print(f"→ Refreshing NST line cache (season_id={season_id})...")
+            # Per-team fetch for every tricode on the slate (not a single side / stale subset).
+            teams = slate_teams if slate_teams else ["all"]
+            print(
+                f"→ Refreshing NST line cache (season_id={season_id}, teams={teams})..."
+            )
             refresh_line_cache(season_id, teams=teams)
 
-    df = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig")
     pp_df = load_pp_cache()
     if not pp_df.empty and "season_id" in pp_df.columns:
         pp_df = pp_df[pp_df["season_id"].astype(int) == season_id]
@@ -188,6 +206,19 @@ def main() -> None:
     line_df = load_cache(LINE_CACHE)
     if not line_df.empty and "season_id" in line_df.columns:
         line_df = line_df[line_df["season_id"].astype(int) == season_id]
+    if not line_df.empty and "team_filter" in line_df.columns:
+        cached_teams = {
+            str(t).strip().upper()
+            for t in line_df["team_filter"].dropna().unique()
+            if str(t).strip().upper() not in ("", "ALL", "NAN")
+        }
+        missing_cache = [t for t in slate_teams if t not in cached_teams]
+        if missing_cache and not args.refresh_nst:
+            print(
+                f"⚠️  NST line cache missing slate team(s): {missing_cache} "
+                f"(cached: {sorted(cached_teams) or 'none'}). "
+                "Re-run with --refresh-nst or refresh_nst_cache.py --team <TRICODE>."
+            )
 
     pp_lookup = build_pp_lookup(pp_df)
 
