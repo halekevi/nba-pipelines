@@ -1,0 +1,408 @@
+{
+  "fit_date": "2026-06-02",
+  "source": "data/retrain_dataset.csv",
+  "excluded_sports": [
+    "NBA1H",
+    "NBA1Q"
+  ],
+  "live_excluded_sports": [
+    "NBA1H",
+    "NBA1Q",
+    "SOCCER"
+  ],
+  "sports": {
+    "MLB": {
+      "sport": "MLB",
+      "n_total": 59961,
+      "ece": 0.073511,
+      "calibration_flag": "inverted_top",
+      "bin_method": "quantile",
+      "n_bins": 6,
+      "bins": [
+        {
+          "bin": 0,
+          "lower": 0.09,
+          "upper": 0.2323,
+          "mean_predicted": 0.117467,
+          "actual_hit_rate": 0.170044,
+          "n": 18113,
+          "brier_contrib": 0.044296
+        },
+        {
+          "bin": 1,
+          "lower": 0.2438,
+          "upper": 0.26,
+          "mean_predicted": 0.259994,
+          "actual_hit_rate": 0.244717,
+          "n": 14102,
+          "brier_contrib": 0.043524
+        },
+        {
+          "bin": 2,
+          "lower": 0.2626,
+          "upper": 0.42,
+          "mean_predicted": 0.402055,
+          "actual_hit_rate": 0.334657,
+          "n": 11080,
+          "brier_contrib": 0.041433
+        },
+        {
+          "bin": 3,
+          "lower": 0.42,
+          "upper": 0.58,
+          "mean_predicted": 0.500596,
+          "actual_hit_rate": 0.347519,
+          "n": 5099,
+          "brier_contrib": 0.02082
+        },
+        {
+          "bin": 4,
+          "lower": 0.5801,
+          "upper": 0.59,
+          "mean_predicted": 0.58986,
+          "actual_hit_rate": 0.48671,
+          "n": 6057,
+          "brier_contrib": 0.026309
+        },
+        {
+          "bin": 5,
+          "lower": 0.5901,
+          "upper": 0.99,
+          "mean_predicted": 0.764237,
+          "actual_hit_rate": 0.566788,
+          "n": 5510,
+          "brier_contrib": 0.026251
+        }
+      ],
+      "fit_date": "2026-06-02",
+      "notes": ""
+    },
+    "NBA": {
+      "sport": "NBA",
+      "n_total": 8227,
+      "ece": 0.11718,
+      "calibration_flag": "ok",
+      "bin_method": "quantile",
+      "n_bins": 8,
+      "bins": [
+        {
+          "bin": 0,
+          "lower": 0.01,
+          "upper": 0.231475,
+          "mean_predicted": 0.148333,
+          "actual_hit_rate": 0.330909,
+          "n": 825,
+          "brier_contrib": 0.027244
+        },
+        {
+          "bin": 1,
+          "lower": 0.2333,
+          "upper": 0.4,
+          "mean_predicted": 0.383868,
+          "actual_hit_rate": 0.433419,
+          "n": 1562,
+          "brier_contrib": 0.047753
+        },
+        {
+          "bin": 2,
+          "lower": 0.4003,
+          "upper": 0.4165,
+          "mean_predicted": 0.408456,
+          "actual_hit_rate": 0.617284,
+          "n": 81,
+          "brier_contrib": 0.002759
+        },
+        {
+          "bin": 3,
+          "lower": 0.416667,
+          "upper": 0.6,
+          "mean_predicted": 0.566824,
+          "actual_hit_rate": 0.550429,
+          "n": 2449,
+          "brier_contrib": 0.074682
+        },
+        {
+          "bin": 4,
+          "lower": 0.6,
+          "upper": 0.6028,
+          "mean_predicted": 0.602169,
+          "actual_hit_rate": 0.75,
+          "n": 32,
+          "brier_contrib": 0.000815
+        },
+        {
+          "bin": 5,
+          "lower": 0.603483,
+          "upper": 0.8,
+          "mean_predicted": 0.773792,
+          "actual_hit_rate": 0.61494,
+          "n": 2249,
+          "brier_contrib": 0.072099
+        },
+        {
+          "bin": 6,
+          "lower": 0.8125,
+          "upper": 0.95,
+          "mean_predicted": 0.899011,
+          "actual_hit_rate": 0.60443,
+          "n": 316,
+          "brier_contrib": 0.012307
+        },
+        {
+          "bin": 7,
+          "lower": 0.99,
+          "upper": 0.99,
+          "mean_predicted": 0.99,
+          "actual_hit_rate": 0.676017,
+          "n": 713,
+          "brier_contrib": 0.027525
+        }
+      ],
+      "fit_date": "2026-06-02",
+      "notes": ""
+    },
+    "NHL": {
+      "sport": "NHL",
+      "n_total": 3191,
+      "ece": 0.059626,
+      "calibration_flag": "ok",
+      "bin_method": "equal_width",
+      "n_bins": 5,
+      "bins": [
+        {
+          "bin": 0,
+          "lower": 0.01,
+          "upper": 0.2,
+          "mean_predicted": 0.132892,
+          "actual_hit_rate": 0.155858,
+          "n": 956,
+          "brier_contrib": 0.039687
+        },
+        {
+          "bin": 1,
+          "lower": 0.207,
+          "upper": 0.4,
+          "mean_predicted": 0.285597,
+          "actual_hit_rate": 0.225882,
+          "n": 1275,
+          "brier_contrib": 0.070418
+        },
+        {
+          "bin": 2,
+          "lower": 0.42,
+          "upper": 0.6,
+          "mean_predicted": 0.533592,
+          "actual_hit_rate": 0.472175,
+          "n": 593,
+          "brier_contrib": 0.046625
+        },
+        {
+          "bin": 3,
+          "lower": 0.6021,
+          "upper": 0.8,
+          "mean_predicted": 0.689814,
+          "actual_hit_rate": 0.539634,
+          "n": 328,
+          "brier_contrib": 0.027774
+        },
+        {
+          "bin": 4,
+          "lower": 0.82,
+          "upper": 0.94,
+          "mean_predicted": 0.858846,
+          "actual_hit_rate": 0.692308,
+          "n": 39,
+          "brier_contrib": 0.002948
+        }
+      ],
+      "fit_date": "2026-06-02",
+      "notes": "Provisional: borderline sample size; confidence_score uses neutral std_norm until step8 game-log export. Re-check after NHL distribution_std."
+    },
+    "SOCCER": {
+      "sport": "SOCCER",
+      "n_total": 6443,
+      "ece": 0.314891,
+      "calibration_flag": "inverted_top",
+      "bin_method": "quantile",
+      "n_bins": 9,
+      "bins": [
+        {
+          "bin": 0,
+          "lower": 0.01,
+          "upper": 0.0449,
+          "mean_predicted": 0.030372,
+          "actual_hit_rate": 0.080972,
+          "n": 741,
+          "brier_contrib": 0.009006
+        },
+        {
+          "bin": 1,
+          "lower": 0.05,
+          "upper": 0.085,
+          "mean_predicted": 0.056403,
+          "actual_hit_rate": 0.106643,
+          "n": 572,
+          "brier_contrib": 0.008652
+        },
+        {
+          "bin": 2,
+          "lower": 0.0896,
+          "upper": 0.155,
+          "mean_predicted": 0.139118,
+          "actual_hit_rate": 0.148094,
+          "n": 682,
+          "brier_contrib": 0.013458
+        },
+        {
+          "bin": 3,
+          "lower": 0.16,
+          "upper": 0.2,
+          "mean_predicted": 0.18532,
+          "actual_hit_rate": 0.16041,
+          "n": 586,
+          "brier_contrib": 0.012297
+        },
+        {
+          "bin": 4,
+          "lower": 0.2029,
+          "upper": 0.33,
+          "mean_predicted": 0.262111,
+          "actual_hit_rate": 0.202765,
+          "n": 651,
+          "brier_contrib": 0.016646
+        },
+        {
+          "bin": 5,
+          "lower": 0.3314,
+          "upper": 0.4723,
+          "mean_predicted": 0.398639,
+          "actual_hit_rate": 0.258675,
+          "n": 634,
+          "brier_contrib": 0.021134
+        },
+        {
+          "bin": 6,
+          "lower": 0.4728,
+          "upper": 0.8,
+          "mean_predicted": 0.612332,
+          "actual_hit_rate": 0.358232,
+          "n": 656,
+          "brier_contrib": 0.030921
+        },
+        {
+          "bin": 7,
+          "lower": 0.8012,
+          "upper": 0.9342,
+          "mean_predicted": 0.889641,
+          "actual_hit_rate": 0.072802,
+          "n": 728,
+          "brier_contrib": 0.083268
+        },
+        {
+          "bin": 8,
+          "lower": 0.9358,
+          "upper": 0.99,
+          "mean_predicted": 0.971645,
+          "actual_hit_rate": 0.088852,
+          "n": 1193,
+          "brier_contrib": 0.159364
+        }
+      ],
+      "fit_date": "2026-06-02",
+      "notes": ""
+    },
+    "WNBA": {
+      "sport": "WNBA",
+      "n_total": 9545,
+      "ece": 0.131006,
+      "calibration_flag": "inverted_top",
+      "bin_method": "quantile",
+      "n_bins": 9,
+      "bins": [
+        {
+          "bin": 0,
+          "lower": 0.1347,
+          "upper": 0.2,
+          "mean_predicted": 0.19859,
+          "actual_hit_rate": 0.258344,
+          "n": 1618,
+          "brier_contrib": 0.03308
+        },
+        {
+          "bin": 1,
+          "lower": 0.2009,
+          "upper": 0.2489,
+          "mean_predicted": 0.232178,
+          "actual_hit_rate": 0.181208,
+          "n": 298,
+          "brier_contrib": 0.004744
+        },
+        {
+          "bin": 2,
+          "lower": 0.2491,
+          "upper": 0.4,
+          "mean_predicted": 0.377045,
+          "actual_hit_rate": 0.343599,
+          "n": 2273,
+          "brier_contrib": 0.053185
+        },
+        {
+          "bin": 3,
+          "lower": 0.401,
+          "upper": 0.5965,
+          "mean_predicted": 0.503818,
+          "actual_hit_rate": 0.476923,
+          "n": 585,
+          "brier_contrib": 0.015319
+        },
+        {
+          "bin": 4,
+          "lower": 0.5977,
+          "upper": 0.6,
+          "mean_predicted": 0.599988,
+          "actual_hit_rate": 0.458176,
+          "n": 1853,
+          "brier_contrib": 0.052097
+        },
+        {
+          "bin": 5,
+          "lower": 0.6001,
+          "upper": 0.6086,
+          "mean_predicted": 0.605204,
+          "actual_hit_rate": 0.592593,
+          "n": 54,
+          "brier_contrib": 0.001365
+        },
+        {
+          "bin": 6,
+          "lower": 0.6089,
+          "upper": 0.7084,
+          "mean_predicted": 0.656441,
+          "actual_hit_rate": 0.523013,
+          "n": 956,
+          "brier_contrib": 0.026836
+        },
+        {
+          "bin": 7,
+          "lower": 0.709,
+          "upper": 0.8,
+          "mean_predicted": 0.796211,
+          "actual_hit_rate": 0.526066,
+          "n": 1266,
+          "brier_contrib": 0.04296
+        },
+        {
+          "bin": 8,
+          "lower": 0.8019,
+          "upper": 0.99,
+          "mean_predicted": 0.984118,
+          "actual_hit_rate": 0.495327,
+          "n": 642,
+          "brier_contrib": 0.033045
+        }
+      ],
+      "fit_date": "2026-06-02",
+      "notes": ""
+    }
+  }
+}

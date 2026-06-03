@@ -81,8 +81,11 @@
     },
     "SOCCER": {
       "aliases": ["SOC", "Soccer"],
-      "required_extra": ["minutes_tier", "league", "confidence_score", "calibration_bucket"],
-      "recommended_extra": ["set_piece_role", "possession_tier"]
+      "required_extra": ["minutes_tier", "league", "confidence_score"],
+      "recommended_extra": ["set_piece_role", "possession_tier"],
+      "excluded_extra": {
+        "calibration_bucket": "Excluded v1 — read prob structural mismatch (ECE ~0.31); re-fit after Soccer pipeline read prob improvements."
+      }
     },
     "TENNIS": {
       "required_extra": ["surface", "confidence_score"],

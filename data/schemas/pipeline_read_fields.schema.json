@@ -15,7 +15,8 @@
     "hit_prob_under",
     "hit_prob_selected",
     "edge",
-    "data_completeness_score"
+    "data_completeness_score",
+    "confidence_score"
   ],
   "properties": {
     "sport": { "type": "string" },
@@ -64,7 +65,14 @@
     "rank_prob_component": { "type": ["number", "null"] },
     "rank_consistency_component": { "type": ["number", "null"] },
     "rank_matchup_component": { "type": ["number", "null"] },
-    "rank_tier_component": { "type": ["number", "null"] }
+    "rank_tier_component": { "type": ["number", "null"] },
+    "distribution_std": { "type": ["number", "null"] },
+    "distribution_n": { "type": ["integer", "null"], "minimum": 0, "maximum": 10 },
+    "std_norm": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "confidence_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "calibration_bucket": { "type": ["integer", "null"] },
+    "calibration_actual_hit_rate": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "calibration_n": { "type": ["integer", "null"], "minimum": 0 }
   },
   "additionalProperties": true
 }

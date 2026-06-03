@@ -23,7 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CHECKLIST_PATH = REPO_ROOT / "data" / "pipeline_read_checklist.json"
 SCHEMA_PATH = REPO_ROOT / "data" / "schemas" / "pipeline_read_fields.schema.json"
 _CALIBRATION_PATH = REPO_ROOT / "data" / "calibration" / "calibration_curves_latest.json"
-_CALIB_EXCLUDED_SPORTS = frozenset({"NBA1H", "NBA1Q"})
+_CALIB_EXCLUDED_SPORTS = frozenset({"NBA1H", "NBA1Q", "SOCCER"})
 
 _PICK_RULES: dict[str, Any] | None = None
 _SPORT_SPECS: dict[str, Any] | None = None
