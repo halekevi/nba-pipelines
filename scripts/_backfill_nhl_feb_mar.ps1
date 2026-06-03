@@ -76,6 +76,19 @@ Write-Host ""
 
 foreach ($d in $dates) {
     $nhlDir = Join-Path $Root "outputs\$d\nhl"
+    $s1 = Join-Path $nhlDir "step1_nhl_props.csv"
+    if (-not (Test-Path -LiteralPath $s1)) {
+        $skipped.Add($d) | Out-Null
+        Write-Host "  [SKIP] $d — no step1 (unseedable)" -ForegroundColor DarkGray
+        continue
+    }
+    $s1rows = Get-Step1RowCount -CsvPath $s1
+    if ($s1rows -eq 0) {
+        $skipped.Add($d) | Out-Null
+        Write-Host "  [SKIP] $d — step1 empty (0 rows)" -ForegroundColor DarkGray
+        continue
+    }
+
     $s8 = Join-Path $nhlDir "step8_nhl_direction_clean.xlsx"
     if (Test-Path -LiteralPath $s8) {
         $skipped.Add($d) | Out-Null
@@ -131,7 +144,7 @@ Write-Host ""
 Write-Host "=== Backfill summary ===" -ForegroundColor Yellow
 Write-Host "  Dates in range: $($dates.Count)"
 Write-Host "  Ran:            $($ran.Count)"
-Write-Host "  Skipped (s8):   $($skipped.Count)"
+Write-Host "  Skipped:        $($skipped.Count)"
 Write-Host "  Failed:         $($failed.Count)$(if ($failed.Count) { " — $($failed -join ', ')" } else { '' })"
 Write-Host "  Empty step1:    $($emptyStep1.Count)$(if ($emptyStep1.Count) { " — $($emptyStep1 -join ', ')" } else { '' })"
 
