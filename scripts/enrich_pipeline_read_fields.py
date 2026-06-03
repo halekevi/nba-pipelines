@@ -522,6 +522,9 @@ def run_audit(
                 "distribution_n",
                 "std_norm",
                 "confidence_score",
+                "calibration_bucket",
+                "calibration_actual_hit_rate",
+                "calibration_n",
                 "read_fields_missing",
             ]
             if c in enriched.columns
@@ -536,7 +539,8 @@ def run_audit(
             f"eligible={stats.get('pick_type_eligible_pct')}% "
             f"completeness={stats.get('avg_data_completeness')} "
             f"P(over)={stats.get('avg_hit_prob_over')} "
-            f"P(action)={stats.get('avg_hit_prob_actionable')}"
+            f"P(action)={stats.get('avg_hit_prob_actionable')} "
+            f"calib_bucket={stats.get('pct_filled_calibration_bucket')}%"
         )
 
     return out_json
