@@ -353,8 +353,10 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         merged = sub.merge(lookup[merge_keys + have_g], on=merge_keys, how="left")
         for c in have_g:
             merged_vals = pd.to_numeric(merged[c], errors="coerce")
-            existing = pd.to_numeric(out.loc[mask, c], errors="coerce")
-            out.loc[mask, c] = merged_vals.where(merged_vals.notna(), existing).to_numpy()
+            if c in out.columns:
+                existing = pd.to_numeric(out.loc[mask, c], errors="coerce")
+                merged_vals = merged_vals.where(merged_vals.notna(), existing)
+            out.loc[mask, c] = merged_vals.to_numpy()
 
     return _mirror_stat_g_columns(out.loc[:, ~out.columns.duplicated()].copy())
 
