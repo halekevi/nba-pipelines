@@ -317,10 +317,6 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
     if df is None or len(df) == 0 or "sport" not in df.columns:
         return df
     out = _mirror_stat_g_columns(df)
-    if "stat_g1" in out.columns:
-        filled = pd.to_numeric(out["stat_g1"], errors="coerce").notna().mean()
-        if filled >= 0.5:
-            return out
 
     d = date_str.strip()[:10]
     merge_keys = ["player", "prop_type", "line"]
@@ -341,6 +337,10 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         mask = out["sport"].astype(str).str.upper().isin(aliases)
         if not mask.any():
             continue
+        if "stat_g1" in out.columns:
+            sport_fill = pd.to_numeric(out.loc[mask, "stat_g1"], errors="coerce").notna().mean()
+            if sport_fill >= 0.5:
+                continue
         patterns = [Path(str(p).format(d=d)) for p in STEP8_STAT_G_CANDIDATES.get(sport_key, [])]
         src = _first_existing(patterns)
         if src is None:
@@ -352,8 +352,9 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         sub = out.loc[mask, merge_keys]
         merged = sub.merge(lookup[merge_keys + have_g], on=merge_keys, how="left")
         for c in have_g:
-            # merge resets index; assign by mask position order, not merged.index labels
-            out.loc[mask, c] = pd.to_numeric(merged[c], errors="coerce").to_numpy()
+            merged_vals = pd.to_numeric(merged[c], errors="coerce")
+            existing = pd.to_numeric(out.loc[mask, c], errors="coerce")
+            out.loc[mask, c] = merged_vals.where(merged_vals.notna(), existing).to_numpy()
 
     return _mirror_stat_g_columns(out.loc[:, ~out.columns.duplicated()].copy())
 

@@ -69,15 +69,8 @@
       "recommended_extra": ["park_factor", "weather_flag", "handedness_split"]
     },
     "NHL": {
-      "required_extra": ["def_tier", "line_combo", "confidence_score"],
-      "recommended_extra": ["power_play_unit", "expected_toi"],
-      "blocked_extra": {
-        "distribution_std": "Blocked pending step8 NHL game-log export (G1–G10); confidence_score uses std_norm=0.5 neutral for NHL rows.",
-        "confidence_score": "Provisional until NHL distribution_std is wired from step8 game-log export; std_norm=0.5 neutral compresses NHL confidence (re-check Tier 3c weights after export)."
-      },
-      "provisional_extra": {
-        "calibration_bucket": "Fitted with 5 equal-width bins on borderline sample; re-check ECE after game-log export and larger graded window."
-      }
+      "required_extra": ["def_tier", "line_combo", "distribution_std", "confidence_score", "calibration_bucket"],
+      "recommended_extra": ["power_play_unit", "expected_toi"]
     },
     "SOCCER": {
       "aliases": ["SOC", "Soccer"],

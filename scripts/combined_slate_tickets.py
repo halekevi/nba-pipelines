@@ -7506,6 +7506,7 @@ def load_nhl(path: str) -> pd.DataFrame:
 
     # Keep NHL on the same source-of-truth L5 logic as other sports whenever
     # stat_g* windows are present in the board payload.
+    df = _ensure_stat_g_columns(df)
     df = _apply_l5_truth_from_stat_games(df, "NHL")
     df = add_l5_play_side_columns(df)
     df = _fill_nhl_l5_season_avgs(df)
@@ -8878,27 +8879,32 @@ def build_combined_slate(
         df = df.loc[:, ~df.columns.duplicated()].copy()
         return df.reindex(columns=cols).copy()
 
-    frames = [safe_keep(nba, keep), safe_keep(cbb, keep)]
+    def _prep_for_combined(df: pd.DataFrame) -> pd.DataFrame:
+        if df is None or len(df) == 0:
+            return df
+        return safe_keep(_ensure_stat_g_columns(df), keep)
+
+    frames = [_prep_for_combined(nba), _prep_for_combined(cbb)]
     if nhl is not None and len(nhl) > 0:
-        frames.append(safe_keep(nhl, keep))
+        frames.append(_prep_for_combined(nhl))
     if soccer is not None and len(soccer) > 0:
-        frames.append(safe_keep(soccer, keep))
+        frames.append(_prep_for_combined(soccer))
     if tennis is not None and len(tennis) > 0:
-        frames.append(safe_keep(tennis, keep))
+        frames.append(_prep_for_combined(tennis))
     if wnba is not None and len(wnba) > 0:
-        frames.append(safe_keep(wnba, keep))
+        frames.append(_prep_for_combined(wnba))
     if wcbb is not None and len(wcbb) > 0:
-        frames.append(safe_keep(wcbb, keep))
+        frames.append(_prep_for_combined(wcbb))
     if mlb is not None and len(mlb) > 0:
-        frames.append(safe_keep(mlb, keep))
+        frames.append(_prep_for_combined(mlb))
     if nba1q is not None and len(nba1q) > 0:
-        frames.append(safe_keep(nba1q, keep))
+        frames.append(_prep_for_combined(nba1q))
     if nba1h is not None and len(nba1h) > 0:
-        frames.append(safe_keep(nba1h, keep))
+        frames.append(_prep_for_combined(nba1h))
     if nfl is not None and len(nfl) > 0:
-        frames.append(safe_keep(nfl, keep))
+        frames.append(_prep_for_combined(nfl))
     if cfb is not None and len(cfb) > 0:
-        frames.append(safe_keep(cfb, keep))
+        frames.append(_prep_for_combined(cfb))
     combined = pd.concat(frames, ignore_index=True)
 
     if "rank_score" in combined.columns:
