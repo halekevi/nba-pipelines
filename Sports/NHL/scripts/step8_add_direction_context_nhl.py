@@ -23,6 +23,9 @@ Column mapping (Step 7 → Step 8 display):
   tier                 → tier
   rank                 → rank
 
+Exports line_combo / line_combo_toi_pct / on_pp1_line to Full Slate when present in step7.
+CAR skaters need NST line-pair cache (CDP or --import-csv); VGK may join from legacy cache rows.
+
 Usage:
     py step8_add_direction_context_nhl.py --input outputs/step7_nhl_ranked.xlsx
         --output outputs/step8_nhl_direction_clean.xlsx --date YYYY-MM-DD

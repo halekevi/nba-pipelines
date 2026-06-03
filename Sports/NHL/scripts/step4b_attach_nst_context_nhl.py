@@ -6,8 +6,10 @@ Attaches after step4_attach_player_stats_nhl.py:
   pp_toi_per_game, pp_toi_pct, pp_unit_tier (NHL Stats API)
   line_combo, line_combo_toi_pct, line_combo_cf_pct, on_pp1_line (NST cache when available)
 
-Refresh NST caches (requires NST_ACCESS_KEY):
-  py -3.14 refresh_nst_cache.py --season 20252026
+Refresh NST line pairs (2-man lines need linestats via browser, not playerteams skater table):
+  py -3.14 refresh_nst_cache.py --refresh-nst --team CAR --cdp   # Chrome CDP on :9222
+  py -3.14 refresh_nst_cache.py --import-csv path/to/export.csv --team CAR --sit 5v5
+  --refresh-nst here uses slate_teams() from the input board (e.g. CAR, VGK).
 
 Run:
   py -3.14 step4b_attach_nst_context_nhl.py \\
