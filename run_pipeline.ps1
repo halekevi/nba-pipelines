@@ -26,7 +26,7 @@
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
 #    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis steps 2-8 + Combined (no step1 fetch)
-#    .\run_pipeline.ps1 -TennisOnly -TennisDate 2026-05-14   # Override slate date (default: day after -Date)
+#    .\run_pipeline.ps1 -TennisOnly -TennisDate 2026-05-14   # Override slate date (default: same as -Date)
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
@@ -119,15 +119,11 @@ if (-not $Date) {
     }
 }
 
-# Tennis targets the next calendar day vs pipeline -Date (early ET / next-day slate). Override with -TennisDate.
-# Step 8 / dated mirrors use $TennisDate; output folder stays outputs\$Date.
+# Tennis step8 uses the same date as the pipeline -Date.
+# Override with -TennisDate if needed (e.g. cross-midnight slates).
 if (-not $TennisDate) {
-    try {
-        $TennisDate = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).AddDays(1).ToString("yyyy-MM-dd")
-    } catch {
-        $TennisDate = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
-    }
-    Write-Host "  [Tennis] No -TennisDate: using day after pipeline -Date ($Date -> $TennisDate)" -ForegroundColor DarkGray
+    $TennisDate = $Date
+    Write-Host "  [Tennis] TennisDate = Date ($TennisDate)" -ForegroundColor DarkGray
 } else {
     Write-Host "  [Tennis] Using specified TennisDate: $TennisDate" -ForegroundColor Cyan
 }

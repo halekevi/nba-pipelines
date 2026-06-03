@@ -356,17 +356,15 @@ def main() -> None:
         if not mask.any():
             valid = df["_et_date"].astype(str).str.match(r"^\d{4}-\d{2}-\d{2}$")
             avail = sorted(df.loc[valid, "_et_date"].unique().tolist())
+            # Fallback: nearest ET date <= target (folder date), not future
             past_or_equal = [d for d in avail if d <= target_str]
             if past_or_equal:
-                fallback_date = past_or_equal[-1]  # latest date <= target
-            else:
-                fallback_date = avail[0] if avail else None
-
-            if fallback_date:
-                print(
-                    f"[DateFilter] No exact ET match — falling back to {fallback_date} "
-                    f"({(df['_et_date'] == fallback_date).sum()} rows)"
-                )
+                fallback_date = past_or_equal[-1]
+                print(f"[DateFilter] No exact ET match for {target_str} — falling back to {fallback_date} ({(df['_et_date']==fallback_date).sum()} rows)")
+                mask = df["_et_date"] == fallback_date
+            elif avail:
+                fallback_date = avail[0]
+                print(f"[DateFilter] No past ET match — using earliest available {fallback_date} ({(df['_et_date']==fallback_date).sum()} rows)")
                 mask = df["_et_date"] == fallback_date
             else:
                 print(f"[DateFilter] No valid ET dates found — keeping all {before_filter} rows")
