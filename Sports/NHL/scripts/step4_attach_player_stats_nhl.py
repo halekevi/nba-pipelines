@@ -65,10 +65,11 @@ def _team_schedule_dates(team: str, cache_dir: Path) -> list[str]:
     Uses daily cache at cache/schedule_<TEAM>.json.
     """
     team = str(team or "").strip().upper()
-    if not team:
+    if not team or "/" in team:
         return []
     cache_dir.mkdir(parents=True, exist_ok=True)
-    cache_path = cache_dir / f"schedule_{team}.json"
+    team_safe = team.replace("/", "_")
+    cache_path = cache_dir / f"schedule_{team_safe}.json"
     today_key = date.today().isoformat()
 
     if cache_path.exists():
@@ -139,13 +140,18 @@ def compute_rest_days(df: pd.DataFrame, con) -> pd.DataFrame:
         game_date = str(rec.get("game_date", "") or "").strip()
         if not team or not game_date:
             continue
+        # Combo legs use team like BOS/WSH — rest days are undefined; skip schedule lookup.
+        if "/" in team:
+            rest_map[(team, game_date)] = ("", 0)
+            continue
         prev = con.execute(
             "SELECT MAX(game_date) FROM nhl WHERE team = ? AND game_date < ?",
             (team, game_date),
         ).fetchone()
         prev_date = prev[0] if prev and prev[0] else None
         if not prev_date:
-            prev_date = _fallback_prev_game_date(team, game_date, cache_dir)
+            team_safe = team.replace("/", "_")
+            prev_date = _fallback_prev_game_date(team_safe, game_date, cache_dir)
         if not prev_date:
             rest_map[(team, game_date)] = ("", 0)
             continue
