@@ -1,17 +1,218 @@
 {
-  "updated_at": "2026-06-02T08:42:23.304484Z",
-  "days_tracked": 1,
+  "updated_at": "2026-06-03T08:41:11.977918Z",
+  "days_tracked": 2,
   "aggregate": {
-    "hit": 3,
-    "miss": 6,
+    "hit": 7,
+    "miss": 10,
     "void": 7,
     "push": 0,
     "pending": 0,
     "no_match": 0,
-    "total": 16
+    "total": 24
   },
-  "aggregate_hit_rate": 0.3333,
+  "aggregate_hit_rate": 0.4118,
   "recent": [
+    {
+      "slate_date": "2026-06-02",
+      "graded_at": "2026-06-03T08:41:11.967232Z",
+      "summary": {
+        "hit": 4,
+        "miss": 4,
+        "void": 0,
+        "push": 0,
+        "pending": 0,
+        "no_match": 0,
+        "total": 8
+      },
+      "hit_rate": 0.5,
+      "decided": 8,
+      "results": [
+        {
+          "player": "NaLyssa Smith",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.931,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 7,
+            "total": 7,
+            "hit_rate": 1.0
+          },
+          "slate_line": 7.0,
+          "slate_pick_type": "Standard",
+          "team": "LVA",
+          "opp": "LAS",
+          "result": "MISS",
+          "actual": 4.0,
+          "line": 8.5,
+          "margin": -4.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Jordin Canada",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.75,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 5,
+            "total": 5,
+            "hit_rate": 1.0
+          },
+          "slate_line": 6.5,
+          "slate_pick_type": "Standard",
+          "team": "ATL",
+          "opp": "CON",
+          "result": "HIT",
+          "actual": 10.0,
+          "line": 6.5,
+          "margin": 3.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "A'ja Wilson",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.6364,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 7,
+            "total": 7,
+            "hit_rate": 1.0
+          },
+          "slate_line": 7.5,
+          "slate_pick_type": "Goblin",
+          "team": "LVA",
+          "opp": "LAS",
+          "result": "HIT",
+          "actual": 15.0,
+          "line": 9.5,
+          "margin": 5.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Angel Reese",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.6316,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 5,
+            "total": 6,
+            "hit_rate": 0.8333
+          },
+          "slate_line": 3.5,
+          "slate_pick_type": "Standard",
+          "team": "ATL",
+          "opp": "CON",
+          "result": "HIT",
+          "actual": 5.0,
+          "line": 2.5,
+          "margin": 2.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Kamilla Cardoso",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.617,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 8,
+            "total": 8,
+            "hit_rate": 1.0
+          },
+          "slate_line": 9.5,
+          "slate_pick_type": "Goblin",
+          "team": "CHI",
+          "opp": "WAS",
+          "result": "HIT",
+          "actual": 12.0,
+          "line": 9.5,
+          "margin": 2.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Dearica Hamby",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.6049,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 9,
+            "total": 13,
+            "hit_rate": 0.6923
+          },
+          "slate_line": 16.5,
+          "slate_pick_type": "Standard",
+          "team": "LAS",
+          "opp": "LVA",
+          "result": "MISS",
+          "actual": 2.0,
+          "line": 11.5,
+          "margin": -9.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Rhyne Howard",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5714,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 7,
+            "total": 7,
+            "hit_rate": 1.0
+          },
+          "slate_line": 2.5,
+          "slate_pick_type": "Goblin",
+          "team": "ATL",
+          "opp": "CON",
+          "result": "MISS",
+          "actual": 2.0,
+          "line": 4.5,
+          "margin": -2.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Brittney Griner",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.5517,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 4,
+            "total": 6,
+            "hit_rate": 0.6667
+          },
+          "slate_line": 12.0,
+          "slate_pick_type": "Standard",
+          "team": "CON",
+          "opp": "ATL",
+          "result": "MISS",
+          "actual": 7.0,
+          "line": 7.5,
+          "margin": -0.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        }
+      ]
+    },
     {
       "slate_date": "2026-06-01",
       "graded_at": "2026-06-02T08:42:23.290424Z",
@@ -390,5 +591,5 @@
       ]
     }
   ],
-  "latest_graded_date": "2026-06-01"
+  "latest_graded_date": "2026-06-02"
 }

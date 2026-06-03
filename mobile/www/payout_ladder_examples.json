@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-01T17:39:35.722725+00:00",
+  "generated_at": "2026-06-03T03:56:57.309307+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -16,14 +16,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -42,14 +42,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -68,14 +68,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -94,14 +94,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -120,14 +120,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -146,14 +146,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -175,9 +175,9 @@
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -208,14 +208,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -244,14 +244,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -280,14 +280,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -316,14 +316,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -352,14 +352,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -388,14 +388,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -414,24 +414,24 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Chet Holmgren",
+          "player": "Brittney Griner",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 3.5,
+          "line": 9.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -450,22 +450,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -499,9 +499,9 @@
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -532,7 +532,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -542,14 +542,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -578,7 +578,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -588,14 +588,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -624,7 +624,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -634,14 +634,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -670,7 +670,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -680,14 +680,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -716,7 +716,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -726,14 +726,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -762,7 +762,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -772,14 +772,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -808,24 +808,24 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Chet Holmgren",
+          "player": "Brittney Griner",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 3.5,
+          "line": 9.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -854,22 +854,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -900,7 +900,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -913,9 +913,9 @@
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -946,7 +946,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -956,8 +956,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -966,14 +966,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1002,7 +1002,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1012,8 +1012,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1022,14 +1022,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1058,7 +1058,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1068,8 +1068,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1078,14 +1078,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1114,7 +1114,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1124,8 +1124,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1134,14 +1134,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1170,7 +1170,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1180,8 +1180,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1190,14 +1190,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1226,7 +1226,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1236,8 +1236,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1246,14 +1246,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1282,7 +1282,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1292,24 +1292,24 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Chet Holmgren",
+          "player": "Brittney Griner",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 3.5,
+          "line": 9.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1338,7 +1338,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1348,22 +1348,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1394,7 +1394,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1404,8 +1404,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1417,9 +1417,9 @@
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1450,9 +1450,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1470,24 +1480,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1516,9 +1516,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1536,24 +1546,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1582,9 +1582,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1602,24 +1612,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1648,9 +1648,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1668,24 +1678,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1714,9 +1714,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1734,24 +1744,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1780,9 +1780,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1800,24 +1810,14 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1846,7 +1846,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1856,8 +1856,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1866,24 +1866,24 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Chet Holmgren",
+          "player": "Brittney Griner",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 3.5,
+          "line": 9.5,
+          "standard_line": 12.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1912,7 +1912,7 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
           "standard_line": null,
@@ -1922,8 +1922,8 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Assists",
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
           "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1932,22 +1932,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Julian Champagnie",
+          "player": "Cecilia Zandalasini",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 6.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1978,9 +1978,19 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Isaiah Hartenstein",
+          "player": "Stephon Castle",
           "prop_type": "Points",
           "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
+        },
+        {
+          "player": "Isaiah Hartenstein",
+          "prop_type": "Points",
+          "line": 0.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1998,22 +2008,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Stephon Castle",
-          "prop_type": "Rebounds",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
           "player": "Skylar Diggins",
           "prop_type": "Points",
           "line": 11.5,
-          "standard_line": 15.5,
+          "standard_line": 16.5,
           "pick_type": "Demon",
-          "delta": 4.0,
+          "delta": 5.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
