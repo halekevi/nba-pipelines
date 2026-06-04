@@ -90,6 +90,10 @@ SPORT_LINE_MOVEMENT_PRESETS: dict[str, dict[str, Any]] = {
             "player_points_assists",
         ],
     },
+    # NBA1H / NBA1Q: OddsAPI has no period player prop markets (1H/1Q lines).
+    # implied_prob stays null for period slates until period markets are available.
+    # Full-game proxy excluded: line scale mismatch causes misleading cross_edge
+    # (e.g. 1Q points ~5 vs full-game ~20 → negative cross_edge noise).
     "Soccer": {
         "sport_key": "soccer_epl",
         "markets": ["player_shots_on_target", "player_to_score"],
