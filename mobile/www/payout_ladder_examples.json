@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T04:21:32.716802+00:00",
+  "generated_at": "2026-06-04T13:41:38.097427+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -16,10 +16,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -42,10 +42,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -68,10 +68,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -94,10 +94,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -120,10 +120,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -146,10 +146,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -172,12 +172,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -208,10 +208,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -244,10 +244,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -280,10 +280,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -316,10 +316,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -352,10 +352,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -388,10 +388,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -414,20 +414,20 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Brittney Griner",
-          "prop_type": "Points",
-          "line": 9.5,
-          "standard_line": 12.5,
+          "player": "Jordin Canada",
+          "prop_type": "Assists",
+          "line": 4.5,
+          "standard_line": 6.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -450,22 +450,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -496,12 +496,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -542,10 +542,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -588,10 +588,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -634,10 +634,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -680,10 +680,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -726,10 +726,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -772,10 +772,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -808,20 +808,20 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Brittney Griner",
-          "prop_type": "Points",
-          "line": 9.5,
-          "standard_line": 12.5,
+          "player": "Jordin Canada",
+          "prop_type": "Assists",
+          "line": 4.5,
+          "standard_line": 6.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -854,22 +854,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -910,12 +910,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -966,10 +966,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1022,10 +1022,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1078,10 +1078,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1134,10 +1134,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1190,10 +1190,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1246,10 +1246,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1292,20 +1292,20 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Brittney Griner",
-          "prop_type": "Points",
-          "line": 9.5,
-          "standard_line": 12.5,
+          "player": "Jordin Canada",
+          "prop_type": "Assists",
+          "line": 4.5,
+          "standard_line": 6.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1348,22 +1348,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1414,12 +1414,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -1480,10 +1480,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1546,10 +1546,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1612,10 +1612,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1678,10 +1678,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1744,10 +1744,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1810,10 +1810,10 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1866,20 +1866,20 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Brittney Griner",
-          "prop_type": "Points",
-          "line": 9.5,
-          "standard_line": 12.5,
+          "player": "Jordin Canada",
+          "prop_type": "Assists",
+          "line": 4.5,
+          "standard_line": 6.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1932,22 +1932,22 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Cecilia Zandalasini",
+          "player": "Sophie Cunningham",
           "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.0,
+          "line": 7.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
@@ -2008,12 +2008,12 @@
           "hit_rate": 0.6625
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Allisha Gray",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 16.5,
+          "line": 14.5,
+          "standard_line": 20.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 6.0,
           "direction": "OVER",
           "hit_rate": 0.8
         }
