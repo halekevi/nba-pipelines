@@ -1,0 +1,104 @@
+category,field,step7,step8,full_slate,enrichment,tickets,gap
+Identity / game context,sport,Yes,Yes,Yes,Yes,Yes,
+Identity / game context,player,Yes,Yes,Yes,Yes,Yes,
+Identity / game context,team,Yes,Yes,Yes,Yes,Yes,
+Identity / game context,opp,Yes,Yes,Yes,Yes,Yes,
+Identity / game context,game_time,Yes,Yes,Yes,Passthrough,Yes,
+Identity / game context,game_date,Yes,Partial,Partial,Passthrough,Partial,Add game_date to Full Slate column order (in step8 CSV; often omitted on FS sheet)
+Identity / game context,game_id,Partial,Partial,No,No,No,Optional; not required for read model
+Market,prop_type,Yes,Yes,Yes,Yes,Yes,
+Market,direction,Yes,Yes,Yes,Yes,Yes,
+Market,pick_type,Yes,Yes,Yes,Yes,Yes,
+Market,line,Yes,Yes,Yes,Yes,Yes,
+Market,standard_line,Yes,Partial,Partial,Derived,Partial,On step8; enrichment computes line_delta_vs_standard; export standard_line consistently to FS
+Market,line_delta_vs_standard,In-score,No,Partial,Derived,Yes,Direction-aware delta; enrichment + tickets
+Market,open_line,Partial,Yes,Yes,Passthrough,Partial,MLB/WNBA/NHL step8; FS Open Line filled 06-02
+Market,line_movement,Partial,Yes,Yes,Passthrough,Partial,MLB/WNBA/NHL step8; FS Line Movement filled 06-02
+Market,line_direction_shift,Partial,Yes,Partial,Passthrough,No,On step8; FS Line Shift intermittent
+Player form,l5_over,Yes,Yes,Yes,Passthrough,Yes,Trust L5 for MLB when L10 empty
+Player form,l5_under,Yes,Yes,Yes,Passthrough,Yes,
+Player form,l10_over,Yes,Partial,Partial,Passthrough,Partial,MLB/NHL often 0 fill on FS; WNBA/Tennis better
+Player form,l10_under,Yes,Partial,Partial,Passthrough,Partial,Same as l10_over
+Player form,season_avg,Yes,Yes,Yes,Passthrough,Yes,
+Player form,stat_last5_avg,Yes,Passthrough,Partial,Passthrough,No,Upstream step5; may appear as l5_avg on FS
+Player form,stat_last10_avg,Yes,Passthrough,Partial,Passthrough,No,Often empty MLB/NHL on FS
+Player form,stat_g1..stat_g10,Yes,Passthrough,Partial,Derived,Partial,Step8 dist_std precompute all active sports; G cols on FS (NHL G1-G10)
+Player form,hit_rate / composite_hit_rate,Yes,Yes,Yes,Derived,Yes,Feeds enrichment probability chain
+Model projection / edge / rank,projection,Yes,Yes,Yes,Passthrough,Yes,
+Model projection / edge / rank,edge,Yes,Yes,Yes,Passthrough,Yes,
+Model projection / edge / rank,abs_edge,Yes,Partial,Yes,Passthrough,Yes,
+Model projection / edge / rank,edge_signed,In-score,No,Partial,Derived,Yes,Direction-aware; enrichment + tickets
+Model projection / edge / rank,edge_pct_vs_line,In-score,No,Partial,Derived,Yes,Enrichment derived
+Model projection / edge / rank,edge_adj / edge_adj_dr,Yes,Partial,Partial,No,No,Step7 rank driver; not on read export bundle
+Model projection / edge / rank,rank_score,Yes,Yes,Yes,Passthrough,Partial,Step7 does heavy lifting; WNBA pick_type_eligible ~52% is rules not missing rank
+Model projection / edge / rank,rank_score_penalized,Yes,Yes,Yes,Passthrough,No,Flags void/penalized WNBA rows on FS
+Model projection / edge / rank,tier,Yes,Yes,Yes,Passthrough,Yes,
+Model projection / edge / rank,ml_prob,Yes,Partial,Partial,Passthrough,Partial,NHL strong; MLB/WNBA/Tennis FS Ml Prob often empty — trust step7 artifact
+Model projection / edge / rank,ml_edge,Yes,Partial,Partial,No,No,NHL step7; not on ticket legs
+Model projection / edge / rank,blended_score,Yes,Partial,No,No,No,In step7; not exported to read model
+Model projection / edge / rank,rank_edge_component,In-score,No,Partial,Derived,Yes,Enrichment transparent rank
+Model projection / edge / rank,rank_prob_component,In-score,No,Partial,Derived,Yes,
+Model projection / edge / rank,rank_consistency_component,In-score,No,Partial,Derived,Yes,
+Model projection / edge / rank,rank_matchup_component,In-score,No,Partial,Derived,Yes,
+Model projection / edge / rank,rank_tier_component,In-score,No,Partial,Derived,Yes,
+Model projection / edge / rank,rank_read_score,In-score,No,Yes,Derived,Yes,Unified read score; not raw step7 formula dump
+Defense / matchup,def_tier,Yes,Yes,Yes,Derived,Yes,MLB/WNBA/NHL 100% FS 06-02; Tennis N/A
+Defense / matchup,opponent_def_rank,Yes,Partial,Yes,Passthrough,Partial,MLB 99% WNBA 96% NHL 100%; Tennis 0%
+Defense / matchup,def_rank / def_rank_signal,Yes,In-score,Partial,No,No,In step7 rank; FS Def Rank column exists
+Defense / matchup,def_matchup_signal,In-score,No,Yes,Derived,Yes,Direction-aware; enrichment + tickets
+Defense / matchup,opp_def_rating / opp_pts_allowed,Yes,Partial,Partial,No,No,In step7 files; not first-class on FS
+Defense / matchup,top3_def_context,Yes,In-score,No,No,No,WNBA step7 rank input; NOT on FS — do not over-weight usage_role as proxy
+Defense / matchup,top3_under_context,Yes,In-score,No,No,No,WNBA step7 only
+Defense / matchup,positional_matchup_tier,Yes,Partial,No,No,No,NBA family; export when NBA returns to slate
+Usage / minutes / pace,minutes_tier,Yes,Partial,Yes,Passthrough,Partial,FS Min Tier; basketball sports
+Usage / minutes / pace,usage_role,Yes,Partial,Yes,Passthrough,Partial,On FS; WNBA usage_boost empty — do not over-weight role alone
+Usage / minutes / pace,usage_boost,Yes,Partial,Partial,No,No,Step7 computes; FS Usage Boost 0% fill 06-02
+Usage / minutes / pace,usage_boost_proj / reason,Yes,No,Partial,No,No,FS columns exist but empty
+Usage / minutes / pace,pace_tier,Yes,Partial,Yes,Passthrough,Partial,On FS; verify sport-native values
+Usage / minutes / pace,game_pace / team_pace,Yes,Partial,No,No,No,In step7; not on FS read sheet
+Volatility / distribution,distribution_std,Yes,Yes,Yes,Derived,Yes,Step8 all active sports; Tennis ~42% fill — provisional confidence
+Volatility / distribution,distribution_n,Yes,Yes,Partial,Derived,Partial,Step8 export; tickets partial
+Volatility / distribution,high_variance_role,Yes,Passthrough,No,No,No,Step7 flag; not on read export
+Volatility / distribution,consistency_score,In-score,No,Yes,Derived,Yes,From L5/L10 side rates in enrichment
+Volatility / distribution,std_norm,No,No,Partial,Derived,Partial,Feeds confidence_score
+Probabilities,hit_prob_over,In-score,No,Yes,Derived,Yes,Tier 1 closed
+Probabilities,hit_prob_under,In-score,No,Yes,Derived,Yes,
+Probabilities,hit_prob_selected,In-score,No,Yes,Derived,Yes,
+Probabilities,hit_prob_actionable,In-score,No,Yes,Derived,Yes,Pick-type rules enforced (Goblin/Demon OVER)
+Probabilities,hit_prob_over_at_line,In-score,No,Partial,Derived,Partial,Goblin/Demon at-line probability
+Probabilities,leg_prob_used,In-score,No,Yes,Derived,Yes,Tickets prefer enrichment actionable prob
+Probabilities,leg_prob_source,In-score,No,Partial,Derived,Partial,
+Probabilities,pick_type_eligible,In-score,No,Yes,Derived,Yes,~36% ineligible 06-02 — product rules not missing data
+Sport context — MLB,park_factor,Yes,No,No,No,No,In step7 rank; ignore until exported to FS
+Sport context — MLB,weather_flag,Yes,No,No,No,No,In step7 rank; ignore until exported to FS
+Sport context — MLB,handedness_split / pitcher_hand,Yes,Partial,No,No,No,Partial in pipeline; not on FS
+Sport context — MLB,batting_order_pos,Yes,Passthrough,No,No,No,Step5+; not on read board
+Sport context — WNBA,intel_opp_vs_league_pct,Yes,In-score,Partial,No,No,Step7 rank; Intel columns on FS — verify fill before trusting
+Sport context — WNBA,intel_l5_vs_season,Yes,In-score,Partial,No,No,Intel L5/L10/Season on FS
+Sport context — NHL,line_combo,Yes,Passthrough,Partial,Passthrough,Partial,30/95 FS 06-02; forwards unknown — treat non-D line context as unknown
+Sport context — NHL,line_combo_toi_pct,Yes,Passthrough,Partial,No,No,D-pairs only
+Sport context — NHL,on_pp1_line / pp_unit_tier,Yes,Partial,Partial,No,No,In step7/8; weak FS export
+Sport context — NHL,goalie_name / goalie_sv_pct,Yes,Partial,Partial,No,No,Goalie props; not all on FS
+Sport context — Tennis,surface,Yes,Yes,Yes,Passthrough,Partial,Passthrough closed
+Sport context — Tennis,hold_rate_surface,Partial,No,No,No,No,Recommended; not built
+Sport context — Tennis,break_rate_surface,Partial,No,No,No,No,Recommended; not built
+Sport context — Tennis,h2h_avg / h2h_games / h2h_over_rate,Partial,Partial,Yes,Passthrough,Partial,FS H2H Avg / GP / Over% / Last
+Sport context — NBA / NBA1H / NBA1Q,intel + pace + minutes stack,Yes,Partial,Partial,Partial,Partial,NBA off 06-02 slate; NBA1H/Q active; NBA1H ticket pool AUC-gated
+Injury / rest / B2B,injury_flag / team_star_out,Yes,Partial,No,No,No,In step7; not on FS read model
+Injury / rest / B2B,rest_days,Yes,Partial,No,No,No,NHL/NBA pipelines
+Injury / rest / B2B,b2b_flag,Yes,Partial,Partial,No,No,FS B2B 0% fill 06-02
+Injury / rest / B2B,void_reason,Yes,Yes,Partial,No,No,WNBA void legs; on step8
+Market odds / implied prob,price,No,No,No,No,No,Tier 4 — needs odds source
+Market odds / implied prob,implied_prob,No,No,No,No,No,Tier 4 — primary remaining new-data build
+Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,FS column; 0 fill without alt-book fetch
+Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Same
+Market odds / implied prob,cross_edge_vs_pp,No,No,Yes,Passthrough,Partial,0 rows with cross-book edge 06-02
+Calibration / confidence,prop_quality_score,In-score,No,Yes,Derived,Yes,
+Calibration / confidence,data_completeness_score,In-score,No,Yes,Derived,Yes,
+Calibration / confidence,confidence_score,In-score,No,Partial,Derived,Yes,Computed after read_fields_missing — audit over-reports; Tennis provisional when dist_std sparse
+Calibration / confidence,calibration_bucket,In-score,No,Partial,Derived,Partial,MLB/WNBA/NHL ~88-91%; Tennis/NBA1H/Q excluded or 0%
+Calibration / confidence,calibration_actual_hit_rate,No,No,Partial,Derived,Partial,When bucket assigned
+Calibration / confidence,read_fields_missing,No,No,No,Derived,Partial,Audit artifact; fix ordering so confidence/calibration not flagged missing
+Calibration / confidence,fetched_at,Partial,Partial,Yes,Passthrough,Partial,NHL step8+FS; MLB/WNBA step1 stamp — verify end-to-end on FS
+Operational,prop_reliability / stratification gate,Yes,N/A,N/A,N/A,Yes,Ticket pool excludes bad prop×direction buckets
+Operational,matchup_edge.json,Partial,N/A,N/A,N/A,N/A,Separate UI artifact; not per-leg read model
