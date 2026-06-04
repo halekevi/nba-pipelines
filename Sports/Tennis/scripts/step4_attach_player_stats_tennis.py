@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Tennis step4 — ESPN match history (stat_g1..10) + optional season stats from /statistics.
+Tennis step4 — Sackmann match history (stat_g1..10) + ESPN scoreboard fallback.
 """
 
 from __future__ import annotations
@@ -17,30 +17,66 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 from tennis_shared import (
+    build_sackmann_player_index,
+    build_sackmann_player_log,
+    ensure_sackmann_matches,
+    fetch_athlete_statistics,
     history_value_key,
     load_match_games_cache,
+    norm_key,
     parse_tennis_season_stats,
     refresh_match_games_cache,
-    fetch_athlete_statistics,
 )
+
+
+def _espn_vals_from_cache(cache: dict, aid: str, hk: str) -> list[float]:
+    hist = cache.get(aid) or []
+    vals: list[float] = []
+    for m in hist:
+        v = m.get(hk)
+        if v is None:
+            continue
+        try:
+            vals.append(float(v))
+        except (TypeError, ValueError):
+            continue
+    return vals
 
 
 def main() -> None:
     print("[Tennis step4] Starting...")
     root = _SCRIPT_DIR.parent
+    repo_root = _SCRIPT_DIR.parent.parent.parent
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", default="outputs/step3_tennis_with_defense.csv")
-    ap.add_argument("--output", default="outputs/step4_tennis_with_stats.csv")
+    ap.add_argument("--date", default="", help="YYYY-MM-DD run folder under outputs/{date}/tennis/")
+    ap.add_argument("--input", default="")
+    ap.add_argument("--output", default="")
     ap.add_argument("--match-cache", default="cache/tennis_match_games.json")
     ap.add_argument("--stats-cache", default="data/tennis_stats_cache.csv")
     ap.add_argument("--refresh-cache", action="store_true")
     ap.add_argument("--fetch-espn-stats", action="store_true", help="Fetch /statistics per player (slow)")
+    ap.add_argument(
+        "--history-source",
+        choices=("sackmann", "espn", "both"),
+        default="sackmann",
+        help="sackmann=Jeff Sackmann CSVs (default); espn=scoreboard only; both=same as sackmann + cache refresh",
+    )
+    ap.add_argument("--history-n", type=int, default=20, help="Max Sackmann matches per player for stat_g*")
+    ap.add_argument("--sackmann-min", type=int, default=1, help="Min Sackmann values required to use Sackmann row")
     args = ap.parse_args()
 
-    inp = Path(args.input)
+    run_date = str(args.date or "").strip()[:10]
+    default_in = "outputs/step3_tennis_with_defense.csv"
+    default_out = "outputs/step4_tennis_with_stats.csv"
+    if run_date:
+        run_dir = repo_root / "outputs" / run_date / "tennis"
+        default_in = str(run_dir / "step3_tennis_with_defense.csv")
+        default_out = str(run_dir / "step4_tennis_with_stats.csv")
+
+    inp = Path(args.input or default_in)
     if not inp.is_absolute():
         inp = root / inp
-    out = Path(args.output)
+    out = Path(args.output or default_out)
     if not out.is_absolute():
         out = root / out
     mpath = Path(args.match_cache)
@@ -55,11 +91,26 @@ def main() -> None:
         print("ERROR [Tennis step4] empty input")
         sys.exit(1)
 
-    if args.refresh_cache or not mpath.is_file():
-        print("[Tennis step4] Refreshing match games cache...")
+    history_src = str(args.history_source).strip().lower()
+    use_sackmann = history_src in ("sackmann", "both")
+    use_espn = history_src in ("espn", "both") or not use_sackmann
+
+    if args.refresh_cache or not mpath.is_file() or use_espn:
+        print("[Tennis step4] Refreshing ESPN match games cache (scoreboard)...")
         cache = refresh_match_games_cache(mpath)
     else:
         cache = load_match_games_cache(mpath)
+
+    sackmann_df = pd.DataFrame()
+    sackmann_index: dict[str, list] = {}
+    if use_sackmann:
+        print("[Tennis step4] Loading Sackmann match history...")
+        sackmann_df = ensure_sackmann_matches()
+        if sackmann_df.empty:
+            print("  [WARN] Sackmann matches empty — ESPN fallback only")
+        else:
+            sackmann_index = build_sackmann_player_index(sackmann_df)
+            print(f"  Sackmann rows={len(sackmann_df):,}  indexed_players={len(sackmann_index):,}")
 
     stat_cache: dict[tuple[str, str], dict[str, float | None]] = {}
 
@@ -154,6 +205,13 @@ def main() -> None:
         if rows_out:
             pd.DataFrame(rows_out).to_csv(stat_path, index=False, encoding="utf-8-sig")
 
+    sack_fill = 0
+    espn_fill = 0
+    min_sack = max(1, int(args.sackmann_min))
+    last_n = max(1, int(args.history_n))
+
+    player_col = "player" if "player" in df.columns else "Player"
+
     for pos in range(len(df)):
         r = df.iloc[pos]
         aid = str(r.get("espn_athlete_id", "")).strip()
@@ -163,27 +221,41 @@ def main() -> None:
         if unsup == 1 or not hk:
             df.iat[pos, df.columns.get_loc("stat_status")] = "UNSUPPORTED_PROP" if unsup == 1 else "NO_STAT_KEY"
             continue
-        if not aid:
-            df.iat[pos, df.columns.get_loc("stat_status")] = "NO_ID"
-            continue
-        hist = cache.get(aid) or []
-        vals = []
-        for m in hist:
-            v = m.get(hk)
-            if v is None:
-                continue
-            try:
-                vals.append(float(v))
-            except (TypeError, ValueError):
-                continue
-        if not vals:
-            # TODO Phase 2: fetch ATP/WTA match history via Jeff Sackmann tennis_atp/tennis_wta
-            # free CSV dataset when ESPN cache has no games for this prop key.
+
+        player_name = str(r.get(player_col) or r.get("player") or "")
+        pk = norm_key(player_name)
+        prop_norm = str(r.get("prop_norm") or "")
+        filled = False
+
+        if use_sackmann and sackmann_index and pk:
+            sack_vals = build_sackmann_player_log(
+                sackmann_df,
+                pk,
+                hk,
+                last_n=last_n,
+                player_index=sackmann_index,
+            )
+            if len(sack_vals) >= min_sack:
+                for j, v in enumerate(sack_vals[:10]):
+                    df.iat[pos, df.columns.get_loc(f"stat_g{j + 1}")] = v
+                df.iat[pos, df.columns.get_loc("stat_status")] = "OK"
+                sack_fill += 1
+                filled = True
+
+        if not filled and use_espn:
+            if not aid:
+                df.iat[pos, df.columns.get_loc("stat_status")] = "NO_ID"
+            else:
+                vals = _espn_vals_from_cache(cache, aid, hk)
+                if not vals:
+                    df.iat[pos, df.columns.get_loc("stat_status")] = "NO_DATA"
+                else:
+                    df.iat[pos, df.columns.get_loc("stat_status")] = "OK"
+                    for j, v in enumerate(vals[:10]):
+                        df.iat[pos, df.columns.get_loc(f"stat_g{j + 1}")] = v
+                    espn_fill += 1
+        elif not filled:
             df.iat[pos, df.columns.get_loc("stat_status")] = "NO_DATA"
-        else:
-            df.iat[pos, df.columns.get_loc("stat_status")] = "OK"
-            for j, v in enumerate(vals[:10]):
-                df.iat[pos, df.columns.get_loc(f"stat_g{j + 1}")] = v
 
         st = stat_cache.get((aid, tour))
         if st:
@@ -196,12 +268,13 @@ def main() -> None:
     df["stat_last5_avg"] = sub.iloc[:, :5].mean(axis=1)
     df["stat_last10_avg"] = sub.mean(axis=1)
     df["stat_season_avg"] = df["stat_last10_avg"]
-    # Slate/API: empty list when no stat_g* (no historical game log in step4 yet).
     df["actual_series"] = ""
 
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8-sig")
     ok_n = int((df["stat_status"] == "OK").sum())
+    print(f"[Tennis step4] Sackmann fill: {sack_fill}/{len(df)} rows got stat_g from Sackmann")
+    print(f"[Tennis step4] ESPN fallback: {espn_fill} rows used scoreboard cache")
     print(f"OK [Tennis step4] -> {out}  rows={len(df)}  stat_OK={ok_n}")
 
 

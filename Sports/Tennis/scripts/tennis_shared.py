@@ -6,11 +6,16 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+import sys
+import time
 import unicodedata
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator
+
+import pandas as pd
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Accept": "application/json"}
 
@@ -84,6 +89,23 @@ def norm_key(s: str) -> str:
     t = re.sub(r"\s+", " ", t.lower().strip())
     t = re.sub(r"[^a-z0-9 ]+", "", t)
     return t
+
+
+# Alias for Sackmann / step4 history (same normalization as ESPN rankings).
+_norm_key = norm_key
+
+_TENNIS_ROOT = Path(__file__).resolve().parent.parent
+_SACKMANN_DIR = _TENNIS_ROOT / "data" / "sackmann"
+_SACKMANN_MAX_AGE_DAYS = 1.0
+_SACKMANN_SET_RE = re.compile(r"(\d+)\s*-\s*(\d+)(?:\(\d+\))?")
+
+_SACKMANN_PROP_MAP: dict[str, tuple[str, ...]] = {
+    "aces": ("aces",),
+    "double_faults": ("double_faults",),
+    "games_won": ("games_won",),
+    "sets_won": ("sets_won",),
+    "match_total_games": ("match_total_games",),
+}
 
 
 def fetch_json(url: str, timeout: int = 25) -> dict[str, Any]:
@@ -343,3 +365,187 @@ def history_value_key(prop_norm: str) -> str | None:
     if prop_norm == "sets_won":
         return "sets_won"
     return None
+
+
+def _sackmann_file_stale(path: Path) -> bool:
+    if not path.is_file():
+        return True
+    age_days = (time.time() - path.stat().st_mtime) / 86400.0
+    return age_days > _SACKMANN_MAX_AGE_DAYS
+
+
+def ensure_sackmann_matches(*, force_fetch: bool = False) -> pd.DataFrame:
+    """
+    Load combined ATP+WTA Sackmann matches; refresh via fetch_sackmann_data.py if stale.
+    """
+    combined_atp = _SACKMANN_DIR / "atp_matches_combined.csv"
+    if force_fetch or _sackmann_file_stale(combined_atp):
+        fetch_script = Path(__file__).resolve().parent / "fetch_sackmann_data.py"
+        if fetch_script.is_file():
+            cmd = [sys.executable, str(fetch_script)]
+            if force_fetch:
+                cmd.append("--force")
+            subprocess.run(cmd, cwd=str(_TENNIS_ROOT.parents[1]), check=False)
+    frames: list[pd.DataFrame] = []
+    for name in ("atp_matches_combined.csv", "wta_matches_combined.csv"):
+        p = _SACKMANN_DIR / name
+        if not p.is_file():
+            continue
+        try:
+            frames.append(pd.read_csv(p, low_memory=False))
+        except Exception:
+            continue
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
+def _parse_score(score: str, is_winner: bool) -> dict[str, float | None]:
+    """Parse Sackmann score string -> games_won, sets_won, match_total_games."""
+    both = _parse_score_both_sides(score)
+    if not both:
+        return {"games_won": None, "sets_won": None, "match_total_games": None}
+    side = both["winner"] if is_winner else both["loser"]
+    return {
+        "games_won": side["games_won"],
+        "sets_won": side["sets_won"],
+        "match_total_games": both["match_total_games"],
+    }
+
+
+def _parse_score_both_sides(score: str) -> dict[str, Any] | None:
+    s = str(score or "").strip()
+    if not s:
+        return None
+    low = s.lower()
+    if low in {"w/o", "wo", "ret", "retired", "def", "default", "walkover"}:
+        return None
+    sets = _SACKMANN_SET_RE.findall(s)
+    if not sets:
+        return None
+    w_games = l_games = w_sets = l_sets = 0
+    total = 0
+    for a, b in sets:
+        try:
+            wi, li = int(a), int(b)
+        except ValueError:
+            continue
+        total += wi + li
+        w_games += wi
+        l_games += li
+        if wi > li:
+            w_sets += 1
+        elif li > wi:
+            l_sets += 1
+    if total <= 0:
+        return None
+    return {
+        "match_total_games": float(total),
+        "winner": {"games_won": float(w_games), "sets_won": float(w_sets)},
+        "loser": {"games_won": float(l_games), "sets_won": float(l_sets)},
+    }
+
+
+def build_sackmann_player_index(matches: pd.DataFrame) -> dict[str, list[dict[str, Any]]]:
+    """
+    Pre-index Sackmann matches by norm_key(player), newest tourney_date first.
+    Each entry holds per-match stats used for stat_g1..g10.
+    """
+    if matches is None or matches.empty:
+        return {}
+    need = {"winner_name", "loser_name", "tourney_date", "score", "w_ace", "l_ace", "w_df", "l_df"}
+    if not need.issubset(set(matches.columns)):
+        return {}
+
+    index: dict[str, list[dict[str, Any]]] = {}
+
+    def _append(pk: str, rec: dict[str, Any]) -> None:
+        if pk:
+            index.setdefault(pk, []).append(rec)
+
+    for _, rd in matches.iterrows():
+        w_name = str(rd.get("winner_name") or "")
+        l_name = str(rd.get("loser_name") or "")
+        date = str(rd.get("tourney_date") or "")
+        score = str(rd.get("score") or "")
+        parsed = _parse_score_both_sides(score)
+        mtg = parsed["match_total_games"] if parsed else None
+        w_side = parsed["winner"] if parsed else {}
+        l_side = parsed["loser"] if parsed else {}
+        try:
+            w_ace = float(rd.get("w_ace"))
+        except (TypeError, ValueError):
+            w_ace = float("nan")
+        try:
+            l_ace = float(rd.get("l_ace"))
+        except (TypeError, ValueError):
+            l_ace = float("nan")
+        try:
+            w_df = float(rd.get("w_df"))
+        except (TypeError, ValueError):
+            w_df = float("nan")
+        try:
+            l_df = float(rd.get("l_df"))
+        except (TypeError, ValueError):
+            l_df = float("nan")
+
+        _append(
+            norm_key(w_name),
+            {
+                "date": date,
+                "aces": w_ace,
+                "double_faults": w_df,
+                "games_won": w_side.get("games_won"),
+                "sets_won": w_side.get("sets_won"),
+                "match_total_games": mtg,
+            },
+        )
+        _append(
+            norm_key(l_name),
+            {
+                "date": date,
+                "aces": l_ace,
+                "double_faults": l_df,
+                "games_won": l_side.get("games_won"),
+                "sets_won": l_side.get("sets_won"),
+                "match_total_games": mtg,
+            },
+        )
+
+    for pk in index:
+        index[pk].sort(key=lambda x: str(x.get("date") or ""), reverse=True)
+    return index
+
+
+def build_sackmann_player_log(
+    matches: pd.DataFrame,
+    player_norm: str,
+    prop_norm: str,
+    last_n: int = 20,
+    *,
+    player_index: dict[str, list[dict[str, Any]]] | None = None,
+) -> list[float]:
+    """
+    Return up to last_n float values for prop_norm from Sackmann matches, newest first.
+    """
+    if prop_norm not in _SACKMANN_PROP_MAP:
+        return []
+    pk = (player_norm or "").strip()
+    if not pk:
+        return []
+    if player_index is None:
+        player_index = build_sackmann_player_index(matches)
+    rows = player_index.get(pk) or []
+    vals: list[float] = []
+    for rec in rows[: max(1, int(last_n))]:
+        raw = rec.get(prop_norm)
+        if raw is None:
+            continue
+        try:
+            fv = float(raw)
+        except (TypeError, ValueError):
+            continue
+        if fv != fv:  # NaN
+            continue
+        vals.append(fv)
+    return vals
