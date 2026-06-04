@@ -25,6 +25,7 @@ if str(REPO_ROOT) not in sys.path:
 from utils.pipeline_read_enrichment import (  # noqa: E402
     CHECKLIST_PATH,
     SCHEMA_PATH,
+    _compute_distribution_std,
     _mirror_stat_g_columns,
     audit_read_fields_dataframe,
     enrich_read_fields_dataframe,
@@ -355,7 +356,12 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         mask = out["sport"].astype(str).str.upper().isin(aliases)
         if not mask.any():
             continue
-        if "stat_g1" in out.columns:
+        dist_fill = (
+            pd.to_numeric(out.loc[mask, "distribution_std"], errors="coerce").notna().mean()
+            if "distribution_std" in out.columns
+            else 0.0
+        )
+        if "stat_g1" in out.columns and dist_fill >= 0.95:
             sport_fill = (
                 pd.to_numeric(out.loc[mask, "stat_g1"], errors="coerce").notna().mean()
             )
@@ -393,7 +399,8 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
                 merged_vals = merged_vals.where(merged_vals.notna(), existing)
             out.loc[mask, c] = merged_vals.to_numpy()
 
-    return _mirror_stat_g_columns(out.loc[:, ~out.columns.duplicated()].copy())
+    out = _mirror_stat_g_columns(out.loc[:, ~out.columns.duplicated()].copy())
+    return _compute_distribution_std(out)
 
 
 def _apply_slate_backfills(df: pd.DataFrame, date_str: str) -> pd.DataFrame:

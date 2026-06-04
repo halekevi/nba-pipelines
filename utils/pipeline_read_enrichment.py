@@ -164,6 +164,9 @@ _SLATE_HEADER_RENAME: dict[str, str] = {
     "Standard Edge": "standard_edge",
     "Standard Projection": "standard_projection",
     "Line Delta Vs Standard": "line_delta_vs_standard",
+    "Distribution Std": "distribution_std",
+    "Distribution N": "distribution_n",
+    **{f"Stat G{i}": f"stat_g{i}" for i in range(1, 11)},
 }
 
 # Empirical L5 / line_hit_rate columns are computed against the played line in step7/8.
@@ -343,16 +346,25 @@ def _compute_confidence_score(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _mirror_stat_g_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Map G1..G10 title-case step8 columns to stat_g1..stat_g10."""
+    """Map G1..G10 / Stat G1..Stat G10 columns to stat_g1..stat_g10."""
     if df is None or len(df) == 0:
         return df
     out = df
     for i in range(1, 11):
-        gcol, scol = f"G{i}", f"stat_g{i}"
-        if gcol in out.columns and scol not in out.columns:
-            out = out.copy()
-            out[scol] = out[gcol]
-        elif scol in out.columns and gcol not in out.columns:
+        gcol, sgcol, scol = f"G{i}", f"Stat G{i}", f"stat_g{i}"
+        for src in (gcol, sgcol):
+            if src not in out.columns:
+                continue
+            if scol not in out.columns:
+                out = out.copy()
+                out[scol] = out[src]
+            else:
+                out = out.copy()
+                existing = out[scol].astype(str).str.strip()
+                incoming = out[src].astype(str).str.strip()
+                blank = existing.isna() | existing.isin(["", "nan", "None", "—", "-"])
+                out.loc[blank, scol] = incoming.loc[blank]
+        if scol in out.columns and gcol not in out.columns:
             out = out.copy()
             out[gcol] = out[scol]
     return out
