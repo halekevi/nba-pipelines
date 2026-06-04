@@ -687,7 +687,7 @@ def fetch_line_snapshot(
     markets: list[str],
     *,
     force_refresh: bool = False,
-    date: str | None = None,
+    cache_date: str | None = None,
 ) -> dict[tuple[str, str, float], dict[str, Any]]:
     """
     Fetch (or load cached) line movement snapshot for events in the next 48h (UTC).
@@ -696,7 +696,7 @@ def fetch_line_snapshot(
     Empty dict if API key missing, quota/error, or no data.
     """
     api_key = _odds_api_key()
-    today = (str(date or "").strip()[:10] or date.today().isoformat())
+    today = (str(cache_date or "").strip()[:10] or date.today().isoformat())
     if not api_key:
         _log.info("line_movement: ODDS_API_KEY missing — skipping fetch")
         return {}
@@ -869,6 +869,7 @@ def enrich_with_line_movement(
     markets: list[str],
     *,
     force_refresh: bool = False,
+    cache_date: str | None = None,
     date: str | None = None,
 ) -> pd.DataFrame:
     """
@@ -878,7 +879,10 @@ def enrich_with_line_movement(
     """
     out = df.copy()
     snapshot = fetch_line_snapshot(
-        sport_key, markets, force_refresh=force_refresh, date=date
+        sport_key,
+        markets,
+        force_refresh=force_refresh,
+        cache_date=cache_date or date,
     )
 
     player_col = next(
