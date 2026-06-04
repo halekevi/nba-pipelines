@@ -5,10 +5,10 @@ Natural Stat Trick client (data.naturalstattrick.com).
 Requires free NST access key: set NST_ACCESS_KEY or NST_KEY in the environment.
 Caches parsed tables under Sports/NHL/data/ — never deletes prior seasons.
 
-NST playerteams.php returns a server-rendered <table> when stdoi/toi/gpfilt/tgp
-(and related filters) are set. linestats.php currently returns only the filter
-shell (no <table>) to automated clients — line combo cache may stay empty until
-NST serves that markup or we add a browser fetch path.
+Line combo pairs (Player A - Player B) come from linestats.php, not playerteams.php
+(which is skater totals; its lines= param is multi-team combine/split, not 2-man lines).
+linestats.php may return only the filter shell until the access key can render tables
+or CDP extracts a DataTable after login on www.naturalstattrick.com.
 """
 
 from __future__ import annotations
@@ -134,11 +134,25 @@ def fetch_html(path: str, params: dict) -> Optional[str]:
         return None
 
 
+def _nst_data_url(path: str, params: dict, *, include_key: bool = True) -> str:
+    q = dict(params)
+    if include_key:
+        key = nst_key()
+        if key:
+            q["key"] = key
+    url = NST_BASE + path.lstrip("/")
+    if q:
+        url += "?" + urlencode(q)
+    return url
+
+
 def browser_fetch_html(
     path: str,
     params: dict,
     cdp_url: str = "http://127.0.0.1:9222",
     timeout: int = 30,
+    *,
+    host: str = NST_DATA,
 ) -> Optional[str]:
     """
     Fetch NST page via Playwright CDP (connect to existing Chrome session).
@@ -155,9 +169,9 @@ def browser_fetch_html(
         log.warning("playwright not installed — skipping browser fetch")
         return None
 
-    url = NST_BASE + path.lstrip("/")
-    if params:
-        url += "?" + urlencode(params)
+    base = host.rstrip("/") + "/"
+    url = _nst_data_url(path, params, include_key=(host.rstrip("/") == NST_DATA))
+    url = url.replace(NST_BASE, base, 1)
 
     try:
         with sync_playwright() as pw:
@@ -169,26 +183,150 @@ def browser_fetch_html(
                     nst_page = p
                     break
 
-            if nst_page:
+            opened_new = False
+            if nst_page and host.rstrip("/") == NST_DATA:
                 log.info("[NST CDP] reusing existing NST tab: %s", nst_page.url)
                 page = nst_page
                 if page.url != url:
                     page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
             else:
-                log.info("[NST CDP] no existing NST tab found — opening new page")
+                log.info("[NST CDP] opening page (%s)", host)
                 page = ctx.new_page()
+                opened_new = True
                 page.goto(url, wait_until="domcontentloaded", timeout=timeout * 1000)
             try:
                 page.wait_for_selector("table", timeout=timeout * 1000)
             except Exception:
                 pass
             html = page.content()
-            if nst_page is None:
+            if opened_new:
                 page.close()
             return html
     except Exception as e:
         log.warning("[NST CDP] browser_fetch_html failed: %s", e)
         return None
+
+
+def _datatable_to_dataframe(page) -> pd.DataFrame:
+    """Extract NST DataTables markup when server HTML has an empty tbody."""
+    payload = page.evaluate(
+        """() => {
+          if (!window.jQuery || !jQuery.fn.DataTable) return null;
+          const tbl = jQuery('table.dataTable, table.display, table#players').first();
+          if (!tbl.length || !jQuery.fn.DataTable.isDataTable(tbl)) return null;
+          const dt = tbl.DataTable();
+          const headers = dt.columns().header().toArray().map(h => (h.innerText || '').trim());
+          const rows = dt.rows().data().toArray().map(row => row.map(cell => {
+            const d = document.createElement('div');
+            d.innerHTML = cell;
+            return (d.innerText || '').trim();
+          }));
+          return { headers, rows };
+        }"""
+    )
+    if not payload or not payload.get("rows"):
+        return pd.DataFrame()
+    headers = [str(h).strip() or f"col_{i}" for i, h in enumerate(payload["headers"])]
+    return pd.DataFrame(payload["rows"], columns=headers[: len(payload["rows"][0])])
+
+
+def browser_fetch_line_html(
+    params: dict,
+    cdp_url: str = "http://127.0.0.1:9222",
+    timeout: int = 30,
+) -> tuple[Optional[str], Optional[pd.DataFrame]]:
+    """
+    CDP fetch for linestats.php: data subdomain (keyed) then www (logged-in cookies).
+    Returns (html, dataframe). Either may be populated; dataframe wins for parsing.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        log.warning("playwright not installed — skipping browser fetch")
+        return None, None
+
+    path = "linestats.php"
+    hosts = [NST_DATA, "https://www.naturalstattrick.com"]
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.connect_over_cdp(cdp_url)
+            ctx = browser.contexts[0] if browser.contexts else browser.new_context()
+
+            for host in hosts:
+                url = _nst_data_url(path, params, include_key=(host == NST_DATA))
+                if host != NST_DATA:
+                    q = dict(params)
+                    url = host.rstrip("/") + "/" + path.lstrip("/")
+                    if q:
+                        url += "?" + urlencode(q)
+
+                page = ctx.new_page()
+                log.info("[NST CDP] linestats via %s", host)
+                page.goto(url, wait_until="networkidle", timeout=timeout * 1000)
+                page.wait_for_timeout(1500)
+
+                html = page.content()
+                df = _datatable_to_dataframe(page)
+                if df.empty and "<table" in html.lower():
+                    tables = parse_tables(html, label=f"linestats cdp {host}")
+                    if tables:
+                        df = tables[0].copy()
+
+                page.close()
+
+                if not df.empty:
+                    return html, df
+                if html and "<table" in html.lower():
+                    return html, None
+
+            return None, None
+    except Exception as e:
+        log.warning("[NST CDP] browser_fetch_line_html failed: %s", e)
+        return None, None
+
+
+def _normalize_line_combo_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Map linestats / pairings / export schemas to a canonical Line column."""
+    if df.empty:
+        return df
+    out = df.copy()
+    out.columns = [str(c).replace("\xa0", " ").strip() for c in out.columns]
+
+    rename = {
+        src: dst
+        for src, dst in _NST_LINE_CSV_ALIASES.items()
+        if src in out.columns and src != dst and not (src == "Player" and "Player 2" in out.columns)
+    }
+    if rename:
+        out = out.rename(columns=rename)
+
+    p1 = next((c for c in out.columns if str(c).lower() in ("player 1", "player1")), None)
+    if p1 is None and "Player 2" in out.columns and "Player" in out.columns:
+        p1 = "Player"
+    p2 = next((c for c in out.columns if str(c).lower() in ("player 2", "player2")), None)
+    if p1 and p2:
+        left = out[p1].astype(str).str.strip()
+        right = out[p2].astype(str).str.strip()
+        mask = (left != "") & (left.str.lower() != "nan") & (right != "") & (right.str.lower() != "nan")
+        out.loc[mask, "Line"] = left[mask] + " - " + right[mask]
+    elif "Line" not in out.columns:
+        for c in out.columns:
+            if "line" in str(c).lower():
+                out = out.rename(columns={c: "Line"})
+                break
+
+    if "Line" in out.columns:
+        line = out["Line"].astype(str).str.strip()
+        keep = line.ne("") & line.str.lower().ne("nan")
+        keep &= ~line.str.startswith("w/o ", na=False)
+        keep &= line.str.contains(r"\s[-–]\s", regex=True, na=False)
+        dropped = int((~keep).sum())
+        if dropped:
+            log.info("[NST] dropped %s non-pair line rows after normalize", dropped)
+        out = out.loc[keep].copy()
+
+    return out
 
 
 def parse_tables(html: str, *, label: str = "") -> list[pd.DataFrame]:
@@ -216,40 +354,52 @@ def fetch_line_combos(
     prefer_browser: bool = False,
     cdp_url: str = "http://127.0.0.1:9222",
     cdp_only: bool = False,
+    lines: str = "2",
 ) -> pd.DataFrame:
     """
     Line combo stats (2-man / 3-man lines). sit: 5v5 | pp | etc.
-    lines: 2 | 3 | … (NST linestats.php; not WOWY view=log)
+    Fetches linestats.php (not playerteams.php skater totals).
     """
-    params = _playerteams_params(season_id, sit=sit, team=team, lines="2")
-    html = None
+    path = "linestats.php"
+    params = _linestats_params(season_id, sit=sit, team=team, lines=lines)
+    label = f"linestats {sit} lines={lines}"
+    html: Optional[str] = None
+    df: Optional[pd.DataFrame] = None
+
     if prefer_browser:
-        html = browser_fetch_html("playerteams.php", params, cdp_url=cdp_url)
+        html, df = browser_fetch_line_html(params, cdp_url=cdp_url)
     elif not cdp_only:
-        html = fetch_html("playerteams.php", params)
+        html = fetch_html(path, params)
 
-    if (not html or "<table" not in html.lower()) and not prefer_browser:
+    if df is None and html and "<table" in html.lower():
+        tables = parse_tables(html, label=label)
+        if tables:
+            df = tables[0].copy()
+
+    if df is None and not prefer_browser:
         log.info("[NST] requests fetch returned no table — trying CDP fallback")
-        html = browser_fetch_html("playerteams.php", params, cdp_url=cdp_url)
+        html, df = browser_fetch_line_html(params, cdp_url=cdp_url)
 
-    if not html or "<table" not in html.lower():
+    if df is None and (not html or "<table" not in (html or "").lower()):
         log.warning("[NST] no table HTML from either path — returning empty")
         return pd.DataFrame()
 
-    tables = parse_tables(html or "", label=f"playerteams {sit}")
-    if not tables:
+    if df is None:
+        tables = parse_tables(html or "", label=label)
+        if not tables:
+            return pd.DataFrame()
+        df = tables[0].copy()
+
+    df = _normalize_line_combo_df(df)
+    if df.empty:
+        log.warning("[NST] linestats parsed 0 dash-pair rows for %s %s", sit, team)
         return pd.DataFrame()
-    df = tables[0].copy()
+
     df.columns = [str(c).strip() for c in df.columns]
     df["season_id"] = season_id
     df["sit"] = sit
     df["team_filter"] = _nst_team(team)
     df["fetched_at"] = datetime.now(timezone.utc).isoformat()
-    if "Line" not in df.columns:
-        for c in df.columns:
-            if "line" in str(c).lower():
-                df = df.rename(columns={c: "Line"})
-                break
     return df
 
 
@@ -297,6 +447,8 @@ _NST_LINE_CSV_ALIASES: dict[str, str] = {
     "Players": "Line",
     "Name": "Line",
     "Line": "Line",
+    "Player 1": "Player 1",
+    "Player 2": "Player 2",
     # Pass-through stats (canonical names unchanged)
     "Game": "Game",
     "TOI": "TOI",
@@ -356,10 +508,12 @@ def import_line_csv(
     rename = {
         src: dst
         for src, dst in _NST_LINE_CSV_ALIASES.items()
-        if src in df.columns and src != dst
+        if src in df.columns and src != dst and not (src == "Player" and "Player 2" in df.columns)
     }
     if rename:
         df = df.rename(columns=rename)
+
+    df = _normalize_line_combo_df(df)
 
     if "Line" not in df.columns:
         df["Line"] = ""
@@ -368,6 +522,9 @@ def import_line_csv(
         if "TOI" in df.columns:
             df = df.sort_values(by="TOI", ascending=False, na_position="last")
         df = df.drop_duplicates(subset=["Line"], keep="first")
+
+    if df.empty:
+        raise ValueError(f"No dash-pair rows found in NST import CSV: {path}")
 
     team_norm = _nst_team(team_filter)
     df["season_id"] = int(season_id)
