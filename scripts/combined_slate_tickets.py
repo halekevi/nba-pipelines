@@ -5049,7 +5049,7 @@ def attach_standard_refs(df: pd.DataFrame) -> pd.DataFrame:
     prior_std = (
         pd.to_numeric(out["standard_line"], errors="coerce")
         if "standard_line" in out.columns
-        else pd.Series(pd.NA, index=out.index, dtype="float64")
+        else pd.Series(np.nan, index=out.index, dtype="float64")
     )
     out = out.drop(columns=[c for c in ("standard_line", "standard_edge", "standard_projection") if c in out.columns])
     out = out.merge(std_ref, on=key_cols, how="left")
