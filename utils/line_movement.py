@@ -974,8 +974,10 @@ def enrich_with_line_movement(
         (c for c in ("player_name", "player", "Player") if c in out.columns),
         None,
     )
+    # prop_norm is the canonical pipeline key (reb, fg3m); prop_type is PP display text
+    # ("Rebounds", "3-PT Made") and does not map to Odds API markets.
     prop_col = next(
-        (c for c in ("prop_type", "stat_norm", "prop_norm") if c in out.columns),
+        (c for c in ("prop_norm", "stat_norm", "prop_type") if c in out.columns),
         None,
     )
     line_col = next(
