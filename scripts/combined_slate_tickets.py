@@ -5046,7 +5046,19 @@ def attach_standard_refs(df: pd.DataFrame) -> pd.DataFrame:
         .drop_duplicates(subset=key_cols, keep="first")
     )
 
+    prior_std = (
+        pd.to_numeric(out["standard_line"], errors="coerce")
+        if "standard_line" in out.columns
+        else pd.Series(pd.NA, index=out.index, dtype="float64")
+    )
+    out = out.drop(columns=[c for c in ("standard_line", "standard_edge", "standard_projection") if c in out.columns])
     out = out.merge(std_ref, on=key_cols, how="left")
+    merged_std = pd.to_numeric(out["standard_line"], errors="coerce")
+    out["standard_line"] = prior_std.combine_first(merged_std)
+    is_standard = out["pick_type"].astype(str).str.lower().eq("standard")
+    out.loc[is_standard, "standard_line"] = out.loc[is_standard, "standard_line"].fillna(
+        pd.to_numeric(out.loc[is_standard, "line"], errors="coerce")
+    )
 
     # Direction-aware "discount vs standard"
     def _discount(row):
@@ -10890,6 +10902,8 @@ FULL_SLATE_EXTRA_HDRS = {
     "cross_edge_vs_pp": "Edge vs PP",
     "cross_n_books": "#Books",
     "fetched_at": "fetched_at",
+    "game_date": "Game Date",
+    "standard_line": "Standard Line",
 }
 FULL_SLATE_EXTRA_WIDTHS = {
     "pace_tier": 10,

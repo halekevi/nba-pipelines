@@ -406,10 +406,15 @@ function Invoke-MLBStep1Fetch {
             $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
             if ($exit -eq 0) {
-                Write-Host "      OK (CDP)" -ForegroundColor Green
-                return $true
+                $cdpHealth = Get-MLBStep1DateHealth -CsvPath $OutputPath -TargetDate $PipelineDate
+                if ($cdpHealth.ok) {
+                    Write-Host "      OK (CDP)" -ForegroundColor Green
+                    return $true
+                }
+                Write-Host "      [MLB] CDP returned exit 0 but step1 is empty ($($cdpHealth.reason)) — falling back to direct API..." -ForegroundColor Yellow
+            } else {
+                Write-Host "      MLB CDP fetch failed (exit $exit); falling back to direct API..." -ForegroundColor Yellow
             }
-            Write-Host "      MLB CDP fetch failed (exit $exit); falling back to direct API..." -ForegroundColor Yellow
         } else {
             Write-Host "      CDP endpoint not reachable at $cdpUrl; using direct API fallback." -ForegroundColor Yellow
         }
@@ -436,6 +441,11 @@ function Invoke-MLBStep1Fetch {
             foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
+        $finalHealth = Get-MLBStep1DateHealth -CsvPath $OutputPath -TargetDate $PipelineDate
+        if (-not $finalHealth.ok) {
+            Write-Host "      FAILED: step1 unhealthy after all fetch paths ($($finalHealth.reason))" -ForegroundColor Red
+            return $false
+        }
         Write-Host "      OK" -ForegroundColor Green; return $true
     } catch {
         Write-Host "      EXCEPTION: $_" -ForegroundColor Red; return $false
@@ -2101,11 +2111,30 @@ $MLBJob = Start-Job -ScriptBlock {
         } catch { Write-Output "[MLB] EXCEPTION: $_"; return $false
         } finally { Pop-Location }
     }
+    function Get-MLBStep1DateHealth-Job {
+        param([string]$CsvPath, [string]$TargetDate)
+        if (-not (Test-Path $CsvPath)) { return @{ ok = $false; reason = "missing_file" } }
+        try { $rows = Import-Csv -Path $CsvPath } catch { return @{ ok = $false; reason = "read_error" } }
+        if (-not $rows -or $rows.Count -eq 0) { return @{ ok = $false; reason = "empty_file" } }
+        $match = @()
+        if ($rows[0].PSObject.Properties.Name -contains "game_date") {
+            $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
+        } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
+            $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+        } else {
+            return @{ ok = $false; reason = "missing_date_columns" }
+        }
+        $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
+        return @{ ok = ($match.Count -gt 0); reason = $reason }
+    }
     function Invoke-MLBStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
         Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (CDP, then direct API, then Playwright)"
         Push-Location $Dir
         try {
+            $env:PYTHONUTF8 = "1"
+            $env:PYTHONIOENCODING = "utf-8"
+            $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
             $cdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
             $cdpReachable = $false
             try {
@@ -2121,10 +2150,15 @@ $MLBJob = Start-Job -ScriptBlock {
                 $exit = $LASTEXITCODE
                 foreach ($line in $output) { Write-Output "        $line" }
                 if ($exit -eq 0) {
-                    Write-Output "[MLB] OK: MLB Step 1 (CDP)"
-                    return $true
+                    $cdpHealth = Get-MLBStep1DateHealth-Job -CsvPath $OutputPath -TargetDate $PipelineDate
+                    if ($cdpHealth.ok) {
+                        Write-Output "[MLB] OK: MLB Step 1 (CDP)"
+                        return $true
+                    }
+                    Write-Output "[MLB] CDP returned exit 0 but step1 is empty ($($cdpHealth.reason)) — falling back to direct API"
+                } else {
+                    Write-Output "[MLB] CDP failed (exit $exit); falling back to direct API"
                 }
-                Write-Output "[MLB] CDP failed (exit $exit); falling back to direct API"
             } else {
                 Write-Output "[MLB] CDP endpoint not reachable at $cdpUrl; using direct API fallback"
             }
@@ -2148,6 +2182,11 @@ $MLBJob = Start-Job -ScriptBlock {
                 foreach ($line in $output) { Write-Output "        $line" }
             }
             if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
+            $finalHealth = Get-MLBStep1DateHealth-Job -CsvPath $OutputPath -TargetDate $PipelineDate
+            if (-not $finalHealth.ok) {
+                Write-Output "[MLB] FAILED: step1 unhealthy after all fetch paths ($($finalHealth.reason))"
+                return $false
+            }
             Write-Output "[MLB] OK: MLB Step 1"; return $true
         } catch {
             Write-Output "[MLB] EXCEPTION: $_"; return $false
@@ -2173,22 +2212,6 @@ $MLBJob = Start-Job -ScriptBlock {
             if ($exit -ne 0) { Write-Output "  [$SportLabel] step7b: WARN (exit $exit)" } else { Write-Output "  [$SportLabel] step7b: OK" }
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
-    }
-    function Get-MLBStep1DateHealth-Job {
-        param([string]$CsvPath, [string]$TargetDate)
-        if (-not (Test-Path $CsvPath)) { return @{ ok = $false; reason = "missing_file" } }
-        try { $rows = Import-Csv -Path $CsvPath } catch { return @{ ok = $false; reason = "read_error" } }
-        if (-not $rows -or $rows.Count -eq 0) { return @{ ok = $false; reason = "empty_file" } }
-        $match = @()
-        if ($rows[0].PSObject.Properties.Name -contains "game_date") {
-            $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
-        } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
-            $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
-        } else {
-            return @{ ok = $false; reason = "missing_date_columns" }
-        }
-        $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
-        return @{ ok = ($match.Count -gt 0); reason = $reason }
     }
     function Clear-MLBGeneratedOutputs-Job {
         param([string]$BaseDir)
