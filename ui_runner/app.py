@@ -1098,6 +1098,7 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "standard_projection",
         "opponent_def_rank",
         "image_url",
+        "game_date",
         "game_time",
         "sport",
         "pick_platform",
@@ -3224,8 +3225,16 @@ def api_pipeline_status():
             except ValueError:
                 tennis_override_date = None
     tennis_card_disp = card_disp
-    if tennis_cnt > 0 and tennis_override_date:
-        tennis_card_disp = f"{tennis_override_date} 00:00:00 UTC"
+    if tennis_cnt > 0:
+        _t_ts, _t_disp = _payload_timestamp_meta(slate_payload)
+        if _t_disp:
+            tennis_card_disp = _t_disp
+        elif card_disp:
+            tennis_card_disp = card_disp
+        else:
+            tennis_card_disp = datetime.now(ZoneInfo("America/New_York")).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
 
     nba_slate_p = _resolve_outputs_artifact(
         days, "step8_nba_direction_clean_{d}.xlsx", NBA_SLATE, NBA_DIR / "step8_nba_direction_clean.xlsx"

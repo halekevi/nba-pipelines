@@ -5,6 +5,7 @@ import re
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import combined_slate_tickets
 
 _ROOT_FOR_UTILS = Path(__file__).resolve().parent.parent
@@ -53,6 +54,73 @@ def _mtime_utc_string(path: Path | None) -> str:
     if path is None or not path.exists():
         return ""
     return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _modified_ts_key(mod_str: str) -> float:
+    s = (mod_str or "").strip()[:19].replace("T", " ")
+    if len(s) < 19:
+        return 0.0
+    try:
+        return datetime.strptime(s, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()
+    except ValueError:
+        return 0.0
+
+
+def _parse_payload_generated_at(payload: dict | None) -> str:
+    """UTC wall clock YYYY-MM-DD HH:MM:SS from generated_at or slate date noon."""
+    if not isinstance(payload, dict):
+        return ""
+    ga = (payload.get("generated_at") or "").strip()
+    if ga:
+        core = ga.replace(" UTC", "").strip()
+        prefix = core[:19].replace("T", " ")
+        try:
+            datetime.strptime(prefix, "%Y-%m-%d %H:%M:%S")
+            return prefix
+        except ValueError:
+            pass
+    ds = str((payload.get("date") or "").strip())[:10]
+    if len(ds) == 10 and ds[4] == "-" and ds[7] == "-":
+        return f"{ds} 12:00:00"
+    return ""
+
+
+def _fresher_modified_str(*candidates: str) -> str:
+    best = ""
+    best_ts = 0.0
+    for c in candidates:
+        s = (c or "").strip()
+        if not s:
+            continue
+        ts = _modified_ts_key(s)
+        if ts >= best_ts:
+            best_ts = ts
+            best = s
+    return best
+
+
+def _mobile_sport_status_modified(
+    sport: str,
+    *,
+    has_rows: bool,
+    slate_build_ts: str,
+    combined_build_ts: str,
+    modified_default: str,
+    artifact_path: Path | None,
+) -> tuple[str, str]:
+    """
+    Prefer slate/tickets JSON build time over step8 Excel mtime (mobile status cards).
+    """
+    if slate_build_ts:
+        return slate_build_ts, "slate_latest.generated_at"
+    if combined_build_ts:
+        return combined_build_ts, "combined_slate_tickets"
+    if modified_default:
+        return modified_default, "slate_date_default"
+    if artifact_path is not None and artifact_path.exists():
+        return _mtime_utc_string(artifact_path), "step8_artifact"
+    return "", "none"
+
 
 # Keep aligned with ui_runner/app.py page_income _SPORT_BREAKDOWN_ORDER.
 SPORT_BREAKDOWN_ORDER = ("NBA", "CBB", "CFB", "WNBA", "MLB", "SOCCER", "TENNIS", "NHL", "NFL")
@@ -912,6 +980,20 @@ async function fetch_smart(localPath) {
                 ]
             ),
         }
+        tickets_build_ts = ""
+        tickets_path = TEMPLATES_DIR / "tickets_latest.json"
+        if tickets_path.exists():
+            try:
+                tickets_payload = json.loads(tickets_path.read_text(encoding="utf-8"))
+                tickets_build_ts = _parse_payload_generated_at(tickets_payload)
+            except Exception:
+                tickets_build_ts = ""
+        slate_build_ts = _fresher_modified_str(
+            _parse_payload_generated_at(slate_payload if isinstance(slate_payload, dict) else None),
+            tickets_build_ts,
+        )
+        combined_build_ts = _mtime_utc_string(combined_artifact) if combined_artifact else ""
+
         status_payload = {}
         for s in status_sports:
             art = combined_artifact if s == "combined" else artifact_by_sport.get(s)
@@ -923,11 +1005,17 @@ async function fetch_smart(localPath) {
                 or (s == "combined" and isinstance(sports_payload, dict) and bool(sports_payload))
             )
             mod_str = ""
+            source = "none"
             if exists:
-                if has_artifact:
-                    mod_str = _mtime_utc_string(art)
-                elif modified_default:
-                    mod_str = modified_default
+                mod_str, source = _mobile_sport_status_modified(
+                    s,
+                    has_rows=has_rows,
+                    slate_build_ts=slate_build_ts,
+                    combined_build_ts=combined_build_ts,
+                    modified_default=modified_default,
+                    artifact_path=art,
+                )
+                print(f"  [pipeline_status] {s}: modified={mod_str!r} source={source}")
             status_payload[s] = {"slate": {"exists": exists, "modified": mod_str}}
         (MOBILE_WWW_DIR / "pipeline_status.json").write_text(
             json.dumps(status_payload, ensure_ascii=True, indent=2),
