@@ -685,8 +685,13 @@ def _missing_fields(row: pd.Series, sport: str, checklist_sports: dict[str, Any]
         if v is None or (isinstance(v, float) and not math.isfinite(v)) or str(v).strip() == "":
             missing.append(c)
 
-    # WNBA void legs: step8 rank is penalized but still numeric; audit accepts rank_read_score fallback.
-    if "rank_score" in missing and sport in ("WNBA", "BASKETBALL_WNBA"):
+    # WNBA void legs / NBA1H·NBA1Q Tier D: audit accepts rank_read_score when rank_score still empty.
+    if "rank_score" in missing and sport in (
+        "WNBA",
+        "BASKETBALL_WNBA",
+        "NBA1H",
+        "NBA1Q",
+    ):
         rr = pd.to_numeric(row.get("rank_read_score"), errors="coerce")
         if pd.notna(rr):
             missing.remove("rank_score")
@@ -739,6 +744,15 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
     if "pick_type" not in out.columns:
         out["pick_type"] = "Standard"
     out["pick_type_norm"] = out["pick_type"].map(norm_pick_type)
+
+    # MLB combo SP props (player A + player B): no opponent def rank in step8 — league-neutral.
+    odr = _series_or_nan(out, "opponent_def_rank")
+    player_s = out.get("player", pd.Series("", index=out.index)).astype(str)
+    is_combo = player_s.str.contains(r"\s*\+\s*", regex=True)
+    mlb_neutral = out["sport_norm"].eq("MLB") & is_combo & odr.isna()
+    if mlb_neutral.any():
+        out = out.copy()
+        out.loc[mlb_neutral, "opponent_def_rank"] = 15.0
 
     line = _series_or_nan(out, "line")
     std_line = _series_or_nan(out, "standard_line")
@@ -854,6 +868,15 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         + 0.14 * matchup_comp
         + 0.10 * tier_comp
     ).clip(0, 1)
+
+    # NBA1H/NBA1Q step8 omits rank_score on Tier D ineligible rows; map read composite to step7 scale.
+    rs_col = _series_or_nan(out, "rank_score")
+    backfill = out["sport_norm"].isin(["NBA1H", "NBA1Q"]) & rs_col.isna()
+    rrs_bf = pd.to_numeric(out["rank_read_score"], errors="coerce")
+    backfill = backfill & rrs_bf.notna()
+    if backfill.any():
+        out = out.copy()
+        out.loc[backfill, "rank_score"] = 0.5 + 1.5 * rrs_bf.loc[backfill]
 
     if "prop_quality_score" in out.columns:
         pq = pd.to_numeric(out["prop_quality_score"], errors="coerce").fillna(out["rank_read_score"])
