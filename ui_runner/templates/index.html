@@ -2282,7 +2282,7 @@ body > nav.snav.glass-card {
 </div>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
-<script src="/static/matchup-edge.js?v=20260532" defer></script>
+<script src="/static/matchup-edge.js?v=20260604b" defer></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -3421,6 +3421,19 @@ function ymdInEastern(d) {
     day: "2-digit",
   }).format(d);
 }
+
+/** Tennis always targets the next ET calendar day (tomorrow's board). */
+function ymdTomorrowEt() {
+  const today = ymdInEastern(new Date());
+  if (!today) return null;
+  const parts = today.split("-").map((x) => parseInt(x, 10));
+  if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) return null;
+  const dt = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2] + 1, 12, 0, 0));
+  return ymdInEastern(dt);
+}
+function tennisMatchDayEt() {
+  return ymdTomorrowEt();
+}
 function parsePipelineModifiedAsUtc(s) {
   const m = (s || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
   if (!m) return null;
@@ -3445,8 +3458,8 @@ function rowGameDateEt(row) {
   return m ? m[1] : null;
 }
 
-async function sportSlateHasTodayGames(sportId) {
-  if (!SLATE_STRICT_GAME_DAY_SPORTS.has(sportId)) return null;
+async function sportSlateHasGamesOnDay(sportId, targetYmd) {
+  if (!targetYmd) return null;
   try {
     let res = await fetch(`/api/slate-sport/${encodeURIComponent(sportId)}`, { cache: "no-store" });
     if (!res.ok) res = await fetch(`slate_sport_${sportId}.json`, { cache: "no-store" });
@@ -3454,11 +3467,15 @@ async function sportSlateHasTodayGames(sportId) {
     const data = await res.json();
     const rows = slateRowsFromPayload(data);
     if (!rows.length) return false;
-    const todayEt = ymdInEastern(new Date());
-    return rows.some((r) => rowGameDateEt(r) === todayEt);
+    return rows.some((r) => rowGameDateEt(r) === targetYmd);
   } catch {
     return null;
   }
+}
+
+async function sportSlateHasTodayGames(sportId) {
+  if (!SLATE_STRICT_GAME_DAY_SPORTS.has(sportId)) return null;
+  return sportSlateHasGamesOnDay(sportId, ymdInEastern(new Date()));
 }
 
 function applyStatusCard(id, info, _label, opts) {
@@ -3548,17 +3565,23 @@ async function refreshStatus() {
     return;
   }
   const strictGameDay = {};
+  const gameDayCheckSports = [...SLATE_STRICT_GAME_DAY_SPORTS, "tennis"];
   await Promise.all(
-    [...SLATE_STRICT_GAME_DAY_SPORTS].map(async (sid) => {
-      const v = await sportSlateHasTodayGames(sid);
+    gameDayCheckSports.map(async (sid) => {
+      const target = sid === "tennis" ? tennisMatchDayEt() : ymdInEastern(new Date());
+      const v = await sportSlateHasGamesOnDay(sid, target);
       if (v !== null) strictGameDay[sid] = v;
     })
   );
-  const statusOpts = (sid) => (
-    SLATE_STRICT_GAME_DAY_SPORTS.has(sid)
-      ? { requireTodayGames: true, hasTodayGames: strictGameDay[sid] }
-      : null
-  );
+  const statusOpts = (sid) => {
+    if (sid === "tennis") {
+      return { requireTodayGames: true, hasTodayGames: strictGameDay.tennis };
+    }
+    if (SLATE_STRICT_GAME_DAY_SPORTS.has(sid)) {
+      return { requireTodayGames: true, hasTodayGames: strictGameDay[sid] };
+    }
+    return null;
+  };
   applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
   applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate", statusOpts("nba1h"));
   applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate", statusOpts("nba1q"));
@@ -3568,7 +3591,10 @@ async function refreshStatus() {
   applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate", statusOpts("soccer"));
   applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate", statusOpts("mlb"));
   applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate", statusOpts("nfl"));
-  applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
+  applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate", statusOpts("tennis"));
+  const tennisVal = document.getElementById("sc-tennis-val");
+  const tennisMd = tennisMatchDayEt();
+  if (tennisVal && tennisMd) tennisVal.textContent = tennisMd;
   applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate", statusOpts("wnba"));
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
   updatePipelineStatusBar();
@@ -4408,6 +4434,9 @@ function toggleSlatePanel(sport) {
     openSlatePanel = sport;
     if (!SLATE_DATA[sport]) loadSlateSport(sport);
     else scheduleRenderSlateTable(sport);
+    if (typeof MatchupEdge !== 'undefined' && MatchupEdge.sports?.includes(sport)) {
+      MatchupEdge.init(sport);
+    }
   }
 }
 
@@ -4503,7 +4532,17 @@ function _slateRowIsFantasyProp(row, sport) {
 
 function _setSlateSportRows(sport, rows) {
   delete SLATE_COLS[sport];
-  const raw = Array.isArray(rows) ? rows : [];
+  let raw = Array.isArray(rows) ? rows : [];
+  if (sport === "tennis") {
+    const md = tennisMatchDayEt();
+    if (md) {
+      const onDay = raw.filter((r) => {
+        const gd = rowGameDateEt(r);
+        return !gd || gd === md;
+      });
+      if (onDay.length) raw = onDay;
+    }
+  }
   SLATE_DATA[sport] = raw.filter((r) => !_slateRowIsFantasyProp(r, sport));
   SLATE_DATA[sport].sort((a,b) => Math.abs(b?.edge||0) - Math.abs(a?.edge||0));
 }

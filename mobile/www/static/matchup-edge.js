@@ -156,15 +156,16 @@
     return "/api/" + sport + "/matchup-edge";
   }
 
-  function fallbackUrl(sport) {
-    const rel = "data/" + sport + "_matchup_edge.json";
+  function fallbackUrls(sport) {
+    const name = sport + "_matchup_edge.json";
+    const rel = "data/" + name;
     if (
       global.location &&
       (global.location.protocol === "file:" || global.location.pathname.includes("/mobile"))
     ) {
-      return rel;
+      return [rel];
     }
-    return "/" + rel.replace(/^\//, "");
+    return ["/" + rel, "/" + name];
   }
 
   function ensurePanel(sport) {
@@ -290,15 +291,19 @@
         }
       }
     } catch (_) {}
-    try {
-      const fb = await fetch(fallbackUrl(sport), { cache: "no-store" });
-      if (fb.ok) {
-        data = await fb.json();
-        state[sport] = state[sport] || {};
-        state[sport].data = data;
-        return data;
-      }
-    } catch (_) {}
+    for (const url of fallbackUrls(sport)) {
+      try {
+        const fb = await fetch(url, { cache: "no-store" });
+        if (fb.ok) {
+          data = await fb.json();
+          if (!data.error) {
+            state[sport] = state[sport] || {};
+            state[sport].data = data;
+            return data;
+          }
+        }
+      } catch (_) {}
+    }
     throw new Error("unavailable");
   }
 
@@ -535,7 +540,7 @@
     const panel = document.getElementById(panelId(sport));
     if (panel) {
       const sum = panel.querySelector("summary");
-      if (sum)
+      if (sum) {
         const viewLbl =
           view === "bottom" ? " (bottom 5)" : view === "all" ? " (all leaders)" : "";
         sum.textContent =
@@ -546,6 +551,7 @@
           " vs " +
           oppName +
           viewLbl;
+      }
     }
 
     if (legend && data.edge_legend) {
@@ -614,12 +620,15 @@
     }
   }
 
-  const origToggle = global.toggleSlatePanel;
-  if (typeof origToggle === "function") {
+  function installToggleHook() {
+    const orig = global.toggleSlatePanel;
+    if (typeof orig !== "function" || orig.__meWrapped) return Boolean(orig?.__meWrapped);
     global.toggleSlatePanel = function (sport) {
-      origToggle(sport);
+      orig(sport);
       if (ME_SPORTS.includes(sport)) onPanelOpen(sport);
     };
+    global.toggleSlatePanel.__meWrapped = true;
+    return true;
   }
 
   function boot() {
@@ -633,8 +642,18 @@
           setTimeout(() => onPanelOpen(s), 0);
         });
       }
-      if (document.getElementById("sp-" + s)?.classList.contains("open")) onPanelOpen(s);
+      const panel = document.getElementById("sp-" + s);
+      if (panel?.classList.contains("open") || card?.classList.contains("active")) onPanelOpen(s);
     });
+    if (typeof global.openSlatePanel === "string" && ME_SPORTS.includes(global.openSlatePanel)) {
+      onPanelOpen(global.openSlatePanel);
+    }
+    if (!installToggleHook()) {
+      let tries = 0;
+      const hookTimer = setInterval(() => {
+        if (installToggleHook() || ++tries > 120) clearInterval(hookTimer);
+      }, 50);
+    }
   }
 
   if (document.readyState === "loading") {

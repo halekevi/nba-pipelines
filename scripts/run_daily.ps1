@@ -96,8 +96,12 @@ function Get-TimeStamp { return Get-Date -Format "HH:mm:ss" }
 $Today = if ($Date.Trim()) { $Date.Trim() } else { (Get-Date).ToString("yyyy-MM-dd") }
 $Yesterday = if ($GradeDate.Trim()) { $GradeDate.Trim() } else { (Get-Date).AddDays(-1).ToString("yyyy-MM-dd") }
 # Tennis step8 ET filter + dated filename use the same calendar day as -Date by default.
-# Override with -TennisDate "yyyy-MM-dd" when the match-day differs from the pipeline folder date.
-$TennisDate = if ($TennisDate -and $TennisDate.Trim()) { $TennisDate.Trim() } else { $Today }
+# Default: tomorrow ET (tennis always publishes next-day match board). Override when needed.
+$TennisDate = if ($TennisDate -and $TennisDate.Trim()) {
+    $TennisDate.Trim()
+} else {
+    (Get-Date $Today).AddDays(1).ToString('yyyy-MM-dd')
+}
 $TicketModelModeEffective = if ($TicketModelMode.Trim()) { $TicketModelMode.Trim().ToLowerInvariant() } elseif ([string]$env:TICKET_MODEL_MODE) { ([string]$env:TICKET_MODEL_MODE).Trim().ToLowerInvariant() } else { "shadow" }
 if (@("off", "shadow", "on") -notcontains $TicketModelModeEffective) {
     Write-Warning "Invalid TicketModelMode '$TicketModelModeEffective' (expected off|shadow|on); defaulting to shadow"

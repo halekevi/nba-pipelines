@@ -120,10 +120,10 @@ if (-not $Date) {
 }
 
 # Tennis step8 uses the same date as the pipeline -Date.
-# Override with -TennisDate if needed (e.g. cross-midnight slates).
+# Default: next ET calendar day (tomorrow's board). Override with -TennisDate if needed.
 if (-not $TennisDate) {
-    $TennisDate = $Date
-    Write-Host "  [Tennis] TennisDate = Date ($TennisDate)" -ForegroundColor DarkGray
+    $TennisDate = (Get-Date $Date).AddDays(1).ToString('yyyy-MM-dd')
+    Write-Host "  [Tennis] TennisDate = tomorrow ET ($TennisDate)  (bundle Date=$Date)" -ForegroundColor DarkGray
 } else {
     Write-Host "  [Tennis] Using specified TennisDate: $TennisDate" -ForegroundColor Cyan
 }

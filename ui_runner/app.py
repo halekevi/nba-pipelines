@@ -3215,7 +3215,7 @@ def api_pipeline_status():
     if len(tennis_override_date) != 10:
         tennis_override_date = None
     tennis_cnt = int(slate_counts.get("tennis", 0))
-    if not tennis_override_date and tennis_cnt > 0:
+    if not tennis_override_date:
         bundle_d = str((slate_payload or {}).get("date") or "").strip()[:10]
         if len(bundle_d) == 10:
             try:
@@ -3224,6 +3224,10 @@ def api_pipeline_status():
                 ).strftime("%Y-%m-%d")
             except ValueError:
                 tennis_override_date = None
+        elif tennis_cnt > 0:
+            tennis_override_date = (
+                datetime.now(ZoneInfo("America/New_York")).date() + timedelta(days=1)
+            ).strftime("%Y-%m-%d")
     tennis_card_disp = card_disp
     if tennis_cnt > 0:
         _t_ts, _t_disp = _payload_timestamp_meta(slate_payload)
@@ -4929,6 +4933,26 @@ def _matchup_edge_payload(sport_key: str) -> dict[str, Any]:
         "matchups": {},
         "players_by_team_cat": {},
     }
+
+
+@app.get("/data/<path:filename>")
+def serve_data_json(filename: str):
+    """Static JSON fallback for Slate Explorer (e.g. matchup-edge.js → /data/wnba_matchup_edge.json)."""
+    name = Path(filename).name
+    if name != filename or not name.endswith(".json"):
+        abort(404)
+    for base in (_MOBILE_WWW_DIR / "data", TEMPLATES_DIR):
+        path = base / name
+        if path.is_file():
+            try:
+                return _gz_json_response(
+                    f"data-json:{name}:{path.stat().st_mtime_ns}",
+                    lambda: json.loads(path.read_text(encoding="utf-8")),
+                    ttl=120.0,
+                )
+            except (OSError, json.JSONDecodeError):
+                abort(404)
+    abort(404)
 
 
 @app.get("/api/<sport>/matchup-edge")
