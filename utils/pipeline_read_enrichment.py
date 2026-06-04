@@ -363,6 +363,18 @@ def _compute_distribution_std(df: pd.DataFrame) -> pd.DataFrame:
     if df is None or len(df) == 0:
         return df
     out = _mirror_stat_g_columns(df)
+    existing_std = (
+        pd.to_numeric(out["distribution_std"], errors="coerce")
+        if "distribution_std" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    existing_n = (
+        pd.to_numeric(out["distribution_n"], errors="coerce")
+        if "distribution_n" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    # Preserve step8 pre-computed std (n>=2); skip enrichment recompute noise (0.0, n<2).
+    keep_step8 = existing_std.notna() & (existing_n >= 2)
     stat_cols = [f"stat_g{i}" for i in range(1, 11) if f"stat_g{i}" in out.columns]
     if not stat_cols:
         stat_cols = sorted(
@@ -376,12 +388,18 @@ def _compute_distribution_std(df: pd.DataFrame) -> pd.DataFrame:
     if stat_cols:
         numeric = out[stat_cols].apply(pd.to_numeric, errors="coerce")
         out = out.copy()
-        out["distribution_std"] = numeric.std(axis=1, ddof=0)
-        out["distribution_n"] = numeric.notna().sum(axis=1).astype(int)
+        computed_std = numeric.std(axis=1, ddof=0)
+        computed_n = numeric.notna().sum(axis=1).astype(int)
+        out["distribution_std"] = existing_std.where(keep_step8, computed_std)
+        out["distribution_n"] = existing_n.where(keep_step8, computed_n)
     else:
         out = out.copy()
-        out["distribution_std"] = np.nan
-        out["distribution_n"] = 0
+        if not keep_step8.any():
+            out["distribution_std"] = np.nan
+            out["distribution_n"] = 0
+        else:
+            out["distribution_std"] = existing_std
+            out["distribution_n"] = existing_n.fillna(0).astype(int)
     return out
 
 
@@ -832,19 +850,16 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         out["prop_quality_score"] = pq
 
     eligible: list[bool] = []
-    missing_json: list[str] = []
     completeness: list[float] = []
     for _, r in out.iterrows():
         sport = norm_sport(r.get("sport_norm") or r.get("sport"))
-        miss = _missing_fields(r, sport, sport_specs)
+        miss_pre = _missing_fields(r, sport, sport_specs)
         core_n = 10
-        comp = 1.0 - (len(miss) / core_n)
+        comp = 1.0 - (len(miss_pre) / core_n)
         eligible.append(_pick_type_eligible(r, pick_rules, sport_specs))
-        missing_json.append(json.dumps(miss))
         completeness.append(float(np.clip(comp, 0, 1)))
 
     out["pick_type_eligible"] = eligible
-    out["read_fields_missing"] = missing_json
     out["data_completeness_score"] = completeness
 
     # Enforce product rule in dataframe (drop ineligible from ticketing pools elsewhere)
@@ -853,6 +868,13 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
 
     out = _compute_confidence_score(out)
     out = _assign_calibration_bucket(out)
+
+    # Audit missing list after derived fields (confidence_score, calibration_bucket) exist.
+    missing_json: list[str] = []
+    for _, r in out.iterrows():
+        sport = norm_sport(r.get("sport_norm") or r.get("sport"))
+        missing_json.append(json.dumps(_missing_fields(r, sport, sport_specs)))
+    out["read_fields_missing"] = missing_json
 
     return out
 

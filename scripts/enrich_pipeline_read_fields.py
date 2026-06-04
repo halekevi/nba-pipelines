@@ -286,6 +286,20 @@ def _backfill_nhl_line_combo(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
     return out.drop(columns=["_s8_line_combo"], errors="ignore")
 
 
+def _normalize_stat_g_merge_keys(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize player/prop/line keys for step8 ↔ Full Slate stat_g backfill."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    if "player" in out.columns:
+        out["player"] = out["player"].astype(str).str.strip().str.lower()
+    if "prop_type" in out.columns:
+        out["prop_type"] = out["prop_type"].astype(str).str.strip().str.lower()
+    if "line" in out.columns:
+        out["line"] = pd.to_numeric(out["line"], errors="coerce").round(1)
+    return out
+
+
 def _read_step8_stat_g_lookup(path: Path) -> pd.DataFrame | None:
     """Load step8 board with stat_g1..10 for merge into Full Slate audit rows."""
     try:
@@ -302,12 +316,16 @@ def _read_step8_stat_g_lookup(path: Path) -> pd.DataFrame | None:
     part = _mirror_stat_g_columns(part)
     merge_keys = ["player", "prop_type", "line"]
     have_g = [c for c in _STAT_G_COLS if c in part.columns]
+    extra_cols = [c for c in ("distribution_std", "distribution_n") if c in part.columns]
     if not have_g or not all(k in part.columns for k in merge_keys):
         return None
-    lookup = part[merge_keys + have_g].drop_duplicates(subset=merge_keys)
+    lookup = part[merge_keys + have_g + extra_cols].drop_duplicates(subset=merge_keys)
     for c in have_g:
+        # Keep string game-log cells (Tennis em-dash sentinels) — numeric parse at merge time.
+        lookup[c] = lookup[c].astype(str).str.strip().replace({"nan": "", "None": ""})
+    for c in extra_cols:
         lookup[c] = pd.to_numeric(lookup[c], errors="coerce")
-    return lookup
+    return _normalize_stat_g_merge_keys(lookup)
 
 
 def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
@@ -338,7 +356,9 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         if not mask.any():
             continue
         if "stat_g1" in out.columns:
-            sport_fill = pd.to_numeric(out.loc[mask, "stat_g1"], errors="coerce").notna().mean()
+            sport_fill = (
+                pd.to_numeric(out.loc[mask, "stat_g1"], errors="coerce").notna().mean()
+            )
             if sport_fill >= 0.5:
                 continue
         patterns = [Path(str(p).format(d=d)) for p in STEP8_STAT_G_CANDIDATES.get(sport_key, [])]
@@ -349,9 +369,24 @@ def _backfill_stat_g_columns(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
         if lookup is None or len(lookup) == 0:
             continue
         have_g = [c for c in _STAT_G_COLS if c in lookup.columns]
-        sub = out.loc[mask, merge_keys]
-        merged = sub.merge(lookup[merge_keys + have_g], on=merge_keys, how="left")
+        dist_cols = [c for c in ("distribution_std", "distribution_n") if c in lookup.columns]
+        merge_keys = ["player", "prop_type", "line"]
+        sub = _normalize_stat_g_merge_keys(out.loc[mask, merge_keys])
+        merged = sub.merge(
+            lookup[merge_keys + have_g + dist_cols],
+            on=merge_keys,
+            how="left",
+        )
+        row_idx = out.index[mask]
         for c in have_g:
+            from_lookup = merged[c].astype(str).str.strip()
+            valid_lookup = from_lookup.notna() & ~from_lookup.isin(["", "nan", "None", "—", "-"])
+            if c in out.columns:
+                existing = out.loc[mask, c].astype(str).str.strip()
+                out.loc[mask, c] = np.where(valid_lookup.to_numpy(), from_lookup, existing)
+            else:
+                out.loc[mask, c] = from_lookup.to_numpy()
+        for c in dist_cols:
             merged_vals = pd.to_numeric(merged[c], errors="coerce")
             if c in out.columns:
                 existing = pd.to_numeric(out.loc[mask, c], errors="coerce")
