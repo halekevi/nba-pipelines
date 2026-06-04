@@ -79,6 +79,15 @@ def slate_calendar_date_ymd() -> str:
     """US Eastern calendar date for outputs/ and tickets JSON (avoids UTC-midnight skew on Railway)."""
     return datetime.now(_SLATE_TZ).date().strftime("%Y-%m-%d")
 
+
+def default_tennis_match_date(bundle_date: str | None = None) -> str:
+    """Tennis board is always the next ET calendar day vs the pipeline bundle date."""
+    raw = str(bundle_date or slate_calendar_date_ymd()).strip()[:10]
+    try:
+        return (datetime.strptime(raw, "%Y-%m-%d").date() + timedelta(days=1)).strftime("%Y-%m-%d")
+    except ValueError:
+        return raw
+
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
@@ -5562,7 +5571,7 @@ def dataframe_to_slate_sport_rows(df: Optional[pd.DataFrame]) -> List[dict]:
             elif line_hist:
                 row["line_series"] = line_hist
 
-        gd = g("game_date")
+        gd = g("game_date") or g("Game Date")
         if gd:
             row["game_date"] = str(gd)[:10]
         dr = g("days_rest")
@@ -5745,8 +5754,10 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
         }
     }
     tennis_rows = payload["sports"].get("tennis") or []
-    if tennis_date and isinstance(tennis_rows, list) and len(tennis_rows) > 0:
-        payload["tennis_date"] = str(tennis_date).strip()[:10]
+    tennis_match_ymd = ""
+    if isinstance(tennis_rows, list) and len(tennis_rows) > 0:
+        tennis_match_ymd = str(tennis_date or default_tennis_match_date(date_str)).strip()[:10]
+        payload["tennis_date"] = tennis_match_ymd
 
     os.makedirs(outdir, exist_ok=True)
     out_path = os.path.join(outdir, "slate_latest.json")
@@ -5765,6 +5776,16 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
     combined_rows: list[dict] = []
     for sport_key, rows in sports_payload.items():
         safe_rows = rows if isinstance(rows, list) else []
+        if sport_key == "tennis" and tennis_match_ymd:
+            stamped: list[dict] = []
+            for r in safe_rows:
+                if not isinstance(r, dict):
+                    stamped.append(r)
+                    continue
+                rr = dict(r)
+                rr["game_date"] = tennis_match_ymd
+                stamped.append(rr)
+            safe_rows = stamped
         sport_path = os.path.join(outdir, f"slate_sport_{sport_key}.json")
         with open(sport_path, "w", encoding="utf-8") as sf:
             _json.dump(
@@ -7688,6 +7709,12 @@ def _load_step8_board_like(
         "open_line": "open_line",
         "line_movement": "line_movement",
         "line_direction_shift": "line_direction_shift",
+        "implied_prob": "implied_prob",
+        "Implied Prob": "implied_prob",
+        "implied_prob_over": "implied_prob_over",
+        "Implied Prob Over": "implied_prob_over",
+        "implied_prob_under": "implied_prob_under",
+        "Implied Prob Under": "implied_prob_under",
     })
 
     if "opp" not in df.columns:
@@ -8312,6 +8339,12 @@ def load_mlb(path: str) -> pd.DataFrame:
         "open_line": "open_line",
         "line_movement": "line_movement",
         "line_direction_shift": "line_direction_shift",
+        "implied_prob": "implied_prob",
+        "Implied Prob": "implied_prob",
+        "implied_prob_over": "implied_prob_over",
+        "Implied Prob Over": "implied_prob_over",
+        "implied_prob_under": "implied_prob_under",
+        "Implied Prob Under": "implied_prob_under",
     })
 
     if "opp" not in df.columns:
@@ -10901,6 +10934,10 @@ FULL_SLATE_EXTRA_HDRS = {
     "best_cross_book": "Best Book",
     "cross_edge_vs_pp": "Edge vs PP",
     "cross_n_books": "#Books",
+    "implied_prob": "Implied Prob",
+    "implied_prob_over": "Implied Prob Over",
+    "implied_prob_under": "Implied Prob Under",
+    "cross_edge": "Cross Edge",
     "fetched_at": "fetched_at",
     "game_date": "Game Date",
     "standard_line": "Standard Line",
@@ -10921,6 +10958,10 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "best_cross_book": 10,
     "cross_edge_vs_pp": 9,
     "cross_n_books": 6,
+    "implied_prob": 12,
+    "implied_prob_over": 14,
+    "implied_prob_under": 15,
+    "cross_edge": 11,
     "distribution_std": 10,
     "distribution_n": 8,
     "G1": 6,
@@ -10945,6 +10986,13 @@ FULL_SLATE_COLS = [
     "line_combo",
     "distribution_std",
     "distribution_n",
+    "open_line",
+    "line_movement",
+    "line_direction_shift",
+    "implied_prob",
+    "implied_prob_over",
+    "implied_prob_under",
+    "cross_edge",
     "G1",
     "G2",
     "G3",
@@ -11729,7 +11777,7 @@ def main():
         "--tennis-date",
         dest="tennis_date",
         default=None,
-        help="Override date for Tennis step8 path + ET match-day filter (default: same as --date).",
+        help="Override date for Tennis step8 path + ET match-day filter (default: --date + 1 day ET).",
     )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
     ap.add_argument(
@@ -11990,8 +12038,8 @@ def main():
     if tennis_ds:
         args.tennis_date = tennis_ds
     else:
-        # Match step8 ET date filter and outputs/<slate>/step8_tennis_direction_clean_<slate>.xlsx
-        args.tennis_date = str(args.date).strip()[:10]
+        # Perpetual next-day board: bundle dated today, match-day filter tomorrow (ET).
+        args.tennis_date = default_tennis_match_date(str(args.date).strip()[:10])
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     if getattr(args, "win_rate_mode", False):

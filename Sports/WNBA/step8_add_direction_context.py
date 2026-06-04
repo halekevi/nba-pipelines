@@ -192,6 +192,7 @@ def write_sheet(wb, name, data):
         'Void Reason': 20,
         'Open Line': 8, 'Line Movement': 12, 'Line Shift': 10,
         'open_line': 10, 'line_movement': 12, 'line_direction_shift': 16,
+        'implied_prob': 12, 'implied_prob_over': 14, 'implied_prob_under': 15,
         'distribution_std': 10, 'distribution_n': 8,
     }
     for ci, h in enumerate(headers, 1):
@@ -267,6 +268,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'minutes_tier', 'shot_role', 'usage_role',
         'void_reason',
         'open_line', 'line_movement', 'line_direction_shift',
+        'implied_prob', 'implied_prob_over', 'implied_prob_under',
         'distribution_std', 'distribution_n',
     ]
     # only keep cols that exist
@@ -277,9 +279,12 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         if col in clean.columns:
             rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
-    for col in ['open_line', 'line_movement']:
+    for col in ['open_line', 'line_movement', 'implied_prob', 'implied_prob_over', 'implied_prob_under']:
         if col in clean.columns:
-            rnd = 2 if col == 'open_line' else 3
+            if col in ('implied_prob', 'implied_prob_over', 'implied_prob_under'):
+                rnd = 4
+            else:
+                rnd = 2 if col == 'open_line' else 3
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
     if 'line_direction_shift' in clean.columns:
         clean['line_direction_shift'] = (
@@ -338,7 +343,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
         'void_reason': 'Void Reason',
     }
-    _lm_cols = ('open_line', 'line_movement', 'line_direction_shift')
+    _lm_cols = (
+        'open_line', 'line_movement', 'line_direction_shift',
+        'implied_prob', 'implied_prob_over', 'implied_prob_under',
+    )
     rename = {k: v for k, v in rename.items() if k not in _lm_cols}
     clean = clean.rename(columns=rename)
 

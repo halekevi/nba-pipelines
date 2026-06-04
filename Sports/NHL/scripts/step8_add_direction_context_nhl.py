@@ -188,6 +188,9 @@ COLUMN_ALIASES = {
     "open_line":            ["open_line"],
     "line_movement":        ["line_movement"],
     "line_direction_shift": ["line_direction_shift"],
+    "implied_prob":         ["implied_prob"],
+    "implied_prob_over":    ["implied_prob_over"],
+    "implied_prob_under":   ["implied_prob_under"],
     "rest_days":            ["rest_days"],
     "back_to_back":         ["back_to_back"],
     "goalie_name":          ["goalie_name"],
@@ -484,6 +487,9 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         ),
         "line_movement": fmt_num(r("line_movement"), 3),
         "line_direction_shift": str(r("line_direction_shift") or "stable"),
+        "implied_prob": fmt_num(r("implied_prob"), 4),
+        "implied_prob_over": fmt_num(r("implied_prob_over"), 4),
+        "implied_prob_under": fmt_num(r("implied_prob_under"), 4),
         "rest_days": str(r("rest_days") or ""),
         "back_to_back": "1" if str(r("back_to_back") or "").strip() in ("1", "1.0", "true", "True") else "0",
         "goalie_name": str(r("goalie_name") or ""),
@@ -509,6 +515,9 @@ _COL_WIDTH_OVERRIDES = {
     "fetched_at": 20,
     "distribution_std": 10,
     "distribution_n": 8,
+    "implied_prob": 12,
+    "implied_prob_over": 14,
+    "implied_prob_under": 15,
 }
 
 

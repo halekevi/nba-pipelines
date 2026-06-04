@@ -158,6 +158,10 @@ _SLATE_HEADER_RENAME: dict[str, str] = {
     "Hit Prob Selected": "hit_prob_selected",
     "Hit Prob Actionable": "hit_prob_actionable",
     "Rank Read Score": "rank_read_score",
+    "Implied Prob": "implied_prob",
+    "Implied Prob Over": "implied_prob_over",
+    "Implied Prob Under": "implied_prob_under",
+    "Cross Edge": "cross_edge",
     "Data Completeness Score": "data_completeness_score",
     "Pick Type Eligible": "pick_type_eligible",
     "Standard Line": "standard_line",
@@ -236,6 +240,10 @@ READ_SLATE_EXPORT_KEYS = [
     "calibration_bucket",
     "calibration_actual_hit_rate",
     "calibration_n",
+    "implied_prob",
+    "implied_prob_over",
+    "implied_prob_under",
+    "cross_edge",
 ]
 
 _CALIBRATION_CURVES: dict[str, Any] = {}
@@ -825,6 +833,10 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         out["hit_prob_under"],
         out["hit_prob_over"],
     )
+
+    imp = _series_or_nan(out, "implied_prob")
+    hps = pd.to_numeric(out["hit_prob_selected"], errors="coerce")
+    out["cross_edge"] = np.where(imp.notna() & hps.notna(), hps - imp, np.nan)
 
     # Goblin/Demon actionable prob is OVER-only at the played line
     out["hit_prob_actionable"] = np.where(

@@ -186,6 +186,9 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "open_line": 10,
         "line_movement": 12,
         "line_direction_shift": 16,
+        "implied_prob": 12,
+        "implied_prob_over": 14,
+        "implied_prob_under": 15,
         "distribution_std": 10,
         "distribution_n": 8,
     }
@@ -275,6 +278,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "open_line",
         "line_movement",
         "line_direction_shift",
+        "implied_prob",
+        "implied_prob_over",
+        "implied_prob_under",
     ]
     keep = [c for c in keep if c in df2.columns]
     # Rolling game values (step4): required so combined slate / UI L5 Over|Under match game logs.
@@ -302,9 +308,15 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "same_series_hit_rate",
         "open_line",
         "line_movement",
+        "implied_prob",
+        "implied_prob_over",
+        "implied_prob_under",
     ]:
         if col in clean.columns:
-            rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else (3 if col == "line_movement" else 2)
+            if col in ("implied_prob", "implied_prob_over", "implied_prob_under"):
+                rnd = 4
+            else:
+                rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else (3 if col == "line_movement" else 2)
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(rnd)
     if "line_direction_shift" in clean.columns:
         clean["line_direction_shift"] = (
@@ -359,7 +371,14 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "void_reason": "Void Reason",
     }
     # Keep snake_case line-movement cols (NHL step8 / combined audit contract).
-    _lm_cols = ("open_line", "line_movement", "line_direction_shift")
+    _lm_cols = (
+        "open_line",
+        "line_movement",
+        "line_direction_shift",
+        "implied_prob",
+        "implied_prob_over",
+        "implied_prob_under",
+    )
     rename = {k: v for k, v in rename.items() if k not in _lm_cols}
     clean = clean.rename(columns=rename)
     clean = clean.where(pd.notna(clean), None)

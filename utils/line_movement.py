@@ -18,6 +18,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from utils.player_name_utils import normalize_player_name
@@ -257,14 +258,18 @@ def _merge_line_snapshot(
                 out[key] = new_row
                 continue
             movement = round(current_line - open_line, 3)
-            out[key] = {
-                "open_line": open_line,
-                "current_line": current_line,
-                "line_movement": movement,
-                "line_direction_shift": _line_direction(open_line, current_line),
-            }
+            merged = _snapshot_row_defaults(new_row)
+            merged["open_line"] = open_line
+            merged["current_line"] = current_line
+            merged["line_movement"] = movement
+            merged["line_direction_shift"] = _line_direction(open_line, current_line)
+            if merged.get("over_price") is None and isinstance(old_row, dict):
+                merged["over_price"] = old_row.get("over_price")
+            if merged.get("under_price") is None and isinstance(old_row, dict):
+                merged["under_price"] = old_row.get("under_price")
+            out[key] = merged
         else:
-            out[key] = new_row
+            out[key] = _snapshot_row_defaults(new_row)
     return out
 
 
@@ -348,11 +353,39 @@ def _american_to_prob(price: Any) -> float | None:
         p = float(price)
     except (TypeError, ValueError):
         return None
+    if p == 0:
+        return None
     if p > 0:
         return 100.0 / (p + 100.0)
     if p < 0:
         return abs(p) / (abs(p) + 100.0)
     return None
+
+
+def _american_to_implied(american: Any) -> float | None:
+    """American odds → implied probability in [0, 1]. Alias of _american_to_prob."""
+    return _american_to_prob(american)
+
+
+def _snapshot_row_defaults(row: dict[str, Any] | None) -> dict[str, Any]:
+    """Normalize cache/API snapshot rows; old caches may omit price fields."""
+    if not isinstance(row, dict):
+        return {
+            "open_line": None,
+            "current_line": None,
+            "line_movement": 0.0,
+            "line_direction_shift": "stable",
+            "over_price": None,
+            "under_price": None,
+        }
+    return {
+        "open_line": row.get("open_line"),
+        "current_line": row.get("current_line", row.get("open_line")),
+        "line_movement": row.get("line_movement", 0.0),
+        "line_direction_shift": row.get("line_direction_shift", "stable"),
+        "over_price": row.get("over_price"),
+        "under_price": row.get("under_price"),
+    }
 
 
 def fetch_game_totals(sport_key: str) -> dict[tuple[str, str], dict[str, float]]:
@@ -551,14 +584,55 @@ def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str
     """
     Build snapshot keyed by (player_lower, odds_market_key, line).
     Outcomes use description=player, point=line (per-event odds shape).
-    open_line = first priority bookmaker; current_line = last priority book with data.
+    open_line = first bookmaker seen; current_line = last (cross-book line movement).
+    over_price / under_price = American odds from the highest-priority bookmaker per event.
     """
     wanted = {m.strip() for m in markets if m.strip()}
-    # (player, market) -> list of (bm_rank, point) in encounter order
     acc: dict[tuple[str, str], list[tuple[int, float]]] = {}
+    prices: dict[tuple[str, str, float], dict[str, Any]] = {}
 
     for event in events:
-        for bm in sorted(event.get("bookmakers") or [], key=_bm_sort_key):
+        bookmakers = sorted(event.get("bookmakers") or [], key=_bm_sort_key)
+        best_bm = None
+        for bm in bookmakers:
+            if any(
+                str(m.get("key", "")).strip() in wanted for m in (bm.get("markets") or [])
+            ):
+                best_bm = bm
+                break
+
+        if best_bm is not None:
+            for market in best_bm.get("markets") or []:
+                mkey = str(market.get("key", "")).strip()
+                if mkey not in wanted:
+                    continue
+                over_at: dict[tuple[str, float], Any] = {}
+                under_at: dict[tuple[str, float], Any] = {}
+                for outcome in market.get("outcomes") or []:
+                    player_raw = outcome.get("description")
+                    if player_raw is None or not str(player_raw).strip():
+                        continue
+                    player = normalize_player_name(str(player_raw)).lower()
+                    if not player:
+                        continue
+                    try:
+                        point = round(float(outcome["point"]), 2)
+                    except (KeyError, TypeError, ValueError):
+                        continue
+                    side = str(outcome.get("name", "")).strip().lower()
+                    price = outcome.get("price")
+                    if side == "over":
+                        over_at[(player, point)] = price
+                    elif side == "under":
+                        under_at[(player, point)] = price
+                for (player, point), over_price in over_at.items():
+                    pk = (player, mkey, point)
+                    prices[pk] = {
+                        "over_price": over_price,
+                        "under_price": under_at.get((player, point)),
+                    }
+
+        for bm in bookmakers:
             rank = _bm_sort_key(bm)
             for market in bm.get("markets") or []:
                 mkey = str(market.get("key", "")).strip()
@@ -591,16 +665,30 @@ def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str
         current_line = float(points[-1])
         for line in sorted(set(points)):
             movement = round(current_line - open_line, 3)
-            snapshot[(player, mkey, line)] = {
-                "open_line": open_line,
-                "current_line": current_line,
-                "line_movement": movement,
-                "line_direction_shift": _line_direction(open_line, current_line),
-            }
+            pk = (player, mkey, line)
+            row = _snapshot_row_defaults(
+                {
+                    "open_line": open_line,
+                    "current_line": current_line,
+                    "line_movement": movement,
+                    "line_direction_shift": _line_direction(open_line, current_line),
+                }
+            )
+            pr = prices.get(pk)
+            if pr:
+                row["over_price"] = pr.get("over_price")
+                row["under_price"] = pr.get("under_price")
+            snapshot[pk] = row
     return snapshot
 
 
-def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, str, float], dict[str, Any]]:
+def fetch_line_snapshot(
+    sport_key: str,
+    markets: list[str],
+    *,
+    force_refresh: bool = False,
+    date: str | None = None,
+) -> dict[tuple[str, str, float], dict[str, Any]]:
     """
     Fetch (or load cached) line movement snapshot for events in the next 48h (UTC).
 
@@ -608,15 +696,18 @@ def fetch_line_snapshot(sport_key: str, markets: list[str]) -> dict[tuple[str, s
     Empty dict if API key missing, quota/error, or no data.
     """
     api_key = _odds_api_key()
-    today = date.today().isoformat()
+    today = (str(date or "").strip()[:10] or date.today().isoformat())
     if not api_key:
         _log.info("line_movement: ODDS_API_KEY missing — skipping fetch")
         return {}
 
-    cached = _load_cache(sport_key, today)
-    if cached is not None:
-        _log.info("line_movement: using cache %s", _cache_path(sport_key, today))
-        return cached
+    if not force_refresh:
+        cached = _load_cache(sport_key, today)
+        if cached is not None:
+            _log.info("line_movement: using cache %s", _cache_path(sport_key, today))
+            return {
+                k: _snapshot_row_defaults(v) for k, v in cached.items()
+            }
 
     try:
         events = _fetch_events(sport_key, api_key)
@@ -741,31 +832,54 @@ def _current_line_value(row: pd.Series, line_col: str | None) -> float | None:
 
 
 def print_line_movement_wire_stats(df: pd.DataFrame, sport: str) -> None:
-    """Log open_line / line_movement fill rates for pipeline validation."""
+    """Log open_line / line_movement / implied_prob fill rates for pipeline validation."""
     total = len(df)
     if total == 0:
-        print(f"[LM-WIRE] {sport}: open_line=0/0, line_movement=0/0, line_direction_shift=0/0")
+        print(
+            f"[LM-WIRE] {sport}: open_line=0/0, line_movement=0/0, "
+            f"line_direction_shift=0/0, implied_prob=0/0"
+        )
         return
     ol = int(pd.to_numeric(df.get("open_line"), errors="coerce").notna().sum()) if "open_line" in df.columns else 0
     lm = int(pd.to_numeric(df.get("line_movement"), errors="coerce").notna().sum()) if "line_movement" in df.columns else 0
     lds = int(df.get("line_direction_shift", pd.Series(dtype=object)).notna().sum()) if "line_direction_shift" in df.columns else 0
+    ip = int(pd.to_numeric(df.get("implied_prob"), errors="coerce").notna().sum()) if "implied_prob" in df.columns else 0
     print(
         f"[LM-WIRE] {sport}: open_line={ol}/{total}, "
-        f"line_movement={lm}/{total}, line_direction_shift={lds}/{total}"
+        f"line_movement={lm}/{total}, line_direction_shift={lds}/{total}, "
+        f"implied_prob={ip}/{total}"
     )
+
+
+def _row_bet_direction(row: pd.Series) -> str:
+    for col in ("final_bet_direction", "bet_direction", "direction", "Direction"):
+        if col not in row.index:
+            continue
+        d = str(row.get(col, "") or "").strip().upper()
+        if d in ("UNDER", "LOWER"):
+            return "UNDER"
+        if d in ("OVER", "HIGHER"):
+            return "OVER"
+    return "OVER"
 
 
 def enrich_with_line_movement(
     df: pd.DataFrame,
     sport_key: str,
     markets: list[str],
+    *,
+    force_refresh: bool = False,
+    date: str | None = None,
 ) -> pd.DataFrame:
     """
-    Left-join open_line, line_movement, line_direction_shift onto df.
-    Unmatched rows: open_line falls back to current line; movement=0.0; direction='stable'.
+    Left-join open_line, line_movement, line_direction_shift, and market implied_prob onto df.
+    Unmatched rows: open_line falls back to current line; movement=0.0; direction='stable';
+    implied_prob columns are NaN when no book match.
     """
     out = df.copy()
-    snapshot = fetch_line_snapshot(sport_key, markets)
+    snapshot = fetch_line_snapshot(
+        sport_key, markets, force_refresh=force_refresh, date=date
+    )
 
     player_col = next(
         (c for c in ("player_name", "player", "Player") if c in out.columns),
@@ -783,12 +897,18 @@ def enrich_with_line_movement(
     open_lines: list[Any] = []
     movements: list[float] = []
     directions: list[str] = []
+    implied_over: list[float | None] = []
+    implied_under: list[float | None] = []
+    implied_sel: list[float | None] = []
 
     for _, row in out.iterrows():
         if not player_col or not prop_col or not line_col:
             open_lines.append(None)
             movements.append(0.0)
             directions.append("stable")
+            implied_over.append(np.nan)
+            implied_under.append(np.nan)
+            implied_sel.append(np.nan)
             continue
 
         odds_market = _pipeline_prop_to_odds_market(str(row.get(prop_col, "")), sport_key)
@@ -800,16 +920,34 @@ def enrich_with_line_movement(
         )
         cur_line = _current_line_value(row, line_col)
         if hit:
+            hit = _snapshot_row_defaults(hit)
             ol = hit.get("open_line")
             open_lines.append(ol if ol is not None else cur_line)
             movements.append(float(hit.get("line_movement", 0.0) or 0.0))
             directions.append(str(hit.get("line_direction_shift") or "stable"))
+            ip_o = _american_to_implied(hit.get("over_price"))
+            ip_u = _american_to_implied(hit.get("under_price"))
         else:
             open_lines.append(cur_line)
             movements.append(0.0)
             directions.append("stable")
+            ip_o = None
+            ip_u = None
+
+        implied_over.append(ip_o if ip_o is not None else np.nan)
+        implied_under.append(ip_u if ip_u is not None else np.nan)
+        side = _row_bet_direction(row)
+        if side == "UNDER" and ip_u is not None:
+            implied_sel.append(ip_u)
+        elif ip_o is not None:
+            implied_sel.append(ip_o)
+        else:
+            implied_sel.append(ip_u if ip_u is not None else np.nan)
 
     out["open_line"] = open_lines
     out["line_movement"] = movements
     out["line_direction_shift"] = directions
+    out["implied_prob_over"] = implied_over
+    out["implied_prob_under"] = implied_under
+    out["implied_prob"] = implied_sel
     return out
