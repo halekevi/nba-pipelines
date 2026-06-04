@@ -7424,6 +7424,11 @@ def load_nhl(path: str) -> pd.DataFrame:
         "game_start":         "game_time",
         "Fetched At":         "fetched_at",
         "fetched_at":         "fetched_at",
+        "B2B":              "b2b_flag",
+        "Opp B2B":          "opp_b2b_flag",
+        "back_to_back":     "b2b_flag",
+        "is_back_to_back":  "b2b_flag",
+        "opp_b2b":          "opp_b2b_flag",
     })
     # Deduplicate columns immediately after rename — multiple source cols may map to same target
     df = df.loc[:, ~df.columns.duplicated()].copy()
@@ -7715,6 +7720,12 @@ def _load_step8_board_like(
         "Implied Prob Over": "implied_prob_over",
         "implied_prob_under": "implied_prob_under",
         "Implied Prob Under": "implied_prob_under",
+        "B2B":              "b2b_flag",
+        "Opp B2B":          "opp_b2b_flag",
+        "is_back_to_back":  "b2b_flag",
+        "back_to_back":     "b2b_flag",
+        "b2b_flag":         "b2b_flag",
+        "opp_b2b":          "opp_b2b_flag",
     })
 
     if "opp" not in df.columns:
@@ -8345,6 +8356,11 @@ def load_mlb(path: str) -> pd.DataFrame:
         "Implied Prob Over": "implied_prob_over",
         "implied_prob_under": "implied_prob_under",
         "Implied Prob Under": "implied_prob_under",
+        "B2B":              "b2b_flag",
+        "Opp B2B":          "opp_b2b_flag",
+        "is_back_to_back":  "b2b_flag",
+        "back_to_back":     "b2b_flag",
+        "opp_b2b":          "opp_b2b_flag",
     })
 
     if "opp" not in df.columns:
@@ -8932,6 +8948,8 @@ def build_combined_slate(
         "min_tier",
         "shot_role",
         "usage_role",
+        "b2b_flag",
+        "opp_b2b_flag",
         "nba_player_id",
         "espn_player_id",
         "league",
