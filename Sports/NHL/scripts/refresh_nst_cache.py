@@ -7,6 +7,8 @@ import argparse
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 _SCRIPTS = Path(__file__).resolve().parent
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
@@ -19,6 +21,23 @@ from nst_client import (
     refresh_line_cache,
     refresh_player_pp_cache,
 )
+
+
+def slate_teams_from_board(csv_path: str | Path) -> list[str]:
+    """Unique NHL tricodes on the board (team, opponent, home/away)."""
+    path = Path(csv_path)
+    if not path.is_file():
+        return []
+    df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+    teams: set[str] = set()
+    for col in ("team", "opponent", "home_team", "away_team"):
+        if col not in df.columns:
+            continue
+        for raw in df[col].dropna().astype(str):
+            t = str(raw).strip().upper()
+            if t and t not in ("NAN", "NONE", "NULL") and len(t) <= 4:
+                teams.add(t)
+    return sorted(teams)
 
 
 def _resolve_season_id(raw: str) -> int:
@@ -70,6 +89,12 @@ def main() -> None:
         action="store_true",
         help="Skip linestats.php; refresh defensive pairs via pairings.php only",
     )
+    ap.add_argument(
+        "--slate-input",
+        default="",
+        metavar="PATH",
+        help="Step4 board CSV; derive --team list from slate when --team omitted",
+    )
     args = ap.parse_args()
 
     season_id = _resolve_season_id(args.season)
@@ -96,7 +121,13 @@ def main() -> None:
         if not use_cdp and not nst_key():
             print("❌ NST_ACCESS_KEY not set. Request a key at naturalstattrick.com → profile.")
             sys.exit(1)
-        teams = args.team if args.team else ["all"]
+        teams = list(args.team) if args.team else []
+        if not teams and str(args.slate_input).strip():
+            teams = slate_teams_from_board(str(args.slate_input).strip())
+            if teams:
+                print(f"[NST] Slate teams from board: {teams}")
+        if not teams:
+            teams = ["all"]
         lines = refresh_line_cache(
             season_id,
             teams=teams,
@@ -106,8 +137,9 @@ def main() -> None:
             pairs_only=args.pairs_only,
         )
         print(f"✅ NST line combos: {len(lines)} rows cached")
-        pp = refresh_player_pp_cache(season_id, teams=teams)
-        print(f"✅ NST player PP table: {len(pp)} rows cached")
+        if not args.skip_pp and not args.pairs_only:
+            pp = refresh_player_pp_cache(season_id, teams=teams)
+            print(f"✅ NST player PP table: {len(pp)} rows cached")
 
 
 if __name__ == "__main__":

@@ -110,8 +110,15 @@ PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 EMPTY_COLS = [
     "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
     "player", "player_name", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
-    "prop_type", "line", "line_score", "standard_line", "pick_type", "sport",
+    "prop_type", "line", "line_score", "standard_line", "pick_type", "sport", "fetched_at",
 ]
+
+
+def _stamp_fetched_at(df: pd.DataFrame) -> pd.DataFrame:
+    """UTC fetch timestamp for data-freshness passthrough (step5→step8)."""
+    out = df.copy()
+    out["fetched_at"] = datetime.now(ZoneInfo(DEFAULT_TZ)).isoformat()
+    return out
 
 PROFILE_DIR = Path.home() / ".pp_browser_profile"
 SNAPSHOT_DIR = Path(__file__).resolve().parents[1] / "outputs" / "step1_snapshots"
@@ -993,6 +1000,7 @@ def main():
         print(f"\n[INFO] Saved empty date-filtered MLB step1 CSV -> {out_path}")
         sys.exit(0)
 
+    df = _stamp_fetched_at(df)
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
     try:
         if str(_PROPORACLE_ROOT) not in sys.path:

@@ -626,9 +626,48 @@ function Copy-DatedSlateOutput {
     }
 }
 
-# -- NHL step4b NST/PP context (non-fatal; step5 runs on unenriched step4 if this fails) ---
+# -- NHL step4b-pre: slate D-pairs (pairings.php) then step4b attach --
 # To import manual NST line export (Option B — no live fetch / Cloudflare):
 #   py Sports/NHL/scripts/refresh_nst_cache.py --import-csv path\to\export.csv --sit 5v5 --team VGK
+function Invoke-NHLDpairsRefresh {
+    param(
+        [string]$RepoRoot,
+        [string]$Step4Path,
+        [string]$SeasonId = "20252026"
+    )
+    if (-not $env:NST_ACCESS_KEY) {
+        Write-Host "[NHL] step4b-pre D-pairs: SKIP (NST_ACCESS_KEY not set)" -ForegroundColor Yellow
+        return
+    }
+    if (-not (Test-Path -LiteralPath $Step4Path)) {
+        Write-Host "[NHL] step4b-pre D-pairs: SKIP (no step4 at $Step4Path)" -ForegroundColor Yellow
+        return
+    }
+    $refresh = Join-Path $RepoRoot "Sports\NHL\scripts\refresh_nst_cache.py"
+    if (-not (Test-Path -LiteralPath $refresh)) {
+        Write-Host "[NHL] step4b-pre D-pairs: WARN (missing refresh_nst_cache.py)" -ForegroundColor Yellow
+        return
+    }
+    Push-Location $RepoRoot
+    try {
+        Write-Host "  --> NHL Step 4b-pre - NST D-pairs (slate teams)" -ForegroundColor Yellow
+        $cmd = "py -3.14 `"$refresh`" --season $SeasonId --refresh-nst --pairs-only --skip-pp --slate-input `"$Step4Path`""
+        Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
+        $output = Invoke-Expression $cmd 2>&1
+        $exit = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "[NHL] step4b-pre D-pairs: WARN (exit $exit) — continuing with stale cache" -ForegroundColor Yellow
+        } else {
+            Write-Host "[NHL] step4b-pre D-pairs: OK" -ForegroundColor Green
+        }
+    } catch {
+        Write-Host "[NHL] step4b-pre D-pairs: WARN ($($_.Exception.Message))" -ForegroundColor Yellow
+    } finally {
+        Pop-Location
+    }
+}
+
 function Invoke-NHLStep4b {
     param(
         [string]$NHLDir,
@@ -1115,6 +1154,7 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { Invoke-NHLDpairsRefresh $Root "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { Invoke-NHLStep4b $NHLDir "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
@@ -1843,6 +1883,32 @@ $NHLJob = Start-Job -ScriptBlock {
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    function Invoke-NHLDpairsRefresh-Job {
+        param([string]$Step4Path)
+        if (-not $env:NST_ACCESS_KEY) {
+            Write-Output "[NHL] step4b-pre D-pairs: SKIP (NST_ACCESS_KEY not set)"
+            return
+        }
+        if (-not (Test-Path -LiteralPath $Step4Path)) {
+            Write-Output "[NHL] step4b-pre D-pairs: SKIP (no step4 at $Step4Path)"
+            return
+        }
+        $refresh = Join-Path $RepoRoot "Sports\NHL\scripts\refresh_nst_cache.py"
+        if (-not (Test-Path -LiteralPath $refresh)) {
+            Write-Output "[NHL] step4b-pre D-pairs: WARN (missing refresh_nst_cache.py)"
+            return
+        }
+        Push-Location $RepoRoot
+        try {
+            $cmd = "py -3.14 `"$refresh`" --season 20252026 --refresh-nst --pairs-only --skip-pp --slate-input `"$Step4Path`""
+            Write-Output "[NHL] --> NHL Step 4b-pre - NST D-pairs (slate teams)"
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[NHL] step4b-pre D-pairs: WARN (exit $exit)" } else { Write-Output "[NHL] step4b-pre D-pairs: OK" }
+        } catch { Write-Output "[NHL] step4b-pre D-pairs: WARN ($($_.Exception.Message))" }
+        finally { Pop-Location }
+    }
     function Invoke-NHLStep4b-Job {
         param([string]$Step4Path)
         Push-Location $NHLDir
@@ -1867,6 +1933,7 @@ $NHLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { Invoke-NHLDpairsRefresh-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { Invoke-NHLStep4b-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }

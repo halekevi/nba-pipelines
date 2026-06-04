@@ -25,6 +25,7 @@ import re
 import time
 import random
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Set
 from zoneinfo import ZoneInfo
@@ -662,6 +663,13 @@ def _wnba_start_time_to_et_date_str(ser: pd.Series) -> pd.Series:
     return et.dt.strftime("%Y-%m-%d").fillna("").astype(str)
 
 
+def _stamp_fetched_at(df: pd.DataFrame) -> pd.DataFrame:
+    """ET fetch timestamp for data-freshness passthrough (step5→step8)."""
+    out = df.copy()
+    out["fetched_at"] = datetime.now(_ET).isoformat()
+    return out
+
+
 def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
     """Filter to --date (ET) unless --allow-nearest-future or --no-slate-filter."""
     if df is None or df.empty:
@@ -905,6 +913,7 @@ def main():
         empty_cols = [
             "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
             "player", "pos", "team", "opp_team", "prop_type", "line", "pick_type", "game_date",
+            "fetched_at",
         ]
         pd.DataFrame(columns=empty_cols).to_csv(out_path, index=False, encoding="utf-8-sig")
         sys.exit(0)
@@ -919,6 +928,7 @@ def main():
         )
         sys.exit(1)
 
+    df = _stamp_fetched_at(df)
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
     try:
         _root = Path(__file__).resolve().parents[2]

@@ -807,32 +807,33 @@ if (-not $SkipPipeline) {
             Preserve-ExistingFile -Path $pt -Reason "pre-STEP C pipeline snapshot"
         }
     }
-    $nstKey = $env:NST_ACCESS_KEY
-    if ($nstKey) {
-        Write-Host "[NHL] Refreshing NST cache..." -ForegroundColor Cyan
-        Write-Log "[NHL] NST cache refresh: START"
+    # NHL PP skater cache (API). D-pair refresh (pairings.php, slate teams) runs in run_pipeline.ps1
+    # as NHL Step 4b-pre after step4 and before step4b — requires step4 board for --slate-input.
+    if ($env:NST_ACCESS_KEY) {
+        Write-Host "[NHL] Refreshing NHL PP skater cache (NST D-pairs run in pipeline step 4b-pre)..." -ForegroundColor Cyan
+        Write-Log "[NHL] NHL PP cache refresh: START"
         Push-Location $Root
         try {
-            & py -3.14 Sports\NHL\scripts\refresh_nst_cache.py --season 20252026 --refresh-nst
+            & py -3.14 Sports\NHL\scripts\refresh_nst_cache.py --season 20252026 --refresh-pp
             if ($LASTEXITCODE -ne 0) {
-                Write-Host "[NHL] WARN: NST cache refresh failed (exit $LASTEXITCODE) — continuing with stale cache" -ForegroundColor Yellow
-                Write-Log "[NHL] NST cache refresh: WARN (exit $LASTEXITCODE)"
+                Write-Host "[NHL] WARN: NHL PP cache refresh failed (exit $LASTEXITCODE)" -ForegroundColor Yellow
+                Write-Log "[NHL] NHL PP cache refresh: WARN (exit $LASTEXITCODE)"
             }
             else {
-                Write-Log "[NHL] NST cache refresh: OK"
+                Write-Log "[NHL] NHL PP cache refresh: OK"
             }
         }
         catch {
-            Write-Host "[NHL] WARN: NST cache refresh failed — continuing with stale cache" -ForegroundColor Yellow
-            Write-Log "[NHL] NST cache refresh: WARN ($($_.Exception.Message))"
+            Write-Host "[NHL] WARN: NHL PP cache refresh failed" -ForegroundColor Yellow
+            Write-Log "[NHL] NHL PP cache refresh: WARN ($($_.Exception.Message))"
         }
         finally {
             Pop-Location
         }
     }
     else {
-        Write-Host "[NHL] WARN: NST_ACCESS_KEY not set — skipping NST refresh" -ForegroundColor Yellow
-        Write-Log "[NHL] NST cache refresh: SKIP (NST_ACCESS_KEY not set)"
+        Write-Host "[NHL] WARN: NST_ACCESS_KEY not set — skipping NHL PP cache refresh" -ForegroundColor Yellow
+        Write-Log "[NHL] NHL PP cache refresh: SKIP (NST_ACCESS_KEY not set)"
     }
 
     Write-Log "STEP C - Pipeline ($Today): START"

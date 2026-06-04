@@ -7389,6 +7389,8 @@ def load_nhl(path: str) -> pd.DataFrame:
         "Line Combo":         "line_combo",
         "line_combo":         "line_combo",
         "game_start":         "game_time",
+        "Fetched At":         "fetched_at",
+        "fetched_at":         "fetched_at",
     })
     # Deduplicate columns immediately after rename — multiple source cols may map to same target
     df = df.loc[:, ~df.columns.duplicated()].copy()
@@ -7650,6 +7652,8 @@ def _load_step8_board_like(
         "prop_score":         "rank_score",
         "game_start":         "game_time",
         "start_time":         "game_time",
+        "Fetched At":         "fetched_at",
+        "fetched_at":         "fetched_at",
         "opponent":           "opp",
         "opp_team":           "opp",
         "pos":                "pos",
@@ -8848,6 +8852,7 @@ def build_combined_slate(
         "opp_ap_rank",
         "ncaa_rank",
         "game_time",
+        "fetched_at",
         "game_date",
         "prop_type",
         "pick_type",
@@ -10883,6 +10888,7 @@ FULL_SLATE_EXTRA_HDRS = {
     "best_cross_book": "Best Book",
     "cross_edge_vs_pp": "Edge vs PP",
     "cross_n_books": "#Books",
+    "fetched_at": "fetched_at",
 }
 FULL_SLATE_EXTRA_WIDTHS = {
     "pace_tier": 10,
@@ -10912,6 +10918,7 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "G8": 6,
     "G9": 6,
     "G10": 6,
+    "fetched_at": 20,
 }
 
 FULL_SLATE_COLS = [
@@ -10937,6 +10944,7 @@ FULL_SLATE_COLS = [
     "team",
     "opp",
     "game_time",
+    "fetched_at",
     "team_seed",
     "team_region",
     "team_ap_rank",

@@ -182,6 +182,7 @@ COLUMN_ALIASES = {
     "toi_avg_L10":      ["toi_avg_L10"],
     "toi_per_game_api": ["toi_per_game_api"],
     "game_start":       ["game_start", "start_time", "Game Time"],
+    "fetched_at":       ["fetched_at"],
     "game_script_mult": ["game_script_mult"],
     "game_script_note": ["game_script_note"],
     "open_line":            ["open_line"],
@@ -428,6 +429,7 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "game_date":        game_date_et,
         "Game Time":        game_time_et or (str(gs_raw) if gs_raw not in (None, "") else r("game_start")),
         "game_start":       (str(gs_raw) if gs_raw not in (None, "") else r("game_start")),
+        "fetched_at":       str(r("fetched_at") or ""),
         "game_script_mult": (
             fmt_num(raw.get("game_script_mult"), 3)
             if raw.get("game_script_mult") not in (None, "")
@@ -462,6 +464,7 @@ TIER_FILL = {
 }
 HEADER_FILL = "1F4E79"
 HEADER_FONT = "FFFFFF"
+_COL_WIDTH_OVERRIDES = {"fetched_at": 20}
 
 
 def write_csv(rows: list[dict], path: str):
@@ -497,7 +500,9 @@ def _write_sheet(ws, rows: list[dict], headers: list[str]):
         for row_data in rows[:500]:
             v = row_data.get(h, "")
             max_len = max(max_len, len(str(v)) if v is not None else 0)
-        ws.column_dimensions[get_column_letter(col_idx)].width = min(40, max(10, max_len + 2))
+        ws.column_dimensions[get_column_letter(col_idx)].width = _COL_WIDTH_OVERRIDES.get(
+            h, min(40, max(10, max_len + 2))
+        )
 
 
 def write_xlsx(rows: list[dict], path: str):
