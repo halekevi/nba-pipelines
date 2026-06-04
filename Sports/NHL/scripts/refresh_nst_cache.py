@@ -35,7 +35,12 @@ def main() -> None:
     ap.add_argument("--season", default="", help="SeasonId (20252026) or start year (2025)")
     ap.add_argument("--refresh-pp", action="store_true", help="Refresh NHL API PP skater cache")
     ap.add_argument("--refresh-nst", action="store_true", help="Refresh NST line + player PP tables")
-    ap.add_argument("--team", default="all", help="NST team filter (default all)")
+    ap.add_argument(
+        "--team",
+        action="append",
+        default=None,
+        help="NST team filter (repeat for multiple: --team CAR --team VGK; default all)",
+    )
     ap.add_argument(
         "--import-csv",
         metavar="PATH",
@@ -59,6 +64,11 @@ def main() -> None:
         "--cdp-only",
         action="store_true",
         help="Skip requests path entirely, use CDP only",
+    )
+    ap.add_argument(
+        "--pairs-only",
+        action="store_true",
+        help="Skip linestats.php; refresh defensive pairs via pairings.php only",
     )
     args = ap.parse_args()
 
@@ -86,13 +96,14 @@ def main() -> None:
         if not use_cdp and not nst_key():
             print("❌ NST_ACCESS_KEY not set. Request a key at naturalstattrick.com → profile.")
             sys.exit(1)
-        teams = [args.team] if args.team else ["all"]
+        teams = args.team if args.team else ["all"]
         lines = refresh_line_cache(
             season_id,
             teams=teams,
             prefer_browser=use_cdp,
             cdp_url=cdp_url,
             cdp_only=args.cdp_only,
+            pairs_only=args.pairs_only,
         )
         print(f"✅ NST line combos: {len(lines)} rows cached")
         pp = refresh_player_pp_cache(season_id, teams=teams)

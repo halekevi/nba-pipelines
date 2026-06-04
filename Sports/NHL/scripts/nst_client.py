@@ -82,6 +82,26 @@ def _playerteams_params(
     }
 
 
+def _pairings_params(
+    season_id: int,
+    *,
+    sit: str,
+    team: str,
+) -> dict:
+    """Query params for NST pairings.php (defensive pairs table)."""
+    return {
+        **_season_block(season_id),
+        "sit": sit,
+        "score": "all",
+        "rate": "n",
+        "team": _nst_team(team),
+        "vteam": "ALL",
+        "loc": "B",
+        "gpfilt": "none",
+        "tgp": "410",
+    }
+
+
 def _linestats_params(
     season_id: int,
     *,
@@ -381,7 +401,11 @@ def fetch_line_combos(
         html, df = browser_fetch_line_html(params, cdp_url=cdp_url)
 
     if df is None and (not html or "<table" not in (html or "").lower()):
-        log.warning("[NST] no table HTML from either path — returning empty")
+        log.warning(
+            "[NST] linestats.php returned no table for %s %s — forward lines unavailable",
+            _nst_team(team),
+            sit,
+        )
         return pd.DataFrame()
 
     if df is None:
@@ -398,7 +422,61 @@ def fetch_line_combos(
     df.columns = [str(c).strip() for c in df.columns]
     df["season_id"] = season_id
     df["sit"] = sit
+    df["line_sit"] = sit
     df["team_filter"] = _nst_team(team)
+    df["source"] = "linestats"
+    df["fetched_at"] = datetime.now(timezone.utc).isoformat()
+    return df
+
+
+def fetch_defense_pairs(
+    season_id: int,
+    team: str = "all",
+    sit: str = "5v5",
+    prefer_browser: bool = False,
+    cdp_url: str = "http://127.0.0.1:9222",
+    cdp_only: bool = False,
+) -> pd.DataFrame:
+    """
+    Defensive pair stats from pairings.php (Player - Player 2 → Line).
+    sit: 5v5 | pp | etc.
+    """
+    path = "pairings.php"
+    params = _pairings_params(season_id, sit=sit, team=team)
+    label = f"pairings {sit}"
+    html: Optional[str] = None
+
+    if prefer_browser:
+        html = browser_fetch_html(path, params, cdp_url=cdp_url)
+    elif not cdp_only:
+        html = fetch_html(path, params)
+
+    if (not html or "<table" not in (html or "").lower()) and not prefer_browser:
+        log.info("[NST] pairings requests fetch returned no table — trying CDP fallback")
+        html = browser_fetch_html(path, params, cdp_url=cdp_url)
+
+    if not html or "<table" not in html.lower():
+        log.warning(
+            "[NST] pairings.php returned no table for %s %s",
+            _nst_team(team),
+            sit,
+        )
+        return pd.DataFrame()
+
+    tables = parse_tables(html, label=label)
+    if not tables:
+        return pd.DataFrame()
+    df = _normalize_line_combo_df(tables[0].copy())
+    if df.empty:
+        log.warning("[NST] pairings parsed 0 dash-pair rows for %s %s", _nst_team(team), sit)
+        return pd.DataFrame()
+
+    df.columns = [str(c).strip() for c in df.columns]
+    df["season_id"] = season_id
+    df["sit"] = sit
+    df["line_sit"] = sit
+    df["team_filter"] = _nst_team(team)
+    df["source"] = "pairings"
     df["fetched_at"] = datetime.now(timezone.utc).isoformat()
     return df
 
@@ -529,7 +607,9 @@ def import_line_csv(
     team_norm = _nst_team(team_filter)
     df["season_id"] = int(season_id)
     df["sit"] = str(sit).strip()
+    df["line_sit"] = str(sit).strip()
     df["team_filter"] = team_norm
+    df["source"] = "import"
     df["fetched_at"] = datetime.now(timezone.utc).isoformat()
 
     old = load_cache(LINE_CACHE)
@@ -546,7 +626,7 @@ def import_line_csv(
     else:
         combined = df
 
-    key_cols = ["season_id", "sit", "team_filter", "Line"]
+    key_cols = ["season_id", "sit", "team_filter", "Line", "source"]
     subset = [c for c in key_cols if c in combined.columns]
     if subset:
         combined = combined.drop_duplicates(subset=subset, keep="last")
@@ -564,12 +644,24 @@ def refresh_line_cache(
     prefer_browser: bool = False,
     cdp_url: str = "http://127.0.0.1:9222",
     cdp_only: bool = False,
+    pairs_only: bool = False,
 ) -> pd.DataFrame:
     teams = teams or ["all"]
     parts: list[pd.DataFrame] = []
     for team in teams:
         for sit in ("5v5", "pp"):
-            df = fetch_line_combos(
+            if not pairs_only:
+                df = fetch_line_combos(
+                    season_id,
+                    team=team,
+                    sit=sit,
+                    prefer_browser=prefer_browser,
+                    cdp_url=cdp_url,
+                    cdp_only=cdp_only,
+                )
+                if not df.empty:
+                    parts.append(df)
+            pairs = fetch_defense_pairs(
                 season_id,
                 team=team,
                 sit=sit,
@@ -577,21 +669,21 @@ def refresh_line_cache(
                 cdp_url=cdp_url,
                 cdp_only=cdp_only,
             )
-            if not df.empty:
-                parts.append(df)
+            if not pairs.empty:
+                parts.append(pairs)
     if not parts:
         cached = load_cache(LINE_CACHE)
         if cached.empty:
             log.warning(
-                "NST line combos: 0 rows (linestats.php returned no table HTML — "
-                "PP cache may still refresh via playerteams.php)"
+                "NST line combos: 0 rows (linestats forward lines unavailable; "
+                "pairings.php may need NST_ACCESS_KEY)"
             )
         return cached
     fresh = pd.concat(parts, ignore_index=True)
     return _append_cache(
         LINE_CACHE,
         fresh,
-        key_cols=["season_id", "sit", "team_filter", "Line"],
+        key_cols=["season_id", "sit", "team_filter", "Line", "source"],
     )
 
 
