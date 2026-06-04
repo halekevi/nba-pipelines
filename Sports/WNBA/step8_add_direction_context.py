@@ -131,7 +131,7 @@ def write_sheet(wb, name, data):
                 bg = 'C8F7C5' if val == 'OVER' else 'F7C5C5' if val == 'UNDER' else 'FFFFFF'
                 cell.fill = PatternFill('solid', start_color=bg)
                 cell.font = Font(bold=True, name='Arial', size=9)
-            elif col_name == 'Line Shift':
+            elif col_name in ('Line Shift', 'line_direction_shift'):
                 cell.fill = PatternFill('solid', start_color=_line_shift_fill(display_val))
             else:
                 cell.fill = PatternFill('solid', start_color='F9F9F9' if ri % 2 == 0 else 'FFFFFF')
@@ -151,6 +151,7 @@ def write_sheet(wb, name, data):
         'G6': 6, 'G7': 6, 'G8': 6, 'G9': 6, 'G10': 6,
         'Void Reason': 20,
         'Open Line': 8, 'Line Movement': 12, 'Line Shift': 10,
+        'open_line': 10, 'line_movement': 12, 'line_direction_shift': 16,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -238,6 +239,11 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         if col in clean.columns:
             rnd = 2 if col == 'open_line' else 3
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
+    if 'line_direction_shift' in clean.columns:
+        clean['line_direction_shift'] = (
+            clean['line_direction_shift'].astype(str).str.strip().replace({'nan': '', 'None': ''})
+        )
+        clean.loc[clean['line_direction_shift'].eq(''), 'line_direction_shift'] = 'stable'
     for col in ['stat_last5_avg', 'stat_season_avg', 'stat_last10_avg']:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(1)
@@ -285,10 +291,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'OVERALL_DEF_RANK': 'Def Rank', 'DEF_TIER': 'Def Tier',
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
         'void_reason': 'Void Reason',
-        'open_line': 'Open Line',
-        'line_movement': 'Line Movement',
-        'line_direction_shift': 'Line Shift',
     }
+    _lm_cols = ('open_line', 'line_movement', 'line_direction_shift')
+    rename = {k: v for k, v in rename.items() if k not in _lm_cols}
     clean = clean.rename(columns=rename)
 
     wb = Workbook()

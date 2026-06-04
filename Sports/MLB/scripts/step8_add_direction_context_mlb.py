@@ -9,6 +9,9 @@ Run:
   py -3.14 step8_add_direction_context_mlb.py \
     --input step7_mlb_ranked.xlsx \
     --output step8_mlb_direction.csv
+
+Writes step8_mlb_direction.csv (full columns, incl. final_dir_reason / direction_override)
+and step8_mlb_direction_clean.xlsx (tickets/UI — Direction only). Fade audit: use the CSV.
 """
 
 from __future__ import annotations
@@ -159,7 +162,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
             elif col_name == "Player Type":
                 bg = "FFE8E8" if str(display_val).lower() == "pitcher" else "E8F4FF"
                 cell.fill = PatternFill("solid", start_color=bg)
-            elif col_name == "Line Shift":
+            elif col_name in ("Line Shift", "line_direction_shift"):
                 cell.fill = PatternFill("solid", start_color=_line_shift_fill(display_val))
             else:
                 cell.fill = PatternFill("solid", start_color="F9F9F9" if ri % 2 == 0 else "FFFFFF")
@@ -180,6 +183,9 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "Open Line": 8,
         "Line Movement": 12,
         "Line Shift": 10,
+        "open_line": 10,
+        "line_movement": 12,
+        "line_direction_shift": 16,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -255,6 +261,11 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         if col in clean.columns:
             rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else (3 if col == "line_movement" else 2)
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(rnd)
+    if "line_direction_shift" in clean.columns:
+        clean["line_direction_shift"] = (
+            clean["line_direction_shift"].astype(str).str.strip().replace({"nan": "", "None": ""})
+        )
+        clean.loc[clean["line_direction_shift"].eq(""), "line_direction_shift"] = "stable"
     for col in ["stat_last5_avg", "stat_season_avg"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(1)
@@ -297,10 +308,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "pitcher_role": "Pitcher Role",
         "same_series_hit_rate": "Series HR",
         "void_reason": "Void Reason",
-        "open_line": "Open Line",
-        "line_movement": "Line Movement",
-        "line_direction_shift": "Line Shift",
     }
+    # Keep snake_case line-movement cols (NHL step8 / combined audit contract).
+    _lm_cols = ("open_line", "line_movement", "line_direction_shift")
+    rename = {k: v for k, v in rename.items() if k not in _lm_cols}
     clean = clean.rename(columns=rename)
     clean = clean.where(pd.notna(clean), None)
 
