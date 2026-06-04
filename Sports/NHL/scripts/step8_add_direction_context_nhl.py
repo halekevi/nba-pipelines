@@ -264,6 +264,47 @@ def get_last_n_raw(raw: dict, available_cols: set, n: int) -> str:
     return ""
 
 
+MISSING_SENTINELS = {"—", "-", "", "nan", "none", "null"}
+
+
+def _parse_g_vals(row, prefix: str = "stat_g", n: int = 10) -> list[float]:
+    vals: list[float] = []
+    for i in range(1, n + 1):
+        col = f"{prefix}{i}"
+        if isinstance(row, pd.Series):
+            raw_val = row.get(col, "")
+        else:
+            raw_val = row.get(col, "")
+        raw = str(raw_val if raw_val is not None else "").strip()
+        if raw.lower() in MISSING_SENTINELS:
+            continue
+        try:
+            vals.append(float(raw))
+        except ValueError:
+            continue
+    return vals
+
+
+def _attach_distribution_std(df: pd.DataFrame, *, g_prefix: str = "stat_g") -> pd.DataFrame:
+    """Sample std (ddof=1) of G1..10 / stat_g1..10 for pipeline_read distribution_std."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    dist_n: list[int | None] = []
+    dist_std: list[float | None] = []
+    for _, row in out.iterrows():
+        g_vals = _parse_g_vals(row, prefix=g_prefix)
+        n = len(g_vals)
+        dist_n.append(n)
+        if n >= 2:
+            dist_std.append(round(float(pd.Series(g_vals).std(ddof=1)), 4))
+        else:
+            dist_std.append(None)
+    out["distribution_n"] = dist_n
+    out["distribution_std"] = dist_std
+    return out
+
+
 # ── Build display row ─────────────────────────────────────────────────────────
 
 def build_display_row(raw: dict, available_cols: set) -> dict:
@@ -464,7 +505,11 @@ TIER_FILL = {
 }
 HEADER_FILL = "1F4E79"
 HEADER_FONT = "FFFFFF"
-_COL_WIDTH_OVERRIDES = {"fetched_at": 20}
+_COL_WIDTH_OVERRIDES = {
+    "fetched_at": 20,
+    "distribution_std": 10,
+    "distribution_n": 8,
+}
 
 
 def write_csv(rows: list[dict], path: str):
@@ -686,6 +731,18 @@ def main():
         key=lambda r: int(r.get("rank") or 9999)
         if str(r.get("rank", "")).isdigit() else 9999
     )
+
+    if display_rows:
+        display_rows = _attach_distribution_std(
+            pd.DataFrame(display_rows), g_prefix="G"
+        ).to_dict(orient="records")
+        filled_std = int(
+            pd.to_numeric(
+                pd.Series([r.get("distribution_std") for r in display_rows]),
+                errors="coerce",
+            ).notna().sum()
+        )
+        print(f"[NHL step8] distribution_std filled {filled_std}/{len(display_rows)} rows")
 
     if args.output.lower().endswith(".xlsx"):
         write_xlsx(display_rows, args.output)

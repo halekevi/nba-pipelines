@@ -186,6 +186,8 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "open_line": 10,
         "line_movement": 12,
         "line_direction_shift": 16,
+        "distribution_std": 10,
+        "distribution_n": 8,
     }
     for ci, h in enumerate(headers, 1):
         ws.column_dimensions[get_column_letter(ci)].width = col_widths.get(h, 12)
@@ -195,6 +197,46 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
 
 
 _MIN_TIER_NUM_MAP = {0: "Low", 1: "Med", 2: "High", 3: "Elite"}
+
+MISSING_SENTINELS = {"—", "-", "", "nan", "none", "null"}
+
+
+def _parse_g_vals(row, prefix: str = "stat_g", n: int = 10) -> list[float]:
+    vals: list[float] = []
+    for i in range(1, n + 1):
+        col = f"{prefix}{i}"
+        if isinstance(row, pd.Series):
+            raw_val = row.get(col, "")
+        else:
+            raw_val = row.get(col, "")
+        raw = str(raw_val if raw_val is not None else "").strip()
+        if raw.lower() in MISSING_SENTINELS:
+            continue
+        try:
+            vals.append(float(raw))
+        except ValueError:
+            continue
+    return vals
+
+
+def _attach_distribution_std(df: pd.DataFrame, *, g_prefix: str = "stat_g") -> pd.DataFrame:
+    """Sample std (ddof=1) of stat_g1..10 for pipeline_read distribution_std."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    dist_n: list[int | None] = []
+    dist_std: list[float | None] = []
+    for _, row in out.iterrows():
+        g_vals = _parse_g_vals(row, prefix=g_prefix)
+        n = len(g_vals)
+        dist_n.append(n)
+        if n >= 2:
+            dist_std.append(round(float(pd.Series(g_vals).std(ddof=1)), 4))
+        else:
+            dist_std.append(None)
+    out["distribution_n"] = dist_n
+    out["distribution_std"] = dist_std
+    return out
 
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
@@ -243,6 +285,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for c in stat_g_cols:
         if c not in keep:
             keep.append(c)
+    for c in ("distribution_std", "distribution_n"):
+        if c in df2.columns and c not in keep:
+            keep.append(c)
     clean = df2[keep].copy()
 
     for col in [
@@ -272,6 +317,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in ["last5_over", "last5_under"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").astype("Int64")
+    if "distribution_std" in clean.columns:
+        clean["distribution_std"] = pd.to_numeric(clean["distribution_std"], errors="coerce").round(4)
+    if "distribution_n" in clean.columns:
+        clean["distribution_n"] = pd.to_numeric(clean["distribution_n"], errors="coerce").astype("Int64")
 
     tier_order = {"A": 0, "B": 1, "C": 2, "D": 3}
     clean["_tier_sort"] = clean["tier"].map(tier_order)
@@ -394,6 +443,10 @@ def main() -> None:
 
     if out.empty:
         raise SystemExit("ERROR [PropOracle-MLB-S8] Empty output after direction step; aborting.")
+
+    out = _attach_distribution_std(out)
+    filled_std = int(pd.to_numeric(out["distribution_std"], errors="coerce").notna().sum())
+    print(f"[MLB step8] distribution_std filled {filled_std}/{len(out)} rows")
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"Saved -> {args.output}")
