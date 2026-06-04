@@ -43,7 +43,11 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.h2h_stats import attach_h2h_columns, print_h2h_stats
-from utils.line_movement import enrich_with_line_movement, print_line_movement_wire_stats
+from utils.line_movement import (
+    enrich_with_line_movement,
+    markets_for_sport_key,
+    print_line_movement_wire_stats,
+)
 from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 
@@ -193,13 +197,7 @@ def main() -> None:
     df = enrich_with_line_movement(
         df,
         sport_key="basketball_wnba",
-        markets=[
-            "player_points",
-            "player_rebounds",
-            "player_assists",
-            "player_threes",
-            "player_points_rebounds_assists",
-        ],
+        markets=markets_for_sport_key("basketball_wnba"),
     )
     print_line_movement_wire_stats(df, "WNBA")
     df.to_csv(args.output, index=False, encoding="utf-8-sig")

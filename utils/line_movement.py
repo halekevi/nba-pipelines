@@ -46,15 +46,49 @@ SPORT_LINE_MOVEMENT_PRESETS: dict[str, dict[str, Any]] = {
     },
     "NBA": {
         "sport_key": "basketball_nba",
-        "markets": ["player_points", "player_rebounds", "player_assists", "player_threes"],
+        "markets": [
+            "player_points",
+            "player_rebounds",
+            "player_assists",
+            "player_threes",
+            "player_points_rebounds_assists",
+            "player_points_rebounds",
+            "player_rebounds_assists",
+            "player_points_assists",
+        ],
     },
     "MLB": {
         "sport_key": "baseball_mlb",
-        "markets": ["batter_hits", "batter_home_runs", "pitcher_strikeouts"],
+        "markets": [
+            "batter_hits",
+            "batter_total_bases",
+            "batter_rbis",
+            "batter_home_runs",
+            "batter_doubles",
+            "batter_stolen_bases",
+            "batter_runs_scored",
+            "batter_walks",
+            "batter_triples",
+            "batter_strikeouts",
+            "pitcher_strikeouts",
+            "pitcher_hits_allowed",
+            "pitcher_walks",
+            "pitcher_earned_runs",
+            "pitcher_outs",
+        ],
     },
     "WNBA": {
         "sport_key": "basketball_wnba",
-        "markets": ["player_points", "player_rebounds", "player_assists"],
+        "markets": [
+            "player_points",
+            "player_rebounds",
+            "player_assists",
+            "player_threes",
+            "player_points_rebounds_assists",
+            "player_points_rebounds",
+            "player_rebounds_assists",
+            "player_points_assists",
+        ],
     },
     "Soccer": {
         "sport_key": "soccer_epl",
@@ -83,19 +117,30 @@ PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
     "total_bases": "batter_total_bases",
     "home_runs": "batter_home_runs",
     "rbis": "batter_rbis",
+    "rbi": "batter_rbis",
+    "runs": "batter_runs_scored",
+    "singles": "batter_hits",
+    "doubles": "batter_doubles",
+    "stolen_bases": "batter_stolen_bases",
+    "triples": "batter_triples",
     "hitter_strikeouts": "batter_strikeouts",
     "strikeouts": "pitcher_strikeouts",
     "hits_allowed": "pitcher_hits_allowed",
     "walks_allowed": "pitcher_walks",
     "walks": "pitcher_walks",
-    # WNBA (PrizePicks abbreviations)
+    "earned_runs_allowed": "pitcher_earned_runs",
+    "pitching_outs": "pitcher_outs",
+    # WNBA / NBA (PrizePicks abbreviations)
     "pts": "player_points",
     "reb": "player_rebounds",
     "ast": "player_assists",
     "3ptmade": "player_threes",
+    "fg3m": "player_threes",
     "threes": "player_threes",
     "pra": "player_points_rebounds_assists",
     "pa": "player_points_assists",
+    "pr": "player_points_rebounds",
+    "ra": "player_rebounds_assists",
     # Soccer
     "shots_on_target": "player_shots_on_target",
     "goal_assist": "player_assists",
@@ -105,6 +150,10 @@ PIPELINE_PROP_TO_ODDS_MARKET: dict[str, str] = {
 
 # Sport-specific prop_norm overrides (resolve cross-sport name collisions).
 SPORT_PROP_TO_ODDS_MARKET: dict[str, dict[str, str]] = {
+    "baseball_mlb": {
+        # PP hitter "walks" — global "walks" maps to pitcher_walks for pitching props.
+        "walks": "batter_walks",
+    },
     "icehockey_nhl": {
         "goals": "player_goals",
         "shots": "player_shots_on_goal",
@@ -114,6 +163,41 @@ SPORT_PROP_TO_ODDS_MARKET: dict[str, dict[str, str]] = {
         "shots": "player_shots_on_target",
     },
 }
+
+
+def markets_for_sport_key(sport_key: str) -> list[str]:
+    """Default Odds API player-prop markets to fetch for a sport_key."""
+    sk = str(sport_key or "").strip()
+    for preset in SPORT_LINE_MOVEMENT_PRESETS.values():
+        if preset.get("sport_key") == sk:
+            return list(preset.get("markets") or [])
+    return []
+
+
+def _snapshot_props_by_market(
+    snapshot: dict[tuple[str, str, float], dict[str, Any]],
+) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for (_player, market, _line) in snapshot:
+        m = str(market or "").strip()
+        if m:
+            counts[m] = counts.get(m, 0) + 1
+    return counts
+
+
+def log_line_movement_market_fetch(
+    sport_label: str,
+    requested_markets: list[str],
+    snapshot: dict[tuple[str, str, float], dict[str, Any]],
+) -> None:
+    """Log per-market snapshot row counts after fetch (live vs dead markets)."""
+    by_mkt = _snapshot_props_by_market(snapshot)
+    label = str(sport_label or "unknown").upper()
+    parts = ", ".join(f"{m}:{by_mkt.get(m, 0)}" for m in requested_markets)
+    print(f"[LM] {label} markets fetched: {{{parts}}}")
+    dead = [m for m in requested_markets if by_mkt.get(m, 0) == 0]
+    if dead:
+        print(f"[LM] {label} markets empty (no book outcomes): {', '.join(dead)}")
 
 BM_PRIORITY = ("draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
 _LINE_EPS = 0.05
@@ -748,6 +832,7 @@ def fetch_line_snapshot(
         prior = _load_cache(sport_key, today) or {}
         snapshot = _merge_line_snapshot(prior, snapshot)
         _save_cache(sport_key, today, snapshot)
+        log_line_movement_market_fetch(sport_key, markets, snapshot)
         _log.info(
             "line_movement: parsed %d prop lines for %s (%d events)",
             len(snapshot),
