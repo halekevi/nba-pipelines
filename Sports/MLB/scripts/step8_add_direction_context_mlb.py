@@ -178,6 +178,11 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
         "Min Tier": 9, "Bat Order": 10, "Pitcher Role": 12,
+        "Lineup Confirmed": 14, "Batting Order Pos": 10,
+        "Opp Starter Name": 18, "Opp Starter Hand": 12,
+        "Opp Starter ERA": 10, "Opp Starter WHIP": 10,
+        "Top Of Order": 10, "Bottom Of Order": 12,
+        "Line Moved Up": 12, "Line Moved Down": 12,
         "Series HR": 9,
         "Void Reason": 20,
         "Open Line": 8,
@@ -273,6 +278,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "last5_over", "last5_under",
         "OVERALL_DEF_RANK", "DEF_TIER",
         "minutes_tier", "batting_order_tier", "pitcher_role",
+        "lineup_confirmed", "batting_order_pos",
+        "opp_starter_name", "opp_starter_hand",
+        "opp_pitcher_era_vs_batter_hand", "opp_pitcher_whip_vs_batter_hand",
+        "top_of_order", "bottom_of_order", "line_moved_up", "line_moved_down",
         "same_series_hit_rate",
         "void_reason",
         "open_line",
@@ -329,6 +338,11 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in ["last5_over", "last5_under"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").astype("Int64")
+    if "batting_order_pos" in clean.columns:
+        clean["batting_order_pos"] = pd.to_numeric(clean["batting_order_pos"], errors="coerce").astype("Int64")
+    for col in ("opp_pitcher_era_vs_batter_hand", "opp_pitcher_whip_vs_batter_hand"):
+        if col in clean.columns:
+            clean[col] = pd.to_numeric(clean[col], errors="coerce").round(2)
     if "distribution_std" in clean.columns:
         clean["distribution_std"] = pd.to_numeric(clean["distribution_std"], errors="coerce").round(4)
     if "distribution_n" in clean.columns:
@@ -367,6 +381,16 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier",
         "minutes_tier": "Min Tier", "batting_order_tier": "Bat Order",
         "pitcher_role": "Pitcher Role",
+        "lineup_confirmed": "Lineup Confirmed",
+        "batting_order_pos": "Batting Order Pos",
+        "opp_starter_name": "Opp Starter Name",
+        "opp_starter_hand": "Opp Starter Hand",
+        "opp_pitcher_era_vs_batter_hand": "Opp Starter ERA",
+        "opp_pitcher_whip_vs_batter_hand": "Opp Starter WHIP",
+        "top_of_order": "Top Of Order",
+        "bottom_of_order": "Bottom Of Order",
+        "line_moved_up": "Line Moved Up",
+        "line_moved_down": "Line Moved Down",
         "same_series_hit_rate": "Series HR",
         "void_reason": "Void Reason",
     }
