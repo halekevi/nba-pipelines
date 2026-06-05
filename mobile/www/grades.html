@@ -2729,8 +2729,10 @@ function gradesFrameMobileLayout() {
 
 function collapseAllSlateDetails(doc) {
   if (!doc) return;
+  // Collapse sport buckets only — leave matrix-collapsible open so Performance Matrix /
+  // Def Tier / Prop Breakdowns show stats when a sport section is expanded (not blank bars).
   doc.querySelectorAll(
-    'details.sport-collapsible, details.matrix-collapsible, details.grades-sport-bucket, details.ticket-bucket'
+    'details.sport-collapsible, details.grades-sport-bucket, details.ticket-bucket'
   ).forEach((el) => {
     el.open = false;
   });

@@ -130,6 +130,70 @@ def _sheet_header_has_margin(ws) -> bool:
     return any(str(c or "").strip().lower() == "margin" for c in row0)
 
 
+# Rollup / dashboard sheets from slate_grader — not per-prop rows (loading them yields 0-prop sport sections).
+_ROLLUP_SHEET_NAMES = frozenset({
+    "summary",
+    "by pick type",
+    "by tier",
+    "prop type x direction",
+    "by direction",
+    "by minutes tier",
+    "by def tier",
+    "by def rank",
+    "by player role",
+    "by opp def tier",
+    "performance matrix",
+    "def tier x performance",
+    "by shot role",
+})
+
+
+def _is_rollup_sheet(name: str) -> bool:
+    return str(name or "").strip().lower() in _ROLLUP_SHEET_NAMES
+
+
+def _is_prop_level_row(r: dict) -> bool:
+    """True when a row is a graded prop (not a Summary / Performance Matrix aggregate line)."""
+    player = _cell_str(r.get("player") or r.get("Player"))
+    if player:
+        low = player.lower()
+        if any(
+            tok in low
+            for tok in (
+                "by pick",
+                "by tier",
+                "by direction",
+                "by def",
+                "by opp",
+                "by shot",
+                "by minutes",
+                "overall",
+                "full slate",
+                "performance matrix",
+                "slate grade",
+            )
+        ):
+            return False
+        return True
+    prop = _cell_str(
+        r.get("Prop Type")
+        or r.get("prop_type_norm")
+        or r.get("prop_type")
+        or r.get("Prop")
+    )
+    if not prop:
+        return False
+    if _cell_str(r.get("Result") or r.get("result") or r.get("Grade") or r.get("grade")):
+        return True
+    if r.get("actual") is not None and str(r.get("actual")).strip() not in ("", "nan"):
+        return True
+    return False
+
+
+def _filter_prop_level_rows(rows: list[dict]) -> list[dict]:
+    return [r for r in rows if _is_prop_level_row(r)]
+
+
 def load_graded(path: Path, sport: str = "") -> list[dict]:
     """
     Load graded workbook rows for Prop Evaluation / HTML.
@@ -143,12 +207,9 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
     try:
         if "Box Raw" in wb.sheetnames and _sheet_header_has_margin(wb["Box Raw"]):
             br_rows = read_sheet(wb["Box Raw"])
-            # Some dates have a margin-ready Box Raw header but no per-prop rows yet; fall back.
             if len(br_rows) > 0:
                 rows = br_rows
-            else:
-                for shname in wb.sheetnames:
-                    rows.extend(read_sheet(wb[shname]))
+            # Empty Box Raw: no per-prop grades yet — do not load Summary/rollup sheets (they show as 0-prop NBA).
         else:
             # Tennis (and similar) writes the same rows to **graded** and **Box Raw** with no margin column.
             # Loading both doubles counts and breaks Slate Evaluation rollups.
@@ -163,9 +224,13 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
                     rows = g_rows
                 else:
                     for shname in wb.sheetnames:
+                        if _is_rollup_sheet(shname):
+                            continue
                         rows.extend(read_sheet(wb[shname]))
             else:
                 for shname in wb.sheetnames:
+                    if _is_rollup_sheet(shname):
+                        continue
                     rows.extend(read_sheet(wb[shname]))
     finally:
         wb.close()
@@ -247,7 +312,7 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
         ps = ps.replace({"": "Standard", "nan": "Standard", "None": "Standard"})
         ndf["Pick Type"] = ps.values
         normalized = ndf.to_dict(orient="records")
-    return normalized
+    return _filter_prop_level_rows(normalized)
 
 
 
@@ -1393,13 +1458,17 @@ def prop_breakdown_widget(rows: list[dict]) -> str:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
+    rows = _filter_prop_level_rows(rows)
     if not rows:
+        return ""
+
+    stats = overall_stats(rows)
+    if stats["decided"] <= 0 and stats["total"] <= 0:
         return ""
 
     if sport.strip().upper() == "MLB" and (not (icon or "").strip() or (icon or "").strip().upper() == "MLB"):
         icon = "⚾"
 
-    stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
     # Apply the pick-type x tier analysis uniformly across all sport sections.
     matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10)
