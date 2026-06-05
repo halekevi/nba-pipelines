@@ -200,6 +200,11 @@ COLUMN_ALIASES = {
     "line_combo":         ["line_combo", "Line Combo"],
     "line_combo_toi_pct": ["line_combo_toi_pct", "Line Combo TOI%"],
     "on_pp1_line":        ["on_pp1_line", "On PP1 Line"],
+    "player_injury_status": ["player_injury_status", "Player Injury Status"],
+    "player_on_il":       ["player_on_il", "Player On IL"],
+    "player_dtd":         ["player_dtd", "Player DTD"],
+    "team_key_out":       ["team_key_out", "Team Key Out"],
+    "team_dtd_count":     ["team_dtd_count", "Team DTD Count"],
 }
 
 # Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
@@ -497,6 +502,11 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "line_combo": str(r("line_combo") or ""),
         "line_combo_toi_pct": fmt_num(r("line_combo_toi_pct"), 1),
         "on_pp1_line": str(r("on_pp1_line") or ""),
+        "player_injury_status": str(r("player_injury_status") or ""),
+        "player_on_il": str(r("player_on_il") or ""),
+        "player_dtd": str(r("player_dtd") or ""),
+        "team_key_out": str(r("team_key_out") or ""),
+        "team_dtd_count": fmt_num(r("team_dtd_count"), 0),
         **_game_log_g_columns(raw, available_cols),
     }
 
@@ -518,6 +528,11 @@ _COL_WIDTH_OVERRIDES = {
     "implied_prob": 12,
     "implied_prob_over": 14,
     "implied_prob_under": 15,
+    "player_injury_status": 16,
+    "player_on_il": 10,
+    "player_dtd": 10,
+    "team_key_out": 12,
+    "team_dtd_count": 12,
 }
 
 

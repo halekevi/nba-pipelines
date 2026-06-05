@@ -1166,6 +1166,23 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
     if ($ok) { Invoke-NHLDpairsRefresh $Root "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { Invoke-NHLStep4b $NHLDir "$NHLRunOutDir\step4_nhl_with_stats.csv" }
+    # Step 4d — Injury context (ESPN); non-fatal
+    if ($ok) {
+        Write-Host "  --> NHL Step 4d - Injury Context" -ForegroundColor Cyan
+        $NhlStep4d = Join-Path $NHLDir "scripts\step4d_attach_injury_context.py"
+        Push-Location $Root
+        try {
+            & py -3.14 $NhlStep4d `
+                --input  "$NHLRunOutDir\step4_nhl_with_stats.csv" `
+                --output "$NHLRunOutDir\step4_nhl_with_stats.csv" `
+                --date   $Date
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[NHL] step4d injury context failed — continuing without injury flags"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
     if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
     if ($ok) {
@@ -1978,6 +1995,20 @@ $NHLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
     if ($ok) { Invoke-NHLDpairsRefresh-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
     if ($ok) { Invoke-NHLStep4b-Job "$NHLRunOutDir\step4_nhl_with_stats.csv" }
+    if ($ok) {
+        Write-Output "[NHL] Step 4d - Injury Context"
+        $NhlStep4d = Join-Path $NHLDir "scripts\step4d_attach_injury_context.py"
+        Push-Location $RepoRoot
+        try {
+            & py -3.14 $NhlStep4d `
+                --input  "$NHLRunOutDir\step4_nhl_with_stats.csv" `
+                --output "$NHLRunOutDir\step4_nhl_with_stats.csv" `
+                --date   $Date
+            if ($LASTEXITCODE -ne 0) {
+                Write-Output "[NHL] step4d injury context WARN (exit $LASTEXITCODE) — continuing"
+            }
+        } finally { Pop-Location }
+    }
     if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
     if ($ok) {

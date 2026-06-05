@@ -52,8 +52,8 @@ Defense / matchup,top3_under_context,Yes,In-score,No,No,No,WNBA step7 only
 Defense / matchup,positional_matchup_tier,Yes,Partial,No,No,No,NBA family; export when NBA returns to slate
 Usage / minutes / pace,minutes_tier,Yes,Partial,Yes,Passthrough,Partial,FS Min Tier; basketball sports
 Usage / minutes / pace,usage_role,Yes,Partial,Yes,Passthrough,Partial,On FS; WNBA usage_boost empty — do not over-weight role alone
-Usage / minutes / pace,usage_boost,Yes,Partial,Partial,No,No,Step7 computes; FS Usage Boost 0% fill 06-02
-Usage / minutes / pace,usage_boost_proj / reason,Yes,No,Partial,No,No,FS columns exist but empty
+Usage / minutes / pace,usage_boost,Yes,Yes,Yes,Passthrough,No,WNBA closed 06-04 (616 nonzero FS); MLB N/A
+Usage / minutes / pace,usage_boost_proj / reason,Yes,Yes,Partial,Passthrough,No,WNBA step8 export; verify per slate
 Usage / minutes / pace,pace_tier,Yes,Partial,Yes,Passthrough,Partial,On FS; verify sport-native values
 Usage / minutes / pace,game_pace / team_pace,Yes,Partial,No,No,No,In step7; not on FS read sheet
 Volatility / distribution,distribution_std,Yes,Yes,Yes,Derived,Yes,Step8 all active sports; Tennis ~42% fill — provisional confidence
@@ -72,10 +72,19 @@ Probabilities,pick_type_eligible,In-score,No,Yes,Derived,Yes,~36% ineligible 06-
 Sport context — MLB,park_factor,Yes,No,No,No,No,In step7 rank; ignore until exported to FS
 Sport context — MLB,weather_flag,Yes,No,No,No,No,In step7 rank; ignore until exported to FS
 Sport context — MLB,handedness_split / pitcher_hand,Yes,Partial,No,No,No,Partial in pipeline; not on FS
-Sport context — MLB,batting_order_pos,Yes,Passthrough,No,No,No,Step5+; not on read board
+Sport context — MLB,lineup_confirmed,Yes,Yes,Yes,Passthrough,No,Tier 3a closed 06-04 — step4b; 1178/1363 FS MLB
+Sport context — MLB,batting_order_pos,Yes,Yes,Yes,Passthrough,No,Tier 3a closed 06-04 — step4b; 833/1363 FS MLB
+Sport context — MLB,opp_starter_name / opp_starter_hand,Yes,Yes,Yes,Passthrough,No,Tier 3a closed 06-04 — step4b + step8
+Sport context — MLB,top_of_order / bottom_of_order / line_moved,Yes,Yes,Yes,Passthrough,No,Tier 3a closed 06-04 — step4b wired run_pipeline
+Sport context — MLB,opp_starter_era / whip,Yes,Yes,Partial,Passthrough,No,Exported step8; splits empty from step4b API (wire only)
+Sport context — MLB,player_on_il / injury_status / injury_type,Yes,Yes,Yes,Passthrough,No,Tier 3b closed 06-04 — step4d ESPN; 9 IL / 23 status on FS MLB
+Sport context — MLB,pitcher_scratched / opp_starter_on_il,Yes,Yes,Yes,Passthrough,No,Tier 3b closed 06-04 — step4d; opp_starter_on_il 0 on 06-04 slate
+Sport context — MLB,days_since_injury_report,Yes,Yes,Yes,Passthrough,No,Tier 3b — DTD rows only; 14 fill FS MLB 06-04
 Sport context — WNBA,intel_opp_vs_league_pct,Yes,In-score,Partial,No,No,Step7 rank; Intel columns on FS — verify fill before trusting
 Sport context — WNBA,intel_l5_vs_season,Yes,In-score,Partial,No,No,Intel L5/L10/Season on FS
-Sport context — NHL,line_combo,Yes,Passthrough,Partial,Passthrough,Partial,30/95 FS 06-02; forwards unknown — treat non-D line context as unknown
+Sport context — WNBA,usage_boost / usage_vacuum / team_star_out,Yes,Yes,Yes,Passthrough,No,WNBA injury tiers closed 06-04 — step4d + step8 + FS (212 team_star_out)
+Sport context — WNBA,key_facilitator_out / injury_boost_candidate,Yes,Yes,Yes,Passthrough,No,WNBA step4d trickle-up flags on FS
+Sport context — NHL,line_combo,Yes,Passthrough,Partial,Passthrough,Partial,D-pairs OK; CAR forward line_combo blocked — manual NST CSV import
 Sport context — NHL,line_combo_toi_pct,Yes,Passthrough,Partial,No,No,D-pairs only
 Sport context — NHL,on_pp1_line / pp_unit_tier,Yes,Partial,Partial,No,No,In step7/8; weak FS export
 Sport context — NHL,goalie_name / goalie_sv_pct,Yes,Partial,Partial,No,No,Goalie props; not all on FS
@@ -84,15 +93,18 @@ Sport context — Tennis,hold_rate_surface,Partial,No,No,No,No,Recommended; not 
 Sport context — Tennis,break_rate_surface,Partial,No,No,No,No,Recommended; not built
 Sport context — Tennis,h2h_avg / h2h_games / h2h_over_rate,Partial,Partial,Yes,Passthrough,Partial,FS H2H Avg / GP / Over% / Last
 Sport context — NBA / NBA1H / NBA1Q,intel + pace + minutes stack,Yes,Partial,Partial,Partial,Partial,NBA off 06-02 slate; NBA1H/Q active; NBA1H ticket pool AUC-gated
-Injury / rest / B2B,injury_flag / team_star_out,Yes,Partial,No,No,No,In step7; not on FS read model
-Injury / rest / B2B,rest_days,Yes,Partial,No,No,No,NHL/NBA pipelines
-Injury / rest / B2B,b2b_flag,Yes,Partial,Partial,No,No,FS B2B 0% fill 06-02
+Sport context — NBA1H / NBA1Q,team_star_out / injury context,Yes,Partial,No,No,No,Open — port NBA step4d pattern; not on FS
+Sport context — NHL,player_injury_status / player_on_il / player_dtd,Yes,Yes,Yes,Passthrough,No,Tier 3 NHL closed 06-04 — step4d ESPN sidecar + league cache fallback
+Sport context — NHL,team_key_out / team_dtd_count,Yes,Yes,Yes,Passthrough,No,Team broadcast flags; rank_penalty<=-0.20 for key_out
+Injury / rest / B2B,injury_flag / team_star_out,Yes,Partial,Partial,No,No,WNBA+MLB on FS 06-04; NHL/NBA1H/Q still open
+Injury / rest / B2B,rest_days / opp_days_rest,Yes,Partial,Yes,Passthrough,No,Tier 1 closed 06-04 — passthrough Full Slate (2282/2925 days_rest)
+Injury / rest / B2B,b2b_flag / opp_b2b_flag,Yes,Partial,Partial,Passthrough,No,On FS; verify sport-native fill per slate
 Injury / rest / B2B,void_reason,Yes,Yes,Partial,No,No,WNBA void legs; on step8
 Market odds / implied prob,price,No,No,No,No,No,Tier 4 — needs odds source
 Market odds / implied prob,implied_prob,No,No,No,No,No,Tier 4 — primary remaining new-data build
-Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,FS column; 0 fill without alt-book fetch
-Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Same
-Market odds / implied prob,cross_edge_vs_pp,No,No,Yes,Passthrough,Partial,0 rows with cross-book edge 06-02
+Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,Tier 4 open — FS column; 0 fill without alt-book fetch
+Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Tier 4 open — same
+Market odds / implied prob,cross_edge_vs_pp,No,No,Yes,Passthrough,Partial,Tier 4 open — 0 rows with cross-book edge 06-02
 Calibration / confidence,prop_quality_score,In-score,No,Yes,Derived,Yes,
 Calibration / confidence,data_completeness_score,In-score,No,Yes,Derived,Yes,
 Calibration / confidence,confidence_score,In-score,No,Partial,Derived,Yes,Computed after read_fields_missing — audit over-reports; Tennis provisional when dist_std sparse
