@@ -379,6 +379,25 @@ if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_
 if ($ok) { $ok = Run-Step "WNBA Step 4b - Usage/Pace/Star Context" $WNBADir ".\scripts\step4b_attach_wnba_context.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2025" -TimeoutSeconds 600 }
 
+# Step 4d — Injury context (team_star_out, usage_vacuum, boost flags); non-fatal
+if ($ok) {
+    Write-Host "  --> WNBA Step 4d - Injury Context" -ForegroundColor Cyan
+    $Step4d = Join-Path $WNBADir "scripts\step4d_attach_injury_context.py"
+    Push-Location $Root
+    try {
+        & py -3.14 $Step4d `
+            --input  "$WnbaRunOutDir\step4_wnba_stats.csv" `
+            --output "$WnbaRunOutDir\step4_wnba_stats.csv" `
+            --date   $Date `
+            --refresh
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[WNBA] step4d injury context failed — continuing without flags"
+        }
+    } finally {
+        Pop-Location
+    }
+}
+
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
     "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --compute10" }
 
