@@ -593,6 +593,22 @@ function Run-NBAPeriodPipeline {
     if ($ok -and $tagLower -eq "nba1h") {
         $ok = Run-Step "${tagLower} Step 4b - Usage/Pace Context" $NBADir ".\scripts\step4b_attach_nba_context.py" "--input `"$step4`" --output `"$step4`" --season 2025-26"
     }
+    # Step 4d — Injury context (team_star_out, usage_vacuum, boost flags); non-fatal
+    if ($ok) {
+        Write-Host "  --> ${tagLower} Step 4d - Injury Context" -ForegroundColor Cyan
+        $NbaStep4d = Join-Path $NBADir "scripts\step4d_attach_injury_context.py"
+        Push-Location $Root
+        try {
+            & py -3.14 $NbaStep4d `
+                --input  "$step4" `
+                --output "$step4"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[${tagLower}] step4d injury context failed — continuing"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
     if ($ok -and $tagLower -eq "nba1h") {
         $ok = Run-Step "${tagLower} Step 4e - NBA1H context" $NBADir ".\scripts\step4e_attach_nba1h_context.py" "--input `"$step4`" --output `"$step4`""
     }
@@ -1520,6 +1536,22 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 4b - Usage/Pace Context"      $NBADir ".\scripts\step4b_attach_nba_context.py"              "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step4_with_stats.csv`" --season 2025-26" }
+    # Step 4d — Injury context (team_star_out, usage_vacuum, boost flags); non-fatal
+    if ($ok) {
+        Write-Host "  --> NBA Step 4d - Injury Context" -ForegroundColor Cyan
+        $NbaStep4d = Join-Path $NBADir "scripts\step4d_attach_injury_context.py"
+        Push-Location $Root
+        try {
+            & py -3.14 $NbaStep4d `
+                --input  "$NBARunOutDir\step4_with_stats.csv" `
+                --output "$NBARunOutDir\step4_with_stats.csv"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[NBA] step4d injury context failed — continuing"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
     if ($ok) { $ok = Run-Step "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input `"$NBARunOutDir\step5_with_hit_rates.csv`" --output `"$NBARunOutDir\step6_with_team_role_context.csv`"" }
     if ($ok) { $ok = Run-Step "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input `"$NBARunOutDir\step6_with_team_role_context.csv`" --output `"$NBARunOutDir\step6a_with_opp_stats.csv`"" }
