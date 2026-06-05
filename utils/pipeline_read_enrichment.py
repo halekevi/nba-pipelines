@@ -363,15 +363,15 @@ def _mirror_stat_g_columns(df: pd.DataFrame) -> pd.DataFrame:
         for src in (gcol, sgcol):
             if src not in out.columns:
                 continue
+            incoming_vals = pd.to_numeric(out[src], errors="coerce")
             if scol not in out.columns:
                 out = out.copy()
-                out[scol] = out[src]
+                out[scol] = incoming_vals
             else:
                 out = out.copy()
-                existing = out[scol].astype(str).str.strip()
-                incoming = out[src].astype(str).str.strip()
-                blank = existing.isna() | existing.isin(["", "nan", "None", "—", "-"])
-                out.loc[blank, scol] = incoming.loc[blank]
+                existing = pd.to_numeric(out[scol], errors="coerce")
+                blank = existing.isna()
+                out.loc[blank, scol] = incoming_vals.loc[blank]
         if scol in out.columns and gcol not in out.columns:
             out = out.copy()
             out[gcol] = out[scol]
