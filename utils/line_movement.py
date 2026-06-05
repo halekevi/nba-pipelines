@@ -7,6 +7,7 @@ Never raises into pipeline callers — returns empty snapshot / default columns 
 
 from __future__ import annotations
 
+from collections import Counter
 import json
 import logging
 import os
@@ -203,7 +204,7 @@ def log_line_movement_market_fetch(
     if dead:
         print(f"[LM] {label} markets empty (no book outcomes): {', '.join(dead)}")
 
-BM_PRIORITY = ("draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
+BM_PRIORITY = ("pinnacle", "draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
 _LINE_EPS = 0.05
 
 NHL_TEAM_ABBREV: dict[str, str] = {
@@ -355,6 +356,8 @@ def _merge_line_snapshot(
                 merged["over_price"] = old_row.get("over_price")
             if merged.get("under_price") is None and isinstance(old_row, dict):
                 merged["under_price"] = old_row.get("under_price")
+            if merged.get("implied_prob_book") is None and isinstance(old_row, dict):
+                merged["implied_prob_book"] = old_row.get("implied_prob_book")
             out[key] = merged
         else:
             out[key] = _snapshot_row_defaults(new_row)
@@ -465,6 +468,7 @@ def _snapshot_row_defaults(row: dict[str, Any] | None) -> dict[str, Any]:
             "line_direction_shift": "stable",
             "over_price": None,
             "under_price": None,
+            "implied_prob_book": None,
         }
     return {
         "open_line": row.get("open_line"),
@@ -473,6 +477,7 @@ def _snapshot_row_defaults(row: dict[str, Any] | None) -> dict[str, Any]:
         "line_direction_shift": row.get("line_direction_shift", "stable"),
         "over_price": row.get("over_price"),
         "under_price": row.get("under_price"),
+        "implied_prob_book": row.get("implied_prob_book"),
     }
 
 
@@ -657,7 +662,7 @@ def _fetch_event_odds(
         return {}
     params: dict[str, str] = {
         "apiKey": api_key,
-        "regions": "us",
+        "regions": "us,eu",
         "markets": ",".join(m.strip() for m in markets if m.strip()),
         "oddsFormat": "american",
         "dateFormat": "iso",
@@ -713,11 +718,13 @@ def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str
                         over_at[(player, point)] = price
                     elif side == "under":
                         under_at[(player, point)] = price
+                bm_key = str(best_bm.get("key", "")).strip() or None
                 for (player, point), over_price in over_at.items():
                     pk = (player, mkey, point)
                     prices[pk] = {
                         "over_price": over_price,
                         "under_price": under_at.get((player, point)),
+                        "implied_prob_book": bm_key,
                     }
 
         for bm in bookmakers:
@@ -766,6 +773,7 @@ def _parse_odds_events(events: list[dict], markets: list[str]) -> dict[tuple[str
             if pr:
                 row["over_price"] = pr.get("over_price")
                 row["under_price"] = pr.get("under_price")
+                row["implied_prob_book"] = pr.get("implied_prob_book")
             snapshot[pk] = row
     return snapshot
 
@@ -995,6 +1003,7 @@ def enrich_with_line_movement(
     implied_over: list[float | None] = []
     implied_under: list[float | None] = []
     implied_sel: list[float | None] = []
+    implied_books: list[Any] = []
 
     for _, row in out.iterrows():
         if not player_col or not prop_col or not line_col:
@@ -1004,6 +1013,7 @@ def enrich_with_line_movement(
             implied_over.append(np.nan)
             implied_under.append(np.nan)
             implied_sel.append(np.nan)
+            implied_books.append(None)
             continue
 
         odds_market = _pipeline_prop_to_odds_market(str(row.get(prop_col, "")), sport_key)
@@ -1022,12 +1032,15 @@ def enrich_with_line_movement(
             directions.append(str(hit.get("line_direction_shift") or "stable"))
             ip_o = _american_to_implied(hit.get("over_price"))
             ip_u = _american_to_implied(hit.get("under_price"))
+            book = hit.get("implied_prob_book")
+            implied_books.append(book if (ip_o is not None or ip_u is not None) else None)
         else:
             open_lines.append(cur_line)
             movements.append(0.0)
             directions.append("stable")
             ip_o = None
             ip_u = None
+            implied_books.append(None)
 
         implied_over.append(ip_o if ip_o is not None else np.nan)
         implied_under.append(ip_u if ip_u is not None else np.nan)
@@ -1045,4 +1058,7 @@ def enrich_with_line_movement(
     out["implied_prob_over"] = implied_over
     out["implied_prob_under"] = implied_under
     out["implied_prob"] = implied_sel
+    out["implied_prob_book"] = implied_books
+    bm_dist = Counter(out["implied_prob_book"].dropna())
+    print(f"[LM] {sport_key} bookmaker distribution: {dict(bm_dist)}")
     return out
