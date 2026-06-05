@@ -100,11 +100,16 @@ Injury / rest / B2B,injury_flag / team_star_out,Yes,Partial,Partial,No,No,WNBA+M
 Injury / rest / B2B,rest_days / opp_days_rest,Yes,Partial,Yes,Passthrough,No,Tier 1 closed 06-04 — passthrough Full Slate (2282/2925 days_rest)
 Injury / rest / B2B,b2b_flag / opp_b2b_flag,Yes,Partial,Partial,Passthrough,No,On FS; verify sport-native fill per slate
 Injury / rest / B2B,void_reason,Yes,Yes,Partial,No,No,WNBA void legs; on step8
-Market odds / implied prob,price,No,No,No,No,No,Tier 4 — needs odds source
-Market odds / implied prob,implied_prob,No,No,No,No,No,Tier 4 — primary remaining new-data build
-Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,Tier 4 open — FS column; 0 fill without alt-book fetch
-Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Tier 4 open — same
-Market odds / implied prob,cross_edge_vs_pp,No,No,Yes,Passthrough,Partial,Tier 4 open — 0 rows with cross-book edge 06-02
+Market odds / implied prob,price,No,No,No,No,No,Tier 4 closed — no PP list price; implied_prob via OddsAPI+Pinnacle covers read model
+Market odds / implied prob,implied_prob,Partial,Yes,Yes,Derived,Partial,Tier 4 closed 06-05 — OddsAPI+Pinnacle (22.5% MLB/51.1% WNBA/57.3% NHL 06-04); PP goblin/demon cascade (pp_line_delta)
+Market odds / implied prob,implied_prob_over,Partial,Yes,Partial,Passthrough,Partial,Tier 4 closed — OddsAPI step5 line_movement
+Market odds / implied prob,implied_prob_under,Partial,Yes,Partial,Passthrough,Partial,Tier 4 closed — OddsAPI step5 line_movement
+Market odds / implied prob,implied_prob_source,No,No,No,Derived,No,Tier 4 closed — pp_line_delta tags goblin/demon derived fills; in READ_SLATE_EXPORT_KEYS
+Market odds / implied prob,implied_prob_book,No,No,No,No,No,Tier 4 closed — internal OddsAPI diagnostic (line_movement); not on FS
+Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,Tier 4 closed — PP/UD cross-book lines on FS; ActionNetwork/DK scrape skipped (structural unmappables)
+Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Tier 4 closed — DK cross-book line on FS; scrape skipped (structural unmappables)
+Market odds / implied prob,cross_edge,No,No,Partial,Derived,Partial,Tier 4 closed — enrichment hit_prob_selected - implied_prob; recomputed after pp_line_delta fill
+Market odds / implied prob,cross_edge_vs_pp,No,No,Yes,Passthrough,Partial,Tier 4 closed — FS Edge vs PP column; best-line cross-book on combined tickets
 Calibration / confidence,prop_quality_score,In-score,No,Yes,Derived,Yes,
 Calibration / confidence,data_completeness_score,In-score,No,Yes,Derived,Yes,
 Calibration / confidence,confidence_score,In-score,No,Partial,Derived,Yes,Computed after read_fields_missing — audit over-reports; Tennis provisional when dist_std sparse
