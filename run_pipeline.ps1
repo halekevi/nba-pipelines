@@ -1256,6 +1256,23 @@ if ($MLBOnly) {
             Pop-Location
         }
     }
+    # Step 4d — Injury / IL context (ESPN); non-fatal
+    if ($ok) {
+        Write-Host "  --> MLB Step 4d - Injury Context" -ForegroundColor Cyan
+        $MlbStep4d = Join-Path $MLBDir "scripts\step4d_attach_injury_context.py"
+        Push-Location $Root
+        try {
+            & py -3.14 $MlbStep4d `
+                --input  "$MLBRunOutDir\step4_mlb_with_stats.csv" `
+                --output "$MLBRunOutDir\step4_mlb_with_stats.csv" `
+                --date   $Date
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[MLB] step4d injury context failed — continuing without injury flags"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
     if ($ok -and $MLBVerify) {
         Write-Host ""
         Write-Host "  [MLBVerify] Step 1-4 completed. Health summary:" -ForegroundColor Cyan
@@ -2292,6 +2309,20 @@ $MLBJob = Start-Job -ScriptBlock {
                 --output "$MLBRunOutDir\step4_mlb_with_stats.csv"
             if ($LASTEXITCODE -ne 0) {
                 Write-Output "[MLB] step4b lineup context WARN (exit $LASTEXITCODE) — continuing"
+            }
+        } finally { Pop-Location }
+    }
+    if ($ok) {
+        Write-Output "[MLB] Step 4d - Injury Context"
+        $MlbStep4d = Join-Path $MLBDir "scripts\step4d_attach_injury_context.py"
+        Push-Location $RepoRoot
+        try {
+            & py -3.14 $MlbStep4d `
+                --input  "$MLBRunOutDir\step4_mlb_with_stats.csv" `
+                --output "$MLBRunOutDir\step4_mlb_with_stats.csv" `
+                --date   $Date
+            if ($LASTEXITCODE -ne 0) {
+                Write-Output "[MLB] step4d injury context WARN (exit $LASTEXITCODE) — continuing"
             }
         } finally { Pop-Location }
     }

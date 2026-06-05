@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ESPN game-day injury reports for NBA, WNBA, CBB (men's college), and NHL.
+ESPN game-day injury reports for NBA, WNBA, CBB (men's college), NHL, and MLB.
 
 Used by:
   - fetch_actuals.py — writes injuries_<league>_<date>.csv next to actuals
@@ -82,6 +82,26 @@ NHL_TEAM_CANON: Dict[str, str] = {
     "cgy": "CGY",
 }
 
+MLB_TEAM_CANON: Dict[str, str] = {
+    "az": "ARI",
+    "ari": "ARI",
+    "oak": "ATH",
+    "ath": "ATH",
+    "was": "WSH",
+    "wsh": "WSH",
+    "wsn": "WSH",
+    "sdp": "SD",
+    "sd": "SD",
+    "sfg": "SF",
+    "sf": "SF",
+    "chw": "CWS",
+    "cws": "CWS",
+    "tb": "TB",
+    "tbl": "TB",
+    "kc": "KC",
+    "kcr": "KC",
+}
+
 
 def canon_team_abbr(sport: str, abbr: str) -> str:
     """Normalize team token for cross-source joins (tickets, actuals, ESPN)."""
@@ -96,6 +116,9 @@ def canon_team_abbr(sport: str, abbr: str) -> str:
     if st == "NHL":
         u = str(abbr).strip().upper()
         return NHL_TEAM_CANON.get(key, u)[:3]
+    if st == "MLB":
+        u = str(abbr).strip().upper()
+        return MLB_TEAM_CANON.get(key, u)[:3]
     if st in ("CBB", "WCBB"):
         u = str(abbr).strip().upper()
         return u[:8] if len(u) > 3 else NBA_TEAM_CANON.get(key, u)
@@ -177,15 +200,122 @@ def flatten_injuries_from_summary(
     return rows
 
 
+MLB_TEAM_DISPLAY_TO_ABBR: Dict[str, str] = {
+    "arizona diamondbacks": "ARI",
+    "athletics": "ATH",
+    "atlanta braves": "ATL",
+    "baltimore orioles": "BAL",
+    "boston red sox": "BOS",
+    "chicago cubs": "CHC",
+    "chicago white sox": "CWS",
+    "cincinnati reds": "CIN",
+    "cleveland guardians": "CLE",
+    "colorado rockies": "COL",
+    "detroit tigers": "DET",
+    "houston astros": "HOU",
+    "kansas city royals": "KC",
+    "los angeles angels": "LAA",
+    "los angeles dodgers": "LAD",
+    "miami marlins": "MIA",
+    "milwaukee brewers": "MIL",
+    "minnesota twins": "MIN",
+    "new york mets": "NYM",
+    "new york yankees": "NYY",
+    "philadelphia phillies": "PHI",
+    "pittsburgh pirates": "PIT",
+    "san diego padres": "SD",
+    "san francisco giants": "SF",
+    "seattle mariners": "SEA",
+    "st. louis cardinals": "STL",
+    "st louis cardinals": "STL",
+    "tampa bay rays": "TB",
+    "texas rangers": "TEX",
+    "toronto blue jays": "TOR",
+    "washington nationals": "WSH",
+}
+
+
+def _mlb_team_abbr(display_name: str, team_obj: dict) -> str:
+    key = strip_norm(display_name or "")
+    if key in MLB_TEAM_DISPLAY_TO_ABBR:
+        return MLB_TEAM_DISPLAY_TO_ABBR[key]
+    abbr = str((team_obj or {}).get("abbreviation", "") or "").strip().upper()
+    if abbr:
+        return MLB_TEAM_CANON.get(strip_norm(abbr), abbr)[:3]
+    return ""
+
+
+def collect_mlb_injuries_league(date_str: str) -> pd.DataFrame:
+    """League-wide MLB injury feed (not per-event scoreboard)."""
+    url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/injuries"
+    r = requests.get(url, headers=HEADERS, timeout=28)
+    r.raise_for_status()
+    all_rows: List[dict] = []
+    for block in r.json().get("injuries") or []:
+        if not isinstance(block, dict):
+            continue
+        team_abbr = _mlb_team_abbr(str(block.get("displayName", "")), block.get("team") or {})
+        for inj in block.get("injuries") or []:
+            if not isinstance(inj, dict):
+                continue
+            ath = inj.get("athlete") or {}
+            name = str(ath.get("displayName") or ath.get("fullName") or "").strip()
+            if not name or not team_abbr:
+                continue
+            typ = inj.get("type") or {}
+            abbrev = str(typ.get("abbreviation") or "").strip()
+            desc = str(typ.get("description") or "").strip()
+            status = str(inj.get("status") or "").strip()
+            pen = _penalty_for_injury_type(abbrev, desc)
+            all_rows.append(
+                {
+                    "sport": "MLB",
+                    "event_id": "",
+                    "team": team_abbr,
+                    "player": name,
+                    "injury_status": status,
+                    "injury_type": abbrev,
+                    "injury_type_desc": desc,
+                    "injury_detail": str((inj.get("shortComment") or "")).strip(),
+                    "injury_side": "",
+                    "rank_penalty": round(pen, 4),
+                }
+            )
+    if not all_rows:
+        return pd.DataFrame(
+            columns=[
+                "date",
+                "sport",
+                "event_id",
+                "team",
+                "player",
+                "injury_status",
+                "injury_type",
+                "injury_type_desc",
+                "injury_detail",
+                "injury_side",
+                "rank_penalty",
+            ]
+        )
+    df = pd.DataFrame(all_rows)
+    df.insert(0, "date", date_str)
+    df = df.drop_duplicates(subset=["sport", "team", "player", "injury_type"], keep="first")
+    return df
+
+
 def _scoreboard_url(sport_key: str, date_espn: str) -> str:
     if sport_key == "nhl":
         return f"https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates={date_espn}"
+    if sport_key == "mlb":
+        return f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates={date_espn}"
     return f"https://site.api.espn.com/apis/site/v2/sports/basketball/{sport_key}/scoreboard?dates={date_espn}"
 
 
 def _summary_url(sport_key: str, event_id: str) -> str:
     if sport_key == "nhl":
         return f"https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={event_id}"
+    if sport_key == "mlb":
+        return f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event={event_id}"
     return f"https://site.api.espn.com/apis/site/v2/sports/basketball/{sport_key}/summary?event={event_id}"
 
 
@@ -210,6 +340,8 @@ def collect_injuries_raw(sport_literal: str, date_str: str) -> pd.DataFrame:
     elif lit == "NHL":
         sk = "nhl"
         label = "NHL"
+    elif lit == "MLB":
+        return collect_mlb_injuries_league(date_str)
     else:
         raise ValueError(f"Unsupported sport for injuries: {sport_literal}")
 
@@ -280,6 +412,7 @@ def injuries_csv_path_for_actuals(
         "CBB": ("actuals_cbb_", "injuries_cbb_"),
         "WCBB": ("actuals_wcbb_", "injuries_wcbb_"),
         "NHL": ("actuals_nhl_", "injuries_nhl_"),
+        "MLB": ("actuals_mlb_", "injuries_mlb_"),
         "SOCCER": ("actuals_soccer_", "injuries_soccer_"),
     }[sport_literal.upper()]
     if stem.startswith(m[0]):
@@ -357,6 +490,7 @@ def auto_injuries_csv_from_outputs(repo_root: Path, slate_date: str, sport_liter
         "CBB": "injuries_cbb",
         "WCBB": "injuries_wcbb",
         "NHL": "injuries_nhl",
+        "MLB": "injuries_mlb",
         "SOCCER": "injuries_soccer",
     }.get(lit)
     if not fname:
@@ -369,7 +503,7 @@ if __name__ == "__main__":
     import argparse
 
     ap = argparse.ArgumentParser(description="Fetch ESPN injury report CSV for a slate date.")
-    ap.add_argument("--sport", required=True, help="NBA | WNBA | CBB | WCBB | NHL")
+    ap.add_argument("--sport", required=True, help="NBA | WNBA | CBB | WCBB | NHL | MLB")
     ap.add_argument("--date", required=True, help="YYYY-MM-DD")
     ap.add_argument(
         "--output",
@@ -384,6 +518,7 @@ if __name__ == "__main__":
         "CBB": "cbb",
         "WCBB": "wcbb",
         "NHL": "nhl",
+        "MLB": "mlb",
     }.get(lit)
     if not slug:
         raise SystemExit(f"Unsupported sport: {args.sport}")
