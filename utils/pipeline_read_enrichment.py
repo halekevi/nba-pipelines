@@ -555,13 +555,16 @@ def _fill_goblin_demon_implied_prob(out: pd.DataFrame) -> pd.DataFrame:
         key = _prop_lookup_key(r.get(player_col), r.get(prop_col), r.get("sport_norm") or r.get("sport"))
         std_lookup[key] = po
 
-    imp = pd.to_numeric(out.get("implied_prob"), errors="coerce")
+    if "implied_prob" in out.columns:
+        imp = pd.to_numeric(out["implied_prob"], errors="coerce")
+    else:
+        imp = pd.Series(np.nan, index=out.index, dtype=float)
 
     for idx, r in out.iterrows():
         pt = norm_pick_type(r.get("pick_type") or r.get("pick_type_norm"))
         if pt not in ("goblin", "demon"):
             continue
-        if pd.notna(imp.loc[idx]):
+        if pd.notna(imp.at[idx]):
             continue
 
         std_line = r.get("standard_line")
