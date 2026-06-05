@@ -243,6 +243,7 @@ READ_SLATE_EXPORT_KEYS = [
     "implied_prob",
     "implied_prob_over",
     "implied_prob_under",
+    "implied_prob_source",
     "cross_edge",
 ]
 
@@ -504,6 +505,96 @@ def _resolve_hit_prob_over_under(row: pd.Series) -> tuple[float | None, float | 
                 under_src = under_src or "edge_inverted"
 
     return p_over, p_under, over_src, under_src
+
+
+def _prop_lookup_key(player: Any, prop: Any, sport: Any = "") -> tuple[str, str, str]:
+    return (
+        norm_sport(sport),
+        str(player or "").strip().lower(),
+        str(prop or "").strip().lower(),
+    )
+
+
+def _standard_line_implied_over(row: pd.Series) -> float | None:
+    """P(OVER) at standard line from implied_prob_over or direction-selected implied_prob."""
+    imp_over = _to_prob_0_1(row.get("implied_prob_over"))
+    if imp_over is not None:
+        return imp_over
+    if norm_direction(row.get("direction")) == "OVER":
+        return _to_prob_0_1(row.get("implied_prob"))
+    return None
+
+
+def _fill_goblin_demon_implied_prob(out: pd.DataFrame) -> pd.DataFrame:
+    """
+    Derive goblin/demon implied_prob from standard-line implied via line-delta model.
+
+    Does not overwrite rows where OddsAPI already set implied_prob at the played line.
+    """
+    if out is None or len(out) == 0:
+        return out
+    out = out.copy()
+    if "implied_prob_source" not in out.columns:
+        out["implied_prob_source"] = None
+
+    player_col = next((c for c in ("player", "player_name", "Player") if c in out.columns), None)
+    prop_col = next(
+        (c for c in ("prop_type", "prop_norm", "Prop", "stat_norm") if c in out.columns),
+        None,
+    )
+    if not player_col or not prop_col:
+        return out
+
+    std_lookup: dict[tuple[str, str, str], float] = {}
+    std_mask = out["pick_type_norm"].eq("standard")
+    for idx in out.index[std_mask]:
+        r = out.loc[idx]
+        po = _standard_line_implied_over(r)
+        if po is None:
+            continue
+        key = _prop_lookup_key(r.get(player_col), r.get(prop_col), r.get("sport_norm") or r.get("sport"))
+        std_lookup[key] = po
+
+    imp = pd.to_numeric(out.get("implied_prob"), errors="coerce")
+
+    for idx, r in out.iterrows():
+        pt = norm_pick_type(r.get("pick_type") or r.get("pick_type_norm"))
+        if pt not in ("goblin", "demon"):
+            continue
+        if pd.notna(imp.loc[idx]):
+            continue
+
+        std_line = r.get("standard_line")
+        try:
+            std_f = float(std_line)
+            line_f = float(r.get("line"))
+        except (TypeError, ValueError):
+            continue
+        if not math.isfinite(std_f) or not math.isfinite(line_f):
+            continue
+
+        std_imp = _standard_line_implied_over(r)
+        if std_imp is None:
+            key = _prop_lookup_key(
+                r.get(player_col),
+                r.get(prop_col),
+                r.get("sport_norm") or r.get("sport"),
+            )
+            std_imp = std_lookup.get(key)
+        if std_imp is None:
+            continue
+
+        pick_raw = str(r.get("pick_type") or r.get("pick_type_norm") or pt)
+        adjusted = _adjust_over_prob_for_played_line(std_imp, line_f, std_f, pick_raw)
+        if adjusted is None:
+            continue
+
+        out.at[idx, "implied_prob"] = adjusted
+        out.at[idx, "implied_prob_source"] = "pp_line_delta"
+        if norm_direction(r.get("direction")) == "OVER":
+            out.at[idx, "implied_prob_over"] = adjusted
+
+    return out
 
 
 def _adjust_over_prob_for_played_line(
@@ -833,6 +924,8 @@ def enrich_read_fields_dataframe(df: pd.DataFrame | None) -> pd.DataFrame:
         out["hit_prob_under"],
         out["hit_prob_over"],
     )
+
+    out = _fill_goblin_demon_implied_prob(out)
 
     imp = _series_or_nan(out, "implied_prob")
     hps = pd.to_numeric(out["hit_prob_selected"], errors="coerce")
