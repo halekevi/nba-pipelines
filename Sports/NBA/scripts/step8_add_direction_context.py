@@ -52,7 +52,7 @@ if str(_REPO_ROOT) not in sys.path:
 from scripts.l10_streak_utils import finalize_l10_ui_columns
 from nba_enrichment_carry import (
     ENRICHMENT_CARRY_COLS,
-    is_nba1h_pipeline,
+    is_nba_period_pipeline,
     reattach_enrichment_carry,
     snapshot_enrichment_carry,
 )
@@ -542,7 +542,7 @@ def main() -> None:
 
     carry_cols: list[str] = []
     carry_df = None
-    if is_nba1h_pipeline(args.input, df):
+    if is_nba_period_pipeline(args.input, df):
         carry_cols, carry_df = snapshot_enrichment_carry(df)
 
     out = df.copy()

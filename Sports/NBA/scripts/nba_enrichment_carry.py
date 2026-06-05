@@ -1,4 +1,4 @@
-"""Preserve step4b usage/pace/defense columns through NBA1H pipeline steps 5-8."""
+"""Preserve step4b/4d usage/pace/injury columns through NBA1H and NBA1Q pipeline steps 5-8."""
 
 from __future__ import annotations
 
@@ -32,15 +32,21 @@ ENRICHMENT_CARRY_COLS = [
 ]
 
 
-def is_nba1h_pipeline(source: str | Path, df: pd.DataFrame) -> bool:
+def is_nba_period_pipeline(source: str | Path, df: pd.DataFrame) -> bool:
+    """True for NBA1H or NBA1Q period sub-slate paths (injury/usage carry)."""
     hint = str(source or "").lower()
-    if "nba1h" in hint:
+    if "nba1h" in hint or "nba1q" in hint:
         return True
     if "sport" in df.columns:
         sports = df["sport"].astype(str).str.strip().str.upper()
-        if len(sports) and sports.eq("NBA1H").all():
+        if len(sports) and sports.isin(["NBA1H", "NBA1Q"]).all():
             return True
     return False
+
+
+def is_nba1h_pipeline(source: str | Path, df: pd.DataFrame) -> bool:
+    """Backward-compatible alias for is_nba_period_pipeline."""
+    return is_nba_period_pipeline(source, df)
 
 
 def _player_team_cols(df: pd.DataFrame) -> tuple[str | None, str | None]:
@@ -89,7 +95,7 @@ def reattach_enrichment_carry(
 
     player_col, team_col = _player_team_cols(out_df)
     if not player_col or not team_col:
-        print(f"⚠️  [NBA1H carry] skip reattach ({label}): no player/team on output")
+        print(f"⚠️  [NBA period carry] skip reattach ({label}): no player/team on output")
         return out_df
 
     drop_restore = [c for c in restore_cols if c in out_df.columns]
@@ -103,9 +109,9 @@ def reattach_enrichment_carry(
     lead_col = restore_cols[0]
     filled = int(pd.to_numeric(merged[lead_col], errors="coerce").notna().sum())
     if filled == 0:
-        print(f"⚠️  [NBA1H carry] no matches for {restore_cols} ({label})")
+        print(f"⚠️  [NBA period carry] no matches for {restore_cols} ({label})")
     else:
-        print(f"[NBA1H carry] reattached {restore_cols} ({filled}/{len(out_df)} rows) — {label}")
+        print(f"[NBA period carry] reattached {restore_cols} ({filled}/{len(out_df)} rows) — {label}")
 
     out = out_df.copy()
     for col in restore_cols:

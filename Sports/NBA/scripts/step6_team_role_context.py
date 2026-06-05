@@ -31,7 +31,7 @@ import pandas as pd
 import numpy as np
 
 from nba_enrichment_carry import (
-    is_nba1h_pipeline,
+    is_nba_period_pipeline,
     reattach_enrichment_carry,
     snapshot_enrichment_carry,
 )
@@ -104,7 +104,7 @@ def main():
 
     carry_cols: list[str] = []
     carry_df = None
-    if is_nba1h_pipeline(args.input, df):
+    if is_nba_period_pipeline(args.input, df):
         carry_cols, carry_df = snapshot_enrichment_carry(df)
 
     stat_last5 = pd.to_numeric(df.get("stat_last5_avg"), errors="coerce")
