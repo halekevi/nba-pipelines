@@ -70,6 +70,23 @@
     return edge === "TOP_UNDER" || edge === "OK_UNDER";
   }
 
+  function isFadeCandidate(p) {
+    return Boolean(
+      p &&
+        (isUnderEdge(p.edge) ||
+          p.fades_vs_elite ||
+          (leaderSlice(p) === "bottom" && String(p.edge || "").toUpperCase() === "AVOID"))
+    );
+  }
+
+  function underSearchPlayers(block) {
+    return (block?.players || []).filter((p) => isUnderEdge(p.edge) || isFadeCandidate(p));
+  }
+
+  function blockHasUnderSignals(block) {
+    return underSearchPlayers(block).length > 0;
+  }
+
   function edgeRank(edge) {
     if (edge === "TOP_EDGE" || edge === "TOP_UNDER") return 0;
     if (edge === "OK_EDGE" || edge === "OK_UNDER") return 1;
@@ -532,10 +549,18 @@
 
     const overBtn = document.getElementById(pid(sport, "find-over"));
     const underBtn = document.getElementById(pid(sport, "find-under"));
-    const hasOver = displayed.some((p) => isOverEdge(p.edge));
-    const hasUnder = displayed.some((p) => isUnderEdge(p.edge));
-    if (overBtn) overBtn.disabled = !hasOver;
-    if (underBtn) underBtn.disabled = !hasUnder;
+    const hasOver = (block?.players || []).some((p) => isOverEdge(p.edge));
+    const hasUnder = blockHasUnderSignals(block);
+    if (overBtn) {
+      overBtn.disabled = !hasOver;
+      overBtn.title = hasOver ? "Jump to slate — OVER props for top-edge players" : "No OVER edges in this team/category";
+    }
+    if (underBtn) {
+      underBtn.disabled = !hasUnder;
+      underBtn.title = hasUnder
+        ? "Jump to slate — UNDER on Standard lines (fade / bottom-5 edges)"
+        : "No UNDER or fade edges in this team/category — try another stat (e.g. Rebounds, Assists)";
+    }
 
     const panel = document.getElementById(panelId(sport));
     if (panel) {
@@ -563,12 +588,29 @@
     }
   }
 
+  function applySlatePickFilter(sport, pickType) {
+    const gobBtn = document.getElementById("sfb-" + sport + "-goblin");
+    const stdBtn = document.getElementById("sfb-" + sport + "-standard");
+    if (!stdBtn || typeof global.togglePickFilter !== "function") return;
+    if (gobBtn?.classList.contains("on")) global.togglePickFilter(sport, "Goblin", gobBtn);
+    if (!stdBtn.classList.contains("on")) global.togglePickFilter(sport, "Standard", stdBtn);
+    if (pickType === "Goblin" && gobBtn && !gobBtn.classList.contains("on")) {
+      global.togglePickFilter(sport, "Goblin", gobBtn);
+    }
+  }
+
   function findProps(sport, direction) {
+    const wantUnder = String(direction || "").toUpperCase() === "UNDER";
+    if (wantUnder) {
+      const blockPre = currentBlock(sport);
+      if (blockPre && (blockPre.players || []).some((p) => leaderSlice(p) === "bottom" && isFadeCandidate(p))) {
+        setLeaderView(sport, "bottom");
+      }
+    }
     const block = currentBlock(sport);
     const terms = PROP_SEARCH[document.getElementById(pid(sport, "cat"))?.value] || [];
-    const wantUnder = String(direction || "").toUpperCase() === "UNDER";
     const overPlayers = (block?.players || []).filter((p) => isOverEdge(p.edge)).map((p) => p.player);
-    const underPlayers = (block?.players || []).filter((p) => isUnderEdge(p.edge)).map((p) => p.player);
+    const underPlayers = underSearchPlayers(block).map((p) => p.player);
     const pool = wantUnder ? underPlayers : overPlayers;
     const search = pool[0] || terms[0] || "";
 
@@ -578,7 +620,10 @@
       if (typeof global.filterSlate === "function") global.filterSlate(sport, search);
     }
     const dirBtn = document.getElementById("sfb-" + sport + (wantUnder ? "-under" : "-over"));
+    const otherDir = document.getElementById("sfb-" + sport + (wantUnder ? "-over" : "-under"));
+    if (otherDir?.classList.contains("on")) otherDir.click();
     if (dirBtn && !dirBtn.classList.contains("on")) dirBtn.click();
+    if (wantUnder) applySlatePickFilter(sport, "Standard");
     document.getElementById("st-" + sport)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
