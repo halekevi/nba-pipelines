@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ESPN game-day injury reports for NBA, CBB (men's college), and NHL.
+ESPN game-day injury reports for NBA, WNBA, CBB (men's college), and NHL.
 
 Used by:
   - fetch_actuals.py — writes injuries_<league>_<date>.csv next to actuals
@@ -13,10 +13,17 @@ Injuries are read from each event's summary JSON (same source as box scores).
 from __future__ import annotations
 
 import re
+import sys
 import time
 import unicodedata
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+for _p in (_REPO_ROOT, _SCRIPTS_DIR):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 import pandas as pd
 import requests
@@ -184,13 +191,16 @@ def _summary_url(sport_key: str, event_id: str) -> str:
 
 def collect_injuries_raw(sport_literal: str, date_str: str) -> pd.DataFrame:
     """
-    sport_literal: NBA | CBB | NHL
+    sport_literal: NBA | WNBA | CBB | NHL
     date_str: YYYY-MM-DD
     """
     lit = sport_literal.upper().strip()
     if lit == "NBA":
         sk = "nba"
         label = "NBA"
+    elif lit == "WNBA":
+        sk = "wnba"
+        label = "WNBA"
     elif lit == "CBB":
         sk = "mens-college-basketball"
         label = "CBB"
@@ -343,6 +353,7 @@ def auto_injuries_csv_from_outputs(repo_root: Path, slate_date: str, sport_liter
     lit = sport_literal.upper()
     fname = {
         "NBA": "injuries_nba",
+        "WNBA": "injuries_wnba",
         "CBB": "injuries_cbb",
         "WCBB": "injuries_wcbb",
         "NHL": "injuries_nhl",
@@ -352,3 +363,33 @@ def auto_injuries_csv_from_outputs(repo_root: Path, slate_date: str, sport_liter
         return None
     cand = repo_root / "outputs" / slate_date / f"{fname}_{slate_date}.csv"
     return cand if cand.is_file() else None
+
+
+if __name__ == "__main__":
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Fetch ESPN injury report CSV for a slate date.")
+    ap.add_argument("--sport", required=True, help="NBA | WNBA | CBB | WCBB | NHL")
+    ap.add_argument("--date", required=True, help="YYYY-MM-DD")
+    ap.add_argument(
+        "--output",
+        default="",
+        help="Output CSV path (default: outputs/<date>/injuries_<sport>_<date>.csv)",
+    )
+    args = ap.parse_args()
+    lit = args.sport.upper().strip()
+    slug = {
+        "NBA": "nba",
+        "WNBA": "wnba",
+        "CBB": "cbb",
+        "WCBB": "wcbb",
+        "NHL": "nhl",
+    }.get(lit)
+    if not slug:
+        raise SystemExit(f"Unsupported sport: {args.sport}")
+    ds = str(args.date).strip()[:10]
+    outp = Path(args.output) if str(args.output).strip() else (
+        Path(__file__).resolve().parents[1] / "outputs" / ds / f"injuries_{slug}_{ds}.csv"
+    )
+    n = write_injuries_for_date(lit, ds, outp)
+    print(f"Injury report saved -> {outp}  ({n} rows)")

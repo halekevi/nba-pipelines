@@ -338,6 +338,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",  default="step6_wnba_context.csv")
     ap.add_argument("--output", default="step7_wnba_ranked.xlsx")
+    ap.add_argument(
+        "--date",
+        default="",
+        help="Slate YYYY-MM-DD (injuries + usage_redistribution; defaults from game_date)",
+    )
     args = ap.parse_args()
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
@@ -347,16 +352,27 @@ def main():
     _sd_usage = str(REPO_ROOT / "scripts")
     if _sd_usage not in sys.path:
         sys.path.insert(0, _sd_usage)
+    run_date = str(args.date or "").strip()[:10]
+    if len(run_date) < 10 and "game_date" in out.columns and not out["game_date"].dropna().empty:
+        run_date = str(out["game_date"].dropna().iloc[0])[:10]
+    if len(run_date) < 10:
+        run_date = pd.Timestamp.today().strftime("%Y-%m-%d")
+
     try:
         from usage_redistribution import apply_usage_redistribution  # noqa: E402
-        run_date = (
-            str(out["game_date"].dropna().iloc[0])[:10]
-            if "game_date" in out.columns and not out["game_date"].dropna().empty
-            else pd.Timestamp.today().strftime("%Y-%m-%d")
-        )
         out = apply_usage_redistribution(out, sport="WNBA", date=run_date, repo_root=str(REPO_ROOT))
     except Exception as e:
         print(f"⚠️ usage redistribution skipped: {e}")
+
+    _inj_pen = pd.Series(0.0, index=out.index, dtype=float)
+    try:
+        from espn_injuries import auto_injuries_csv_from_outputs, penalty_series_for_slate  # noqa: E402
+
+        _inj_path = auto_injuries_csv_from_outputs(REPO_ROOT, run_date, "WNBA")
+        if _inj_path:
+            _inj_pen = penalty_series_for_slate(out, "player", "team", "WNBA", _inj_path)
+    except Exception as e:
+        print(f"⚠️ injury rank penalty skipped: {e}")
 
     for col, default in [("line",""),("pick_type","Standard")]:
         if col not in out.columns: out[col] = default
@@ -509,7 +525,7 @@ def main():
     )
     usage_bonus = np.clip(_to_num(out.get("usage_boost", pd.Series(0.0, index=out.index))).fillna(0.0) * 5.0, 0.0, 0.5)
     out["usage_bonus"] = usage_bonus
-    score = score + usage_bonus
+    score = score + usage_bonus + _inj_pen.reindex(out.index).fillna(0.0)
     score = (
         score
         * out["prop_weight"].astype(float).fillna(1.0)

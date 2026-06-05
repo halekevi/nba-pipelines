@@ -402,8 +402,22 @@ if ($ok) {
     }
 }
 
+# ESPN injury report (feeds usage_redistribution + combined slate)
+if ($ok) {
+    $InjOut = Join-Path $OutRoot "$Date\injuries_wnba_$Date.csv"
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $InjOut) | Out-Null
+    Write-Host "  --> WNBA ESPN injuries ($Date)" -ForegroundColor Yellow
+    Push-Location $Root
+    try {
+        & py -3.14 (Join-Path $Root "scripts\espn_injuries.py") --sport WNBA --date $Date --output $InjOut
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "      injuries WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+        }
+    } finally { Pop-Location }
+}
+
 if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_props.py" `
-    "--input `"$WnbaRunOutDir\step6_wnba_context.csv`" --output `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`"" }
+    "--input `"$WnbaRunOutDir\step6_wnba_context.csv`" --output `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`" --date $Date" }
 
 # Step 7b — same unified edge overlay as NBA/NHL/Soccer (non-fatal on failure)
 if ($ok) {

@@ -1816,8 +1816,8 @@ def fetch_soccer(date_str, adjacent_days: int = 1):
 
 
 def _export_injuries_sidecar(args) -> None:
-    """Write ESPN injury report CSV beside actuals (NBA/CBB/NHL only)."""
-    if args.sport not in ("NBA", "CBB", "WCBB", "NHL"):
+    """Write ESPN injury report CSV beside actuals (NBA/WNBA/CBB/NHL only)."""
+    if args.sport not in ("NBA", "WNBA", "CBB", "WCBB", "NHL"):
         return
     try:
         from espn_injuries import injuries_csv_path_for_actuals, write_injuries_for_date
