@@ -3,10 +3,10 @@
   "rows": [
     {
       "sport": "NBA",
-      "decided": 139375,
-      "paid": 77309,
-      "win_rate": 0.5546834080717489,
-      "net_dollars": 152430.0
+      "decided": 140791,
+      "paid": 77950,
+      "win_rate": 0.5536575491331122,
+      "net_dollars": 151090.0
     },
     {
       "sport": "CBB",
@@ -24,17 +24,17 @@
     },
     {
       "sport": "WNBA",
-      "decided": 15826,
-      "paid": 6576,
-      "win_rate": 0.4155187665866296,
-      "net_dollars": -26740.0
+      "decided": 16797,
+      "paid": 7010,
+      "win_rate": 0.4173364291242484,
+      "net_dollars": -27770.0
     },
     {
       "sport": "MLB",
-      "decided": 188364,
-      "paid": 56579,
-      "win_rate": 0.3003705591301947,
-      "net_dollars": -752060.0
+      "decided": 194442,
+      "paid": 58377,
+      "win_rate": 0.30022834572777485,
+      "net_dollars": -776880.0
     },
     {
       "sport": "SOCCER",
@@ -45,17 +45,17 @@
     },
     {
       "sport": "TENNIS",
-      "decided": 10820,
-      "paid": 2817,
-      "win_rate": 0.2603512014787431,
-      "net_dollars": -51860.0
+      "decided": 11012,
+      "paid": 2860,
+      "win_rate": 0.25971667272066834,
+      "net_dollars": -52920.0
     },
     {
       "sport": "NHL",
-      "decided": 57225,
-      "paid": 16789,
-      "win_rate": 0.29338575797291394,
-      "net_dollars": -236470.0
+      "decided": 57250,
+      "paid": 16793,
+      "win_rate": 0.2933275109170306,
+      "net_dollars": -236640.0
     },
     {
       "sport": "NFL",
@@ -66,5 +66,5 @@
     }
   ],
   "source": "graded_props_json",
-  "signature": "n=103:mt=1780683777989493800"
+  "signature": "n=104:mt=1780762214130286800"
 }
