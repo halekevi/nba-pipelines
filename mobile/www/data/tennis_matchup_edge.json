@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-07T09:08:02.145747+00:00",
+  "generated_at": "2026-06-07T11:42:49.310231+00:00",
   "slate_note": "Tennis match day 2026-06-08 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-08.xlsx)",
   "tennis_match_date": "2026-06-08",
   "n_teams": 300,
@@ -1862,8 +1862,8 @@
           "notes": "Solid vs average opponent (#78).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 22.5,
-          "pp_edge": -1.1
+          "pp_line": 21.5,
+          "pp_edge": -0.1
         }
       ]
     },
