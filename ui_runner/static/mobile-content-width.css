@@ -308,8 +308,7 @@ nav.snav.glass-card {
     position: relative !important;
   }
 
-  body.page-grades #grade-frame,
-  body.page-grades #ticket-frame {
+  body.page-grades #grade-frame {
     display: block !important;
     position: relative !important;
     width: 100% !important;
@@ -317,6 +316,19 @@ nav.snav.glass-card {
     max-width: 100% !important;
     min-height: 0 !important;
     height: auto !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: auto !important;
+    box-sizing: border-box !important;
+    touch-action: auto !important;
+  }
+
+  body.page-grades #ticket-frame {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
     overflow: visible !important;
     -webkit-overflow-scrolling: auto !important;
     box-sizing: border-box !important;
@@ -1473,6 +1485,5 @@ nav.snav .mobile-menu a {
     body.page-grades .iframe-shell-stage[data-grades-tab="tickets"],
     body.page-grades #ticket-frame {
           min-height: 0 !important;
-          height: auto !important;
     }
 }
