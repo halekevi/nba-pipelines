@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-08T09:26:34.734027+00:00",
+  "generated_at": "2026-06-08T12:16:09.121092+00:00",
   "slate_note": "Tennis match day 2026-06-09 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-09.xlsx)",
   "tennis_match_date": "2026-06-09",
   "n_teams": 300,
@@ -1039,20 +1039,20 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "kayla day": {
-      "opponent_slate": "mary stoiana",
-      "opponent_name": "MARY STOIANA",
-      "opponent_def_rank": 142,
-      "opponent_def_tier": "Weak",
-      "team_def_rank": 136,
-      "team_def_tier": "Weak"
-    },
     "tamara zidansek": {
       "opponent_slate": "federica urgesi",
       "opponent_name": "FEDERICA URGESI",
       "opponent_def_rank": 75,
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 134,
+      "team_def_tier": "Weak"
+    },
+    "kayla day": {
+      "opponent_slate": "mary stoiana",
+      "opponent_name": "MARY STOIANA",
+      "opponent_def_rank": 142,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 136,
       "team_def_tier": "Weak"
     },
     "noemi basiletti": {
@@ -4145,34 +4145,6 @@
         }
       ]
     },
-    "mary stoiana|games_won": {
-      "team_slate": "mary stoiana",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "kayla day",
-        "name": "KAYLA DAY",
-        "def_rank": 136,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Mary Stoiana",
-          "player_norm": "mary stoiana",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 11.5,
-          "game_score": 11.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -1.0
-        }
-      ]
-    },
     "mingge xu|games_won": {
       "team_slate": "mingge xu",
       "category": "games_won",
@@ -4198,6 +4170,34 @@
           "def_boost": null,
           "pp_line": 12.5,
           "pp_edge": -4.75
+        }
+      ]
+    },
+    "mary stoiana|games_won": {
+      "team_slate": "mary stoiana",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "kayla day",
+        "name": "KAYLA DAY",
+        "def_rank": 136,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Mary Stoiana",
+          "player_norm": "mary stoiana",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.5,
+          "game_score": 11.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -1.0
         }
       ]
     },
@@ -8513,34 +8513,6 @@
         }
       ]
     },
-    "kayla day|break_points_won": {
-      "team_slate": "kayla day",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "mary stoiana",
-        "name": "MARY STOIANA",
-        "def_rank": 142,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Kayla Day",
-          "player_norm": "kayla day",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "greet minnen|break_points_won": {
       "team_slate": "greet minnen",
       "category": "break_points_won",
@@ -8668,6 +8640,34 @@
         {
           "player": "Leyre Romero Gormaz",
           "player_norm": "leyre romero gormaz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "kayla day|break_points_won": {
+      "team_slate": "kayla day",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "mary stoiana",
+        "name": "MARY STOIANA",
+        "def_rank": 142,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Kayla Day",
+          "player_norm": "kayla day",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.5,
