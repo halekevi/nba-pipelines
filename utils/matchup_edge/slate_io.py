@@ -88,7 +88,7 @@ def pick_type_rank(pick_type: object) -> int:
 
 
 def _opp_from_row(row: dict) -> str:
-    for k in ("opp", "opp_team", "opp_team_abbr", "pp_opp_team", "opponent"):
+    for k in ("opp", "Opp", "opp_team", "opp_team_abbr", "pp_opp_team", "opponent"):
         v = str(row.get(k) or "").strip().upper()
         if v and v not in ("—", "-", "NAN", "UNKNOWN_OPP", "UNK"):
             return v
@@ -96,7 +96,9 @@ def _opp_from_row(row: dict) -> str:
 
 
 def _team_from_row(row: dict) -> str:
-    team = str(row.get("team") or row.get("team_abbr") or row.get("pp_team") or "").strip().upper()
+    team = str(
+        row.get("team") or row.get("Team") or row.get("team_abbr") or row.get("pp_team") or ""
+    ).strip().upper()
     if team and team not in ("—", "-", "NAN"):
         if "/" in team:
             team = team.split("/")[0].strip()

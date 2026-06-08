@@ -56,6 +56,26 @@ def main() -> int:
     for p in (REPO / "mobile" / "www" / "slate_display_date.json", REPO / "ui_runner/templates/slate_display_date.json"):
         p.write_text(json.dumps(disp, indent=2) + "\n", encoding="utf-8")
     print(f"slate_display_date -> {date}")
+
+    # Matchup Edge reads tonight's team→opp from slate_sport_nba.json — rebuild after publish.
+    import subprocess
+
+    me_script = REPO / "scripts" / "build_matchup_edge_json.py"
+    if me_script.is_file():
+        print("  rebuilding nba_matchup_edge.json …")
+        proc = subprocess.run(
+            [sys.executable, str(me_script), "--sport", "nba"],
+            cwd=str(REPO),
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            print(f"  WARN: build_matchup_edge_json nba exit {proc.returncode}")
+            if proc.stderr:
+                print(proc.stderr[:500])
+        else:
+            print((proc.stdout or "").strip() or "  nba_matchup_edge.json OK")
+
     return 0
 
 
