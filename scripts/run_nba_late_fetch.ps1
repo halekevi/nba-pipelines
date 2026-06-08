@@ -151,7 +151,7 @@ $nhlRunOut = Ensure-RunOutDir -SportTag "nhl"
 $nhlStep1 = Join-Path $nhlRunOut "step1_nhl_props.csv"
 Push-Location $NHLDir
 try {
-    & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--output" $nhlStep1
+    & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--date" "$PipeDate" "--output" $nhlStep1
 }
 finally {
     Pop-Location
@@ -182,31 +182,58 @@ elseif ((Get-CsvDataRowCount -CsvPath $soccerStep1) -gt 0) {
     Copy-Step1Mirror -Source $soccerStep1 -MirrorPath (Join-Path $SoccerDir "outputs\step1_soccer_props.csv")
 }
 
-# MLB - direct API first (dated output), then Playwright fallback
-Write-Host "[LATE_FETCH] Fetching MLB props (append; direct API then Playwright if needed)..." -ForegroundColor Cyan
+# MLB — CDP when debug Chrome is up, then fast-fail direct API, then Playwright (all --append)
+Write-Host "[LATE_FETCH] Fetching MLB props (append; CDP → API → Playwright)..." -ForegroundColor Cyan
 $MLBDir = Join-Path $SportsRoot "MLB"
 $mlbRunOut = Ensure-RunOutDir -SportTag "mlb"
 $mlbStep1 = Join-Path $mlbRunOut "step1_mlb_props.csv"
+$env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+$mlbCdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
+$mlbCdpReachable = $false
+try {
+    $mlbCdpProbe = Invoke-RestMethod -Uri "$mlbCdpUrl/json/version" -TimeoutSec 2 -ErrorAction Stop
+    if ($mlbCdpProbe) { $mlbCdpReachable = $true }
+}
+catch { $mlbCdpReachable = $false }
+
 Push-Location $MLBDir
 try {
-    & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-        "--max-pages" "5" `
-        "--api-retries" "5" `
-        "--api-session-waves" "3" `
-        "--api-wave-gap-min" "30" `
-        "--api-wave-gap-max" "75" `
-        "--api-403-cooldown-after" "4" `
-        "--api-403-cooldown-seconds" "180" `
-        "--api-403-cooldown-jitter-min" "20" `
-        "--api-403-cooldown-jitter-max" "80" `
-        "--append" `
-        "--date" "$PipeDate" `
-        "--output" $mlbStep1
+    if ($mlbCdpReachable) {
+        Write-Host "[LATE_FETCH] MLB CDP attach: $mlbCdpUrl" -ForegroundColor DarkGray
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--cdp" $mlbCdpUrl `
+            "--timeout" "120" `
+            "--retries" "1" `
+            "--retry_delay" "5" `
+            "--append" `
+            "--date" "$PipeDate" `
+            "--output" $mlbStep1
+    }
+    if (-not $mlbCdpReachable -or $LASTEXITCODE -ne 0) {
+        if ($mlbCdpReachable) {
+            Write-Host "[LATE_FETCH] MLB CDP step1 failed (exit $LASTEXITCODE) — trying direct API" -ForegroundColor Yellow
+        }
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--max-pages" "5" `
+            "--api-retries" "2" `
+            "--api-session-waves" "1" `
+            "--api-wave-gap-min" "5" `
+            "--api-wave-gap-max" "15" `
+            "--api-403-cooldown-after" "2" `
+            "--api-403-cooldown-seconds" "45" `
+            "--api-403-cooldown-jitter-min" "8" `
+            "--api-403-cooldown-jitter-max" "25" `
+            "--append" `
+            "--date" "$PipeDate" `
+            "--output" $mlbStep1
+    }
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "[LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright" -ForegroundColor Yellow
+        Write-Host "[LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) — trying Playwright" -ForegroundColor Yellow
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
             "--playwright" `
             "--timeout" "240" `
+            "--retries" "1" `
+            "--retry_delay" "5" `
             "--append" `
             "--date" "$PipeDate" `
             "--output" $mlbStep1

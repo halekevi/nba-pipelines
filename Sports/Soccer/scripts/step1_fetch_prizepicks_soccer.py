@@ -26,7 +26,11 @@ _PROPORACLE_ROOT = Path(__file__).resolve().parents[3]
 if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
-from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+from utils.step1_slate_date_filter import (
+    apply_game_date_filter,
+    no_props_log_line,
+    should_preserve_append_output,
+)
 
 # PrizePicks internal soccer league IDs
 SOCCER_BOARDS = {
@@ -316,6 +320,9 @@ def main():
 
     if len(df) == 0:
         print(no_props_log_line("Soccer", str(args.date).strip()))
+        if should_preserve_append_output(out_path, args.append):
+            print("   (--append: left existing output file unchanged)")
+            sys.exit(0)
         pd.DataFrame(
             columns=pre_filter_columns
             or ["player", "prop_type", "line", "start_time", "team", "opp_team", "pick_type", "league"]

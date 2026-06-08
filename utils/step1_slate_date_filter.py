@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -12,6 +13,20 @@ def no_props_log_line(sport_label: str, fetch_date: str) -> str:
         f"[{sport_label} step1] No props for {fetch_date} — "
         "board may be tomorrow's slate or off-season"
     )
+
+
+def should_preserve_append_output(out_path: str | Path, append: bool) -> bool:
+    """True when --append should keep an existing non-empty step1 CSV unchanged."""
+    if not append:
+        return False
+    path = Path(out_path)
+    if not path.is_file():
+        return False
+    try:
+        existing = pd.read_csv(path, encoding="utf-8-sig")
+        return len(existing) > 0
+    except Exception:
+        return False
 
 
 def apply_game_date_filter(

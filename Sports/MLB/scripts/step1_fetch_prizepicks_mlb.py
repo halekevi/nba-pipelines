@@ -42,7 +42,11 @@ if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
 from scripts.db_utils import log_pipeline_health
-from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+from utils.step1_slate_date_filter import (
+    apply_game_date_filter,
+    no_props_log_line,
+    should_preserve_append_output,
+)
 
 MLB_LEAGUE_ID = "2"
 BOARD_URL     = f"https://app.prizepicks.com/board?league_id={MLB_LEAGUE_ID}"
@@ -868,7 +872,7 @@ def main():
             extra={"league_id": MLB_LEAGUE_ID, "method": fetch_method, "attempts": max_attempts},
             start=Path(__file__),
         )
-        sys.exit(1)
+        sys.exit(0 if should_preserve_append_output(out_path, args.append) else 1)
 
     # ── Parse ────────────────────────────────────────────────────────────────
     rows = parse_rows(data, included)
@@ -934,7 +938,7 @@ def main():
                 extra={"rows": rows_n_new, "teams": teams_n_new, "append": True},
                 start=Path(__file__),
             )
-            sys.exit(1)
+            sys.exit(0 if should_preserve_append_output(out_path, args.append) else 1)
         try:
             existing = pd.read_csv(out_path, encoding="utf-8-sig")
             n_existing = len(existing)
@@ -996,6 +1000,9 @@ def main():
 
     if len(df) == 0:
         print(no_props_log_line("MLB", str(args.date).strip()))
+        if should_preserve_append_output(out_path, args.append):
+            print("   (--append: left existing output file unchanged)")
+            sys.exit(0)
         pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False, encoding="utf-8-sig")
         print(f"\n[INFO] Saved empty date-filtered MLB step1 CSV -> {out_path}")
         sys.exit(0)

@@ -27,7 +27,11 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from utils.step1_slate_date_filter import apply_game_date_filter, no_props_log_line
+from utils.step1_slate_date_filter import (
+    apply_game_date_filter,
+    no_props_log_line,
+    should_preserve_append_output,
+)
 
 try:
     from tqdm import tqdm as _tqdm
@@ -526,9 +530,9 @@ def main():
 
     if not rows:
         print("⚠️  No NHL props found. NHL may not be active on PrizePicks today.")
-        if args.append and out_path.is_file():
+        if should_preserve_append_output(out_path, args.append):
             print("   (--append: left existing output file unchanged)")
-            sys.exit(1)
+            sys.exit(0)
         _write_empty_nhl(out_path)
         sys.exit(0)
 
@@ -549,6 +553,9 @@ def main():
         print("[NHL step1] allow-nearest-future: skipping date filter")
     if len(filtered) == 0:
         print(no_props_log_line("NHL", fetch_date))
+        if should_preserve_append_output(out_path, args.append):
+            print("   (--append: left existing output file unchanged)")
+            sys.exit(0)
         _write_empty_nhl(out_path)
         sys.exit(0)
     rows = filtered.to_dict("records")
