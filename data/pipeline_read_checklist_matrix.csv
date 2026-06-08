@@ -84,7 +84,7 @@ Sport context — WNBA,intel_opp_vs_league_pct,Yes,In-score,Partial,No,No,Step7 
 Sport context — WNBA,intel_l5_vs_season,Yes,In-score,Partial,No,No,Intel L5/L10/Season on FS
 Sport context — WNBA,usage_boost / usage_vacuum / team_star_out,Yes,Yes,Yes,Passthrough,No,WNBA injury tiers closed 06-04 — step4d + step8 + FS (212 team_star_out)
 Sport context — WNBA,key_facilitator_out / injury_boost_candidate,Yes,Yes,Yes,Passthrough,No,WNBA step4d trickle-up flags on FS
-Sport context — NHL,line_combo,Yes,Passthrough,Partial,Passthrough,Partial,D-pairs OK; CAR forward line_combo blocked — manual NST CSV import
+Sport context — NHL,line_combo,Yes,Passthrough,Partial,Passthrough,Partial,Closed 2025-26 season — CAR 70 dash-pairs in nst_line_combos_cache (pairings.php); NHL slate done
 Sport context — NHL,line_combo_toi_pct,Yes,Passthrough,Partial,No,No,D-pairs only
 Sport context — NHL,on_pp1_line / pp_unit_tier,Yes,Partial,Partial,No,No,In step7/8; weak FS export
 Sport context — NHL,goalie_name / goalie_sv_pct,Yes,Partial,Partial,No,No,Goalie props; not all on FS
@@ -93,10 +93,10 @@ Sport context — Tennis,hold_rate_surface,Partial,No,No,No,No,Recommended; not 
 Sport context — Tennis,break_rate_surface,Partial,No,No,No,No,Recommended; not built
 Sport context — Tennis,h2h_avg / h2h_games / h2h_over_rate,Partial,Partial,Yes,Passthrough,Partial,FS H2H Avg / GP / Over% / Last
 Sport context — NBA / NBA1H / NBA1Q,intel + pace + minutes stack,Yes,Partial,Partial,Partial,Partial,NBA off 06-02 slate; NBA1H/Q active; NBA1H ticket pool AUC-gated
-Sport context — NBA1H / NBA1Q,team_star_out / injury context,Yes,Partial,No,No,No,Open — port NBA step4d pattern; not on FS
+Sport context — NBA1H / NBA1Q,team_star_out / injury context,Yes,Yes,Partial,Passthrough,No,Closed 06-08 — step4d + step7 bool-fix + step8 INJURY_COLS keep list (NBA/NBA1H/NBA1Q)
 Sport context — NHL,player_injury_status / player_on_il / player_dtd,Yes,Yes,Yes,Passthrough,No,Tier 3 NHL closed 06-04 — step4d ESPN sidecar + league cache fallback
 Sport context — NHL,team_key_out / team_dtd_count,Yes,Yes,Yes,Passthrough,No,Team broadcast flags; rank_penalty<=-0.20 for key_out
-Injury / rest / B2B,injury_flag / team_star_out,Yes,Partial,Partial,No,No,WNBA+MLB on FS 06-04; NHL/NBA1H/Q still open
+Injury / rest / B2B,injury_flag / team_star_out,Yes,Yes,Yes,Passthrough,No,NBA Full Slate closed 06-08 (usage_vacuum 571/1233); WNBA+MLB closed 06-04; NHL step4d closed 06-04
 Injury / rest / B2B,rest_days / opp_days_rest,Yes,Partial,Yes,Passthrough,No,Tier 1 closed 06-04 — passthrough Full Slate (2282/2925 days_rest)
 Injury / rest / B2B,b2b_flag / opp_b2b_flag,Yes,Partial,Partial,Passthrough,No,On FS; verify sport-native fill per slate
 Injury / rest / B2B,void_reason,Yes,Yes,Partial,No,No,WNBA void legs; on step8
@@ -105,7 +105,7 @@ Market odds / implied prob,implied_prob,Partial,Yes,Yes,Derived,Partial,Tier 4 c
 Market odds / implied prob,implied_prob_over,Partial,Yes,Partial,Passthrough,Partial,Tier 4 closed — OddsAPI step5 line_movement
 Market odds / implied prob,implied_prob_under,Partial,Yes,Partial,Passthrough,Partial,Tier 4 closed — OddsAPI step5 line_movement
 Market odds / implied prob,implied_prob_source,No,No,No,Derived,No,Tier 4 closed — pp_line_delta tags goblin/demon derived fills; in READ_SLATE_EXPORT_KEYS
-Market odds / implied prob,implied_prob_book,No,No,No,No,No,Tier 4 closed — internal OddsAPI diagnostic (line_movement); not on FS
+Market odds / implied prob,implied_prob_book,No,No,No,No,No,Pending — validate Pinnacle fill on next OddsAPI quota reset ([LM] bookmaker distribution)
 Market odds / implied prob,line_underdog,Partial,No,Yes,Passthrough,Partial,Tier 4 closed — PP/UD cross-book lines on FS; ActionNetwork/DK scrape skipped (structural unmappables)
 Market odds / implied prob,line_draftkings,Partial,No,Yes,Passthrough,Partial,Tier 4 closed — DK cross-book line on FS; scrape skipped (structural unmappables)
 Market odds / implied prob,cross_edge,No,No,Partial,Derived,Partial,Tier 4 closed — enrichment hit_prob_selected - implied_prob; recomputed after pp_line_delta fill
