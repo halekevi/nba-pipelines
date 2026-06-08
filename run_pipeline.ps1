@@ -652,6 +652,38 @@ function Copy-DatedSlateOutput {
     }
 }
 
+# -- MLB: mirror step8 to sport root + publish slate_sport_mlb.json (Railway / Slate Explorer) --
+function Publish-MlbStep8Artifacts {
+    param([string]$Reason = "")
+    $step8Clean = Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx"
+    if (-not (Test-Path -LiteralPath $step8Clean)) {
+        Write-Host "  [MLB publish] skip — no step8_mlb_direction_clean.xlsx" -ForegroundColor DarkGray
+        return
+    }
+    $sportRoot = Join-Path $MLBDir "step8_mlb_direction_clean.xlsx"
+    try {
+        Copy-Item -LiteralPath $step8Clean -Destination $sportRoot -Force -ErrorAction Stop
+        Write-Host "  [MLB publish] Railway sport root -> $sportRoot" -ForegroundColor DarkGray
+    } catch {
+        Write-Host "  [MLB publish] WARN: could not copy to sport root: $_" -ForegroundColor Yellow
+    }
+    Copy-DatedSlateOutput -SourcePath $step8Clean -DatedFileName "step8_mlb_direction_clean_$Date.xlsx" -Label "MLB"
+    $pubScript = Join-Path $Root "scripts\_publish_mlb_slate_only.py"
+    if (Test-Path -LiteralPath $pubScript) {
+        $tag = if ($Reason) { " ($Reason)" } else { "" }
+        Write-Host "  [MLB publish] slate_sport_mlb.json$tag" -ForegroundColor DarkGray
+        Push-Location $Root
+        try {
+            & py -3.14 $pubScript $Date
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "  [MLB publish] WARN: _publish_mlb_slate_only exit $LASTEXITCODE" -ForegroundColor Yellow
+            }
+        } finally {
+            Pop-Location
+        }
+    }
+}
+
 # -- NHL step4b-pre: slate D-pairs (pairings.php) then step4b attach --
 # To import manual NST line export (Option B — no live fetch / Cloudflare):
 #   py Sports/NHL/scripts/refresh_nst_cache.py --import-csv path\to\export.csv --sit 5v5 --team VGK
@@ -1368,6 +1400,7 @@ if ($MLBOnly) {
             } finally { Pop-Location }
         }
     }
+    if ($ok) { Publish-MlbStep8Artifacts -Reason "MLB-only" }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
@@ -2597,6 +2630,7 @@ if (-not $mlbStep1Health.ok) {
 } else {
     $MLBSuccess = $MLBSuccess -and $true
 }
+if ($MLBSuccess) { Publish-MlbStep8Artifacts -Reason "parallel" }
 
 $nbaStep1Health = Get-NBAStep1DateHealth -CsvPath (Join-Path $NBARunOutDir "step1_pp_props_today.csv") -TargetDate $Date
 if (-not $nbaStep1Health.ok) {
