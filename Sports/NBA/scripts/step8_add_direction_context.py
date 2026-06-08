@@ -427,6 +427,17 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'game_script_mult', 'game_script_note',
         'open_line', 'line_movement', 'line_direction_shift',
     ]
+    # Injury/usage cols always included (step4d populates for all NBA variants)
+    INJURY_COLS = [
+        'usage_vacuum', 'team_star_out',
+        'key_facilitator_out', 'injury_boost_candidate',
+        'usage_pct', 'usage_tier', 'usage_role_type',
+    ]
+    for c in INJURY_COLS:
+        if c not in keep:
+            keep.append(c)
+
+    # Remaining carry cols (pace, intel carry, etc.) — period slates only
     if is_period_slate:
         for c in ENRICHMENT_CARRY_COLS:
             if c not in keep:
@@ -478,6 +489,12 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'OVERALL_DEF_RANK': 'Def Rank', 'DEF_TIER': 'Def Tier',
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
         'void_reason': 'Void Reason',
+        'usage_vacuum': 'usage_vacuum',
+        'team_star_out': 'team_star_out',
+        'key_facilitator_out': 'key_facilitator_out',
+        'injury_boost_candidate': 'injury_boost_candidate',
+        'usage_pct': 'usage_pct',
+        'usage_tier': 'usage_tier',
         # Intel columns
         'intel_season_avg':        'Intel Season Avg',
         'intel_l5_avg':            'Intel L5 Avg',
