@@ -2779,21 +2779,25 @@ function pctFromValue(raw) {
 
 function topEdgeL5HitPct(p, dirOverride = "") {
   const d = String(dirOverride || p?.dir || "").trim().toUpperCase();
-  const hits = d === "UNDER" ? resolvedUnderHits(p, 5) : resolvedOverHits(p, 5);
-  if (hits !== null) return Math.round((hits / 5) * 100);
+  // Game-log L5 (chart) wins over pipeline l5_over/l5_under — avoids UNDER cards showing
+  // 80% when actuals vs today's line are mostly overs (or vice versa).
   const empirical = empiricalHitPctForPick({ ...p, dir: d }, 5);
   if (Number.isFinite(empirical)) return empirical;
+  const hits = d === "UNDER" ? resolvedUnderHits(p, 5) : resolvedOverHits(p, 5);
+  if (hits !== null) return Math.round((hits / 5) * 100);
   return pctFromValue(p?.hit);
 }
 
 /** If pipeline L5 is 80%+ but chart/game-log data are flat near zero vs line, omit the card. */
 function passesTopEdgeEmpiricalSanity(p, dir) {
   const d = String(dir || "OVER").trim().toUpperCase();
+  const emp = empiricalHitPctForPick({ ...p, dir: d }, 5);
   const gate = topEdgeL5HitPct({ ...p, dir: d }, d);
   if (!Number.isFinite(gate) || gate < 80) return true;
+  // When we have real game logs, hit% must match the chart direction at this line.
+  if (Number.isFinite(emp) && emp < 80) return false;
   const lineVal = coercePropLine(p);
   if (!Number.isFinite(lineVal) || lineVal < 2) return true;
-  const emp = empiricalHitPctForPick({ ...p, dir: d }, 5);
   if (Number.isFinite(emp) && emp <= 0 && gate >= 80) return false;
   const plot = expandHistForEdgeChart(p, 5);
   if (plot && Array.isArray(plot.actual) && plot.actual.length >= 3 && gate >= 80) {
@@ -3885,14 +3889,21 @@ function underEdgeDisplayPick(basePick) {
   const UNDER_SYNTH_EDGE_MIN = 0.1;
   if (!Number.isFinite(eo) || Math.abs(eo) < UNDER_SYNTH_EDGE_MIN) return null;
   const edgeUnder = -eo;
-
+  const disp = { ...basePick, dir: "UNDER", edge: edgeUnder };
+  const emp5 = empiricalHitPctForPick(disp, 5);
+  if (Number.isFinite(emp5)) {
+    if (emp5 < 80) return null;
+    return { ...disp, hit: emp5 };
+  }
   const h5 = resolvedUnderHits(basePick, 5);
   if (h5 !== null) {
-    return { ...basePick, dir: "UNDER", edge: edgeUnder, hit: Math.max(0, Math.min(100, Math.round((h5 / 5) * 100))) };
+    if (h5 < 4) return null;
+    return { ...disp, hit: Math.max(0, Math.min(100, Math.round((h5 / 5) * 100))) };
   }
   const h10 = resolvedUnderHits(basePick, 10);
   if (h10 !== null) {
-    return { ...basePick, dir: "UNDER", edge: edgeUnder, hit: Math.max(0, Math.min(100, Math.round((h10 / 10) * 100))) };
+    if (h10 < 8) return null;
+    return { ...disp, hit: Math.max(0, Math.min(100, Math.round((h10 / 10) * 100))) };
   }
   return null;
 }
@@ -3911,12 +3922,17 @@ function collectUnderEdgeRows() {
 
 function pickPrimaryLineRows(rows) {
   const out = new Map();
+  const lineKey = (p) => {
+    const v = coercePropLine(p);
+    return Number.isFinite(v) ? v.toFixed(3) : String(p?.line ?? "").trim();
+  };
   const keyFor = (p) => [
     String(p.sport || "").trim().toUpperCase(),
     String(p.player || "").trim().toLowerCase(),
     String(p.prop || "").trim().toLowerCase(),
     String(p.pick || "").trim().toLowerCase(),
     String(p.dir || "").trim().toUpperCase(),
+    lineKey(p),
   ].join("|");
   const lineNum = (p) => {
     const v = Number(p?.line);
