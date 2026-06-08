@@ -1,17 +1,218 @@
 {
-  "updated_at": "2026-06-07T08:40:54.981494Z",
-  "days_tracked": 6,
+  "updated_at": "2026-06-08T08:41:43.486269Z",
+  "days_tracked": 7,
   "aggregate": {
-    "hit": 26,
-    "miss": 24,
+    "hit": 28,
+    "miss": 30,
     "void": 7,
     "push": 0,
     "pending": 0,
     "no_match": 15,
-    "total": 72
+    "total": 80
   },
-  "aggregate_hit_rate": 0.52,
+  "aggregate_hit_rate": 0.4828,
   "recent": [
+    {
+      "slate_date": "2026-06-07",
+      "graded_at": "2026-06-08T08:41:43.472947Z",
+      "summary": {
+        "hit": 2,
+        "miss": 6,
+        "void": 0,
+        "push": 0,
+        "pending": 0,
+        "no_match": 0,
+        "total": 8
+      },
+      "hit_rate": 0.25,
+      "decided": 8,
+      "results": [
+        {
+          "player": "Nyara Sabally",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.6327,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 10,
+            "total": 10,
+            "hit_rate": 1.0
+          },
+          "slate_line": 10.0,
+          "slate_pick_type": "Standard",
+          "team": "TOR",
+          "opp": "CHI",
+          "result": "HIT",
+          "actual": 15.0,
+          "line": 7.5,
+          "margin": 7.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Marina Mabrey",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5897,
+          "display_prop": {
+            "prop_type": "Pts+Asts",
+            "direction": "OVER",
+            "hits": 14,
+            "total": 15,
+            "hit_rate": 0.9333
+          },
+          "slate_line": 22.0,
+          "slate_pick_type": "Standard",
+          "team": "TOR",
+          "opp": "CHI",
+          "result": "MISS",
+          "actual": 15.0,
+          "line": 19.5,
+          "margin": -4.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Kelsey Plum",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5132,
+          "display_prop": {
+            "prop_type": "3-PT Made",
+            "direction": "OVER",
+            "hits": 7,
+            "total": 8,
+            "hit_rate": 0.875
+          },
+          "slate_line": 1.5,
+          "slate_pick_type": "Goblin",
+          "team": "LAS",
+          "opp": "PDX",
+          "result": "MISS",
+          "actual": 1.0,
+          "line": 1.5,
+          "margin": -0.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4885,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 14,
+            "total": 26,
+            "hit_rate": 0.5385
+          },
+          "slate_line": 5.5,
+          "slate_pick_type": "Goblin",
+          "team": "LAS",
+          "opp": "PDX",
+          "result": "HIT",
+          "actual": 17.0,
+          "line": 7.5,
+          "margin": 9.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Bridget Carleton",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4516,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 14,
+            "total": 34,
+            "hit_rate": 0.4118
+          },
+          "slate_line": 9.5,
+          "slate_pick_type": "Goblin",
+          "team": "PDX",
+          "opp": "LAS",
+          "result": "MISS",
+          "actual": 7.0,
+          "line": 9.5,
+          "margin": -2.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Cameron Brink",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4483,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 11,
+            "total": 17,
+            "hit_rate": 0.6471
+          },
+          "slate_line": 8.5,
+          "slate_pick_type": "Standard",
+          "team": "LAS",
+          "opp": "PDX",
+          "result": "MISS",
+          "actual": 2.0,
+          "line": 4.5,
+          "margin": -2.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Kamilla Cardoso",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4462,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 22,
+            "total": 43,
+            "hit_rate": 0.5116
+          },
+          "slate_line": 9.5,
+          "slate_pick_type": "Standard",
+          "team": "CHI",
+          "opp": "TOR",
+          "result": "MISS",
+          "actual": 8.0,
+          "line": 10.5,
+          "margin": -2.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Dearica Hamby",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4384,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 13,
+            "total": 21,
+            "hit_rate": 0.619
+          },
+          "slate_line": 3.5,
+          "slate_pick_type": "Standard",
+          "team": "LAS",
+          "opp": "PDX",
+          "result": "MISS",
+          "actual": 0.0,
+          "line": 2.5,
+          "margin": -2.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        }
+      ]
+    },
     {
       "slate_date": "2026-06-06",
       "graded_at": "2026-06-07T08:40:54.938373Z",
@@ -1703,5 +1904,5 @@
       ]
     }
   ],
-  "latest_graded_date": "2026-06-06"
+  "latest_graded_date": "2026-06-07"
 }
