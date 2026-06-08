@@ -1459,15 +1459,20 @@ nav.snav .mobile-menu a {
 }
 
 
-/* ── Fix: Grades iframe min-height on mobile (v20260522gradesframe) ── */
+/* ── Fix: Grades iframe min-height on mobile (v20260522gradesframe) ──
+   Ticket tab: hub JS sizes #ticket-frame to content — 80vh min-height left a dark void under KPIs. */
 @media (max-width: 900px) {
     body.page-grades #grade-frame,
-    body.page-grades #ticket-frame,
-    body.page-grades iframe.grade-frame {
+    body.page-grades iframe.grade-frame:not(#ticket-frame) {
           min-height: 80vh !important;
           height: auto !important;
     }
-    body.page-grades .iframe-shell-stage {
+    body.page-grades .iframe-shell-stage:not([data-grades-tab="tickets"]) {
           min-height: 80vh !important;
+    }
+    body.page-grades .iframe-shell-stage[data-grades-tab="tickets"],
+    body.page-grades #ticket-frame {
+          min-height: 0 !important;
+          height: auto !important;
     }
 }

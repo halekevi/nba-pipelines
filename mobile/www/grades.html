@@ -99,6 +99,9 @@ html.page-grades-root body.page-grades .grades-body{
   overflow:hidden!important;
   flex:none!important;
 }
+html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .grades-body{
+  overflow:visible!important;
+}
 @media (max-width:900px){
   html.page-grades-root body.page-grades .grades-page,
   html.page-grades-root body.page-grades .grades-body{
@@ -359,6 +362,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-toolbar-parent-slot{flex-shrink:0}
 .grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
 .iframe-shell-stage{flex:1;min-height:0;min-width:0;width:100%;max-width:100%;position:relative;overflow:hidden;}
+.iframe-shell-stage[data-grades-tab="tickets"]{flex:none!important;overflow:visible!important;}
 /* Slate/ticket iframes follow #empty-state in DOM — without z-index, the iframe paints on top and hides
    “No report” / errors on desktop (mobile media query used to fix this only for small screens). */
 .iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:var(--bg-main);min-width:0;box-sizing:border-box;z-index:1;}
@@ -565,6 +569,44 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   max-height:none !important;
   opacity:1 !important;
   z-index:2;
+}
+/* Ticket tab: stage must shrink-wrap the iframe — flex/min-height:80vh left a dark void under the KPI bar. */
+html.page-grades-root body.page-grades .iframe-shell-stage[data-grades-tab="tickets"]{
+  min-height:0!important;
+  height:auto!important;
+  background:transparent!important;
+  overflow:visible!important;
+}
+html.page-grades-root body.page-grades .iframe-shell-stage[data-grades-tab="tickets"] > #ticket-frame{
+  position:relative!important;
+  inset:auto!important;
+  top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  height:auto!important;
+  background:var(--bg-main,#0a0a14);
+  overflow:visible!important;
+}
+html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .grades-body,
+html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .grades-page,
+html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe-shell{
+  overflow:visible!important;
+}
+.iframe-shell-stage[data-grades-tab="tickets"] .load-overlay,
+.iframe-shell-stage[data-grades-tab="tickets"] .empty-state,
+.iframe-shell-stage[data-grades-tab="tickets"] #ticket-empty-state{
+  display:none!important;
+  visibility:hidden!important;
+  height:0!important;
+  max-height:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  opacity:0!important;
+  z-index:-1!important;
+  background:transparent!important;
 }
 .iframe-shell-stage[data-grades-tab="slate"] #grade-frame,
 .iframe-shell-stage[data-grades-tab="slate"] #grade-frame-inline{
@@ -1428,7 +1470,7 @@ select option,
 
 </style>
 <link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="static/mobile-content-width.css?v=20260522gradesframe"/>
+<link rel="stylesheet" href="static/mobile-content-width.css?v=20260608ticketembed"/>
 <link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1561,7 +1603,7 @@ select option,
     <div class="empty-sub">Nothing is available for <strong><span id="ticket-empty-date-label"></span></strong> yet. Use the report date pills or <strong>Jump to date</strong> to pick a day that already has graded tickets.</div>
   </div>
   <iframe class="grade-frame" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
-  <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
+  <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" scrolling="yes" style="display:none;"></iframe>
   <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" hidden aria-label="Graded props by report date">
     <div class="grades-props-inner">
       <div class="glass-insights props-eval-intro">
@@ -2078,6 +2120,9 @@ function scheduleTicketFrameCollapse(frame) {
         const doc = frame.contentDocument;
         if (!doc || !ticketIframeDocLooksReady(doc)) return;
         collapseSportsInTicketFrame(frame);
+        requestAnimationFrame(function () {
+          syncTicketFrameHeight(frame);
+        });
       } catch (_e) {}
     }, ms);
   });
@@ -2903,6 +2948,13 @@ function collapseSportsInTicketFrame(frame) {
   }
   enforceTicketEvalBucketsCollapsed(doc);
   collapseAllSlateDetails(doc);
+  try {
+    if (activeTab === 'tickets' && frame && frame.id === 'ticket-frame') {
+      requestAnimationFrame(function () {
+        syncTicketFrameHeight(frame);
+      });
+    }
+  } catch (_syncH) {}
 }
 
 // ─── PROP EVALUATION (archived props_history) ─────────────────────────────────
@@ -3354,6 +3406,25 @@ function setGradesHubFrameDisplay(frameId, visible) {
   if (frame) {
     frame.style.setProperty('display', show, 'important');
     frame.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+    if (!visible) {
+      frame.style.setProperty('height', '0', 'important');
+      frame.style.setProperty('min-height', '0', 'important');
+      frame.style.setProperty('max-height', '0', 'important');
+      frame.style.setProperty('overflow', 'hidden', 'important');
+      frame.style.setProperty('position', 'absolute', 'important');
+      frame.style.setProperty('left', '-9999px', 'important');
+      frame.style.setProperty('top', '0', 'important');
+      frame.style.setProperty('width', '1px', 'important');
+    } else {
+      frame.style.removeProperty('height');
+      frame.style.removeProperty('min-height');
+      frame.style.removeProperty('max-height');
+      frame.style.removeProperty('overflow');
+      frame.style.removeProperty('position');
+      frame.style.removeProperty('left');
+      frame.style.removeProperty('top');
+      frame.style.removeProperty('width');
+    }
   }
   const inlined = document.getElementById(frameId + '-inline');
   if (inlined) {
@@ -3373,6 +3444,9 @@ function setGradesHubFrameDisplay(frameId, visible) {
 function syncGradesTabStage(tab) {
   const stage = document.querySelector('.iframe-shell-stage');
   if (stage) stage.setAttribute('data-grades-tab', tab || 'slate');
+  try {
+    document.body.dataset.gradesActiveTab = tab || 'slate';
+  } catch (_eTabBody) {}
 }
 function switchTab(tab) {
   activeTab = tab;
@@ -3478,6 +3552,7 @@ function switchTab(tab) {
     if (esP) esP.hidden = true;
   } else if (tab === 'tickets') {
     hideGradesHubLoadOverlay();
+    hideGradesTicketTabStageOverlays();
     const es1 = document.getElementById('empty-state');
     if (es1) es1.hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
@@ -3497,6 +3572,7 @@ function switchTab(tab) {
           ) {
             syncTicketFrameHeight(tf);
             setupTicketFrameAutoHeight(tf);
+            scheduleTicketFrameHeightResync(tf);
           }
         } catch (_e) {}
       });
@@ -3555,25 +3631,73 @@ function applyTicketEvalGradesEmbed(doc) {
     doc.documentElement.classList.add('ticket-eval-embed-grades');
     doc.body.classList.remove('ticket-eval-embed-grades');
   } catch (_e) {}
-  if (doc.getElementById('grades-embed-ticket-nav-css')) return;
-  const st = doc.createElement('style');
-  st.id = 'grades-embed-ticket-nav-css';
+  let st = doc.getElementById('grades-embed-ticket-nav-css');
+  if (!st) {
+    st = doc.createElement('style');
+    st.id = 'grades-embed-ticket-nav-css';
+    doc.head.appendChild(st);
+  }
   st.setAttribute('data-from', 'grades-hub');
   st.textContent =
-    'html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}' +
+    'html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%!important;height:auto!important;overflow-x:hidden!important;overflow-y:visible!important;-webkit-overflow-scrolling:auto!important;}' +
     'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:max(0px, env(safe-area-inset-bottom, 0px))!important;}' +
     'html.ticket-eval-embed-grades .snav,' +
     'html.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
     'html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}' +
-    'html.ticket-eval-embed-grades .stats-bar{top:0!important;}' +
+    'html.ticket-eval-embed-grades .stats-bar{position:relative!important;top:auto!important;overflow:visible!important;height:auto!important;min-height:0!important;max-height:none!important;}' +
+    'html.ticket-eval-embed-grades .stats-bar .sum-row{display:flex!important;flex-wrap:wrap!important;align-content:flex-start!important;align-items:flex-start!important;justify-content:center!important;gap:12px 20px!important;height:auto!important;overflow:visible!important;}' +
+    'html.ticket-eval-embed-grades .stats-bar .sum-item{display:flex!important;flex-direction:column!important;align-items:center!important;flex:0 0 auto!important;min-width:72px!important;max-width:11em!important;height:auto!important;}' +
     'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar){margin-top:0!important;margin-bottom:0!important;border-bottom:none!important;' +
     'border-radius:12px 12px 0 0!important;box-shadow:none!important;padding:6px 12px 6px!important;}' +
-    'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;' +
+    'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:auto!important;margin-top:-1px!important;border-top:none!important;' +
     'border-radius:0 0 16px 16px!important;padding:9px clamp(12px,2.5vw,26px)!important;margin-bottom:10px!important;}' +
     'html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}' +
     'html.ticket-eval-embed-grades .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}' +
     'html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}';
-  doc.head.appendChild(st);
+  injectTicketEvalHeightReporter(doc);
+}
+
+function injectTicketEvalHeightReporter(doc) {
+  if (!doc || !doc.body) return;
+  try {
+    if (doc.defaultView && doc.defaultView.__ticketEvalHeightReporterInstalled) {
+      if (typeof doc.defaultView.__ticketEvalScheduleHeight === 'function') {
+        doc.defaultView.__ticketEvalScheduleHeight();
+      }
+      return;
+    }
+  } catch (_e0) {}
+  let s = doc.getElementById('grades-embed-ticket-height-js');
+  if (!s) {
+    s = doc.createElement('script');
+    s.id = 'grades-embed-ticket-height-js';
+    doc.body.appendChild(s);
+  }
+  s.textContent =
+    '(function(){' +
+    'if(window.__ticketEvalHeightReporterInstalled)return;' +
+    'window.__ticketEvalHeightReporterInstalled=true;' +
+    'function measureTicketEvalHeight(){' +
+    'var docEl=document.documentElement,body=document.body,rootTop=docEl.getBoundingClientRect().top;' +
+    'var scrollTop=docEl.scrollTop||body.scrollTop||0,maxBottom=0;' +
+    'function bump(el){if(!el||el.nodeType!==1)return;try{var st=getComputedStyle(el);' +
+    'if(st.display==="none"||st.visibility==="hidden")return;var r=el.getBoundingClientRect();' +
+    'if(r.height<=0&&r.width<=0)return;var bottom=r.bottom-rootTop+scrollTop;if(bottom>maxBottom)maxBottom=bottom;}catch(_e){}}' +
+    'Array.prototype.forEach.call(body.children,bump);' +
+    'var wrap=document.querySelector(".wrap.ticket-eval-main");' +
+    'if(wrap){bump(wrap);Array.prototype.forEach.call(wrap.children,bump);' +
+    'Array.prototype.forEach.call(wrap.querySelectorAll("details.grades-sport-bucket,details.ticket-bucket"),bump);}' +
+    'var scrollH=Math.max(body.scrollHeight||0,docEl.scrollHeight||0);' +
+    'var h=Math.ceil(Math.max(maxBottom+24,scrollH));' +
+    'try{parent.postMessage({type:"resizeRequest",source:"ticketEval",height:h},"*");}catch(_e2){}' +
+    '}' +
+    'function schedule(){requestAnimationFrame(measureTicketEvalHeight);}' +
+    'window.__ticketEvalScheduleHeight=schedule;' +
+    'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule);else schedule();' +
+    'window.addEventListener("load",schedule);' +
+    'try{var ro=new ResizeObserver(schedule);if(document.body)ro.observe(document.body);ro.observe(document.documentElement);}catch(_e3){}' +
+    '[100,350,900,2200,5000].forEach(function(ms){setTimeout(schedule,ms);});' +
+    '})();';
 }
 
 async function probeTicketEval(dateStr) {
@@ -3632,11 +3756,23 @@ async function loadTicketEval(dateStr) {
   tf.onload = function(){
     function completeTicketFrameLoad() {
       try {
+        hideGradesTicketTabStageOverlays();
+      } catch (_e0a) {}
+      try {
         applyTicketEvalGradesEmbed(tf.contentDocument);
       } catch (_e0) {}
       try {
         ensureTicketEvalSportStatsBar(tf.contentDocument);
       } catch (_e0b) {}
+      try {
+        collapseSportsInTicketFrame(tf);
+      } catch (_e0c) {}
+      try {
+        const tw = tf.contentWindow;
+        if (tw && typeof tw.__ticketEvalScheduleHeight === 'function') {
+          tw.__ticketEvalScheduleHeight();
+        }
+      } catch (_e0d) {}
       try {
         scheduleTicketFrameCollapse(tf);
       } catch (_e) {}
@@ -3647,6 +3783,7 @@ async function loadTicketEval(dateStr) {
         requestAnimationFrame(function () {
           syncTicketFrameHeight(tf);
           setupTicketFrameAutoHeight(tf);
+          scheduleTicketFrameHeightResync(tf);
         });
       } catch (_e3) {}
     }
@@ -3688,11 +3825,20 @@ async function loadTicketEval(dateStr) {
   }
   if (sameDoc) {
     try {
+      hideGradesTicketTabStageOverlays();
       applyTicketEvalGradesEmbed(tf.contentDocument);
       ensureTicketEvalSportStatsBar(tf.contentDocument);
+      collapseSportsInTicketFrame(tf);
+      try {
+        const tw = tf.contentWindow;
+        if (tw && typeof tw.__ticketEvalScheduleHeight === 'function') {
+          tw.__ticketEvalScheduleHeight();
+        }
+      } catch (_e0d) {}
       scheduleTicketFrameCollapse(tf);
       syncTicketFrameHeight(tf);
       setupTicketFrameAutoHeight(tf);
+      scheduleTicketFrameHeightResync(tf);
     } catch (_e7) {}
     return;
   }
@@ -4072,20 +4218,131 @@ function scheduleSyncPropsEvalHeight() {
   });
 }
 
+function hideGradesTicketTabStageOverlays() {
+  ['load-overlay', 'empty-state', 'ticket-empty-state'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.hidden = true;
+    el.classList.add('hidden');
+    el.setAttribute('aria-hidden', 'true');
+    el.style.setProperty('display', 'none', 'important');
+    el.style.setProperty('visibility', 'hidden', 'important');
+    el.style.setProperty('pointer-events', 'none', 'important');
+    el.style.setProperty('height', '0', 'important');
+    el.style.setProperty('max-height', '0', 'important');
+    el.style.setProperty('overflow', 'hidden', 'important');
+  });
+}
+
+function applyTicketFrameHeightPx(frame, h) {
+  if (activeTab !== 'tickets') return;
+  if (!frame || frame.id !== 'ticket-frame') return;
+  let px = Math.max(320, Math.ceil(Number(h) || 0));
+  try {
+    const doc = frame.contentDocument;
+    const buckets =
+      doc &&
+      doc.querySelectorAll(
+        '.wrap.ticket-eval-main details.grades-sport-bucket, .wrap.ticket-eval-main details.ticket-bucket'
+      );
+    if (buckets && buckets.length > 0 && px < 520) {
+      px = Math.max(px, measureGradesIframeDocHeight(doc, frame), 720);
+    }
+  } catch (_bucket) {}
+  const hPx = px + 'px';
+  frame.style.height = hPx;
+  frame.style.removeProperty('min-height');
+  frame.style.removeProperty('max-height');
+  frame.style.setProperty('position', 'relative', 'important');
+  const stage =
+    document.querySelector('.iframe-shell-stage[data-grades-tab="tickets"]') ||
+    document.querySelector('.iframe-shell-stage');
+  if (stage) {
+    stage.style.height = hPx;
+    stage.style.minHeight = '0';
+    stage.style.maxHeight = 'none';
+    stage.style.overflow = 'visible';
+    stage.style.background = 'transparent';
+  }
+  const shell = document.getElementById('grades-iframe-shell');
+  if (shell) {
+    shell.style.removeProperty('min-height');
+    shell.style.removeProperty('height');
+  }
+  const gp = document.querySelector('.grades-page');
+  if (gp) gp.style.removeProperty('min-height');
+  hideGradesTicketTabStageOverlays();
+}
+
+/** Parent hub scrolls; size iframe to full document height (incl. collapsed sport buckets). */
+function measureGradesIframeDocHeight(doc, frame) {
+  if (!doc || !doc.body) return 0;
+  const html = doc.documentElement;
+  const body = doc.body;
+  let prevFrameHeight = null;
+  try {
+    if (frame) {
+      prevFrameHeight = frame.style.height;
+      frame.style.height = '10000px';
+      frame.style.removeProperty('min-height');
+      void body.offsetHeight;
+    }
+  } catch (_prep) {}
+  let h = Math.max(
+    body.scrollHeight || 0,
+    html.scrollHeight || 0,
+    html.offsetHeight || 0,
+    body.offsetHeight || 0
+  );
+  try {
+    const rootTop = html.getBoundingClientRect().top;
+    const scrollTop = html.scrollTop || body.scrollTop || 0;
+    function bumpEl(el) {
+      if (!el || el.nodeType !== 1) return;
+      const st = getComputedStyle(el);
+      if (st.display === 'none' || st.visibility === 'hidden') return;
+      const r = el.getBoundingClientRect();
+      if (r.height <= 0 && r.width <= 0) return;
+      const bottom = r.bottom - rootTop + scrollTop;
+      if (bottom > h) h = bottom;
+    }
+    Array.from(body.children).forEach(bumpEl);
+    const wrap = doc.querySelector('.wrap.ticket-eval-main');
+    if (wrap) {
+      bumpEl(wrap);
+      wrap.querySelectorAll(':scope > details, :scope > p, :scope > .ticket-sections-wrap').forEach(bumpEl);
+      wrap.querySelectorAll('details.grades-sport-bucket, details.ticket-bucket').forEach(bumpEl);
+    }
+  } catch (_e) {}
+  try {
+    if (frame && prevFrameHeight !== null) {
+      frame.style.height = prevFrameHeight;
+    }
+  } catch (_restore) {}
+  return Math.ceil(h + 24);
+}
+
+function scheduleTicketFrameHeightResync(frame) {
+  if (!frame) return;
+  [100, 350, 900, 2200].forEach(function (ms) {
+    setTimeout(function () {
+      try {
+        if (activeTab !== 'tickets') return;
+        syncTicketFrameHeight(frame);
+      } catch (_e) {}
+    }, ms);
+  });
+}
+
 function syncGradeFrameHeight(frame) {
   if (activeTab !== 'slate') return;
   if (!frame || frame.id !== 'grade-frame') return;
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    const scrollH = Math.max(
-      doc.body ? doc.body.scrollHeight : 0,
-      doc.documentElement.scrollHeight || 0,
-      doc.documentElement.offsetHeight || 0
-    );
-    const h = Math.ceil(scrollH || 0);
-    const hPx = Math.ceil(h) + 'px';
-    frame.style.height = hPx;
+    const h = measureGradesIframeDocHeight(doc, frame);
+    frame.style.height = Math.ceil(h) + 'px';
+    frame.style.removeProperty('min-height');
     const gradesPage = document.querySelector('.grades-page');
     if (gradesPage) gradesPage.style.removeProperty('min-height');
   } catch (_e) {}
@@ -4114,16 +4371,7 @@ function syncTicketFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    const scrollH = Math.max(
-      doc.body ? doc.body.scrollHeight : 0,
-      doc.documentElement.scrollHeight || 0,
-      doc.documentElement.offsetHeight || 0
-    );
-    const h = Math.ceil(scrollH || 0);
-    const hPx = Math.ceil(h) + 'px';
-    frame.style.height = hPx;
-    const gp = document.querySelector('.grades-page');
-    if (gp) gp.style.removeProperty('min-height');
+    applyTicketFrameHeightPx(frame, measureGradesIframeDocHeight(doc, frame));
   } catch (_e) {}
 }
 
@@ -4161,7 +4409,15 @@ window.addEventListener('message', function (e) {
     }
     if (ticketFrame && ticketFrame.contentWindow === e.source && activeTab === 'tickets') {
       requestAnimationFrame(function () {
-        syncTicketFrameHeight(ticketFrame);
+        const explicit =
+          data && data.source === 'ticketEval' && Number(data.height) > 0
+            ? Math.ceil(Number(data.height))
+            : 0;
+        if (explicit > 0) {
+          applyTicketFrameHeightPx(ticketFrame, explicit);
+        } else {
+          syncTicketFrameHeight(ticketFrame);
+        }
       });
     }
   } catch (_e) {}

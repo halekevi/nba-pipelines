@@ -3340,12 +3340,16 @@ def _build_html(
         ".grade-ticket-result.void-slip{color:var(--gold2);}",
         ".grade-ticket-result.void-loss{color:#ffd87a;}",
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
+        "html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%!important;height:auto!important;overflow-x:hidden!important;overflow-y:visible!important;}"
         "html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}"
         "html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
         "html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}"
-        "html.ticket-eval-embed-grades .stats-bar{top:0!important;}"
-        "html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}"
+        "html.ticket-eval-embed-grades .stats-bar{position:relative!important;top:auto!important;overflow:visible!important;height:auto!important;max-height:none!important;}"
+        "html.ticket-eval-embed-grades .stats-bar .sum-row{display:flex!important;flex-wrap:wrap!important;align-content:flex-start!important;gap:12px 20px!important;height:auto!important;overflow:visible!important;}"
+        "html.ticket-eval-embed-grades .stats-bar .sum-item{display:flex!important;flex-direction:column!important;flex:0 0 auto!important;min-width:72px!important;max-width:11em!important;}"
+        "html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:auto!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}"
         "html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}"
+        "html.ticket-eval-embed-grades .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}"
         "html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}",
         "</style>",
         '<script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>',
