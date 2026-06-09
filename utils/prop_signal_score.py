@@ -18,8 +18,17 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from scripts.l10_streak_utils import finalize_l10_ui_columns  # noqa: E402
+from scripts.l10_streak_utils import (  # noqa: E402
+    compute_l10_streak_label,
+    finalize_l10_ui_columns,
+)
 from utils.defense_tiers import normalize_def_tier_label  # noqa: E402
+
+# Graded-backed ticket scoring constants (all sports).
+HOT_L10_BOOST = 0.12
+COLD_L10_PENALTY = -0.08
+DEMON_OVER_PENALTY = -0.18
+WNBA_STD_OVER_D_PENALTY = -0.12
 
 
 def _direction_series(df: pd.DataFrame) -> pd.Series:
@@ -84,6 +93,42 @@ def directional_l10_rate_series(df: pd.DataFrame) -> pd.Series:
     return (side / gp).clip(0.0, 1.0)
 
 
+def l10_streak_for_row(row: dict | pd.Series) -> str | None:
+    """HOT / COLD / NEUTRAL from l10 counts and direction."""
+    if isinstance(row, pd.Series):
+        row = row.to_dict()
+    existing = str(row.get("l10_streak") or "").strip().upper()
+    if existing in {"HOT", "COLD", "NEUTRAL"}:
+        return existing
+    direction = str(
+        row.get("direction") or row.get("bet_direction") or row.get("final_bet_direction") or "OVER"
+    ).strip().upper()
+    return compute_l10_streak_label(
+        row.get("l10_over"),
+        row.get("l10_under"),
+        direction,
+    )
+
+
+def l10_streak_series(df: pd.DataFrame) -> pd.Series:
+    if df is None or df.empty:
+        return pd.Series(dtype=object)
+    direction = _direction_series(df)
+    l10_over = _num_col(df, "l10_over")
+    l10_under = _num_col(df, "l10_under")
+    streaks: list[str | None] = []
+    for idx in df.index:
+        if "l10_streak" in df.columns:
+            existing = str(df.at[idx, "l10_streak"] or "").strip().upper()
+            if existing in {"HOT", "COLD", "NEUTRAL"}:
+                streaks.append(existing)
+                continue
+        streaks.append(
+            compute_l10_streak_label(l10_over.at[idx], l10_under.at[idx], direction.at[idx])
+        )
+    return pd.Series(streaks, index=df.index, dtype=object).astype(str).str.upper().str.strip()
+
+
 def row_hot_l10_streak(row: dict | pd.Series) -> bool:
     direction = str(
         row.get("direction") or row.get("bet_direction") or row.get("final_bet_direction") or "OVER"
@@ -124,15 +169,21 @@ def context_signal_adjustment_series(df: pd.DataFrame) -> pd.Series:
         np.where(side_l5 >= 4, 0.06, np.where(side_l5 <= 2, -0.05, 0.0)),
     )
 
-    side_l10 = directional_l10_side_series(out)
+    streak = l10_streak_series(out)
+    adj = adj + np.where(streak.eq("HOT"), HOT_L10_BOOST, 0.0)
+    adj = adj + np.where(streak.eq("COLD"), COLD_L10_PENALTY, 0.0)
+
+    pick_raw = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.lower()
+    is_demon = pick_raw.str.contains("demon", na=False)
+    is_standard = ~pick_raw.str.contains("goblin", na=False) & ~is_demon
+    adj = adj + np.where(is_demon & over_mask, DEMON_OVER_PENALTY, 0.0)
+
+    sport_u = out.get("sport", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    tier_u = out.get("tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
     adj = adj + np.where(
-        pd.isna(side_l10),
+        sport_u.eq("WNBA") & is_standard & over_mask & tier_u.eq("D"),
+        WNBA_STD_OVER_D_PENALTY,
         0.0,
-        np.where(
-            side_l10 >= 7,
-            0.08,
-            np.where(side_l10 >= 6, 0.03, np.where(side_l10 <= 4, -0.04, 0.0)),
-        ),
     )
 
     mlp = _num_col(out, "ml_prob")
@@ -284,7 +335,7 @@ def graded_analysis_boost_series(df: pd.DataFrame, ctx: dict[str, Any] | None) -
             boost.at[i] -= 0.06
         row = df.loc[i]
         if row_hot_l10_streak(row.to_dict() if hasattr(row, "to_dict") else dict(row)):
-            boost.at[i] += 0.05
+            boost.at[i] += HOT_L10_BOOST
         try:
             ln = float(row.get("line") or row.get("line_score") or 0)
         except (TypeError, ValueError):

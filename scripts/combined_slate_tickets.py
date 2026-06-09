@@ -102,11 +102,13 @@ if REPO_ROOT not in sys.path:
 from utils.defense_tiers import normalize_def_tier_label
 from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
 from utils.prop_signal_score import (
+    HOT_L10_BOOST,
     compute_prop_quality_score,
     context_signal_adjustment_series,
     directional_l10_side_series,
     ensure_prop_signal_columns,
     graded_analysis_boost_series,
+    l10_streak_for_row,
 )
 from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
 from utils.goblin_demon_multiplier import (
@@ -3722,7 +3724,7 @@ def _graded_analysis_row_boost(row_d: dict, ctx: dict[str, Any]) -> float:
     if player_key in ctx.get("bottom_players", set()):
         boost -= 0.06
     if _row_hot_l10_streak(row_d):
-        boost += 0.05
+        boost += HOT_L10_BOOST
     try:
         ln = float(row_d.get("line") or row_d.get("line_score") or 0)
     except (TypeError, ValueError):
@@ -5362,6 +5364,14 @@ def ticket_groups_to_payload(
                     "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
+                    "l10_streak": l10_streak_for_row(
+                        {
+                            "l10_streak": gv("l10_streak"),
+                            "l10_over": gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10"),
+                            "l10_under": gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10"),
+                            "direction": gv("direction") or gv("bet_direction") or gv("final_bet_direction"),
+                        }
+                    ),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
@@ -11027,6 +11037,7 @@ SLATE_COLS = [
     "l5_consistency",
     "l10_over",
     "l10_under",
+    "l10_streak",
     "def_tier",
     "min_tier",
     "shot_role",
