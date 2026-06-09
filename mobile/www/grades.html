@@ -3676,9 +3676,43 @@ function applyTicketEvalGradesEmbed(doc) {
     'html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}' +
     'html.ticket-eval-embed-grades .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}' +
     'html.ticket-eval-embed-grades .ticket-sections-wrap{display:block!important;visibility:visible!important;height:auto!important;overflow:visible!important;}' +
-    'html.ticket-eval-embed-grades .ticket-sections-wrap details.ticket-bucket{display:block!important;visibility:visible!important;}' +
+    'html.ticket-eval-embed-grades .ticket-sections-wrap details.ticket-bucket{display:block!important;visibility:visible!important;overflow:visible!important;}' +
+    'html.ticket-eval-embed-grades details.ticket-bucket[open] .ticket-bucket-body,' +
+    'html.ticket-eval-embed-grades details.grades-sport-bucket[open] .grades-sport-bucket-body{display:block!important;overflow:visible!important;height:auto!important;max-height:none!important;}' +
+    'html.ticket-eval-embed-grades .ticket-bucket-body section.sec,' +
+    'html.ticket-eval-embed-grades .ticket-bucket-body article.ticket-card,' +
+    'html.ticket-eval-embed-grades .grades-sport-bucket-body section.sec,' +
+    'html.ticket-eval-embed-grades .grades-sport-bucket-body article.ticket-card{display:block!important;visibility:visible!important;}' +
     'html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}';
   injectTicketEvalHeightReporter(doc);
+  setupTicketEvalToggleHeightSync(document.getElementById('ticket-frame'));
+}
+
+/** Re-sync iframe height when user opens/closes a sport bucket (collapsed measure is too short). */
+function setupTicketEvalToggleHeightSync(frame) {
+  if (!frame) return;
+  try {
+    const doc = frame.contentDocument;
+    if (!doc || doc.__ticketEvalToggleHeightSync) return;
+    doc.__ticketEvalToggleHeightSync = true;
+    doc.addEventListener(
+      'toggle',
+      function (e) {
+        const t = e && e.target;
+        if (!t || !t.matches || !t.matches('details.ticket-bucket, details.grades-sport-bucket')) return;
+        requestAnimationFrame(function () {
+          try {
+            const tw = frame.contentWindow;
+            if (tw && typeof tw.__ticketEvalScheduleHeight === 'function') {
+              tw.__ticketEvalScheduleHeight();
+            }
+          } catch (_tw) {}
+          syncTicketFrameHeight(frame);
+        });
+      },
+      true
+    );
+  } catch (_e) {}
 }
 
 function injectTicketEvalHeightReporter(doc) {
@@ -3710,15 +3744,17 @@ function injectTicketEvalHeightReporter(doc) {
     'Array.prototype.forEach.call(body.children,bump);' +
     'var wrap=document.querySelector(".wrap.ticket-eval-main");' +
     'if(wrap){bump(wrap);Array.prototype.forEach.call(wrap.children,bump);' +
-    'Array.prototype.forEach.call(wrap.querySelectorAll("details.grades-sport-bucket,details.ticket-bucket"),bump);}' +
-    'var scrollH=Math.max(body.scrollHeight||0,docEl.scrollHeight||0);' +
-    'var h=Math.ceil(Math.max(maxBottom+24,scrollH));' +
+    'Array.prototype.forEach.call(wrap.querySelectorAll("details.grades-sport-bucket,details.ticket-bucket,.ticket-sections-wrap"),bump);' +
+    'Array.prototype.forEach.call(wrap.querySelectorAll("section.sec,article.ticket-card"),bump);}' +
+    'var scrollH=Math.max(body.scrollHeight||0,docEl.scrollHeight||0,body.offsetHeight||0,docEl.offsetHeight||0);' +
+    'var h=Math.ceil(Math.max(maxBottom+32,scrollH));' +
     'try{parent.postMessage({type:"resizeRequest",source:"ticketEval",height:h},"*");}catch(_e2){}' +
     '}' +
     'function schedule(){requestAnimationFrame(measureTicketEvalHeight);}' +
     'window.__ticketEvalScheduleHeight=schedule;' +
     'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule);else schedule();' +
     'window.addEventListener("load",schedule);' +
+    'document.addEventListener("toggle",function(e){var t=e&&e.target;if(!t||!t.matches||!t.matches("details.ticket-bucket,details.grades-sport-bucket"))return;schedule();},true);' +
     'try{var ro=new ResizeObserver(schedule);if(document.body)ro.observe(document.body);ro.observe(document.documentElement);}catch(_e3){}' +
     '[100,350,900,2200,5000].forEach(function(ms){setTimeout(schedule,ms);});' +
     '})();';
@@ -3807,6 +3843,7 @@ async function loadTicketEval(dateStr) {
         requestAnimationFrame(function () {
           syncTicketFrameHeight(tf);
           setupTicketFrameAutoHeight(tf);
+          setupTicketEvalToggleHeightSync(tf);
           scheduleTicketFrameHeightResync(tf);
         });
       } catch (_e3) {}
@@ -3862,6 +3899,7 @@ async function loadTicketEval(dateStr) {
       scheduleTicketFrameCollapse(tf);
       syncTicketFrameHeight(tf);
       setupTicketFrameAutoHeight(tf);
+      setupTicketEvalToggleHeightSync(tf);
       scheduleTicketFrameHeightResync(tf);
     } catch (_e7) {}
     return;
@@ -4270,7 +4308,23 @@ function applyTicketFrameHeightPx(frame, h) {
         '.wrap.ticket-eval-main details.grades-sport-bucket, .wrap.ticket-eval-main details.ticket-bucket'
       );
     if (buckets && buckets.length > 0 && px < 520) {
-      px = Math.max(px, measureGradesIframeDocHeight(doc, frame), 720);
+      px = Math.max(px, measureGradesIframeDocHeight(doc, frame));
+    }
+    const cardCount =
+      doc && doc.querySelectorAll('.wrap.ticket-eval-main article.ticket-card').length;
+    if (cardCount > 2) {
+      const openBodies = doc.querySelectorAll(
+        'details.ticket-bucket[open] .ticket-bucket-body, details.grades-sport-bucket[open] .grades-sport-bucket-body'
+      );
+      if (openBodies.length > 0) {
+        let openH = 0;
+        openBodies.forEach(function (bodyEl) {
+          openH = Math.max(openH, bodyEl.scrollHeight || bodyEl.offsetHeight || 0);
+        });
+        if (openH > 0) {
+          px = Math.max(px, openH + 420);
+        }
+      }
     }
   } catch (_bucket) {}
   const hPx = px + 'px';
@@ -4306,10 +4360,12 @@ function measureGradesIframeDocHeight(doc, frame) {
   const html = doc.documentElement;
   const body = doc.body;
   let prevFrameHeight = null;
+  let prevFramePriority = '';
   try {
     if (frame) {
-      prevFrameHeight = frame.style.height;
-      frame.style.height = '10000px';
+      prevFrameHeight = frame.style.getPropertyValue('height');
+      prevFramePriority = frame.style.getPropertyPriority('height') || '';
+      frame.style.setProperty('height', '10000px', 'important');
       frame.style.removeProperty('min-height');
       void body.offsetHeight;
     }
@@ -4338,11 +4394,16 @@ function measureGradesIframeDocHeight(doc, frame) {
       bumpEl(wrap);
       wrap.querySelectorAll(':scope > details, :scope > p, :scope > .ticket-sections-wrap').forEach(bumpEl);
       wrap.querySelectorAll('details.grades-sport-bucket, details.ticket-bucket').forEach(bumpEl);
+      wrap.querySelectorAll('section.sec, article.ticket-card').forEach(bumpEl);
     }
   } catch (_e) {}
   try {
     if (frame && prevFrameHeight !== null) {
-      frame.style.height = prevFrameHeight;
+      if (prevFrameHeight) {
+        frame.style.setProperty('height', prevFrameHeight, prevFramePriority || '');
+      } else {
+        frame.style.removeProperty('height');
+      }
     }
   } catch (_restore) {}
   return Math.ceil(h + 24);
