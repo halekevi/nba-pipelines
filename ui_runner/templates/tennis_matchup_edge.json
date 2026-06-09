@@ -2,9 +2,9 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-08T12:16:09.121092+00:00",
-  "slate_note": "Tennis match day 2026-06-09 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-09.xlsx)",
-  "tennis_match_date": "2026-06-09",
+  "generated_at": "2026-06-09T09:08:28.442066+00:00",
+  "slate_note": "Tennis match day 2026-06-10 ET (rows after date filter; source=slate_sport_tennis.json)",
+  "tennis_match_date": "2026-06-10",
   "n_teams": 300,
   "elite_rank_cut": 25,
   "weak_rank_cut": 100,
@@ -57,6 +57,13 @@
       "name": "Aleksandar Kovacevic",
       "def_rank": 69,
       "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "alexandra eala",
+      "slate_abbr": "alexandra eala",
+      "name": "Alexandra Eala",
+      "def_rank": 33,
+      "def_tier": "Avg"
     },
     {
       "def_key": "alexis galarneau",
@@ -178,6 +185,20 @@
       "def_tier": "Weak"
     },
     {
+      "def_key": "emma navarro",
+      "slate_abbr": "emma navarro",
+      "name": "Emma Navarro",
+      "def_rank": 25,
+      "def_tier": "Above Avg"
+    },
+    {
+      "def_key": "emma raducanu",
+      "slate_abbr": "emma raducanu",
+      "name": "Emma Raducanu",
+      "def_rank": 42,
+      "def_tier": "Avg"
+    },
+    {
       "def_key": "federica urgesi",
       "slate_abbr": "federica urgesi",
       "name": "Federica Urgesi",
@@ -220,6 +241,13 @@
       "def_tier": "Below Avg"
     },
     {
+      "def_key": "james duckworth",
+      "slate_abbr": "james duckworth",
+      "name": "James Duckworth",
+      "def_rank": 79,
+      "def_tier": "Below Avg"
+    },
+    {
       "def_key": "james mccabe",
       "slate_abbr": "james mccabe",
       "name": "James McCabe",
@@ -238,6 +266,13 @@
       "slate_abbr": "janice tjen",
       "name": "Janice Tjen",
       "def_rank": 40,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "jaume munar",
+      "slate_abbr": "jaume munar",
+      "name": "Jaume Munar",
+      "def_rank": 44,
       "def_tier": "Avg"
     },
     {
@@ -316,6 +351,20 @@
       "name": "Marcos Giron",
       "def_rank": 88,
       "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "maria sakkari",
+      "slate_abbr": "maria sakkari",
+      "name": "Maria Sakkari",
+      "def_rank": 37,
+      "def_tier": "Avg"
+    },
+    {
+      "def_key": "marie bouzkova",
+      "slate_abbr": "marie bouzkova",
+      "name": "Marie Bouzkova",
+      "def_rank": 28,
+      "def_tier": "Avg"
     },
     {
       "def_key": "marina bassols ribera",
@@ -435,6 +484,13 @@
       "name": "Solana Sierra",
       "def_rank": 56,
       "def_tier": "Below Avg"
+    },
+    {
+      "def_key": "sorana cirstea",
+      "slate_abbr": "sorana cirstea",
+      "name": "Sorana Cirstea",
+      "def_rank": 18,
+      "def_tier": "Above Avg"
     },
     {
       "def_key": "suzan lamens",
@@ -663,12 +719,28 @@
       "team_def_rank": 55,
       "team_def_tier": "Below Avg"
     },
+    "emma navarro": {
+      "opponent_slate": "iva jovic",
+      "opponent_name": "Iva Jovic",
+      "opponent_def_rank": 19,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 25,
+      "team_def_tier": "Above Avg"
+    },
     "tallon griekspoor": {
       "opponent_slate": "botic van de zandschulp",
       "opponent_name": "BOTIC VAN DE ZANDSCHULP",
       "opponent_def_rank": 55,
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 41,
+      "team_def_tier": "Avg"
+    },
+    "marie bouzkova": {
+      "opponent_slate": "francesca jones",
+      "opponent_name": "Francesca Jones",
+      "opponent_def_rank": 98,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 28,
       "team_def_tier": "Avg"
     },
     "suzan lamens": {
@@ -743,6 +815,14 @@
       "team_def_rank": 149,
       "team_def_tier": "Weak"
     },
+    "sorana cirstea": {
+      "opponent_slate": "eva lys",
+      "opponent_name": "Eva Lys",
+      "opponent_def_rank": 82,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 18,
+      "team_def_tier": "Above Avg"
+    },
     "zhizhen zhang": {
       "opponent_slate": "jenson brooksby",
       "opponent_name": "JENSON BROOKSBY",
@@ -782,6 +862,14 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 101,
       "team_def_tier": "Weak"
+    },
+    "alexandra eala": {
+      "opponent_slate": "iva jovic",
+      "opponent_name": "Iva Jovic",
+      "opponent_def_rank": 19,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 33,
+      "team_def_tier": "Avg"
     },
     "quentin halys": {
       "opponent_slate": "sho shimabukuro",
@@ -943,6 +1031,14 @@
       "team_def_rank": 96,
       "team_def_tier": "Below Avg"
     },
+    "maria sakkari": {
+      "opponent_slate": "linda noskova",
+      "opponent_name": "Linda Noskova",
+      "opponent_def_rank": 13,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 37,
+      "team_def_tier": "Avg"
+    },
     "xinyu gao": {
       "opponent_slate": "lucia bronzetti",
       "opponent_name": "LUCIA BRONZETTI",
@@ -1006,6 +1102,14 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 79,
       "team_def_tier": "Below Avg"
+    },
+    "emma raducanu": {
+      "opponent_slate": "solana sierra",
+      "opponent_name": "Solana Sierra",
+      "opponent_def_rank": 56,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 42,
+      "team_def_tier": "Avg"
     },
     "emerson jones": {
       "opponent_slate": "dalma galfi",
@@ -1078,6 +1182,22 @@
       "opponent_def_tier": "Avg",
       "team_def_rank": null,
       "team_def_tier": ""
+    },
+    "jaume munar": {
+      "opponent_slate": "hubert hurkacz",
+      "opponent_name": "Hubert Hurkacz",
+      "opponent_def_rank": 96,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 44,
+      "team_def_tier": "Avg"
+    },
+    "james duckworth": {
+      "opponent_slate": "rafael jodar",
+      "opponent_name": "Rafael Jodar",
+      "opponent_def_rank": 23,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 79,
+      "team_def_tier": "Below Avg"
     },
     "janlennard struff": {
       "opponent_slate": "alexis galarneau",
@@ -1351,10 +1471,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "francesca jones",
+        "name": "Francesca Jones",
+        "def_rank": 98,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -1364,8 +1484,8 @@
           "rank_on_team": 1,
           "season_avg": 21.0,
           "game_score": 21.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#98).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 17.5,
@@ -1435,10 +1555,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "eva lys",
+        "name": "Eva Lys",
+        "def_rank": 82,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -1491,10 +1611,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -1504,8 +1624,8 @@
           "rank_on_team": 1,
           "season_avg": 19.8,
           "game_score": 19.8,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +4.1 on board tonight.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +4.1 but elite opponent (#19) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 17.5,
@@ -1715,10 +1835,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -1728,8 +1848,8 @@
           "rank_on_team": 1,
           "season_avg": 22.0,
           "game_score": 22.0,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +5.5 on board tonight.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +5.5 but elite opponent (#19) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 17.5,
@@ -1743,10 +1863,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "linda noskova",
+        "name": "Linda Noskova",
+        "def_rank": 13,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -1756,8 +1876,8 @@
           "rank_on_team": 1,
           "season_avg": 21.1,
           "game_score": 21.1,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.9 on board tonight.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +2.9 but elite opponent (#13) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 17.5,
@@ -1911,10 +2031,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "solana sierra",
+        "name": "Solana Sierra",
+        "def_rank": 56,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -1995,10 +2115,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "rafael jodar",
+        "name": "Rafael Jodar",
+        "def_rank": 23,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -2008,8 +2128,8 @@
           "rank_on_team": 1,
           "season_avg": 26.5,
           "game_score": 26.5,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.9 on board tonight.",
+          "edge": "NEUTRAL",
+          "notes": "PP edge +1.9 vs elite opponent (#23) \u2014 proceed with caution.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 19.5,
@@ -2107,10 +2227,10 @@
       "category_label": "Total games",
       "threshold": 22.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "hubert hurkacz",
+        "name": "Hubert Hurkacz",
+        "def_rank": 96,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -2120,8 +2240,8 @@
           "rank_on_team": 1,
           "season_avg": 20.6,
           "game_score": 20.6,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#96).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 19.5,
@@ -2583,10 +2703,10 @@
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -2596,8 +2716,8 @@
           "rank_on_team": 1,
           "season_avg": 11.6,
           "game_score": 11.6,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +4.9 on board tonight.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +4.9 but elite opponent (#19) \u2014 tough matchup.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 9.5,
@@ -3218,34 +3338,6 @@
           "def_boost": null,
           "pp_line": 12.5,
           "pp_edge": 0.0
-        }
-      ]
-    },
-    "marta kostyuk|games_won": {
-      "team_slate": "marta kostyuk",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "mika stojsavljevic",
-        "name": "MIKA STOJSAVLJEVIC",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Marta Kostyuk",
-          "player_norm": "marta kostyuk",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 13.1,
-          "game_score": 13.1,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#75).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": 0.1
         }
       ]
     },
@@ -3899,10 +3991,10 @@
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "rafael jodar",
+        "name": "Rafael Jodar",
+        "def_rank": 23,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -3913,7 +4005,7 @@
           "season_avg": 10.9,
           "game_score": 10.9,
           "edge": "AVOID",
-          "notes": "PP edge -4.1 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -4.1 vs elite opponent (#23).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 12.5,
@@ -4142,6 +4234,34 @@
           "def_boost": null,
           "pp_line": 12.5,
           "pp_edge": -3.5
+        }
+      ]
+    },
+    "marta kostyuk|games_won": {
+      "team_slate": "marta kostyuk",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "mika stojsavljevic",
+        "name": "MIKA STOJSAVLJEVIC",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Marta Kostyuk",
+          "player_norm": "marta kostyuk",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 13.1,
+          "game_score": 13.1,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": -0.9
         }
       ]
     },
@@ -5047,10 +5167,10 @@
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -5060,8 +5180,8 @@
           "rank_on_team": 1,
           "season_avg": 1.5,
           "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Elite opponent (#19); production below threshold.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 1.5,
@@ -5103,10 +5223,10 @@
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "rafael jodar",
+        "name": "Rafael Jodar",
+        "def_rank": 23,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -5117,7 +5237,7 @@
           "season_avg": 9.7,
           "game_score": 9.7,
           "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "notes": "Elite opponent (#23) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 8.5,
@@ -5999,10 +6119,10 @@
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "hubert hurkacz",
+        "name": "Hubert Hurkacz",
+        "def_rank": 96,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -6130,62 +6250,6 @@
           "def_boost": null,
           "pp_line": 7.5,
           "pp_edge": -2.9
-        }
-      ]
-    },
-    "jessica pieri|aces": {
-      "team_slate": "jessica pieri",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "victoria jimenez kasintseva",
-        "name": "VICTORIA JIMENEZ KASINTSEVA",
-        "def_rank": 124,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Jessica Pieri",
-          "player_norm": "jessica pieri",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.5
-        }
-      ]
-    },
-    "alice tubello|aces": {
-      "team_slate": "alice tubello",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "dominika salkova",
-        "name": "DOMINIKA SALKOVA",
-        "def_rank": 114,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Alice Tubello",
-          "player_norm": "alice tubello",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.0,
-          "game_score": 0.0,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 0.5,
-          "pp_edge": -0.5
         }
       ]
     },
@@ -6979,10 +7043,10 @@
       "category_label": "Double faults",
       "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -6993,7 +7057,7 @@
           "season_avg": 4.4,
           "game_score": 4.4,
           "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "notes": "Elite opponent (#19) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 3.5,
@@ -7875,10 +7939,10 @@
       "category_label": "Double faults",
       "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "hubert hurkacz",
+        "name": "Hubert Hurkacz",
+        "def_rank": 96,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -7987,10 +8051,10 @@
       "category_label": "Double faults",
       "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "rafael jodar",
+        "name": "Rafael Jodar",
+        "def_rank": 23,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -8001,7 +8065,7 @@
           "season_avg": 3.1,
           "game_score": 3.1,
           "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "notes": "Elite opponent (#23) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 2.5,
@@ -8771,10 +8835,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "hubert hurkacz",
+        "name": "Hubert Hurkacz",
+        "def_rank": 96,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -8967,10 +9031,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "rafael jodar",
+        "name": "Rafael Jodar",
+        "def_rank": 23,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -8980,8 +9044,8 @@
           "rank_on_team": 1,
           "season_avg": 1.5,
           "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Elite opponent (#23); production below threshold.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": null,
@@ -9303,10 +9367,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -9316,8 +9380,8 @@
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Elite opponent (#19); production below threshold.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": null,
@@ -9499,10 +9563,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "linda noskova",
+        "name": "Linda Noskova",
+        "def_rank": 13,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -9512,8 +9576,8 @@
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Elite opponent (#13); production below threshold.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": null,
@@ -9527,10 +9591,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "solana sierra",
+        "name": "Solana Sierra",
+        "def_rank": 56,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -9611,10 +9675,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "iva jovic",
+        "name": "Iva Jovic",
+        "def_rank": 19,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -9624,8 +9688,8 @@
           "rank_on_team": 1,
           "season_avg": 0.5,
           "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Elite opponent (#19); production below threshold.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": null,
@@ -9639,10 +9703,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "francesca jones",
+        "name": "Francesca Jones",
+        "def_rank": 98,
+        "def_tier": "Below Avg"
       },
       "players": [
         {
@@ -9667,10 +9731,10 @@
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "eva lys",
+        "name": "Eva Lys",
+        "def_rank": 82,
+        "def_tier": "Below Avg"
       },
       "players": [
         {

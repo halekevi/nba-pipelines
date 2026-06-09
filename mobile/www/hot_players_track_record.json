@@ -1,17 +1,218 @@
 {
-  "updated_at": "2026-06-08T08:41:43.486269Z",
-  "days_tracked": 7,
+  "updated_at": "2026-06-09T08:51:57.820002Z",
+  "days_tracked": 8,
   "aggregate": {
-    "hit": 28,
-    "miss": 30,
-    "void": 7,
+    "hit": 32,
+    "miss": 32,
+    "void": 9,
     "push": 0,
     "pending": 0,
     "no_match": 15,
-    "total": 80
+    "total": 88
   },
-  "aggregate_hit_rate": 0.4828,
+  "aggregate_hit_rate": 0.5,
   "recent": [
+    {
+      "slate_date": "2026-06-08",
+      "graded_at": "2026-06-09T08:51:57.808276Z",
+      "summary": {
+        "hit": 4,
+        "miss": 2,
+        "void": 2,
+        "push": 0,
+        "pending": 0,
+        "no_match": 0,
+        "total": 8
+      },
+      "hit_rate": 0.6667,
+      "decided": 6,
+      "results": [
+        {
+          "player": "NaLyssa Smith",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.8111,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 19,
+            "total": 20,
+            "hit_rate": 0.95
+          },
+          "slate_line": 6.5,
+          "slate_pick_type": "Standard",
+          "team": "LVA",
+          "opp": "SEA",
+          "result": "HIT",
+          "actual": 9.0,
+          "line": 7.5,
+          "margin": 1.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "A'ja Wilson",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5283,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 17,
+            "total": 22,
+            "hit_rate": 0.7727
+          },
+          "slate_line": 10.0,
+          "slate_pick_type": "Standard",
+          "team": "LVA",
+          "opp": "SEA",
+          "result": "HIT",
+          "actual": 12.0,
+          "line": 10.5,
+          "margin": 1.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Shakira Austin",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5,
+          "display_prop": {
+            "prop_type": "Pts+Rebs+Asts",
+            "direction": "OVER",
+            "hits": 16,
+            "total": 21,
+            "hit_rate": 0.7619
+          },
+          "slate_line": 25.5,
+          "slate_pick_type": "Standard",
+          "team": "WAS",
+          "opp": "IND",
+          "result": "HIT",
+          "actual": 23.0,
+          "line": 19.5,
+          "margin": 3.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Aliyah Boston",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 17,
+            "total": 24,
+            "hit_rate": 0.7083
+          },
+          "slate_line": 13.5,
+          "slate_pick_type": "Standard",
+          "team": "IND",
+          "opp": "WAS",
+          "result": "HIT",
+          "actual": 14.0,
+          "line": 9.5,
+          "margin": 4.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Jonquel Jones",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4858,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 30,
+            "total": 48,
+            "hit_rate": 0.625
+          },
+          "slate_line": 9.0,
+          "slate_pick_type": "Standard",
+          "team": "NYL",
+          "opp": "CON",
+          "result": "VOID",
+          "actual": null,
+          "line": 9.5,
+          "margin": null,
+          "void_reason": "INJURY_REPORT_DNP",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Flau'jae Johnson",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4759,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 13,
+            "total": 30,
+            "hit_rate": 0.4333
+          },
+          "slate_line": 5.0,
+          "slate_pick_type": "Standard",
+          "team": "SEA",
+          "opp": "LVA",
+          "result": "MISS",
+          "actual": 2.0,
+          "line": 5.5,
+          "margin": -3.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Jackie Young",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4313,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 13,
+            "total": 21,
+            "hit_rate": 0.619
+          },
+          "slate_line": 6.0,
+          "slate_pick_type": "Standard",
+          "team": "LVA",
+          "opp": "SEA",
+          "result": "MISS",
+          "actual": 6.0,
+          "line": 7.5,
+          "margin": -1.5,
+          "void_reason": "FORCED_OVER_NEG_EDGE",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Aneesah Morrow",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.402,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 13,
+            "total": 30,
+            "hit_rate": 0.4333
+          },
+          "slate_line": 11.0,
+          "slate_pick_type": "Standard",
+          "team": "CON",
+          "opp": "NYL",
+          "result": "VOID",
+          "actual": null,
+          "line": 11.5,
+          "margin": null,
+          "void_reason": "INJURY_REPORT_DNP",
+          "grade_source": "graded_props"
+        }
+      ]
+    },
     {
       "slate_date": "2026-06-07",
       "graded_at": "2026-06-08T08:41:43.472947Z",
@@ -1904,5 +2105,5 @@
       ]
     }
   ],
-  "latest_graded_date": "2026-06-07"
+  "latest_graded_date": "2026-06-08"
 }
