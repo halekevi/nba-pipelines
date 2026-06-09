@@ -3354,6 +3354,52 @@ def format_hit_window_fraction(n_games: int, raw) -> str:
     return f"{k}/{n_games}"
 
 
+def _l10_streak_hit_count(raw, n_games: int = 10) -> int | None:
+    try:
+        x = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(x):
+        return None
+    xi = int(round(x))
+    if abs(x - xi) < 1e-6 and 0 <= xi <= int(n_games):
+        k = xi
+    elif 0.0 < x <= 1.0:
+        k = int(round(x * n_games))
+    elif float(n_games) < x <= 100.0:
+        k = int(round((x / 100.0) * n_games))
+    else:
+        k = int(round(x))
+    return max(0, min(int(n_games), k))
+
+
+def _l10_streak_badge_html(leg: dict) -> str:
+    """Direction-aware HOT/COLD badge for ticket leg rows."""
+    streak = str(leg.get("l10_streak") or "").strip().upper()
+    if streak not in ("HOT", "COLD"):
+        return ""
+    direction = str(leg.get("direction") or leg.get("dir") or "OVER").strip().upper()
+    if direction == "LOWER":
+        direction = "UNDER"
+    over = _l10_streak_hit_count(leg.get("l10_over"))
+    under = _l10_streak_hit_count(leg.get("l10_under"))
+    side_hits = under if direction == "UNDER" else over
+    opp_hits = over if direction == "UNDER" else under
+    if streak == "HOT" and side_hits is not None:
+        side = "under" if direction == "UNDER" else "over"
+        return (
+            f'<span class="l10-streak-badge l10-hot" '
+            f'title="Last 10 games {side} today&apos;s line">🔥 {side_hits}/10</span>'
+        )
+    if streak == "COLD" and opp_hits is not None:
+        side = "over" if direction == "UNDER" else "under"
+        return (
+            f'<span class="l10-streak-badge l10-cold" '
+            f'title="Last 10 games {side} today&apos;s line (against pick)">❄️ {opp_hits}/10</span>'
+        )
+    return ""
+
+
 def _resolve_l5_cols(row: pd.Series, direction: str) -> tuple[float, float]:
     """
     Return (l5_hits, l5_games_played) for the play direction.
@@ -14600,6 +14646,27 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
   margin-left: 8px;
   font-weight: 600;
 }
+.tickets-built .l10-streak-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.tickets-built .l10-streak-badge.l10-hot {
+  background: rgba(125,255,203,.12);
+  color: #00ff88;
+  border: 1px solid rgba(125,255,203,.35);
+}
+.tickets-built .l10-streak-badge.l10-cold {
+  background: rgba(100,180,255,.12);
+  color: #7eb8ff;
+  border: 1px solid rgba(100,180,255,.35);
+}
+.tickets-built .kpi-val.l10-hot-count { color: #00ff88; }
+.tickets-built .kpi-val.l10-cold-count { color: #7eb8ff; }
 </style>"""
 
 
@@ -15114,6 +15181,7 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
             _pill("L5 Under", l5_under, lambda x: format_hit_window_fraction(5, x)),
             _pill("L10 Over", l10_over, lambda x: format_hit_window_fraction(10, x)),
             _pill("L10 Under", l10_under, lambda x: format_hit_window_fraction(10, x)),
+            _pill("L10 Streak", leg.get("l10_streak")),
             _pill("Hit Rate", hr_val, lambda x: f"{float(x) * 100:.0f}%"),
         ]
     )
@@ -15366,6 +15434,11 @@ def render_tickets_body_html(
     Render ticket slips from tickets_latest.json payload.
     Returns (body_html, page_title) for injection into tickets_built.html.
     """
+    import copy
+
+    payload = copy.deepcopy(payload)
+    _finalize_payload_l10_streaks(payload)
+
     def safe_str(val, default: str = "") -> str:
         if val is None:
             return default
@@ -15731,6 +15804,20 @@ def render_tickets_body_html(
             warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
                          if has_warn else "")
 
+            hot_legs_n = int(ticket.get("hot_legs") or 0)
+            cold_legs_n = int(ticket.get("cold_legs") or 0)
+            l10_kpi_html = ""
+            if hot_legs_n or cold_legs_n:
+                l10_kpi_html = f'''
+        <div class="kpi">
+          <div class="kpi-label">L10 Streak</div>
+          <div class="kpi-val" style="font-size:clamp(18px,2vw,24px);">
+            <span class="l10-hot-count" title="Legs hitting in bet direction (L10)">🔥 {hot_legs_n}</span>
+            <span style="color:var(--muted);font-size:14px;"> / </span>
+            <span class="l10-cold-count" title="Legs with opposite side hitting (L10)">❄️ {cold_legs_n}</span>
+          </div>
+        </div>'''
+
             parts.append(f'''
 <div class="ticket" style="border-left:4px solid {accent};">
   <div class="ticket-body">
@@ -15756,7 +15843,7 @@ def render_tickets_body_html(
           <div class="kpi-label">MIN PAYOUT</div>
           <div class="kpi-val">{_fmt(kpi_payout, 2)}×</div>
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">Sweep {_fmt(kpi_sweep, 2)}x {_payout_source_badge_html(kpi_source)}</div>
-        </div>
+        </div>{l10_kpi_html}
       </div>
       <div class="ticket-legs-table-wrapper">
       <table class="ticket-legs-table">
@@ -15866,7 +15953,7 @@ def render_tickets_body_html(
               <div class="pwrap">
                 {av_html}
                 <div>
-                  <div style="font-weight:600;font-size:14px;">{_h(player)}</div>
+                  <div style="font-weight:600;font-size:14px;">{_h(player)}{_l10_streak_badge_html(leg)}</div>
                   <div style="font-size:12px;color:var(--muted);">{_h(matchup)}</div>
                 </div>
               </div>
