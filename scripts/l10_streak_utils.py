@@ -35,16 +35,17 @@ def compute_l10_streak_label(
     if total <= 0:
         return None
     d = str(direction or "OVER").strip().upper()
+    # HOT = the bet direction is hitting; COLD = the opposite side is hitting.
     if d == "UNDER":
-        if un >= L10_STREAK_COLD:
-            return "COLD"
-        if ov >= L10_STREAK_HOT:
+        if un >= L10_STREAK_HOT:
             return "HOT"
-    else:
         if ov >= L10_STREAK_HOT:
-            return "HOT"
-        if un >= L10_STREAK_COLD:
             return "COLD"
+        return "NEUTRAL"
+    if ov >= L10_STREAK_HOT:
+        return "HOT"
+    if un >= L10_STREAK_HOT:
+        return "COLD"
     return "NEUTRAL"
 
 

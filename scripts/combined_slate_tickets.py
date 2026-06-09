@@ -108,8 +108,8 @@ from utils.prop_signal_score import (
     directional_l10_side_series,
     ensure_prop_signal_columns,
     graded_analysis_boost_series,
-    l10_streak_for_row,
 )
+from scripts.l10_streak_utils import compute_l10_streak_label, sanitize_l10_streak_label
 from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
 from utils.goblin_demon_multiplier import (
     compute_ticket_ev as gd_compute_ticket_ev,
@@ -5212,6 +5212,73 @@ def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
         leg["projection"] = _safe_float(proj)
 
 
+def _l10_counts_look_like_rates(over: float | None, under: float | None) -> bool:
+    if over is None or under is None:
+        return False
+    if over > 1.0 or under > 1.0:
+        return False
+    total = over + under
+    return 0.9 <= total <= 1.1
+
+
+def _finalize_leg_l10_streak(leg: dict) -> None:
+    """
+    Derive L10 hit counts from stat_g* vs line when missing or rate-like,
+    then set l10_streak from final counts (main + high-leg-HR export paths).
+    """
+    line_f = _safe_float(leg.get("line"))
+    lo_f = _safe_float(leg.get("l10_over"))
+    lu_f = _safe_float(leg.get("l10_under"))
+
+    need_stat = lo_f is None or lu_f is None or _l10_counts_look_like_rates(lo_f, lu_f)
+    if need_stat and line_f is not None:
+        stats: list[float] = []
+        for i in range(1, 11):
+            fv = _safe_float(leg.get(f"stat_g{i}") or leg.get(f"g{i}"))
+            if fv is not None:
+                stats.append(float(fv))
+        if stats:
+            over_n = sum(1 for s in stats if s > line_f)
+            under_n = sum(1 for s in stats if s < line_f)
+            leg["l10_over"] = float(over_n)
+            leg["l10_under"] = float(under_n)
+            if leg.get("l10_games_played") is None:
+                leg["l10_games_played"] = float(len(stats))
+
+    leg["l10_streak"] = sanitize_l10_streak_label(
+        compute_l10_streak_label(
+            leg.get("l10_over"),
+            leg.get("l10_under"),
+            leg.get("direction") or leg.get("bet_direction") or leg.get("final_bet_direction"),
+        )
+    )
+
+
+def _finalize_payload_l10_streaks(payload: dict) -> None:
+    """Recompute l10_streak on every exported leg (post-merge / post-filter)."""
+    if not isinstance(payload, dict):
+        return
+    for group in payload.get("groups") or []:
+        if not isinstance(group, dict):
+            continue
+        g_hot = g_cold = 0
+        for slip in group.get("tickets") or []:
+            if not isinstance(slip, dict):
+                continue
+            for leg in slip.get("legs") or []:
+                if isinstance(leg, dict):
+                    _finalize_leg_l10_streak(leg)
+            hot_n, cold_n = _count_l10_streak_legs(slip.get("legs") or [])
+            slip["hot_legs"] = hot_n
+            slip["cold_legs"] = cold_n
+            g_hot += hot_n
+            g_cold += cold_n
+        group["hot_legs"] = g_hot
+        group["cold_legs"] = g_cold
+    payload["hot_legs"] = sum(int(g.get("hot_legs") or 0) for g in (payload.get("groups") or []) if isinstance(g, dict))
+    payload["cold_legs"] = sum(int(g.get("cold_legs") or 0) for g in (payload.get("groups") or []) if isinstance(g, dict))
+
+
 def _count_l10_streak_legs(legs: list) -> tuple[int, int]:
     hot = cold = 0
     for leg in legs or []:
@@ -5406,15 +5473,11 @@ def ticket_groups_to_payload(
                     ),
                     "l5_side_hits": _safe_float(gv("l5_side_hits")),
                     "l5_consistency": _safe_float(gv("l5_consistency")),
-                    "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
-                    "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
-                    "l10_streak": l10_streak_for_row(
-                        {
-                            "l10_streak": gv("l10_streak"),
-                            "l10_over": gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10"),
-                            "l10_under": gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10"),
-                            "direction": gv("direction") or gv("bet_direction") or gv("final_bet_direction"),
-                        }
+                    "l10_over": _safe_float(
+                        gv("l10_over") or gv("L10 Over") or gv("line_hits_over_10") or gv("over_L10")
+                    ),
+                    "l10_under": _safe_float(
+                        gv("l10_under") or gv("L10 Under") or gv("line_hits_under_10") or gv("under_L10")
                     ),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
@@ -5440,6 +5503,7 @@ def ticket_groups_to_payload(
                     if _line_hist_v is not None:
                         leg[f"line_g{_i}"] = _line_hist_v
                 _merge_read_export_fields_into_leg(leg, gv)
+                _finalize_leg_l10_streak(leg)
                 leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport", "")).upper() == "NBA1Q" else None
                 leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
                 leg["leg_prob_used"] = _safe_float(leg_prob_used)
@@ -6677,6 +6741,7 @@ def write_web_outputs(
     json_path = os.path.join(outdir, json_filename)
     if skip_ui_filters:
         apply_slate_ev_tier_recommendations(payload)
+        _finalize_payload_l10_streaks(payload)
         payload = _sanitize_for_json(payload)
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
@@ -6705,6 +6770,7 @@ def write_web_outputs(
                 print("  [web-merge] skipped: existing tickets_latest.json has a different slate date")
         except Exception as exc:
             print(f"  [web-merge] WARN: could not merge existing tickets_latest.json ({exc})")
+    _finalize_payload_l10_streaks(payload)
     payload = _sanitize_for_json(payload)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)

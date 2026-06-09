@@ -2827,13 +2827,18 @@ function streakHits(raw, n) {
 function l10StreakBadgeHtml(p) {
   const streak = String(p?.l10_streak || "").trim().toUpperCase();
   if (streak !== "HOT" && streak !== "COLD") return "";
+  const dir = String(p?.direction || p?.dir || "OVER").trim().toUpperCase();
   const over = streakHits(p?.l10_over, 10);
   const under = streakHits(p?.l10_under, 10);
-  if (streak === "HOT" && over != null) {
-    return `<span class="l10-streak-badge l10-hot" title="Last 10 games over today's line">🔥 ${over}/10</span>`;
+  const sideHits = dir === "UNDER" ? under : over;
+  const oppHits = dir === "UNDER" ? over : under;
+  if (streak === "HOT" && sideHits != null) {
+    const side = dir === "UNDER" ? "under" : "over";
+    return `<span class="l10-streak-badge l10-hot" title="Last 10 games ${side} today's line">🔥 ${sideHits}/10</span>`;
   }
-  if (streak === "COLD" && under != null) {
-    return `<span class="l10-streak-badge l10-cold" title="Last 10 games under today's line">❄️ ${under}/10</span>`;
+  if (streak === "COLD" && oppHits != null) {
+    const side = dir === "UNDER" ? "over" : "under";
+    return `<span class="l10-streak-badge l10-cold" title="Last 10 games ${side} today's line (against pick)">❄️ ${oppHits}/10</span>`;
   }
   return "";
 }
