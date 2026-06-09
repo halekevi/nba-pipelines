@@ -30,6 +30,7 @@ from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 
 from edge_feature_engineering import (
+    ALWAYS_EXCLUDE_FROM_EDGE_TRAINING,
     FEATURE_COLUMNS,
     WNBA_FEATURE_COLUMNS,
     _direction_series,
@@ -54,10 +55,6 @@ SCRIPT_NAME = "train_edge_model"
 # Verdict: not leaky; high booster importance (~0.64) is largely redundant with sport/direction/
 # composite_hit_rate slices. Do not add pick_type_encoded to this frozenset unless a future ablation
 # shows a suspicious post-game derivation path.
-ALWAYS_EXCLUDE_FROM_EDGE_TRAINING: frozenset[str] = frozenset(
-    {"edge", "abs_edge", "prop_score", "result_binary", "hit", "outcome"}
-)
-
 _COMBINED_GRADED_DATE = re.compile(r"combined_tickets_graded_(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
 
 

@@ -1,42 +1,51 @@
 {
   "MLB": {
     "gate": false,
-    "auc": 0.6262305156970128,
+    "auc": 0.6564995152971009,
     "reason": "OK (ALWAYS_ALLOW_SPORTS)"
   },
   "NBA": {
     "gate": false,
-    "auc": 0.6128058843043981,
+    "auc": 0.5848263950545443,
     "reason": "OK (ALWAYS_ALLOW_SPORTS)"
   },
   "NBA1H": {
-    "gate": true,
-    "auc": 0.49903009494533823,
-    "reason": "AUC 0.4990 < 0.5"
+    "gate": false,
+    "auc": 0.5050156991383029,
+    "reason": "AUC 0.5050 OK; streak 0/3 above 0.52",
+    "rolling_30d_auc": 0.5050156991383029,
+    "rolling_7d_auc": 0.6156462585034014,
+    "inversion_flag": false,
+    "sample_n_30d": 632,
+    "sample_n_7d": 100,
+    "sample_n": 632,
+    "trend": "unknown",
+    "last_checked": "2026-06-08",
+    "consecutive_days_above_052": 0
   },
   "NBA1Q": {
     "gate": false,
-    "auc": 0.6320240351682712,
+    "auc": 0.646676580681652,
     "reason": "OK"
   },
   "NHL": {
     "gate": false,
-    "auc": 0.5759465229458,
+    "auc": 0.6186901230426638,
     "reason": "OK"
   },
   "SOCCER": {
     "gate": false,
-    "auc": 0.6519705193429741,
+    "auc": 0.6379351647745705,
     "reason": "OK"
   },
   "TENNIS": {
     "gate": false,
-    "auc": 0.5677031094148437,
+    "auc": 0.6055528952330796,
     "reason": "OK"
   },
   "WNBA": {
     "gate": false,
-    "auc": 0.5689436221261321,
+    "auc": 0.5703744903775827,
     "reason": "OK"
   }
 }

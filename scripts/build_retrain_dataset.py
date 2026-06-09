@@ -50,11 +50,10 @@ TIER_OVERHAUL_DATE = "2026-05-02"
 TRAINING_FROM_DATE = "2026-05-06"
 
 # Sports omitted from retrain_dataset.csv (and graded_only export).
-# Tennis: 29.6% join rate overall, Goblin/Demon at ~3%.
-# Missing step8 player coverage on high-volume dates (May 19, May 24).
-# def_tier 0% on all joined rows.
-# Re-include after Tennis pipeline step8 coverage is fixed.
-EXCLUDE_SPORTS: frozenset[str] = frozenset({"Tennis"})
+EXCLUDE_SPORTS: frozenset[str] = frozenset()
+# Tennis re-enabled: May 19/May 24 date filter fixed; Sackmann history
+# brings distribution_std to 74%; def_tier still 0% but model can learn
+# absence signal. Monitor Tennis AUC post-retrain.
 
 STEP8_FEATURE_COLS = [
     "blended_score",
@@ -85,6 +84,11 @@ ENRICHMENT_RAW_COLS = [
     "wind_out_to_cf",
     "weather_flag",
     "role_stability_score",
+    # Distribution / volatility
+    "distribution_std",
+    "distribution_n",
+    # MLB opponent (100% fill after cache backfill)
+    "opp_team_id",
     # NHL
     "pp_toi_per_game",
     "pp_toi_pct",
@@ -1492,14 +1496,148 @@ def main() -> int:
     # n_total_after = len(out_df)
     # print(f"[build_retrain] Total rows: {n_total_before:,} → {n_total_after:,}")
 
+    # Derive hit from result/result_binary for pre-May graded rows
+    # that have result but no hit field (e.g. Feb/Mar NHL backfill)
+    if "hit" not in out_df.columns:
+        out_df["hit"] = np.nan
+
+    mask_no_hit = out_df["hit"].isna()
+    n_missing_hit = int(mask_no_hit.sum())
+
+    # Try result_binary first (0/1 numeric)
+    if "result_binary" in out_df.columns:
+        out_df.loc[mask_no_hit, "hit"] = pd.to_numeric(
+            out_df.loc[mask_no_hit, "result_binary"], errors="coerce"
+        )
+
+    # Try result string (HIT/MISS/WIN/LOSS)
+    mask_no_hit = out_df["hit"].isna()
+    if "result" in out_df.columns and mask_no_hit.any():
+        result_map = {"HIT": 1, "WIN": 1, "MISS": 0, "LOSS": 0}
+        out_df.loc[mask_no_hit, "hit"] = (
+            out_df.loc[mask_no_hit, "result"]
+            .astype(str)
+            .str.upper()
+            .str.strip()
+            .map(result_map)
+        )
+
+    derived = n_missing_hit - int(out_df["hit"].isna().sum())
+    print(f"[retrain] hit derived from result/result_binary: {derived} rows")
+
+    # MLB opp_team_id backfill from stats cache
+    if "opp_team_id" not in out_df.columns or out_df["opp_team_id"].isna().all():
+        try:
+            cache_path = root / "Sports" / "MLB" / "mlb_stats_cache.csv"
+            cache = pd.read_csv(
+                cache_path,
+                usecols=["MLB_PLAYER_ID", "GAME_DATE", "OPP_TEAM_ID"],
+                low_memory=False,
+            )
+            cache = cache.rename(
+                columns={
+                    "MLB_PLAYER_ID": "player_id",
+                    "GAME_DATE": "game_date",
+                    "OPP_TEAM_ID": "opp_team_id",
+                }
+            )
+            cache = cache.dropna(subset=["opp_team_id"])
+            cache["player_id"] = pd.to_numeric(cache["player_id"], errors="coerce")
+            cache["opp_team_id"] = pd.to_numeric(cache["opp_team_id"], errors="coerce")
+            cache["game_date"] = cache["game_date"].astype(str).str.strip().str[:10]
+            cache = cache.drop_duplicates(["player_id", "game_date"])
+
+            if "opp_team_id" not in out_df.columns:
+                out_df["opp_team_id"] = np.nan
+
+            id_cache_path = root / "Sports" / "MLB" / "mlb_id_cache.csv"
+            id_cache = pd.read_csv(id_cache_path)
+            id_map = dict(
+                zip(
+                    id_cache["player_norm"].astype(str).str.strip().str.casefold(),
+                    id_cache["mlb_player_id"],
+                )
+            )
+            out_df["_mlb_player_id"] = out_df["player"].map(player_join_key).map(id_map)
+            out_df["_mlb_player_id"] = pd.to_numeric(out_df["_mlb_player_id"], errors="coerce")
+
+            gd = out_df.get("step8_game_date", out_df.get("file_date", pd.Series("", index=out_df.index)))
+            out_df["_mlb_game_date"] = gd.astype(str).str.strip().str[:10]
+
+            mlb_mask = out_df["sport"].astype(str).str.upper() == "MLB"
+            if mlb_mask.any():
+                mlb_idx = out_df.index[mlb_mask]
+                mlb_part = out_df.loc[
+                    mlb_idx, ["_mlb_player_id", "_mlb_game_date"]
+                ].rename(columns={"_mlb_player_id": "player_id", "_mlb_game_date": "game_date"})
+                merged = mlb_part.merge(cache, on=["player_id", "game_date"], how="left")
+                out_df.loc[mlb_idx, "opp_team_id"] = pd.to_numeric(
+                    merged["opp_team_id"], errors="coerce"
+                ).values
+
+                # Cache only covers players with stat rows; fill remainder from opp_team abbrev.
+                still_null = mlb_mask & out_df["opp_team_id"].isna()
+                if still_null.any() and "opp_team" in out_df.columns:
+                    _mlb_opp_abbr_map = {
+                        "ARI": 109,
+                        "AZ": 109,
+                        "ATL": 144,
+                        "BAL": 110,
+                        "BOS": 111,
+                        "CHC": 112,
+                        "CIN": 113,
+                        "CLE": 114,
+                        "COL": 115,
+                        "CWS": 145,
+                        "CHW": 145,
+                        "DET": 116,
+                        "HOU": 117,
+                        "KC": 118,
+                        "KCR": 118,
+                        "LAA": 108,
+                        "LAD": 119,
+                        "MIA": 146,
+                        "MIL": 158,
+                        "MIN": 142,
+                        "NYM": 121,
+                        "NYY": 147,
+                        "ATH": 133,
+                        "OAK": 133,
+                        "PHI": 143,
+                        "PIT": 134,
+                        "SD": 135,
+                        "SDP": 135,
+                        "SF": 137,
+                        "SFG": 137,
+                        "SEA": 136,
+                        "STL": 138,
+                        "TB": 139,
+                        "TBR": 139,
+                        "TEX": 140,
+                        "TOR": 141,
+                        "WSH": 120,
+                        "WSN": 120,
+                        "WAS": 120,
+                    }
+                    out_df.loc[still_null, "opp_team_id"] = (
+                        out_df.loc[still_null, "opp_team"]
+                        .astype(str)
+                        .str.upper()
+                        .str.strip()
+                        .map(_mlb_opp_abbr_map)
+                    )
+
+                fill = int(out_df.loc[mlb_mask, "opp_team_id"].notna().sum())
+                print(f"[retrain] MLB opp_team_id backfill: {fill}/{int(mlb_mask.sum())} rows")
+            out_df = out_df.drop(columns=["_mlb_player_id", "_mlb_game_date"], errors="ignore")
+        except Exception as e:
+            print(f"[retrain] MLB opp_team_id backfill failed: {e}")
+
     # Critical training hygiene: supervised target must be present.
     # Keep only rows with known hit outcome before any final export.
-    if "hit" in out_df.columns:
-        before_hit = len(out_df)
-        out_df = out_df.loc[out_df["hit"].notna()].copy()
-        print(f"After dropping null-hit rows: {len(out_df):,} rows remain (from {before_hit:,})")
-    else:
-        print("[WARN] 'hit' column missing from joined dataset; cannot apply null-hit filter.")
+    before_hit = len(out_df)
+    out_df = out_df.loc[out_df["hit"].notna()].copy()
+    print(f"After dropping null-hit rows: {len(out_df):,} rows remain (from {before_hit:,})")
 
     # Prune columns that are effectively all-null across the retained dataset.
     # Protect required identity/model columns even if mostly null.
@@ -1522,6 +1660,7 @@ def main() -> int:
         "result",
         "rank_score",
         "blended_score",
+        "opp_team_id",
     ]
     drop_cols = [c for c in drop_cols if c not in keep_always]
     if drop_cols:

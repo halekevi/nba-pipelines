@@ -77,6 +77,9 @@ FEATURE_COLUMNS: list[str] = [
     "defense_known",
     "minutes_known",
     "role_stability_score",
+    "distribution_std",
+    "distribution_n",
+    "opp_team_id",
     # MLB-only (neutral fill on other sports via SPORT_FEATURE_OVERRIDES)
     "batting_order_pos",
     "top_of_order",
@@ -136,6 +139,24 @@ FEATURE_COLUMNS: list[str] = [
     "player_shots_per90",
     "xg_tier_encoded",
 ]
+
+# Post-game / label-adjacent columns — never tree inputs (trainer scopes FEATURE_COLUMNS;
+# explicit list prevents accidental inclusion if FEATURE_COLUMNS grows).
+ALWAYS_EXCLUDE_FROM_EDGE_TRAINING: frozenset[str] = frozenset(
+    {
+        "edge",
+        "abs_edge",
+        "prop_score",
+        "result_binary",
+        "hit",
+        "outcome",
+        "actual_value",
+        "margin",
+        "result",
+        "graded_at",
+        "payout",
+    }
+)
 
 SPORT_FEATURE_OVERRIDES: dict[str, list[str]] = {
     "MLB": [
