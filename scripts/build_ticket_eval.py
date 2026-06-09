@@ -1257,7 +1257,7 @@ def _append_grade_history(record: dict[str, Any]) -> None:
 
 
 EVAL_TRACK_LABELS: dict[str, str] = {
-    "graded_main": "Graded Main Slate (2-4 leg)",
+    "graded_main": "Graded Main Slate (2-3 leg, curated)",
     "long_parlay": "Long Parlays (5-6 leg)",
     "high_leg_hr": "High Leg HR",
 }
@@ -3254,7 +3254,7 @@ def _build_html(
     page_title_label = {
         "long_parlay": "Long Parlay Ticket Eval (5-6 leg)",
         "high_leg_hr": "High Leg HR Ticket Eval",
-    }.get(eval_track, "Ticket Eval (2-4 leg)")
+    }.get(eval_track, "Ticket Eval (2-3 leg, 70%+ p_win)")
     parts: list[str] = [
         "<!DOCTYPE html>",
         f'<html lang="en" data-theme="dark" data-ticket-track="{esc(eval_track)}">',

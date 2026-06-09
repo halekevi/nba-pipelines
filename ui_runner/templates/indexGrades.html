@@ -1548,7 +1548,7 @@ select option,
             </button>
           </div>
           <div class="ticket-track-bar" id="ticket-track-bar" aria-label="Ticket evaluation track">
-            <button type="button" class="ticket-track-btn active" id="ticket-track-main" onclick="setTicketEvalTrack('main')">Main (2-4 leg)</button>
+            <button type="button" class="ticket-track-btn active" id="ticket-track-main" onclick="setTicketEvalTrack('main')">Main (2-3 leg, curated)</button>
             <button type="button" class="ticket-track-btn" id="ticket-track-long" onclick="setTicketEvalTrack('long_parlay')">Long parlays (5-6)</button>
           </div>
         </div>
@@ -3071,7 +3071,7 @@ function refreshControlsSummary() {
       titleEl.textContent =
         ticketEvalTrack === 'long_parlay'
           ? 'Long parlay ticket evaluation (5-6 leg)'
-          : 'Main ticket evaluation (2-4 leg, graded)';
+          : 'Main ticket evaluation (2-3 leg, STRONG/OK curated)';
     } else if (activeTab === 'props') titleEl.textContent = 'Prop evaluation';
     else titleEl.textContent = 'Slate evaluation';
   }
@@ -3079,7 +3079,7 @@ function refreshControlsSummary() {
   const ds = currentDateStr || gradesEl('date-jump')?.value || '';
   let tab = 'Slate';
   if (activeTab === 'tickets') {
-    tab = ticketEvalTrack === 'long_parlay' ? 'Long parlays (5-6)' : 'Main (2-4 leg)';
+    tab = ticketEvalTrack === 'long_parlay' ? 'Long parlays (5-6)' : 'Main (2-3 leg, 70%+)';
   } else if (activeTab === 'props') tab = 'Props';
   if (
     activeTab === 'tickets' &&

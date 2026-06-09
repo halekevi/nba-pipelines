@@ -1915,6 +1915,13 @@ def main():
             mlb_players_all |= players
     mlb_teams_seen: Set[str] = set(mlb_team_players.keys())
     tennis_void: Set[Tuple[str, str]] = set()
+    tennis_players_all: Set[str] = set()
+    if not tennis_act.empty:
+        tennis_players_all = {
+            strip_norm(v)
+            for v in tennis_act.get("player_norm", pd.Series(dtype=str)).tolist()
+            if str(v or "").strip()
+        }
 
     # ticket sheets (workbook) or JSON snapshot (same legs as --write-web output)
     tickets_xlsx = tickets_path
@@ -1983,10 +1990,30 @@ def main():
     legs_df = legs_df.drop(columns=["leg_result_legacy"], errors="ignore")
 
     def _injury_void_leg(row: pd.Series) -> str:
-        if row["leg_result"] != "NO_ACTUAL":
-            return row["leg_result"]
+        res = str(row["leg_result"] or "").upper().strip()
         sp = str(row["sport"] or "").upper().strip()
         pl = strip_norm(row["player"])
+        prop_raw = str(row.get("prop_norm") or row.get("prop") or "").lower()
+        prop_compact = re.sub(r"[^a-z0-9]", "", prop_raw)
+
+        # Provider/board VOID with no numeric actual — settle as VOID (matches ticket_eval HTML).
+        if res in ("VOID", "PUSH", "N/A", "NA") and pd.isna(row.get("actual")):
+            if sp == "NHL" and "hit" in prop_raw:
+                return "VOID"
+            if sp == "MLB" and any(
+                k in prop_compact
+                for k in (
+                    "pitcherstrikeouts",
+                    "pitchingouts",
+                    "pitchesthrown",
+                    "hitsallowed",
+                    "walksallowed",
+                )
+            ):
+                return "VOID"
+
+        if res != "NO_ACTUAL":
+            return row["leg_result"]
         if sp in ("NBA", "NBA1H", "NBA1Q"):
             tm = _inj_canon_team("NBA", row["team"])
             if pl and tm and (pl, tm) in nba_void:
@@ -1998,6 +2025,8 @@ def main():
         elif sp == "NHL":
             tm = _inj_canon_team("NHL", row["team"])
             if pl and tm and (pl, tm) in nhl_void:
+                return "VOID"
+            if "hit" in prop_raw:
                 return "VOID"
         elif sp == "SOCCER":
             tm = _inj_canon_team("SOCCER", row["team"])
@@ -2011,8 +2040,21 @@ def main():
             tm = _inj_canon_team("TENNIS", row["team"])
             if pl and tm and (pl, tm) in tennis_void:
                 return "VOID"
+            if pl and tennis_players_all and pl not in tennis_players_all:
+                return "VOID"
         elif sp == "MLB":
             tm = strip_norm(row["team"])
+            if any(
+                k in prop_compact
+                for k in (
+                    "pitcherstrikeouts",
+                    "pitchingouts",
+                    "pitchesthrown",
+                    "hitsallowed",
+                    "walksallowed",
+                )
+            ):
+                return "VOID"
             if pl and tm and (tm in mlb_teams_seen) and (pl not in mlb_team_players.get(tm, set())):
                 return "VOID"
             if pl and mlb_players_all and (pl not in mlb_players_all):

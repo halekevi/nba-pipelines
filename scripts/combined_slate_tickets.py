@@ -5325,11 +5325,26 @@ def _finalize_payload_l10_streaks(payload: dict) -> None:
     payload["cold_legs"] = sum(int(g.get("cold_legs") or 0) for g in (payload.get("groups") or []) if isinstance(g, dict))
 
 
-# Graded KPI split: main = 2–4 leg parlays (higher win prob); long_parlay = 5–6 (tracked separately).
+# Graded KPI split: main = 2–3 leg high-win-prob parlays; long_parlay = 5–6 (tracked separately).
 MAIN_GRADED_MIN_LEGS = 2
-MAIN_GRADED_MAX_LEGS = 4
+MAIN_GRADED_MAX_LEGS = 3
 LONG_PARLAY_MIN_LEGS = 5
 LONG_PARLAY_MAX_LEGS = 6
+
+# Main graded export: rank-based selection (modeled parlay p_win rarely exceeds ~0.55 on 3-leg).
+MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.15"))
+MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "25")))
+MAIN_EXCLUDE_SPORTS: frozenset[str] = frozenset(
+    s.strip().upper()
+    for s in os.getenv("PROPORACLE_MAIN_EXCLUDE_SPORTS", "TENNIS").split(",")
+    if s.strip()
+)
+MAIN_REQUIRE_STRONG_OK: bool = os.getenv("PROPORACLE_MAIN_REQUIRE_STRONG_OK", "1").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+    "off",
+)
 
 
 def _slip_leg_count(ticket: dict, group: dict | None = None) -> int:
@@ -5396,8 +5411,66 @@ def filter_ticket_payload_by_leg_count(
     return out
 
 
+def filter_main_track_high_win_prob(payload: dict) -> dict:
+    """
+    Curate main-track slips: STRONG/OK only, top MAIN_MAX_SLIPS by modeled p_win rank score.
+
+    Excludes void-prone sports (default: Tennis) and same-game deep-bench stacks.
+    """
+    if not isinstance(payload, dict):
+        return {}
+    floor_p = float(MAIN_MIN_P_WIN_FLOOR)
+    max_slips = int(MAIN_MAX_SLIPS)
+    exclude = set(MAIN_EXCLUDE_SPORTS)
+    candidates: list[tuple[float, dict, dict]] = []
+    for g in payload.get("groups") or []:
+        if not isinstance(g, dict):
+            continue
+        for t in g.get("tickets") or []:
+            if not isinstance(t, dict):
+                continue
+            leg_sports = {
+                str(leg.get("sport") or "").strip().upper()
+                for leg in (t.get("legs") or [])
+                if isinstance(leg, dict) and str(leg.get("sport") or "").strip()
+            }
+            if leg_sports & exclude:
+                continue
+            p_win = _winrate_ticket_rank_score(t)
+            if p_win < floor_p:
+                continue
+            pay = t.get("payout") if isinstance(t.get("payout"), dict) else {}
+            rec = str((pay or {}).get("recommendation") or "").strip().upper()
+            if MAIN_REQUIRE_STRONG_OK and rec not in ("STRONG", "OK"):
+                continue
+            if _winrate_ticket_same_game_bench_stack(t):
+                continue
+            candidates.append((p_win, dict(t), g))
+    candidates.sort(key=lambda x: (-x[0], str(x[2].get("group_name") or "")))
+    candidates = candidates[:max_slips]
+    by_group: dict[str, list[dict]] = {}
+    group_meta: dict[str, dict] = {}
+    for _p, t, g in candidates:
+        gn = str(g.get("group_name") or "Group")
+        by_group.setdefault(gn, []).append(t)
+        group_meta[gn] = g
+    new_groups: list[dict] = []
+    for gn, tickets in by_group.items():
+        g0 = group_meta[gn]
+        ng = dict(g0)
+        ng["tickets"] = tickets
+        new_groups.append(ng)
+    out = dict(payload)
+    out["groups"] = new_groups
+    out["main_min_p_win_floor"] = floor_p
+    out["main_max_slips"] = max_slips
+    out["main_exclude_sports"] = sorted(exclude)
+    _finalize_payload_l10_streaks(out)
+    return out
+
+
 def split_graded_ticket_payloads(full_payload: dict) -> tuple[dict, dict]:
-    """Split combined export into main (2–4 leg) and long parlay (5–6 leg) tracks."""
+    """Split combined export into main (2–3 leg, high p_win) and long parlay (5–6 leg) tracks."""
     main = filter_ticket_payload_by_leg_count(
         full_payload,
         min_legs=MAIN_GRADED_MIN_LEGS,
@@ -5405,6 +5478,14 @@ def split_graded_ticket_payloads(full_payload: dict) -> tuple[dict, dict]:
         ticket_track="graded_main",
         payload_mode="main",
     )
+    n_before = sum(len(g.get("tickets") or []) for g in main.get("groups") or [])
+    main = filter_main_track_high_win_prob(main)
+    n_after = sum(len(g.get("tickets") or []) for g in main.get("groups") or [])
+    if n_before != n_after:
+        print(
+            f"  [main-track] curated main KPI pool (STRONG/OK, top {MAIN_MAX_SLIPS} by p_win): "
+            f"{n_before} -> {n_after}"
+        )
     long_p = filter_ticket_payload_by_leg_count(
         full_payload,
         min_legs=LONG_PARLAY_MIN_LEGS,
@@ -14442,7 +14523,7 @@ def main():
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
             print(
-                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-4 leg) | "
+                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-3 leg, high p_win) | "
                 f"{n_long} long-parlay slips (5-6 leg, separate grade track)."
             )
             gated_preview = filter_positive_ev_tickets_payload(

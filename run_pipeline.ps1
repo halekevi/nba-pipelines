@@ -991,7 +991,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --tennis-date $TennisDate --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --tennis-date $TennisDate --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --max-ticket-legs 3 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -1007,7 +1007,7 @@ function Run-Combined {
             "--allow-cross-date-fallback",
             "--output", "`"$WinrateOut`"",
             "--max-legs", "3",
-            "--min-leg-prob", "0.55",
+            "--min-leg-prob", "0.65",
             "--win-rate-mode",
             "--tiers", "A,B",
             "--max-tickets", "20",
