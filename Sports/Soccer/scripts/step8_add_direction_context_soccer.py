@@ -32,6 +32,7 @@ for _ in range(10):
 else:
     raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
 
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -179,6 +180,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     except Exception:
         df2["game_time"] = pd.to_datetime(df2.get("start_time", ""), errors="coerce").dt.strftime("%m/%d %H:%M")
 
+    if "line" in df2.columns:
+        df2 = finalize_l10_ui_columns(df2, line_col="line")
+
     keep = [
         "tier", "rank_score",
         "player", "pos", "position_group", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b",
@@ -195,6 +199,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "line_hit_rate_over_ou_10",
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
+        "l10_over", "l10_under", "l10_over_pct", "l10_streak", "l10_games_played",
         "OVERALL_DEF_RANK", "DEF_TIER", "def_tier",
         "deviation_level", "opp_pace",
         "minutes_tier", "starter_tier", "shot_role", "usage_role",

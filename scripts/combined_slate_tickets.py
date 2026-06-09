@@ -101,6 +101,13 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 from utils.defense_tiers import normalize_def_tier_label
 from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
+from utils.prop_signal_score import (
+    compute_prop_quality_score,
+    context_signal_adjustment_series,
+    directional_l10_side_series,
+    ensure_prop_signal_columns,
+    graded_analysis_boost_series,
+)
 from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
 from utils.goblin_demon_multiplier import (
     compute_ticket_ev as gd_compute_ticket_ev,
@@ -3169,8 +3176,10 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
         out["__ts_pri"] = ml.fillna(-1.0)
         out["__ts_sec"] = rs.fillna(-1e9)
     elif m == "blend":
+        out = ensure_prop_signal_columns(out)
+        ctx = context_signal_adjustment_series(out)
         ml_b = ml.where(ml.notna(), rs_p)
-        out["__ts_pri"] = 0.5 * ml_b + 0.5 * rs_p
+        out["__ts_pri"] = (0.45 * ml_b + 0.35 * rs_p + 0.20 * ctx.clip(-0.15, 0.15)).fillna(-1.0)
         out["__ts_sec"] = rs.fillna(-1e9)
     elif m == "rule":
         # User methodology:
@@ -9259,53 +9268,24 @@ def _prop_quality_min_threshold_series(df: pd.DataFrame, min_prop_quality: float
 
 
 def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
-    """Attach prop_quality_score in [0,1] from core leg quality signals."""
+    """Attach prop_quality_score in [0,1] — L10, ml_prob, context signals (all sports)."""
     if df is None or len(df) == 0:
         return df
-    out = df.copy()
-
+    out = ensure_prop_signal_columns(df)
     direction_u = (
         out.get("direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
     )
     is_under_side = direction_u.isin({"UNDER", "LOWER"})
-
-    hr = pd.to_numeric(out.get("hit_rate"), errors="coerce")
-    hr = hr.apply(_to_prob_0_1)
-
+    hr = pd.to_numeric(out.get("hit_rate"), errors="coerce").apply(_to_prob_0_1)
     l5o = pd.to_numeric(out.get("l5_over"), errors="coerce").fillna(0.0)
     l5u = pd.to_numeric(out.get("l5_under"), errors="coerce").fillna(0.0)
     l5_side = np.maximum(l5o, l5u)
     l5_side_rate = np.clip(l5_side / 5.0, 0.0, 1.0)
     hr = hr.fillna(pd.Series(l5_side_rate, index=out.index))
-    # Direction-aware: sheet hit_rate is OVER-side rate; UNDER legs use implied under-side rate.
-    hr_eff = pd.Series(np.where(is_under_side, 1.0 - hr, hr), index=out.index).clip(0.0, 1.0)
-    out["effective_hit_rate"] = hr_eff
-
-    edge_dir = _directional_edge_series(out).fillna(0.0)
-    edge_norm = np.clip(np.abs(edge_dir) / 15.0, 0.0, 1.0)
-
-    rs = pd.to_numeric(out.get("rank_score"), errors="coerce")
-    rank_prob = rs.apply(lambda x: _rank_score_to_prob(float(x)) if pd.notna(x) else np.nan).fillna(0.5)
-
-    sample_strength = pd.Series(np.clip(l5_side / 5.0, 0.0, 1.0), index=out.index)
-
-    tier_raw = out.get("tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
-    tier_norm = tier_raw.map({"A": 1.00, "B": 0.86, "C": 0.70, "D": 0.45}).fillna(0.55)
-
-    score = (
-        0.33 * hr_eff
-        + 0.22 * edge_norm
-        + 0.20 * rank_prob
-        + 0.15 * sample_strength
-        + 0.10 * tier_norm
-    )
-
-    rel = out.get("reliability_note", pd.Series("", index=out.index)).astype(str).str.upper()
-    hs = out.get("hit_rate_status", pd.Series("", index=out.index)).astype(str).str.upper()
-    score = score - np.where(rel.str.contains("THIN_SAMPLE_", na=False), 0.08, 0.0)
-    score = score - np.where(hs.str.startswith("BLENDED_N"), 0.05, 0.0)
-
-    out["prop_quality_score"] = np.clip(score, 0.0, 1.0)
+    out["effective_hit_rate"] = pd.Series(
+        np.where(is_under_side, 1.0 - hr, hr), index=out.index
+    ).clip(0.0, 1.0)
+    out["prop_quality_score"] = compute_prop_quality_score(out)
     return out
 
 
@@ -9504,6 +9484,7 @@ def filter_eligible(
             return in_df.iloc[0:0].copy()
         return pd.concat(result, axis=0)
 
+    df = ensure_prop_signal_columns(df)
     df = add_prop_quality_score(df)
     if "pick_type_eligible" not in df.columns:
         df = enrich_read_fields_dataframe(df)
@@ -9605,16 +9586,29 @@ def filter_eligible(
                 val = val.iloc[:, 0]
             return pd.to_numeric(val, errors="coerce")
 
+        pq_s = _pool_sort_series("prop_quality_score")
+        ml_s = _pool_sort_series("ml_prob")
+        l10_s = directional_l10_side_series(out).fillna(0.0)
         win_s = _pool_sort_series("win_probability")
         if not win_s.notna().any():
-            win_s = _pool_sort_series("ml_prob")
+            win_s = ml_s
         if not win_s.notna().any():
             win_s = _pool_sort_series("hit_rate")
         win_s = win_s.fillna(0.0)
-        out = out.assign(_edge_sort=edge_s, _win_sort=win_s).sort_values(
-            ["_edge_sort", "_win_sort"], ascending=[False, False]
+        out = out.assign(
+            _pq_sort=pq_s.fillna(0.0),
+            _ml_sort=ml_s.fillna(0.0),
+            _l10_sort=l10_s,
+            _edge_sort=edge_s,
+            _win_sort=win_s,
+        ).sort_values(
+            ["_pq_sort", "_ml_sort", "_l10_sort", "_edge_sort", "_win_sort"],
+            ascending=[False, False, False, False, False],
         )
-        out = out.drop(columns=["_edge_sort", "_win_sort"], errors="ignore")
+        out = out.drop(
+            columns=["_pq_sort", "_ml_sort", "_l10_sort", "_edge_sort", "_win_sort"],
+            errors="ignore",
+        )
     return out
 
 
@@ -12734,6 +12728,16 @@ def main():
     if _nba1h_gated(_MODEL_GATE_CACHE or {}):
         print(f"  [ticket-gate] NBA1H excluded from tickets — {_nba1h_ticket_gate_reason()}")
 
+    _graded_analysis_main = _load_graded_analysis()
+    _graded_ctx_main = _graded_analysis_context(_graded_analysis_main)
+    if _graded_analysis_main:
+        _dr = _graded_analysis_main.get("date_range") or {}
+        print(
+            f"  [signals] graded_analysis for ticket scoring: "
+            f"{_dr.get('min', '?')} → {_dr.get('max', '?')} "
+            f"({_graded_analysis_main.get('total_props', 0):,} props)"
+        )
+
     def pool(df, pt=None):
         if df is None or len(df) == 0:
             return df
@@ -12764,7 +12768,7 @@ def main():
             excluded = set()
         # NHL + MLB: row-wise low-signal exclusions.
 
-        filtered_df = df.copy()
+        filtered_df = ensure_prop_signal_columns(df.copy())
         filtered_df = _attach_reliability_columns(filtered_df, reliability_index)
         filtered_df = _attach_strat_columns(filtered_df, strat_index)
         voided_excluded = 0
@@ -12865,6 +12869,21 @@ def main():
                 filtered_df["blended_score"] = pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) * strat_mult
             if "rank_score" in filtered_df.columns:
                 filtered_df["rank_score"] = pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) * strat_mult
+
+        # L10, ml_prob, def_tier, cross-book edge, line movement, graded-history boosts.
+        _ctx_adj = context_signal_adjustment_series(filtered_df)
+        _ga_boost = graded_analysis_boost_series(filtered_df, _graded_ctx_main)
+        filtered_df["context_signal_adj"] = _ctx_adj
+        filtered_df["graded_history_boost"] = _ga_boost
+        _signal_bonus = _ctx_adj + _ga_boost
+        if "rank_score" in filtered_df.columns:
+            filtered_df["rank_score"] = (
+                pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) + _signal_bonus
+            )
+        if "blended_score" in filtered_df.columns:
+            filtered_df["blended_score"] = (
+                pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) + _signal_bonus
+            )
 
         # Sport-specific hit rate floors based on empirical data
         effective_min_hit = args.min_hit_rate

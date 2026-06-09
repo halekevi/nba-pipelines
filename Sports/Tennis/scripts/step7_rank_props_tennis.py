@@ -16,6 +16,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _TENNIS_REPO = Path(__file__).resolve().parents[3]
 if str(_TENNIS_REPO) not in sys.path:
     sys.path.insert(0, str(_TENNIS_REPO))
+from utils.prop_signal_score import apply_ml_rank_blend  # noqa: E402
 from utils.group_rank_tier import (  # noqa: E402
     assign_tier_column,
     print_tier_distribution_by_pick_direction_group,
@@ -73,6 +74,13 @@ def main() -> None:
     df["ml_prob"] = (0.42 + 0.22 * hr5.fillna(0.5).clip(0.35, 0.72)).clip(0.38, 0.78)
     df["edge_score"] = (df["edge"].astype(float).abs().clip(0, 8) / 8.0 * 10.0).round(4)
     df["rank_score"] = (composite_score * 4.0).clip(0.0, 10.0).round(4)
+    df["line_hit_rate"] = composite_hit_rate
+    df = apply_ml_rank_blend(
+        df,
+        rank_col="rank_score",
+        composite_hr_col="composite_hit_rate",
+        label="Tennis step7",
+    )
     df["blended_score"] = (0.3 * df["ml_prob"] + 0.7 * composite_hit_rate).round(4)
     if "bet_direction" not in df.columns:
         df["bet_direction"] = "OVER"

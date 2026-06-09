@@ -36,6 +36,7 @@ import pandas as pd
 _WNBA_REPO = Path(__file__).resolve().parents[2]
 if str(_WNBA_REPO) not in sys.path:
     sys.path.insert(0, str(_WNBA_REPO))
+from utils.prop_signal_score import apply_ml_rank_blend  # noqa: E402
 from utils.group_rank_tier import (  # noqa: E402
     assign_tier_column,
     print_tier_distribution_by_pick_direction_group,
@@ -562,9 +563,14 @@ def main():
         out.loc[void_mask, "rank_score"] = void_score
         out.loc[void_mask, "rank_score_penalized"] = True
 
-    _rs_wnba = pd.to_numeric(out["rank_score"], errors="coerce")
-    _pct_wnba = _rs_wnba.rank(method="average", pct=True)
-    out["ml_prob"] = (0.45 + 0.40 * _pct_wnba.fillna(0.5)).clip(0.35, 0.90)
+    if "line_hit_rate" not in out.columns and "line_hit_rate_over_ou_5" in out.columns:
+        out["line_hit_rate"] = pd.to_numeric(out["line_hit_rate_over_ou_5"], errors="coerce")
+    out = apply_ml_rank_blend(
+        out,
+        rank_col="rank_score",
+        composite_hr_col="line_hit_rate",
+        label="WNBA step7",
+    )
     out["tier"] = assign_tier_column(out, sport="wnba")
     report_goblin_demon_standard_line_fill(out, "[WNBA step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[WNBA step7]")

@@ -38,6 +38,7 @@ for _ in range(10):
 else:
     raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
 
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 
 _ET = ZoneInfo("America/New_York")
@@ -249,6 +250,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         if "game_time" not in df2.columns:
             df2["game_time"] = ""
 
+    if "line" in df2.columns:
+        df2 = finalize_l10_ui_columns(df2, line_col="line")
+
     keep = [
         'tier', 'rank_score', 'rank_score_penalized',
         'player', 'pos', 'team', 'opp_team', 'days_rest', 'is_back_to_back', 'opp_days_rest', 'opp_b2b',
@@ -267,6 +271,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'stat_g1', 'stat_g2', 'stat_g3', 'stat_g4', 'stat_g5',
         'stat_g6', 'stat_g7', 'stat_g8', 'stat_g9', 'stat_g10',
         'last5_over', 'last5_under',
+        'l10_over', 'l10_under', 'l10_over_pct', 'l10_streak', 'l10_games_played',
         'line_hits_over_10', 'line_hits_under_10',
         'OVERALL_DEF_RANK', 'DEF_TIER',
         'minutes_tier', 'shot_role', 'usage_role',

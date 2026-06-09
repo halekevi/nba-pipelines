@@ -35,6 +35,7 @@ for _ in range(10):
 else:
     raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
 
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -232,6 +233,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     df2["last5_over"] = l5_over.fillna(l5_over_fallback)
     df2["last5_under"] = l5_under.fillna(l5_under_fallback)
 
+    if "line" in df2.columns:
+        df2 = finalize_l10_ui_columns(df2, line_col="line")
+
     if "OVERALL_DEF_RANK" not in df2.columns:
         df2["OVERALL_DEF_RANK"] = "N/A"
     else:
@@ -276,6 +280,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "line_hit_rate_over_ou_10",
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
+        "l10_over", "l10_under", "l10_over_pct", "l10_streak", "l10_games_played",
         "OVERALL_DEF_RANK", "DEF_TIER",
         "minutes_tier", "shot_role", "usage_role",
         "void_reason",

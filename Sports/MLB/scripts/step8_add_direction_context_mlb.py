@@ -35,6 +35,7 @@ for _ in range(10):
 else:
     raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
 
+from scripts.l10_streak_utils import finalize_l10_ui_columns
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -263,6 +264,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     _gd = _row_game_datetimes(df2)
     df2["slate_game_date"] = _gd.dt.strftime("%Y-%m-%d").where(_gd.notna(), "").fillna("")
 
+    if "line" in df2.columns:
+        df2 = finalize_l10_ui_columns(df2, line_col="line")
+
     keep = [
         "tier", "rank_score",
         "player", "pos", "player_type_norm", "team", "opp_team", "days_rest", "is_back_to_back", "opp_days_rest", "opp_b2b",
@@ -278,6 +282,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "hit_rate_status", "reliability_note",
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
+        "l10_over", "l10_under", "l10_over_pct", "l10_streak", "l10_games_played",
         "OVERALL_DEF_RANK", "DEF_TIER",
         "minutes_tier", "batting_order_tier", "pitcher_role",
         "lineup_confirmed", "batting_order_pos",
