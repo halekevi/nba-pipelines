@@ -1018,6 +1018,13 @@ function Run-Combined {
         $okWinrate = Run-Step "Win-Rate Tickets" $Root ".\scripts\combined_slate_tickets.py" $WinrateArgs
         if (-not $okWinrate) {
             Write-Host "  [win-rate] WARN: win-rate ticket pass failed (EV tickets unchanged)." -ForegroundColor Yellow
+        } else {
+            $WinrateJson = Join-Path $WebOutDir "tickets_winrate_latest.json"
+            $HighLegDatedJson = Join-Path $UiDataDir "combined_slate_tickets_high_leg_$Date.json"
+            if (Test-Path $WinrateJson) {
+                Copy-Item $WinrateJson $HighLegDatedJson -Force -ErrorAction SilentlyContinue
+                Write-Host "  Saved -> $HighLegDatedJson (high-leg-HR section, not graded)" -ForegroundColor Green
+            }
         }
         # Keep Matchup Edge JSON in lockstep with combined slate/ticket publish.
         # Includes WNBA (slate_sport_wnba.json) — must run after --write-web writes all slate_sport_*.json.

@@ -53,7 +53,7 @@ def main() -> int:
     checks = {
         "p_win": "p_win" in body,
         "P(WIN)": "P(WIN)" in body or "P (WIN)" in body,
-        "winrate-best": "winrate-best" in body or "Today's Best" in body,
+        "winrate-best": "winrate-best" in body or "HIGH LEG HR" in body,
     }
     print("UI checks:", checks)
     if winrate_path.is_file():

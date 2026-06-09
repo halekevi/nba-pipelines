@@ -3864,6 +3864,25 @@ def _win_rate_sport_allowed(sport_key: str, leg_prob: float) -> bool:
     return False
 
 
+def _row_high_leg_hr_reserved(
+    row: pd.Series | dict,
+    *,
+    min_leg_prob: float = 0.55,
+    min_composite_hr: float = 0.52,
+    graded_ctx: dict[str, Any] | None = None,
+) -> bool:
+    """
+    Legs reserved for the high-leg-HR ticket section (win-rate / Today's Best).
+    Excluded from main graded ticket pool so performance tracking stays clean.
+    """
+    return _row_win_rate_eligible(
+        row,
+        min_leg_prob=min_leg_prob,
+        min_composite_hr=min_composite_hr,
+        graded_ctx=graded_ctx,
+    )
+
+
 def _row_win_rate_eligible(
     row: pd.Series | dict,
     *,
@@ -5193,14 +5212,36 @@ def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
         leg["projection"] = _safe_float(proj)
 
 
+def _count_l10_streak_legs(legs: list) -> tuple[int, int]:
+    hot = cold = 0
+    for leg in legs or []:
+        if not isinstance(leg, dict):
+            continue
+        streak = str(leg.get("l10_streak") or "").upper()
+        if streak == "HOT":
+            hot += 1
+        elif streak == "COLD":
+            cold += 1
+    return hot, cold
+
+
 def ticket_groups_to_payload(
-    all_ticket_groups, date_str, thresholds, bankroll: float = 0.0, curve_stake_usd: float = 1.0
+    all_ticket_groups,
+    date_str,
+    thresholds,
+    bankroll: float = 0.0,
+    curve_stake_usd: float = 1.0,
+    *,
+    ticket_track: str = "graded_main",
+    payload_mode: str | None = None,
 ):
     payload = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "date": date_str,
         "filters": thresholds,
         "bankroll": float(bankroll) if bankroll and bankroll > 0 else None,
+        "ticket_track": str(ticket_track or "graded_main"),
+        "mode": str(payload_mode or ticket_track or "main"),
         "groups": [],
     }
 
@@ -5235,6 +5276,8 @@ def ticket_groups_to_payload(
                 "web_group_name": str(group_name),
                 "ticket_id": ticket_id,
                 "ticket_no": ti,
+                "ticket_track": payload["ticket_track"],
+                "mode": payload["mode"],
                 "avg_hit_rate": _safe_float(t.get("avg_hit_rate")),
                 "avg_rank_score": _safe_float(t.get("avg_rank_score")),
                 "est_win_prob": _safe_float(t.get("est_win_prob")),
@@ -5299,6 +5342,7 @@ def ticket_groups_to_payload(
                 canonical_leg_id = "leg_" + hashlib.sha1(id_material.encode("utf-8")).hexdigest()[:20]
                 leg = {
                     "ticket_id": ticket_id,
+                    "ticket_track": payload["ticket_track"],
                     "sport": sport_s,
                     "player": player_s,
                     "team": team_s,
@@ -5416,6 +5460,9 @@ def ticket_groups_to_payload(
 
                 slip["legs"].append(leg)
             slip["has_data_warning"] = any(bool(x.get("data_warning")) for x in slip["legs"])
+            _hot_n, _cold_n = _count_l10_streak_legs(slip["legs"])
+            slip["hot_legs"] = _hot_n
+            slip["cold_legs"] = _cold_n
 
             try:
                 slip["payout"] = build_ticket_payout_json(str(group_name), rows)
@@ -5426,8 +5473,16 @@ def ticket_groups_to_payload(
 
             group["tickets"].append(slip)
 
+        _g_hot = sum(int(t.get("hot_legs") or 0) for t in group["tickets"])
+        _g_cold = sum(int(t.get("cold_legs") or 0) for t in group["tickets"])
+        group["hot_legs"] = _g_hot
+        group["cold_legs"] = _g_cold
         payload["groups"].append(group)
 
+    _payload_hot = sum(int(g.get("hot_legs") or 0) for g in payload["groups"])
+    _payload_cold = sum(int(g.get("cold_legs") or 0) for g in payload["groups"])
+    payload["hot_legs"] = _payload_hot
+    payload["cold_legs"] = _payload_cold
     apply_slate_ev_tier_recommendations(payload)
     return payload
 
@@ -12983,6 +13038,26 @@ def main():
             else:
                 demon_passed = 0
 
+        # Main graded tickets: reserve high-leg-HR picks for the separate win-rate section.
+        if not getattr(args, "win_rate_mode", False) and len(filtered_df) > 0:
+            _hr_min_prob = float(getattr(args, "min_leg_prob", 0.55) or 0.55)
+            _hr_mask = filtered_df.apply(
+                lambda r: _row_high_leg_hr_reserved(
+                    r,
+                    min_leg_prob=_hr_min_prob,
+                    min_composite_hr=0.52,
+                    graded_ctx=_graded_ctx_main,
+                ),
+                axis=1,
+            )
+            _hr_n = int(_hr_mask.sum())
+            if _hr_n > 0:
+                filtered_df = filtered_df[~_hr_mask].copy()
+                print(
+                    f"  [pool] Reserved {_hr_n} high-leg-HR legs for win-rate section "
+                    f"(excluded from graded main tickets)"
+                )
+
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
         # NHL / Tennis / NFL: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
@@ -13171,8 +13246,9 @@ def main():
             thresholds,
             bankroll=max(0.0, float(args.bankroll)),
             curve_stake_usd=float(args.curve_stake_usd),
+            ticket_track="high_leg_hr",
+            payload_mode="high_leg_hr",
         )
-        wr_payload["mode"] = "win_rate"
         wr_payload["max_legs"] = wr_max_legs
         wr_payload["sort"] = "p_win"
         for g in wr_payload.get("groups") or []:
@@ -14145,6 +14221,8 @@ def main():
                 thresholds,
                 bankroll=max(0.0, float(args.bankroll)),
                 curve_stake_usd=float(args.curve_stake_usd),
+                ticket_track="graded_main",
+                payload_mode="main",
             )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
@@ -14200,6 +14278,8 @@ def main():
                 thresholds,
                 bankroll=max(0.0, float(args.bankroll)),
                 curve_stake_usd=float(args.curve_stake_usd),
+                ticket_track="graded_main",
+                payload_mode="main",
             )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
@@ -15022,13 +15102,13 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     """Pinned panel: top 5 win-rate tickets (sorted by est_win_prob, bench legs filtered)."""
     _placeholder = (
         '<motionless class="winrate-best-panel" id="winrate-best-panel" aria-live="polite">'
-        '<motionless class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</motionless>'
-        '<motionless class="winrate-best-sub">Win-rate tickets generating…</motionless>'
+        '<motionless class="winrate-best-title">⚡ HIGH LEG HR — Not in graded main track</motionless>'
+        '<motionless class="winrate-best-sub">High-leg-HR tickets generating…</motionless>'
         "</motionless>"
     ).replace("motionless", "div")
     data = winrate_payload
     if data is None:
-        path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_latest.json"
+        path = Path(REPO_ROOT) / "ui_runner" / "templates" / "tickets_winrate_latest.json"
         if not path.is_file():
             return _placeholder
         try:
@@ -15053,8 +15133,8 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
     if not top:
         return (
             '<div class="winrate-best-panel" id="winrate-best-panel">'
-            '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
-            '<div class="winrate-best-sub">No qualifying tickets for this slate '
+            '<div class="winrate-best-title">⚡ HIGH LEG HR — Not in graded main track</div>'
+            '<div class="winrate-best-sub">No qualifying high-leg-HR tickets for this slate '
             '(deep-bench SUPPORT legs and same-game bench stacks are excluded). '
             'Rebuild win-rate JSON after the next ticket run.</div>'
             "</div>"
@@ -15101,14 +15181,14 @@ def _winrate_best_panel_html(winrate_payload: dict | None = None) -> str:
             f'<div>EV {_fmt(ev_f, 1)} · Payout {_fmt(pay_f, 1)}x · {int(n_legs)}-leg</div>'
             f"</span></div>"
         )
-    sub_parts = ["Sorted by modeled win probability (est_win_prob); deep-bench SUPPORT legs excluded"]
+    sub_parts = ["High-leg-HR only — excluded from graded main track · sorted by modeled win probability"]
     if generated_at:
         sub_parts.append(f"Updated: {generated_at}")
     sub = _h(" · ".join(sub_parts))
     body = "".join(rows)
     return (
         '<div class="winrate-best-panel" id="winrate-best-panel">'
-        '<div class="winrate-best-title">⚡ TODAY&apos;S BEST — Highest Win Probability</div>'
+        '<div class="winrate-best-title">⚡ HIGH LEG HR — Not in graded main track</div>'
         f'<div class="winrate-best-sub">{sub}</div>'
         f"{body}"
         "</div>"
@@ -15318,10 +15398,16 @@ def render_tickets_body_html(
     else:
         counts_line = f"{n_groups} groups &nbsp;·&nbsp; {n_slips} slips"
     counts_line += _ui_cap_note
+    _track = str(payload.get("ticket_track") or payload.get("mode") or "").lower()
+    _hero_eyebrow = (
+        "Graded Main Slate"
+        if _track in ("graded_main", "main")
+        else "Today&rsquo;s Picks"
+    )
     parts.append(f'''
 <div class="hero tickets-hero" style="margin-bottom:24px;">
   <div class="hero-copy">
-    <div class="hero-eyebrow" style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Today&rsquo;s Picks</div>
+    <div class="hero-eyebrow" style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">{_hero_eyebrow}</div>
     <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,56px);letter-spacing:0.06em;line-height:1.05;color:var(--text);margin:0;">
       PROP<span class="hero-oracle-em">ORACLE</span>&nbsp;TICKETS
     </h1>

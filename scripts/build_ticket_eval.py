@@ -1228,7 +1228,7 @@ def _fmt_pct_cell(v: float | None) -> str:
 
 
 def _append_grade_history(record: dict[str, Any]) -> None:
-    """Append (or replace same-date) run summary to persistent data/grade_history.json (see utils.proporacle_data_root)."""
+    """Append (or replace same-date+track) run summary to persistent data/grade_history.json (see utils.proporacle_data_root)."""
     path = persistent_data_dir(REPO_ROOT) / "grade_history.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     runs: list[Any] = []
@@ -1242,9 +1242,24 @@ def _append_grade_history(record: dict[str, Any]) -> None:
         except (OSError, json.JSONDecodeError):
             runs = []
     ds = str(record.get("date") or "")[:10]
-    runs = [r for r in runs if not (isinstance(r, dict) and str(r.get("date", ""))[:10] == ds)]
+    track = str(record.get("track") or "graded_main").strip().lower()
+    runs = [
+        r
+        for r in runs
+        if not (
+            isinstance(r, dict)
+            and str(r.get("date", ""))[:10] == ds
+            and str(r.get("track") or "graded_main").strip().lower() == track
+        )
+    ]
     runs.append(record)
     path.write_text(json.dumps(runs, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+EVAL_TRACK_LABELS: dict[str, str] = {
+    "graded_main": "Graded Main Slate",
+    "high_leg_hr": "High Leg HR",
+}
 
 
 def _ticket_pays_money(group_name: str, leg_grades: list[str]) -> bool:
@@ -2216,6 +2231,39 @@ def find_ticket_payload_path(
     return None
 
 
+def find_high_leg_ticket_payload_path(
+    arg_date: str, override: Path | None = None
+) -> Path | None:
+    """Resolve high-leg-HR ticket JSON or win-rate workbook for shadow grading."""
+    if override is not None:
+        return override if override.is_file() else None
+    for jp in (
+        REPO_ROOT / "ui_runner" / "data" / f"combined_slate_tickets_high_leg_{arg_date}.json",
+        REPO_ROOT / "outputs" / arg_date / f"winrate_tickets_{arg_date}.xlsx",
+    ):
+        if jp.is_file():
+            return jp
+    wr = TEMPLATES_DIR / "tickets_winrate_latest.json"
+    if wr.is_file():
+        try:
+            with wr.open(encoding="utf-8") as f:
+                hdr = json.load(f)
+            if str(hdr.get("date") or "")[:10] == arg_date:
+                return wr
+        except (OSError, json.JSONDecodeError, TypeError):
+            pass
+    return None
+
+
+def _normalize_eval_track(raw: str | None) -> str:
+    t = str(raw or "graded_main").strip().lower()
+    if t in ("main", "graded_main"):
+        return "graded_main"
+    if t in ("high_leg_hr", "high-leg-hr", "win_rate", "winrate"):
+        return "high_leg_hr"
+    return "graded_main"
+
+
 def _player_initials(name: str) -> str:
     parts = str(name or "").strip().split()
     if not parts:
@@ -2915,6 +2963,8 @@ def _build_html(
     arg_date: str,
     sport_candidates: dict[str, list[Path]],
     graded_merge_dates: list[str],
+    *,
+    eval_track: str = "graded_main",
 ) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
     indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
@@ -2957,11 +3007,14 @@ def _build_html(
     # We flatten all legs into a single array and embed it into the HTML as window.SLATE_DATA.
     manual_props: list[dict[str, Any]] = [leg for leg, _, _ in all_legs if isinstance(leg, dict)]
     slate_date_str = str(payload.get("date") or arg_date)[:10]
-    try:
-        te_path = write_ticket_eval_slate_json(manual_props, slate_date_str)
-        print(f"  {te_path.name} -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)")
-    except OSError as e:
-        print(f"  WARN: could not write ticket_eval_slate_latest.json: {e}")
+    if eval_track != "high_leg_hr":
+        try:
+            te_path = write_ticket_eval_slate_json(manual_props, slate_date_str)
+            print(f"  {te_path.name} -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)")
+        except OSError as e:
+            print(f"  WARN: could not write ticket_eval_slate_latest.json: {e}")
+    else:
+        print("  [ticket_eval] high_leg_hr track — skipped ticket_eval_slate_latest.json (main slate unchanged)")
     manual_props_json = json.dumps(manual_props, ensure_ascii=False)
     # Avoid prematurely terminating the <script> tag if any string contains "</".
     manual_props_json = manual_props_json.replace("</", "<\\/")
@@ -3085,10 +3138,12 @@ def _build_html(
     net_per = total_net_10 / n_pay if n_pay else 0.0
     roi_pct = (100.0 * total_net_10 / (10 * n_pay)) if n_pay else 0.0
 
+    track_label = EVAL_TRACK_LABELS.get(eval_track, eval_track)
     history_record: dict[str, Any] | None = None
     if n_pay:
         history_record = {
             "date": str(payload.get("date") or arg_date)[:10],
+            "track": eval_track,
             "n_tickets": n_pay,
             "wins": wins_ct,
             "guarantees": guar_ct,
@@ -3138,7 +3193,7 @@ def _build_html(
         )
         grade_eval_summary_html = (
             '<div class="grade-eval-summary">'
-            f'<div class="grade-eval-summary-line1">Date: {json_date} · {n_pay} tickets graded</div>'
+            f'<div class="grade-eval-summary-line1">Date: {json_date} · {esc(track_label)} · {n_pay} tickets graded</div>'
             '<div class="grade-eval-summary-line2">'
             f'<span>✅ Wins: {wins_ct}</span>'
             f'<span>🛡️ Guarantees: {guar_ct}</span>'
@@ -3155,7 +3210,7 @@ def _build_html(
     else:
         grade_eval_summary_html = (
             '<div class="grade-eval-summary grade-eval-summary-empty">'
-            f'<div>Date: {json_date} · No fully graded tickets for payout summary (ungraded, all-void, or none).</div>'
+            f'<div>Date: {json_date} · {esc(track_label)} · No fully graded tickets for payout summary (ungraded, all-void, or none).</div>'
             "</div>"
         )
 
@@ -3175,9 +3230,12 @@ def _build_html(
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
+    page_title_label = (
+        "High Leg HR Ticket Eval" if eval_track == "high_leg_hr" else "Ticket Eval"
+    )
     parts: list[str] = [
         "<!DOCTYPE html>",
-        '<html lang="en" data-theme="dark">',
+        f'<html lang="en" data-theme="dark" data-ticket-track="{esc(eval_track)}">',
         "<head>",
         '<meta charset="UTF-8"/>',
         '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>',
@@ -3185,7 +3243,7 @@ def _build_html(
         "if(t==='light'){document.documentElement.setAttribute('data-theme','light');"
         "document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>",
         '<meta name="theme-color" content="#050505"/>',
-        f"<title>Ticket Eval — {json_date}</title>",
+        f"<title>{page_title_label} — {json_date}</title>",
         '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>',
         '<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>',
         f'<link rel="stylesheet" href="/static/proporacle-page-shell.css?v={_TICKET_EVAL_SHELL_CSS_VER}"/>',
@@ -4451,7 +4509,14 @@ def main() -> int:
         metavar="PATH",
         help="Alias for --tickets (same path override).",
     )
+    ap.add_argument(
+        "--track",
+        default="graded_main",
+        choices=("graded_main", "main", "high_leg_hr", "win_rate"),
+        help="Ticket track: graded_main (default) or high_leg_hr (separate scoreboard).",
+    )
     args = ap.parse_args()
+    eval_track = _normalize_eval_track(args.track)
     if args.date:
         arg_date = args.date.strip()
         if not re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
@@ -4465,16 +4530,28 @@ def main() -> int:
     override_raw = (args.tickets or args.slate or "").strip()
     override_path = Path(override_raw).resolve() if override_raw else None
 
-    tpath = find_ticket_payload_path(arg_date, override=override_path)
-    if not tpath:
-        if override_raw:
-            print(f"ERROR: Ticket workbook not found: {override_raw}")
-        else:
-            print(
-                "ERROR: No ticket payload found (.xlsx under outputs/, or "
-                "ui_runner/data/combined_slate_tickets_{date}.json, or templates/tickets_latest.json when date matches)."
-            )
-        return 1
+    if eval_track == "high_leg_hr":
+        tpath = find_high_leg_ticket_payload_path(arg_date, override=override_path)
+        if not tpath:
+            if override_raw:
+                print(f"ERROR: High-leg-HR ticket file not found: {override_raw}")
+            else:
+                print(
+                    "ERROR: No high-leg-HR ticket payload found "
+                    "(combined_slate_tickets_high_leg_{date}.json or winrate_tickets_{date}.xlsx)."
+                )
+            return 1
+    else:
+        tpath = find_ticket_payload_path(arg_date, override=override_path)
+        if not tpath:
+            if override_raw:
+                print(f"ERROR: Ticket workbook not found: {override_raw}")
+            else:
+                print(
+                    "ERROR: No ticket payload found (.xlsx under outputs/, or "
+                    "ui_runner/data/combined_slate_tickets_{date}.json, or templates/tickets_latest.json when date matches)."
+                )
+            return 1
 
     try:
         payload = _load_tickets(tpath, arg_date)
@@ -4500,7 +4577,7 @@ def main() -> int:
     if leg_game_dates_for_log and not parsed_leg_dates:
         infer_note = " (inferred next day; ticket file has no leg game_time column)"
     print(
-        f"[TICKET EVAL] Slate date: {arg_date}; ticket workbook: {tpath.name}; "
+        f"[TICKET EVAL] track={eval_track}; slate date: {arg_date}; ticket workbook: {tpath.name}; "
         f"leg game_time dates: {leg_game_dates_for_log or '[]'}{infer_note}; "
         f"graded workbook merge order: {graded_merge_dates}"
     )
@@ -4508,9 +4585,15 @@ def main() -> int:
     if args.debug:
         debug_report(arg_date, payload, tpath, sport_candidates, graded_merge_dates)
 
-    html_out, hist = _build_html(payload, arg_date, sport_candidates, graded_merge_dates)
+    html_out, hist = _build_html(
+        payload, arg_date, sport_candidates, graded_merge_dates, eval_track=eval_track
+    )
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
-    dated_name = f"ticket_eval_{arg_date}.html"
+    dated_name = (
+        f"ticket_eval_high_leg_{arg_date}.html"
+        if eval_track == "high_leg_hr"
+        else f"ticket_eval_{arg_date}.html"
+    )
     out_dated = TEMPLATES_DIR / dated_name
     try:
         out_dated.write_text(html_out, encoding="utf-8")

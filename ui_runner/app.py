@@ -418,7 +418,7 @@ _LARGE_JSON_NAMES = frozenset({"tickets_latest.json", "slate_latest.json"})
 # If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
 # Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
 #   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
-#   TICKETS_WINRATE_JSON_URL = .../tickets_winrate_latest.json  (Today's Best panel on /tickets)
+#   TICKETS_WINRATE_JSON_URL = .../tickets_winrate_latest.json  (High Leg HR panel on /tickets — not graded)
 #   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
 #   PIPELINE_JSON_TTL_SEC = 45   # optional; on Railway default is 60 if unset (fresher slates)
 #   GITHUB_JSON_FETCH_BUST = 0   # set to 0 to disable ?nocache= on raw GitHub fetches (not recommended)
@@ -541,8 +541,10 @@ def _grades_report_dates_payload() -> dict[str, list[str]]:
     """Disk scan + optional grades_report_dates.json (GitHub on Railway)."""
     slate_disk = _grade_report_dates_on_disk("slate")
     ticket_disk = _grade_report_dates_on_disk("ticket")
+    ticket_high_leg_disk = _grade_report_dates_on_disk("ticket_high_leg")
     slate_extra: list[str] = []
     ticket_extra: list[str] = []
+    ticket_high_leg_extra: list[str] = []
     meta_path = TEMPLATES_DIR / "grades_report_dates.json"
     if _DATA_FILE_URL_MAP.get("grades_report_dates.json") or meta_path.is_file():
         try:
@@ -552,11 +554,16 @@ def _grades_report_dates_payload() -> dict[str, list[str]]:
                     slate_extra = [str(x) for x in j["slate_eval_dates"]]
                 if isinstance(j.get("ticket_eval_dates"), list):
                     ticket_extra = [str(x) for x in j["ticket_eval_dates"]]
+                if isinstance(j.get("ticket_eval_high_leg_dates"), list):
+                    ticket_high_leg_extra = [str(x) for x in j["ticket_eval_high_leg_dates"]]
         except Exception:
             pass
     return {
         "slate_eval_dates": _merge_grade_report_date_lists(slate_disk, slate_extra),
         "ticket_eval_dates": _merge_grade_report_date_lists(ticket_disk, ticket_extra),
+        "ticket_eval_high_leg_dates": _merge_grade_report_date_lists(
+            ticket_high_leg_disk, ticket_high_leg_extra
+        ),
     }
 
 
@@ -2660,6 +2667,16 @@ def serve_ticket_eval_report(date: str):
     abort(404)
 
 
+@app.route("/grades/ticket_eval_high_leg_<date>.html", methods=("GET", "HEAD"))
+def serve_ticket_eval_high_leg_report(date: str):
+    """Serve high-leg-HR ticket eval HTML (separate from main graded track)."""
+    fname = f"ticket_eval_high_leg_{date}.html"
+    r = _send_grades_report_html(fname)
+    if r is not None:
+        return r
+    abort(404)
+
+
 def _pick_type_from_tier_tier_el(tier_el) -> str:
     if tier_el is None:
         return "—"
@@ -3109,14 +3126,20 @@ def api_grades_archive_dates():
 
 _SLATE_EVAL_FN_RE = re.compile(r"^slate_eval_(\d{4}-\d{2}-\d{2})\.html$")
 _TICKET_EVAL_FN_RE = re.compile(r"^ticket_eval_(\d{4}-\d{2}-\d{2})\.html$")
+_TICKET_EVAL_HIGH_LEG_FN_RE = re.compile(r"^ticket_eval_high_leg_(\d{4}-\d{2}-\d{2})\.html$")
 
 
 def _grade_report_dates_on_disk(which: str) -> list[str]:
     """
     List YYYY-MM-DD values for which static report HTML exists (templates/ or templates/archive/).
-    which: 'slate' | 'ticket'
+    which: 'slate' | 'ticket' | 'ticket_high_leg'
     """
-    pat = _SLATE_EVAL_FN_RE if which == "slate" else _TICKET_EVAL_FN_RE
+    if which == "slate":
+        pat = _SLATE_EVAL_FN_RE
+    elif which == "ticket_high_leg":
+        pat = _TICKET_EVAL_HIGH_LEG_FN_RE
+    else:
+        pat = _TICKET_EVAL_FN_RE
     found: set[str] = set()
     for base in (TEMPLATES_DIR, ARCHIVE_DIR):
         if not base.is_dir():
@@ -3149,6 +3172,7 @@ def api_grades_report_dates():
             "ok": True,
             "slate_eval_dates": payload["slate_eval_dates"],
             "ticket_eval_dates": payload["ticket_eval_dates"],
+            "ticket_eval_high_leg_dates": payload["ticket_eval_high_leg_dates"],
             "grades_html_remote": bool(_GRADES_HTML_RAW_BASE),
         }
     )

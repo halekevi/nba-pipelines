@@ -1052,6 +1052,59 @@ if (Test-Path $TicketEvalBuilderScript) {
     else {
         Write-Host "Skipping ticket eval build (graded workbook missing: $GradedCombined)." -ForegroundColor Yellow
     }
+
+    # High-leg-HR tickets: separate grader + eval (does not mix into main graded KPIs).
+    $HighLegJson = Join-Path $Root "ui_runner\data\combined_slate_tickets_high_leg_$Date.json"
+    $WinrateXlsx = Join-Path $DateDir "winrate_tickets_$Date.xlsx"
+    $HighLegTicketsArg = $null
+    if (Test-Path $HighLegJson) {
+        $HighLegTicketsArg = $HighLegJson
+    }
+    elseif (Test-Path $WinrateXlsx) {
+        $HighLegTicketsArg = $WinrateXlsx
+    }
+    if ($HighLegTicketsArg -and (Test-Path $CombinedTicketGrader) -and (Test-Path $NBAActuals)) {
+        Write-Host "[GRADER] High-leg-HR ticket pass: $HighLegTicketsArg" -ForegroundColor DarkGray
+        $HighLegGraded = Join-Path $DateDir "combined_tickets_high_leg_graded_$Date.xlsx"
+        $HighLegGraderArgs = @(
+            "--tickets", $HighLegTicketsArg,
+            "--nba_actuals", $NBAActuals,
+            "--out", $HighLegGraded
+        )
+        if (Test-Path $CBBActuals) { $HighLegGraderArgs += @("--cbb_actuals", $CBBActuals) }
+        if (Test-Path $NBA1HActuals) { $HighLegGraderArgs += @("--nba1h_actuals", $NBA1HActuals) }
+        if (Test-Path $NBA1QActuals) { $HighLegGraderArgs += @("--nba1q_actuals", $NBA1QActuals) }
+        if (Test-Path $NHLActuals) { $HighLegGraderArgs += @("--nhl_actuals", $NHLActuals) }
+        if (Test-Path $SoccerActuals) { $HighLegGraderArgs += @("--soccer_actuals", $SoccerActuals) }
+        if (Test-Path $TennisActuals) { $HighLegGraderArgs += @("--tennis_actuals", $TennisActuals) }
+        if (Test-Path $MlbActuals) { $HighLegGraderArgs += @("--mlb_actuals", $MlbActuals) }
+        Run-Py "High Leg HR Ticket Grader" $Root $CombinedTicketGrader $HighLegGraderArgs
+    }
+    elseif ($HighLegTicketsArg) {
+        Write-Host "Skipping high-leg-HR grader (grader or NBA actuals missing)." -ForegroundColor Yellow
+    }
+    if ($HighLegTicketsArg) {
+        $TeHighOut = Join-Path $TemplatesDir "ticket_eval_high_leg_$Date.html"
+        $TeHighArgs = @(
+            "--date", $Date,
+            "--track", "high_leg_hr",
+            "--tickets", $HighLegTicketsArg,
+            "--out", $TeHighOut
+        )
+        if ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -and $env:PROPORACLE_TICKET_EVAL_GAME_DATE.Trim()) {
+            foreach ($gd in ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -split ',')) {
+                $t = $gd.Trim()
+                if ($t -match '^\d{4}-\d{2}-\d{2}$') {
+                    $TeHighArgs += @("--game-date", $t)
+                }
+            }
+        }
+        Run-Py "Build High Leg HR Ticket Eval HTML" $Root $TicketEvalBuilderScript $TeHighArgs
+        if ((Test-Path -LiteralPath $MobileWwwDir) -and (Test-Path -LiteralPath $TeHighOut)) {
+            Copy-Item -LiteralPath $TeHighOut -Destination (Join-Path $MobileWwwDir "ticket_eval_high_leg_$Date.html") -Force -ErrorAction SilentlyContinue
+            Write-Host "[GRADER] Mobile copy: ticket_eval_high_leg_$Date.html -> mobile\www\" -ForegroundColor DarkGray
+        }
+    }
 }
 else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
@@ -1060,14 +1113,17 @@ else {
 # Publish ticket eval + slate eval HTML (after combined ticket grader + build above).
 if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
     $TeHtml = Join-Path $TemplatesDir "ticket_eval_$Date.html"
+    $TeHighHtml = Join-Path $TemplatesDir "ticket_eval_high_leg_$Date.html"
     $SeHtml = Join-Path $TemplatesDir "slate_eval_$Date.html"
-    if ((Test-Path $TeHtml) -or (Test-Path $SeHtml)) {
+    if ((Test-Path $TeHtml) -or (Test-Path $TeHighHtml) -or (Test-Path $SeHtml)) {
         Push-Location $Root
         try {
             $env:GIT_TERMINAL_PROMPT = "0"
             $teRel = "ui_runner/templates/ticket_eval_$Date.html"
+            $teHighRel = "ui_runner/templates/ticket_eval_high_leg_$Date.html"
             $seRel = "ui_runner/templates/slate_eval_$Date.html"
             if (Test-Path $TeHtml) { git add -- $teRel 2>$null | Out-Null }
+            if (Test-Path $TeHighHtml) { git add -- $teHighRel 2>$null | Out-Null }
             if (Test-Path $SeHtml) { git add -- $seRel 2>$null | Out-Null }
             git diff --cached --quiet
             if ($LASTEXITCODE -ne 0) {
