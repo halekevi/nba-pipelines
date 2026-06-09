@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Backtest ticket win rates split by parlay size: main (2-4 leg) vs long (5-6 leg).
+Backtest ticket win rates split by parlay size: main (2-leg win-rate) vs long (5-6 leg).
 
 Uses saved combined_slate_tickets JSON, splits with the same logic as combined_slate_tickets.py,
 grades via combined_ticket_grader.py (PrizePicks pay rules), and summarizes empirical_ticket_paid.
@@ -82,7 +82,7 @@ def _summarize(df: pd.DataFrame) -> dict:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Backtest 2-4 vs 5-6 leg ticket win rates.")
+    ap = argparse.ArgumentParser(description="Backtest 2-leg main vs 5-6 leg long-parlay ticket win rates.")
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--dates", help="Comma-separated YYYY-MM-DD")
     g.add_argument("--from", dest="date_from", help="Start date (with --to)")

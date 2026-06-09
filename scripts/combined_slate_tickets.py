@@ -3579,7 +3579,7 @@ def win_prob(leg_probs_with_source, _n_legs: int) -> float:
     return float(np.clip(np.prod(vals), TICKET_PROB_FLOOR, TICKET_PROB_CAP))
 
 
-_WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1Q"})
+_WIN_RATE_PRIMARY_SPORTS = frozenset({"NBA", "WNBA", "NBA1Q", "NBA1H"})
 _WIN_RATE_EXTRA_SPORTS = frozenset({"MLB", "NHL", "TENNIS"})
 # Cap per-leg factor in p_win product — l5_over_proxy can return 0.99 on hot streaks (artifact).
 MAX_LEG_PROB_FOR_P_WIN = 0.72
@@ -3592,12 +3592,20 @@ MAX_L5_HIT_PROB_DEFAULT = 0.85
 def _winrate_leg_bench_risk(leg: dict) -> bool:
     """True for low-minute support bench (e.g. 0-pt DNP-risk legs in playoff rotations)."""
     su = str(leg.get("sport") or "").strip().upper()
-    if su not in ("NBA", "WNBA", "NBA1H"):
+    if su not in ("NBA", "WNBA", "NBA1H", "NBA1Q"):
         return False
     mt = str(leg.get("min_tier") or leg.get("minutes_tier") or "").strip().upper()
     ur = str(leg.get("usage_role") or "").strip().upper()
     sr = str(leg.get("shot_role") or "").strip().upper()
     return mt == "LOW" and ur == "SUPPORT" and sr in ("LOW_VOL", "", "LOW")
+
+
+def _leg_dnp_risk(leg: dict) -> bool:
+    """True when a leg is tagged DNP-risk or deep-bench support."""
+    if _winrate_leg_bench_risk(leg):
+        return True
+    mt = str(leg.get("min_tier") or leg.get("minutes_tier") or "").strip().upper()
+    return "DNP" in mt
 
 
 def _leg_l5_hit_prob_cap(row: pd.Series | dict) -> float:
@@ -4130,6 +4138,8 @@ def build_win_rate_ticket_groups(
         if _winrate_ticket_same_game_bench_stack(t):
             continue
         rows = [dict(r) for r in (t.get("rows") or [])]
+        if any(_leg_dnp_risk(r) for r in rows):
+            continue
         key = _ticket_row_dedup_key(rows)
         if key in seen:
             continue
@@ -5325,21 +5335,29 @@ def _finalize_payload_l10_streaks(payload: dict) -> None:
     payload["cold_legs"] = sum(int(g.get("cold_legs") or 0) for g in (payload.get("groups") or []) if isinstance(g, dict))
 
 
-# Graded KPI split: main = 2–3 leg high-win-prob parlays; long_parlay = 5–6 (tracked separately).
+# Graded KPI split: main = 2-leg NBA-family win-rate slips; long_parlay = 5–6 (tracked separately).
 MAIN_GRADED_MIN_LEGS = 2
-MAIN_GRADED_MAX_LEGS = 3
+MAIN_GRADED_MAX_LEGS = 2
 LONG_PARLAY_MIN_LEGS = 5
 LONG_PARLAY_MAX_LEGS = 6
 
-# Main graded export: rank-based selection (modeled parlay p_win rarely exceeds ~0.55 on 3-leg).
+# Main graded export: win-rate builder (Goblin OVER / Tier-A standard, NBA family only).
+MAIN_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_MAIN_MIN_LEG_PROB", "0.65"))
 MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.15"))
-MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "25")))
-MAIN_EXCLUDE_SPORTS: frozenset[str] = frozenset(
+MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "15")))
+MAIN_ALLOWED_SPORTS: frozenset[str] = frozenset(
     s.strip().upper()
-    for s in os.getenv("PROPORACLE_MAIN_EXCLUDE_SPORTS", "TENNIS").split(",")
+    for s in os.getenv("PROPORACLE_MAIN_ALLOWED_SPORTS", "NBA,NBA1Q,NBA1H,WNBA").split(",")
     if s.strip()
 )
-MAIN_REQUIRE_STRONG_OK: bool = os.getenv("PROPORACLE_MAIN_REQUIRE_STRONG_OK", "1").strip().lower() not in (
+MAIN_EXCLUDE_SPORTS: frozenset[str] = frozenset(
+    s.strip().upper()
+    for s in os.getenv(
+        "PROPORACLE_MAIN_EXCLUDE_SPORTS", "TENNIS,SOCCER,NHL,MLB,CBB,WCBB,NFL,CFB"
+    ).split(",")
+    if s.strip()
+)
+MAIN_REQUIRE_STRONG_OK: bool = os.getenv("PROPORACLE_MAIN_REQUIRE_STRONG_OK", "0").strip().lower() not in (
     "0",
     "false",
     "no",
@@ -5429,12 +5447,17 @@ def filter_main_track_high_win_prob(payload: dict) -> dict:
         for t in g.get("tickets") or []:
             if not isinstance(t, dict):
                 continue
+            legs = [leg for leg in (t.get("legs") or []) if isinstance(leg, dict)]
             leg_sports = {
                 str(leg.get("sport") or "").strip().upper()
-                for leg in (t.get("legs") or [])
-                if isinstance(leg, dict) and str(leg.get("sport") or "").strip()
+                for leg in legs
+                if str(leg.get("sport") or "").strip()
             }
             if leg_sports & exclude:
+                continue
+            if MAIN_ALLOWED_SPORTS and not leg_sports.issubset(MAIN_ALLOWED_SPORTS):
+                continue
+            if any(_leg_dnp_risk(leg) for leg in legs):
                 continue
             p_win = _winrate_ticket_rank_score(t)
             if p_win < floor_p:
@@ -5469,8 +5492,87 @@ def filter_main_track_high_win_prob(payload: dict) -> dict:
     return out
 
 
+def extract_long_parlay_payload(full_payload: dict) -> dict:
+    """5–6 leg slips from the full EV export (separate grade track from main win-rate pool)."""
+    return filter_ticket_payload_by_leg_count(
+        full_payload,
+        min_legs=LONG_PARLAY_MIN_LEGS,
+        max_legs=LONG_PARLAY_MAX_LEGS,
+        ticket_track="long_parlay",
+        payload_mode="long_parlay",
+    )
+
+
+def _main_track_wr_sport_frames(
+    *,
+    nba1q,
+    nba,
+    nba1h,
+    wnba,
+    pool_fn,
+) -> list[tuple[str, pd.DataFrame]]:
+    frames: list[tuple[str, pd.DataFrame]] = []
+    for label, frame in (("NBA1Q", nba1q), ("NBA", nba), ("NBA1H", nba1h), ("WNBA", wnba)):
+        if frame is None or len(frame) == 0:
+            continue
+        gated, _reason = _sport_ticket_gated(label)
+        if gated:
+            continue
+        pooled = pool_fn(frame)
+        if pooled is not None and len(pooled) > 0:
+            frames.append((label, pooled))
+    return frames
+
+
+def build_graded_main_win_rate_payload(
+    sport_frames: list[tuple[str, pd.DataFrame]],
+    date_str: str,
+    thresholds: dict,
+    *,
+    bankroll: float,
+    curve_stake_usd: float,
+    graded_analysis: dict | None = None,
+    min_leg_prob: float | None = None,
+    max_legs: int | None = None,
+    max_tickets: int | None = None,
+) -> dict:
+    """Build main graded track from win-rate ticket groups (NBA-family, 2-leg power slips)."""
+    wr_max_legs = max(
+        MAIN_GRADED_MIN_LEGS,
+        min(MAIN_GRADED_MAX_LEGS, int(max_legs or MAIN_GRADED_MAX_LEGS)),
+    )
+    wr_min_prob = float(min_leg_prob if min_leg_prob is not None else MAIN_MIN_LEG_PROB)
+    wr_max_tickets = int(max_tickets or MAIN_MAX_SLIPS)
+    wr_groups = build_win_rate_ticket_groups(
+        sport_frames,
+        min_leg_prob=wr_min_prob,
+        min_composite_hr=0.52,
+        max_legs=wr_max_legs,
+        max_tickets=wr_max_tickets,
+        graded_analysis=graded_analysis,
+    )
+    payload = ticket_groups_to_payload(
+        wr_groups,
+        date_str,
+        thresholds,
+        bankroll=max(0.0, float(bankroll)),
+        curve_stake_usd=float(curve_stake_usd),
+        ticket_track="graded_main",
+        payload_mode="main",
+    )
+    payload["max_legs"] = wr_max_legs
+    payload["sort"] = "p_win"
+    payload["main_source"] = "win_rate"
+    payload["main_allowed_sports"] = sorted(MAIN_ALLOWED_SPORTS)
+    payload["main_min_leg_prob"] = wr_min_prob
+    for g in payload.get("groups") or []:
+        for slip in g.get("tickets") or []:
+            _enrich_slip_p_win_fields(slip, mode="win_rate")
+    return payload
+
+
 def split_graded_ticket_payloads(full_payload: dict) -> tuple[dict, dict]:
-    """Split combined export into main (2–3 leg, high p_win) and long parlay (5–6 leg) tracks."""
+    """Fallback: curated EV main (2-leg) + long parlay (5–6 leg) when win-rate builder is empty."""
     main = filter_ticket_payload_by_leg_count(
         full_payload,
         min_legs=MAIN_GRADED_MIN_LEGS,
@@ -5483,16 +5585,54 @@ def split_graded_ticket_payloads(full_payload: dict) -> tuple[dict, dict]:
     n_after = sum(len(g.get("tickets") or []) for g in main.get("groups") or [])
     if n_before != n_after:
         print(
-            f"  [main-track] curated main KPI pool (STRONG/OK, top {MAIN_MAX_SLIPS} by p_win): "
+            f"  [main-track] curated EV fallback (top {MAIN_MAX_SLIPS} by p_win, NBA-family): "
             f"{n_before} -> {n_after}"
         )
-    long_p = filter_ticket_payload_by_leg_count(
-        full_payload,
-        min_legs=LONG_PARLAY_MIN_LEGS,
-        max_legs=LONG_PARLAY_MAX_LEGS,
-        ticket_track="long_parlay",
-        payload_mode="long_parlay",
+    long_p = extract_long_parlay_payload(full_payload)
+    return main, long_p
+
+
+def resolve_graded_main_and_long_payloads(
+    full_payload: dict,
+    *,
+    nba1q,
+    nba,
+    nba1h,
+    wnba,
+    date_str: str,
+    thresholds: dict,
+    bankroll: float,
+    curve_stake_usd: float,
+    pool_fn,
+    graded_analysis: dict | None = None,
+) -> tuple[dict, dict]:
+    """Main = win-rate NBA-family builder; long = 5–6 leg from full EV export."""
+    wr_frames = _main_track_wr_sport_frames(
+        nba1q=nba1q,
+        nba=nba,
+        nba1h=nba1h,
+        wnba=wnba,
+        pool_fn=pool_fn,
     )
+    main = build_graded_main_win_rate_payload(
+        wr_frames,
+        date_str,
+        thresholds,
+        bankroll=bankroll,
+        curve_stake_usd=curve_stake_usd,
+        graded_analysis=graded_analysis,
+    )
+    n_main = sum(len(g.get("tickets") or []) for g in main.get("groups") or [])
+    if n_main > 0:
+        print(
+            f"  [main-track] win-rate main pool: {n_main} slips "
+            f"({MAIN_GRADED_MIN_LEGS}-{MAIN_GRADED_MAX_LEGS} leg, "
+            f"min_leg_prob={MAIN_MIN_LEG_PROB:.2f}, sports={','.join(sorted(MAIN_ALLOWED_SPORTS))})"
+        )
+    else:
+        print("  [main-track] win-rate builder empty — falling back to curated EV split")
+        main, _long_from_split = split_graded_ticket_payloads(full_payload)
+    long_p = extract_long_parlay_payload(full_payload)
     return main, long_p
 
 
@@ -12579,7 +12719,7 @@ def main():
         "--win-rate-mode",
         action="store_true",
         dest="win_rate_mode",
-        help="Win-rate ticket pass only: 2-3 leg goblin / Tier-A standard, sort by p_win, separate JSON output.",
+        help="Win-rate ticket pass only: 2-leg goblin / Tier-A standard, sort by p_win, separate JSON output.",
     )
     ap.add_argument(
         "--max-legs",
@@ -13516,9 +13656,6 @@ def main():
             ("NBA", nba),
             ("NBA1H", nba1h),
             ("WNBA", wnba),
-            ("MLB", mlb),
-            ("NHL", nhl),
-            ("Tennis", tennis),
         ):
             if _sport_ticket_gated(label)[0]:
                 print(f"  [win-rate] {label} excluded (model AUC gate)")
@@ -14518,12 +14655,24 @@ def main():
                 ticket_track="graded_main",
                 payload_mode="main",
             )
-            payload, long_payload = split_graded_ticket_payloads(full_payload)
+            payload, long_payload = resolve_graded_main_and_long_payloads(
+                full_payload,
+                nba1q=nba1q,
+                nba=nba,
+                nba1h=nba1h,
+                wnba=wnba,
+                date_str=str(args.date),
+                thresholds=thresholds,
+                bankroll=max(0.0, float(args.bankroll)),
+                curve_stake_usd=float(args.curve_stake_usd),
+                pool_fn=pool,
+                graded_analysis=_load_graded_analysis(),
+            )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
             print(
-                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-3 leg, high p_win) | "
+                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-leg win-rate, NBA-family) | "
                 f"{n_long} long-parlay slips (5-6 leg, separate grade track)."
             )
             gated_preview = filter_positive_ev_tickets_payload(
@@ -14581,12 +14730,24 @@ def main():
                 ticket_track="graded_main",
                 payload_mode="main",
             )
-            payload, long_payload = split_graded_ticket_payloads(full_payload)
+            payload, long_payload = resolve_graded_main_and_long_payloads(
+                full_payload,
+                nba1q=nba1q,
+                nba=nba,
+                nba1h=nba1h,
+                wnba=wnba,
+                date_str=str(args.date),
+                thresholds=thresholds,
+                bankroll=max(0.0, float(args.bankroll)),
+                curve_stake_usd=float(args.curve_stake_usd),
+                pool_fn=pool,
+                graded_analysis=_load_graded_analysis(),
+            )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
             print(
-                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-4 leg) | "
+                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-leg win-rate) | "
                 f"{n_long} long-parlay slips (FINAL fallback)."
             )
             gated_preview = filter_positive_ev_tickets_payload(
