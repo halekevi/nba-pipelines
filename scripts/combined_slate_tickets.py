@@ -15628,35 +15628,6 @@ def render_tickets_body_html(
     ]
     parts.append(_tickets_filter_pills_html(filter_attr_rows))
 
-    top_groups = [
-        e for e in prepared
-        if str(e.get("ev") or "").lower() not in {"skip", "low"}
-    ]
-    top_groups.sort(
-        key=lambda e: (
-            -float(e.get("ev_score") or 0.0),
-            -float(e.get("payout_confidence") or 0.0),
-        )
-    )
-    if top_groups:
-        top_rows: list[str] = []
-        for e in top_groups[:5]:
-            g = e["group"]
-            gn = str(g.get("group_name") or "Tickets")
-            ev_score = float(e.get("ev_score") or 0.0)
-            rec = str(e.get("ev") or "").upper() or "OK"
-            rec_cls = "ev-strong" if rec == "STRONG" else ("ev-ok" if rec == "OK" else "ev-marginal")
-            top_rows.append(
-                f'<div class="best-ticket-row"><span class="best-ticket-name">{_h(gn)}</span>'
-                f'<span class="best-ticket-meta {_h(rec_cls)}">{_h(rec)} · EV {_fmt(ev_score, 2)}×</span></div>'
-            )
-        parts.append(
-            '<div class="filter-pill" style="margin-top:8px;">'
-            '<div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Today&apos;s Best</div>'
-            + "".join(top_rows)
-            + "</div>"
-        )
-
     for ent in prepared:
         group = ent["group"]
         group_name = group.get("group_name") or "Tickets"
