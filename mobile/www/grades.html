@@ -592,6 +592,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .grades
 html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe-shell{
   overflow:visible!important;
 }
+/* Ticket tab: absolute load/empty layers sit inset:0 on a tall stage and read as a footer slab over cards. */
 .iframe-shell-stage[data-grades-tab="tickets"] .load-overlay,
 .iframe-shell-stage[data-grades-tab="tickets"] .empty-state,
 .iframe-shell-stage[data-grades-tab="tickets"] #ticket-empty-state{
@@ -719,6 +720,17 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 }
 .tab-icon{width:14px;height:14px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
+.ticket-track-bar{
+  flex-shrink:0;margin:6px 1rem 0;padding:4px 8px;display:none;gap:8px;align-items:center;flex-wrap:wrap;
+  background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;
+}
+.ticket-track-bar.visible{display:flex;}
+.ticket-track-btn{
+  padding:5px 10px;border-radius:10px;font-size:10px;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--muted2);background:transparent;border:1px solid transparent;cursor:pointer;
+}
+.ticket-track-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.1);}
+.ticket-track-btn.active{color:#ffd54f;border-color:rgba(255,213,79,0.45);background:rgba(255,213,79,0.08);}
 
 @media(max-width:768px){
   .date-bar{margin-left:12px;margin-right:12px;padding:7px 10px;min-height:42px;gap:8px;}
@@ -1467,7 +1479,7 @@ select option,
 
 </style>
 <link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="static/mobile-content-width.css?v=20260608ticketembed"/>
+<link rel="stylesheet" href="static/mobile-content-width.css?v=20260608ticketembed4"/>
 <link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1577,6 +1589,10 @@ select option,
             <button type="button" class="tab-btn" id="tab-players" onclick="switchTab('players')">
               <span class="tab-icon">📊</span>PLAYERS
             </button>
+          </div>
+          <div class="ticket-track-bar" id="ticket-track-bar" aria-label="Ticket evaluation track">
+            <button type="button" class="ticket-track-btn active" id="ticket-track-main" onclick="setTicketEvalTrack('main')">Main (2-4 leg)</button>
+            <button type="button" class="ticket-track-btn" id="ticket-track-long" onclick="setTicketEvalTrack('long_parlay')">Long parlays (5-6)</button>
           </div>
         </div>
       </div>
@@ -1974,9 +1990,14 @@ function slateEvalUrl(dateStr) {
   return REPORT_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
 }
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
+const TICKET_EVAL_LONG_PARLAY_URL_TEMPLATE = 'ticket_eval_long_parlay_{date}.html';
 /** Keep ticket iframe fresh too (prevents stale/blank cache edge-cases after deploy). */
 function ticketEvalUrl(dateStr) {
-  return TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
+  const tpl =
+    ticketEvalTrack === 'long_parlay'
+      ? TICKET_EVAL_LONG_PARLAY_URL_TEMPLATE
+      : TICKET_EVAL_URL_TEMPLATE;
+  return tpl.replace('{date}', dateStr) + '?cb=' + Date.now();
 }
 
 /** True when slate_eval HTML looks loaded (selectors evolve; avoid false “empty” from narrow checks). */
@@ -3394,15 +3415,20 @@ function refreshControlsSummary() {
   const el = gradesEl('grades-controls-live');
   const titleEl = gradesEl('iframe-shell-title');
   if (titleEl) {
-    if (activeTab === 'tickets') titleEl.textContent = 'Ticket evaluation';
-    else if (activeTab === 'props') titleEl.textContent = 'Prop evaluation';
+    if (activeTab === 'tickets') {
+      titleEl.textContent =
+        ticketEvalTrack === 'long_parlay'
+          ? 'Long parlay ticket evaluation (5-6 leg)'
+          : 'Main ticket evaluation (2-4 leg, graded)';
+    } else if (activeTab === 'props') titleEl.textContent = 'Prop evaluation';
     else titleEl.textContent = 'Slate evaluation';
   }
   if (!el) return;
   const ds = currentDateStr || gradesEl('date-jump')?.value || '';
   let tab = 'Slate';
-  if (activeTab === 'tickets') tab = 'Tickets';
-  else if (activeTab === 'props') tab = 'Props';
+  if (activeTab === 'tickets') {
+    tab = ticketEvalTrack === 'long_parlay' ? 'Long parlays (5-6)' : 'Main (2-4 leg)';
+  } else if (activeTab === 'props') tab = 'Props';
   if (
     activeTab === 'tickets' &&
     ticketEvalFallbackNotice &&
@@ -3476,6 +3502,7 @@ function switchTab(tab) {
     window.__gradesActiveTab = tab;
   } catch (_eTab) {}
   syncGradesTabStage(tab);
+  syncTicketTrackBarVisibility();
   const gradeFrame = document.getElementById('grade-frame');
   const ticketFrame = document.getElementById('ticket-frame');
   if (tab !== 'tickets') {
@@ -3685,7 +3712,15 @@ function applyTicketEvalGradesEmbed(doc) {
     'html.ticket-eval-embed-grades .grades-sport-bucket-body article.ticket-card{display:block!important;visibility:visible!important;}' +
     'html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}';
   injectTicketEvalHeightReporter(doc);
-  setupTicketEvalToggleHeightSync(document.getElementById('ticket-frame'));
+  setupTicketEvalToggleHeightSync(frameFromDoc(doc));
+}
+
+function frameFromDoc(doc) {
+  try {
+    return document.getElementById('ticket-frame');
+  } catch (_e) {
+    return null;
+  }
 }
 
 /** Re-sync iframe height when user opens/closes a sport bucket (collapsed measure is too short). */
@@ -3715,6 +3750,7 @@ function setupTicketEvalToggleHeightSync(frame) {
   } catch (_e) {}
 }
 
+/** Iframe posts its own content height — parent scrollHeight measure fails when the frame is clipped. */
 function injectTicketEvalHeightReporter(doc) {
   if (!doc || !doc.body) return;
   try {
@@ -3761,7 +3797,7 @@ function injectTicketEvalHeightReporter(doc) {
 }
 
 async function probeTicketEval(dateStr) {
-  const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
+  const url = ticketEvalUrl(dateStr);
   try {
     const res = await fetch(url, { method: 'HEAD', cache: 'no-cache', signal: gradesFetchSignal(15000) });
     if (res.ok) return true;
@@ -3914,10 +3950,38 @@ let currentDateStr = '';
 let slateReportMissing = false;
 /** When the hub date has no ticket_eval HTML but an older report exists (e.g. slate 05-21, tickets 05-20). */
 let ticketEvalFallbackNotice = null;
+/** Main 2-4 leg vs long 5-6 leg parlay scoreboards on Ticket tab. */
+let ticketEvalTrack = 'main';
 const MIN_REPORT_DATE_PILLS = 6;
 const GRADES_REPORT_TZ = 'America/New_York';
 /** Last /api/grades/report_dates payload (slate vs ticket lists differ on partial deploys). */
-let gradeReportMeta = { slate: [], ticket: [] };
+let gradeReportMeta = { slate: [], ticket: [], ticketLongParlay: [] };
+
+function ticketEvalDatesForTrack() {
+  if (ticketEvalTrack === 'long_parlay') {
+    return gradeReportMeta.ticketLongParlay.length
+      ? gradeReportMeta.ticketLongParlay
+      : gradeReportMeta.ticket;
+  }
+  return gradeReportMeta.ticket;
+}
+
+function setTicketEvalTrack(track) {
+  ticketEvalTrack = track === 'long_parlay' ? 'long_parlay' : 'main';
+  const mainBtn = document.getElementById('ticket-track-main');
+  const longBtn = document.getElementById('ticket-track-long');
+  if (mainBtn) mainBtn.classList.toggle('active', ticketEvalTrack === 'main');
+  if (longBtn) longBtn.classList.toggle('active', ticketEvalTrack === 'long_parlay');
+  refreshControlsSummary();
+  if (activeTab === 'tickets' && currentDateStr) {
+    loadTicketEval(currentDateStr);
+  }
+}
+
+function syncTicketTrackBarVisibility() {
+  const bar = document.getElementById('ticket-track-bar');
+  if (bar) bar.classList.toggle('visible', activeTab === 'tickets');
+}
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 function toDateStr(d){
@@ -3960,6 +4024,11 @@ function cacheGradeReportMeta(j) {
   if (!j || typeof j !== 'object') return;
   gradeReportMeta.slate = Array.isArray(j.slate_eval_dates) ? j.slate_eval_dates.slice() : [];
   gradeReportMeta.ticket = Array.isArray(j.ticket_eval_dates) ? j.ticket_eval_dates.slice() : [];
+  gradeReportMeta.ticketLongParlay = Array.isArray(j.ticket_eval_long_parlay_dates)
+    ? j.ticket_eval_long_parlay_dates.slice()
+    : Array.isArray(j.ticket_eval_high_leg_dates)
+      ? j.ticket_eval_high_leg_dates.slice()
+      : [];
 }
 /** Keep empty-state hints in sync (avoids blank slate_eval_.html before async probe finishes). */
 function syncEmptyStateDateHints(dateStr) {
@@ -3977,7 +4046,7 @@ function syncEmptyStateDateHints(dateStr) {
 /** Newest ticket_eval date known to the server that is <= cap (defaults to ET yesterday). */
 function latestTicketReportDateOnOrBefore(capYmd) {
   const cap = capYmd && /^\d{4}-\d{2}-\d{2}$/.test(capYmd) ? capYmd : easternYesterdayStr();
-  const pool = gradeReportMeta.ticket.filter(function (ds) {
+  const pool = ticketEvalDatesForTrack().filter(function (ds) {
     return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= cap;
   });
   pool.sort();
@@ -4048,6 +4117,8 @@ function mergeGradeReportDateLists(j) {
   }
   take('slate_eval_dates');
   take('ticket_eval_dates');
+  take('ticket_eval_long_parlay_dates');
+  take('ticket_eval_high_leg_dates');
   take('dates');
   take('report_dates');
   var seen = Object.create(null);
@@ -4773,6 +4844,7 @@ function jumpToDate(){
 window.stepDate = stepDate;
 window.jumpToDate = jumpToDate;
 window.switchTab = switchTab;
+window.setTicketEvalTrack = setTicketEvalTrack;
 window.syncGradesTabStage = syncGradesTabStage;
 window.loadDate = loadDate;
 /** Debug / recovery: if Promise.race ever rejects, callers can still invoke these. */

@@ -1,0 +1,140 @@
+{
+  "generated_at_utc": "2026-06-09T23:29:18.070743Z",
+  "date_range": {
+    "from": "2026-06-03",
+    "to": "2026-06-08",
+    "n_dates_attempted": 6
+  },
+  "summary_by_bucket": {
+    "main_2_4": {
+      "n_tickets": 43,
+      "win_rate": 0.186,
+      "wins": 8,
+      "losses": 35
+    },
+    "long_5_6": {
+      "n_tickets": 197,
+      "win_rate": 0.2437,
+      "wins": 48,
+      "losses": 149
+    },
+    "all": {
+      "n_tickets": 240,
+      "win_rate": 0.2333,
+      "wins": 56,
+      "losses": 184
+    }
+  },
+  "by_n_legs": {
+    "2": {
+      "n_tickets": 25,
+      "win_rate": 0.24
+    },
+    "3": {
+      "n_tickets": 11,
+      "win_rate": 0.1818
+    },
+    "4": {
+      "n_tickets": 7,
+      "win_rate": 0.0
+    },
+    "5": {
+      "n_tickets": 101,
+      "win_rate": 0.2475
+    },
+    "6": {
+      "n_tickets": 85,
+      "win_rate": 0.2118
+    },
+    "10": {
+      "n_tickets": 5,
+      "win_rate": 0.4
+    },
+    "12": {
+      "n_tickets": 6,
+      "win_rate": 0.5
+    }
+  },
+  "per_date": [
+    {
+      "date": "2026-06-03",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 2,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-06-03",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 106,
+      "win_rate": 0.2642
+    },
+    {
+      "date": "2026-06-04",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 41,
+      "win_rate": 0.1951
+    },
+    {
+      "date": "2026-06-04",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 39,
+      "win_rate": 0.0256
+    },
+    {
+      "date": "2026-06-05",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 22,
+      "win_rate": 0.8636
+    },
+    {
+      "date": "2026-06-08",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 30,
+      "win_rate": 0.0
+    }
+  ],
+  "slates": [
+    {
+      "date": "2026-06-03",
+      "ticket_source": "combined_slate_tickets_2026-06-03.json",
+      "all": 906,
+      "main_2_4": 373,
+      "long_5_6": 533
+    },
+    {
+      "date": "2026-06-04",
+      "ticket_source": "combined_slate_tickets_2026-06-04.json",
+      "all": 1486,
+      "main_2_4": 669,
+      "long_5_6": 817
+    },
+    {
+      "date": "2026-06-05",
+      "ticket_source": "combined_slate_tickets_2026-06-05.json",
+      "all": 481,
+      "main_2_4": 164,
+      "long_5_6": 317
+    },
+    {
+      "date": "2026-06-06",
+      "ticket_source": "combined_slate_tickets_2026-06-06.json",
+      "all": 429,
+      "main_2_4": 159,
+      "long_5_6": 270
+    },
+    {
+      "date": "2026-06-07",
+      "ticket_source": "combined_slate_tickets_2026-06-07.json",
+      "all": 948,
+      "main_2_4": 392,
+      "long_5_6": 556
+    },
+    {
+      "date": "2026-06-08",
+      "ticket_source": "combined_slate_tickets_2026-06-08.json",
+      "all": 1539,
+      "main_2_4": 574,
+      "long_5_6": 965
+    }
+  ]
+}

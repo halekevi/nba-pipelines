@@ -5325,6 +5325,107 @@ def _finalize_payload_l10_streaks(payload: dict) -> None:
     payload["cold_legs"] = sum(int(g.get("cold_legs") or 0) for g in (payload.get("groups") or []) if isinstance(g, dict))
 
 
+# Graded KPI split: main = 2–4 leg parlays (higher win prob); long_parlay = 5–6 (tracked separately).
+MAIN_GRADED_MIN_LEGS = 2
+MAIN_GRADED_MAX_LEGS = 4
+LONG_PARLAY_MIN_LEGS = 5
+LONG_PARLAY_MAX_LEGS = 6
+
+
+def _slip_leg_count(ticket: dict, group: dict | None = None) -> int:
+    legs = ticket.get("legs")
+    if isinstance(legs, list) and legs:
+        return len(legs)
+    rows = ticket.get("rows")
+    if isinstance(rows, list) and rows:
+        return len(rows)
+    n = ticket.get("n_legs")
+    if n is not None:
+        try:
+            return int(n)
+        except (TypeError, ValueError):
+            pass
+    if group is not None:
+        try:
+            return int(group.get("n_legs") or 0)
+        except (TypeError, ValueError):
+            pass
+    return 0
+
+
+def filter_ticket_payload_by_leg_count(
+    payload: dict,
+    *,
+    min_legs: int,
+    max_legs: int,
+    ticket_track: str,
+    payload_mode: str | None = None,
+) -> dict:
+    """Return a copy of payload with slips filtered to [min_legs, max_legs] per ticket."""
+    if not isinstance(payload, dict):
+        return {}
+    out = dict(payload)
+    new_groups: list[dict] = []
+    for g in payload.get("groups") or []:
+        if not isinstance(g, dict):
+            continue
+        kept: list[dict] = []
+        for t in g.get("tickets") or []:
+            if not isinstance(t, dict):
+                continue
+            n = _slip_leg_count(t, g)
+            if n < int(min_legs) or n > int(max_legs):
+                continue
+            t2 = dict(t)
+            t2["ticket_track"] = ticket_track
+            for leg in t2.get("legs") or []:
+                if isinstance(leg, dict):
+                    leg["ticket_track"] = ticket_track
+            kept.append(t2)
+        if not kept:
+            continue
+        ng = dict(g)
+        ng["tickets"] = kept
+        ng["ticket_track"] = ticket_track
+        ng["n_legs"] = int(g.get("n_legs") or _slip_leg_count(kept[0], g))
+        new_groups.append(ng)
+    out["groups"] = new_groups
+    out["ticket_track"] = ticket_track
+    out["mode"] = str(payload_mode or ticket_track)
+    _finalize_payload_l10_streaks(out)
+    return out
+
+
+def split_graded_ticket_payloads(full_payload: dict) -> tuple[dict, dict]:
+    """Split combined export into main (2–4 leg) and long parlay (5–6 leg) tracks."""
+    main = filter_ticket_payload_by_leg_count(
+        full_payload,
+        min_legs=MAIN_GRADED_MIN_LEGS,
+        max_legs=MAIN_GRADED_MAX_LEGS,
+        ticket_track="graded_main",
+        payload_mode="main",
+    )
+    long_p = filter_ticket_payload_by_leg_count(
+        full_payload,
+        min_legs=LONG_PARLAY_MIN_LEGS,
+        max_legs=LONG_PARLAY_MAX_LEGS,
+        ticket_track="long_parlay",
+        payload_mode="long_parlay",
+    )
+    return main, long_p
+
+
+def _write_long_parlay_ticket_snapshot(payload: dict, date_str: str) -> None:
+    path = os.path.join(
+        REPO_ROOT, "ui_runner", "data", f"combined_slate_tickets_long_parlay_{date_str}.json"
+    )
+    _write_json_file(path, payload)
+    n_slips = sum(len(g.get("tickets") or []) for g in payload.get("groups") or [])
+    print(
+        f"  [OK] Long-parlay JSON (5-6 leg, separate grade track) -> {path} ({n_slips} slips)"
+    )
+
+
 def _count_l10_streak_legs(legs: list) -> tuple[int, int]:
     hot = cold = 0
     for leg in legs or []:
@@ -14327,7 +14428,7 @@ def main():
     if args.write_web:
         print("\nWriting web outputs...")
         if all_ticket_groups:
-            payload = ticket_groups_to_payload(
+            full_payload = ticket_groups_to_payload(
                 all_ticket_groups,
                 args.date,
                 thresholds,
@@ -14336,14 +14437,20 @@ def main():
                 ticket_track="graded_main",
                 payload_mode="main",
             )
+            payload, long_payload = split_graded_ticket_payloads(full_payload)
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
-            print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
+            n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
+            print(
+                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-4 leg) | "
+                f"{n_long} long-parlay slips (5-6 leg, separate grade track)."
+            )
             gated_preview = filter_positive_ev_tickets_payload(
                 payload,
                 apply_template_cap=bool(args.web_template_cap),
             )
             print_positive_ev_gate_report(gated_preview)
+            _write_long_parlay_ticket_snapshot(long_payload, str(args.date))
         else:
             print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
             nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
@@ -14384,7 +14491,7 @@ def main():
                 if bool(_diversity_cfg.get("enabled", True)):
                     final_groups = _apply_diversity_filter_to_ticket_groups(final_groups, _diversity_cfg)
                     print(f"  [diversity] FINAL fallback groups: {len(final_groups)}")
-            payload = ticket_groups_to_payload(
+            full_payload = ticket_groups_to_payload(
                 final_groups,
                 args.date,
                 thresholds,
@@ -14393,14 +14500,20 @@ def main():
                 ticket_track="graded_main",
                 payload_mode="main",
             )
+            payload, long_payload = split_graded_ticket_payloads(full_payload)
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
-            print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
+            n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
+            print(
+                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-4 leg) | "
+                f"{n_long} long-parlay slips (FINAL fallback)."
+            )
             gated_preview = filter_positive_ev_tickets_payload(
                 payload,
                 apply_template_cap=bool(args.web_template_cap),
             )
             print_positive_ev_gate_report(gated_preview)
+            _write_long_parlay_ticket_snapshot(long_payload, str(args.date))
         _web_ev = not bool(args.no_web_ev_gate)
         write_web_outputs(
             payload,

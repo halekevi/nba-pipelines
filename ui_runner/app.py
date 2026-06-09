@@ -541,9 +541,11 @@ def _grades_report_dates_payload() -> dict[str, list[str]]:
     """Disk scan + optional grades_report_dates.json (GitHub on Railway)."""
     slate_disk = _grade_report_dates_on_disk("slate")
     ticket_disk = _grade_report_dates_on_disk("ticket")
+    ticket_long_parlay_disk = _grade_report_dates_on_disk("ticket_long_parlay")
     ticket_high_leg_disk = _grade_report_dates_on_disk("ticket_high_leg")
     slate_extra: list[str] = []
     ticket_extra: list[str] = []
+    ticket_long_parlay_extra: list[str] = []
     ticket_high_leg_extra: list[str] = []
     meta_path = TEMPLATES_DIR / "grades_report_dates.json"
     if _DATA_FILE_URL_MAP.get("grades_report_dates.json") or meta_path.is_file():
@@ -554,13 +556,25 @@ def _grades_report_dates_payload() -> dict[str, list[str]]:
                     slate_extra = [str(x) for x in j["slate_eval_dates"]]
                 if isinstance(j.get("ticket_eval_dates"), list):
                     ticket_extra = [str(x) for x in j["ticket_eval_dates"]]
+                if isinstance(j.get("ticket_eval_long_parlay_dates"), list):
+                    ticket_long_parlay_extra = [
+                        str(x) for x in j["ticket_eval_long_parlay_dates"]
+                    ]
                 if isinstance(j.get("ticket_eval_high_leg_dates"), list):
                     ticket_high_leg_extra = [str(x) for x in j["ticket_eval_high_leg_dates"]]
         except Exception:
             pass
+    ticket_long_parlay_dates = _merge_grade_report_date_lists(
+        ticket_long_parlay_disk, ticket_long_parlay_extra
+    )
+    if not ticket_long_parlay_dates:
+        ticket_long_parlay_dates = _merge_grade_report_date_lists(
+            ticket_high_leg_disk, ticket_high_leg_extra
+        )
     return {
         "slate_eval_dates": _merge_grade_report_date_lists(slate_disk, slate_extra),
         "ticket_eval_dates": _merge_grade_report_date_lists(ticket_disk, ticket_extra),
+        "ticket_eval_long_parlay_dates": ticket_long_parlay_dates,
         "ticket_eval_high_leg_dates": _merge_grade_report_date_lists(
             ticket_high_leg_disk, ticket_high_leg_extra
         ),
@@ -2667,13 +2681,26 @@ def serve_ticket_eval_report(date: str):
     abort(404)
 
 
-@app.route("/grades/ticket_eval_high_leg_<date>.html", methods=("GET", "HEAD"))
-def serve_ticket_eval_high_leg_report(date: str):
-    """Serve high-leg-HR ticket eval HTML (separate from main graded track)."""
-    fname = f"ticket_eval_high_leg_{date}.html"
+@app.route("/grades/ticket_eval_long_parlay_<date>.html", methods=("GET", "HEAD"))
+def serve_ticket_eval_long_parlay_report(date: str):
+    """Serve 5-6 leg long-parlay ticket eval HTML (separate from main 2-4 leg graded track)."""
+    fname = f"ticket_eval_long_parlay_{date}.html"
     r = _send_grades_report_html(fname)
     if r is not None:
         return r
+    abort(404)
+
+
+@app.route("/grades/ticket_eval_high_leg_<date>.html", methods=("GET", "HEAD"))
+def serve_ticket_eval_high_leg_report(date: str):
+    """Legacy alias: prefer long-parlay eval, then win-rate high-leg eval."""
+    for fname in (
+        f"ticket_eval_long_parlay_{date}.html",
+        f"ticket_eval_high_leg_{date}.html",
+    ):
+        r = _send_grades_report_html(fname)
+        if r is not None:
+            return r
     abort(404)
 
 
@@ -3126,16 +3153,21 @@ def api_grades_archive_dates():
 
 _SLATE_EVAL_FN_RE = re.compile(r"^slate_eval_(\d{4}-\d{2}-\d{2})\.html$")
 _TICKET_EVAL_FN_RE = re.compile(r"^ticket_eval_(\d{4}-\d{2}-\d{2})\.html$")
+_TICKET_EVAL_LONG_PARLAY_FN_RE = re.compile(
+    r"^ticket_eval_long_parlay_(\d{4}-\d{2}-\d{2})\.html$"
+)
 _TICKET_EVAL_HIGH_LEG_FN_RE = re.compile(r"^ticket_eval_high_leg_(\d{4}-\d{2}-\d{2})\.html$")
 
 
 def _grade_report_dates_on_disk(which: str) -> list[str]:
     """
     List YYYY-MM-DD values for which static report HTML exists (templates/ or templates/archive/).
-    which: 'slate' | 'ticket' | 'ticket_high_leg'
+    which: 'slate' | 'ticket' | 'ticket_long_parlay' | 'ticket_high_leg'
     """
     if which == "slate":
         pat = _SLATE_EVAL_FN_RE
+    elif which == "ticket_long_parlay":
+        pat = _TICKET_EVAL_LONG_PARLAY_FN_RE
     elif which == "ticket_high_leg":
         pat = _TICKET_EVAL_HIGH_LEG_FN_RE
     else:
@@ -3172,6 +3204,7 @@ def api_grades_report_dates():
             "ok": True,
             "slate_eval_dates": payload["slate_eval_dates"],
             "ticket_eval_dates": payload["ticket_eval_dates"],
+            "ticket_eval_long_parlay_dates": payload["ticket_eval_long_parlay_dates"],
             "ticket_eval_high_leg_dates": payload["ticket_eval_high_leg_dates"],
             "grades_html_remote": bool(_GRADES_HTML_RAW_BASE),
         }

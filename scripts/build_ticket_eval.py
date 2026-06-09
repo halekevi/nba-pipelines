@@ -1257,7 +1257,8 @@ def _append_grade_history(record: dict[str, Any]) -> None:
 
 
 EVAL_TRACK_LABELS: dict[str, str] = {
-    "graded_main": "Graded Main Slate",
+    "graded_main": "Graded Main Slate (2-4 leg)",
+    "long_parlay": "Long Parlays (5-6 leg)",
     "high_leg_hr": "High Leg HR",
 }
 
@@ -2231,6 +2232,21 @@ def find_ticket_payload_path(
     return None
 
 
+def find_long_parlay_ticket_payload_path(
+    arg_date: str, override: Path | None = None
+) -> Path | None:
+    """Resolve 5-6 leg parlay ticket JSON (separate grade track from main 2-4 leg slips)."""
+    if override is not None:
+        return override if override.is_file() else None
+    for jp in (
+        REPO_ROOT / "ui_runner" / "data" / f"combined_slate_tickets_long_parlay_{arg_date}.json",
+        REPO_ROOT / "outputs" / arg_date / f"combined_slate_tickets_long_parlay_{arg_date}.json",
+    ):
+        if jp.is_file():
+            return jp
+    return None
+
+
 def find_high_leg_ticket_payload_path(
     arg_date: str, override: Path | None = None
 ) -> Path | None:
@@ -2259,6 +2275,8 @@ def _normalize_eval_track(raw: str | None) -> str:
     t = str(raw or "graded_main").strip().lower()
     if t in ("main", "graded_main"):
         return "graded_main"
+    if t in ("long_parlay", "long-parlay", "longparlay", "5_6", "5-6"):
+        return "long_parlay"
     if t in ("high_leg_hr", "high-leg-hr", "win_rate", "winrate"):
         return "high_leg_hr"
     return "graded_main"
@@ -3007,14 +3025,17 @@ def _build_html(
     # We flatten all legs into a single array and embed it into the HTML as window.SLATE_DATA.
     manual_props: list[dict[str, Any]] = [leg for leg, _, _ in all_legs if isinstance(leg, dict)]
     slate_date_str = str(payload.get("date") or arg_date)[:10]
-    if eval_track != "high_leg_hr":
+    if eval_track == "graded_main":
         try:
             te_path = write_ticket_eval_slate_json(manual_props, slate_date_str)
             print(f"  {te_path.name} -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)")
         except OSError as e:
             print(f"  WARN: could not write ticket_eval_slate_latest.json: {e}")
     else:
-        print("  [ticket_eval] high_leg_hr track — skipped ticket_eval_slate_latest.json (main slate unchanged)")
+        print(
+            f"  [ticket_eval] {eval_track} track — skipped ticket_eval_slate_latest.json "
+            "(main slate unchanged)"
+        )
     manual_props_json = json.dumps(manual_props, ensure_ascii=False)
     # Avoid prematurely terminating the <script> tag if any string contains "</".
     manual_props_json = manual_props_json.replace("</", "<\\/")
@@ -3230,9 +3251,10 @@ def _build_html(
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
-    page_title_label = (
-        "High Leg HR Ticket Eval" if eval_track == "high_leg_hr" else "Ticket Eval"
-    )
+    page_title_label = {
+        "long_parlay": "Long Parlay Ticket Eval (5-6 leg)",
+        "high_leg_hr": "High Leg HR Ticket Eval",
+    }.get(eval_track, "Ticket Eval (2-4 leg)")
     parts: list[str] = [
         "<!DOCTYPE html>",
         f'<html lang="en" data-theme="dark" data-ticket-track="{esc(eval_track)}">',
@@ -4512,8 +4534,8 @@ def main() -> int:
     ap.add_argument(
         "--track",
         default="graded_main",
-        choices=("graded_main", "main", "high_leg_hr", "win_rate"),
-        help="Ticket track: graded_main (default) or high_leg_hr (separate scoreboard).",
+        choices=("graded_main", "main", "long_parlay", "high_leg_hr", "win_rate"),
+        help="Ticket track: graded_main (2-4 leg, default), long_parlay (5-6 leg), or high_leg_hr (win-rate panel).",
     )
     args = ap.parse_args()
     eval_track = _normalize_eval_track(args.track)
@@ -4530,7 +4552,18 @@ def main() -> int:
     override_raw = (args.tickets or args.slate or "").strip()
     override_path = Path(override_raw).resolve() if override_raw else None
 
-    if eval_track == "high_leg_hr":
+    if eval_track == "long_parlay":
+        tpath = find_long_parlay_ticket_payload_path(arg_date, override=override_path)
+        if not tpath:
+            if override_raw:
+                print(f"ERROR: Long-parlay ticket file not found: {override_raw}")
+            else:
+                print(
+                    "ERROR: No long-parlay ticket payload found "
+                    "(combined_slate_tickets_long_parlay_{date}.json)."
+                )
+            return 1
+    elif eval_track == "high_leg_hr":
         tpath = find_high_leg_ticket_payload_path(arg_date, override=override_path)
         if not tpath:
             if override_raw:
@@ -4589,11 +4622,10 @@ def main() -> int:
         payload, arg_date, sport_candidates, graded_merge_dates, eval_track=eval_track
     )
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
-    dated_name = (
-        f"ticket_eval_high_leg_{arg_date}.html"
-        if eval_track == "high_leg_hr"
-        else f"ticket_eval_{arg_date}.html"
-    )
+    dated_name = {
+        "long_parlay": f"ticket_eval_long_parlay_{arg_date}.html",
+        "high_leg_hr": f"ticket_eval_high_leg_{arg_date}.html",
+    }.get(eval_track, f"ticket_eval_{arg_date}.html")
     out_dated = TEMPLATES_DIR / dated_name
     try:
         out_dated.write_text(html_out, encoding="utf-8")

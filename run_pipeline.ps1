@@ -1023,7 +1023,11 @@ function Run-Combined {
             $HighLegDatedJson = Join-Path $UiDataDir "combined_slate_tickets_high_leg_$Date.json"
             if (Test-Path $WinrateJson) {
                 Copy-Item $WinrateJson $HighLegDatedJson -Force -ErrorAction SilentlyContinue
-                Write-Host "  Saved -> $HighLegDatedJson (high-leg-HR section, not graded)" -ForegroundColor Green
+                Write-Host "  Saved -> $HighLegDatedJson (win-rate panel; separate from main 2-4 leg + long 5-6 leg tracks)" -ForegroundColor Green
+            }
+            $LongParlayDatedJson = Join-Path $UiDataDir "combined_slate_tickets_long_parlay_$Date.json"
+            if (Test-Path $LongParlayDatedJson) {
+                Write-Host "  Long-parlay JSON (5-6 leg): $LongParlayDatedJson" -ForegroundColor Green
             }
         }
         # Keep Matchup Edge JSON in lockstep with combined slate/ticket publish.

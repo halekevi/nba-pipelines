@@ -1053,7 +1053,56 @@ if (Test-Path $TicketEvalBuilderScript) {
         Write-Host "Skipping ticket eval build (graded workbook missing: $GradedCombined)." -ForegroundColor Yellow
     }
 
-    # High-leg-HR tickets: separate grader + eval (does not mix into main graded KPIs).
+    # Long parlays (5-6 leg): separate grader + eval — does not mix into main 2-4 leg KPIs.
+    $LongParlayJson = Join-Path $Root "ui_runner\data\combined_slate_tickets_long_parlay_$Date.json"
+    $LongParlayTicketsArg = $null
+    if (Test-Path $LongParlayJson) {
+        $LongParlayTicketsArg = $LongParlayJson
+    }
+    if ($LongParlayTicketsArg -and (Test-Path $CombinedTicketGrader) -and (Test-Path $NBAActuals)) {
+        Write-Host "[GRADER] Long-parlay ticket pass (5-6 leg): $LongParlayTicketsArg" -ForegroundColor DarkGray
+        $LongParlayGraded = Join-Path $DateDir "combined_tickets_long_parlay_graded_$Date.xlsx"
+        $LongParlayGraderArgs = @(
+            "--tickets", $LongParlayTicketsArg,
+            "--nba_actuals", $NBAActuals,
+            "--out", $LongParlayGraded
+        )
+        if (Test-Path $CBBActuals) { $LongParlayGraderArgs += @("--cbb_actuals", $CBBActuals) }
+        if (Test-Path $NBA1HActuals) { $LongParlayGraderArgs += @("--nba1h_actuals", $NBA1HActuals) }
+        if (Test-Path $NBA1QActuals) { $LongParlayGraderArgs += @("--nba1q_actuals", $NBA1QActuals) }
+        if (Test-Path $NHLActuals) { $LongParlayGraderArgs += @("--nhl_actuals", $NHLActuals) }
+        if (Test-Path $SoccerActuals) { $LongParlayGraderArgs += @("--soccer_actuals", $SoccerActuals) }
+        if (Test-Path $TennisActuals) { $LongParlayGraderArgs += @("--tennis_actuals", $TennisActuals) }
+        if (Test-Path $MlbActuals) { $LongParlayGraderArgs += @("--mlb_actuals", $MlbActuals) }
+        Run-Py "Long Parlay Ticket Grader" $Root $CombinedTicketGrader $LongParlayGraderArgs
+    }
+    elseif ($LongParlayTicketsArg) {
+        Write-Host "Skipping long-parlay grader (grader or NBA actuals missing)." -ForegroundColor Yellow
+    }
+    if ($LongParlayTicketsArg) {
+        $TeLongOut = Join-Path $TemplatesDir "ticket_eval_long_parlay_$Date.html"
+        $TeLongArgs = @(
+            "--date", $Date,
+            "--track", "long_parlay",
+            "--tickets", $LongParlayTicketsArg,
+            "--out", $TeLongOut
+        )
+        if ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -and $env:PROPORACLE_TICKET_EVAL_GAME_DATE.Trim()) {
+            foreach ($gd in ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -split ',')) {
+                $t = $gd.Trim()
+                if ($t -match '^\d{4}-\d{2}-\d{2}$') {
+                    $TeLongArgs += @("--game-date", $t)
+                }
+            }
+        }
+        Run-Py "Build Long Parlay Ticket Eval HTML" $Root $TicketEvalBuilderScript $TeLongArgs
+        if ((Test-Path -LiteralPath $MobileWwwDir) -and (Test-Path -LiteralPath $TeLongOut)) {
+            Copy-Item -LiteralPath $TeLongOut -Destination (Join-Path $MobileWwwDir "ticket_eval_long_parlay_$Date.html") -Force -ErrorAction SilentlyContinue
+            Write-Host "[GRADER] Mobile copy: ticket_eval_long_parlay_$Date.html -> mobile\www\" -ForegroundColor DarkGray
+        }
+    }
+
+    # Win-rate cherry-pick panel (optional; UI-only, not mixed into main graded KPIs).
     $HighLegJson = Join-Path $Root "ui_runner\data\combined_slate_tickets_high_leg_$Date.json"
     $WinrateXlsx = Join-Path $DateDir "winrate_tickets_$Date.xlsx"
     $HighLegTicketsArg = $null
@@ -1113,16 +1162,19 @@ else {
 # Publish ticket eval + slate eval HTML (after combined ticket grader + build above).
 if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
     $TeHtml = Join-Path $TemplatesDir "ticket_eval_$Date.html"
+    $TeLongHtml = Join-Path $TemplatesDir "ticket_eval_long_parlay_$Date.html"
     $TeHighHtml = Join-Path $TemplatesDir "ticket_eval_high_leg_$Date.html"
     $SeHtml = Join-Path $TemplatesDir "slate_eval_$Date.html"
-    if ((Test-Path $TeHtml) -or (Test-Path $TeHighHtml) -or (Test-Path $SeHtml)) {
+    if ((Test-Path $TeHtml) -or (Test-Path $TeLongHtml) -or (Test-Path $TeHighHtml) -or (Test-Path $SeHtml)) {
         Push-Location $Root
         try {
             $env:GIT_TERMINAL_PROMPT = "0"
             $teRel = "ui_runner/templates/ticket_eval_$Date.html"
+            $teLongRel = "ui_runner/templates/ticket_eval_long_parlay_$Date.html"
             $teHighRel = "ui_runner/templates/ticket_eval_high_leg_$Date.html"
             $seRel = "ui_runner/templates/slate_eval_$Date.html"
             if (Test-Path $TeHtml) { git add -- $teRel 2>$null | Out-Null }
+            if (Test-Path $TeLongHtml) { git add -- $teLongRel 2>$null | Out-Null }
             if (Test-Path $TeHighHtml) { git add -- $teHighRel 2>$null | Out-Null }
             if (Test-Path $SeHtml) { git add -- $seRel 2>$null | Out-Null }
             git diff --cached --quiet
