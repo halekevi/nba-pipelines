@@ -7124,6 +7124,9 @@ def write_web_outputs(
     )
     if not require_positive_ev:
         print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
+    if merge_existing_for_date and str(payload.get("main_source") or "") == "win_rate":
+        print("  [web] Skipping merge for win-rate main payload (replace tickets_latest.json)")
+        merge_existing_for_date = False
     if merge_existing_for_date and os.path.isfile(json_path):
         try:
             with open(json_path, "r", encoding="utf-8") as f:
