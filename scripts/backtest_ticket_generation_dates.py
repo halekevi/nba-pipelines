@@ -10,7 +10,7 @@ Requires per date:
   outputs/<date>/actuals_nba_<date>.csv
 
 Optional actuals (passed through when present):
-  nba1h, nba1q, cbb (or wcbb as cbb), nhl, soccer, tennis
+  nba1h, nba1q, cbb (or wcbb as cbb), nhl, soccer, tennis, mlb, wnba
 
 Examples:
   py scripts/backtest_ticket_generation_dates.py --dates 2026-02-15,2026-02-16 \\
@@ -88,6 +88,8 @@ def resolve_optional_actuals(date_dir: Path, date_str: str) -> dict[str, Path]:
         ("nhl", f"actuals_nhl_{date_str}.csv"),
         ("soccer", f"actuals_soccer_{date_str}.csv"),
         ("tennis", f"actuals_tennis_{date_str}.csv"),
+        ("mlb", f"actuals_mlb_{date_str}.csv"),
+        ("wnba", f"actuals_wnba_{date_str}.csv"),
     ]
     for key, name in pairs:
         p = date_dir / name
@@ -166,6 +168,10 @@ def run_grader_subprocess(
         cmd.extend(["--soccer_actuals", str(optional["soccer"])])
     if optional.get("tennis"):
         cmd.extend(["--tennis_actuals", str(optional["tennis"])])
+    if optional.get("mlb"):
+        cmd.extend(["--mlb_actuals", str(optional["mlb"])])
+    if optional.get("wnba"):
+        cmd.extend(["--wnba_actuals", str(optional["wnba"])])
     if no_ml:
         cmd.append("--no-ml")
     cmd.extend(["--export-graded-tickets-csv", str(stacked_csv)])
