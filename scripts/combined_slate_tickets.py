@@ -2918,6 +2918,43 @@ DEFAULT_DIRECTIONAL_THRESHOLD: dict[str, float] = {"over": 0.65, "under": 0.35}
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
+_MLB_POSTPONED_TEAMS_CACHE: dict[str, set[str]] = {}
+
+
+def _mlb_postponed_teams_for_slate(date_str: str) -> set[str]:
+    """Teams with a postponed/canceled MLB game on ``date_str`` (Stats API schedule)."""
+    key = str(date_str or "").strip()[:10]
+    if not key:
+        return set()
+    if key in _MLB_POSTPONED_TEAMS_CACHE:
+        return _MLB_POSTPONED_TEAMS_CACHE[key]
+    abbrs: set[str] = set()
+    try:
+        import sys as _sys
+        from pathlib import Path as _Path
+
+        _scripts = _Path(__file__).resolve().parent
+        if str(_scripts) not in _sys.path:
+            _sys.path.insert(0, str(_scripts))
+        from mlb_grade_date import mlb_postponed_team_abbrs_for_date
+
+        abbrs = set(mlb_postponed_team_abbrs_for_date(key))
+    except Exception as exc:
+        _log_slate.debug("MLB postponed lookup failed for %s: %s", key, exc)
+    _MLB_POSTPONED_TEAMS_CACHE[key] = abbrs
+    return abbrs
+
+
+def _mlb_postponed_exclusion_mask(df: pd.DataFrame, slate_date: str) -> pd.Series:
+    if df is None or df.empty or "sport" not in df.columns:
+        return pd.Series(dtype=bool)
+    teams = _mlb_postponed_teams_for_slate(slate_date)
+    if not teams:
+        return pd.Series(False, index=df.index)
+    mlb = df["sport"].astype(str).str.upper().eq("MLB")
+    team_col = df.get("team", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    return mlb & team_col.isin({t.upper() for t in teams})
+
 # Tennis: short slips only (max 3 legs). Relaxed per-leg floors vs NBA — no graded PP history yet.
 MAX_LEGS_TENNIS = 3
 TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
@@ -3979,6 +4016,9 @@ def _row_win_rate_eligible(
         return False
     leg_prob = _leg_prob_for_p_win_from_mapping(row_d)
     if leg_prob < float(min_leg_prob):
+        return False
+    mlp = pd.to_numeric(row_d.get("ml_prob"), errors="coerce")
+    if pd.notna(mlp) and 0.0 < float(mlp) < float(MAIN_MIN_ML_PROB_LEG):
         return False
     comp = row_d.get("composite_hit_rate")
     if comp is None or comp == "":
@@ -5362,6 +5402,7 @@ LONG_PARLAY_MAX_LEGS = 6
 
 # Main graded export: win-rate builder (Goblin OVER / Tier-A standard, NBA family only).
 MAIN_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_MAIN_MIN_LEG_PROB", "0.65"))
+MAIN_MIN_ML_PROB_LEG: float = float(os.getenv("PROPORACLE_MAIN_MIN_ML_PROB_LEG", "0.58"))
 MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.15"))
 MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "15")))
 MAIN_ALLOWED_SPORTS: frozenset[str] = frozenset(
@@ -5584,6 +5625,7 @@ def build_graded_main_win_rate_payload(
     payload["main_source"] = "win_rate"
     payload["main_allowed_sports"] = sorted(MAIN_ALLOWED_SPORTS)
     payload["main_min_leg_prob"] = wr_min_prob
+    payload["main_min_ml_prob_leg"] = MAIN_MIN_ML_PROB_LEG
     for g in payload.get("groups") or []:
         for slip in g.get("tickets") or []:
             _enrich_slip_p_win_fields(slip, mode="win_rate")
@@ -10928,11 +10970,22 @@ def _rerank_tickets_live(tickets: list[dict], max_tickets: int) -> list[dict]:
     else:
         evn = np.full(len(tickets), 0.5, dtype=float)
     w = max(0.0, min(1.0, float(_TICKET_MODEL_RERANK_WEIGHT)))
+    try:
+        from ticket_ml_sports import infer_ticket_sport_key, ticket_rerank_weight_for_sport
+    except Exception:
+        infer_ticket_sport_key = None  # type: ignore[misc, assignment]
+        ticket_rerank_weight_for_sport = None  # type: ignore[misc, assignment]
     for i, t in enumerate(tickets):
         mp = _ticket_model_prob(t)
         if mp is None:
             mp = float(t.get("est_win_prob") or 0.0)
-        score = (1.0 - w) * float(evn[i]) + w * float(mp)
+        sport_key = infer_ticket_sport_key(t) if infer_ticket_sport_key else "combined"
+        w_eff = (
+            ticket_rerank_weight_for_sport(sport_key, w)
+            if ticket_rerank_weight_for_sport
+            else w
+        )
+        score = (1.0 - w_eff) * float(evn[i]) + w_eff * float(mp)
         x = dict(t)
         x["ticket_model_p_cash"] = round(float(mp), 6)
         x["ticket_live_score"] = round(float(score), 6)
@@ -13387,7 +13440,16 @@ def main():
             void_mask = filtered_df["void_reason"].apply(
                 lambda x: bool(x) and str(x).strip().lower() not in ("", "nan", "none", "null")
             )
+            post_note = filtered_df["void_reason"].astype(str).str.upper()
+            void_mask = void_mask | post_note.str.contains("POSTPON", na=False)
             voided_excluded = int(void_mask.sum())
+            if voided_excluded:
+                filtered_df = filtered_df[~void_mask].copy()
+        post_mask = _mlb_postponed_exclusion_mask(filtered_df, str(args.date)[:10])
+        post_n = int(post_mask.sum())
+        if post_n:
+            filtered_df = filtered_df[~post_mask].copy()
+            print(f"  [pool] Excluded {post_n} MLB legs (postponed/canceled game on slate date)")
         if excluded and "prop_type" in filtered_df.columns:
             filtered_df = filtered_df[
                 ~filtered_df["prop_type"].astype(str).str.lower().isin(excluded)

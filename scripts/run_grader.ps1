@@ -836,8 +836,15 @@ if (Test-Path $VoidValidatorScript) {
         "--accepted-void-token", "NO_DATA",
         "--accepted-void-token", "DNP",
         "--accepted-void-token", "NO_ACTUAL",
-        "--accepted-void-token", "NO_LINE"
+        "--accepted-void-token", "NO_LINE",
+        "--accepted-void-token", "POSTPONED",
+        "--accepted-void-token", "INJURY",
+        "--accepted-void-token", "SUSPENDED",
+        "--accepted-void-token", "CANCELED"
     )
+    if ($env:PROPORACLE_FAIL_ON_UNACCEPTABLE_VOID -eq "1") {
+        $VoidArgs += "--fail-on-unacceptable"
+    }
     foreach ($gf in @(
         $NBAGradedFile,
         $CBBGradedFile,
@@ -856,10 +863,27 @@ if (Test-Path $VoidValidatorScript) {
     }
     if ($VoidArgs.Count -gt 8) {
         Run-Py "Validate unacceptable VOIDs" $Root $VoidValidatorScript $VoidArgs
+        $VoidSummary = Join-Path (Join-Path $Root "data\reports\void_validator") "void_validator_$Date`_summary.csv"
+        if (Test-Path $VoidSummary) {
+            try {
+                $badVoid = (& py -3.14 -c "import pandas as pd; df=pd.read_csv(r'$VoidSummary'); print(int(df['unacceptable_void_rows'].sum()))" 2>$null | Select-Object -Last 1)
+                if ($badVoid -and [int]$badVoid -gt 0) {
+                    Write-Host "[GRADER] WARN: $badVoid unacceptable VOID row(s) on $Date (see data/reports/void_validator/)" -ForegroundColor Yellow
+                }
+            } catch { }
+        }
     }
 }
 else {
     Write-Host "Skipping VOID validator (validate_unacceptable_voids.py not found)." -ForegroundColor Yellow
+}
+
+$MissAttributionScript = Join-Path $Root "scripts\report_miss_attribution.py"
+if (Test-Path $MissAttributionScript) {
+    Run-Py "Miss attribution report" $Root $MissAttributionScript @("--date", $Date, "--repo-root", $Root)
+}
+else {
+    Write-Host "Skipping miss attribution (report_miss_attribution.py not found)." -ForegroundColor DarkGray
 }
 
 if (Test-Path $BuildGradesHtmlScript) {
@@ -1020,6 +1044,11 @@ else {
     if (Test-Path $InjCBB) { $GraderArgs += @("--cbb_injuries", $InjCBB) }
     if (Test-Path $InjNHL) { $GraderArgs += @("--nhl_injuries", $InjNHL) }
     if (Test-Path $InjSoc) { $GraderArgs += @("--soccer_injuries", $InjSoc) }
+    $GradedLegsStack = Join-Path $Root "data\ml\graded_legs_stack.csv"
+    $GraderArgs += @(
+        "--export-graded-legs-csv", $GradedLegsStack,
+        "--append-graded-legs-csv"
+    )
     Run-Py "Combined Ticket Grader" $Root $CombinedTicketGrader $GraderArgs
 }
 

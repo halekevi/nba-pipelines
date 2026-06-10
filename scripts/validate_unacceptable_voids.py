@@ -20,7 +20,20 @@ from pathlib import Path
 import pandas as pd
 
 
-DEFAULT_ACCEPTABLE_VOID_TOKENS = ["NO_DATA", "DNP", "NO_ACTUAL", "NO_LINE"]
+DEFAULT_ACCEPTABLE_VOID_TOKENS = [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "POSTPONED",
+    "POSTPONE",
+    "RAIN",
+    "CANCELED",
+    "CANCELLED",
+    "SUSPENDED",
+    "INJURY",
+    "INJURED",
+]
 
 
 def _resolve_result_col(df: pd.DataFrame) -> str | None:

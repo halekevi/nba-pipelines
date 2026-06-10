@@ -2,6 +2,7 @@
 """Sport-scoped ticket ML registry: training filters, model paths, runtime sport inference."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -159,3 +160,45 @@ def sport_display_name(sport_key: str) -> str:
         "mixed": "Multi-sport parlays",
     }
     return names.get(str(sport_key).lower(), sport_key)
+
+
+REGISTRY_PATH = ROOT / "data" / "ml" / "ticket_model_registry.json"
+
+
+def load_ticket_model_registry() -> dict[str, Any]:
+    if not REGISTRY_PATH.is_file():
+        return {}
+    try:
+        return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def sport_model_auc_test(sport_key: str) -> float | None:
+    """Holdout AUC for a sport ticket model (None if untrained / missing)."""
+    reg = load_ticket_model_registry()
+    ent = (reg.get("sports") or {}).get(str(sport_key or "").strip().lower()) or {}
+    if not ent.get("trained"):
+        return None
+    try:
+        return float(ent["auc_test"])
+    except (TypeError, ValueError, KeyError):
+        return None
+
+
+def ticket_rerank_weight_for_sport(sport_key: str, base_weight: float) -> float:
+    """
+    Scale ticket-model rerank blend by sport model quality.
+    Weak buckets (AUC < 0.55) get zero weight; strong buckets get up to 1.8× base.
+    """
+    base = max(0.0, min(1.0, float(base_weight)))
+    auc = sport_model_auc_test(sport_key)
+    if auc is None:
+        return base * 0.5
+    if auc >= 0.68:
+        return min(0.45, base * 1.8)
+    if auc >= 0.62:
+        return base
+    if auc < 0.55:
+        return 0.0
+    return base * 0.65
