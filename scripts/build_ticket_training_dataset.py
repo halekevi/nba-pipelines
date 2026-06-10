@@ -178,25 +178,31 @@ def _infer_group_type(group_name: str) -> str:
 def _discover_ticket_jsons() -> dict[str, Path]:
     """
     Date -> combined_slate_tickets path.
-    Prefer outputs/YYYY-MM-DD copy over root copy when both exist.
+    Later sources overwrite earlier ones (ui_runner/data wins over outputs/ over repo root).
     """
     out: dict[str, Path] = {}
 
-    # Root-level archives
-    for p in ROOT.glob("combined_slate_tickets_*.json"):
-        m = re.match(r"^combined_slate_tickets_(\d{4}-\d{2}-\d{2})", p.name)
+    def _add(path: Path) -> None:
+        name = path.name
+        if "high_leg" in name or "long_parlay" in name:
+            return
+        m = re.match(r"^combined_slate_tickets_(\d{4}-\d{2}-\d{2})", name)
         if not m:
-            continue
-        out[m.group(1)] = p
+            return
+        out[m.group(1)] = path
 
-    # outputs/YYYY-MM-DD/ archives (preferred)
+    for p in ROOT.glob("combined_slate_tickets_*.json"):
+        _add(p)
+
     outputs_dir = ROOT / "outputs"
     if outputs_dir.is_dir():
         for p in outputs_dir.glob("*/combined_slate_tickets_*.json"):
-            m = re.match(r"^combined_slate_tickets_(\d{4}-\d{2}-\d{2})", p.name)
-            if not m:
-                continue
-            out[m.group(1)] = p
+            _add(p)
+
+    ui_data = ROOT / "ui_runner" / "data"
+    if ui_data.is_dir():
+        for p in ui_data.glob("combined_slate_tickets_*.json"):
+            _add(p)
 
     return out
 
@@ -305,6 +311,7 @@ def _build_rows_from_graded_workbook(
             "sports_in_ticket": len(sport_counts),
             "dominant_sport": dominant_sport,
             "legs_nba": sport_counts.get("NBA", 0) + sport_counts.get("NBA1H", 0) + sport_counts.get("NBA1Q", 0),
+            "legs_wnba": sport_counts.get("WNBA", 0),
             "legs_cbb": sport_counts.get("CBB", 0) + sport_counts.get("WCBB", 0),
             "legs_nhl": sport_counts.get("NHL", 0),
             "legs_soccer": sport_counts.get("SOCCER", 0),
@@ -454,6 +461,7 @@ def _ticket_row(
         "sports_in_ticket": len(sport_counts),
         "dominant_sport": dominant_sport,
         "legs_nba": sport_counts.get("NBA", 0) + sport_counts.get("NBA1H", 0) + sport_counts.get("NBA1Q", 0),
+        "legs_wnba": sport_counts.get("WNBA", 0),
         "legs_cbb": sport_counts.get("CBB", 0) + sport_counts.get("WCBB", 0),
         "legs_nhl": sport_counts.get("NHL", 0),
         "legs_soccer": sport_counts.get("SOCCER", 0),
@@ -546,6 +554,11 @@ def main() -> None:
     ap.add_argument("--end-date", default="", help="Optional YYYY-MM-DD upper bound.")
     ap.add_argument("--include-undecided", action="store_true", help="Include pending/ungraded tickets (label columns stay null).")
     ap.add_argument("--limit-files", type=int, default=0, help="Optional max number of dates to process (newest first).")
+    ap.add_argument(
+        "--sport",
+        default="combined",
+        help="Filter output rows to a sport key (combined, nba, wnba, nhl, mlb, tennis, soccer, cbb, mixed).",
+    )
     args = ap.parse_args()
 
     by_date_json = _discover_ticket_jsons()
@@ -570,15 +583,7 @@ def main() -> None:
         rows: list[dict[str, Any]] = []
         stats: dict[str, int] = {"tickets_total": 0, "tickets_kept": 0, "tickets_pending": 0, "tickets_decided": 0}
         source_path: Path | None = None
-        if d in by_date_graded:
-            gp = by_date_graded[d]
-            source_path = gp
-            try:
-                rows, stats = _build_rows_from_graded_workbook(d, gp, include_undecided=bool(args.include_undecided))
-            except Exception as e:
-                print(f"  [warn] {d} graded load failed from {gp}: {type(e).__name__}: {e}")
-                rows = []
-        if not rows and d in by_date_json:
+        if d in by_date_json:
             p = by_date_json[d]
             source_path = p
             try:
@@ -593,8 +598,8 @@ def main() -> None:
             try:
                 rows, stats = _build_rows_from_graded_workbook(d, gp, include_undecided=bool(args.include_undecided))
             except Exception as e:
-                print(f"  [skip] {d} graded load failed from {gp}: {type(e).__name__}: {e}")
-                continue
+                print(f"  [warn] {d} graded load failed from {gp}: {type(e).__name__}: {e}")
+                rows = []
         if not rows:
             print(f"  [skip] {d}: no usable ticket source")
             continue
@@ -612,6 +617,15 @@ def main() -> None:
     df = pd.DataFrame(all_rows)
     if "slate_date" in df.columns:
         df = df.sort_values(["slate_date", "group_name", "ticket_no"], ascending=[True, True, True], na_position="last")
+
+    sport_key = str(args.sport or "combined").strip().lower()
+    if sport_key != "combined":
+        sys.path.insert(0, str(_SCRIPTS))
+        from ticket_ml_sports import filter_training_rows, sport_display_name  # noqa: WPS433
+
+        before = len(df)
+        df = filter_training_rows(df, sport_key)
+        print(f"[ticket-dataset] Sport filter {sport_key} ({sport_display_name(sport_key)}): {before} -> {len(df)} rows")
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)

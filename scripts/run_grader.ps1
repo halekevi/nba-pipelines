@@ -1009,6 +1009,9 @@ else {
     if (Test-Path $MlbActuals) {
         $GraderArgs += @("--mlb_actuals", $MlbActuals)
     }
+    if (Test-Path $WNBAActuals) {
+        $GraderArgs += @("--wnba_actuals", $WNBAActuals)
+    }
     $InjNBA = Join-Path $DateDir "injuries_nba_$Date.csv"
     $InjCBB = Join-Path $DateDir "injuries_cbb_$Date.csv"
     $InjNHL = Join-Path $DateDir "injuries_nhl_$Date.csv"
@@ -1074,6 +1077,7 @@ if (Test-Path $TicketEvalBuilderScript) {
         if (Test-Path $SoccerActuals) { $LongParlayGraderArgs += @("--soccer_actuals", $SoccerActuals) }
         if (Test-Path $TennisActuals) { $LongParlayGraderArgs += @("--tennis_actuals", $TennisActuals) }
         if (Test-Path $MlbActuals) { $LongParlayGraderArgs += @("--mlb_actuals", $MlbActuals) }
+        if (Test-Path $WNBAActuals) { $LongParlayGraderArgs += @("--wnba_actuals", $WNBAActuals) }
         Run-Py "Long Parlay Ticket Grader" $Root $CombinedTicketGrader $LongParlayGraderArgs
     }
     elseif ($LongParlayTicketsArg) {
@@ -1127,6 +1131,7 @@ if (Test-Path $TicketEvalBuilderScript) {
         if (Test-Path $SoccerActuals) { $HighLegGraderArgs += @("--soccer_actuals", $SoccerActuals) }
         if (Test-Path $TennisActuals) { $HighLegGraderArgs += @("--tennis_actuals", $TennisActuals) }
         if (Test-Path $MlbActuals) { $HighLegGraderArgs += @("--mlb_actuals", $MlbActuals) }
+        if (Test-Path $WNBAActuals) { $HighLegGraderArgs += @("--wnba_actuals", $WNBAActuals) }
         Run-Py "High Leg HR Ticket Grader" $Root $CombinedTicketGrader $HighLegGraderArgs
     }
     elseif ($HighLegTicketsArg) {

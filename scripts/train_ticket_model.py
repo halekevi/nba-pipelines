@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Train ticket-level cash-probability models (combined + per-sport)."""
 from __future__ import annotations
 
 import argparse
@@ -14,18 +15,19 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import brier_score_loss, roc_auc_score
 
+from ticket_ml_sports import (
+    MIN_ROWS_BUCKET,
+    TICKET_ML_SPORT_KEYS,
+    dataset_path_for_sport,
+    filter_training_rows,
+    min_rows_for_sport,
+    model_artifact_paths,
+    sport_display_name,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATASET = ROOT / "data" / "ml" / "ticket_training_dataset.csv"
 MODELS_DIR = ROOT / "models"
-MODEL_PATH = MODELS_DIR / "ticket_model.pkl"
-FEATURES_PATH = MODELS_DIR / "ticket_model_features.json"
-META_PATH = MODELS_DIR / "ticket_model_metadata.json"
-BUCKET_MODEL_PATHS = {
-    "2leg": MODELS_DIR / "ticket_model_2leg.pkl",
-    "3leg": MODELS_DIR / "ticket_model_3leg.pkl",
-    "4plus": MODELS_DIR / "ticket_model_4plus.pkl",
-}
 
 
 def _to_num(s: pd.Series) -> pd.Series:
@@ -49,6 +51,7 @@ def _build_features(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
         "is_flex_structure",
         "sports_in_ticket",
         "legs_nba",
+        "legs_wnba",
         "legs_cbb",
         "legs_nhl",
         "legs_soccer",
@@ -127,29 +130,40 @@ def _bucket_name(n_legs: float | int | None) -> str:
     return "4plus"
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description="Train ticket-level cash-probability model from backfilled ticket dataset.")
-    ap.add_argument("--input-csv", default=str(DEFAULT_DATASET), help="Ticket training CSV from build_ticket_training_dataset.py")
-    ap.add_argument("--target", default="label_cash", choices=["label_cash", "label_paid"], help="Binary target column.")
-    ap.add_argument("--dry-run", action="store_true", help="Print dataset summary only; do not train/write model.")
-    ap.add_argument("--bucketed", action="store_true", help="Also train per-structure bucket models (2-leg, 3-leg, 4+).")
-    args = ap.parse_args()
+def train_ticket_model_from_df(
+    df: pd.DataFrame,
+    *,
+    sport_key: str = "combined",
+    target: str = "label_cash",
+    bucketed: bool = True,
+    dry_run: bool = False,
+    models_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Train and persist ticket model artifacts; return summary dict."""
+    key = str(sport_key or "combined").strip().lower()
+    paths = model_artifact_paths(key, models_dir)
+    min_rows = min_rows_for_sport(key)
 
-    path = Path(args.input_csv)
-    if not path.is_file():
-        raise FileNotFoundError(f"Training dataset not found: {path}")
+    if target not in df.columns:
+        raise RuntimeError(f"Missing target column: {target}")
 
-    df = pd.read_csv(path, low_memory=False)
-    if args.target not in df.columns:
-        raise RuntimeError(f"Missing target column: {args.target}")
-
-    y_raw = _to_num(df[args.target])
+    y_raw = _to_num(df[target])
     m = y_raw.isin([0, 1])
     df = df.loc[m].copy()
     y = y_raw.loc[m].astype(int)
 
-    if len(df) < 80:
-        raise RuntimeError(f"Not enough decided ticket rows to train robustly (rows={len(df)}).")
+    summary: dict[str, Any] = {
+        "sport_key": key,
+        "sport_label": sport_display_name(key),
+        "trained": False,
+        "reason": "",
+        "n_rows": int(len(df)),
+        "min_rows": int(min_rows),
+    }
+
+    if len(df) < min_rows:
+        summary["reason"] = f"insufficient rows ({len(df)} < {min_rows})"
+        return summary
 
     X, feat_cols = _build_features(df)
     train_df, test_df = _chrono_split(df, frac_train=0.80)
@@ -160,51 +174,64 @@ def main() -> None:
     y_train = y.loc[train_idx]
     y_test = y.loc[test_idx]
 
-    print(f"→ Input rows: {len(df)} | train={len(X_train)} test={len(X_test)} | target={args.target}")
-    print(f"→ Positive rate: train={y_train.mean():.3f} test={y_test.mean():.3f}")
-    print(f"→ Feature count: {len(feat_cols)}")
+    summary.update(
+        {
+            "n_train": int(len(X_train)),
+            "n_test": int(len(X_test)),
+            "positive_rate_train": float(y_train.mean()) if len(y_train) else None,
+            "positive_rate_test": float(y_test.mean()) if len(y_test) else None,
+            "feature_count": int(len(feat_cols)),
+        }
+    )
 
-    if args.dry_run:
-        print("[DRY RUN] Done (no model written).")
-        return
+    print(
+        f"→ [{key}] rows={len(df)} train={len(X_train)} test={len(X_test)} "
+        f"pos_rate train={y_train.mean():.3f} test={y_test.mean():.3f}"
+    )
 
-    # Robust baseline for tabular binary outcomes; calibrated for probability quality.
+    if dry_run:
+        summary["trained"] = False
+        summary["reason"] = "dry_run"
+        return summary
+
     model = _fit_calibrated_logit(X_train, y_train)
-
     p_test = model.predict_proba(X_test)[:, 1]
-    auc = roc_auc_score(y_test, p_test)
+    auc = roc_auc_score(y_test, p_test) if y_test.nunique() > 1 else float("nan")
     brier = brier_score_loss(y_test, p_test)
 
-    MODELS_DIR.mkdir(parents=True, exist_ok=True)
-    joblib.dump(model, MODEL_PATH, compress=3)
-    FEATURES_PATH.write_text(json.dumps(feat_cols, indent=2), encoding="utf-8")
+    mdir = paths["model"].parent
+    mdir.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, paths["model"], compress=3)
+    paths["features"].write_text(json.dumps(feat_cols, indent=2), encoding="utf-8")
 
     meta: dict[str, Any] = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "sport_key": key,
+        "sport_label": sport_display_name(key),
         "model_type": "CalibratedClassifierCV(LogisticRegression)",
-        "target": args.target,
+        "target": target,
         "n_rows": int(len(df)),
         "n_train": int(len(X_train)),
         "n_test": int(len(X_test)),
         "positive_rate_train": float(y_train.mean()),
         "positive_rate_test": float(y_test.mean()),
-        "auc_test": float(auc),
+        "auc_test": float(auc) if auc == auc else None,
         "brier_test": float(brier),
         "feature_count": int(len(feat_cols)),
-        "input_csv": str(path),
-        "bucketed_enabled": bool(args.bucketed),
+        "bucketed_enabled": bool(bucketed),
+        "model_path": str(paths["model"]),
+        "features_path": str(paths["features"]),
     }
 
-    # Optional: train structure-specific models for better hit-rate ranking by ticket shape.
     bucket_meta: dict[str, Any] = {}
-    if bool(args.bucketed):
+    if bucketed:
         nlegs = pd.to_numeric(df.get("n_legs", 0), errors="coerce").fillna(0).astype(int)
         bucket_series = nlegs.map(_bucket_name)
         for bname in ("2leg", "3leg", "4plus"):
-            m = bucket_series.eq(bname)
-            d_b = df.loc[m].copy()
-            y_b = y.loc[m].copy()
-            if len(d_b) < 120 or y_b.nunique() < 2:
+            bm = bucket_series.eq(bname)
+            d_b = df.loc[bm].copy()
+            y_b = y.loc[bm].copy()
+            if len(d_b) < MIN_ROWS_BUCKET or y_b.nunique() < 2:
                 bucket_meta[bname] = {
                     "trained": False,
                     "reason": f"insufficient rows or classes (rows={len(d_b)}, classes={int(y_b.nunique())})",
@@ -218,17 +245,17 @@ def main() -> None:
             Xb_test = X_b.loc[te_idx]
             yb_train = y_b.loc[tr_idx]
             yb_test = y_b.loc[te_idx]
-            if len(Xb_train) < 80 or yb_train.nunique() < 2:
+            if len(Xb_train) < min(40, MIN_ROWS_BUCKET) or yb_train.nunique() < 2:
                 bucket_meta[bname] = {
                     "trained": False,
-                    "reason": f"insufficient train rows or classes (rows={len(Xb_train)}, classes={int(yb_train.nunique())})",
+                    "reason": f"insufficient train rows or classes (rows={len(Xb_train)})",
                 }
                 continue
             mb = _fit_calibrated_logit(Xb_train, yb_train)
             pb = mb.predict_proba(Xb_test)[:, 1]
             auc_b = roc_auc_score(yb_test, pb) if yb_test.nunique() > 1 else float("nan")
             brier_b = brier_score_loss(yb_test, pb)
-            outp = BUCKET_MODEL_PATHS[bname]
+            outp = paths[bname]
             joblib.dump(mb, outp, compress=3)
             bucket_meta[bname] = {
                 "trained": True,
@@ -236,28 +263,57 @@ def main() -> None:
                 "n_rows": int(len(d_b)),
                 "n_train": int(len(Xb_train)),
                 "n_test": int(len(Xb_test)),
-                "positive_rate_train": float(yb_train.mean()),
-                "positive_rate_test": float(yb_test.mean()) if len(yb_test) else 0.0,
                 "auc_test": float(auc_b) if auc_b == auc_b else None,
                 "brier_test": float(brier_b),
             }
         meta["bucket_models"] = bucket_meta
-    META_PATH.write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
-    print(f"\nAUC={auc:.4f}  Brier={brier:.4f}")
-    print(f"Saved model -> {MODEL_PATH}")
-    print(f"Saved features -> {FEATURES_PATH}")
-    print(f"Saved metadata -> {META_PATH}")
-    if bool(args.bucketed):
-        for bname in ("2leg", "3leg", "4plus"):
-            info = bucket_meta.get(bname, {})
-            if info.get("trained"):
-                print(
-                    f"Bucket {bname}: rows={info.get('n_rows')} "
-                    f"AUC={info.get('auc_test')} Brier={info.get('brier_test')}"
-                )
-            else:
-                print(f"Bucket {bname}: skipped ({info.get('reason', 'unknown')})")
+    paths["metadata"].write_text(json.dumps(meta, indent=2), encoding="utf-8")
+
+    summary.update(
+        {
+            "trained": True,
+            "auc_test": float(auc) if auc == auc else None,
+            "brier_test": float(brier),
+            "model_path": str(paths["model"]),
+            "metadata_path": str(paths["metadata"]),
+            "bucket_models": bucket_meta,
+        }
+    )
+    print(f"  Saved [{key}] AUC={auc:.4f} Brier={brier:.4f} -> {paths['model']}")
+    return summary
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description="Train ticket-level cash-probability model from backfilled ticket dataset.")
+    ap.add_argument("--input-csv", default=str(DEFAULT_DATASET), help="Ticket training CSV from build_ticket_training_dataset.py")
+    ap.add_argument("--sport", default="combined", choices=[*TICKET_ML_SPORT_KEYS], help="Sport scope for this model.")
+    ap.add_argument("--target", default="label_cash", choices=["label_cash", "label_paid"], help="Binary target column.")
+    ap.add_argument("--dry-run", action="store_true", help="Print dataset summary only; do not train/write model.")
+    ap.add_argument("--no-bucketed", action="store_true", help="Skip per leg-count bucket models.")
+    args = ap.parse_args()
+
+    path = Path(args.input_csv)
+    if not path.is_file():
+        raise FileNotFoundError(f"Training dataset not found: {path}")
+
+    df = pd.read_csv(path, low_memory=False)
+    sport_key = str(args.sport).strip().lower()
+    if sport_key != "combined":
+        df = filter_training_rows(df, sport_key)
+        print(f"→ Filtered to sport={sport_key} ({sport_display_name(sport_key)}): {len(df)} rows")
+
+    summary = train_ticket_model_from_df(
+        df,
+        sport_key=sport_key,
+        target=str(args.target),
+        bucketed=not bool(args.no_bucketed),
+        dry_run=bool(args.dry_run),
+    )
+    if not summary.get("trained") and summary.get("reason") not in ("dry_run",):
+        raise RuntimeError(summary.get("reason") or "training failed")
+    if args.dry_run:
+        print("[DRY RUN] Done (no model written).")
 
 
 if __name__ == "__main__":

@@ -409,6 +409,7 @@ def injuries_csv_path_for_actuals(
     stem = p.name
     m = {
         "NBA": ("actuals_nba_", "injuries_nba_"),
+        "WNBA": ("actuals_wnba_", "injuries_wnba_"),
         "CBB": ("actuals_cbb_", "injuries_cbb_"),
         "WCBB": ("actuals_wcbb_", "injuries_wcbb_"),
         "NHL": ("actuals_nhl_", "injuries_nhl_"),

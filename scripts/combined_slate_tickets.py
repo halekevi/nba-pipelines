@@ -33,8 +33,13 @@ NEW (Web):
 - JSON includes image_url per leg.
 - More helpful file-path resolution (tries script dir + recursive search if file not found)
 
+Market notes:
+- Goblin UNDER is not a valid PrizePicks side (Goblin is OVER-only); those rows are dropped from pools.
+- Demon legs are excluded from ticket rating (data collection only).
+
 Ticket modes (defaults favor volume; optional strict mode):
 - --high-conviction is OFF by default (--high-conviction for stricter pools).
+- --stack-70-only restricts pools to stack_70_eligible legs (strat/HR/L5/opponent/consistency stack).
 - Default pool: tiers A,B,C, min hit rate 0.65, per-leg floors LEG_MIN_HIT_RATE; --high-conviction raises floors via max().
 - With --high-conviction: pool min hit rate >= 0.65, max 4 legs on FINAL slips; structured 2–3 leg tickets use 0.65 leg floor unless --min-leg-hit-rate set.
 - --min-leg-hit-rate / --max-ticket-legs: optional overrides (see argparse help).
@@ -121,10 +126,23 @@ from utils.pipeline_read_enrichment import (
     READ_SLATE_EXPORT_KEYS,
     enrich_read_fields_dataframe,
 )
+from utils.stack_70_eligible import (
+    GOBLIN_UNDER_INVALID_NOTE,
+    attach_stack_70_columns,
+    filter_stack_70_only,
+    is_invalid_market_side,
+)
 from utils.ticket_ev_tiers import (
     apply_slate_ev_tier_recommendations,
     recommendation_from_ev,
 )
+
+try:
+    from ticket_ml_sports import TICKET_ML_SPORT_KEYS, infer_ticket_sport_key, model_artifact_paths
+except ImportError:
+    TICKET_ML_SPORT_KEYS = ("combined",)
+    infer_ticket_sport_key = None  # type: ignore[assignment]
+    model_artifact_paths = None  # type: ignore[assignment]
 
 _log_slate = logging.getLogger("combined_slate_tickets")
 
@@ -149,6 +167,7 @@ _TICKET_MODEL_USE_BUCKETS = True
 _TICKET_MODEL = None
 _TICKET_MODEL_BUCKETS: dict[str, Any] = {}
 _TICKET_MODEL_FEATURES: list[str] = []
+_TICKET_MODELS_BY_SPORT: dict[str, dict[str, Any]] = {}
 
 # Primary layout: outputs/<slate-date>/<sport>/... (canonical runtime),
 # plus outputs/<slate-date>/step8_*_<date>.xlsx (dated exports).
@@ -10008,6 +10027,15 @@ def filter_eligible(
         if funnel_tracker is not None:
             funnel_tracker.checkpoint_df(stage, df[mask], default_sport=sport_hint)
 
+    if {"pick_type", "direction"}.issubset(df.columns):
+        invalid_side = df.apply(
+            lambda r: is_invalid_market_side(
+                r.get("pick_type", r.get("Pick Type", "")),
+                r.get("direction", r.get("bet_direction", r.get("direction_used", ""))),
+            ),
+            axis=1,
+        )
+        _apply_gate(~invalid_side, "goblin_under_invalid", "after_invalid_market_side")
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         _apply_gate(~prop_norm.isin(TICKET_EXCLUDED_PROPS), "prop_banned", "after_prop_ban")
@@ -10672,34 +10700,81 @@ def _ticket_bucket_name(n_legs: int) -> str:
 
 
 def _load_ticket_rerank_models() -> None:
-    global _TICKET_MODEL, _TICKET_MODEL_BUCKETS, _TICKET_MODEL_FEATURES
+    global _TICKET_MODEL, _TICKET_MODEL_BUCKETS, _TICKET_MODEL_FEATURES, _TICKET_MODELS_BY_SPORT
     if _TICKET_MODEL is not None:
         return
     _TICKET_MODEL = False
     _TICKET_MODEL_BUCKETS = {}
     _TICKET_MODEL_FEATURES = []
+    _TICKET_MODELS_BY_SPORT = {}
     try:
         if joblib is None:
             _log_slate.warning("[ticket-rerank] joblib unavailable; rerank disabled")
             return
-        if os.path.exists(TICKET_MODEL_FEATURES_PATH):
-            with open(TICKET_MODEL_FEATURES_PATH, "r", encoding="utf-8") as f:
-                _TICKET_MODEL_FEATURES = list(json.load(f) or [])
-        if os.path.exists(TICKET_MODEL_PATH):
-            _TICKET_MODEL = joblib.load(TICKET_MODEL_PATH)
-        if bool(_TICKET_MODEL_USE_BUCKETS):
-            for bname, p in {
-                "2leg": TICKET_MODEL_2LEG_PATH,
-                "3leg": TICKET_MODEL_3LEG_PATH,
-                "4plus": TICKET_MODEL_4PLUS_PATH,
-            }.items():
-                if os.path.exists(p):
-                    _TICKET_MODEL_BUCKETS[bname] = joblib.load(p)
+
+        def _load_pack(paths: dict[str, str], *, use_buckets: bool) -> dict[str, Any] | None:
+            pack: dict[str, Any] = {"model": None, "buckets": {}, "features": []}
+            feat_path = paths.get("features")
+            if feat_path and os.path.exists(feat_path):
+                with open(feat_path, "r", encoding="utf-8") as f:
+                    pack["features"] = list(json.load(f) or [])
+            model_path = paths.get("model")
+            if model_path and os.path.exists(model_path):
+                pack["model"] = joblib.load(model_path)
+            else:
+                return None
+            if use_buckets:
+                for bname in ("2leg", "3leg", "4plus"):
+                    bp = paths.get(bname)
+                    if bp and os.path.exists(bp):
+                        pack["buckets"][bname] = joblib.load(bp)
+            return pack
+
+        if model_artifact_paths is not None:
+            for sport_key in TICKET_ML_SPORT_KEYS:
+                raw = model_artifact_paths(sport_key, Path(os.path.join(REPO_ROOT, "models")))
+                paths = {k: str(v) for k, v in raw.items()}
+                pack = _load_pack(paths, use_buckets=bool(_TICKET_MODEL_USE_BUCKETS))
+                if pack is not None:
+                    _TICKET_MODELS_BY_SPORT[sport_key] = pack
+                    if sport_key == "combined":
+                        _TICKET_MODEL = pack["model"]
+                        _TICKET_MODEL_BUCKETS = dict(pack.get("buckets") or {})
+                        _TICKET_MODEL_FEATURES = list(pack.get("features") or [])
+
+        # Legacy unprefixed paths if combined pack missing.
+        if _TICKET_MODEL is False or _TICKET_MODEL is None:
+            if os.path.exists(TICKET_MODEL_FEATURES_PATH):
+                with open(TICKET_MODEL_FEATURES_PATH, "r", encoding="utf-8") as f:
+                    _TICKET_MODEL_FEATURES = list(json.load(f) or [])
+            if os.path.exists(TICKET_MODEL_PATH):
+                _TICKET_MODEL = joblib.load(TICKET_MODEL_PATH)
+            if bool(_TICKET_MODEL_USE_BUCKETS):
+                for bname, p in {
+                    "2leg": TICKET_MODEL_2LEG_PATH,
+                    "3leg": TICKET_MODEL_3LEG_PATH,
+                    "4plus": TICKET_MODEL_4PLUS_PATH,
+                }.items():
+                    if os.path.exists(p):
+                        _TICKET_MODEL_BUCKETS[bname] = joblib.load(p)
+            if _TICKET_MODEL not in (False, None):
+                _TICKET_MODELS_BY_SPORT.setdefault(
+                    "combined",
+                    {
+                        "model": _TICKET_MODEL,
+                        "buckets": dict(_TICKET_MODEL_BUCKETS),
+                        "features": list(_TICKET_MODEL_FEATURES),
+                    },
+                )
+        if _TICKET_MODELS_BY_SPORT:
+            loaded = ", ".join(sorted(_TICKET_MODELS_BY_SPORT.keys()))
+            _log_slate.info("[ticket-rerank] loaded sport models: %s", loaded)
     except Exception as e:
         _log_slate.warning("[ticket-rerank] model load failed: %s", e)
         _TICKET_MODEL = False
         _TICKET_MODEL_BUCKETS = {}
         _TICKET_MODEL_FEATURES = []
+        _TICKET_MODELS_BY_SPORT = {}
 
 
 def _ticket_ev_signal(ticket: dict) -> float:
@@ -10814,15 +10889,27 @@ def _ticket_feature_vector(ticket: dict) -> tuple[pd.DataFrame, list[str]]:
 
 def _ticket_model_prob(ticket: dict) -> float | None:
     _load_ticket_rerank_models()
-    if _TICKET_MODEL is False:
+    if _TICKET_MODEL is False and not _TICKET_MODELS_BY_SPORT:
         return None
     try:
-        model = _TICKET_MODEL_BUCKETS.get(_ticket_bucket_name(int(ticket.get("n_legs") or 0))) if _TICKET_MODEL_BUCKETS else _TICKET_MODEL
+        sport_key = "combined"
+        if infer_ticket_sport_key is not None:
+            sport_key = infer_ticket_sport_key(ticket)
+        pack = _TICKET_MODELS_BY_SPORT.get(sport_key) or _TICKET_MODELS_BY_SPORT.get("combined")
+        if not pack:
+            return None
+        model = None
+        if bool(_TICKET_MODEL_USE_BUCKETS):
+            buckets = pack.get("buckets") or {}
+            model = buckets.get(_ticket_bucket_name(int(ticket.get("n_legs") or 0)))
         if model is None:
-            model = _TICKET_MODEL
+            model = pack.get("model") or _TICKET_MODEL
         if model is None or model is False:
             return None
+        feat_names = list(pack.get("features") or _TICKET_MODEL_FEATURES or [])
         X, _ = _ticket_feature_vector(ticket)
+        if feat_names:
+            X = X.reindex(columns=feat_names, fill_value=0.0)
         p = float(model.predict_proba(X)[0, 1])
         return p
     except Exception:
@@ -11741,6 +11828,11 @@ FULL_SLATE_COLS = [
     "data_completeness_score",
     "pick_type_eligible",
     "def_tier",
+    "team_top3_rank",
+    "team_bottom3_rank",
+    "top3_weak_overperformer",
+    "top3_elite_fader",
+    "stack_70_eligible",
     "opponent_def_rank",
     "pace_tier",
     "bet_strong",
@@ -12514,6 +12606,16 @@ def main():
         ),
     )
     ap.add_argument(
+        "--stack-70-only",
+        action="store_true",
+        default=False,
+        help=(
+            "Restrict ticket pool to stack_70_eligible legs: Goblin OVER only (Goblin UNDER is not a "
+            "valid market), strat/row hit rate >= 0.70, L5 side hits >= 4, opponent/top-3 alignment, "
+            "and consistency grade S/A/B when known."
+        ),
+    )
+    ap.add_argument(
         "--prioritize-ticket-hit",
         action=argparse.BooleanOptionalAction,
         default=False,
@@ -12780,6 +12882,8 @@ def main():
             "[tickets] strict pool: min hit rate >= 0.65, "
             f"max FINAL legs={args.max_ticket_legs} (use --no-high-conviction for wider pools)"
         )
+    if args.stack_70_only:
+        print(f"[tickets] stack-70 pool: {GOBLIN_UNDER_INVALID_NOTE}")
     if args.prioritize_ticket_hit:
         args.min_hit_rate = max(float(args.min_hit_rate), 0.72)
         print(
@@ -13274,6 +13378,7 @@ def main():
         filtered_df = ensure_prop_signal_columns(df.copy())
         filtered_df = _attach_reliability_columns(filtered_df, reliability_index)
         filtered_df = _attach_strat_columns(filtered_df, strat_index)
+        filtered_df = attach_stack_70_columns(filtered_df)
         voided_excluded = 0
         demon_candidates = None
         demon_passed = None
@@ -13531,6 +13636,13 @@ def main():
         )
         if use_funnel:
             funnel_seen_sports.add(sport)
+        if getattr(args, "stack_70_only", False) and pooled is not None and len(pooled) > 0:
+            before_stack = len(pooled)
+            pooled = filter_stack_70_only(pooled)
+            stack_n = int(len(pooled))
+            if before_stack != stack_n:
+                discard_tracker.log_count(str(sport), "stack_70_ineligible", before_stack - stack_n)
+                print(f"         stack-70: kept {stack_n}/{before_stack} legs (70% stack filter)")
         discard_tracker.log_count(str(sport), "final_pool_kept", int(len(pooled)))
         gob_n = std_n = dem_n = 0
         if pooled is not None and "pick_type" in pooled.columns:

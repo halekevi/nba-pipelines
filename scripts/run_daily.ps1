@@ -1022,13 +1022,26 @@ else {
             }
 
             if ($ticketDatasetOk -and (Test-Path $trainTicketScript)) {
-                & py -3.14 -X utf8 $trainTicketScript --input-csv (Join-Path $Root "data\ml\ticket_training_dataset.csv") --target label_cash
-                if ($LASTEXITCODE -eq 0) {
-                    $ticketTrainOk = $true
-                    Write-Log "STEP D1b - train_ticket_model: OK"
+                $trainAllScript = Join-Path $Root "scripts\train_all_ticket_models.py"
+                if (Test-Path $trainAllScript) {
+                    & py -3.14 -X utf8 $trainAllScript --input-csv (Join-Path $Root "data\ml\ticket_training_dataset.csv") --write-sport-csvs
+                    if ($LASTEXITCODE -eq 0) {
+                        $ticketTrainOk = $true
+                        Write-Log "STEP D1b - train_all_ticket_models: OK (combined + per-sport)"
+                    }
+                    else {
+                        Write-Log "STEP D1b - train_all_ticket_models: WARN (exit $LASTEXITCODE)"
+                    }
                 }
                 else {
-                    Write-Log "STEP D1b - train_ticket_model: WARN (exit $LASTEXITCODE)"
+                    & py -3.14 -X utf8 $trainTicketScript --input-csv (Join-Path $Root "data\ml\ticket_training_dataset.csv") --target label_cash --bucketed
+                    if ($LASTEXITCODE -eq 0) {
+                        $ticketTrainOk = $true
+                        Write-Log "STEP D1b - train_ticket_model: OK"
+                    }
+                    else {
+                        Write-Log "STEP D1b - train_ticket_model: WARN (exit $LASTEXITCODE)"
+                    }
                 }
             }
             elseif (-not (Test-Path $trainTicketScript)) {
