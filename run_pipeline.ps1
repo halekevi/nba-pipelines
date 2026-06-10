@@ -12,6 +12,7 @@
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
 #    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
+#    .\run_pipeline.ps1 -GolfOnly             # PGA Golf (step1-7-8) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (delegates to scripts\run_wnba_pipeline.ps1)
 #    .\run_pipeline.ps1 -WNBAOnly -WNBACdp http://127.0.0.1:9222   # PrizePicks via Chrome CDP (DataDome)
 #  WNBA / combined contract: step1 HTTP API by default (curl_cffi); optional CDP/-UsePlaywright; step8 preserves game_date;
@@ -60,6 +61,7 @@ param(
     [switch]$MLBVerify,
     [switch]$SoccerOnly,
     [switch]$TennisOnly,
+    [switch]$GolfOnly,
     [string]$TennisDate = "",
     [switch]$WNBAOnly,
     [switch]$NFLOnly,
@@ -159,6 +161,7 @@ $NHLDir    = Join-Path $SportsRoot "NHL"
 $MLBDir    = Join-Path $SportsRoot "MLB"
 $SoccerDir = Join-Path $SportsRoot "Soccer"
 $TennisDir = Join-Path $SportsRoot "Tennis"
+$GolfDir   = Join-Path $SportsRoot "Golf"
 $WNBADir   = Join-Path $SportsRoot "WNBA"
 $NFLDir    = Join-Path $SportsRoot "NFL"
 # WNBA regular season: include in full parallel runs on/after this date (ISO yyyy-MM-dd).
@@ -171,6 +174,7 @@ $NBA1QRunOutDir = Join-Path $OutDir "nba1q"
 $NHLRunOutDir = Join-Path $OutDir "nhl"
 $SoccerRunOutDir = Join-Path $OutDir "soccer"
 $TennisRunOutDir = Join-Path $OutDir "tennis"
+$GolfRunOutDir = Join-Path $OutDir "golf"
 $MLBRunOutDir = Join-Path $OutDir "mlb"
 $NFLRunOutDir = Join-Path $OutDir "nfl"
 $CBBRunOutDir = Join-Path $OutDir "cbb"
@@ -190,6 +194,7 @@ if (-not (Test-Path $NBA1QRunOutDir)) { New-Item -ItemType Directory -Force -Pat
 if (-not (Test-Path $NHLRunOutDir)) { New-Item -ItemType Directory -Force -Path $NHLRunOutDir | Out-Null }
 if (-not (Test-Path $SoccerRunOutDir)) { New-Item -ItemType Directory -Force -Path $SoccerRunOutDir | Out-Null }
 if (-not (Test-Path $TennisRunOutDir)) { New-Item -ItemType Directory -Force -Path $TennisRunOutDir | Out-Null }
+if (-not (Test-Path $GolfRunOutDir)) { New-Item -ItemType Directory -Force -Path $GolfRunOutDir | Out-Null }
 if (-not (Test-Path $MLBRunOutDir)) { New-Item -ItemType Directory -Force -Path $MLBRunOutDir | Out-Null }
 if (-not (Test-Path $NFLRunOutDir)) { New-Item -ItemType Directory -Force -Path $NFLRunOutDir | Out-Null }
 if (-not (Test-Path $CBBRunOutDir)) { New-Item -ItemType Directory -Force -Path $CBBRunOutDir | Out-Null }
@@ -1445,6 +1450,43 @@ if ($SoccerOnly) {
     Write-Host ""
     if ($ok) { Write-Host "  Soccer complete." -ForegroundColor Green } else { Write-Host "  Soccer FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Soccer" }
+    Print-Done
+    exit
+}
+
+# =============================================================================
+#  GOLF ONLY  (PGA — step1 fetch → step7 rank → step8 direction)
+# =============================================================================
+if ($GolfOnly) {
+    Write-Host "[ GOLF PIPELINE ]" -ForegroundColor Magenta
+    Write-Host ""
+    Write-Host "  [Golf] Slate day (step8 filter): $Date ET  |  Bundle folder: outputs\$Date\golf" -ForegroundColor DarkGray
+    $ok = $true
+    if (-not $SkipFetch) {
+        if ($ok) {
+            $ok = Run-Step "Golf Step 1 - Fetch PrizePicks" $GolfDir ".\scripts\step1_fetch_prizepicks_golf.py" "--league_id 1 --replace --output `"$GolfRunOutDir\step1_golf_props.csv`""
+        }
+    } else {
+        Write-Host "  [Golf] Skipping step1 fetch -- using existing $GolfRunOutDir\step1_golf_props.csv" -ForegroundColor DarkGray
+    }
+    if ($ok) {
+        $ok = Run-Step "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`""
+    }
+    if ($ok) {
+        $ok = Run-Step "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$GolfRunOutDir\step2_golf_context.csv`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`""
+    }
+    if ($ok) {
+        $ok = Run-Step "Golf Step 8 - Direction Context" $GolfDir ".\scripts\step8_add_direction_context_golf.py" "--input `"$GolfRunOutDir\step7_golf_ranked.xlsx`" --sheet ALL --output `"$GolfRunOutDir\step8_golf_direction.csv`" --xlsx `"$GolfRunOutDir\step8_golf_direction_clean.xlsx`" --date $Date"
+    }
+    if ($ok) {
+        Copy-DatedSlateOutput `
+            -SourcePath (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx") `
+            -DatedFileName "step8_golf_direction_clean_$Date.xlsx" `
+            -Label "Golf"
+    }
+    Write-Host ""
+    if ($ok) { Write-Host "  Golf complete." -ForegroundColor Green } else { Write-Host "  Golf FAILED." -ForegroundColor Red }
+    if ($ok) { Run-Combined "after Golf" }
     Print-Done
     exit
 }

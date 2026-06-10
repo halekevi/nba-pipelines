@@ -33,6 +33,7 @@ _repo_root_cbb = Path(__file__).resolve().parents[4]
 if str(_repo_root_cbb) not in sys.path:
     sys.path.insert(0, str(_repo_root_cbb))
 from utils.defense_tiers import def_tier_from_overall_rank
+from utils.hit_tracking_columns import attach_hit_tracking_columns, resolve_sport_code
 from utils.optional_ml_context import optional_context_features
 from utils.cfb_playoff_metadata import (
     CFB_AP_TOP25_2026,
@@ -1219,6 +1220,12 @@ def main():
             "line",
             tid_to_abbr=tid_to_abbr_for_h2h,
         )
+
+    _ht_sport = resolve_sport_code(f"{args.input} {args.output}")
+    if "final_bet_direction" in out.columns and "bet_direction" not in out.columns:
+        out["bet_direction"] = out["final_bet_direction"]
+    out = attach_hit_tracking_columns(out, _ht_sport)
+    out_sorted = out.loc[out_sorted.index].sort_values("final_score", ascending=False, na_position="last")
 
     # ── Write Excel ───────────────────────────────────────────────────────────
     with pd.ExcelWriter(args.output, engine="openpyxl") as xw:

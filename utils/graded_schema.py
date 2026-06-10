@@ -114,6 +114,30 @@ FIELD_ALIASES: dict[str, list[str]] = {
         "L5 Under",
         "last5_under",
     ],
+    "l10_over": [
+        "l10_over",
+        "L10 Over",
+        "line_hits_over_10",
+        "over_L10",
+        "over_L10_raw",
+    ],
+    "l10_under": [
+        "l10_under",
+        "L10 Under",
+        "line_hits_under_10",
+        "under_L10",
+        "under_L10_raw",
+    ],
+    "l10_games_played": [
+        "l10_games_played",
+        "line_games_played_10",
+        "Games (10g)",
+        "sample_L10",
+    ],
+    "l10_streak": [
+        "l10_streak",
+        "L10 Streak",
+    ],
     "hit_rate": [
         "hit_rate",
         "Hit Rate",
@@ -127,6 +151,22 @@ FIELD_ALIASES: dict[str, list[str]] = {
     ],
     "strat_n": [
         "strat_n",
+    ],
+    "hit_rate_l5": [
+        "hit_rate_l5",
+        "Hit Rate L5",
+    ],
+    "hit_rate_l10": [
+        "hit_rate_l10",
+        "Hit Rate L10",
+    ],
+    "player_hr_historical": [
+        "player_hr_historical",
+        "Player HR Hist",
+    ],
+    "opp_hr_historical": [
+        "opp_hr_historical",
+        "Opp HR Hist",
     ],
     "consistency_grade": [
         "consistency_grade",

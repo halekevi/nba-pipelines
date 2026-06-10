@@ -65,6 +65,18 @@ _STEP8_RENAME: dict[str, str] = {
     "last5_under": "l5_under",
     "over_L5_raw": "l5_over",
     "under_L5_raw": "l5_under",
+    "L10 Over": "l10_over",
+    "L10 Under": "l10_under",
+    "line_hits_over_10": "l10_over",
+    "line_hits_under_10": "l10_under",
+    "over_L10": "l10_over",
+    "under_L10": "l10_under",
+    "over_L10_raw": "l10_over",
+    "under_L10_raw": "l10_under",
+    "line_games_played_10": "l10_games_played",
+    "sample_L10": "l10_games_played",
+    "Games (10g)": "l10_games_played",
+    "l10_streak": "l10_streak",
     "Hit Rate (5g)": "hit_rate",
     "line_hit_rate_over_ou_5": "hit_rate",
     "composite_hr": "hit_rate",
@@ -148,6 +160,9 @@ def _get_step8_lookup(sport: str, date: str, repo: Path) -> dict[str, dict[str, 
             elif field in {
                 "l5_over",
                 "l5_under",
+                "l10_over",
+                "l10_under",
+                "l10_games_played",
                 "strat_n",
                 "top3_weak_overperformer",
                 "top3_elite_fader",
@@ -161,10 +176,17 @@ def _get_step8_lookup(sport: str, date: str, repo: Path) -> dict[str, dict[str, 
                 num = pd.to_numeric(val, errors="coerce")
                 if pd.notna(num):
                     payload[field] = float(num)
-            elif field in ("hit_rate", "strat_hit_rate"):
+            elif field in (
+                "hit_rate", "hit_rate_l5", "hit_rate_l10",
+                "strat_hit_rate", "player_hr_historical", "opp_hr_historical",
+            ):
                 num = pd.to_numeric(val, errors="coerce")
                 if pd.notna(num):
                     payload[field] = float(num)
+            elif field == "l10_streak":
+                streak = str(val or "").strip().upper()
+                if streak and streak not in {"NAN", "NONE"}:
+                    payload[field] = streak
             elif not is_empty_value(val):
                 payload[field] = val
         if payload:
@@ -294,10 +316,13 @@ def _step8_paths(sport: str, date: str, repo: Path) -> list[Path]:
     return [p for p in candidates if p.is_file()]
 
 
-_SIGNAL_STRING_COLS = frozenset({"def_tier", "consistency_grade"})
+_SIGNAL_STRING_COLS = frozenset({"def_tier", "consistency_grade", "l10_streak"})
 _SIGNAL_INT_COLS = frozenset({
     "l5_over",
     "l5_under",
+    "l10_over",
+    "l10_under",
+    "l10_games_played",
     "strat_n",
     "top3_weak_overperformer",
     "top3_elite_fader",
@@ -327,6 +352,15 @@ def _assign_signal_value(df: pd.DataFrame, idx: object, field: str, val: object)
         if pd.notna(num):
             df.at[idx, field] = int(num)
         return
+    if field in {
+        "hit_rate", "hit_rate_l5", "hit_rate_l10",
+        "strat_hit_rate", "player_hr_historical", "opp_hr_historical",
+        "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
+    }:
+        num = pd.to_numeric(val, errors="coerce")
+        if pd.notna(num):
+            df.at[idx, field] = float(num)
+        return
     num = pd.to_numeric(val, errors="coerce")
     if pd.notna(num):
         df.at[idx, field] = float(num)
@@ -335,8 +369,14 @@ def _assign_signal_value(df: pd.DataFrame, idx: object, field: str, val: object)
 def _field_empty(col: str, val: object) -> bool:
     if col == "def_tier":
         return is_empty_def_tier(val)
-    if col in {"l5_over", "l5_under", "hit_rate", "strat_hit_rate", "strat_n"}:
+    if col in {
+        "l5_over", "l5_under", "l10_over", "l10_under", "l10_games_played",
+        "hit_rate", "hit_rate_l5", "hit_rate_l10",
+        "strat_hit_rate", "strat_n", "player_hr_historical", "opp_hr_historical",
+    }:
         return is_empty_numeric(val)
+    if col == "l10_streak":
+        return is_empty_value(val)
     if col in {"top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context"}:
         return int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0)) == 0
     if col in {"team_top3_rank", "team_bottom3_rank", "def_boost_hist"}:
@@ -478,8 +518,11 @@ def attach_strat_hit_rates(df: pd.DataFrame, *, min_n: int = 30) -> pd.DataFrame
 def _coalesce_l5_columns(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
     pairs = (
-        ("l5_over", ("l5_over", "last5_over", "L5 Over")),
-        ("l5_under", ("l5_under", "last5_under", "L5 Under")),
+        ("l5_over", ("l5_over", "last5_over", "L5 Over", "over_L5_raw", "line_hits_over_5")),
+        ("l5_under", ("l5_under", "last5_under", "L5 Under", "under_L5_raw", "line_hits_under_5")),
+        ("l10_over", ("l10_over", "L10 Over", "line_hits_over_10", "over_L10", "over_L10_raw")),
+        ("l10_under", ("l10_under", "L10 Under", "line_hits_under_10", "under_L10", "under_L10_raw")),
+        ("l10_games_played", ("l10_games_played", "line_games_played_10", "Games (10g)", "sample_L10")),
         ("hit_rate", ("hit_rate", "last5_hit_rate", "Hit Rate (5g)", "line_hit_rate_over_ou_5", "composite_hr")),
     )
     for target, alts in pairs:
@@ -493,6 +536,25 @@ def _coalesce_l5_columns(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _attach_l10_streak(df: pd.DataFrame) -> pd.DataFrame:
+    """Fill missing l10_streak from directional L10 hit counts."""
+    if df is None or df.empty or "l10_over" not in df.columns or "l10_under" not in df.columns:
+        return df
+    from utils.prop_signal_score import l10_streak_series
+
+    out = df.copy()
+    if "l10_streak" not in out.columns:
+        out["l10_streak"] = ""
+    elif pd.api.types.is_numeric_dtype(out["l10_streak"]):
+        out["l10_streak"] = out["l10_streak"].astype(object)
+    empty = out["l10_streak"].map(is_empty_value)
+    if not empty.any():
+        return out
+    streaks = l10_streak_series(out.loc[empty])
+    out.loc[empty, "l10_streak"] = streaks.values
+    return out
+
+
 def enrich_graded_for_analysis(
     df: pd.DataFrame,
     *,
@@ -503,11 +565,24 @@ def enrich_graded_for_analysis(
     """Backfill def_tier then attach top-3 context; optional stack_70_eligible (slow on large frames)."""
     if df is None or df.empty:
         return df
-    out = _coalesce_l5_columns(df)
+    from utils.hit_tracking_columns import (  # noqa: WPS433
+        attach_archive_historical_hr,
+        attach_direction_hit_rate,
+        attach_hit_window_columns,
+    )
+
+    out = attach_hit_window_columns(_coalesce_l5_columns(df))
+    out = attach_direction_hit_rate(out)
     out = backfill_def_tier_dataframe(out, repo=repo)
     out = backfill_from_step8(out, repo=repo)
+    out = _attach_l10_streak(out)
     if "sport" not in out.columns and "_sport" in out.columns:
         out["sport"] = out["_sport"]
+    sport_hint = ""
+    if "sport" in out.columns and len(out):
+        modes = out["sport"].astype(str).str.strip().str.upper().mode()
+        sport_hint = str(modes.iloc[0]) if len(modes) else "NBA"
+    out = attach_archive_historical_hr(out, sport_hint or "NBA")
     out = attach_strat_hit_rates(out)
     if attach_context:
         out = attach_stack_70_columns(out, repo=repo, compute_eligible=stack_eligible)
@@ -528,6 +603,9 @@ def coverage_summary(df: pd.DataFrame) -> dict[str, Any]:
     l5_known = 0
     if "l5_over" in df.columns:
         l5_known = int(pd.to_numeric(df["l5_over"], errors="coerce").notna().sum())
+    l10_known = 0
+    if "l10_over" in df.columns:
+        l10_known = int(pd.to_numeric(df["l10_over"], errors="coerce").notna().sum())
     return {
         "n": total,
         "def_tier_known": def_known,
@@ -538,6 +616,8 @@ def coverage_summary(df: pd.DataFrame) -> dict[str, Any]:
         "strat_pct": round(100.0 * strat_known / total, 1),
         "l5_over_known": l5_known,
         "l5_over_pct": round(100.0 * l5_known / total, 1),
+        "l10_over_known": l10_known,
+        "l10_over_pct": round(100.0 * l10_known / total, 1),
         "stack_70_eligible": stack_n,
         "stack_70_pct": round(100.0 * stack_n / total, 1),
     }

@@ -34,6 +34,7 @@ Usage:
 import argparse
 import csv
 import shutil
+import sys
 import openpyxl
 import pandas as pd
 from datetime import date, datetime
@@ -446,6 +447,18 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "under_L5_raw":     int(raw_under_L5) if raw_under_L5 is not None else "",
         "over_L10_raw":     int(raw_over_L10) if raw_over_L10 is not None else "",
         "under_L10_raw":    int(raw_under_L10) if raw_under_L10 is not None else "",
+        "l5_over":          r("l5_over") or (int(raw_over_L5) if raw_over_L5 is not None else ""),
+        "l5_under":         r("l5_under") or (int(raw_under_L5) if raw_under_L5 is not None else ""),
+        "l10_over":         r("l10_over") or (int(raw_over_L10) if raw_over_L10 is not None else ""),
+        "l10_under":        r("l10_under") or (int(raw_under_L10) if raw_under_L10 is not None else ""),
+        "l10_games_played": r("l10_games_played") or r("sample_L10"),
+        "l10_streak":       r("l10_streak"),
+        "hit_rate_l5":      r("hit_rate_l5"),
+        "hit_rate_l10":     r("hit_rate_l10"),
+        "strat_hit_rate":   r("strat_hit_rate"),
+        "strat_n":          r("strat_n"),
+        "player_hr_historical": r("player_hr_historical"),
+        "opp_hr_historical": r("opp_hr_historical"),
         # Last 3 raw game values (from Step 4 fix)
         "last1_raw":        get_last_n_raw(raw, available_cols, 1),
         "last2_raw":        get_last_n_raw(raw, available_cols, 2),
@@ -654,6 +667,34 @@ def main():
     available_cols = set(raw_headers)
     print(f"Loaded {len(raw_rows)} props from {args.input}")
     print(f"Upstream columns ({len(available_cols)}): {sorted(available_cols)}\n")
+
+    try:
+        _repo = Path(__file__).resolve().parents[3]
+        if str(_repo) not in sys.path:
+            sys.path.insert(0, str(_repo))
+        from utils.hit_tracking_columns import HIT_TRACKING_EXPORT_COLS, attach_hit_tracking_columns
+
+        df_ht = pd.DataFrame(raw_rows)
+        for canon, alts in COLUMN_ALIASES.items():
+            if canon in df_ht.columns:
+                continue
+            for alt in alts:
+                if alt in df_ht.columns:
+                    df_ht[canon] = df_ht[alt]
+                    break
+        if "bet_direction" not in df_ht.columns and "direction" in df_ht.columns:
+            df_ht["bet_direction"] = df_ht["direction"]
+        df_ht = attach_hit_tracking_columns(df_ht, "NHL")
+        for i in range(len(raw_rows)):
+            for col in HIT_TRACKING_EXPORT_COLS:
+                if col not in df_ht.columns:
+                    continue
+                val = df_ht.iloc[i][col]
+                if pd.notna(val) and str(val).strip().lower() not in ("", "nan"):
+                    raw_rows[i][col] = val
+        available_cols |= set(HIT_TRACKING_EXPORT_COLS)
+    except Exception as exc:
+        print(f"WARNING: NHL hit-tracking attach skipped: {exc}")
 
     display_rows = [build_display_row(r, available_cols) for r in _tqdm(raw_rows, desc="  Building display rows", unit="prop")]
 

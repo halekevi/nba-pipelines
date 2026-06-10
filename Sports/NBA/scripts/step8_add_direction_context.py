@@ -50,6 +50,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.hit_tracking_columns import HIT_TRACKING_RENAME, attach_hit_tracking_columns
 from utils.stack_context_cols import STACK_CONTEXT_COLS, STACK_CONTEXT_RENAME
 from nba_enrichment_carry import (
     ENRICHMENT_CARRY_COLS,
@@ -359,6 +360,11 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     if "line" in df2.columns:
         df2 = finalize_l10_ui_columns(df2, line_col="line")
 
+    _sport_ht = "NBA1Q" if is_period_slate and "nba1q" in hint else (
+        "NBA1H" if is_period_slate and "nba1h" in hint else "NBA"
+    )
+    df2 = attach_hit_tracking_columns(df2, _sport_ht)
+
     # Sample size proxy used by downstream eligibility void exceptions.
     if "n_legs_sample" not in df2.columns:
         df2["n_legs_sample"] = np.nan
@@ -402,6 +408,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'final_bet_direction',
         'edge', 'abs_edge', 'projection',
         'ml_prob',
+        'hit_rate', 'hit_rate_l5', 'hit_rate_l10',
+        'strat_hit_rate', 'strat_n',
+        'player_hr_historical', 'opp_hr_historical',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
@@ -534,6 +543,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'line_movement': 'Line Movement',
         'line_direction_shift': 'Line Shift',
         **STACK_CONTEXT_RENAME,
+        **HIT_TRACKING_RENAME,
     }
     clean = clean.rename(columns=rename)
 

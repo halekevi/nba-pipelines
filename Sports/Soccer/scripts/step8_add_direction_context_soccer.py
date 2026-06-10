@@ -33,6 +33,7 @@ else:
     raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
 
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.hit_tracking_columns import HIT_TRACKING_RENAME, attach_hit_tracking_columns
 from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -182,6 +183,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     if "line" in df2.columns:
         df2 = finalize_l10_ui_columns(df2, line_col="line")
+    df2 = attach_hit_tracking_columns(df2, "SOCCER")
 
     keep = [
         "tier", "rank_score",
@@ -193,6 +195,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "final_bet_direction",
         "edge", "abs_edge", "projection",
         "ml_prob",
+        "hit_rate", "hit_rate_l5", "hit_rate_l10",
+        "strat_hit_rate", "strat_n",
+        "player_hr_historical", "opp_hr_historical",
         "edge_score",
         "blended_score",
         "line_hit_rate_over_ou_5",
@@ -288,6 +293,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "open_line": "Open Line",
         "line_movement": "Line Movement",
         "line_direction_shift": "Line Shift",
+        **HIT_TRACKING_RENAME,
     }
     clean = clean.rename(columns=rename)
 

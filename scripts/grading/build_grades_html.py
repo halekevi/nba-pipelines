@@ -451,8 +451,16 @@ def prop_row_for_api(
     top3_elite_fade = _pick("Top3 Elite Fade", "top3_elite_fader")
     l5_over = _pick("L5 Over", "l5_over", "last5_over", "over_L5_raw")
     l5_under = _pick("L5 Under", "l5_under", "last5_under", "under_L5_raw")
+    l10_over = _pick("L10 Over", "l10_over", "line_hits_over_10", "over_L10", "over_L10_raw")
+    l10_under = _pick("L10 Under", "l10_under", "line_hits_under_10", "under_L10", "under_L10_raw")
+    l10_games_played = _pick("l10_games_played", "line_games_played_10", "Games (10g)", "sample_L10")
+    l10_streak = _pick("l10_streak", "L10 Streak")
     strat_hit_rate = _pick("strat_hit_rate")
     strat_n = _pick("strat_n")
+    hit_rate_l5 = _pick("hit_rate_l5", "Hit Rate L5")
+    hit_rate_l10 = _pick("hit_rate_l10", "Hit Rate L10")
+    player_hr_hist = _pick("player_hr_historical", "Player HR Hist")
+    opp_hr_hist = _pick("opp_hr_historical", "Opp HR Hist")
     h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
@@ -554,9 +562,17 @@ def prop_row_for_api(
         "top3_elite_fader": top3_elite_fade or "",
         "l5_over": l5_over or "",
         "l5_under": l5_under or "",
+        "l10_over": l10_over or "",
+        "l10_under": l10_under or "",
+        "l10_games_played": l10_games_played or "",
+        "l10_streak": l10_streak or "",
         "hit_rate": hit_rate_for_pick or "",
         "strat_hit_rate": strat_hit_rate or "",
         "strat_n": strat_n or "",
+        "hit_rate_l5": hit_rate_l5 or "",
+        "hit_rate_l10": hit_rate_l10 or "",
+        "player_hr_historical": player_hr_hist or "",
+        "opp_hr_historical": opp_hr_hist or "",
         "h2h_bucket": h2h_bucket or "",
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",

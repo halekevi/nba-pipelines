@@ -57,6 +57,27 @@ def main() -> None:
         sys.exit(1)
 
     df = pd.read_excel(src, sheet_name=args.sheet, engine="openpyxl")
+    _repo = Path(__file__).resolve().parents[3]
+    if str(_repo) not in sys.path:
+        sys.path.insert(0, str(_repo))
+    from utils.hit_tracking_columns import attach_hit_tracking_columns
+
+    if not df.empty:
+        work = df.copy()
+        if "player" not in work.columns and "player_name" in work.columns:
+            work["player"] = work["player_name"]
+        if "prop_type" not in work.columns:
+            for c in ("stat_type", "prop_type_normalized"):
+                if c in work.columns:
+                    work["prop_type"] = work[c]
+                    break
+        if "final_bet_direction" not in work.columns:
+            for c in ("recommended_side", "bet_direction", "direction"):
+                if c in work.columns:
+                    work["final_bet_direction"] = work[c]
+                    break
+        df = attach_hit_tracking_columns(work, "NFL")
+
     if df.empty:
         out = Path(args.output)
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -111,9 +132,18 @@ def main() -> None:
             "Direction": direction,
             "Edge": edge.round(2),
             "Projection": proj.round(2),
-            "Hit Rate (5g)": hr,
-            "L5 Over": l5o,
-            "L5 Under": l5u,
+            "Hit Rate (5g)": pd.to_numeric(col("hit_rate", "composite_hit_rate"), errors="coerce").combine_first(hr),
+            "Hit Rate L5": pd.to_numeric(col("hit_rate_l5"), errors="coerce"),
+            "Hit Rate L10": pd.to_numeric(col("hit_rate_l10"), errors="coerce"),
+            "L5 Over": pd.to_numeric(col("l5_over", "last5_over"), errors="coerce").combine_first(l5o),
+            "L5 Under": pd.to_numeric(col("l5_under", "last5_under"), errors="coerce").combine_first(l5u),
+            "L10 Over": pd.to_numeric(col("l10_over"), errors="coerce"),
+            "L10 Under": pd.to_numeric(col("l10_under"), errors="coerce"),
+            "L10 Streak": col("l10_streak"),
+            "Strat Hit Rate": pd.to_numeric(col("strat_hit_rate"), errors="coerce"),
+            "Strat N": pd.to_numeric(col("strat_n"), errors="coerce"),
+            "Player HR Hist": pd.to_numeric(col("player_hr_historical"), errors="coerce"),
+            "Opp HR Hist": pd.to_numeric(col("opp_hr_historical"), errors="coerce"),
             "Team L5": tm_l5_rec,
             "Tm L5 PF/G": tm_l5_pf.round(1),
             "Tm L5 PA/G": tm_l5_pa.round(1),

@@ -183,6 +183,7 @@ DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nf
 DISABLED_SPORTS: set[str] = set()
 DEFAULT_SOCCER_PATH = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
+DEFAULT_GOLF_PATH = os.path.join(REPO_ROOT, "Sports", "Golf", "outputs", "step8_golf_direction_clean.xlsx")
 DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction_clean.xlsx")
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
@@ -266,6 +267,15 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
             os.path.join(out, "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
+        )
+
+    if not str(getattr(args, "golf", "") or "").strip():
+        args.golf = _first_existing_path(
+            os.path.join(out, "golf", f"step8_golf_direction_clean_{d}.xlsx"),
+            os.path.join(out, f"step8_golf_direction_clean_{d}.xlsx"),
+            os.path.join(out, "golf", "step8_golf_direction_clean.xlsx"),
+            os.path.join(out, "step8_golf_direction_clean.xlsx"),
+            DEFAULT_GOLF_PATH,
         )
 
     if not str(args.wnba).strip():
@@ -365,6 +375,7 @@ def print_combined_slate_input_paths(args: argparse.Namespace) -> None:
     _line("NHL", args.nhl, optional=True)
     _line("Soccer", args.soccer, optional=True)
     _line("Tennis", args.tennis, optional=True)
+    _line("Golf", getattr(args, "golf", ""), optional=True)
     _line("WNBA", args.wnba, optional=True)
     _line("NFL", args.nfl, optional=True)
     _line("CFB", getattr(args, "cfb", ""), optional=True)
@@ -464,6 +475,8 @@ C = {
     "soccer": "EAFBF1",
     "hdr_tennis": "4A6741",
     "tennis": "E8F5E9",
+    "hdr_golf": "2E5E1A",
+    "golf": "F0F8E8",
     "hdr_wcbb": "4A235A",
     "hdr_mlb": "922B21",
     "hdr_nba1q": "1F618D",
@@ -6295,7 +6308,7 @@ def publish_wnba_slate_merge_into_web(
 
 
 def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None, cfb=None,
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, golf=None, nfl=None, wnba=None, cfb=None,
                      tennis_date=None):
     """Write full per-sport ranked slate to slate_latest.json for the web UI.
 
@@ -6312,6 +6325,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
             "nhl":    dataframe_to_slate_sport_rows(nhl),
             "soccer": dataframe_to_slate_sport_rows(soccer),
             "tennis": dataframe_to_slate_sport_rows(tennis),
+            "golf":   dataframe_to_slate_sport_rows(golf),
             "wcbb":   dataframe_to_slate_sport_rows(wcbb),
             "mlb":    dataframe_to_slate_sport_rows(mlb),
             "nba1q":  dataframe_to_slate_sport_rows(nba1q),
@@ -8741,6 +8755,30 @@ def load_tennis(path: str) -> pd.DataFrame:
     return _tennis_board_hit_rate_proxy(base)
 
 
+def _golf_board_hit_rate_proxy(df: pd.DataFrame) -> pd.DataFrame:
+    """Golf has no graded PP history — proxy hit_rate from blended_score when sparse."""
+    out = df.copy()
+    _tennis_hit_rate_zero_like_proxy(out, "load_golf")
+    bs = pd.to_numeric(out.get("blended_score"), errors="coerce")
+    hr = pd.to_numeric(out.get("hit_rate"), errors="coerce")
+    sparse = hr.isna() | (hr <= 0.01)
+    if bs.notna().any() and sparse.any():
+        out.loc[sparse, "hit_rate"] = bs[sparse].clip(0.0, 1.0)
+        print("  [load_golf] hit_rate proxy from blended_score (zero-history board)")
+    return out
+
+
+def load_golf(path: str) -> pd.DataFrame:
+    base = _load_step8_board_like(
+        path,
+        fallback_filename="step8_golf_direction_clean.xlsx",
+        sheet_order=("Golf", "ALL"),
+        sport="Golf",
+        log_prefix="load_golf",
+    )
+    return _golf_board_hit_rate_proxy(base)
+
+
 def load_wnba(path: str) -> pd.DataFrame:
     """WNBA step8 direction workbook (same column contract as other step8 boards)."""
     return _load_step8_board_like(
@@ -9591,6 +9629,7 @@ def build_combined_slate(
     nhl: pd.DataFrame = None,
     soccer: pd.DataFrame = None,
     tennis: pd.DataFrame = None,
+    golf: pd.DataFrame = None,
     wnba: pd.DataFrame = None,
     wcbb: pd.DataFrame = None,
     mlb: pd.DataFrame = None,
@@ -9733,6 +9772,8 @@ def build_combined_slate(
         frames.append(_prep_for_combined(soccer))
     if tennis is not None and len(tennis) > 0:
         frames.append(_prep_for_combined(tennis))
+    if golf is not None and len(golf) > 0:
+        frames.append(_prep_for_combined(golf))
     if wnba is not None and len(wnba) > 0:
         frames.append(_prep_for_combined(wnba))
     if wcbb is not None and len(wcbb) > 0:
@@ -12608,6 +12649,14 @@ def main():
         ),
     )
     ap.add_argument(
+        "--golf",
+        default="",
+        help=(
+            "Golf/PGA step8. When omitted: outputs/<date>/golf/step8_golf_direction_clean_<date>.xlsx, "
+            f"then {DEFAULT_GOLF_PATH}"
+        ),
+    )
+    ap.add_argument(
         "--wnba",
         default="",
         help=(
@@ -13098,6 +13147,22 @@ def main():
     else:
         print("  [Tennis] skipped (empty --tennis)")
 
+    golf = None
+    if str(getattr(args, "golf", "") or "").strip():
+        try:
+            golf = load_golf(args.golf)
+            golf = enforce_target_date(
+                golf, "Golf", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            golf = attach_standard_refs(golf)
+            print(f"  {len(golf)} Golf props loaded")
+            _load_audit_row("Golf", args.golf, golf)
+        except Exception as e:
+            print(f"  WARNING: Could not load Golf file: {e}")
+            golf = None
+    else:
+        print("  [Golf] skipped (empty --golf)")
+
     wnba = None
     if str(args.wnba).strip():
         try:
@@ -13266,6 +13331,7 @@ def main():
     nhl = drop_stale_rows(nhl, args.date, "NHL")
     soccer = drop_stale_rows(soccer, args.date, "Soccer")
     tennis = drop_stale_rows(tennis, args.date, "Tennis")
+    golf = drop_stale_rows(golf, args.date, "Golf")
     wnba = drop_stale_rows(wnba, args.date, "WNBA")
     wcbb = drop_stale_rows(wcbb, args.date, "WCBB")
     mlb = drop_stale_rows(mlb, args.date, "MLB")
@@ -13293,6 +13359,7 @@ def main():
     nhl = drop_demon_over_rows(nhl, "NHL")
     soccer = drop_demon_over_rows(soccer, "Soccer")
     tennis = drop_demon_over_rows(tennis, "Tennis")
+    golf = drop_demon_over_rows(golf, "Golf")
     wnba = drop_demon_over_rows(wnba, "WNBA")
     wcbb = drop_demon_over_rows(wcbb, "WCBB")
     mlb = drop_demon_over_rows(mlb, "MLB")
@@ -13304,6 +13371,7 @@ def main():
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
                                     tennis=tennis,
+                                    golf=golf,
                                     wnba=wnba,
                                     wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h,
                                     nfl=nfl, cfb=cfb)
@@ -14659,6 +14727,8 @@ def main():
         write_slate_sheet(wb, soccer, "Soccer Slate", C["hdr_soccer"], "Soccer")
     if tennis is not None and len(tennis) > 0:
         write_slate_sheet(wb, tennis, "Tennis Slate", C["hdr_tennis"], "Tennis")
+    if golf is not None and len(golf) > 0:
+        write_slate_sheet(wb, golf, "Golf Slate", C["hdr_golf"], "Golf")
     if wcbb is not None and len(wcbb) > 0:
         write_slate_sheet(wb, wcbb, "WCBB Slate", C["hdr_wcbb"], "WCBB")
     if mlb is not None and len(mlb) > 0:
@@ -14944,7 +15014,8 @@ def main():
             discard_tracker=discard_tracker,
         )
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba, cfb=cfb,
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, golf=golf,
+                         nfl=nfl, wnba=wnba, cfb=cfb,
                          tennis_date=getattr(args, "tennis_date", None))
         try:
             ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")

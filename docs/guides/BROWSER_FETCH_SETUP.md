@@ -139,7 +139,10 @@ Also update `TRACKABLE_PROPS` to the prop types for your sport, and the
 | CBB   | 20        |
 | CFB   | 15        |
 | Soccer (generic) | 178 |
-| PGA Golf | 15    |
+| PGA Golf | 1     |
+| EUROGOLF | 131   |
+| LPGA     | 256   |
+| LIVGOLF  | 228   |
 
 > Verify these by opening DevTools on the PP board and watching the
 > `/projections?league_id=X` call in the Network tab.

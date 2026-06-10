@@ -260,11 +260,18 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
     else:
         df["ml_prob"] = np.nan
     for target, alts in (
-        ("l5_over", ("l5_over", "last5_over", "L5 Over")),
-        ("l5_under", ("l5_under", "last5_under", "L5 Under")),
+        ("l5_over", ("l5_over", "last5_over", "L5 Over", "over_L5_raw")),
+        ("l5_under", ("l5_under", "last5_under", "L5 Under", "under_L5_raw")),
+        ("l10_over", ("l10_over", "L10 Over", "line_hits_over_10", "over_L10", "over_L10_raw")),
+        ("l10_under", ("l10_under", "L10 Under", "line_hits_under_10", "under_L10", "under_L10_raw")),
+        ("l10_games_played", ("l10_games_played", "line_games_played_10", "Games (10g)", "sample_L10")),
         ("hit_rate", ("hit_rate", "last5_hit_rate", "Hit Rate (5g)", "line_hit_rate_over_ou_5")),
         ("strat_hit_rate", ("strat_hit_rate",)),
         ("strat_n", ("strat_n",)),
+        ("hit_rate_l5", ("hit_rate_l5", "Hit Rate L5")),
+        ("hit_rate_l10", ("hit_rate_l10", "Hit Rate L10")),
+        ("player_hr_historical", ("player_hr_historical", "Player HR Hist")),
+        ("opp_hr_historical", ("opp_hr_historical", "Opp HR Hist")),
     ):
         if target not in df.columns:
             df[target] = np.nan
@@ -273,6 +280,11 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
             if alt in df.columns and alt != target:
                 val = val.combine_first(pd.to_numeric(df[alt], errors="coerce"))
         df[target] = val
+    if "l10_streak" not in df.columns:
+        df["l10_streak"] = ""
+    else:
+        df["l10_streak"] = df["l10_streak"].astype(str).str.strip()
+        df.loc[df["l10_streak"].str.lower().isin({"", "nan", "none"}), "l10_streak"] = ""
     return df
 
 

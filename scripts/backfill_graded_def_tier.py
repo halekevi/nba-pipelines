@@ -2,7 +2,7 @@
 """
 Backfill stack signal columns on graded_props_*.json archives and graded xlsx Box Raw.
 
-Fills def_tier, L5 counts, hit_rate, strat rates, and top-3 context from defense CSVs,
+Fills def_tier, L5/L10 counts, hit_rate, strat rates, and top-3 context from defense CSVs,
 dated step8 slates, and strat lookup when missing on archive rows.
 
 Usage:
@@ -39,11 +39,17 @@ _GRADED_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json$")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 _TOP3_INT_COLS = frozenset({"top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context"})
-_NUMERIC_COLS = frozenset({"l5_over", "l5_under", "hit_rate", "strat_hit_rate", "strat_n", "team_top3_rank", "team_bottom3_rank", "def_boost_hist"})
+_NUMERIC_COLS = frozenset({
+    "l5_over", "l5_under", "l10_over", "l10_under", "l10_games_played",
+    "hit_rate", "hit_rate_l5", "hit_rate_l10",
+    "strat_hit_rate", "strat_n",
+    "player_hr_historical", "opp_hr_historical",
+    "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
+})
 
 
 def _apply_patch_value(entry: dict, col: str, val: object) -> None:
-    if col == "def_tier":
+    if col in {"def_tier", "l10_streak"}:
         entry[col] = str(val)
     elif col in _TOP3_INT_COLS:
         entry[col] = int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0))
