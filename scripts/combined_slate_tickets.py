@@ -13238,7 +13238,7 @@ def main():
             f"({_graded_analysis_main.get('total_props', 0):,} props)"
         )
 
-    def pool(df, pt=None):
+    def pool(df, pt=None, for_win_rate=False):
         if df is None or len(df) == 0:
             return df
 
@@ -13472,8 +13472,9 @@ def main():
             else:
                 demon_passed = 0
 
-        # Main graded tickets: reserve high-leg-HR picks for the separate win-rate section.
-        if not getattr(args, "win_rate_mode", False) and len(filtered_df) > 0:
+        # Main EV tickets: reserve win-rate picks so they are not reused in loose EV parlays.
+        # Main win-rate builder must see the full eligible pool (for_win_rate=True).
+        if not getattr(args, "win_rate_mode", False) and not for_win_rate and len(filtered_df) > 0:
             _hr_min_prob = float(getattr(args, "min_leg_prob", 0.55) or 0.55)
             _hr_mask = filtered_df.apply(
                 lambda r: _row_high_leg_hr_reserved(
@@ -14665,7 +14666,7 @@ def main():
                 thresholds=thresholds,
                 bankroll=max(0.0, float(args.bankroll)),
                 curve_stake_usd=float(args.curve_stake_usd),
-                pool_fn=pool,
+                pool_fn=lambda f: pool(f, for_win_rate=True),
                 graded_analysis=_load_graded_analysis(),
             )
             n_groups = len(payload["groups"])
@@ -14740,7 +14741,7 @@ def main():
                 thresholds=thresholds,
                 bankroll=max(0.0, float(args.bankroll)),
                 curve_stake_usd=float(args.curve_stake_usd),
-                pool_fn=pool,
+                pool_fn=lambda f: pool(f, for_win_rate=True),
                 graded_analysis=_load_graded_analysis(),
             )
             n_groups = len(payload["groups"])
