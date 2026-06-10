@@ -1,0 +1,144 @@
+{
+  "slate_date": "2026-06-09",
+  "snapshotted_at": "2026-06-09T11:28:43.506954Z",
+  "limit_per_sport": 8,
+  "featured_count": 8,
+  "featured": [
+    {
+      "player": "Jessica Shepard",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6199,
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 15,
+        "hit_rate": 0.7333
+      },
+      "slate_line": 17.5,
+      "slate_pick_type": "Standard",
+      "team": "DAL",
+      "opp": "MIN"
+    },
+    {
+      "player": "Maddy Siegrist",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.6,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 14,
+        "hit_rate": 0.7143
+      },
+      "slate_line": 7.5,
+      "slate_pick_type": "Goblin",
+      "team": "DAL",
+      "opp": "MIN"
+    },
+    {
+      "player": "Azur\u00e1 Stevens",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5652,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 20,
+        "hit_rate": 0.85
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Goblin",
+      "team": "CHI",
+      "opp": "ATL"
+    },
+    {
+      "player": "Kayla Thornton",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5188,
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 26,
+        "hit_rate": 0.6538
+      },
+      "slate_line": 2.5,
+      "slate_pick_type": "Standard",
+      "team": "GSV",
+      "opp": "PHX"
+    },
+    {
+      "player": "Olivia Miles",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5174,
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 21,
+        "total": 29,
+        "hit_rate": 0.7241
+      },
+      "slate_line": 27.5,
+      "slate_pick_type": "Standard",
+      "team": "MIN",
+      "opp": "DAL"
+    },
+    {
+      "player": "Paige Bueckers",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4985,
+      "display_prop": {
+        "prop_type": "Rebs+Asts",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 18,
+        "hit_rate": 0.6667
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Standard",
+      "team": "DAL",
+      "opp": "MIN"
+    },
+    {
+      "player": "Natasha Mack",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4897,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 31,
+        "total": 51,
+        "hit_rate": 0.6078
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Standard",
+      "team": "PHX",
+      "opp": "GSV"
+    },
+    {
+      "player": "Janelle Sala\u00fcn",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4823,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 38,
+        "total": 55,
+        "hit_rate": 0.6909
+      },
+      "slate_line": 14.5,
+      "slate_pick_type": "Goblin",
+      "team": "GSV",
+      "opp": "PHX"
+    }
+  ]
+}

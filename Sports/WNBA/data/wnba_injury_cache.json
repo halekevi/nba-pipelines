@@ -1,14 +1,8 @@
 {
   "latest": {
-    "fetched_at": "2026-06-05T02:22:58.622443+00:00",
+    "fetched_at": "2026-06-09T17:05:27.211492+00:00",
     "teams": {
       "ATL": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Amy Okonkwo",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Brionna Jones",
@@ -17,12 +11,6 @@
         }
       ],
       "CHI": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Gabriela Jaquez",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Courtney Vandersloot",
@@ -42,15 +30,14 @@
           "usage_pct": 0.22
         }
       ],
-      "CON": [
+      "CON": [],
+      "DAL": [
         {
           "ast_pct": 0.0,
-          "player_name": "Aaliyah Edwards",
+          "player_name": "Odyssey Sims",
           "status": "OUT",
           "usage_pct": 0.22
-        }
-      ],
-      "DAL": [
+        },
         {
           "ast_pct": 0.0,
           "player_name": "Awak Kuier",
@@ -59,18 +46,6 @@
         }
       ],
       "GSV": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Ashten Prechtel",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
-        {
-          "ast_pct": 0.0,
-          "player_name": "Miela Sowah",
-          "status": "OUT",
-          "usage_pct": 0.0
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Iliana Rupert",
@@ -92,15 +67,13 @@
           "usage_pct": 0.0
         }
       ],
-      "LAS": [
+      "LVA": [
         {
           "ast_pct": 0.0,
-          "player_name": "Kelsey Plum",
+          "player_name": "Chennedy Carter",
           "status": "OUT",
-          "usage_pct": 0.3
-        }
-      ],
-      "LVA": [
+          "usage_pct": 0.22
+        },
         {
           "ast_pct": 0.0,
           "player_name": "Dana Evans",
@@ -109,18 +82,6 @@
         }
       ],
       "MIN": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Eliska Hamzova",
-          "status": "OUT",
-          "usage_pct": 0.0
-        },
-        {
-          "ast_pct": 0.0,
-          "player_name": "Liatu King",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Napheesa Collier",
@@ -143,15 +104,15 @@
       "NYL": [
         {
           "ast_pct": 0.0,
-          "player_name": "Sabrina Ionescu",
+          "player_name": "Anneli Maley",
           "status": "OUT",
-          "usage_pct": 0.3
+          "usage_pct": 0.22
         },
         {
           "ast_pct": 0.0,
-          "player_name": "Marine Fauthoux",
+          "player_name": "Sabrina Ionescu",
           "status": "OUT",
-          "usage_pct": 0.0
+          "usage_pct": 0.3
         }
       ],
       "PHO": [
@@ -162,25 +123,15 @@
           "usage_pct": 0.22
         }
       ],
+      "POR": [
+        {
+          "ast_pct": 0.0,
+          "player_name": "Jordan Harrison",
+          "status": "OUT",
+          "usage_pct": 0.22
+        }
+      ],
       "SEA": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Taylor Thierry",
-          "status": "OUT",
-          "usage_pct": 0.0
-        },
-        {
-          "ast_pct": 0.0,
-          "player_name": "Taina Mair",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
-        {
-          "ast_pct": 0.0,
-          "player_name": "Dominique Malonga",
-          "status": "OUT",
-          "usage_pct": 0.22
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Ezi Magbegor",
@@ -189,12 +140,6 @@
         }
       ],
       "TOR": [
-        {
-          "ast_pct": 0.0,
-          "player_name": "Isabelle Harrison",
-          "status": "OUT",
-          "usage_pct": 0.0
-        },
         {
           "ast_pct": 0.0,
           "player_name": "Temi Fagbenle",

@@ -1,0 +1,68 @@
+{
+  "date": "2026-06-07",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_nba_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_nhl_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 249,
+      "void_rows": 224,
+      "acceptable_void_rows": 224,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_mlb_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 8020,
+      "void_rows": 1415,
+      "acceptable_void_rows": 1415,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_soccer_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 451,
+      "void_rows": 451,
+      "acceptable_void_rows": 451,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_nba1h_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_tennis_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 40,
+      "void_rows": 40,
+      "acceptable_void_rows": 40,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-07\\graded_wnba_2026-06-07.xlsx",
+      "status": "ok",
+      "rows": 839,
+      "void_rows": 54,
+      "acceptable_void_rows": 54,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

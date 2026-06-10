@@ -1,0 +1,4 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+SAS,OKC,212.5,3.5,104.5,False,True,SLOW,live
+OKC/SAS,SAS,212.5,-3.5,108.0,False,True,SLOW,live
+OKC,SAS,212.5,-3.5,108.0,False,True,SLOW,live

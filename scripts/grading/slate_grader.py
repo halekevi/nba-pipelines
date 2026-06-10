@@ -454,6 +454,14 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     "edge_score": "edge_score",
     "Blended Score": "blended_score",
     "blended_score": "blended_score",
+    "Consistency Grade": "consistency_grade",
+    "Top3 Rank": "team_top3_rank",
+    "Bottom3 Rank": "team_bottom3_rank",
+    "Def Boost Hist": "def_boost_hist",
+    "Top3 Weak Over": "top3_weak_overperformer",
+    "Top3 Elite Fade": "top3_elite_fader",
+    "Top3 Def Context": "top3_def_context",
+    "Top3 Under Context": "top3_under_context",
 })
     # fallback compatibility
     if "prop_type_norm" not in df.columns:
@@ -1404,6 +1412,8 @@ def write_raw(wb,df):
     ws=wb.create_sheet('Box Raw')
     desired=['pp_projection_id','ticket_id','player','team','opp_team','prop_type_norm','pick_type','line',
              'bet_direction','tier','def_tier','minutes_tier','shot_role','usage_role',
+             'consistency_grade','team_top3_rank','team_bottom3_rank','def_boost_hist',
+             'top3_weak_overperformer','top3_elite_fader','top3_def_context','top3_under_context',
              'edge','abs_edge','last5_hit_rate','last5_avg','season_avg',
              'last5_over','last5_under','projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',

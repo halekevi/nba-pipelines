@@ -40,6 +40,8 @@ $args = @(
     "--user-data-dir=$profile",
     "--no-first-run",
     "--no-default-browser-check",
+    "--new-window",
+    "--start-maximized",
     "https://www.naturalstattrick.com/"
 )
 
@@ -49,13 +51,20 @@ Write-Host "  Log in at naturalstattrick.com, complete Cloudflare challenge once
 Write-Host "  CDP URL: $cdpUrl" -ForegroundColor DarkGray
 Write-Host ""
 
-Start-Process -FilePath $chrome -ArgumentList $args
+$proc = Start-Process -FilePath $chrome -ArgumentList $args -PassThru
+Write-Host "[NST Chrome] Started PID $($proc.Id) — look for a Chrome window titled 'Natural Stat Trick'" -ForegroundColor Cyan
+Write-Host "  If you don't see it, check the taskbar or Alt+Tab (separate profile from your normal Chrome)." -ForegroundColor DarkGray
 
-Start-Sleep -Seconds 2
+Start-Sleep -Seconds 3
 try {
     $ver = Invoke-RestMethod -Uri "$cdpUrl/json/version" -TimeoutSec 8
     Write-Host "[NST Chrome] CDP ready: $($ver.Browser)" -ForegroundColor Green
+    $pages = Invoke-RestMethod -Uri "$cdpUrl/json" -TimeoutSec 8
+    $nst = $pages | Where-Object { $_.url -like '*naturalstattrick*' } | Select-Object -First 1
+    if ($nst) {
+        Write-Host "[NST Chrome] NST tab open: $($nst.url)" -ForegroundColor Green
+    }
 } catch {
-    Write-Host "[NST Chrome] Started Chrome; CDP not responding yet — wait a few seconds." -ForegroundColor Yellow
+    Write-Host "[NST Chrome] Started Chrome; CDP not responding yet — wait a few seconds and re-run refresh." -ForegroundColor Yellow
 }
 

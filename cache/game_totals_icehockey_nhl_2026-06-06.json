@@ -1,0 +1,11 @@
+{
+  "date": "2026-06-06",
+  "sport_key": "icehockey_nhl",
+  "totals": {
+    "VGK|CAR": {
+      "game_total": 5.5,
+      "home_implied": 2.77,
+      "away_implied": 2.73
+    }
+  }
+}

@@ -1990,7 +1990,7 @@ function slateEvalUrl(dateStr) {
   return REPORT_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
 }
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
-const TICKET_EVAL_LONG_PARLAY_URL_TEMPLATE = 'ticket_eval_long_parlay_{date}.html';
+const TICKET_EVAL_LONG_PARLAY_URL_TEMPLATE = '/grades/ticket_eval_long_parlay_{date}.html';
 /** Keep ticket iframe fresh too (prevents stale/blank cache edge-cases after deploy). */
 function ticketEvalUrl(dateStr) {
   const tpl =

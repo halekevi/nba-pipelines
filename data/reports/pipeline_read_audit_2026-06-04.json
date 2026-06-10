@@ -1,0 +1,121 @@
+{
+  "date": "2026-06-04",
+  "generated_at": "2026-06-04 20:45:14 UTC",
+  "source": "combined_slate_full",
+  "rows": 2925,
+  "pick_type_ineligible_rows": 1073,
+  "sports": {
+    "MLB": {
+      "rows": 1363,
+      "pick_type_eligible_pct": 70.87,
+      "avg_data_completeness": 1.0,
+      "avg_hit_prob_over": 0.526,
+      "avg_hit_prob_under": 0.437,
+      "avg_hit_prob_actionable": 0.57,
+      "avg_rank_read_score": 0.465,
+      "avg_prop_quality_score": 0.455,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 100.0,
+      "avg_distribution_std": 2.993,
+      "pct_filled_calibration_bucket": 91.71
+    },
+    "NBA1H": {
+      "rows": 51,
+      "pick_type_eligible_pct": 100.0,
+      "avg_data_completeness": 1.0,
+      "avg_hit_prob_over": 0.525,
+      "avg_hit_prob_under": 0.463,
+      "avg_hit_prob_actionable": 0.6,
+      "avg_rank_read_score": 0.462,
+      "avg_prop_quality_score": 0.507,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 100.0,
+      "avg_distribution_std": 4.671,
+      "pct_filled_calibration_bucket": 0.0
+    },
+    "NBA1Q": {
+      "rows": 65,
+      "pick_type_eligible_pct": 86.15,
+      "avg_data_completeness": 1.0,
+      "avg_hit_prob_over": 0.671,
+      "avg_hit_prob_under": 0.329,
+      "avg_hit_prob_actionable": 0.646,
+      "avg_rank_read_score": 0.468,
+      "avg_prop_quality_score": 0.535,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 93.85,
+      "avg_distribution_std": 2.388,
+      "pct_filled_calibration_bucket": 0.0
+    },
+    "NHL": {
+      "rows": 89,
+      "pick_type_eligible_pct": 95.51,
+      "avg_data_completeness": 0.962,
+      "avg_hit_prob_over": 0.6,
+      "avg_hit_prob_under": 0.373,
+      "avg_hit_prob_actionable": 0.636,
+      "avg_rank_read_score": 0.41,
+      "avg_prop_quality_score": 0.479,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 100.0,
+      "avg_distribution_std": 1.798,
+      "pct_filled_calibration_bucket": 89.89
+    },
+    "TENNIS": {
+      "rows": 527,
+      "pick_type_eligible_pct": 43.26,
+      "avg_data_completeness": 1.0,
+      "avg_hit_prob_over": 0.334,
+      "avg_hit_prob_under": 0.651,
+      "avg_hit_prob_actionable": 0.339,
+      "avg_rank_read_score": 0.315,
+      "avg_prop_quality_score": 0.452,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 74.19,
+      "avg_distribution_std": 3.042,
+      "pct_filled_calibration_bucket": 0.0
+    },
+    "WNBA": {
+      "rows": 830,
+      "pick_type_eligible_pct": 56.14,
+      "avg_data_completeness": 0.985,
+      "avg_hit_prob_over": 0.388,
+      "avg_hit_prob_under": 0.59,
+      "avg_hit_prob_actionable": 0.41,
+      "avg_rank_read_score": 0.37,
+      "avg_prop_quality_score": 0.4,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 84.94,
+      "avg_distribution_std": 4.762,
+      "pct_filled_calibration_bucket": 88.31
+    }
+  },
+  "expected_sports": [
+    "CBB",
+    "CFB",
+    "MLB",
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "TENNIS",
+    "WCBB",
+    "WNBA"
+  ],
+  "inactive_sports": [
+    "CBB",
+    "CFB",
+    "NBA",
+    "NFL",
+    "SOCCER",
+    "WCBB"
+  ],
+  "top_missing_fields": {
+    "distribution_std": 125,
+    "line_combo": 34
+  },
+  "checklist_path": "data\\pipeline_read_checklist.json",
+  "schema_path": "data\\schemas\\pipeline_read_fields.schema.json"
+}

@@ -1,0 +1,4 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+SAS,NYK,214.5,-6.5,110.5,False,True,SLOW,live
+SAS/NYK,NYK,214.5,-6.5,110.5,False,True,SLOW,live
+NYK,SAS,214.5,6.5,104.0,False,True,SLOW,live

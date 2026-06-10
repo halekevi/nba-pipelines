@@ -143,6 +143,15 @@ ENRICHMENT_RAW_COLS = [
     "l10_under",
     "l10_over_pct",
     "l10_streak",
+    # 70% stack / opponent context (step7/step8)
+    "consistency_grade",
+    "team_top3_rank",
+    "team_bottom3_rank",
+    "def_boost_hist",
+    "top3_weak_overperformer",
+    "top3_elite_fader",
+    "top3_def_context",
+    "top3_under_context",
 ]
 
 JOIN_FEATURE_COLS = list(dict.fromkeys(STEP8_FEATURE_COLS + ENRICHMENT_RAW_COLS))

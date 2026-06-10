@@ -4,16 +4,15 @@
     "NO_DATA",
     "DNP",
     "NO_ACTUAL",
-    "NO_LINE",
-    "PUSH"
+    "NO_LINE"
   ],
   "summary_rows": [
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_nba_2026-05-18.xlsx",
       "status": "ok",
-      "rows": 742,
-      "void_rows": 81,
-      "acceptable_void_rows": 81,
+      "rows": 591,
+      "void_rows": 43,
+      "acceptable_void_rows": 43,
       "unacceptable_void_rows": 0
     },
     {
@@ -28,8 +27,8 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_mlb_2026-05-18.xlsx",
       "status": "ok",
       "rows": 3826,
-      "void_rows": 336,
-      "acceptable_void_rows": 336,
+      "void_rows": 164,
+      "acceptable_void_rows": 164,
       "unacceptable_void_rows": 0
     },
     {
@@ -44,32 +43,32 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_nba1h_2026-05-18.xlsx",
       "status": "ok",
       "rows": 43,
-      "void_rows": 6,
-      "acceptable_void_rows": 6,
+      "void_rows": 5,
+      "acceptable_void_rows": 5,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_nba1q_2026-05-18.xlsx",
       "status": "ok",
       "rows": 75,
-      "void_rows": 6,
-      "acceptable_void_rows": 6,
+      "void_rows": 5,
+      "acceptable_void_rows": 5,
       "unacceptable_void_rows": 0
     },
     {
-      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_tennis_2026-05-19.xlsx",
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_tennis_2026-05-18.xlsx",
       "status": "ok",
-      "rows": 1178,
-      "void_rows": 122,
-      "acceptable_void_rows": 122,
+      "rows": 975,
+      "void_rows": 975,
+      "acceptable_void_rows": 975,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-18\\graded_wnba_2026-05-18.xlsx",
       "status": "ok",
       "rows": 556,
-      "void_rows": 68,
-      "acceptable_void_rows": 68,
+      "void_rows": 60,
+      "acceptable_void_rows": 60,
       "unacceptable_void_rows": 0
     }
   ],

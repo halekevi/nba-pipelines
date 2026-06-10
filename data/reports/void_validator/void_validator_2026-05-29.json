@@ -1,0 +1,68 @@
+{
+  "date": "2026-05-29",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_nba_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_nhl_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 286,
+      "void_rows": 2,
+      "acceptable_void_rows": 2,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_mlb_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 3737,
+      "void_rows": 772,
+      "acceptable_void_rows": 772,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_soccer_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 62,
+      "void_rows": 46,
+      "acceptable_void_rows": 46,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_nba1h_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_tennis_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 305,
+      "void_rows": 36,
+      "acceptable_void_rows": 36,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-29\\graded_wnba_2026-05-29.xlsx",
+      "status": "ok",
+      "rows": 1395,
+      "void_rows": 168,
+      "acceptable_void_rows": 168,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

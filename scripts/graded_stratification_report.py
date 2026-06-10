@@ -3,8 +3,9 @@
 Weekly / post-retrain: walk graded XLSX discovery tree, emit stratified CSV + HTML.
 
 Tier 1: hit rates by (sport, prop, direction, pick_type, line_bucket) plus
-context_known / defense_known / minutes_known. Goblin/Demon UNDER rows are
-dropped (invalid market side).
+context_known / defense_known / minutes_known. Demon pick types are excluded
+from all hit-rate rating (data collection only). Goblin UNDER rows are also
+dropped — Goblin is OVER-only on PrizePicks (not a valid market side).
 
 Segment and prop-type tier scores blend every discoverable numeric graded/pipeline
 column (IDs, labels, and outcomes excluded) with min–max normalization within
@@ -44,10 +45,17 @@ except ImportError:
     calibration_curve = None  # type: ignore[misc, assignment]
 
 try:
-    from analyze_graded_prop_winners import load_unified, normalize_decided  # type: ignore[import-not-found]
+    from analyze_graded_prop_winners import (  # type: ignore[import-not-found]
+        exclude_non_rating_legs,
+        is_demon_pick_type,
+        load_unified,
+        normalize_decided,
+    )
 except ImportError:
     load_unified = None  # type: ignore[misc, assignment]
     normalize_decided = None  # type: ignore[misc, assignment]
+    exclude_non_rating_legs = None  # type: ignore[misc, assignment]
+    is_demon_pick_type = None  # type: ignore[misc, assignment]
 
 try:
     from edge_predict_utils import (  # type: ignore[import-not-found]
@@ -192,11 +200,17 @@ def _attach_features_via_build_vector(decided: pd.DataFrame) -> pd.DataFrame:
     return decided.join(feat, how="left")
 
 
-def _drop_invalid_goblin_demon_under(df: pd.DataFrame) -> pd.DataFrame:
-    pt = _pick_type_norm(df.get("pick_type", pd.Series("", index=df.index)))
-    d = df.get("direction", pd.Series("", index=df.index)).astype(str).str.strip().str.upper()
-    bad = pt.isin(["goblin", "demon"]) & d.eq("UNDER")
-    return df.loc[~bad].copy()
+def _drop_invalid_goblin_under(df: pd.DataFrame) -> pd.DataFrame:
+    """Goblin UNDER is not a valid PrizePicks market (Goblin is OVER-only)."""
+    try:
+        from utils.stack_70_eligible import exclude_invalid_market_sides_from_rating
+
+        return exclude_invalid_market_sides_from_rating(df)
+    except ImportError:
+        pt = _pick_type_norm(df.get("pick_type", pd.Series("", index=df.index)))
+        d = df.get("direction", pd.Series("", index=df.index)).astype(str).str.strip().str.upper()
+        bad = pt.eq("goblin") & d.eq("UNDER")
+        return df.loc[~bad].copy()
 
 
 def _result_binary(s: pd.Series) -> pd.Series:
@@ -944,10 +958,32 @@ def run(
 
     raw = load_unified(roots)
     decided = normalize_decided(raw)
-    decided = _drop_invalid_goblin_demon_under(decided)
+    goblin_under_n = 0
+    if "pick_type" in decided.columns and "direction" in decided.columns:
+        try:
+            from utils.stack_70_eligible import is_invalid_market_side
+
+            goblin_under_n = int(
+                decided.apply(
+                    lambda r: is_invalid_market_side(r["pick_type"], r["direction"]),
+                    axis=1,
+                ).sum()
+            )
+        except ImportError:
+            goblin_under_n = 0
+    demon_n = (
+        int(is_demon_pick_type(decided["pick_type"]).sum())
+        if is_demon_pick_type is not None and "pick_type" in decided.columns
+        else 0
+    )
+    decided = exclude_non_rating_legs(decided) if exclude_non_rating_legs is not None else _drop_invalid_goblin_under(decided)
     if decided.empty:
         print("No decided graded rows after filters.")
         return
+    if goblin_under_n:
+        print(f"Excluded {goblin_under_n:,} Goblin UNDER rows (not a valid market).")
+    if demon_n:
+        print(f"Excluded {demon_n:,} Demon rows from hit-rate rating (data collection only).")
 
     decided["sport_disp"] = decided["_sport"].map(_sport_display)
     if "pipeline" in decided.columns:
@@ -1123,7 +1159,7 @@ h1,h2 {{ font-weight: 600; }}
 <body>
 <h1>Graded stratification report</h1>
 <p class="note">Generated {html.escape(gen_at)}. Tier A requires context_known, defense_known, and minutes_known near 1.0 on the slice (unknown-context props excluded).</p>
-<p class="note">Goblin/Demon UNDER rows removed. {html.escape(ha_note)}</p>
+<p class="note">Demon pick types excluded from hit-rate rating (data collection only). Goblin UNDER removed (Goblin is OVER-only on PrizePicks). {html.escape(ha_note)}</p>
 
 <h2>Primary stratification (min n = {min_cell_n})</h2>
 {_html_escape_df(hit_tbl)}
@@ -1136,7 +1172,7 @@ h1,h2 {{ font-weight: 600; }}
 {_html_escape_df(threshold_rows)}
 
 <h2>Independent market segment ratings</h2>
-<p class="note">Each sport is scored independently for Goblin, Demon, Standard OVER, and Standard UNDER with segment-specific metrics and thresholds.</p>
+<p class="note">Each sport is scored independently for Goblin, Standard OVER, and Standard UNDER (Demon excluded from rating).</p>
 {_html_escape_df(segment_tiers)}
 
 <h2>Prop-type tiering by requested metrics</h2>

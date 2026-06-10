@@ -1,0 +1,3607 @@
+{
+  "latest": {
+    "fetched_at": "2026-06-09T15:29:07.360555+00:00",
+    "rows": [
+      {
+        "injury_date": "2026-06-09T13:13:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Lourdes Gurriel Jr.",
+        "player_norm": "lourdes gurriel jr",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-07T13:52:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Carlos Santana",
+        "player_norm": "carlos santana",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-06T13:10:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jordan Lawlar",
+        "player_norm": "jordan lawlar",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-03T23:01:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Corbin Burnes",
+        "player_norm": "corbin burnes",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-03T11:10:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "James McCann",
+        "player_norm": "james mccann",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-03T10:53:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "A.J. Puk",
+        "player_norm": "a j puk",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-01T22:44:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Cristian Mena",
+        "player_norm": "cristian mena",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-01T13:57:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Blake Walston",
+        "player_norm": "blake walston",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-05-25T02:16:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "A.J. Vukovich",
+        "player_norm": "a j vukovich",
+        "player_on_il": false,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-05-21T15:48:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Derek Law",
+        "player_norm": "derek law",
+        "player_on_il": false,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-05-09T20:59:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Justin Martinez",
+        "player_norm": "justin martinez",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Andrew Saalfrank",
+        "player_norm": "andrew saalfrank",
+        "player_on_il": true,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Kyle Amendt",
+        "player_norm": "kyle amendt",
+        "player_on_il": false,
+        "team": "ARI"
+      },
+      {
+        "injury_date": "2026-06-08T15:51:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jacob Wilson",
+        "player_norm": "jacob wilson",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-06-03T15:56:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Aaron Civale",
+        "player_norm": "aaron civale",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-06-03T15:52:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Luis Severino",
+        "player_norm": "luis severino",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-06-02T20:20:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brooks Kriske",
+        "player_norm": "brooks kriske",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-05-27T00:08:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Denzel Clarke",
+        "player_norm": "denzel clarke",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-05-20T22:04:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Gunnar Hoglund",
+        "player_norm": "gunnar hoglund",
+        "player_on_il": true,
+        "team": "ATH"
+      },
+      {
+        "injury_date": "2026-06-07T14:59:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Michael Harris II",
+        "player_norm": "michael harris ii",
+        "player_on_il": false,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-06-04T15:26:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Sean Murphy",
+        "player_norm": "sean murphy",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-06-02T20:45:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Drake Baldwin",
+        "player_norm": "drake baldwin",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-06-01T17:39:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hurston Waldrep",
+        "player_norm": "hurston waldrep",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-26T19:57:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Spencer Schwellenbach",
+        "player_norm": "spencer schwellenbach",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-22T21:22:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "AJ Smith-Shawver",
+        "player_norm": "aj smith shawver",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-18T22:21:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Kyle Farmer",
+        "player_norm": "kyle farmer",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-13T21:07:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Joe Jimenez",
+        "player_norm": "joe jimenez",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Danny Young",
+        "player_norm": "danny young",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Blake Burkhalter",
+        "player_norm": "blake burkhalter",
+        "player_on_il": false,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "suspension",
+        "injury_type": "SUSP",
+        "injury_type_desc": "Suspension",
+        "player_name": "Jurickson Profar",
+        "player_norm": "jurickson profar",
+        "player_on_il": false,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Joey Wentz",
+        "player_norm": "joey wentz",
+        "player_on_il": true,
+        "team": "ATL"
+      },
+      {
+        "injury_date": "2026-06-08T20:49:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Yaramil Hiraldo",
+        "player_norm": "yaramil hiraldo",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-08T20:45:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Cade Povich",
+        "player_norm": "cade povich",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-08T20:28:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jhonkensy Noel",
+        "player_norm": "jhonkensy noel",
+        "player_on_il": false,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-08T19:58:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Ryan Helsley",
+        "player_norm": "ryan helsley",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-08T18:07:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Chris Bassitt",
+        "player_norm": "chris bassitt",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-05T22:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Dean Kremer",
+        "player_norm": "dean kremer",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-28T16:46:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Levi Wells",
+        "player_norm": "levi wells",
+        "player_on_il": false,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-27T20:59:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Dylan Beavers",
+        "player_norm": "dylan beavers",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-19T20:12:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Colin Selby",
+        "player_norm": "colin selby",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-15T21:24:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ryan Mountcastle",
+        "player_norm": "ryan mountcastle",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-15T21:13:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jordan Westburg",
+        "player_norm": "jordan westburg",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Richard Guasch",
+        "player_norm": "richard guasch",
+        "player_on_il": false,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Zach Eflin",
+        "player_norm": "zach eflin",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Will Robertson",
+        "player_norm": "will robertson",
+        "player_on_il": false,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Felix Bautista",
+        "player_norm": "felix bautista",
+        "player_on_il": true,
+        "team": "BAL"
+      },
+      {
+        "injury_date": "2026-06-08T21:12:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Roman Anthony",
+        "player_norm": "roman anthony",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-08T12:49:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Patrick Sandoval",
+        "player_norm": "patrick sandoval",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-08T12:43:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Garrett Whitlock",
+        "player_norm": "garrett whitlock",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-06T20:33:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jovani Moran",
+        "player_norm": "jovani moran",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-05T19:54:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Garrett Crochet",
+        "player_norm": "garrett crochet",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-04T16:27:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Trevor Story",
+        "player_norm": "trevor story",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-03T20:54:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Romy Gonzalez",
+        "player_norm": "romy gonzalez",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-03T15:11:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Nick Sogard",
+        "player_norm": "nick sogard",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-02T21:58:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Kutter Crawford",
+        "player_norm": "kutter crawford",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-05-27T22:32:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Triston Casas",
+        "player_norm": "triston casas",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-05-15T12:18:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tanner Houck",
+        "player_norm": "tanner houck",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Hobie Harris",
+        "player_norm": "hobie harris",
+        "player_on_il": false,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Brendan Rodgers",
+        "player_norm": "brendan rodgers",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Johan Oviedo",
+        "player_norm": "johan oviedo",
+        "player_on_il": true,
+        "team": "BOS"
+      },
+      {
+        "injury_date": "2026-06-08T17:40:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Matt Shaw",
+        "player_norm": "matt shaw",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-06-08T08:34:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Matthew Boyd",
+        "player_norm": "matthew boyd",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-06-08T08:23:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Jameson Taillon",
+        "player_norm": "jameson taillon",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-17T16:40:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hunter Harvey",
+        "player_norm": "hunter harvey",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Brandon Birdsell",
+        "player_norm": "brandon birdsell",
+        "player_on_il": false,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jeff Brigham",
+        "player_norm": "jeff brigham",
+        "player_on_il": false,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Justin Steele",
+        "player_norm": "justin steele",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Porter Hodge",
+        "player_norm": "porter hodge",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jaxon Wiggins",
+        "player_norm": "jaxon wiggins",
+        "player_on_il": false,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Riley Martin",
+        "player_norm": "riley martin",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Shelby Miller",
+        "player_norm": "shelby miller",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Cade Horton",
+        "player_norm": "cade horton",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tyler Austin",
+        "player_norm": "tyler austin",
+        "player_on_il": true,
+        "team": "CHC"
+      },
+      {
+        "injury_date": "2026-06-06T13:42:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Kyle Teel",
+        "player_norm": "kyle teel",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-06-05T15:43:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Everson Pereira",
+        "player_norm": "everson pereira",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-06-03T17:13:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Noah Schultz",
+        "player_norm": "noah schultz",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-06-01T22:43:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Munetaka Murakami",
+        "player_norm": "munetaka murakami",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-06-01T17:26:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Austin Hays",
+        "player_norm": "austin hays",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-30T15:39:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jordan Leasure",
+        "player_norm": "jordan leasure",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-26T02:03:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ky Bush",
+        "player_norm": "ky bush",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-26T01:55:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Drew Thorpe",
+        "player_norm": "drew thorpe",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-23T16:23:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jordan Hicks",
+        "player_norm": "jordan hicks",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-17T16:49:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Prelander Berroa",
+        "player_norm": "prelander berroa",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Mike Vasil",
+        "player_norm": "mike vasil",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tanner Murray",
+        "player_norm": "tanner murray",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Mason Adams",
+        "player_norm": "mason adams",
+        "player_on_il": false,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Tim Elko",
+        "player_norm": "tim elko",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brooks Baldwin",
+        "player_norm": "brooks baldwin",
+        "player_on_il": true,
+        "team": "CWS"
+      },
+      {
+        "injury_date": "2026-06-09T10:58:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jose Trevino",
+        "player_norm": "jose trevino",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-08T12:16:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Emilio Pagan",
+        "player_norm": "emilio pagan",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-07T16:14:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Pierce Johnson",
+        "player_norm": "pierce johnson",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-06T16:14:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Elly De La Cruz",
+        "player_norm": "elly de la cruz",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-06T16:04:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hunter Greene",
+        "player_norm": "hunter greene",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-03T11:27:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Graham Ashcraft",
+        "player_norm": "graham ashcraft",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-05-22T18:44:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Ke'Bryan Hayes",
+        "player_norm": "ke bryan hayes",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Connor Burns",
+        "player_norm": "connor burns",
+        "player_on_il": false,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brandon Williamson",
+        "player_norm": "brandon williamson",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Carson Spiers",
+        "player_norm": "carson spiers",
+        "player_on_il": true,
+        "team": "CIN"
+      },
+      {
+        "injury_date": "2026-06-09T15:11:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Gabriel Arias",
+        "player_norm": "gabriel arias",
+        "player_on_il": true,
+        "team": "CLE"
+      },
+      {
+        "injury_date": "2026-05-27T11:44:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Erik Sabrowski",
+        "player_norm": "erik sabrowski",
+        "player_on_il": true,
+        "team": "CLE"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Carlos Hernandez",
+        "player_norm": "carlos hernandez",
+        "player_on_il": false,
+        "team": "CLE"
+      },
+      {
+        "injury_date": "2026-06-07T03:06:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Tyler Freeman",
+        "player_norm": "tyler freeman",
+        "player_on_il": false,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-06T00:39:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Tanner Gordon",
+        "player_norm": "tanner gordon",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-05T22:58:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Mickey Moniak",
+        "player_norm": "mickey moniak",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-02T17:08:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Welinton Herrera",
+        "player_norm": "welinton herrera",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-01T00:18:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "McCade Brown",
+        "player_norm": "mccade brown",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-01T00:09:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jimmy Herget",
+        "player_norm": "jimmy herget",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-31T23:43:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Brenton Doyle",
+        "player_norm": "brenton doyle",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-31T23:31:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Victor Vodnik",
+        "player_norm": "victor vodnik",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-31T23:27:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jordan Beck",
+        "player_norm": "jordan beck",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-28T22:38:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jose Quintana",
+        "player_norm": "jose quintana",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-20T19:43:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Chase Dollander",
+        "player_norm": "chase dollander",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "RJ Petit",
+        "player_norm": "rj petit",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Brayan Castillo",
+        "player_norm": "brayan castillo",
+        "player_on_il": false,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Pierson Ohl",
+        "player_norm": "pierson ohl",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Kris Bryant",
+        "player_norm": "kris bryant",
+        "player_on_il": true,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Case Williams",
+        "player_norm": "case williams",
+        "player_on_il": false,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jared Thomas",
+        "player_norm": "jared thomas",
+        "player_on_il": false,
+        "team": "COL"
+      },
+      {
+        "injury_date": "2026-06-08T15:07:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Burch Smith",
+        "player_norm": "burch smith",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-07T22:16:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Tarik Skubal",
+        "player_norm": "tarik skubal",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-07T17:00:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Kenley Jansen",
+        "player_norm": "kenley jansen",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-07T15:44:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Casey Mize",
+        "player_norm": "casey mize",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-07T15:14:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Justin Verlander",
+        "player_norm": "justin verlander",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-05T19:14:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Trey Sweeney",
+        "player_norm": "trey sweeney",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-04T14:23:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jackson Jobe",
+        "player_norm": "jackson jobe",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-04T14:18:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Javier Baez",
+        "player_norm": "javier baez",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-29T22:45:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brant Hurter",
+        "player_norm": "brant hurter",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-27T01:37:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Bailey Horn",
+        "player_norm": "bailey horn",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Reese Olson",
+        "player_norm": "reese olson",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Parker Meadows",
+        "player_norm": "parker meadows",
+        "player_on_il": true,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Dugan Darnell",
+        "player_norm": "dugan darnell",
+        "player_on_il": false,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Josue Briceno",
+        "player_norm": "josue briceno",
+        "player_on_il": false,
+        "team": "DET"
+      },
+      {
+        "injury_date": "2026-06-09T14:09:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "LaMonte Wade Jr.",
+        "player_norm": "lamonte wade jr",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-08T19:59:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Nick Allen",
+        "player_norm": "nick allen",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-06T17:57:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hunter Brown",
+        "player_norm": "hunter brown",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-04T15:07:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Yainer Diaz",
+        "player_norm": "yainer diaz",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-04T15:03:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brandon Walter",
+        "player_norm": "brandon walter",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-04T14:58:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Bennett Sousa",
+        "player_norm": "bennett sousa",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-04T14:44:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Lance McCullers Jr.",
+        "player_norm": "lance mccullers jr",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-04T14:35:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Cristian Javier",
+        "player_norm": "cristian javier",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-02T19:57:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Braden Shewmake",
+        "player_norm": "braden shewmake",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-02T19:51:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Carlos Correa",
+        "player_norm": "carlos correa",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-05-29T20:29:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hayden Wesneski",
+        "player_norm": "hayden wesneski",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-05-29T20:27:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ronel Blanco",
+        "player_norm": "ronel blanco",
+        "player_on_il": true,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Walker Janek",
+        "player_norm": "walker janek",
+        "player_on_il": false,
+        "team": "HOU"
+      },
+      {
+        "injury_date": "2026-06-08T15:54:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Kris Bubic",
+        "player_norm": "kris bubic",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-07T20:39:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Bobby Witt Jr.",
+        "player_norm": "bobby witt jr",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-07T16:41:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Salvador Perez",
+        "player_norm": "salvador perez",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-07T16:09:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jac Caglianone",
+        "player_norm": "jac caglianone",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-04T20:26:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jonathan India",
+        "player_norm": "jonathan india",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-04T20:24:00+00:00",
+        "injury_status": "bereavement",
+        "injury_type": "BL",
+        "injury_type_desc": "Bereavement",
+        "player_name": "Stephen Kolek",
+        "player_norm": "stephen kolek",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-02T17:19:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Cole Ragans",
+        "player_norm": "cole ragans",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-29T20:04:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Nick Mears",
+        "player_norm": "nick mears",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-28T16:45:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Carlos Estevez",
+        "player_norm": "carlos estevez",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-25T03:55:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "James McArthur",
+        "player_norm": "james mcarthur",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Anthony Simonelli",
+        "player_norm": "anthony simonelli",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Javier Vaz",
+        "player_norm": "javier vaz",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Tyson Guerrero",
+        "player_norm": "tyson guerrero",
+        "player_on_il": false,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Alec Marsh",
+        "player_norm": "alec marsh",
+        "player_on_il": true,
+        "team": "KC"
+      },
+      {
+        "injury_date": "2026-06-09T03:29:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Yoan Moncada",
+        "player_norm": "yoan moncada",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-08T23:04:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Adam Frazier",
+        "player_norm": "adam frazier",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-08T22:58:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Vaughn Grissom",
+        "player_norm": "vaughn grissom",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-08T22:22:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Nolan Schanuel",
+        "player_norm": "nolan schanuel",
+        "player_on_il": false,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-07T18:13:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jack Kochanowicz",
+        "player_norm": "jack kochanowicz",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-06T23:42:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Gustavo Campero",
+        "player_norm": "gustavo campero",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-06T23:28:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jorge Soler",
+        "player_norm": "jorge soler",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-03T22:51:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Travis d'Arnaud",
+        "player_norm": "travis d arnaud",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-05-26T21:45:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ben Joyce",
+        "player_norm": "ben joyce",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-05-22T22:16:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Yusei Kikuchi",
+        "player_norm": "yusei kikuchi",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Robert Stephenson",
+        "player_norm": "robert stephenson",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Anthony Rendon",
+        "player_norm": "anthony rendon",
+        "player_on_il": true,
+        "team": "LAA"
+      },
+      {
+        "injury_date": "2026-06-07T17:10:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Will Smith",
+        "player_norm": "will smith",
+        "player_on_il": false,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-07T05:28:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Brock Stewart",
+        "player_norm": "brock stewart",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-06T23:10:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tyler Glasnow",
+        "player_norm": "tyler glasnow",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-06T01:17:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Blake Snell",
+        "player_norm": "blake snell",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-05T14:12:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Evan Phillips",
+        "player_norm": "evan phillips",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-03T17:43:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Bobby Miller",
+        "player_norm": "bobby miller",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-03T17:31:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Gavin Stone",
+        "player_norm": "gavin stone",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-01T14:38:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Brusdar Graterol",
+        "player_norm": "brusdar graterol",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-31T06:38:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tommy Edman",
+        "player_norm": "tommy edman",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-30T23:22:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Teoscar Hernandez",
+        "player_norm": "teoscar hernandez",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-28T14:25:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Enrique Hernandez",
+        "player_norm": "enrique hernandez",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-28T03:40:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Kendall George",
+        "player_norm": "kendall george",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-25T22:37:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Edwin Diaz",
+        "player_norm": "edwin diaz",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-19T00:19:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ben Casparius",
+        "player_norm": "ben casparius",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Landon Knack",
+        "player_norm": "landon knack",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jake Cousins",
+        "player_norm": "jake cousins",
+        "player_on_il": true,
+        "team": "LAD"
+      },
+      {
+        "injury_date": "2026-06-06T00:29:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Thomas White",
+        "player_norm": "thomas white",
+        "player_on_il": false,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-06-02T16:44:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Josh Ekness",
+        "player_norm": "josh ekness",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-06-01T18:22:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Griffin Conine",
+        "player_norm": "griffin conine",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-06-01T18:21:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Andrew Nardi",
+        "player_norm": "andrew nardi",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-31T16:34:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Janson Junk",
+        "player_norm": "janson junk",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-29T21:10:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Eury Perez",
+        "player_norm": "eury perez",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-25T01:05:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Kemp Alderman",
+        "player_norm": "kemp alderman",
+        "player_on_il": false,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-22T20:20:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Robby Snelling",
+        "player_norm": "robby snelling",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ronny Henriquez",
+        "player_norm": "ronny henriquez",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Jesus Tinoco",
+        "player_norm": "jesus tinoco",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Adam Mazur",
+        "player_norm": "adam mazur",
+        "player_on_il": true,
+        "team": "MIA"
+      },
+      {
+        "injury_date": "2026-06-09T14:39:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Trevor Megill",
+        "player_norm": "trevor megill",
+        "player_on_il": false,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-09T03:04:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Carlos Rodriguez",
+        "player_norm": "carlos rodriguez",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-07T01:16:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Brian Fitzpatrick",
+        "player_norm": "brian fitzpatrick",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-05T21:04:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "DL Hall",
+        "player_norm": "dl hall",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-05T15:03:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Brandon Woodruff",
+        "player_norm": "brandon woodruff",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-03T23:51:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Logan Henderson",
+        "player_norm": "logan henderson",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-03T20:22:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Rob Zastryzny",
+        "player_norm": "rob zastryzny",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-02T19:04:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Quinn Priester",
+        "player_norm": "quinn priester",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-01T21:11:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Brandon Lockridge",
+        "player_norm": "brandon lockridge",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-05-31T17:56:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Angel Zerpa",
+        "player_norm": "angel zerpa",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-05-26T21:27:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jared Koenig",
+        "player_norm": "jared koenig",
+        "player_on_il": true,
+        "team": "MIL"
+      },
+      {
+        "injury_date": "2026-06-07T16:15:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Byron Buxton",
+        "player_norm": "byron buxton",
+        "player_on_il": false,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-05T15:27:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Mick Abel",
+        "player_norm": "mick abel",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-03T16:33:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Ryan Jeffers",
+        "player_norm": "ryan jeffers",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-01T23:37:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Kendry Rojas",
+        "player_norm": "kendry rojas",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-01T23:30:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Bailey Ober",
+        "player_norm": "bailey ober",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-01T20:41:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Cole Sands",
+        "player_norm": "cole sands",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-19T16:52:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Garrett Acton",
+        "player_norm": "garrett acton",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-18T14:23:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Walker Jenkins",
+        "player_norm": "walker jenkins",
+        "player_on_il": false,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-18T13:51:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "David Festa",
+        "player_norm": "david festa",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Pablo Lopez",
+        "player_norm": "pablo lopez",
+        "player_on_il": true,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Julian Merryweather",
+        "player_norm": "julian merryweather",
+        "player_on_il": false,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Matt Canterino",
+        "player_norm": "matt canterino",
+        "player_on_il": false,
+        "team": "MIN"
+      },
+      {
+        "injury_date": "2026-06-08T14:51:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Tyrone Taylor",
+        "player_norm": "tyrone taylor",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-07T12:19:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Kodai Senga",
+        "player_norm": "kodai senga",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-07T01:22:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jorge Polanco",
+        "player_norm": "jorge polanco",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-02T16:46:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Francisco Alvarez",
+        "player_norm": "francisco alvarez",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-01T03:23:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Brandon Waddell",
+        "player_norm": "brandon waddell",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-01T03:15:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Adbert Alzolay",
+        "player_norm": "adbert alzolay",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-29T21:16:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Luis Robert Jr.",
+        "player_norm": "luis robert jr",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-25T18:12:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Francisco Lindor",
+        "player_norm": "francisco lindor",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-19T18:25:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Clay Holmes",
+        "player_norm": "clay holmes",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-18T16:01:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Mike Tauchman",
+        "player_norm": "mike tauchman",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-13T20:01:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Grae Kessinger",
+        "player_norm": "grae kessinger",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Joe Jacques",
+        "player_norm": "joe jacques",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Reed Garrett",
+        "player_norm": "reed garrett",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Kevin Herget",
+        "player_norm": "kevin herget",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Dedniel Nunez",
+        "player_norm": "dedniel nunez",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Justin Hagenman",
+        "player_norm": "justin hagenman",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Ronny Mauricio",
+        "player_norm": "ronny mauricio",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jose Rojas",
+        "player_norm": "jose rojas",
+        "player_on_il": false,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Tylor Megill",
+        "player_norm": "tylor megill",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Robert Stock",
+        "player_norm": "robert stock",
+        "player_on_il": true,
+        "team": "NYM"
+      },
+      {
+        "injury_date": "2026-06-08T18:30:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Clarke Schmidt",
+        "player_norm": "clarke schmidt",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-08T18:24:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Austin Wells",
+        "player_norm": "austin wells",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-07T16:06:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Max Fried",
+        "player_norm": "max fried",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-05T21:41:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Payton Henry",
+        "player_norm": "payton henry",
+        "player_on_il": false,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-05T21:41:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Eric Reyzelman",
+        "player_norm": "eric reyzelman",
+        "player_on_il": false,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-05T18:27:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Aaron Judge",
+        "player_norm": "aaron judge",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-04T16:15:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jasson Dominguez",
+        "player_norm": "jasson dominguez",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-06-04T15:49:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Giancarlo Stanton",
+        "player_norm": "giancarlo stanton",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-05-31T06:16:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Angel Chivilli",
+        "player_norm": "angel chivilli",
+        "player_on_il": true,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Travis MacGregor",
+        "player_norm": "travis macgregor",
+        "player_on_il": false,
+        "team": "NYY"
+      },
+      {
+        "injury_date": "2026-05-27T18:20:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Carson DeMartini",
+        "player_norm": "carson demartini",
+        "player_on_il": false,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-05-14T04:33:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Kyle Backhus",
+        "player_norm": "kyle backhus",
+        "player_on_il": true,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "suspension",
+        "injury_type": "SUSP",
+        "injury_type_desc": "Suspension",
+        "player_name": "Johan Rojas",
+        "player_norm": "johan rojas",
+        "player_on_il": false,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Rene Pinto",
+        "player_norm": "rene pinto",
+        "player_on_il": false,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Daniel Robert",
+        "player_norm": "daniel robert",
+        "player_on_il": false,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Mark Kolozsvary",
+        "player_norm": "mark kolozsvary",
+        "player_on_il": false,
+        "team": "PHI"
+      },
+      {
+        "injury_date": "2026-06-09T00:41:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Oneil Cruz",
+        "player_norm": "oneil cruz",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-06-07T19:55:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Konnor Griffin",
+        "player_norm": "konnor griffin",
+        "player_on_il": true,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-06-07T16:50:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Chris Devenski",
+        "player_norm": "chris devenski",
+        "player_on_il": true,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-06-07T16:37:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Brandon Lowe",
+        "player_norm": "brandon lowe",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-05-29T21:36:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Joey Bart",
+        "player_norm": "joey bart",
+        "player_on_il": true,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Anthony Solometo",
+        "player_norm": "anthony solometo",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Oddanier Mosqueda",
+        "player_norm": "oddanier mosqueda",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Mike Clevinger",
+        "player_norm": "mike clevinger",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Sean Sullivan",
+        "player_norm": "sean sullivan",
+        "player_on_il": false,
+        "team": "PIT"
+      },
+      {
+        "injury_date": "2026-06-08T22:33:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Matt Waldron",
+        "player_norm": "matt waldron",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-08T21:30:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Miguel Andujar",
+        "player_norm": "miguel andujar",
+        "player_on_il": false,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-08T18:15:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Joe Musgrove",
+        "player_norm": "joe musgrove",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-08T17:57:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "German Marquez",
+        "player_norm": "german marquez",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-08T17:33:00+00:00",
+        "injury_status": "7-Day IL",
+        "injury_type": "IL7",
+        "injury_type_desc": "7-day IL",
+        "player_name": "Jake Cronenworth",
+        "player_norm": "jake cronenworth",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-05T23:55:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ramon Laureano",
+        "player_norm": "ramon laureano",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-05T23:40:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jeremiah Estrada",
+        "player_norm": "jeremiah estrada",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-02T21:44:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Nick Pivetta",
+        "player_norm": "nick pivetta",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-05-31T05:21:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Luis Campusano",
+        "player_norm": "luis campusano",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-05-12T13:49:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Yu Darvish",
+        "player_norm": "yu darvish",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Blake Hunt",
+        "player_norm": "blake hunt",
+        "player_on_il": false,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Bryan Hoeing",
+        "player_norm": "bryan hoeing",
+        "player_on_il": true,
+        "team": "SD"
+      },
+      {
+        "injury_date": "2026-06-08T23:21:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jason Foley",
+        "player_norm": "jason foley",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-06-03T20:08:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Matt Gage",
+        "player_norm": "matt gage",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-06-01T22:11:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Heliot Ramos",
+        "player_norm": "heliot ramos",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-06-01T21:16:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Joel Peguero",
+        "player_norm": "joel peguero",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-31T17:13:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jared Oliva",
+        "player_norm": "jared oliva",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-30T22:37:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Harrison Bader",
+        "player_norm": "harrison bader",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-29T22:32:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Tyler Mahle",
+        "player_norm": "tyler mahle",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-20T13:59:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Reiver Sanmartin",
+        "player_norm": "reiver sanmartin",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Rowan Wick",
+        "player_norm": "rowan wick",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Hayden Birdsong",
+        "player_norm": "hayden birdsong",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Randy Rodriguez",
+        "player_norm": "randy rodriguez",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jose Butto",
+        "player_norm": "jose butto",
+        "player_on_il": true,
+        "team": "SF"
+      },
+      {
+        "injury_date": "2026-06-08T21:58:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Colt Emerson",
+        "player_norm": "colt emerson",
+        "player_on_il": false,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-06-08T19:43:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "J.P. Crawford",
+        "player_norm": "j p crawford",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-06-03T19:01:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Cal Raleigh",
+        "player_norm": "cal raleigh",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-05-26T14:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Miles Mastrobuoni",
+        "player_norm": "miles mastrobuoni",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-05-18T18:04:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Brendan Donovan",
+        "player_norm": "brendan donovan",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Logan Evans",
+        "player_norm": "logan evans",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Carlos Vargas",
+        "player_norm": "carlos vargas",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Will Wilson",
+        "player_norm": "will wilson",
+        "player_on_il": true,
+        "team": "SEA"
+      },
+      {
+        "injury_date": "2026-06-08T13:16:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Nathan Church",
+        "player_norm": "nathan church",
+        "player_on_il": true,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-06-06T16:53:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Ramon Urias",
+        "player_norm": "ramon urias",
+        "player_on_il": true,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-06-05T20:17:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Ryan Fernandez",
+        "player_norm": "ryan fernandez",
+        "player_on_il": true,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-05-14T19:56:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Packy Naughton",
+        "player_norm": "packy naughton",
+        "player_on_il": false,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Sem Robberse",
+        "player_norm": "sem robberse",
+        "player_on_il": false,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Victor Santos",
+        "player_norm": "victor santos",
+        "player_on_il": false,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Ixan Henderson",
+        "player_norm": "ixan henderson",
+        "player_on_il": false,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Zack Thompson",
+        "player_norm": "zack thompson",
+        "player_on_il": false,
+        "team": "STL"
+      },
+      {
+        "injury_date": "2026-06-08T20:31:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Gavin Lux",
+        "player_norm": "gavin lux",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-06-08T20:19:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Craig Kimbrel",
+        "player_norm": "craig kimbrel",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-06-08T20:15:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jonny DeLuca",
+        "player_norm": "jonny deluca",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-06-08T18:54:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Chandler Simpson",
+        "player_norm": "chandler simpson",
+        "player_on_il": false,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-06-08T18:24:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jonathan Heasley",
+        "player_norm": "jonathan heasley",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-30T04:14:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Manuel Rodriguez",
+        "player_norm": "manuel rodriguez",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-30T04:03:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Steven Wilson",
+        "player_norm": "steven wilson",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-29T20:14:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Edwin Uceta",
+        "player_norm": "edwin uceta",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-28T03:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Michael Grove",
+        "player_norm": "michael grove",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-27T13:39:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jesse Scholtens",
+        "player_norm": "jesse scholtens",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-18T21:05:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Jake Fraley",
+        "player_norm": "jake fraley",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Austin Vernon",
+        "player_norm": "austin vernon",
+        "player_on_il": false,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ryan Pepiot",
+        "player_norm": "ryan pepiot",
+        "player_on_il": true,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Alfredo Zarraga",
+        "player_norm": "alfredo zarraga",
+        "player_on_il": false,
+        "team": "TB"
+      },
+      {
+        "injury_date": "2026-06-06T21:04:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Josh Smith",
+        "player_norm": "josh smith",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-06T21:01:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Danny Jansen",
+        "player_norm": "danny jansen",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-05T20:22:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Cole Winn",
+        "player_norm": "cole winn",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-04T12:56:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jordan Montgomery",
+        "player_norm": "jordan montgomery",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-01T22:22:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Chris Martin",
+        "player_norm": "chris martin",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-01T22:21:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Robert Garcia",
+        "player_norm": "robert garcia",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-05-23T18:16:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Carter Baumler",
+        "player_norm": "carter baumler",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-05-10T14:22:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Cody Bradford",
+        "player_norm": "cody bradford",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Declan Cronin",
+        "player_norm": "declan cronin",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Out",
+        "injury_type": "O",
+        "injury_type_desc": "out",
+        "player_name": "Nabil Crismatt",
+        "player_norm": "nabil crismatt",
+        "player_on_il": true,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-04-07T23:15:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Sebastian Walcott",
+        "player_norm": "sebastian walcott",
+        "player_on_il": false,
+        "team": "TEX"
+      },
+      {
+        "injury_date": "2026-06-09T14:30:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Shane Bieber",
+        "player_norm": "shane bieber",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-08T20:58:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Addison Barger",
+        "player_norm": "addison barger",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-08T20:41:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Alejandro Kirk",
+        "player_norm": "alejandro kirk",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-08T20:34:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Dylan Cease",
+        "player_norm": "dylan cease",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-08T19:30:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Daulton Varsho",
+        "player_norm": "daulton varsho",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-07T17:42:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Max Scherzer",
+        "player_norm": "max scherzer",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-04T21:22:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Yimi Garcia",
+        "player_norm": "yimi garcia",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-04T02:23:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Joe Mantiply",
+        "player_norm": "joe mantiply",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-03T13:45:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Lazaro Estrada",
+        "player_norm": "lazaro estrada",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-28T18:52:00+00:00",
+        "injury_status": "10-Day-IL",
+        "injury_type": "IL10",
+        "injury_type_desc": "10-day IL",
+        "player_name": "Lenyn Sosa",
+        "player_norm": "lenyn sosa",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-27T17:29:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Jose Berrios",
+        "player_norm": "jose berrios",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-11T12:59:00+00:00",
+        "injury_status": "developmental list",
+        "injury_type": "DEVLIST",
+        "injury_type_desc": "Developmental List",
+        "player_name": "Fernando Perez",
+        "player_norm": "fernando perez",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Geovanny Jesus Planchart",
+        "player_norm": "geovanny jesus planchart",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Chay Yeager",
+        "player_norm": "chay yeager",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Anthony Santander",
+        "player_norm": "anthony santander",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "CJ Stubbs",
+        "player_norm": "cj stubbs",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Javen Coleman",
+        "player_norm": "javen coleman",
+        "player_on_il": false,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Cody Ponce",
+        "player_norm": "cody ponce",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Bowden Francis",
+        "player_norm": "bowden francis",
+        "player_on_il": true,
+        "team": "TOR"
+      },
+      {
+        "injury_date": "2026-06-05T16:51:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "DJ Herz",
+        "player_norm": "dj herz",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-06-05T14:14:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Trevor Williams",
+        "player_norm": "trevor williams",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-06-01T20:24:00+00:00",
+        "injury_status": "15-Day-IL",
+        "injury_type": "IL15",
+        "injury_type_desc": "15-day IL",
+        "player_name": "Jake Irvin",
+        "player_norm": "jake irvin",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-25T21:31:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Max Kranick",
+        "player_norm": "max kranick",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-25T13:47:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Tyler Stuart",
+        "player_norm": "tyler stuart",
+        "player_on_il": false,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Josiah Gray",
+        "player_norm": "josiah gray",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Tyler Baum",
+        "player_norm": "tyler baum",
+        "player_on_il": false,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "60-Day-IL",
+        "injury_type": "IL60",
+        "injury_type_desc": "60-day IL",
+        "player_name": "Ken Waldichuk",
+        "player_norm": "ken waldichuk",
+        "player_on_il": true,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Travis Sykora",
+        "player_norm": "travis sykora",
+        "player_on_il": false,
+        "team": "WSH"
+      },
+      {
+        "injury_date": "2026-05-08T11:02:00+00:00",
+        "injury_status": "Day-To-Day",
+        "injury_type": "DD",
+        "injury_type_desc": "day-to-day",
+        "player_name": "Jarlin Susana",
+        "player_norm": "jarlin susana",
+        "player_on_il": false,
+        "team": "WSH"
+      }
+    ]
+  }
+}

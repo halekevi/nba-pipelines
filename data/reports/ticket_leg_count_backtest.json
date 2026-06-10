@@ -1,78 +1,378 @@
 {
-  "generated_at_utc": "2026-06-09T23:29:18.070743Z",
+  "generated_at_utc": "2026-06-10T00:52:37.468181Z",
   "date_range": {
-    "from": "2026-06-03",
-    "to": "2026-06-08",
-    "n_dates_attempted": 6
+    "from": "2026-05-05",
+    "to": "2026-06-09",
+    "n_dates_attempted": 36
   },
   "summary_by_bucket": {
     "main_2_4": {
-      "n_tickets": 43,
-      "win_rate": 0.186,
-      "wins": 8,
-      "losses": 35
+      "n_tickets": 1824,
+      "win_rate": 0.1606,
+      "wins": 293,
+      "losses": 1531
     },
     "long_5_6": {
-      "n_tickets": 197,
-      "win_rate": 0.2437,
-      "wins": 48,
-      "losses": 149
+      "n_tickets": 4178,
+      "win_rate": 0.0546,
+      "wins": 228,
+      "losses": 3950
     },
     "all": {
-      "n_tickets": 240,
-      "win_rate": 0.2333,
-      "wins": 56,
-      "losses": 184
+      "n_tickets": 6002,
+      "win_rate": 0.0868,
+      "wins": 521,
+      "losses": 5481
     }
   },
   "by_n_legs": {
     "2": {
-      "n_tickets": 25,
-      "win_rate": 0.24
+      "n_tickets": 908,
+      "win_rate": 0.2346
     },
     "3": {
-      "n_tickets": 11,
-      "win_rate": 0.1818
+      "n_tickets": 562,
+      "win_rate": 0.1174
     },
     "4": {
-      "n_tickets": 7,
-      "win_rate": 0.0
+      "n_tickets": 354,
+      "win_rate": 0.0395
     },
     "5": {
-      "n_tickets": 101,
-      "win_rate": 0.2475
+      "n_tickets": 2041,
+      "win_rate": 0.0686
     },
     "6": {
-      "n_tickets": 85,
-      "win_rate": 0.2118
+      "n_tickets": 1699,
+      "win_rate": 0.0471
     },
     "10": {
-      "n_tickets": 5,
-      "win_rate": 0.4
+      "n_tickets": 146,
+      "win_rate": 0.0274
     },
     "12": {
+      "n_tickets": 146,
+      "win_rate": 0.0205
+    },
+    "15": {
+      "n_tickets": 56,
+      "win_rate": 0.0
+    },
+    "18": {
+      "n_tickets": 41,
+      "win_rate": 0.0244
+    },
+    "20": {
+      "n_tickets": 4,
+      "win_rate": 0.0
+    },
+    "24": {
+      "n_tickets": 3,
+      "win_rate": 0.0
+    },
+    "25": {
+      "n_tickets": 2,
+      "win_rate": 0.0
+    },
+    "30": {
+      "n_tickets": 14,
+      "win_rate": 0.0
+    },
+    "35": {
+      "n_tickets": 11,
+      "win_rate": 0.0
+    },
+    "36": {
       "n_tickets": 6,
-      "win_rate": 0.5
+      "win_rate": 0.0
+    },
+    "42": {
+      "n_tickets": 9,
+      "win_rate": 0.0
     }
   },
   "per_date": [
     {
+      "date": "2026-05-05",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 217,
+      "win_rate": 0.3272
+    },
+    {
+      "date": "2026-05-05",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 138,
+      "win_rate": 0.0797
+    },
+    {
+      "date": "2026-05-06",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 214,
+      "win_rate": 0.0888
+    },
+    {
+      "date": "2026-05-06",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 153,
+      "win_rate": 0.0196
+    },
+    {
+      "date": "2026-05-07",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 36,
+      "win_rate": 0.1389
+    },
+    {
+      "date": "2026-05-07",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 65,
+      "win_rate": 0.0615
+    },
+    {
+      "date": "2026-05-08",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 87,
+      "win_rate": 0.046
+    },
+    {
+      "date": "2026-05-08",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 160,
+      "win_rate": 0.0375
+    },
+    {
+      "date": "2026-05-09",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 130,
+      "win_rate": 0.3692
+    },
+    {
+      "date": "2026-05-09",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 329,
+      "win_rate": 0.1064
+    },
+    {
+      "date": "2026-05-10",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 178,
+      "win_rate": 0.191
+    },
+    {
+      "date": "2026-05-10",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 357,
+      "win_rate": 0.0532
+    },
+    {
+      "date": "2026-05-11",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 193,
+      "win_rate": 0.0415
+    },
+    {
+      "date": "2026-05-11",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 316,
+      "win_rate": 0.0095
+    },
+    {
+      "date": "2026-05-12",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 64,
+      "win_rate": 0.125
+    },
+    {
+      "date": "2026-05-12",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 92,
+      "win_rate": 0.0435
+    },
+    {
+      "date": "2026-05-13",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 47,
+      "win_rate": 0.1915
+    },
+    {
+      "date": "2026-05-13",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 104,
+      "win_rate": 0.1154
+    },
+    {
+      "date": "2026-05-14",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 5,
+      "win_rate": 0.2
+    },
+    {
+      "date": "2026-05-14",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 10,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-15",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 6,
+      "win_rate": 0.8333
+    },
+    {
+      "date": "2026-05-15",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 33,
+      "win_rate": 0.0606
+    },
+    {
+      "date": "2026-05-16",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 6,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-16",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 28,
+      "win_rate": 0.0357
+    },
+    {
+      "date": "2026-05-18",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 99,
+      "win_rate": 0.1818
+    },
+    {
+      "date": "2026-05-18",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 275,
+      "win_rate": 0.1636
+    },
+    {
+      "date": "2026-05-19",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 7,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-19",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 5,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-24",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 55,
+      "win_rate": 0.2182
+    },
+    {
+      "date": "2026-05-24",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 295,
+      "win_rate": 0.0136
+    },
+    {
+      "date": "2026-05-27",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 12,
+      "win_rate": 0.0833
+    },
+    {
+      "date": "2026-05-27",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 4,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-28",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 343,
+      "win_rate": 0.1108
+    },
+    {
+      "date": "2026-05-28",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 1076,
+      "win_rate": 0.0177
+    },
+    {
+      "date": "2026-05-29",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 4,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-29",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 2,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-30",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 12,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-30",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 383,
+      "win_rate": 0.0313
+    },
+    {
+      "date": "2026-05-31",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 3,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-05-31",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 2,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-06-01",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 4,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-06-01",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 1,
+      "win_rate": 0.0
+    },
+    {
+      "date": "2026-06-02",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 24,
+      "win_rate": 0.1667
+    },
+    {
+      "date": "2026-06-02",
+      "leg_bucket": "long_5_6",
+      "n_tickets": 12,
+      "win_rate": 0.0
+    },
+    {
       "date": "2026-06-03",
       "leg_bucket": "main_2_4",
-      "n_tickets": 2,
+      "n_tickets": 32,
       "win_rate": 0.0
     },
     {
       "date": "2026-06-03",
       "leg_bucket": "long_5_6",
-      "n_tickets": 106,
-      "win_rate": 0.2642
+      "n_tickets": 176,
+      "win_rate": 0.1591
     },
     {
       "date": "2026-06-04",
       "leg_bucket": "main_2_4",
-      "n_tickets": 41,
-      "win_rate": 0.1951
+      "n_tickets": 43,
+      "win_rate": 0.186
     },
     {
       "date": "2026-06-04",
@@ -87,13 +387,173 @@
       "win_rate": 0.8636
     },
     {
+      "date": "2026-06-06",
+      "leg_bucket": "main_2_4",
+      "n_tickets": 3,
+      "win_rate": 0.0
+    },
+    {
       "date": "2026-06-08",
       "leg_bucket": "long_5_6",
-      "n_tickets": 30,
+      "n_tickets": 101,
       "win_rate": 0.0
     }
   ],
   "slates": [
+    {
+      "date": "2026-05-05",
+      "ticket_source": "combined_slate_tickets_2026-05-05.json",
+      "all": 2327,
+      "main_2_4": 429,
+      "long_5_6": 1898
+    },
+    {
+      "date": "2026-05-06",
+      "ticket_source": "combined_slate_tickets_2026-05-06.json",
+      "all": 2577,
+      "main_2_4": 717,
+      "long_5_6": 1860
+    },
+    {
+      "date": "2026-05-07",
+      "ticket_source": "combined_slate_tickets_2026-05-07.json",
+      "all": 1011,
+      "main_2_4": 233,
+      "long_5_6": 778
+    },
+    {
+      "date": "2026-05-08",
+      "ticket_source": "combined_slate_tickets_2026-05-08.json",
+      "all": 1034,
+      "main_2_4": 350,
+      "long_5_6": 684
+    },
+    {
+      "date": "2026-05-09",
+      "ticket_source": "combined_slate_tickets_2026-05-09.json",
+      "all": 1220,
+      "main_2_4": 331,
+      "long_5_6": 889
+    },
+    {
+      "date": "2026-05-10",
+      "ticket_source": "combined_slate_tickets_2026-05-10.json",
+      "all": 1960,
+      "main_2_4": 691,
+      "long_5_6": 1269
+    },
+    {
+      "date": "2026-05-11",
+      "ticket_source": "combined_slate_tickets_2026-05-11.json",
+      "all": 2063,
+      "main_2_4": 438,
+      "long_5_6": 1625
+    },
+    {
+      "date": "2026-05-12",
+      "ticket_source": "combined_slate_tickets_2026-05-12.json",
+      "all": 676,
+      "main_2_4": 211,
+      "long_5_6": 465
+    },
+    {
+      "date": "2026-05-13",
+      "ticket_source": "combined_slate_tickets_2026-05-13.json",
+      "all": 654,
+      "main_2_4": 219,
+      "long_5_6": 435
+    },
+    {
+      "date": "2026-05-14",
+      "ticket_source": "combined_slate_tickets_2026-05-14.json",
+      "all": 449,
+      "main_2_4": 110,
+      "long_5_6": 339
+    },
+    {
+      "date": "2026-05-15",
+      "ticket_source": "combined_slate_tickets_2026-05-15.json",
+      "all": 302,
+      "main_2_4": 64,
+      "long_5_6": 238
+    },
+    {
+      "date": "2026-05-16",
+      "ticket_source": "combined_slate_tickets_2026-05-16.json",
+      "all": 339,
+      "main_2_4": 110,
+      "long_5_6": 229
+    },
+    {
+      "date": "2026-05-18",
+      "ticket_source": "combined_slate_tickets_2026-05-18.json",
+      "all": 6452,
+      "main_2_4": 1944,
+      "long_5_6": 4508
+    },
+    {
+      "date": "2026-05-19",
+      "ticket_source": "combined_slate_tickets_2026-05-19.json",
+      "all": 289,
+      "main_2_4": 144,
+      "long_5_6": 145
+    },
+    {
+      "date": "2026-05-24",
+      "ticket_source": "combined_slate_tickets_2026-05-24.json",
+      "all": 1520,
+      "main_2_4": 762,
+      "long_5_6": 758
+    },
+    {
+      "date": "2026-05-27",
+      "ticket_source": "combined_slate_tickets_2026-05-27.json",
+      "all": 5483,
+      "main_2_4": 2059,
+      "long_5_6": 3424
+    },
+    {
+      "date": "2026-05-28",
+      "ticket_source": "combined_slate_tickets_2026-05-28.json",
+      "all": 4173,
+      "main_2_4": 1455,
+      "long_5_6": 2718
+    },
+    {
+      "date": "2026-05-29",
+      "ticket_source": "combined_slate_tickets_2026-05-29.json",
+      "all": 2918,
+      "main_2_4": 853,
+      "long_5_6": 2065
+    },
+    {
+      "date": "2026-05-30",
+      "ticket_source": "combined_slate_tickets_2026-05-30.json",
+      "all": 2242,
+      "main_2_4": 493,
+      "long_5_6": 1749
+    },
+    {
+      "date": "2026-05-31",
+      "ticket_source": "combined_slate_tickets_2026-05-31.json",
+      "all": 2567,
+      "main_2_4": 593,
+      "long_5_6": 1974
+    },
+    {
+      "date": "2026-06-01",
+      "ticket_source": "combined_slate_tickets_2026-06-01.json",
+      "all": 2115,
+      "main_2_4": 709,
+      "long_5_6": 1406
+    },
+    {
+      "date": "2026-06-02",
+      "ticket_source": "combined_slate_tickets_2026-06-02.json",
+      "all": 511,
+      "main_2_4": 272,
+      "long_5_6": 239
+    },
     {
       "date": "2026-06-03",
       "ticket_source": "combined_slate_tickets_2026-06-03.json",

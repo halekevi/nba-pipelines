@@ -1556,6 +1556,7 @@
   },
   {
     "date": "2026-06-08",
+    "track": "graded_main",
     "n_tickets": 89,
     "wins": 20,
     "guarantees": 0,

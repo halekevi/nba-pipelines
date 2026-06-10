@@ -1,0 +1,47 @@
+{
+  "final_url": "https://www.naturalstattrick.com/linestats.php?fromseason=20252026&thruseason=20252026&stype=3&sit=5v5&score=all&rate=n&team=CAR&vteam=ALL&view=wowy&loc=B&gpfilt=none&fd=2026-04-18&td=2026-06-04&tgp=2000&strict=incl",
+  "has_table": false,
+  "datatable_rows": 0,
+  "requests": [
+    {
+      "method": "GET",
+      "url": "https://www.naturalstattrick.com/linestats.php",
+      "post_data": null
+    },
+    {
+      "method": "GET",
+      "url": "https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&output=html&h=280&slotname=8680455719&adk=2936548383&adf=1140641187&pi=t.ma~as.8680455719&w=970&fwrn=4&fwrnh=100&lmt=1780533901&rafmt=1&format=970x280&url=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php&fwr=0&rh=90&rpe=1&resp_fmts=3&asro=0&aiactd=0&aicctd=0&ailctd=0&aimartd=4&aieuf=1&aicrs=1&uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&abgtt=1&dt=1780533901666&bpp=6&bdt=217&idt=53&shv=r20260601&mjsv=m202605280101&ptt=9&saldr=aa&abxe=1&cookie_enabled=1&eoidce=1&correlator=5755414992250&frm=20&pv=2&u_tz=-240&u_his=2&u_h=1440&u_w=2560&u_ah=1392&u_aw=2560&u_cd=32&u_sd=1&dmc=32&adx=132&ady=240&biw=1234&bih=1277&scr_x=0&scr_y=0&eid=95390668%2C95392417&oid=2&pvsid=1320716670541989&tmod=1024280797&uas=0&nvt=1&fc=896&brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&vis=1&rsz=o%7Com%7CpeE%7Cp&abl=XS&pfx=0&fu=128&bc=31&bz=1.01&ifi=1&uci=a!1&fsb=1&dtd=103",
+      "post_data": null
+    },
+    {
+      "method": "GET",
+      "url": "https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&output=html&adk=1812271804&adf=3025194257&lmt=1780533901&plat=9%3A32768%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1081344%2C32%3A32%2C41%3A32%2C42%3A32%2C43%3A32%2C44%3A32&format=0x0&url=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php&pra=7&asro=0&aiactd=0&aicctd=0&ailctd=0&aimartd=4&aieuf=1&aicrs=1&uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&abgtt=1&dt=1780533901682&bpp=3&bdt=232&idt=100&shv=r20260601&mjsv=m202605280101&ptt=9&saldr=aa&abxe=1&cookie_enabled=1&eoidce=1&prev_fmts=970x280&nras=1&correlator=5755414992250&frm=20&pv=1&u_tz=-240&u_his=2&u_h=1440&u_w=2560&u_ah=1392&u_aw=2560&u_cd=32&u_sd=1&dmc=32&adx=-12245933&ady=-12245933&biw=1234&bih=1277&scr_x=0&scr_y=0&eid=95390668%2C95392417&oid=2&pvsid=1320716670541989&tmod=1024280797&uas=0&nvt=1&fsapi=1&fc=896&brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&vis=1&rsz=%7C%7Cs%7C&abl=NS&fu=32768&bc=31&plas=395x576_l%7C395x576_r&bz=1.01&ifi=2&uci=a!2&fsb=1&dtd=120",
+      "post_data": null
+    },
+    {
+      "method": "POST",
+      "url": "https://www.google-analytics.com/j/collect?v=1&_v=j102&a=1002752889&t=pageview&_s=1&dl=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php&ul=en-us&dt=Line%20Stats%20-%20Natural%20Stat%20Trick&sr=2560x1440&vp=1234x1277&_u=ACCAgEABAAAAACAAI~&jid=&gjid=&cid=1378864186.1779891161&tid=UA-55321726-1&_gid=531486797.1780523107&_slc=1&z=1677452182",
+      "post_data": null
+    },
+    {
+      "method": "GET",
+      "url": "https://www.naturalstattrick.com/linestats.php?fromseason=20252026&thruseason=20252026&stype=3&sit=5v5&score=all&rate=n&team=CAR&vteam=ALL&view=wowy&loc=B&gpfilt=none&fd=2026-04-18&td=2026-06-04&tgp=2000&strict=incl",
+      "post_data": null
+    },
+    {
+      "method": "GET",
+      "url": "https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&output=html&h=280&slotname=8680455719&adk=2936548383&adf=1140641187&pi=t.ma~as.8680455719&w=970&fwrn=4&fwrnh=100&lmt=1780533905&rafmt=1&format=970x280&url=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php%3Ffromseason%3D20252026%26thruseason%3D20252026%26stype%3D3%26sit%3D5v5%26score%3Dall%26rate%3Dn%26team%3DCAR%26vteam%3DALL%26view%3Dwowy%26loc%3DB%26gpfilt%3Dnone%26fd%3D2026-04-18%26td%3D2026-06-04%26tgp%3D2000%26strict%3Dincl&fwr=0&rh=90&rpe=1&resp_fmts=3&asro=0&aiactd=0&aicctd=0&ailctd=0&aimartd=4&aieuf=1&aicrs=1&uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&abgtt=1&dt=1780533905863&bpp=2&bdt=42&idt=10&shv=r20260601&mjsv=m202605280101&ptt=9&saldr=aa&abxe=1&cookie_enabled=1&eoidce=1&correlator=4965695701720&frm=20&pv=2&u_tz=-240&u_his=3&u_h=1440&u_w=2560&u_ah=1392&u_aw=2560&u_cd=32&u_sd=1&dmc=32&adx=132&ady=240&biw=1234&bih=1277&scr_x=0&scr_y=0&eid=95390667&oid=2&pvsid=4672593892889368&tmod=1024280797&uas=1&nvt=1&ref=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php&fc=896&brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&vis=1&rsz=o%7Com%7CpeE%7Cp&abl=XS&pfx=0&fu=128&bc=31&bz=1.01&ifi=1&uci=a!1&fsb=1&dtd=22",
+      "post_data": null
+    },
+    {
+      "method": "GET",
+      "url": "https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&output=html&adk=1812271804&adf=3025194257&lmt=1780533905&plat=9%3A32768%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1081344%2C32%3A32%2C41%3A32%2C42%3A32%2C43%3A32%2C44%3A32&format=0x0&url=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php%3Ffromseason%3D20252026%26thruseason%3D20252026%26stype%3D3%26sit%3D5v5%26score%3Dall%26rate%3Dn%26team%3DCAR%26vteam%3DALL%26view%3Dwowy%26loc%3DB%26gpfilt%3Dnone%26fd%3D2026-04-18%26td%3D2026-06-04%26tgp%3D2000%26strict%3Dincl&pra=7&asro=0&aiactd=0&aicctd=0&ailctd=0&aimartd=4&aieuf=1&aicrs=1&uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&abgtt=1&dt=1780533905865&bpp=3&bdt=44&idt=33&shv=r20260601&mjsv=m202605280101&ptt=9&saldr=aa&abxe=1&cookie_enabled=1&eoidce=1&prev_fmts=970x280&nras=1&correlator=4965695701720&frm=20&pv=1&u_tz=-240&u_his=3&u_h=1440&u_w=2560&u_ah=1392&u_aw=2560&u_cd=32&u_sd=1&dmc=32&adx=-12245933&ady=-12245933&biw=1234&bih=1277&scr_x=0&scr_y=0&eid=95390667&oid=2&pvsid=4672593892889368&tmod=1024280797&uas=1&nvt=1&fsapi=1&ref=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php&fc=896&brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&vis=1&rsz=%7C%7Cs%7C&abl=NS&fu=32768&bc=31&plas=395x576_l%7C395x576_r&bz=1.01&ifi=2&uci=a!2&fsb=1&dtd=50",
+      "post_data": null
+    },
+    {
+      "method": "POST",
+      "url": "https://www.google-analytics.com/j/collect?v=1&_v=j102&a=1734234112&t=pageview&_s=1&dl=https%3A%2F%2Fwww.naturalstattrick.com%2Flinestats.php%3Ffromseason%3D20252026%26thruseason%3D20252026%26stype%3D3%26sit%3D5v5%26score%3Dall%26rate%3Dn%26team%3DCAR%26vteam%3DALL%26view%3Dwowy%26loc%3DB%26gpfilt%3Dnone%26fd%3D2026-04-18%26td%3D2026-06-04%26tgp%3D2000%26strict%3Dincl&ul=en-us&dt=Line%20Stats%20-%20Natural%20Stat%20Trick&sr=2560x1440&vp=1234x1277&_u=ACCAgEABAAAAACAAI~&jid=&gjid=&cid=1378864186.1779891161&tid=UA-55321726-1&_gid=531486797.1780523107&_slc=1&z=1517559415",
+      "post_data": null
+    }
+  ]
+}

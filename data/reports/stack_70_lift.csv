@@ -1,0 +1,13 @@
+﻿scope,layer,hit_rate,n,lift_vs_prev
+ALL,baseline,0.5789,136768,
+ALL,hit_rate_70,0.6892,296,0.1103
+ALL,l5_side_4,0.6881,295,-0.0011
+ALL,matchup_aligned,,0,
+ALL,consistency_sab,,0,
+ALL,full_stack,,0,
+NBA,baseline,0.5789,136768,
+NBA,hit_rate_70,0.6892,296,0.1103
+NBA,l5_side_4,0.6881,295,-0.0011
+NBA,matchup_aligned,,0,
+NBA,consistency_sab,,0,
+NBA,full_stack,,0,

@@ -1,0 +1,272 @@
+{
+  "slate_date": "2026-06-01",
+  "snapshotted_at": "2026-06-01T23:56:17.051518Z",
+  "limit_per_sport": 8,
+  "featured_count": 16,
+  "featured": [
+    {
+      "player": "NaLyssa Smith",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.931,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 5.5,
+      "slate_pick_type": "Goblin",
+      "team": "LVA",
+      "opp": "LAS"
+    },
+    {
+      "player": "Christian Yelich",
+      "sport": "MLB",
+      "tier": "medium",
+      "hit_rate": 0.7692,
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 8,
+        "hit_rate": 1.0
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "MIL",
+      "opp": "SF"
+    },
+    {
+      "player": "Jessica Shepard",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.7632,
+      "display_prop": {
+        "prop_type": "Fantasy Score",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "slate_line": 33.5,
+      "slate_pick_type": "Standard",
+      "team": "DAL",
+      "opp": "SEA"
+    },
+    {
+      "player": "Jordin Canada",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.75,
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "slate_line": 6.5,
+      "slate_pick_type": "Standard",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "A'ja Wilson",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.6364,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 7.5,
+      "slate_pick_type": "Goblin",
+      "team": "LVA",
+      "opp": "LAS"
+    },
+    {
+      "player": "Angel Reese",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6316,
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "Kamilla Cardoso",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.617,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 8,
+        "hit_rate": 1.0
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Goblin",
+      "team": "CHI",
+      "opp": "WAS"
+    },
+    {
+      "player": "Dearica Hamby",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6049,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 13,
+        "hit_rate": 0.6923
+      },
+      "slate_line": 14.5,
+      "slate_pick_type": "Goblin",
+      "team": "LAS",
+      "opp": "LVA"
+    },
+    {
+      "player": "Ketel Marte",
+      "sport": "MLB",
+      "tier": "high",
+      "hit_rate": 0.5736,
+      "display_prop": {
+        "prop_type": "Hits",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 22,
+        "hit_rate": 0.7727
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "AZ",
+      "opp": "LAD"
+    },
+    {
+      "player": "Cade Cavalli",
+      "sport": "MLB",
+      "tier": "medium",
+      "hit_rate": 0.5714,
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 18,
+        "hit_rate": 0.9444
+      },
+      "slate_line": 5.0,
+      "slate_pick_type": "Standard",
+      "team": "WSH",
+      "opp": "MIA"
+    },
+    {
+      "player": "Rhyne Howard",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5714,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 2.5,
+      "slate_pick_type": "Goblin",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "Nathaniel Lowe",
+      "sport": "MLB",
+      "tier": "high",
+      "hit_rate": 0.5522,
+      "display_prop": {
+        "prop_type": "Runs",
+        "direction": "OVER",
+        "hits": 6,
+        "total": 7,
+        "hit_rate": 0.8571
+      }
+    },
+    {
+      "player": "Michael McGreevy",
+      "sport": "MLB",
+      "tier": "medium",
+      "hit_rate": 0.5357,
+      "display_prop": {
+        "prop_type": "Pitcher Strikeouts",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 10,
+        "hit_rate": 0.5
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "STL",
+      "opp": "TEX"
+    },
+    {
+      "player": "Jake Burger",
+      "sport": "MLB",
+      "tier": "high",
+      "hit_rate": 0.4615,
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 28,
+        "hit_rate": 0.5
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "TEX",
+      "opp": "STL"
+    },
+    {
+      "player": "Colt Keith",
+      "sport": "MLB",
+      "tier": "medium",
+      "hit_rate": 0.4565,
+      "display_prop": {
+        "prop_type": "Runs",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      }
+    },
+    {
+      "player": "Juan Soto",
+      "sport": "MLB",
+      "tier": "high",
+      "hit_rate": 0.4406,
+      "display_prop": {
+        "prop_type": "Total Bases",
+        "direction": "OVER",
+        "hits": 25,
+        "total": 45,
+        "hit_rate": 0.5556
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "NYM",
+      "opp": "SEA"
+    }
+  ]
+}

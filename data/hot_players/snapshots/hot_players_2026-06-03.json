@@ -1,0 +1,280 @@
+{
+  "slate_date": "2026-06-03",
+  "snapshotted_at": "2026-06-03T11:27:07.476944Z",
+  "limit_per_sport": 8,
+  "featured_count": 16,
+  "featured": [
+    {
+      "player": "Stephon Castle",
+      "sport": "NBA1Q",
+      "tier": "high",
+      "hit_rate": 0.6964,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 24,
+        "total": 30,
+        "hit_rate": 0.8
+      },
+      "slate_line": 1.5,
+      "slate_pick_type": "Goblin",
+      "team": "SAS",
+      "opp": "OKC"
+    },
+    {
+      "player": "Kiki Rice",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6571,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 18,
+        "total": 21,
+        "hit_rate": 0.8571
+      },
+      "slate_line": 4.5,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "NYL"
+    },
+    {
+      "player": "Nyara Sabally",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.6327,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
+      "slate_line": 8.5,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "NYL"
+    },
+    {
+      "player": "Julian Champagnie",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.619,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 20,
+        "hit_rate": 0.8
+      },
+      "slate_line": 2.5,
+      "slate_pick_type": "Standard",
+      "team": "SAS",
+      "opp": "OKC"
+    },
+    {
+      "player": "Marina Mabrey",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5897,
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 15,
+        "hit_rate": 0.9333
+      },
+      "slate_line": 21.5,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "NYL"
+    },
+    {
+      "player": "Devin Vassell",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.5814,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 24,
+        "hit_rate": 0.625
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "SAS",
+      "opp": "OKC"
+    },
+    {
+      "player": "Isaiah Hartenstein",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.5625,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 16,
+        "hit_rate": 0.625
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "OKC",
+      "opp": "SAS"
+    },
+    {
+      "player": "Sabrina Ionescu",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.5106,
+      "display_prop": {
+        "prop_type": "Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "slate_line": 10.5,
+      "slate_pick_type": "Goblin",
+      "team": "NYL",
+      "opp": "TOR"
+    },
+    {
+      "player": "Shai Gilgeous-Alexander",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.5102,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "UNDER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "slate_line": 8.0,
+      "slate_pick_type": "Standard",
+      "team": "OKC",
+      "opp": "SAS"
+    },
+    {
+      "player": "Victor Wembanyama",
+      "sport": "NBA1Q",
+      "tier": "high",
+      "hit_rate": 0.4909,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 12,
+        "total": 26,
+        "hit_rate": 0.4615
+      },
+      "slate_line": 6.5,
+      "slate_pick_type": "Standard",
+      "team": "SAS",
+      "opp": "OKC"
+    },
+    {
+      "player": "Jonquel Jones",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4858,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 30,
+        "total": 48,
+        "hit_rate": 0.625
+      },
+      "slate_line": 8.0,
+      "slate_pick_type": "Standard",
+      "team": "NYL",
+      "opp": "TOR"
+    },
+    {
+      "player": "Flau'jae Johnson",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4759,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 30,
+        "hit_rate": 0.4333
+      },
+      "slate_line": 5.0,
+      "slate_pick_type": "Standard",
+      "team": "SEA",
+      "opp": "PHX"
+    },
+    {
+      "player": "Natasha Mack",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4558,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 40,
+        "hit_rate": 0.475
+      },
+      "slate_line": 6.5,
+      "slate_pick_type": "Goblin",
+      "team": "PHX",
+      "opp": "SEA"
+    },
+    {
+      "player": "Jalen Williams",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.44,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 13,
+        "hit_rate": 0.6154
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "OKC",
+      "opp": "SAS"
+    },
+    {
+      "player": "Keldon Johnson",
+      "sport": "NBA1Q",
+      "tier": "medium",
+      "hit_rate": 0.3929,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 6,
+        "hit_rate": 0.5
+      },
+      "slate_line": 0.5,
+      "slate_pick_type": "Goblin",
+      "team": "SAS",
+      "opp": "OKC"
+    },
+    {
+      "player": "Brittney Sykes",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.3606,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 27,
+        "hit_rate": 0.4815
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "NYL"
+    }
+  ]
+}

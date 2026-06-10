@@ -444,6 +444,11 @@ def prop_row_for_api(
     actual_value = _pick("Actual", "actual", "actual_value")
     margin = _pick("Margin", "margin")
     def_tier = _pick("Def Tier", "def_tier", "Defense Tier", "defense_tier", "Opp Def Tier", "opp_def_tier")
+    consistency_grade = _pick("Consistency Grade", "consistency_grade")
+    team_top3_rank = _pick("Top3 Rank", "team_top3_rank", "top3_rank")
+    team_bottom3_rank = _pick("Bottom3 Rank", "team_bottom3_rank", "bottom3_rank")
+    top3_weak_over = _pick("Top3 Weak Over", "top3_weak_overperformer")
+    top3_elite_fade = _pick("Top3 Elite Fade", "top3_elite_fader")
     h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
@@ -538,6 +543,11 @@ def prop_row_for_api(
         "actual_value": actual_value or "",
         "margin": margin or "",
         "def_tier": def_tier or "",
+        "consistency_grade": consistency_grade or "",
+        "team_top3_rank": team_top3_rank or "",
+        "team_bottom3_rank": team_bottom3_rank or "",
+        "top3_weak_overperformer": top3_weak_over or "",
+        "top3_elite_fader": top3_elite_fade or "",
         "h2h_bucket": h2h_bucket or "",
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",

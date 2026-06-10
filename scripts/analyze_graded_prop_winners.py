@@ -22,6 +22,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 from utils.graded_schema import normalize_graded_df, recover_direction_if_missing  # noqa: E402
+from utils.graded_enrichment import enrich_graded_for_analysis  # noqa: E402
 
 
 def _repo_root() -> Path:
@@ -155,12 +156,15 @@ def dedupe_graded_workbooks(paths: list[Path]) -> list[Path]:
     return sorted(best.values(), key=lambda x: str(x))
 
 
-def load_unified(roots: list[Path]) -> pd.DataFrame:
+def load_unified(roots: list[Path], *, sport: str | None = None) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     paths = dedupe_graded_workbooks(discover_graded_workbooks(roots))
+    sport_f = str(sport or "").strip().lower()
     for p in paths:
         sp = _sport_from_name(p.name)
         if not sp:
+            continue
+        if sport_f and sp != sport_f:
             continue
         try:
             xl = pd.ExcelFile(p)
@@ -182,7 +186,8 @@ def load_unified(roots: list[Path]) -> pd.DataFrame:
         frames.append(df)
     if not frames:
         return pd.DataFrame()
-    return pd.concat(frames, ignore_index=True)
+    out = pd.concat(frames, ignore_index=True)
+    return enrich_graded_for_analysis(out)
 
 
 def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
@@ -257,6 +262,30 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def is_demon_pick_type(series: pd.Series) -> pd.Series:
+    """True for Demon pick_type rows (case-insensitive)."""
+    return series.astype(str).str.strip().str.lower().eq("demon")
+
+
+def exclude_demons_from_rating(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop Demon legs from hit-rate / tier rating (kept in raw graded exports for data collection)."""
+    if df.empty or "pick_type" not in df.columns:
+        return df
+    return df.loc[~is_demon_pick_type(df["pick_type"])].copy()
+
+
+def exclude_non_rating_legs(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop Demon legs and invalid Goblin UNDER rows from hit-rate / tier rating."""
+    out = exclude_demons_from_rating(df)
+    try:
+        from utils.stack_70_eligible import exclude_invalid_market_sides_from_rating
+
+        out = exclude_invalid_market_sides_from_rating(out)
+    except ImportError:
+        pass
+    return out
+
+
 def agg_dimension(df: pd.DataFrame, sport: str, dim: str, min_n: int) -> pd.DataFrame:
     sub = df[df["_sport"] == sport]
     if sub.empty or dim not in sub.columns:
@@ -296,6 +325,25 @@ def run_report(roots: list[Path], min_n: int, top_k: int, out_dir: Path) -> None
         print("No graded rows found under:", ", ".join(str(r) for r in roots))
         return
 
+    demon_n = int(is_demon_pick_type(decided["pick_type"]).sum()) if "pick_type" in decided.columns else 0
+    goblin_under_n = 0
+    if "pick_type" in decided.columns and "direction" in decided.columns:
+        try:
+            from utils.stack_70_eligible import is_invalid_market_side
+
+            goblin_under_n = int(
+                decided.apply(
+                    lambda r: is_invalid_market_side(r["pick_type"], r["direction"]),
+                    axis=1,
+                ).sum()
+            )
+        except ImportError:
+            goblin_under_n = 0
+    decided = exclude_non_rating_legs(decided)
+    if decided.empty:
+        print("No rated rows after excluding Demon pick types and invalid Goblin UNDER legs.")
+        return
+
     sports = sorted(decided["_sport"].dropna().unique().tolist())
     dims = ["direction", "prop", "minutes_tier", "def_tier", "h2h_bucket", "role", "pick_type", "tier"]
 
@@ -303,7 +351,11 @@ def run_report(roots: list[Path], min_n: int, top_k: int, out_dir: Path) -> None
     all_top_props: list[pd.DataFrame] = []
 
     lines: list[str] = []
-    lines.append(f"Decided props (HIT/MISS only): n={len(decided)}")
+    lines.append(f"Decided props (HIT/MISS only, Demon + invalid Goblin UNDER excluded): n={len(decided)}")
+    if demon_n:
+        lines.append(f"  Demon rows excluded from rating: n={demon_n}")
+    if goblin_under_n:
+        lines.append(f"  Goblin UNDER rows excluded (not a valid market): n={goblin_under_n}")
     lines.append("Counts by sport:")
     for sp in sports:
         n = int((decided["_sport"] == sp).sum())

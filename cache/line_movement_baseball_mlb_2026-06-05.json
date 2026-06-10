@@ -1,0 +1,4046 @@
+{
+  "date": "2026-06-05",
+  "sport_key": "baseball_mlb",
+  "snapshot": {
+    "luis arraez|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 126,
+      "under_price": -168
+    },
+    "jung hoo lee|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 163,
+      "under_price": -220
+    },
+    "nico hoerner|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 165,
+      "under_price": -222
+    },
+    "rafael devers|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -269,
+      "under_price": 197
+    },
+    "alex bregman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -264,
+      "under_price": 194
+    },
+    "casey schmitt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -257,
+      "under_price": 189
+    },
+    "pete crow-armstrong|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -257,
+      "under_price": 189
+    },
+    "daniel susac|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -243,
+      "under_price": 179
+    },
+    "seiya suzuki|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -235,
+      "under_price": 174
+    },
+    "willy adames|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -231,
+      "under_price": 171
+    },
+    "carson kelly|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -223,
+      "under_price": 166
+    },
+    "ian happ|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -209,
+      "under_price": 155
+    },
+    "matt chapman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -205,
+      "under_price": 152
+    },
+    "bryce eldridge|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -196,
+      "under_price": 146
+    },
+    "michael busch|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -193,
+      "under_price": 144
+    },
+    "dansby swanson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -183,
+      "under_price": 137
+    },
+    "drew gilbert|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -174,
+      "under_price": 131
+    },
+    "kevin alcantara|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -145,
+      "under_price": 109
+    },
+    "robbie ray|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 107,
+      "under_price": -143
+    },
+    "robbie ray|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -152,
+      "under_price": 119
+    },
+    "edward cabrera|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 105,
+      "under_price": -134
+    },
+    "trea turner|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 178,
+      "under_price": -241
+    },
+    "chase meidroth|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -245,
+      "under_price": 181
+    },
+    "alec bohm|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -231,
+      "under_price": 171
+    },
+    "kyle schwarber|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -209,
+      "under_price": 156
+    },
+    "bryce harper|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -205,
+      "under_price": 153
+    },
+    "j t realmuto|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -198,
+      "under_price": 148
+    },
+    "miguel vargas|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -194,
+      "under_price": 145
+    },
+    "bryson stott|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -188,
+      "under_price": 141
+    },
+    "edgar quero|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -185,
+      "under_price": 138
+    },
+    "randal grichuk|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -179,
+      "under_price": 134
+    },
+    "brandon marsh|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -160,
+      "under_price": 120
+    },
+    "adolis garcia|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -155,
+      "under_price": 116
+    },
+    "sam antonacci|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -153,
+      "under_price": 115
+    },
+    "andrew benintendi|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -143,
+      "under_price": 108
+    },
+    "derek hill|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -128,
+      "under_price": -103
+    },
+    "edmundo sosa|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -127,
+      "under_price": -104
+    },
+    "luisangel acuna|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -122,
+      "under_price": -109
+    },
+    "jacob gonzalez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -117,
+      "under_price": -113
+    },
+    "kyle schwarber|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 102,
+      "under_price": -135
+    },
+    "trea turner|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 102,
+      "under_price": -136
+    },
+    "alec bohm|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -170
+    },
+    "bryce harper|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -170
+    },
+    "miguel vargas|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 136,
+      "under_price": -181
+    },
+    "chase meidroth|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -188
+    },
+    "jesus luzardo|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -140,
+      "under_price": 105
+    },
+    "anthony kay|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 104,
+      "under_price": -138
+    },
+    "jesus luzardo|pitcher_strikeouts|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -108,
+      "under_price": -118
+    },
+    "anthony kay|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 115,
+      "under_price": -147
+    },
+    "luisangel acuna|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "trea turner|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bryson stott|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "sam antonacci|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "chase meidroth|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brandon marsh|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "derek hill|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bryce harper|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "miguel vargas|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jacob gonzalez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "j t realmuto|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "adolis garcia|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "edmundo sosa|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kyle schwarber|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "andrew benintendi|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "edgar quero|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "alec bohm|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "anthony kay|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jesus luzardo|pitcher_earned_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julio rodriguez|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 156,
+      "under_price": -209
+    },
+    "randy arozarena|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 193,
+      "under_price": -262
+    },
+    "josh naylor|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -244,
+      "under_price": 180
+    },
+    "j p crawford|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -216,
+      "under_price": 161
+    },
+    "dillon dingler|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -215,
+      "under_price": 160
+    },
+    "kevin mcgonigle|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -201,
+      "under_price": 150
+    },
+    "gleyber torres|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -197,
+      "under_price": 147
+    },
+    "kerry carpenter|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -182,
+      "under_price": 136
+    },
+    "cole young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -179,
+      "under_price": 134
+    },
+    "mitch garver|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -177,
+      "under_price": 132
+    },
+    "riley greene|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -177,
+      "under_price": 133
+    },
+    "victor robles|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -159,
+      "under_price": 120
+    },
+    "spencer torkelson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -146,
+      "under_price": 110
+    },
+    "colt emerson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -145,
+      "under_price": 109
+    },
+    "rob refsnyder|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -143,
+      "under_price": 108
+    },
+    "wenceel perez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -136,
+      "under_price": 102
+    },
+    "colt keith|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -135,
+      "under_price": 102
+    },
+    "matt vierling|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -133,
+      "under_price": 100
+    },
+    "julio rodriguez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -121
+    },
+    "randy arozarena|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 112,
+      "under_price": -149
+    },
+    "kerry carpenter|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 126,
+      "under_price": -168
+    },
+    "dillon dingler|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 135,
+      "under_price": -180
+    },
+    "josh naylor|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 141,
+      "under_price": -189
+    },
+    "j p crawford|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 159,
+      "under_price": -214
+    },
+    "bryan woo|pitcher_outs|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 125,
+      "under_price": -166
+    },
+    "framber valdez|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -158,
+      "under_price": 119
+    },
+    "bryan woo|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -144,
+      "under_price": 113
+    },
+    "framber valdez|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -154,
+      "under_price": 121
+    },
+    "victor robles|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "randy arozarena|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julio rodriguez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh naylor|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kevin mcgonigle|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "zach mckinstry|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "colt emerson|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "wenceel perez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "rob refsnyder|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "gleyber torres|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "cole young|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "j p crawford|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "riley greene|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "colt keith|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kerry carpenter|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bryan woo|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "framber valdez|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ben rice|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -228,
+      "under_price": 169
+    },
+    "cody bellinger|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -210,
+      "under_price": 156
+    },
+    "trent grisham|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -200,
+      "under_price": 150
+    },
+    "paul goldschmidt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -192,
+      "under_price": 144
+    },
+    "wilyer abreu|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -191,
+      "under_price": 143
+    },
+    "jarren duran|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -183,
+      "under_price": 137
+    },
+    "willson contreras|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -180,
+      "under_price": 135
+    },
+    "ceddanne rafaela|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -169,
+      "under_price": 127
+    },
+    "isiah kiner-falefa|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -162,
+      "under_price": 122
+    },
+    "jose caballero|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -162,
+      "under_price": 122
+    },
+    "jazz chisholm|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -155,
+      "under_price": 116
+    },
+    "caleb durbin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -148,
+      "under_price": 112
+    },
+    "austin wells|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -142,
+      "under_price": 107
+    },
+    "andruw monasterio|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -138,
+      "under_price": 104
+    },
+    "ryan mcmahon|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -133,
+      "under_price": 100
+    },
+    "carlos narvaez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -131,
+      "under_price": -102
+    },
+    "anthony volpe|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -125,
+      "under_price": -106
+    },
+    "connor wong|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -116
+    },
+    "ben rice|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -141
+    },
+    "trent grisham|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 128,
+      "under_price": -171
+    },
+    "cody bellinger|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 133,
+      "under_price": -177
+    },
+    "ryan weathers|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -138,
+      "under_price": 104
+    },
+    "sonny gray|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 104,
+      "under_price": -138
+    },
+    "ryan weathers|pitcher_strikeouts|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -135
+    },
+    "sonny gray|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -105,
+      "under_price": -122
+    },
+    "jose caballero|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jazz chisholm|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jarren duran|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "caleb durbin|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "anthony volpe|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ceddanne rafaela|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "cody bellinger|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "isiah kiner-falefa|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "trent grisham|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "andruw monasterio|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "wilyer abreu|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "connor wong|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "paul goldschmidt|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "willson contreras|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ben rice|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "austin wells|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ryan mcmahon|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "carlos narvaez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ryan weathers|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "sonny gray|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "vladimir guerrero|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 195,
+      "under_price": -265
+    },
+    "george springer|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -263,
+      "under_price": 194
+    },
+    "nathan lukes|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -219,
+      "under_price": 162
+    },
+    "ernie clement|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -216,
+      "under_price": 161
+    },
+    "daulton varsho|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -215,
+      "under_price": 160
+    },
+    "pete alonso|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -200,
+      "under_price": 149
+    },
+    "gunnar henderson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -196,
+      "under_price": 147
+    },
+    "adley rutschman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -186,
+      "under_price": 139
+    },
+    "andres gimenez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -183,
+      "under_price": 137
+    },
+    "samuel basallo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -179,
+      "under_price": 134
+    },
+    "kazuma okamoto|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -178,
+      "under_price": 133
+    },
+    "jesus sanchez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -160,
+      "under_price": 120
+    },
+    "taylor ward|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -152,
+      "under_price": 114
+    },
+    "brandon valenzuela|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -148,
+      "under_price": 112
+    },
+    "leody taveras|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -132,
+      "under_price": -101
+    },
+    "jackson holliday|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -127,
+      "under_price": -105
+    },
+    "coby mayo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -123,
+      "under_price": -108
+    },
+    "colton cowser|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -116
+    },
+    "vladimir guerrero|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 104,
+      "under_price": -138
+    },
+    "george springer|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -141
+    },
+    "daulton varsho|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 112,
+      "under_price": -149
+    },
+    "pete alonso|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 125,
+      "under_price": -167
+    },
+    "gunnar henderson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 134,
+      "under_price": -178
+    },
+    "nathan lukes|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 139,
+      "under_price": -186
+    },
+    "ernie clement|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 144,
+      "under_price": -193
+    },
+    "brandon young|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -124,
+      "under_price": -107
+    },
+    "trey yesavage|pitcher_outs|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -101,
+      "under_price": -132
+    },
+    "trey yesavage|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -160,
+      "under_price": 125
+    },
+    "brandon young|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -126,
+      "under_price": -101
+    },
+    "leody taveras|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "gunnar henderson|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "andres gimenez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "george springer|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jackson holliday|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "colton cowser|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "daulton varsho|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ernie clement|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brandon valenzuela|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "coby mayo|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jesus sanchez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "taylor ward|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "vladimir guerrero|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kazuma okamoto|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "samuel basallo|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "nathan lukes|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "pete alonso|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "chandler simpson|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 155,
+      "under_price": -209
+    },
+    "yandy diaz|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 182,
+      "under_price": -246
+    },
+    "otto lopez|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 186,
+      "under_price": -252
+    },
+    "xavier edwards|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -247,
+      "under_price": 183
+    },
+    "junior caminero|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -243,
+      "under_price": 180
+    },
+    "jonathan aranda|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -218,
+      "under_price": 162
+    },
+    "liam hicks|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -205,
+      "under_price": 153
+    },
+    "kyle stowers|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -179,
+      "under_price": 134
+    },
+    "cedric mullins|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -170,
+      "under_price": 128
+    },
+    "richie palacios|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -157,
+      "under_price": 118
+    },
+    "leo jimenez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -155,
+      "under_price": 117
+    },
+    "jakob marsee|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -139,
+      "under_price": 105
+    },
+    "taylor walls|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -131,
+      "under_price": -101
+    },
+    "connor norby|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -126,
+      "under_price": -106
+    },
+    "joe mack|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -126,
+      "under_price": -106
+    },
+    "hunter feduccia|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -106,
+      "under_price": -125
+    },
+    "owen caissie|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -104,
+      "under_price": -128
+    },
+    "junior caminero|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 112,
+      "under_price": -149
+    },
+    "chandler simpson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 116,
+      "under_price": -155
+    },
+    "yandy diaz|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 117,
+      "under_price": -156
+    },
+    "otto lopez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -160
+    },
+    "jonathan aranda|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -170
+    },
+    "xavier edwards|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -187
+    },
+    "liam hicks|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 148,
+      "under_price": -198
+    },
+    "drew rasmussen|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -116,
+      "under_price": -115
+    },
+    "drew rasmussen|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -136,
+      "under_price": 106
+    },
+    "drew rasmussen|pitcher_earned_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ryan gusto|pitcher_earned_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "michael harris|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 175,
+      "under_price": -237
+    },
+    "jake mangum|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 200,
+      "under_price": -272
+    },
+    "nick gonzales|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -274,
+      "under_price": 201
+    },
+    "bryan reynolds|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -259,
+      "under_price": 191
+    },
+    "ozzie albies|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -216,
+      "under_price": 160
+    },
+    "ronald acuna|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -210,
+      "under_price": 156
+    },
+    "brandon lowe|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -205,
+      "under_price": 152
+    },
+    "matt olson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -200,
+      "under_price": 149
+    },
+    "ryan o'hearn|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -196,
+      "under_price": 146
+    },
+    "oneil cruz|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -191,
+      "under_price": 143
+    },
+    "dominic smith|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -178,
+      "under_price": 133
+    },
+    "austin riley|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -166,
+      "under_price": 125
+    },
+    "jorge mateo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -165,
+      "under_price": 124
+    },
+    "jared triolo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -159,
+      "under_price": 120
+    },
+    "marcell ozuna|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -151,
+      "under_price": 114
+    },
+    "henry davis|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -141,
+      "under_price": 106
+    },
+    "mike yastrzemski|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -134,
+      "under_price": 101
+    },
+    "sandy leon|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 125,
+      "under_price": -167
+    },
+    "michael harris|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -106,
+      "under_price": -125
+    },
+    "nick gonzales|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 119,
+      "under_price": -158
+    },
+    "matt olson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -159
+    },
+    "bryan reynolds|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 121,
+      "under_price": -162
+    },
+    "ronald acuna|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 124,
+      "under_price": -165
+    },
+    "jake mangum|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -169
+    },
+    "ozzie albies|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -174
+    },
+    "oneil cruz|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 131,
+      "under_price": -174
+    },
+    "brandon lowe|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 132,
+      "under_price": -176
+    },
+    "mitch keller|pitcher_outs|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -119,
+      "under_price": -111
+    },
+    "martin perez|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 128,
+      "under_price": -171
+    },
+    "mitch keller|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -111
+    },
+    "martin perez|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 104,
+      "under_price": -133
+    },
+    "ronald acuna|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jorge mateo|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "oneil cruz|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ha-seong kim|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "michael harris|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ozzie albies|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jared triolo|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bryan reynolds|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jhostynxon garcia|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "nick gonzales|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brandon lowe|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "dominic smith|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "henry davis|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "spencer horwitz|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "alec burleson|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 160,
+      "under_price": -215
+    },
+    "ivan herrera|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 168,
+      "under_price": -227
+    },
+    "jj wetherholt|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 182,
+      "under_price": -246
+    },
+    "blake dunn|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 190,
+      "under_price": -258
+    },
+    "jordan walker|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 196,
+      "under_price": -267
+    },
+    "sal stewart|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -266,
+      "under_price": 196
+    },
+    "nathaniel lowe|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -239,
+      "under_price": 177
+    },
+    "spencer steer|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -231,
+      "under_price": 171
+    },
+    "masyn winn|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -228,
+      "under_price": 169
+    },
+    "bryan torres|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -226,
+      "under_price": 168
+    },
+    "jj bleday|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -212,
+      "under_price": 158
+    },
+    "eugenio suarez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -203,
+      "under_price": 151
+    },
+    "tyler stephenson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -189,
+      "under_price": 142
+    },
+    "jimmy crooks|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -158,
+      "under_price": 119
+    },
+    "matt mclain|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -152,
+      "under_price": 114
+    },
+    "nolan gorman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -147,
+      "under_price": 110
+    },
+    "victor scott|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -125,
+      "under_price": -106
+    },
+    "alec burleson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -104,
+      "under_price": -127
+    },
+    "ivan herrera|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 101,
+      "under_price": -134
+    },
+    "jj wetherholt|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 103,
+      "under_price": -137
+    },
+    "jordan walker|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 107,
+      "under_price": -142
+    },
+    "blake dunn|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 116,
+      "under_price": -154
+    },
+    "sal stewart|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 117,
+      "under_price": -156
+    },
+    "nathaniel lowe|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 124,
+      "under_price": -165
+    },
+    "jj bleday|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 125,
+      "under_price": -167
+    },
+    "spencer steer|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 132,
+      "under_price": -176
+    },
+    "eugenio suarez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 134,
+      "under_price": -179
+    },
+    "bryan torres|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -193
+    },
+    "masyn winn|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 147,
+      "under_price": -197
+    },
+    "kyle leahy|pitcher_outs|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -113,
+      "under_price": -118
+    },
+    "brady singer|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 107,
+      "under_price": -142
+    },
+    "kyle leahy|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -116,
+      "under_price": -110
+    },
+    "brady singer|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -164,
+      "under_price": 129
+    },
+    "brady singer|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kyle leahy|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jose ramirez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -230,
+      "under_price": 170
+    },
+    "travis bazzana|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -218,
+      "under_price": 162
+    },
+    "angel martinez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -214,
+      "under_price": 159
+    },
+    "chase delauter|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -211,
+      "under_price": 157
+    },
+    "josh jung|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -202,
+      "under_price": 151
+    },
+    "steven kwan|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -202,
+      "under_price": 150
+    },
+    "brandon nimmo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -187,
+      "under_price": 140
+    },
+    "ezequiel duran|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -179,
+      "under_price": 134
+    },
+    "corey seager|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -163,
+      "under_price": 122
+    },
+    "wyatt langford|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -161,
+      "under_price": 121
+    },
+    "kyle manzardo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -150,
+      "under_price": 113
+    },
+    "jake burger|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -148,
+      "under_price": 111
+    },
+    "brayan rocchio|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -147,
+      "under_price": 111
+    },
+    "daniel schneemann|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -146,
+      "under_price": 110
+    },
+    "patrick bailey|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -123,
+      "under_price": -108
+    },
+    "justin foscue|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -120,
+      "under_price": -111
+    },
+    "danny jansen|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -106,
+      "under_price": -125
+    },
+    "michael helman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 101,
+      "under_price": -134
+    },
+    "jose ramirez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -169
+    },
+    "angel martinez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -187
+    },
+    "travis bazzana|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 143,
+      "under_price": -191
+    },
+    "chase delauter|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 146,
+      "under_price": -195
+    },
+    "parker messick|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -102,
+      "under_price": -130
+    },
+    "kumar rocker|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -146
+    },
+    "parker messick|pitcher_strikeouts|5.5": {
+      "open_line": 6.5,
+      "current_line": 5.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "parker messick|pitcher_strikeouts|6.5": {
+      "open_line": 6.5,
+      "current_line": 5.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "kumar rocker|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -142,
+      "under_price": 111
+    },
+    "jose ramirez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "travis bazzana|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "steven kwan|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "wyatt langford|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "angel martinez|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "chase delauter|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brayan rocchio|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ezequiel duran|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "michael helman|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "daniel schneemann|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brandon nimmo|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "justin foscue|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh jung|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "patrick bailey|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bobby witt|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 166,
+      "under_price": -224
+    },
+    "byron buxton|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 194,
+      "under_price": -264
+    },
+    "vinnie pasquantino|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -228,
+      "under_price": 169
+    },
+    "salvador perez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -215,
+      "under_price": 160
+    },
+    "brooks lee|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -214,
+      "under_price": 159
+    },
+    "josh bell|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -198,
+      "under_price": 148
+    },
+    "kody clemens|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -198,
+      "under_price": 148
+    },
+    "austin martin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -190,
+      "under_price": 142
+    },
+    "carter jensen|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -184,
+      "under_price": 138
+    },
+    "luke keaschall|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -180,
+      "under_price": 135
+    },
+    "jac caglianone|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -178,
+      "under_price": 133
+    },
+    "victor caratini|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -178,
+      "under_price": 133
+    },
+    "michael massey|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -168,
+      "under_price": 126
+    },
+    "trevor larnach|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -159,
+      "under_price": 119
+    },
+    "isaac collins|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -149,
+      "under_price": 112
+    },
+    "nick loftin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -138,
+      "under_price": 104
+    },
+    "tristan gray|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -133,
+      "under_price": 100
+    },
+    "kyle isbel|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -129,
+      "under_price": -103
+    },
+    "bobby witt|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -118,
+      "under_price": -112
+    },
+    "byron buxton|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -116
+    },
+    "vinnie pasquantino|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 118,
+      "under_price": -158
+    },
+    "salvador perez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 121,
+      "under_price": -161
+    },
+    "kody clemens|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 122,
+      "under_price": -162
+    },
+    "josh bell|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 134,
+      "under_price": -179
+    },
+    "brooks lee|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 135,
+      "under_price": -180
+    },
+    "carter jensen|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 135,
+      "under_price": -180
+    },
+    "zebby matthews|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 101,
+      "under_price": -128
+    },
+    "michael wacha|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -141,
+      "under_price": 110
+    },
+    "bobby witt|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke keaschall|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "austin martin|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "isaac collins|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "byron buxton|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kyle isbel|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jac caglianone|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "kody clemens|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brooks lee|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "nick loftin|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "trevor larnach|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "tristan gray|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "carter jensen|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "michael massey|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor caratini|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "tyler freeman|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 138,
+      "under_price": -185
+    },
+    "jackson chourio|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -188
+    },
+    "christian yelich|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 150,
+      "under_price": -202
+    },
+    "william contreras|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 156,
+      "under_price": -209
+    },
+    "brice turang|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 166,
+      "under_price": -223
+    },
+    "sal frelick|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 179,
+      "under_price": -243
+    },
+    "hunter goodman|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 189,
+      "under_price": -257
+    },
+    "tj rumfield|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 191,
+      "under_price": -259
+    },
+    "luis rengifo|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 197,
+      "under_price": -268
+    },
+    "jake bauers|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 199,
+      "under_price": -271
+    },
+    "jake mccarthy|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -270,
+      "under_price": 198
+    },
+    "troy johnston|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -261,
+      "under_price": 192
+    },
+    "ezequiel tovar|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -229,
+      "under_price": 170
+    },
+    "garrett mitchell|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -224,
+      "under_price": 166
+    },
+    "david hamilton|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -201,
+      "under_price": 150
+    },
+    "kyle karros|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -201,
+      "under_price": 150
+    },
+    "willi castro|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -190,
+      "under_price": 142
+    },
+    "sterlin thompson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -139,
+      "under_price": 104
+    },
+    "jackson chourio|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -121,
+      "under_price": -109
+    },
+    "christian yelich|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -116,
+      "under_price": -114
+    },
+    "tyler freeman|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -113,
+      "under_price": -117
+    },
+    "hunter goodman|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -112,
+      "under_price": -119
+    },
+    "william contreras|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -108,
+      "under_price": -123
+    },
+    "brice turang|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -103,
+      "under_price": -129
+    },
+    "jake bauers|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 101,
+      "under_price": -134
+    },
+    "tj rumfield|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 102,
+      "under_price": -136
+    },
+    "sal frelick|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 109,
+      "under_price": -144
+    },
+    "jake mccarthy|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 113,
+      "under_price": -151
+    },
+    "troy johnston|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 115,
+      "under_price": -153
+    },
+    "luis rengifo|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 117,
+      "under_price": -155
+    },
+    "garrett mitchell|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 121,
+      "under_price": -161
+    },
+    "ezequiel tovar|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 124,
+      "under_price": -165
+    },
+    "david hamilton|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -194
+    },
+    "brandon sproat|pitcher_outs|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -154,
+      "under_price": 116
+    },
+    "ryan feltner|pitcher_outs|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -153,
+      "under_price": 115
+    },
+    "brandon sproat|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -106,
+      "under_price": -120
+    },
+    "ryan feltner|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -112
+    },
+    "ketel marte|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 179,
+      "under_price": -242
+    },
+    "corbin carroll|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 199,
+      "under_price": -271
+    },
+    "geraldo perdomo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -264,
+      "under_price": 194
+    },
+    "gabriel moreno|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -257,
+      "under_price": 189
+    },
+    "daylen lile|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -252,
+      "under_price": 186
+    },
+    "curtis mead|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -246,
+      "under_price": 181
+    },
+    "james wood|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -238,
+      "under_price": 176
+    },
+    "cj abrams|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -227,
+      "under_price": 168
+    },
+    "luis garcia|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -227,
+      "under_price": 168
+    },
+    "dylan crews|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -226,
+      "under_price": 167
+    },
+    "nolan arenado|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -213,
+      "under_price": 158
+    },
+    "ryan waldschmidt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -213,
+      "under_price": 158
+    },
+    "jacob young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -204,
+      "under_price": 152
+    },
+    "keibert ruiz|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -187,
+      "under_price": 140
+    },
+    "jose fernandez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -186,
+      "under_price": 139
+    },
+    "tommy troy|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -145,
+      "under_price": 109
+    },
+    "nasim nunez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -139,
+      "under_price": 105
+    },
+    "corbin carroll|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -104,
+      "under_price": -127
+    },
+    "ketel marte|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -101,
+      "under_price": -132
+    },
+    "james wood|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 105,
+      "under_price": -140
+    },
+    "daylen lile|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 118,
+      "under_price": -158
+    },
+    "geraldo perdomo|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 122,
+      "under_price": -163
+    },
+    "cj abrams|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 126,
+      "under_price": -168
+    },
+    "curtis mead|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -173
+    },
+    "gabriel moreno|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -174
+    },
+    "nolan arenado|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 136,
+      "under_price": -182
+    },
+    "dylan crews|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -188
+    },
+    "merrill kelly|pitcher_outs|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -169
+    },
+    "foster griffin|pitcher_outs|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -102,
+      "under_price": -130
+    },
+    "foster griffin|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 105,
+      "under_price": -134
+    },
+    "merrill kelly|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -166
+    },
+    "bo bichette|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 193,
+      "under_price": -262
+    },
+    "fernando tatis|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -247,
+      "under_price": 182
+    },
+    "juan soto|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -217,
+      "under_price": 161
+    },
+    "miguel andujar|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -204,
+      "under_price": 152
+    },
+    "ty france|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -189,
+      "under_price": 142
+    },
+    "manny machado|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -182,
+      "under_price": 136
+    },
+    "jackson merrill|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -177,
+      "under_price": 133
+    },
+    "carson benge|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -173,
+      "under_price": 130
+    },
+    "gavin sheets|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -173,
+      "under_price": 130
+    },
+    "xander bogaerts|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -170,
+      "under_price": 128
+    },
+    "mark vientos|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -151,
+      "under_price": 113
+    },
+    "marcus semien|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -149,
+      "under_price": 112
+    },
+    "a j ewing|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -142,
+      "under_price": 107
+    },
+    "brett baty|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -134,
+      "under_price": 101
+    },
+    "freddy fermin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -124,
+      "under_price": -107
+    },
+    "jared young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -124,
+      "under_price": -107
+    },
+    "luis torrens|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -117,
+      "under_price": -113
+    },
+    "juan soto|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 116,
+      "under_price": -154
+    },
+    "bo bichette|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 121,
+      "under_price": -161
+    },
+    "fernando tatis|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 123,
+      "under_price": -163
+    },
+    "michael king|pitcher_outs|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -116
+    },
+    "christian scott|pitcher_outs|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -117
+    },
+    "michael king|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -115
+    },
+    "christian scott|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -152,
+      "under_price": 119
+    },
+    "christian scott|pitcher_strikeouts|5.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "a j ewing|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "fernando tatis|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "juan soto|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "carson benge|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jared young|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "xander bogaerts|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "marcus semien|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jackson merrill|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "bo bichette|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brett baty|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "manny machado|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "miguel andujar|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "gavin sheets|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "luis torrens|batter_stolen_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "christian scott|pitcher_earned_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "michael king|pitcher_earned_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    }
+  }
+}

@@ -299,6 +299,12 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "implied_prob",
         "implied_prob_over",
         "implied_prob_under",
+        "consistency_grade",
+        "team_top3_rank",
+        "team_bottom3_rank",
+        "def_boost_hist",
+        "top3_weak_overperformer",
+        "top3_elite_fader",
     ]
     keep = [c for c in keep if c in df2.columns]
     # Rolling game values (step4): required so combined slate / UI L5 Over|Under match game logs.

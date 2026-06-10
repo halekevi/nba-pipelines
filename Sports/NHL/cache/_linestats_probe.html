@@ -1,0 +1,489 @@
+<html><head>
+<title>Line Stats - Natural Stat Trick</title><style>input.filtertg ~div.filter { display:none; }
+input.filtertg:checked ~div.filter { display: block; } 
+input.filtertg:checked + #filterlb:after { content:"Filters [-]"; } 
+input.filtertg + #filterlb:after { content:"Filters [+]"; } 
+input.filtertg { display: none; }
+input.gpnone:checked ~span>label.button[for=gpnone] { color: #6E0000; border-color: #6E0000;}input.gpdate ~div.tgpdate { display:none; }
+input.gpdate:checked ~div.tgpdate { display: block; }
+input.gpdate:checked ~span>label.button[for=gpdate] { color: #6E0000; border-color: #6E0000;}input.gpteam ~div.ttgp { display:none; }
+input.gpteam:checked ~div.ttgp { display: block; }
+input.gpteam:checked ~span>label.button[for=gpteam] { color: #6E0000; border-color: #6E0000;}input.gmincl:checked ~span>label.button[for=gmincl] { color: #6E0000; border-color: #6E0000;}input.gmexcl:checked ~span>label.button[for=gmexcl] { color: #6E0000; border-color: #6E0000;}input.gpnone { display: none; }
+input.gpdate { display: none; }
+input.gpteam { display: none; }
+input.gmincl { display: none; }
+input.gmexcl { display: none; }
+</style>
+<link rel="stylesheet" type="text/css" href="/DataTables-1.10.3/media/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="/DataTables-1.10.3/extensions/Buttons/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="style.css?20221027"> 
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<meta charset="UTF-8"><script src="https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202605280101/show_ads_impl_fy2021.js"></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/media/js/jquery.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/Buttons/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/Buttons/js/buttons.html5.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/Buttons/js/buttons.flash.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/FixedColumns/js/dataTables.fixedColumns.js"></script>
+<script type="text/javascript" charset="utf8" src="/DataTables-1.10.3/extensions/FixedHeader/js/dataTables.fixedHeader.js"></script>
+<script>
+ $(document).ready( function () {
+
+		var t = $('#players').DataTable({dom: 'Bfrtip',
+
+		scrollX: true,
+
+		scrollY: '70vh',
+
+		scrollCollapse: true,
+
+		buttons: [{extend: 'collection',
+text: 'Show/Hide Columns',
+
+		buttons: [{extend: 'columnToggle',text: 'Corsi',columns: ['.cf']},
+
+		{extend: 'columnToggle',text: 'Fenwick',columns: ['.ff']},
+
+		{extend: 'columnToggle',text: 'Shots',columns: ['.sf']},
+
+		{extend: 'columnToggle',text: 'Goals',columns: ['.gf']},
+
+		{extend: 'columnToggle',text: 'Expected Goals',columns: ['.xgf']},
+
+		{extend: 'columnToggle',text: 'Scoring Chances',columns: ['.sc']},
+
+		{extend: 'columnToggle',text: 'High Danger Chances',columns: ['.hd']},
+
+		{extend: 'columnToggle',text: 'High Danger Scoring',columns: ['.hds']},
+
+		{extend: 'columnToggle',text: 'Medium Danger Chances',columns: ['.md']},
+
+		{extend: 'columnToggle',text: 'Medium Danger Scoring',columns: ['.mds']},
+
+		{extend: 'columnToggle',text: 'Low Danger Chances',columns: ['.ld']},
+
+		{extend: 'columnToggle',text: 'Low Danger Scoring',columns: ['.lds']},
+
+		{extend: 'columnToggle',text: 'PDO',columns: ['.pdo']}]}],
+
+		paging:false,
+searching:false,
+bSort: false,
+
+		columnDefs: [
+
+			{ "visible": false, "targets": ['md','mds','ld','lds'] },
+
+			{render: function ( data, type, full, meta ) {
+		return type === 'display' ? Math.floor(Math.abs(data)) + ":" + (Math.floor((Math.abs(data) * 60) % 60) < 10 ? "0" : "") + Math.floor((Math.abs(data) * 60) % 60) :
+			data; 
+			}
+			, targets: 'time' }
+]
+});
+
+		new $.fn.dataTable.Buttons( t, {
+			buttons: [{extend: 'copy',
+				text: 'Copy (Visible)',
+				exportOptions: {
+					columns: ':visible',
+					orthogonal: 'data'
+				}
+			},
+				{extend: 'csv',
+				text: 'CSV (Visible)',
+				exportOptions: {
+					columns: ':visible',
+					orthogonal: 'data'
+				}
+			},
+				{extend: 'copy',
+				text: 'Copy (All)',
+				exportOptions: {
+					orthogonal: 'data'
+				}
+			},
+				{extend: 'csv',
+				text: 'CSV (All)',
+				exportOptions: {
+					orthogonal: 'data'
+				}
+			}]
+		} );
+
+		new $.fn.dataTable.FixedColumns( t, {
+			leftColumns: 0
+		} );
+	
+		t.buttons( 1, null ).container().appendTo(
+			t.table().container()
+		);
+		} );</script>
+<script src="https://static.addtoany.com/menu/modules/core.bycdb5qo.js" type="module"></script><meta http-equiv="origin-trial" content="AlK2UR5SkAlj8jjdEc9p3F3xuFYlF6LYjAML3EOqw1g26eCwWPjdmecULvBH5MVPoqKYrOfPhYVL71xAXI1IBQoAAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="Amm8/NmvvQfhwCib6I7ZsmUxiSCfOxWxHayJwyU1r3gRIItzr7bNQid6O8ZYaE1GSQTa69WwhPC9flq/oYkRBwsAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A9nrunKdU5m96PSN1XsSGr3qOP0lvPFUB2AiAylCDlN5DTl17uDFkpQuHj1AFtgWLxpLaiBZuhrtb2WOu7ofHwEAAACKeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A93bovR+QVXNx2/38qDbmeYYf1wdte9EO37K9eMq3r+541qo0byhYU899BhPB7Cv9QqD7wIbR1B6OAc9kEfYCA4AAACQeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A1S5fojrAunSDrFbD8OfGmFHdRFZymSM/1ss3G+NEttCLfHkXvlcF6LGLH8Mo5PakLO1sCASXU1/gQf6XGuTBgwAAACQeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXRhZ3NlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"></head><body>
+<div style="position:relative; min-height:100%"><script>
+$(window).scroll(function(e){ 
+$el = $('.headertxtsticky'); 
+if ($(this).scrollTop() > 92 && $el.css('display') != 'block'){ 
+  $('.headertxtsticky').css({'display': 'block'}); 
+}
+if ($(this).scrollTop() < 92 && $el.css('display') == 'block')
+{
+  $('.headertxtsticky').css({'display': 'none'}); 
+} 
+});
+</script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-55321726-1', 'auto');
+ga('require', 'displayfeatures');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
+<div class="headertxtsticky" id="headertxtsticky">
+<a class="main" href="http://www.naturalstattrick.com/" style="text-decoration:none">Natural Stat Trick</a>
+</div>
+<div class="headertxt" id="headertxt">
+<a class="main" href="http://www.naturalstattrick.com/" style="text-decoration:none;"><img src="/images/newlogo.png"></a>
+ <div style="float:right; display: inline-table; min-height: 40px; text-align: right; padding: 5px; font-size: 0.5em;"><a class="menu" href="profile.php">Profile</a><br><a class="menu" href="/login.php?logout">Logout</a>
+</div>
+<div class="menubox"><ul class="menu"><li class="menu"><a href="#" class="menu">Games</a><ul class="menu"><li><a href="#" class="menu">East </a><ul class="menu"><li><a href="games.php?team=BOS" class="menu">Boston&nbsp;Bruins</a></li><li><a href="games.php?team=BUF" class="menu">Buffalo&nbsp;Sabres</a></li><li><a href="games.php?team=CAR" class="menu">Carolina&nbsp;Hurricanes</a></li><li><a href="games.php?team=CBJ" class="menu">Columbus&nbsp;Blue&nbsp;Jackets</a></li><li><a href="games.php?team=DET" class="menu">Detroit&nbsp;Red&nbsp;Wings</a></li><li><a href="games.php?team=FLA" class="menu">Florida&nbsp;Panthers</a></li><li><a href="games.php?team=MTL" class="menu">Montreal&nbsp;Canadiens</a></li><li><a href="games.php?team=N.J" class="menu">New&nbsp;Jersey&nbsp;Devils</a></li><li><a href="games.php?team=NYI" class="menu">New&nbsp;York&nbsp;Islanders</a></li><li><a href="games.php?team=NYR" class="menu">New&nbsp;York&nbsp;Rangers</a></li><li><a href="games.php?team=OTT" class="menu">Ottawa&nbsp;Senators</a></li><li><a href="games.php?team=PHI" class="menu">Philadelphia&nbsp;Flyers</a></li><li><a href="games.php?team=PIT" class="menu">Pittsburgh&nbsp;Penguins</a></li><li><a href="games.php?team=T.B" class="menu">Tampa&nbsp;Bay&nbsp;Lightning</a></li><li><a href="games.php?team=TOR" class="menu">Toronto&nbsp;Maple&nbsp;Leafs</a></li><li><a href="games.php?team=WSH" class="menu">Washington&nbsp;Capitals</a></li></ul></li>
+<li><a href="#" class="menu">West</a><ul class="menu" style="top: -100%"><li><a href="games.php?team=ANA" class="menu">Anaheim&nbsp;Ducks</a></li><li><a href="games.php?team=CGY" class="menu">Calgary&nbsp;Flames</a></li><li><a href="games.php?team=CHI" class="menu">Chicago&nbsp;Blackhawks</a></li><li><a href="games.php?team=COL" class="menu">Colorado&nbsp;Avalanche</a></li><li><a href="games.php?team=DAL" class="menu">Dallas&nbsp;Stars</a></li><li><a href="games.php?team=EDM" class="menu">Edmonton&nbsp;Oilers</a></li><li><a href="games.php?team=L.A" class="menu">Los&nbsp;Angeles&nbsp;Kings</a></li><li><a href="games.php?team=MIN" class="menu">Minnesota&nbsp;Wild</a></li><li><a href="games.php?team=NSH" class="menu">Nashville&nbsp;Predators</a></li><li><a href="games.php?team=S.J" class="menu">San&nbsp;Jose&nbsp;Sharks</a></li><li><a href="games.php?team=SEA" class="menu">Seattle&nbsp;Kraken</a></li><li><a href="games.php?team=STL" class="menu">St&nbsp;Louis&nbsp;Blues</a></li><li><a href="games.php?team=UTA" class="menu">Utah&nbsp;Mammoth</a></li><li><a href="games.php?team=VAN" class="menu">Vancouver&nbsp;Canucks</a></li><li><a href="games.php?team=VGK" class="menu">Vegas&nbsp;Golden&nbsp;Knights</a></li><li><a href="games.php?team=WPG" class="menu">Winnipeg&nbsp;Jets</a></li></ul></li>
+<li><a href="games.php" class="menu">All&nbsp;Teams</a></li></ul></li>
+<li class="menu"><a href="#" class="menu">Players</a><ul class="menu"><li><a href="playerteams.php?stdoi=oi" class="menu">On-Ice</a></li><li><a href="playerteams.php?stdoi=std" class="menu">Individual</a></li><li><a href="playerteams.php?stdoi=g" class="menu">Goalies</a></li><li><a href="playerteams.php?stdoi=bio" class="menu">Bios</a></li><li><a href="pairings.php" class="menu">Defensive&nbsp;Pairs</a></li><li><a href="playercompare.php" class="menu">Compare</a></li><li><a href="playerlist.php" class="menu">Player&nbsp;Index</a></li><li><a href="linestats.php" class="menu">Line&nbsp;Tool</a></li><li><a href="shiftperformance.php" class="menu">Shift&nbsp;Performance</a></li></ul></li><li class="menu"><a href="#" class="menu">Teams</a><ul class="menu"><li><a href="#" class="menu">Team&nbsp;Reports</a><ul class="menu"><li><a href="#" class="menu">East </a><ul class="menu"><li><a href="teamreport.php?team=BOS" class="menu">Boston&nbsp;Bruins</a></li><li><a href="teamreport.php?team=BUF" class="menu">Buffalo&nbsp;Sabres</a></li><li><a href="teamreport.php?team=CAR" class="menu">Carolina&nbsp;Hurricanes</a></li><li><a href="teamreport.php?team=CBJ" class="menu">Columbus&nbsp;Blue&nbsp;Jackets</a></li><li><a href="teamreport.php?team=DET" class="menu">Detroit&nbsp;Red&nbsp;Wings</a></li><li><a href="teamreport.php?team=FLA" class="menu">Florida&nbsp;Panthers</a></li><li><a href="teamreport.php?team=MTL" class="menu">Montreal&nbsp;Canadiens</a></li><li><a href="teamreport.php?team=N.J" class="menu">New&nbsp;Jersey&nbsp;Devils</a></li><li><a href="teamreport.php?team=NYI" class="menu">New&nbsp;York&nbsp;Islanders</a></li><li><a href="teamreport.php?team=NYR" class="menu">New&nbsp;York&nbsp;Rangers</a></li><li><a href="teamreport.php?team=OTT" class="menu">Ottawa&nbsp;Senators</a></li><li><a href="teamreport.php?team=PHI" class="menu">Philadelphia&nbsp;Flyers</a></li><li><a href="teamreport.php?team=PIT" class="menu">Pittsburgh&nbsp;Penguins</a></li><li><a href="teamreport.php?team=T.B" class="menu">Tampa&nbsp;Bay&nbsp;Lightning</a></li><li><a href="teamreport.php?team=TOR" class="menu">Toronto&nbsp;Maple&nbsp;Leafs</a></li><li><a href="teamreport.php?team=WSH" class="menu">Washington&nbsp;Capitals</a></li></ul></li>
+<li><a href="#" class="menu">West</a><ul class="menu" style="top: -100%"><li><a href="teamreport.php?team=ANA" class="menu">Anaheim&nbsp;Ducks</a></li><li><a href="teamreport.php?team=CGY" class="menu">Calgary&nbsp;Flames</a></li><li><a href="teamreport.php?team=CHI" class="menu">Chicago&nbsp;Blackhawks</a></li><li><a href="teamreport.php?team=COL" class="menu">Colorado&nbsp;Avalanche</a></li><li><a href="teamreport.php?team=DAL" class="menu">Dallas&nbsp;Stars</a></li><li><a href="teamreport.php?team=EDM" class="menu">Edmonton&nbsp;Oilers</a></li><li><a href="teamreport.php?team=L.A" class="menu">Los&nbsp;Angeles&nbsp;Kings</a></li><li><a href="teamreport.php?team=MIN" class="menu">Minnesota&nbsp;Wild</a></li><li><a href="teamreport.php?team=NSH" class="menu">Nashville&nbsp;Predators</a></li><li><a href="teamreport.php?team=S.J" class="menu">San&nbsp;Jose&nbsp;Sharks</a></li><li><a href="teamreport.php?team=SEA" class="menu">Seattle&nbsp;Kraken</a></li><li><a href="teamreport.php?team=STL" class="menu">St&nbsp;Louis&nbsp;Blues</a></li><li><a href="teamreport.php?team=UTA" class="menu">Utah&nbsp;Mammoth</a></li><li><a href="teamreport.php?team=VAN" class="menu">Vancouver&nbsp;Canucks</a></li><li><a href="teamreport.php?team=VGK" class="menu">Vegas&nbsp;Golden&nbsp;Knights</a></li><li><a href="teamreport.php?team=WPG" class="menu">Winnipeg&nbsp;Jets</a></li></ul></li>
+</ul></li>
+<li><a href="teamtable.php" class="menu">Season&nbsp;Stats</a></li><li><a href="standings.php" class="menu">Standings</a></li></ul></li><li class="menu"><a href="#" class="menu">Tools</a><ul class="menu"><li>Available&nbsp;to&nbsp;Early<br>Access&nbsp;Subcribers:<br><font size="-2" color="#585858"><i>&nbsp;&nbsp;&nbsp;Rolling&nbsp;Average&nbsp;Charts</i></font></li></ul></li><li class="menu"><a href="#" class="menu">Trivia</a><ul class="menu"><li><a href="teamstreaks.php" class="menu">Team&nbsp;Streaks</a></li><li><a href="altstandings.php" class="menu">Alternate&nbsp;Standings</a></li><li><a href="playernumbers.php" class="menu">Player&nbsp;Numbers</a></li></ul></li></ul>
+</div>
+</div>
+<div style="margin:5px; padding:5px; min-height:25px;"><div style=" display:&nbsp;inline-block;&nbsp;">
+<a href="game.php?season=20252026&amp;game=30412" style="text-decoration:none"><div class="boxscore">
+Golden Knights
+<br>Hurricanes
+<br><center>June 4th, 8:00 PM</center>
+<center>VGK Leads 1 - 0</center>
+</div>
+</a>
+</div>
+</div>
+<div style="width: 100%; overflow: auto;">
+<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Header Responsive -->
+ <center>
+<ins class="adsbygoogle" style="display: block; min-width: 400px; max-width: 970px; width: 100%; height: 280px;" data-ad-client="ca-pub-8142307985704945" data-ad-slot="8680455719" data-ad-format="auto" data-adsbygoogle-status="done"><div id="aswift_0_host" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; height: 280px; width: 970px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block; overflow: visible;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:970px;height:280px;min-height:auto;max-height:none;min-width:auto;max-width:none;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="970" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting; run-ad-auction" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&amp;output=html&amp;h=280&amp;slotname=8680455719&amp;adk=2936548383&amp;adf=1140641187&amp;pi=t.ma~as.8680455719&amp;w=970&amp;fwrn=4&amp;fwrnh=100&amp;lmt=1780532458&amp;rafmt=1&amp;format=970x280&amp;url=https%3A%2F%2Fdata.naturalstattrick.com%2Flinestats.php%3Ffromseason%3D20252026%26thruseason%3D20252026%26stype%3D2%26sit%3D5v5%26score%3Dall%26rate%3Dn%26team%3DCAR%26vteam%3DALL%26loc%3DB%26gpfilt%3Dnone%26tgp%3D410%26lines%3D2%26draftteam%3DALL%26fd%3D%26td%3D%26key%3D314495461881264ecb3ab7431853c814&amp;fwr=0&amp;rh=90&amp;rpe=1&amp;resp_fmts=3&amp;uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&amp;abgtt=1&amp;dt=1780532458610&amp;bpp=8&amp;bdt=125&amp;idt=31&amp;shv=r20260601&amp;mjsv=m202605280101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie_enabled=1&amp;eoidce=1&amp;correlator=4468707642969&amp;frm=20&amp;pv=2&amp;u_tz=-240&amp;u_his=2&amp;u_h=1440&amp;u_w=2560&amp;u_ah=1392&amp;u_aw=2560&amp;u_cd=32&amp;u_sd=1&amp;dmc=32&amp;adx=132&amp;ady=240&amp;biw=1234&amp;bih=1277&amp;scr_x=0&amp;scr_y=0&amp;eid=95390667%2C95392169%2C42533294%2C95390278&amp;oid=2&amp;pvsid=4020088154774634&amp;tmod=1024280797&amp;uas=0&amp;nvt=1&amp;fc=896&amp;brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&amp;vis=1&amp;rsz=o%7Com%7CpeE%7Cp&amp;abl=XS&amp;pfx=0&amp;fu=128&amp;bc=31&amp;bz=1.01&amp;ifi=1&amp;uci=a!1&amp;fsb=1&amp;dtd=47" data-google-container-id="a!1" tabindex="0" title="Advertisement" aria-label="Advertisement"></iframe></div></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+ </center>
+</div>
+<div style="padding-bottom:50px;"><div class="content nh"><form>
+<div style="display: inline-block;">
+<div>
+From <select id="fromseason" name="fromseason" onchange="UpdateThruSeason()"><option value="20072008">2007-2008</option><option value="20082009">2008-2009</option><option value="20092010">2009-2010</option><option value="20102011">2010-2011</option><option value="20112012">2011-2012</option><option value="20122013">2013</option><option value="20132014">2013-2014</option><option value="20142015">2014-2015</option><option value="20152016">2015-2016</option><option value="20162017">2016-2017</option><option value="20172018">2017-2018</option><option value="20182019">2018-2019</option><option value="20192020">2019-2020</option><option value="20202021">2020-2021</option><option value="20212022">2021-2022</option><option value="20222023">2022-2023</option><option value="20232024">2023-2024</option><option value="20242025">2024-2025</option><option value="20252026" selected="">2025-2026</option></select>
+Thru <select id="thruseason" name="thruseason"><option value="20072008" disabled="">2007-2008</option><option value="20082009" disabled="">2008-2009</option><option value="20092010" disabled="">2009-2010</option><option value="20102011" disabled="">2010-2011</option><option value="20112012" disabled="">2011-2012</option><option value="20122013" disabled="">2013</option><option value="20132014" disabled="">2013-2014</option><option value="20142015" disabled="">2014-2015</option><option value="20152016" disabled="">2015-2016</option><option value="20162017" disabled="">2016-2017</option><option value="20172018" disabled="">2017-2018</option><option value="20182019" disabled="">2018-2019</option><option value="20192020">2019-2020</option><option value="20202021">2020-2021</option><option value="20212022">2021-2022</option><option value="20222023">2022-2023</option><option value="20232024">2023-2024</option><option value="20242025">2024-2025</option><option value="20252026" selected="">2025-2026</option></select>
+<script>
+function UpdateThruSeason() {
+			var fromseas = document.getElementById('fromseason');
+			var thruseas = document.getElementById('thruseason');
+			var fromindex = fromseas.selectedIndex;
+			var thruindex = thruseas.selectedIndex;
+			
+			if (thruindex < fromindex) {
+				thruindex = fromindex;
+				document.getElementById('thruseason').selectedIndex = thruindex;
+			} else if (thruindex - fromindex > 2) {
+				thruindex = fromindex + 2;
+				document.getElementById('thruseason').selectedIndex = thruindex;
+			}
+			
+			for (i = 0; i < document.getElementById('thruseason').options.length; i++) { 
+				if (i < fromindex) {
+					document.getElementById('thruseason').options[i].disabled = 'disabled';
+				} else if (i > fromindex + 2) {
+					document.getElementById('thruseason').options[i].disabled = 'disabled';
+				} else {
+					document.getElementById('thruseason').options[i].disabled = '';
+				}
+			}
+		}
+</script>
+<select name="stype"><option value="1">Pre-Season</option><option value="2" selected="">Regular Season</option><option value="3">Playoffs</option></select>
+<select name="sit"><option value="all">All Strengths</option><option value="ev">Even Strength</option><option value="5v5" selected="">5v5</option><option value="sva">5v5 Score &amp; Venue Adjusted</option><option value="pp">Power Play</option><option value="5v4">5 on 4 PP</option><option value="pk">Penalty Kill</option><option value="4v5">4 on 5 PK</option><option value="3v3">3 on 3</option><option value="enf">With Empty Net</option><option value="ena">Against Empty Net</option></select>
+<select name="score"><option value="all" selected="">All Scores</option><option value="tied">Tied</option><option value="u">Leading</option><option value="d">Trailing</option><option value="w1">Within 1</option><option value="u1">Up 1</option><option value="d1">Down 1</option></select>
+<select name="rate">
+<option value="n" selected="">Counts</option>
+<option value="y">Rates</option>
+<option value="r">Relative</option>
+</select>
+<select name="team">
+<option value="ALL">All Teams</option>
+<option value="ANA">Anaheim Ducks</option>
+<option value="BOS">Boston Bruins</option>
+<option value="BUF">Buffalo Sabres</option>
+<option value="CAR" selected="">Carolina Hurricanes</option>
+<option value="CBJ">Columbus Blue Jackets</option>
+<option value="CGY">Calgary Flames</option>
+<option value="CHI">Chicago Blackhawks</option>
+<option value="COL">Colorado Avalanche</option>
+<option value="DAL">Dallas Stars</option>
+<option value="DET">Detroit Red Wings</option>
+<option value="EDM">Edmonton Oilers</option>
+<option value="FLA">Florida Panthers</option>
+<option value="L.A">Los Angeles Kings</option>
+<option value="MIN">Minnesota Wild</option>
+<option value="MTL">Montreal Canadiens</option>
+<option value="N.J">New Jersey Devils</option>
+<option value="NSH">Nashville Predators</option>
+<option value="NYI">New York Islanders</option>
+<option value="NYR">New York Rangers</option>
+<option value="OTT">Ottawa Senators</option>
+<option value="PHI">Philadelphia Flyers</option>
+<option value="PIT">Pittsburgh Penguins</option>
+<option value="S.J">San Jose Sharks</option>
+<option value="SEA">Seattle Kraken</option>
+<option value="STL">St Louis Blues</option>
+<option value="T.B">Tampa Bay Lightning</option>
+<option value="TOR">Toronto Maple Leafs</option>
+<option value="UTA">Utah Mammoth</option>
+<option value="VAN">Vancouver Canucks</option>
+<option value="VGK">Vegas Golden Knights</option>
+<option value="WPG">Winnipeg Jets</option>
+<option value="WSH">Washington Capitals</option>
+</select>
+VS <select name="vteam">
+<option value="ALL">All Teams</option>
+<option value="ANA">Anaheim Ducks</option>
+<option value="BOS">Boston Bruins</option>
+<option value="BUF">Buffalo Sabres</option>
+<option value="CAR">Carolina Hurricanes</option>
+<option value="CBJ">Columbus Blue Jackets</option>
+<option value="CGY">Calgary Flames</option>
+<option value="CHI">Chicago Blackhawks</option>
+<option value="COL">Colorado Avalanche</option>
+<option value="DAL">Dallas Stars</option>
+<option value="DET">Detroit Red Wings</option>
+<option value="EDM">Edmonton Oilers</option>
+<option value="FLA">Florida Panthers</option>
+<option value="L.A">Los Angeles Kings</option>
+<option value="MIN">Minnesota Wild</option>
+<option value="MTL">Montreal Canadiens</option>
+<option value="N.J">New Jersey Devils</option>
+<option value="NSH">Nashville Predators</option>
+<option value="NYI">New York Islanders</option>
+<option value="NYR">New York Rangers</option>
+<option value="OTT">Ottawa Senators</option>
+<option value="PHI">Philadelphia Flyers</option>
+<option value="PIT">Pittsburgh Penguins</option>
+<option value="S.J">San Jose Sharks</option>
+<option value="SEA">Seattle Kraken</option>
+<option value="STL">St Louis Blues</option>
+<option value="T.B">Tampa Bay Lightning</option>
+<option value="TOR">Toronto Maple Leafs</option>
+<option value="UTA">Utah Mammoth</option>
+<option value="VAN">Vancouver Canucks</option>
+<option value="VGK">Vegas Golden Knights</option>
+<option value="WPG">Winnipeg Jets</option>
+<option value="WSH">Washington Capitals</option>
+</select>
+<select name="view">
+<option value="wowy" selected="">With or Without</option>
+<option value="log">Game Log</option>
+</select>
+</div>
+<div><input type="checkbox" class="filtertg" id="filtertg"> <label for="filtertg" id="filterlb"></label>
+<div class="filter"> <select name="loc">
+<option value="B" selected="">Home &amp; Away</option>
+<option value="H">Home</option>
+<option value="A">Away</option>
+</select>
+<br>Game Range: <input type="radio" class="gpnone button" name="gpfilt" value="none" id="gpnone" checked=""><input type="radio" class="gpdate button" name="gpfilt" value="gpdate" id="gpdate"><input type="radio" class="gpteam button" name="gpfilt" value="gpteam" id="gpteam"><span class="buttonspan"><label class="button" for="gpnone">None</label>
+<label class="button" for="gpdate">By Date</label>
+<label class="button" for="gpteam">By Team Games</label>
+</span><div class="tgpdate">From <input class="tgpdate" type="date" name="fd" value="2025-10-07" size="10">
+ Through <input class="tgpdate" type="date" name="td" value="2026-04-16" size="10"></div>
+<div class="ttgp">Last <input class="ttgp" type="text" name="tgp" value="2000" size="2"> Team Games</div>
+<br><input type="radio" class="gmincl button" name="strict" value="incl" id="gmincl" checked=""><input type="radio" class="gmexcl button" name="strict" value="excl" id="gmexcl"><span class="buttonspan"><label class="button" for="gmincl">Include</label>
+<label class="button" for="gmexcl">Exclude</label>
+</span>games where not all of the selected players played</div>
+</div>
+<div><select name="p1">
+<option value="0" selected="">Select a Player</option>
+<option value="8482100">Alexander Nikishin</option>
+<option value="8480830">Andrei Svechnikov</option>
+<option value="8484203">Bradly Nadeau</option>
+<option value="8484428">Charles Alexis Legault</option>
+<option value="8481562">Domenick Fensore</option>
+<option value="8480762">Eric Robinson</option>
+<option value="8484392">Felix Unger Sorum</option>
+<option value="8476958">Jaccob Slavin</option>
+<option value="8482809">Jackson Blake</option>
+<option value="8478970">Jalen Chatfield</option>
+<option value="8480829">Jesperi Kotkaniemi</option>
+<option value="8482911">Joel Nystrom</option>
+<option value="8476921">Jordan Martinook</option>
+<option value="8473533">Jordan Staal</option>
+<option value="8481004">Josiah Slavin</option>
+<option value="8482785">Justin Robidas</option>
+<option value="8480817">K'Andre Miller</option>
+<option value="8482702">Logan Stankoven</option>
+<option value="8476873">Mark Jankowski</option>
+<option value="8476422">Mike Reilly</option>
+<option value="8475235">Nicolas Deslauriers</option>
+<option value="8477940">Nikolaj Ehlers</option>
+<option value="8481491">Noah Philp</option>
+<option value="8482187">Ronan Seeley</option>
+<option value="8480336">Sean Walker</option>
+<option value="8478427">Sebastian Aho</option>
+<option value="8482093">Seth Jarvis</option>
+<option value="8476906">Shayne Gostisbehere</option>
+<option value="8480291">Skyler Brind'Amour</option>
+<option value="8475791">Taylor Hall</option>
+<option value="8477478">William Carrier</option>
+</select>
+<select name="p2">
+<option value="0" selected="">Select a Player</option>
+<option value="8482100">Alexander Nikishin</option>
+<option value="8480830">Andrei Svechnikov</option>
+<option value="8484203">Bradly Nadeau</option>
+<option value="8484428">Charles Alexis Legault</option>
+<option value="8481562">Domenick Fensore</option>
+<option value="8480762">Eric Robinson</option>
+<option value="8484392">Felix Unger Sorum</option>
+<option value="8476958">Jaccob Slavin</option>
+<option value="8482809">Jackson Blake</option>
+<option value="8478970">Jalen Chatfield</option>
+<option value="8480829">Jesperi Kotkaniemi</option>
+<option value="8482911">Joel Nystrom</option>
+<option value="8476921">Jordan Martinook</option>
+<option value="8473533">Jordan Staal</option>
+<option value="8481004">Josiah Slavin</option>
+<option value="8482785">Justin Robidas</option>
+<option value="8480817">K'Andre Miller</option>
+<option value="8482702">Logan Stankoven</option>
+<option value="8476873">Mark Jankowski</option>
+<option value="8476422">Mike Reilly</option>
+<option value="8475235">Nicolas Deslauriers</option>
+<option value="8477940">Nikolaj Ehlers</option>
+<option value="8481491">Noah Philp</option>
+<option value="8482187">Ronan Seeley</option>
+<option value="8480336">Sean Walker</option>
+<option value="8478427">Sebastian Aho</option>
+<option value="8482093">Seth Jarvis</option>
+<option value="8476906">Shayne Gostisbehere</option>
+<option value="8480291">Skyler Brind'Amour</option>
+<option value="8475791">Taylor Hall</option>
+<option value="8477478">William Carrier</option>
+</select>
+<select name="p3">
+<option value="0" selected="">Select a Player</option>
+<option value="8482100">Alexander Nikishin</option>
+<option value="8480830">Andrei Svechnikov</option>
+<option value="8484203">Bradly Nadeau</option>
+<option value="8484428">Charles Alexis Legault</option>
+<option value="8481562">Domenick Fensore</option>
+<option value="8480762">Eric Robinson</option>
+<option value="8484392">Felix Unger Sorum</option>
+<option value="8476958">Jaccob Slavin</option>
+<option value="8482809">Jackson Blake</option>
+<option value="8478970">Jalen Chatfield</option>
+<option value="8480829">Jesperi Kotkaniemi</option>
+<option value="8482911">Joel Nystrom</option>
+<option value="8476921">Jordan Martinook</option>
+<option value="8473533">Jordan Staal</option>
+<option value="8481004">Josiah Slavin</option>
+<option value="8482785">Justin Robidas</option>
+<option value="8480817">K'Andre Miller</option>
+<option value="8482702">Logan Stankoven</option>
+<option value="8476873">Mark Jankowski</option>
+<option value="8476422">Mike Reilly</option>
+<option value="8475235">Nicolas Deslauriers</option>
+<option value="8477940">Nikolaj Ehlers</option>
+<option value="8481491">Noah Philp</option>
+<option value="8482187">Ronan Seeley</option>
+<option value="8480336">Sean Walker</option>
+<option value="8478427">Sebastian Aho</option>
+<option value="8482093">Seth Jarvis</option>
+<option value="8476906">Shayne Gostisbehere</option>
+<option value="8480291">Skyler Brind'Amour</option>
+<option value="8475791">Taylor Hall</option>
+<option value="8477478">William Carrier</option>
+</select>
+<select name="p4">
+<option value="0" selected="">Select a Player</option>
+<option value="8482100">Alexander Nikishin</option>
+<option value="8480830">Andrei Svechnikov</option>
+<option value="8484203">Bradly Nadeau</option>
+<option value="8484428">Charles Alexis Legault</option>
+<option value="8481562">Domenick Fensore</option>
+<option value="8480762">Eric Robinson</option>
+<option value="8484392">Felix Unger Sorum</option>
+<option value="8476958">Jaccob Slavin</option>
+<option value="8482809">Jackson Blake</option>
+<option value="8478970">Jalen Chatfield</option>
+<option value="8480829">Jesperi Kotkaniemi</option>
+<option value="8482911">Joel Nystrom</option>
+<option value="8476921">Jordan Martinook</option>
+<option value="8473533">Jordan Staal</option>
+<option value="8481004">Josiah Slavin</option>
+<option value="8482785">Justin Robidas</option>
+<option value="8480817">K'Andre Miller</option>
+<option value="8482702">Logan Stankoven</option>
+<option value="8476873">Mark Jankowski</option>
+<option value="8476422">Mike Reilly</option>
+<option value="8475235">Nicolas Deslauriers</option>
+<option value="8477940">Nikolaj Ehlers</option>
+<option value="8481491">Noah Philp</option>
+<option value="8482187">Ronan Seeley</option>
+<option value="8480336">Sean Walker</option>
+<option value="8478427">Sebastian Aho</option>
+<option value="8482093">Seth Jarvis</option>
+<option value="8476906">Shayne Gostisbehere</option>
+<option value="8480291">Skyler Brind'Amour</option>
+<option value="8475791">Taylor Hall</option>
+<option value="8477478">William Carrier</option>
+</select>
+<select name="p5">
+<option value="0" selected="">Select a Player</option>
+<option value="8482100">Alexander Nikishin</option>
+<option value="8480830">Andrei Svechnikov</option>
+<option value="8484203">Bradly Nadeau</option>
+<option value="8484428">Charles Alexis Legault</option>
+<option value="8481562">Domenick Fensore</option>
+<option value="8480762">Eric Robinson</option>
+<option value="8484392">Felix Unger Sorum</option>
+<option value="8476958">Jaccob Slavin</option>
+<option value="8482809">Jackson Blake</option>
+<option value="8478970">Jalen Chatfield</option>
+<option value="8480829">Jesperi Kotkaniemi</option>
+<option value="8482911">Joel Nystrom</option>
+<option value="8476921">Jordan Martinook</option>
+<option value="8473533">Jordan Staal</option>
+<option value="8481004">Josiah Slavin</option>
+<option value="8482785">Justin Robidas</option>
+<option value="8480817">K'Andre Miller</option>
+<option value="8482702">Logan Stankoven</option>
+<option value="8476873">Mark Jankowski</option>
+<option value="8476422">Mike Reilly</option>
+<option value="8475235">Nicolas Deslauriers</option>
+<option value="8477940">Nikolaj Ehlers</option>
+<option value="8481491">Noah Philp</option>
+<option value="8482187">Ronan Seeley</option>
+<option value="8480336">Sean Walker</option>
+<option value="8478427">Sebastian Aho</option>
+<option value="8482093">Seth Jarvis</option>
+<option value="8476906">Shayne Gostisbehere</option>
+<option value="8480291">Skyler Brind'Amour</option>
+<option value="8475791">Taylor Hall</option>
+<option value="8477478">William Carrier</option>
+</select>
+</div></div>
+<input style="vertical-align: top;" type="submit" value="Submit"></form></div>
+</div>
+<div class="footer" id="footer">
+<div style="float:right; padding: 0.4em;"><a class="menu" href="/glossary.php" style="vertical-align:middle;">Glossary</a> <a class="menu" href="/contact.php" style="vertical-align:middle;">Contact</a> <a class="menu" href="/privacy.php" style="vertical-align:middle;">Privacy</a> <a class="menu" href="/scraping.php" style="vertical-align:middle;">Scraping</a> <a href="https://www.patreon.com/NaturalStatTrick"><img src="/images/become_a_patron_button.png" style="vertical-align:middle;"></a>
+<a href="https://bsky.app/profile/naturalstattrick.com"><img src="/images/bsky_social.png" style="vertical-align:middle;"></a>
+</div>
+</div>
+</div><div id="addtoany" style="position: static;"><div style="height: 1px; width: 1px; position: absolute; z-index: 100000; top: 0px; visibility: hidden;"><iframe id="a2a_sm_ifr" title="AddToAny Utility Frame" aria-hidden="true" src="https://static.addtoany.com/menu/sm.25.html#type=core&amp;event=load" style="height: 1px; width: 1px; border: 0px; left: 0px; top: 0px; position: absolute; z-index: 100000; display: none;"></iframe></div></div><ins class="adsbygoogle adsbygoogle-noablate" data-ad-hi="true" data-adsbygoogle-status="done" style="display: none !important;"><div id="aswift_1_host" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;min-height:auto;max-height:none;min-width:auto;max-width:none;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting; run-ad-auction" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8142307985704945&amp;output=html&amp;adk=1812271804&amp;adf=3025194257&amp;lmt=1780532458&amp;plat=9%3A32768%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1081344%2C32%3A32%2C41%3A32%2C42%3A32%2C43%3A32%2C44%3A32&amp;format=0x0&amp;url=https%3A%2F%2Fdata.naturalstattrick.com%2Flinestats.php%3Ffromseason%3D20252026%26thruseason%3D20252026%26stype%3D2%26sit%3D5v5%26score%3Dall%26rate%3Dn%26team%3DCAR%26vteam%3DALL%26loc%3DB%26gpfilt%3Dnone%26tgp%3D410%26lines%3D2%26draftteam%3DALL%26fd%3D%26td%3D%26key%3D314495461881264ecb3ab7431853c814&amp;pra=7&amp;asro=0&amp;aiactd=0&amp;aicctd=0&amp;ailctd=0&amp;aimartd=4&amp;uach=WyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQ4LjAuNzc3OC4xODEiLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDguMC43Nzc4LjE4MSJdLFsiR29vZ2xlIENocm9tZSIsIjE0OC4wLjc3NzguMTgxIl0sWyJOb3QvQSlCcmFuZCIsIjk5LjAuMC4wIl1dLDBd&amp;abgtt=1&amp;dt=1780532458626&amp;bpp=2&amp;bdt=141&amp;idt=41&amp;shv=r20260601&amp;mjsv=m202605280101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie_enabled=1&amp;eoidce=1&amp;prev_fmts=970x280&amp;nras=1&amp;correlator=4468707642969&amp;frm=20&amp;pv=1&amp;u_tz=-240&amp;u_his=2&amp;u_h=1440&amp;u_w=2560&amp;u_ah=1392&amp;u_aw=2560&amp;u_cd=32&amp;u_sd=1&amp;dmc=32&amp;adx=-12245933&amp;ady=-12245933&amp;biw=1234&amp;bih=1277&amp;scr_x=0&amp;scr_y=0&amp;eid=95390667%2C95392169%2C42533294%2C95390278&amp;oid=2&amp;pvsid=4020088154774634&amp;tmod=1024280797&amp;uas=0&amp;nvt=1&amp;fsapi=1&amp;fc=896&amp;brdim=-31%2C-1426%2C-31%2C-1426%2C2560%2C-1440%2C1265%2C1372%2C1249%2C1277&amp;vis=1&amp;rsz=%7C%7Cs%7C&amp;abl=NS&amp;fu=32768&amp;bc=31&amp;plas=395x576_l%7C395x576_r&amp;bz=1.01&amp;ifi=2&amp;uci=a!2&amp;fsb=1&amp;dtd=53" data-google-container-id="a!2" tabindex="0" title="Advertisement" aria-label="Advertisement"></iframe></div></ins></body><iframe id="google_esf" name="google_esf" src="https://googleads.g.doubleclick.net/pagead/html/r20260601/r20190131/zrt_lookup_fy2021.html" style="display: none;"></iframe></html>

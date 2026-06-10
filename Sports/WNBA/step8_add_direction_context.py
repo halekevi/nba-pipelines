@@ -282,6 +282,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'open_line', 'line_movement', 'line_direction_shift',
         'implied_prob', 'implied_prob_over', 'implied_prob_under',
         'distribution_std', 'distribution_n',
+        'consistency_grade',
+        'team_top3_rank', 'team_bottom3_rank', 'def_boost_hist',
+        'top3_weak_overperformer', 'top3_elite_fader',
+        'top3_def_context', 'top3_under_context',
     ]
     # only keep cols that exist
     keep = [c for c in keep if c in df2.columns]
@@ -360,6 +364,14 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'team_star_out': 'Team Star Out', 'key_facilitator_out': 'Key Facilitator Out',
         'injury_boost_candidate': 'Injury Boost', 'usage_vacuum': 'Usage Vacuum',
         'void_reason': 'Void Reason',
+        'consistency_grade': 'Consistency Grade',
+        'team_top3_rank': 'Top3 Rank',
+        'team_bottom3_rank': 'Bottom3 Rank',
+        'def_boost_hist': 'Def Boost Hist',
+        'top3_weak_overperformer': 'Top3 Weak Over',
+        'top3_elite_fader': 'Top3 Elite Fade',
+        'top3_def_context': 'Top3 Def Context',
+        'top3_under_context': 'Top3 Under Context',
     }
     _lm_cols = (
         'open_line', 'line_movement', 'line_direction_shift',

@@ -26,17 +26,17 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-23\\graded_mlb_2026-05-23.xlsx",
       "status": "ok",
-      "rows": 7462,
-      "void_rows": 3672,
-      "acceptable_void_rows": 3199,
-      "unacceptable_void_rows": 473
+      "rows": 3775,
+      "void_rows": 566,
+      "acceptable_void_rows": 455,
+      "unacceptable_void_rows": 111
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-23\\graded_soccer_2026-05-23.xlsx",
       "status": "ok",
       "rows": 4848,
-      "void_rows": 2274,
-      "acceptable_void_rows": 2274,
+      "void_rows": 2337,
+      "acceptable_void_rows": 2337,
       "unacceptable_void_rows": 0
     },
     {
@@ -72,5 +72,5 @@
       "unacceptable_void_rows": 0
     }
   ],
-  "unacceptable_count": 473
+  "unacceptable_count": 111
 }

@@ -1,0 +1,4764 @@
+{
+  "date": "2026-06-01",
+  "sport_key": "baseball_mlb",
+  "snapshot": {
+    "yandy diaz|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chandler simpson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "junior caminero|batter_hits|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jonathan aranda|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kevin mcgonigle|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt vierling|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor mesa|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt keith|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "richie palacios|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "riley greene|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kerry carpenter|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "wenceel perez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer torkelson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "zach mckinstry|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "taylor walls|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter feduccia|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "yandy diaz|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonathan aranda|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor mesa|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chandler simpson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kerry carpenter|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "riley greene|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kevin mcgonigle|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer torkelson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt vierling|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "richie palacios|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "taylor walls|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "wenceel perez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt keith|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "zach mckinstry|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter feduccia|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "yandy diaz|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonathan aranda|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kevin mcgonigle|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chandler simpson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "griffin jax|pitcher_hits_allowed|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ty madden|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "griffin jax|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ty madden|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter feduccia|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "hunter feduccia|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "zach mckinstry|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "dillon dingler|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kerry carpenter|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kerry carpenter|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "spencer torkelson|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "spencer torkelson|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "wenceel perez|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "cedric mullins|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor mesa|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt keith|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "colt keith|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "riley greene|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "riley greene|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "matt vierling|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "matt vierling|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "richie palacios|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "richie palacios|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "taylor walls|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kerry carpenter|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kerry carpenter|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kerry carpenter|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer torkelson|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer torkelson|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer torkelson|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "riley greene|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "riley greene|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "riley greene|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dillon dingler|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "junior caminero|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "yandy diaz|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "yandy diaz|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "yandy diaz|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonathan aranda|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonathan aranda|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonathan aranda|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_home_runs|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_home_runs|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cedric mullins|batter_home_runs|2.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "richie palacios|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "richie palacios|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "richie palacios|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colt keith|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colt keith|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colt keith|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "hunter feduccia|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "hunter feduccia|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "hunter feduccia|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kevin mcgonigle|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kevin mcgonigle|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kevin mcgonigle|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chandler simpson|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chandler simpson|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chandler simpson|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt vierling|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt vierling|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt vierling|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis garcia|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "xavier edwards|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "otto lopez|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "otto lopez|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daylen lile|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "javier sanoja|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "james wood|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "curtis mead|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "liam hicks|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan crews|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cj abrams|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keibert ruiz|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jacob young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle stowers|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jakob marsee|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "connor norby|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nasim nunez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joe mack|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "owen caissie|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "james wood|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cj abrams|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis garcia|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "curtis mead|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daylen lile|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "otto lopez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle stowers|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan crews|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "keibert ruiz|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "liam hicks|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jacob young|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "javier sanoja|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "xavier edwards|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jakob marsee|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "connor norby|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joe mack|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nasim nunez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "owen caissie|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis garcia|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "james wood|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daylen lile|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "xavier edwards|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "otto lopez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cj abrams|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "curtis mead|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan crews|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dylan crews|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "liam hicks|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cade cavalli|pitcher_hits_allowed|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cade cavalli|pitcher_hits_allowed|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sandy alcantara|pitcher_hits_allowed|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cade cavalli|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sandy alcantara|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "drew millas|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "drew millas|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "drew millas|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nasim nunez|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joe mack|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "owen caissie|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "owen caissie|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "javier sanoja|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jakob marsee|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jakob marsee|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kyle stowers|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kyle stowers|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jacob young|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jacob young|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "connor norby|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "connor norby|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "luis garcia|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis garcia|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis garcia|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "otto lopez|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "otto lopez|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "otto lopez|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daylen lile|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daylen lile|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daylen lile|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "xavier edwards|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "xavier edwards|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "xavier edwards|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kyle stowers|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kyle stowers|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kyle stowers|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jakob marsee|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jakob marsee|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jakob marsee|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "james wood|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "james wood|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "james wood|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cj abrams|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cj abrams|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "cj abrams|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "liam hicks|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "liam hicks|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "liam hicks|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "owen caissie|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "owen caissie|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "owen caissie|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jacob young|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jacob young|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jacob young|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dylan crews|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dylan crews|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dylan crews|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "connor norby|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "connor norby|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "connor norby|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "curtis mead|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "curtis mead|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "curtis mead|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sal stewart|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "sal stewart|batter_hits|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "bobby witt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer steer|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "blake dunn|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nathaniel lowe|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj bleday|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eugenio suarez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "salvador perez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler stephenson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "vinnie pasquantino|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt mclain|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carter jensen|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jac caglianone|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nick loftin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tj friedl|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michael massey|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle isbel|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaac collins|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sal stewart|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nathaniel lowe|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eugenio suarez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj bleday|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer steer|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler stephenson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bobby witt|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt mclain|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "salvador perez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "vinnie pasquantino|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "blake dunn|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jac caglianone|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carter jensen|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tj friedl|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michael massey|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaac collins|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nick loftin|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle isbel|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sal stewart|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bobby witt|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj bleday|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "spencer steer|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nathaniel lowe|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nathaniel lowe|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eugenio suarez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "blake dunn|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chase burns|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chase burns|pitcher_strikeouts|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luinder avila|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle isbel|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "isaac collins|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "isaac collins|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jac caglianone|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jac caglianone|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "tj friedl|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carter jensen|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "carter jensen|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "tyler stephenson|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "tyler stephenson|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "nick loftin|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt mclain|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michael massey|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "michael massey|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "vinnie pasquantino|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "vinnie pasquantino|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "salvador perez|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "salvador perez|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jj bleday|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jj bleday|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jj bleday|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "eugenio suarez|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "eugenio suarez|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "eugenio suarez|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sal stewart|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sal stewart|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sal stewart|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bobby witt|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bobby witt|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bobby witt|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "michael massey|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "michael massey|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "michael massey|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "isaac collins|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "isaac collins|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "isaac collins|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jac caglianone|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jac caglianone|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jac caglianone|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "salvador perez|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "salvador perez|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "salvador perez|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "vinnie pasquantino|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "vinnie pasquantino|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "vinnie pasquantino|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "spencer steer|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "spencer steer|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "spencer steer|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "blake dunn|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "blake dunn|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "blake dunn|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "carter jensen|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "carter jensen|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "carter jensen|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "nathaniel lowe|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "nathaniel lowe|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "nathaniel lowe|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tyler stephenson|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tyler stephenson|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tyler stephenson|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "byron buxton|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sam antonacci|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brooks lee|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kody clemens|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh bell|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "austin martin|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke keaschall|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andrew benintendi|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chase meidroth|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "trevor larnach|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colson montgomery|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor caratini|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "miguel vargas|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tristan peters|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rikuu nishida|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "drew romo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tristan gray|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "byron buxton|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colson montgomery|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kody clemens|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh bell|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andrew benintendi|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "miguel vargas|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor caratini|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke keaschall|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "trevor larnach|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brooks lee|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tristan gray|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "austin martin|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "drew romo|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sam antonacci|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chase meidroth|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tristan peters|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rikuu nishida|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "byron buxton|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colson montgomery|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colson montgomery|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kody clemens|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brooks lee|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brooks lee|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sam antonacci|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh bell|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh bell|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joe ryan|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joe ryan|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tristan gray|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "austin martin|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "austin martin|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "miguel vargas|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "miguel vargas|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "tristan peters|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "tristan peters|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "drew romo|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luke keaschall|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor caratini|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor caratini|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "rikuu nishida|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andrew benintendi|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "andrew benintendi|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chase meidroth|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "chase meidroth|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "trevor larnach|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "trevor larnach|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "andrew benintendi|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "andrew benintendi|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "andrew benintendi|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chase meidroth|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chase meidroth|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "chase meidroth|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "trevor larnach|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "trevor larnach|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "trevor larnach|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "miguel vargas|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "miguel vargas|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "miguel vargas|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colson montgomery|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colson montgomery|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "colson montgomery|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tristan peters|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tristan peters|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "tristan peters|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "byron buxton|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "byron buxton|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "byron buxton|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sam antonacci|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sam antonacci|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "sam antonacci|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brooks lee|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brooks lee|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brooks lee|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kody clemens|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kody clemens|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kody clemens|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor caratini|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor caratini|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor caratini|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "austin martin|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "austin martin|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "austin martin|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "josh bell|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "josh bell|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "josh bell|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis arraez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis arraez|batter_hits|1.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackson chourio|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jackson chourio|batter_hits|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "william contreras|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jung hoo lee|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "casey schmitt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "christian yelich|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sal frelick|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brice turang|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis rengifo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "willy adames|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake bauers|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rafael devers|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daniel susac|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt chapman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "david hamilton|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bryce eldridge|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "garrett mitchell|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor bericoto|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "william contreras|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackson chourio|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "casey schmitt|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake bauers|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rafael devers|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brice turang|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis rengifo|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "christian yelich|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bryce eldridge|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "garrett mitchell|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sal frelick|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "willy adames|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt chapman|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "david hamilton|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jung hoo lee|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daniel susac|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis arraez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor bericoto|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis arraez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackson chourio|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "casey schmitt|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "landen roupp|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "landen roupp|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shane drohan|pitcher_strikeouts|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shane drohan|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jesus rodriguez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joey ortiz|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jesus rodriguez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joey ortiz|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "christian yelich|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake bauers|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jake bauers|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "william contreras|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "matt chapman|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "matt chapman|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "garrett mitchell|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "garrett mitchell|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jesus rodriguez|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rafael devers|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "rafael devers|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "sal frelick|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joey ortiz|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brice turang|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "brice turang|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "david hamilton|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "daniel susac|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "daniel susac|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor bericoto|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "victor bericoto|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "willy adames|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "willy adames|batter_total_bases|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "brice turang|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brice turang|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brice turang|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jackson chourio|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jackson chourio|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jackson chourio|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "christian yelich|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "christian yelich|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "christian yelich|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "willy adames|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "willy adames|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "willy adames|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "william contreras|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "william contreras|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "william contreras|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "casey schmitt|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "casey schmitt|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "casey schmitt|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis arraez|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis arraez|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis arraez|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jake bauers|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jake bauers|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jake bauers|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "rafael devers|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "rafael devers|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "rafael devers|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "garrett mitchell|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "garrett mitchell|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "garrett mitchell|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor bericoto|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor bericoto|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "victor bericoto|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis rengifo|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis rengifo|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis rengifo|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt chapman|batter_home_runs|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt chapman|batter_home_runs|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "matt chapman|batter_home_runs|2.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daniel susac|batter_home_runs|0.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daniel susac|batter_home_runs|1.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "daniel susac|batter_home_runs|2.5": {
+      "open_line": 2.5,
+      "current_line": 0.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down"
+    },
+    "luis rengifo|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh jung|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brandon nimmo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake burger|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alec burleson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jordan walker|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel duran|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ivan herrera|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj wetherholt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joc pederson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nicky lopez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "masyn winn|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alejandro osuna|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "evan carter|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "danny jansen|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bryan torres|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jimmy crooks|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan gorman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor scott|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jordan walker|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake burger|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brandon nimmo|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alec burleson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh jung|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj wetherholt|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joc pederson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ivan herrera|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel duran|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "evan carter|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "danny jansen|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan gorman|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alejandro osuna|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nicky lopez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bryan torres|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "masyn winn|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jimmy crooks|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor scott|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh jung|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jordan walker|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brandon nimmo|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alec burleson|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake burger|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj wetherholt|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jj wetherholt|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel duran|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ivan herrera|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jacob degrom|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michael mcgreevy|pitcher_hits_allowed|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jacob degrom|pitcher_strikeouts|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jacob degrom|pitcher_strikeouts|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michael mcgreevy|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan gorman|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "evan carter|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bryan torres|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jimmy crooks|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "masyn winn|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "joc pederson|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "danny jansen|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nicky lopez|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alejandro osuna|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "vaughn grissom|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "vaughn grissom|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "zach neto|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "zach neto|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "mike trout|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "mike trout|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jo adell|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jo adell|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "nick madrigal|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler freeman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jorge soler|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "logan o'hoppe|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "oswald peraza|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tj rumfield|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake mccarthy|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel tovar|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter goodman|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "troy johnston|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "willi castro|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle karros|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jose siri|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sterlin thompson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jo adell|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mike trout|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jorge soler|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "vaughn grissom|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "zach neto|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter goodman|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "logan o'hoppe|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "oswald peraza|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jose siri|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tj rumfield|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler freeman|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nick madrigal|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel tovar|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "willi castro|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "troy johnston|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake mccarthy|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle karros|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sterlin thompson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mike trout|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "zach neto|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "vaughn grissom|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jo adell|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jorge soler|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jorge soler|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "logan o'hoppe|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "logan o'hoppe|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler freeman|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tyler freeman|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "oswald peraza|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "oswald peraza|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nick madrigal|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nick madrigal|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jose soriano|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle freeland|pitcher_hits_allowed|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jose soriano|pitcher_strikeouts|6.5": {
+      "open_line": 7.5,
+      "current_line": 6.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jose soriano|pitcher_strikeouts|7.5": {
+      "open_line": 7.5,
+      "current_line": 6.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "kyle freeland|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "edouard julien|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "edouard julien|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sterlin thompson|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "willi castro|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "troy johnston|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tj rumfield|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jose siri|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ezequiel tovar|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "hunter goodman|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jake mccarthy|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "edouard julien|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andy pages|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "freddie freeman|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "freddie freeman|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "shohei ohtani|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mookie betts|batter_hits|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "mookie betts|batter_hits|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "will smith|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "corbin carroll|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ketel marte|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle tucker|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "miguel rojas|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ildemaro vargas|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabriel moreno|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan arenado|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex call|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "geraldo perdomo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "santiago espinal|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ryan waldschmidt|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tommy troy|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "adrian del castillo|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mookie betts|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shohei ohtani|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andy pages|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "freddie freeman|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "will smith|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle tucker|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "corbin carroll|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan arenado|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ketel marte|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "miguel rojas|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "santiago espinal|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex call|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ryan waldschmidt|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabriel moreno|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "geraldo perdomo|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ildemaro vargas|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "adrian del castillo|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tommy troy|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shohei ohtani|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "andy pages|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mookie betts|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "freddie freeman|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "corbin carroll|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ketel marte|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "will smith|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kyle tucker|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "emmet sheehan|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eduardo rodriguez|pitcher_hits_allowed|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eduardo rodriguez|pitcher_hits_allowed|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "emmet sheehan|pitcher_strikeouts|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "eduardo rodriguez|pitcher_strikeouts|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "santiago espinal|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "adrian del castillo|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabriel moreno|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alex call|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "miguel rojas|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nolan arenado|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "tommy troy|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ryan waldschmidt|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ildemaro vargas|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "geraldo perdomo|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bo bichette|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh naylor|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "juan soto|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julio rodriguez|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "randy arozarena|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "j p crawford|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carson benge|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cole young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mark vientos|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marcus semien|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a j ewing|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brett baty|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis torrens|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt emerson|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared young|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jhonny pereda|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rob refsnyder|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor robles|batter_hits|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "juan soto|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "josh naylor|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julio rodriguez|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared young|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "randy arozarena|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mark vientos|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rob refsnyder|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marcus semien|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cole young|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carson benge|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a j ewing|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "j p crawford|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bo bichette|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jhonny pereda|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt emerson|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brett baty|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor robles|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis torrens|batter_rbis|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "juan soto|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "julio rodriguez|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bo bichette|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bo bichette|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "josh naylor|batter_total_bases|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "josh naylor|batter_total_bases|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "emerson hancock|pitcher_hits_allowed|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "emerson hancock|pitcher_strikeouts|4.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "emerson hancock|pitcher_strikeouts|5.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "rob refsnyder|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jhonny pereda|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a j ewing|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "luis torrens|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carson benge|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "colt emerson|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "mark vientos|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marcus semien|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brett baty|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jared young|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "j p crawford|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "victor robles|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "randy arozarena|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cole young|batter_total_bases|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    }
+  }
+}

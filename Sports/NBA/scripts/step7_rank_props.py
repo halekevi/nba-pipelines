@@ -1152,6 +1152,18 @@ def main() -> None:
     df = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig", 
                      engine='python').fillna("")
 
+    # step4d writes bool cols; dtype=str load yields "True"/"False" which pd.to_numeric cannot parse
+    bool_cols = ["team_star_out", "key_facilitator_out", "injury_boost_candidate", "usage_vacuum"]
+    for col in bool_cols:
+        if col in df.columns:
+            df[col] = df[col].map(
+                lambda x: 1.0
+                if str(x).strip().lower() == "true"
+                else 0.0
+                if str(x).strip().lower() == "false"
+                else pd.to_numeric(x, errors="coerce")
+            ).fillna(0.0)
+
     carry_cols: list[str] = []
     carry_df = None
     if is_nba_period_pipeline(args.input, df):

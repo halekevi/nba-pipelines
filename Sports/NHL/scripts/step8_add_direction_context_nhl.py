@@ -205,6 +205,12 @@ COLUMN_ALIASES = {
     "player_dtd":         ["player_dtd", "Player DTD"],
     "team_key_out":       ["team_key_out", "Team Key Out"],
     "team_dtd_count":     ["team_dtd_count", "Team DTD Count"],
+    "consistency_grade":  ["consistency_grade", "Consistency Grade"],
+    "team_top3_rank":     ["team_top3_rank", "Top3 Rank"],
+    "team_bottom3_rank":  ["team_bottom3_rank", "Bottom3 Rank"],
+    "def_boost_hist":     ["def_boost_hist", "Def Boost Hist"],
+    "top3_weak_overperformer": ["top3_weak_overperformer", "Top3 Weak Over"],
+    "top3_elite_fader":   ["top3_elite_fader", "Top3 Elite Fade"],
 }
 
 # Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
@@ -450,6 +456,12 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "pp_tier":          r("pp_tier"),
         "def_tier":         r("def_tier"),
         "def_rank":         r("def_rank"),
+        "consistency_grade": r("consistency_grade"),
+        "team_top3_rank":   r("team_top3_rank"),
+        "team_bottom3_rank": r("team_bottom3_rank"),
+        "def_boost_hist":   r("def_boost_hist"),
+        "top3_weak_overperformer": r("top3_weak_overperformer"),
+        "top3_elite_fader": r("top3_elite_fader"),
         "opp_gaa":          fmt_num(r("opp_gaa"), 3),
         "implied_team_total": fmt_num(r("implied_team_total"), 2),
         "game_total":       fmt_num(r("game_total"), 1),

@@ -1,0 +1,144 @@
+{
+  "slate_date": "2026-06-02",
+  "snapshotted_at": "2026-06-02T11:27:41.812328Z",
+  "limit_per_sport": 8,
+  "featured_count": 8,
+  "featured": [
+    {
+      "player": "NaLyssa Smith",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.931,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 7.0,
+      "slate_pick_type": "Standard",
+      "team": "LVA",
+      "opp": "LAS"
+    },
+    {
+      "player": "Jordin Canada",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.75,
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 5,
+        "hit_rate": 1.0
+      },
+      "slate_line": 6.5,
+      "slate_pick_type": "Standard",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "A'ja Wilson",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.6364,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 7.5,
+      "slate_pick_type": "Goblin",
+      "team": "LVA",
+      "opp": "LAS"
+    },
+    {
+      "player": "Angel Reese",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6316,
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 5,
+        "total": 6,
+        "hit_rate": 0.8333
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "Kamilla Cardoso",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.617,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 8,
+        "total": 8,
+        "hit_rate": 1.0
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Goblin",
+      "team": "CHI",
+      "opp": "WAS"
+    },
+    {
+      "player": "Dearica Hamby",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.6049,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 13,
+        "hit_rate": 0.6923
+      },
+      "slate_line": 16.5,
+      "slate_pick_type": "Standard",
+      "team": "LAS",
+      "opp": "LVA"
+    },
+    {
+      "player": "Rhyne Howard",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5714,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 7,
+        "hit_rate": 1.0
+      },
+      "slate_line": 2.5,
+      "slate_pick_type": "Goblin",
+      "team": "ATL",
+      "opp": "CON"
+    },
+    {
+      "player": "Brittney Griner",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.5517,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 4,
+        "total": 6,
+        "hit_rate": 0.6667
+      },
+      "slate_line": 12.0,
+      "slate_pick_type": "Standard",
+      "team": "CON",
+      "opp": "ATL"
+    }
+  ]
+}

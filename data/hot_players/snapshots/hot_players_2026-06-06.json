@@ -1,0 +1,144 @@
+{
+  "slate_date": "2026-06-06",
+  "snapshotted_at": "2026-06-06T11:28:29.042526Z",
+  "limit_per_sport": 8,
+  "featured_count": 8,
+  "featured": [
+    {
+      "player": "NaLyssa Smith",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.8111,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 19,
+        "total": 20,
+        "hit_rate": 0.95
+      },
+      "slate_line": 7.0,
+      "slate_pick_type": "Standard",
+      "team": "LVA",
+      "opp": "GSV"
+    },
+    {
+      "player": "Olivia Miles",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5424,
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 15,
+        "total": 20,
+        "hit_rate": 0.75
+      },
+      "slate_line": 26.5,
+      "slate_pick_type": "Standard",
+      "team": "MIN",
+      "opp": "SEA"
+    },
+    {
+      "player": "Gabby Williams",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5323,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 20,
+        "total": 26,
+        "hit_rate": 0.7692
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Goblin",
+      "team": "GSV",
+      "opp": "LVA"
+    },
+    {
+      "player": "A'ja Wilson",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5283,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 22,
+        "hit_rate": 0.7727
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Standard",
+      "team": "LVA",
+      "opp": "GSV"
+    },
+    {
+      "player": "Sabrina Ionescu",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.5106,
+      "display_prop": {
+        "prop_type": "Rebs+Asts",
+        "direction": "OVER",
+        "hits": 3,
+        "total": 3,
+        "hit_rate": 1.0
+      },
+      "slate_line": 8.5,
+      "slate_pick_type": "Goblin",
+      "team": "NYL",
+      "opp": "IND"
+    },
+    {
+      "player": "Shakira Austin",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5,
+      "display_prop": {
+        "prop_type": "Pts+Rebs+Asts",
+        "direction": "OVER",
+        "hits": 16,
+        "total": 21,
+        "hit_rate": 0.7619
+      },
+      "slate_line": 25.5,
+      "slate_pick_type": "Standard",
+      "team": "WAS",
+      "opp": "ATL"
+    },
+    {
+      "player": "Aliyah Boston",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 17,
+        "total": 24,
+        "hit_rate": 0.7083
+      },
+      "slate_line": 14.5,
+      "slate_pick_type": "Standard",
+      "team": "IND",
+      "opp": "NYL"
+    },
+    {
+      "player": "Nia Coffey",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4915,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 9,
+        "total": 16,
+        "hit_rate": 0.5625
+      },
+      "slate_line": 8.5,
+      "slate_pick_type": "Standard",
+      "team": "MIN",
+      "opp": "SEA"
+    }
+  ]
+}

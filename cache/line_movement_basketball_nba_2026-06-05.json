@@ -1,0 +1,2414 @@
+{
+  "date": "2026-06-05",
+  "sport_key": "basketball_nba",
+  "snapshot": {
+    "stephon castle|player_assists|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -104,
+      "under_price": -126
+    },
+    "stephon castle|player_assists|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_assists|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 109,
+      "under_price": -144
+    },
+    "jalen brunson|player_assists|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_assists|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -122,
+      "under_price": -108
+    },
+    "de'aaron fox|player_assists|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -137,
+      "under_price": 104
+    },
+    "josh hart|player_assists|5.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -154,
+      "under_price": 117
+    },
+    "karl-anthony towns|player_assists|4.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_assists|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -171
+    },
+    "dylan harper|player_assists|2.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": 131,
+      "under_price": -173
+    },
+    "mikal bridges|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -115
+    },
+    "mikal bridges|player_assists|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_assists|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 115,
+      "under_price": -152
+    },
+    "og anunoby|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 108,
+      "under_price": -143
+    },
+    "julian champagnie|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 127,
+      "under_price": -168
+    },
+    "miles mcbride|player_assists|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 141,
+      "under_price": -188
+    },
+    "landry shamet|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -162,
+      "under_price": 123
+    },
+    "keldon johnson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -109,
+      "under_price": -121
+    },
+    "luke kornet|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -144
+    },
+    "mitchell robinson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 129,
+      "under_price": -171
+    },
+    "victor wembanyama|player_blocks|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_blocks|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -141
+    },
+    "karl-anthony towns|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -149,
+      "under_price": 112
+    },
+    "og anunoby|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -127,
+      "under_price": -104
+    },
+    "mitchell robinson|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -102,
+      "under_price": -131
+    },
+    "mikal bridges|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 144,
+      "under_price": -193
+    },
+    "julian champagnie|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 152,
+      "under_price": -204
+    },
+    "devin vassell|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 161,
+      "under_price": -216
+    },
+    "luke kornet|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 174,
+      "under_price": -235
+    },
+    "dylan harper|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 210,
+      "under_price": -287
+    },
+    "josh hart|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 239,
+      "under_price": -330
+    },
+    "stephon castle|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 246,
+      "under_price": -340
+    },
+    "de'aaron fox|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 297,
+      "under_price": -419
+    },
+    "jalen brunson|player_blocks|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 550,
+      "under_price": -850
+    },
+    "victor wembanyama|player_points|23.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|24.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|25.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|26.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|27.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -107,
+      "under_price": -119
+    },
+    "victor wembanyama|player_points|28.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|29.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|30.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points|31.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|21.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|22.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|23.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|24.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|25.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -118,
+      "under_price": -108
+    },
+    "jalen brunson|player_points|26.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|27.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|28.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|29.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points|30.5": {
+      "open_line": 25.5,
+      "current_line": 26.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|13.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|14.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|15.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -119,
+      "under_price": -107
+    },
+    "karl-anthony towns|player_points|17.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|18.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|19.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points|20.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|13.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|14.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|15.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -112,
+      "under_price": -114
+    },
+    "stephon castle|player_points|17.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|18.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|19.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points|20.5": {
+      "open_line": 16.5,
+      "current_line": 15.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|12.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|13.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|14.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 100,
+      "under_price": -127
+    },
+    "og anunoby|player_points|16.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|17.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points|18.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|11.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|12.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|13.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -101,
+      "under_price": -126
+    },
+    "de'aaron fox|player_points|15.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|16.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points|17.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points|10.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points|11.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -123,
+      "under_price": -104
+    },
+    "dylan harper|player_points|13.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points|14.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points|15.5": {
+      "open_line": 12.5,
+      "current_line": 11.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|9.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|10.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|11.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -105,
+      "under_price": -122
+    },
+    "devin vassell|player_points|13.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|14.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points|15.5": {
+      "open_line": 12.5,
+      "current_line": 13.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points|9.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points|10.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -127,
+      "under_price": -101
+    },
+    "mikal bridges|player_points|12.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points|13.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points|14.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points|8.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points|9.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points|10.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 100,
+      "under_price": -127
+    },
+    "julian champagnie|player_points|12.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points|13.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points|8.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points|9.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points|10.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -119,
+      "under_price": -107
+    },
+    "josh hart|player_points|11.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points|12.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points|13.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points|5.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points|6.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -111
+    },
+    "landry shamet|player_points|8.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points|9.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points|4.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points|5.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -107,
+      "under_price": -119
+    },
+    "keldon johnson|player_points|7.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points|8.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -116,
+      "under_price": -110
+    },
+    "miles mcbride|player_points|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points|7.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points|2.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points|3.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -112,
+      "under_price": -113
+    },
+    "mitchell robinson|player_points|4.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points|5.5": {
+      "open_line": 3.5,
+      "current_line": 2.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_points|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -156,
+      "under_price": 122
+    },
+    "luke kornet|player_points|2.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_points|3.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points_rebounds_assists|39.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points_rebounds_assists|40.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points_rebounds_assists|41.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_points_rebounds_assists|42.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -111,
+      "under_price": -118
+    },
+    "victor wembanyama|player_points_rebounds_assists|43.5": {
+      "open_line": 42.5,
+      "current_line": 41.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points_rebounds_assists|32.5": {
+      "open_line": 35.5,
+      "current_line": 33.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points_rebounds_assists|33.5": {
+      "open_line": 35.5,
+      "current_line": 33.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points_rebounds_assists|34.5": {
+      "open_line": 35.5,
+      "current_line": 33.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_points_rebounds_assists|35.5": {
+      "open_line": 35.5,
+      "current_line": 33.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -111,
+      "under_price": -119
+    },
+    "jalen brunson|player_points_rebounds_assists|36.5": {
+      "open_line": 35.5,
+      "current_line": 33.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points_rebounds_assists|29.5": {
+      "open_line": 32.5,
+      "current_line": 31.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points_rebounds_assists|30.5": {
+      "open_line": 32.5,
+      "current_line": 31.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points_rebounds_assists|31.5": {
+      "open_line": 32.5,
+      "current_line": 31.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_points_rebounds_assists|32.5": {
+      "open_line": 32.5,
+      "current_line": 31.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -109,
+      "under_price": -120
+    },
+    "karl-anthony towns|player_points_rebounds_assists|33.5": {
+      "open_line": 32.5,
+      "current_line": 31.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points_rebounds_assists|25.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points_rebounds_assists|26.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points_rebounds_assists|27.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_points_rebounds_assists|28.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -108,
+      "under_price": -121
+    },
+    "stephon castle|player_points_rebounds_assists|29.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points_rebounds_assists|22.5": {
+      "open_line": 24.5,
+      "current_line": 25.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points_rebounds_assists|23.5": {
+      "open_line": 24.5,
+      "current_line": 25.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points_rebounds_assists|24.5": {
+      "open_line": 24.5,
+      "current_line": 25.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -123,
+      "under_price": -107
+    },
+    "josh hart|player_points_rebounds_assists|25.5": {
+      "open_line": 24.5,
+      "current_line": 25.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_points_rebounds_assists|26.5": {
+      "open_line": 24.5,
+      "current_line": 25.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points_rebounds_assists|21.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points_rebounds_assists|22.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -114
+    },
+    "de'aaron fox|player_points_rebounds_assists|24.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_points_rebounds_assists|25.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points_rebounds_assists|19.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points_rebounds_assists|20.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points_rebounds_assists|21.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_points_rebounds_assists|22.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -105,
+      "under_price": -125
+    },
+    "og anunoby|player_points_rebounds_assists|23.5": {
+      "open_line": 22.5,
+      "current_line": 23.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points_rebounds_assists|18.5": {
+      "open_line": 21.5,
+      "current_line": 19.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points_rebounds_assists|19.5": {
+      "open_line": 21.5,
+      "current_line": 19.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points_rebounds_assists|20.5": {
+      "open_line": 21.5,
+      "current_line": 19.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_points_rebounds_assists|21.5": {
+      "open_line": 21.5,
+      "current_line": 19.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -105,
+      "under_price": -126
+    },
+    "dylan harper|player_points_rebounds_assists|22.5": {
+      "open_line": 21.5,
+      "current_line": 19.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points_rebounds_assists|16.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points_rebounds_assists|17.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points_rebounds_assists|18.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_points_rebounds_assists|19.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -110,
+      "under_price": -119
+    },
+    "devin vassell|player_points_rebounds_assists|20.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points_rebounds_assists|16.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points_rebounds_assists|17.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points_rebounds_assists|18.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -119,
+      "under_price": -111
+    },
+    "julian champagnie|player_points_rebounds_assists|19.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_points_rebounds_assists|20.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points_rebounds_assists|15.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points_rebounds_assists|16.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points_rebounds_assists|17.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -122,
+      "under_price": -107
+    },
+    "mikal bridges|player_points_rebounds_assists|18.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_points_rebounds_assists|19.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points_rebounds_assists|7.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points_rebounds_assists|8.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points_rebounds_assists|9.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -131,
+      "under_price": 100
+    },
+    "landry shamet|player_points_rebounds_assists|10.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_points_rebounds_assists|11.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points_rebounds_assists|7.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points_rebounds_assists|8.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points_rebounds_assists|9.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -128,
+      "under_price": -103
+    },
+    "keldon johnson|player_points_rebounds_assists|10.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_points_rebounds_assists|11.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points_rebounds_assists|7.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points_rebounds_assists|8.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points_rebounds_assists|9.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -106,
+      "under_price": -124
+    },
+    "mitchell robinson|player_points_rebounds_assists|10.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_points_rebounds_assists|11.5": {
+      "open_line": 9.5,
+      "current_line": 11.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points_rebounds_assists|6.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points_rebounds_assists|7.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points_rebounds_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -108,
+      "under_price": -122
+    },
+    "miles mcbride|player_points_rebounds_assists|9.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "miles mcbride|player_points_rebounds_assists|10.5": {
+      "open_line": 8.5,
+      "current_line": 10.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_points_rebounds_assists|3.5": {
+      "open_line": 4.5,
+      "current_line": 6.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_points_rebounds_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 6.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -121,
+      "under_price": -109
+    },
+    "luke kornet|player_points_rebounds_assists|5.5": {
+      "open_line": 4.5,
+      "current_line": 6.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_points_rebounds_assists|6.5": {
+      "open_line": 4.5,
+      "current_line": 6.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_rebounds|10.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_rebounds|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -114,
+      "under_price": -115
+    },
+    "victor wembanyama|player_rebounds|12.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "victor wembanyama|player_rebounds|13.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_rebounds|9.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_rebounds|10.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -137,
+      "under_price": 104
+    },
+    "karl-anthony towns|player_rebounds|11.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "karl-anthony towns|player_rebounds|12.5": {
+      "open_line": 10.5,
+      "current_line": 11.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_rebounds|7.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_rebounds|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -136,
+      "under_price": 104
+    },
+    "josh hart|player_rebounds|9.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "josh hart|player_rebounds|10.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_rebounds|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -146,
+      "under_price": 111
+    },
+    "julian champagnie|player_rebounds|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "julian champagnie|player_rebounds|7.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_rebounds|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -101,
+      "under_price": -130
+    },
+    "og anunoby|player_rebounds|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_rebounds|4.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitchell robinson|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -140
+    },
+    "mitchell robinson|player_rebounds|6.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -158,
+      "under_price": 120
+    },
+    "stephon castle|player_rebounds|5.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "dylan harper|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -141,
+      "under_price": 107
+    },
+    "dylan harper|player_rebounds|5.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_rebounds|3.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -106,
+      "under_price": -124
+    },
+    "devin vassell|player_rebounds|5.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_rebounds|2.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "de'aaron fox|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 103,
+      "under_price": -136
+    },
+    "de'aaron fox|player_rebounds|4.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mikal bridges|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -174,
+      "under_price": 131
+    },
+    "mikal bridges|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -149,
+      "under_price": 113
+    },
+    "jalen brunson|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keldon johnson|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -121,
+      "under_price": -108
+    },
+    "keldon johnson|player_rebounds|3.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_rebounds|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "luke kornet|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 129,
+      "under_price": -171
+    },
+    "landry shamet|player_rebounds|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -104,
+      "under_price": -127
+    },
+    "miles mcbride|player_rebounds|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 136,
+      "under_price": -180
+    },
+    "josh hart|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 115,
+      "under_price": -153
+    },
+    "og anunoby|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 153,
+      "under_price": -205
+    },
+    "mikal bridges|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 159,
+      "under_price": -214
+    },
+    "victor wembanyama|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 169,
+      "under_price": -227
+    },
+    "stephon castle|player_steals|0.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "stephon castle|player_steals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 181,
+      "under_price": -246
+    },
+    "de'aaron fox|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -246,
+      "under_price": 181
+    },
+    "de'aaron fox|player_steals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -195,
+      "under_price": 145
+    },
+    "dylan harper|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -183,
+      "under_price": 137
+    },
+    "jalen brunson|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -166,
+      "under_price": 125
+    },
+    "julian champagnie|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -154,
+      "under_price": 116
+    },
+    "karl-anthony towns|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -139,
+      "under_price": 105
+    },
+    "mitchell robinson|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -101,
+      "under_price": -131
+    },
+    "landry shamet|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 104,
+      "under_price": -138
+    },
+    "miles mcbride|player_steals|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 106,
+      "under_price": -141
+    },
+    "julian champagnie|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -113,
+      "under_price": -116
+    },
+    "devin vassell|player_threes|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "devin vassell|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -159
+    },
+    "jalen brunson|player_threes|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen brunson|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 125,
+      "under_price": -165
+    },
+    "og anunoby|player_threes|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "og anunoby|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 132,
+      "under_price": -175
+    },
+    "victor wembanyama|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -177,
+      "under_price": 134
+    },
+    "victor wembanyama|player_threes|2.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "landry shamet|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": -101
+    },
+    "josh hart|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -116,
+      "under_price": -113
+    },
+    "stephon castle|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 107,
+      "under_price": -140
+    },
+    "mikal bridges|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 126,
+      "under_price": -166
+    },
+    "karl-anthony towns|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 132,
+      "under_price": -174
+    },
+    "de'aaron fox|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 137,
+      "under_price": -181
+    },
+    "miles mcbride|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 146,
+      "under_price": -194
+    },
+    "dylan harper|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -178,
+      "under_price": 135
+    },
+    "keldon johnson|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -124,
+      "under_price": -106
+    },
+    "jose alvarado|player_points_rebounds_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jordan clarkson|player_points_rebounds_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "harrison barnes|player_points_rebounds_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "date": "2026-06-06",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_nba_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_nhl_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 317,
+      "void_rows": 2,
+      "acceptable_void_rows": 2,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_mlb_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 7601,
+      "void_rows": 1235,
+      "acceptable_void_rows": 1132,
+      "unacceptable_void_rows": 103
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_soccer_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 451,
+      "void_rows": 451,
+      "acceptable_void_rows": 451,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_nba1h_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_tennis_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 30,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-06\\graded_wnba_2026-06-06.xlsx",
+      "status": "ok",
+      "rows": 1207,
+      "void_rows": 37,
+      "acceptable_void_rows": 37,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 103
+}

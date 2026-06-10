@@ -1,0 +1,68 @@
+{
+  "date": "2026-06-01",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_nba_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_nhl_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 321,
+      "void_rows": 6,
+      "acceptable_void_rows": 6,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_mlb_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 4572,
+      "void_rows": 705,
+      "acceptable_void_rows": 705,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_soccer_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 451,
+      "void_rows": 451,
+      "acceptable_void_rows": 451,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_nba1h_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_tennis_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 259,
+      "void_rows": 12,
+      "acceptable_void_rows": 12,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-01\\graded_wnba_2026-06-01.xlsx",
+      "status": "ok",
+      "rows": 1739,
+      "void_rows": 89,
+      "acceptable_void_rows": 89,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

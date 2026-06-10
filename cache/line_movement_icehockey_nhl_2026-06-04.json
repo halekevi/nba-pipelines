@@ -1,0 +1,1324 @@
+{
+  "date": "2026-06-04",
+  "sport_key": "icehockey_nhl",
+  "snapshot": {
+    "mitch marner|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -140,
+      "under_price": 110
+    },
+    "jack eichel|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": 100
+    },
+    "sebastian aho|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "seth jarvis|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -154
+    },
+    "andrei svechnikov|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 135,
+      "under_price": -175
+    },
+    "nikolaj ehlers|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 135,
+      "under_price": -175
+    },
+    "jackson blake|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -180
+    },
+    "shea theodore|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 140,
+      "under_price": -180
+    },
+    "mark stone|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -188
+    },
+    "k'andre miller|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 154,
+      "under_price": -200
+    },
+    "taylor hall|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 160,
+      "under_price": -210
+    },
+    "shayne gostisbehere|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 165,
+      "under_price": -215
+    },
+    "ivan barbashev|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 185,
+      "under_price": -245
+    },
+    "logan stankoven|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 195,
+      "under_price": -260
+    },
+    "william karlsson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 195,
+      "under_price": -260
+    },
+    "pavel dorofeyev|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 210,
+      "under_price": -280
+    },
+    "tomas hertl|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 230,
+      "under_price": -315
+    },
+    "brett howden|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 240,
+      "under_price": -330
+    },
+    "jordan staal|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 270,
+      "under_price": -375
+    },
+    "noah hanifin|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 280,
+      "under_price": -395
+    },
+    "brayden mcnabb|player_blocked_shots|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 105,
+      "under_price": -135
+    },
+    "shea theodore|player_blocked_shots|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -154
+    },
+    "rasmus andersson|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -166,
+      "under_price": 130
+    },
+    "noah hanifin|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -145,
+      "under_price": 114
+    },
+    "jaccob slavin|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -105,
+      "under_price": -125
+    },
+    "sean walker|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 100,
+      "under_price": -130
+    },
+    "jeremy lauzon|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "k'andre miller|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -188
+    },
+    "jack eichel|player_points|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jack eichel|player_points|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": 180,
+      "under_price": -238
+    },
+    "mitch marner|player_points|0.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitch marner|player_points|1.5": {
+      "open_line": 1.5,
+      "current_line": 0.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": 180,
+      "under_price": -238
+    },
+    "seth jarvis|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -166,
+      "under_price": 130
+    },
+    "andrei svechnikov|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -160,
+      "under_price": 124
+    },
+    "sebastian aho|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -160,
+      "under_price": 124
+    },
+    "nikolaj ehlers|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -145,
+      "under_price": 114
+    },
+    "jackson blake|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": 100
+    },
+    "mark stone|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": 100
+    },
+    "pavel dorofeyev|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -120,
+      "under_price": -110
+    },
+    "taylor hall|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -120,
+      "under_price": -110
+    },
+    "logan stankoven|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -120
+    },
+    "shea theodore|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 105,
+      "under_price": -135
+    },
+    "ivan barbashev|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 114,
+      "under_price": -145
+    },
+    "tomas hertl|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 114,
+      "under_price": -145
+    },
+    "brett howden|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -154
+    },
+    "shayne gostisbehere|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -154
+    },
+    "k'andre miller|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -166
+    },
+    "william karlsson|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 124,
+      "under_price": -160
+    },
+    "jordan staal|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 154,
+      "under_price": -200
+    },
+    "noah hanifin|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 220,
+      "under_price": -298
+    },
+    "mitch marner|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 180,
+      "under_price": -238
+    },
+    "jack eichel|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 185,
+      "under_price": -245
+    },
+    "sebastian aho|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 220,
+      "under_price": -298
+    },
+    "pavel dorofeyev|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 230,
+      "under_price": -315
+    },
+    "andrei svechnikov|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 240,
+      "under_price": -330
+    },
+    "mark stone|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 240,
+      "under_price": -330
+    },
+    "nikolaj ehlers|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 240,
+      "under_price": -330
+    },
+    "seth jarvis|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 260,
+      "under_price": -360
+    },
+    "shayne gostisbehere|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 280,
+      "under_price": -395
+    },
+    "tomas hertl|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 280,
+      "under_price": -395
+    },
+    "shea theodore|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 600,
+      "under_price": -1050
+    },
+    "k'andre miller|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 650,
+      "under_price": -1150
+    },
+    "andrei svechnikov|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -135,
+      "under_price": 105
+    },
+    "seth jarvis|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -135,
+      "under_price": 105
+    },
+    "jack eichel|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -120,
+      "under_price": -110
+    },
+    "pavel dorofeyev|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -120
+    },
+    "logan stankoven|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -105,
+      "under_price": -125
+    },
+    "nikolaj ehlers|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "sebastian aho|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 114,
+      "under_price": -145
+    },
+    "jackson blake|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -166
+    },
+    "taylor hall|player_shots_on_goal|1.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "taylor hall|player_shots_on_goal|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -188
+    },
+    "mitch marner|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -195,
+      "under_price": 150
+    },
+    "sean walker|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": 100
+    },
+    "shayne gostisbehere|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -130,
+      "under_price": 100
+    },
+    "mark stone|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -115
+    },
+    "shea theodore|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -120
+    },
+    "tomas hertl|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -110,
+      "under_price": -120
+    },
+    "william karlsson|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -105,
+      "under_price": -125
+    },
+    "brett howden|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "jaccob slavin|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "jordan staal|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 114,
+      "under_price": -145
+    },
+    "jalen chatfield|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 120,
+      "under_price": -154
+    },
+    "jordan martinook|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 124,
+      "under_price": -160
+    },
+    "k'andre miller|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -166
+    },
+    "rasmus andersson|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 130,
+      "under_price": -166
+    },
+    "ivan barbashev|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 145,
+      "under_price": -188
+    },
+    "noah hanifin|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 160,
+      "under_price": -210
+    },
+    "eric robinson|player_shots_on_goal|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 170,
+      "under_price": -220
+    },
+    "alexander nikishin|player_shots_on_goal|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -210,
+      "under_price": 160
+    },
+    "sebastian aho|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "sebastian aho|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "sebastian aho|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "taylor hall|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "taylor hall|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "taylor hall|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "logan stankoven|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "logan stankoven|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "logan stankoven|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "pavel dorofeyev|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "pavel dorofeyev|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "pavel dorofeyev|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jack eichel|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jack eichel|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jack eichel|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitch marner|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitch marner|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mitch marner|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "andrei svechnikov|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "andrei svechnikov|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "andrei svechnikov|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "seth jarvis|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "seth jarvis|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "seth jarvis|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "nikolaj ehlers|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "nikolaj ehlers|player_goals|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "nikolaj ehlers|player_goals|2.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "jaccob slavin|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brayden mcnabb|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jordan martinook|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen chatfield|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "rasmus andersson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "sean walker|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "eric robinson|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mark jankowski|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "alexander nikishin|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jaccob slavin|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brayden mcnabb|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jordan martinook|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen chatfield|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "rasmus andersson|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "sean walker|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "eric robinson|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mark jankowski|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "alexander nikishin|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "logan stankoven|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "taylor hall|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jackson blake|player_power_play_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jordan martinook|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "william carrier|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "brett howden|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jordan staal|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "colton sissons|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jackson blake|player_goals|1.5": {
+      "open_line": 2.5,
+      "current_line": 1.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "jackson blake|player_goals|2.5": {
+      "open_line": 2.5,
+      "current_line": 1.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null
+    },
+    "rasmus andersson|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "keegan kolesar|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "william karlsson|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "nic dowd|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "k'andre miller|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "eric robinson|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "ivan barbashev|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "tomas hertl|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "shea theodore|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mark stone|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "mark stone|player_goals|2.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "cole smith|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "mark jankowski|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "shayne gostisbehere|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "jalen chatfield|player_blocked_shots|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": 110,
+      "under_price": -140
+    },
+    "mark stone|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 2.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "tomas hertl|player_goals|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null
+    },
+    "colton sissons|player_assists|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "colton sissons|player_points|0.5": {
+      "open_line": 0.5,
+      "current_line": 0.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    },
+    "alexander nikishin|player_goals|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null
+    }
+  }
+}

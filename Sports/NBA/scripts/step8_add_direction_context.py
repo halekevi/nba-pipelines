@@ -50,6 +50,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from scripts.l10_streak_utils import finalize_l10_ui_columns
+from utils.stack_context_cols import STACK_CONTEXT_COLS, STACK_CONTEXT_RENAME
 from nba_enrichment_carry import (
     ENRICHMENT_CARRY_COLS,
     is_nba_period_pipeline,
@@ -426,6 +427,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'is_playoff_game',
         'game_script_mult', 'game_script_note',
         'open_line', 'line_movement', 'line_direction_shift',
+        *STACK_CONTEXT_COLS,
     ]
     # Injury/usage cols always included (step4d populates for all NBA variants)
     INJURY_COLS = [
@@ -531,6 +533,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'open_line': 'Open Line',
         'line_movement': 'Line Movement',
         'line_direction_shift': 'Line Shift',
+        **STACK_CONTEXT_RENAME,
     }
     clean = clean.rename(columns=rename)
 

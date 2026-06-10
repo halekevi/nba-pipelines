@@ -1,0 +1,62 @@
+{
+  "date": "2026-05-19",
+  "generated_at": "2026-06-03 17:13:40 UTC",
+  "source": "combined_slate_full",
+  "rows": 1996,
+  "pick_type_ineligible_rows": 510,
+  "sports": {
+    "TENNIS": {
+      "rows": 581,
+      "pick_type_eligible_pct": 58.0,
+      "avg_data_completeness": 0.9,
+      "avg_hit_prob_over": 0.335,
+      "avg_hit_prob_under": 0.534,
+      "avg_hit_prob_actionable": 0.338,
+      "avg_rank_read_score": 0.304,
+      "avg_prop_quality_score": 0.46,
+      "pct_missing_hit_prob_over": 0.0,
+      "pct_filled_distribution_std": 0.0,
+      "avg_distribution_std": NaN,
+      "pct_filled_calibration_bucket": 0.0
+    }
+  },
+  "expected_sports": [
+    "CBB",
+    "CFB",
+    "MLB",
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "TENNIS",
+    "WCBB",
+    "WNBA"
+  ],
+  "inactive_sports": [
+    "CBB",
+    "CFB",
+    "MLB",
+    "NBA",
+    "NBA1H",
+    "NBA1Q",
+    "NFL",
+    "NHL",
+    "SOCCER",
+    "WCBB",
+    "WNBA"
+  ],
+  "top_missing_fields": {
+    "confidence_score": 1996,
+    "calibration_bucket": 1003,
+    "pace_tier": 612,
+    "surface": 581,
+    "league": 200,
+    "rank_score": 179,
+    "distribution_std": 64,
+    "edge": 43
+  },
+  "checklist_path": "data\\pipeline_read_checklist.json",
+  "schema_path": "data\\schemas\\pipeline_read_fields.schema.json"
+}

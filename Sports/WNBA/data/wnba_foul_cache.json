@@ -1,0 +1,1099 @@
+{
+  "season_2025": {
+    "fetched_at": "2026-06-09T13:03:12.554198+00:00",
+    "players": {
+      "A'ja Wilson|LVA": {
+        "min": 31.2,
+        "pf": 1.9,
+        "player_name": "A'ja Wilson",
+        "team": "LVA"
+      },
+      "Aaliyah Edwards|CON": {
+        "min": 14.8,
+        "pf": 1.6,
+        "player_name": "Aaliyah Edwards",
+        "team": "CON"
+      },
+      "Aaliyah Nye|LVA": {
+        "min": 15.3,
+        "pf": 1.3,
+        "player_name": "Aaliyah Nye",
+        "team": "LVA"
+      },
+      "Aari McDonald|IND": {
+        "min": 26.3,
+        "pf": 2.5,
+        "player_name": "Aari McDonald",
+        "team": "IND"
+      },
+      "Aerial Powers|IND": {
+        "min": 16.7,
+        "pf": 1.9,
+        "player_name": "Aerial Powers",
+        "team": "IND"
+      },
+      "Ajae Petty|DAL": {
+        "min": 3.2,
+        "pf": 0.5,
+        "player_name": "Ajae Petty",
+        "team": "DAL"
+      },
+      "Alanna Smith|MIN": {
+        "min": 26.5,
+        "pf": 2.8,
+        "player_name": "Alanna Smith",
+        "team": "MIN"
+      },
+      "Alexis Prince|PHX": {
+        "min": 22.1,
+        "pf": 1.0,
+        "player_name": "Alexis Prince",
+        "team": "PHX"
+      },
+      "Alissa Pili|LAS": {
+        "min": 5.2,
+        "pf": 0.7,
+        "player_name": "Alissa Pili",
+        "team": "LAS"
+      },
+      "Aliyah Boston|IND": {
+        "min": 30.2,
+        "pf": 3.1,
+        "player_name": "Aliyah Boston",
+        "team": "IND"
+      },
+      "Allisha Gray|ATL": {
+        "min": 34.5,
+        "pf": 2.6,
+        "player_name": "Allisha Gray",
+        "team": "ATL"
+      },
+      "Alysha Clark|WAS": {
+        "min": 19.7,
+        "pf": 1.9,
+        "player_name": "Alysha Clark",
+        "team": "WAS"
+      },
+      "Alyssa Thomas|PHX": {
+        "min": 31.3,
+        "pf": 2.1,
+        "player_name": "Alyssa Thomas",
+        "team": "PHX"
+      },
+      "Amy Okonkwo|DAL": {
+        "min": 19.6,
+        "pf": 1.4,
+        "player_name": "Amy Okonkwo",
+        "team": "DAL"
+      },
+      "Anastasiia Olairi Kosu|MIN": {
+        "min": 3.8,
+        "pf": 0.4,
+        "player_name": "Anastasiia Olairi Kosu",
+        "team": "MIN"
+      },
+      "Aneesah Morrow|CON": {
+        "min": 18.9,
+        "pf": 2.0,
+        "player_name": "Aneesah Morrow",
+        "team": "CON"
+      },
+      "Angel Reese|CHI": {
+        "min": 31.6,
+        "pf": 3.4,
+        "player_name": "Angel Reese",
+        "team": "CHI"
+      },
+      "Ariel Atkins|CHI": {
+        "min": 28.5,
+        "pf": 3.0,
+        "player_name": "Ariel Atkins",
+        "team": "CHI"
+      },
+      "Arike Ogunbowale|DAL": {
+        "min": 33.3,
+        "pf": 2.6,
+        "player_name": "Arike Ogunbowale",
+        "team": "DAL"
+      },
+      "Aziaha James|DAL": {
+        "min": 17.7,
+        "pf": 1.2,
+        "player_name": "Aziaha James",
+        "team": "DAL"
+      },
+      "Azura Stevens|LAS": {
+        "min": 28.4,
+        "pf": 2.2,
+        "player_name": "Azura Stevens",
+        "team": "LAS"
+      },
+      "Breanna Stewart|NYL": {
+        "min": 30.6,
+        "pf": 1.9,
+        "player_name": "Breanna Stewart",
+        "team": "NYL"
+      },
+      "Bree Hall|IND": {
+        "min": 4.4,
+        "pf": 1.0,
+        "player_name": "Bree Hall",
+        "team": "IND"
+      },
+      "Bria Hartley|CON": {
+        "min": 22.8,
+        "pf": 2.5,
+        "player_name": "Bria Hartley",
+        "team": "CON"
+      },
+      "Brianna Turner|IND": {
+        "min": 8.6,
+        "pf": 0.9,
+        "player_name": "Brianna Turner",
+        "team": "IND"
+      },
+      "Bridget Carleton|MIN": {
+        "min": 27.9,
+        "pf": 1.9,
+        "player_name": "Bridget Carleton",
+        "team": "MIN"
+      },
+      "Brionna Jones|ATL": {
+        "min": 26.6,
+        "pf": 2.5,
+        "player_name": "Brionna Jones",
+        "team": "ATL"
+      },
+      "Brittney Griner|ATL": {
+        "min": 20.8,
+        "pf": 1.9,
+        "player_name": "Brittney Griner",
+        "team": "ATL"
+      },
+      "Brittney Sykes|SEA": {
+        "min": 30.6,
+        "pf": 2.5,
+        "player_name": "Brittney Sykes",
+        "team": "SEA"
+      },
+      "Caitlin Clark|IND": {
+        "min": 31.0,
+        "pf": 2.7,
+        "player_name": "Caitlin Clark",
+        "team": "IND"
+      },
+      "Cameron Brink|LAS": {
+        "min": 12.9,
+        "pf": 2.5,
+        "player_name": "Cameron Brink",
+        "team": "LAS"
+      },
+      "Camryn Taylor|MIN": {
+        "min": 3.8,
+        "pf": 0.7,
+        "player_name": "Camryn Taylor",
+        "team": "MIN"
+      },
+      "Carla Leite|GSV": {
+        "min": 17.2,
+        "pf": 1.5,
+        "player_name": "Carla Leite",
+        "team": "GSV"
+      },
+      "Cecilia Zandalasini|GSV": {
+        "min": 23.7,
+        "pf": 1.7,
+        "player_name": "Cecilia Zandalasini",
+        "team": "GSV"
+      },
+      "Chelsea Gray|LVA": {
+        "min": 31.1,
+        "pf": 2.0,
+        "player_name": "Chelsea Gray",
+        "team": "LVA"
+      },
+      "Cheyenne Parker-Tyus|LVA": {
+        "min": 7.0,
+        "pf": 1.0,
+        "player_name": "Cheyenne Parker-Tyus",
+        "team": "LVA"
+      },
+      "Chloe Bibby|IND": {
+        "min": 11.0,
+        "pf": 0.9,
+        "player_name": "Chloe Bibby",
+        "team": "IND"
+      },
+      "Christyn Williams|DAL": {
+        "min": 11.2,
+        "pf": 1.0,
+        "player_name": "Christyn Williams",
+        "team": "DAL"
+      },
+      "Courtney Vandersloot|CHI": {
+        "min": 27.2,
+        "pf": 1.9,
+        "player_name": "Courtney Vandersloot",
+        "team": "CHI"
+      },
+      "Courtney Williams|MIN": {
+        "min": 28.6,
+        "pf": 2.0,
+        "player_name": "Courtney Williams",
+        "team": "MIN"
+      },
+      "Crystal Bradford|LVA": {
+        "min": 6.0,
+        "pf": 0.8,
+        "player_name": "Crystal Bradford",
+        "team": "LVA"
+      },
+      "Damiris Dantas|IND": {
+        "min": 11.5,
+        "pf": 1.5,
+        "player_name": "Damiris Dantas",
+        "team": "IND"
+      },
+      "Dana Evans|LVA": {
+        "min": 17.7,
+        "pf": 1.3,
+        "player_name": "Dana Evans",
+        "team": "LVA"
+      },
+      "DeWanna Bonner|PHX": {
+        "min": 23.6,
+        "pf": 1.3,
+        "player_name": "DeWanna Bonner",
+        "team": "PHX"
+      },
+      "Dearica Hamby|LAS": {
+        "min": 31.2,
+        "pf": 2.7,
+        "player_name": "Dearica Hamby",
+        "team": "LAS"
+      },
+      "DiJonai Carrington|MIN": {
+        "min": 21.9,
+        "pf": 2.5,
+        "player_name": "DiJonai Carrington",
+        "team": "MIN"
+      },
+      "Diamond Miller|DAL": {
+        "min": 10.9,
+        "pf": 1.6,
+        "player_name": "Diamond Miller",
+        "team": "DAL"
+      },
+      "Dominique Malonga|SEA": {
+        "min": 14.3,
+        "pf": 2.1,
+        "player_name": "Dominique Malonga",
+        "team": "SEA"
+      },
+      "Elizabeth Kitley|LVA": {
+        "min": 8.2,
+        "pf": 1.5,
+        "player_name": "Elizabeth Kitley",
+        "team": "LVA"
+      },
+      "Elizabeth Williams|CHI": {
+        "min": 21.1,
+        "pf": 1.4,
+        "player_name": "Elizabeth Williams",
+        "team": "CHI"
+      },
+      "Emily Engstler|WAS": {
+        "min": 12.8,
+        "pf": 1.3,
+        "player_name": "Emily Engstler",
+        "team": "WAS"
+      },
+      "Emma Cannon|LAS": {
+        "min": 10.1,
+        "pf": 1.7,
+        "player_name": "Emma Cannon",
+        "team": "LAS"
+      },
+      "Emma Meesseman|NYL": {
+        "min": 25.9,
+        "pf": 1.5,
+        "player_name": "Emma Meesseman",
+        "team": "NYL"
+      },
+      "Erica Wheeler|SEA": {
+        "min": 25.6,
+        "pf": 2.5,
+        "player_name": "Erica Wheeler",
+        "team": "SEA"
+      },
+      "Ezi Magbegor|SEA": {
+        "min": 27.3,
+        "pf": 2.9,
+        "player_name": "Ezi Magbegor",
+        "team": "SEA"
+      },
+      "Gabby Williams|SEA": {
+        "min": 31.6,
+        "pf": 1.5,
+        "player_name": "Gabby Williams",
+        "team": "SEA"
+      },
+      "Grace Berger|DAL": {
+        "min": 22.0,
+        "pf": 1.9,
+        "player_name": "Grace Berger",
+        "team": "DAL"
+      },
+      "Hailey Van Lith|CHI": {
+        "min": 12.4,
+        "pf": 0.8,
+        "player_name": "Hailey Van Lith",
+        "team": "CHI"
+      },
+      "Haley Jones|DAL": {
+        "min": 21.2,
+        "pf": 2.3,
+        "player_name": "Haley Jones",
+        "team": "DAL"
+      },
+      "Haley Peters|CON": {
+        "min": 11.5,
+        "pf": 1.5,
+        "player_name": "Haley Peters",
+        "team": "CON"
+      },
+      "Iliana Rupert|GSV": {
+        "min": 23.2,
+        "pf": 2.3,
+        "player_name": "Iliana Rupert",
+        "team": "GSV"
+      },
+      "Isabelle Harrison|NYL": {
+        "min": 10.6,
+        "pf": 1.3,
+        "player_name": "Isabelle Harrison",
+        "team": "NYL"
+      },
+      "JJ Quinerly|DAL": {
+        "min": 15.9,
+        "pf": 2.1,
+        "player_name": "JJ Quinerly",
+        "team": "DAL"
+      },
+      "Jackie Young|LVA": {
+        "min": 30.4,
+        "pf": 2.4,
+        "player_name": "Jackie Young",
+        "team": "LVA"
+      },
+      "Jacy Sheldon|WAS": {
+        "min": 23.6,
+        "pf": 2.4,
+        "player_name": "Jacy Sheldon",
+        "team": "WAS"
+      },
+      "Jade Melbourne|WAS": {
+        "min": 23.4,
+        "pf": 2.3,
+        "player_name": "Jade Melbourne",
+        "team": "WAS"
+      },
+      "Jaelyn Brown|CON": {
+        "min": 13.1,
+        "pf": 1.7,
+        "player_name": "Jaelyn Brown",
+        "team": "CON"
+      },
+      "Janelle Salaun|GSV": {
+        "min": 27.0,
+        "pf": 1.9,
+        "player_name": "Janelle Salaun",
+        "team": "GSV"
+      },
+      "Jaylyn Sherrod|MIN": {
+        "min": 5.5,
+        "pf": 0.7,
+        "player_name": "Jaylyn Sherrod",
+        "team": "MIN"
+      },
+      "Jessica Shepard|MIN": {
+        "min": 20.9,
+        "pf": 1.1,
+        "player_name": "Jessica Shepard",
+        "team": "MIN"
+      },
+      "Jewell Loyd|LVA": {
+        "min": 28.3,
+        "pf": 1.9,
+        "player_name": "Jewell Loyd",
+        "team": "LVA"
+      },
+      "Jonquel Jones|NYL": {
+        "min": 26.8,
+        "pf": 2.5,
+        "player_name": "Jonquel Jones",
+        "team": "NYL"
+      },
+      "Jordin Canada|ATL": {
+        "min": 28.0,
+        "pf": 1.6,
+        "player_name": "Jordin Canada",
+        "team": "ATL"
+      },
+      "Joyner Holmes|LVA": {
+        "min": 4.8,
+        "pf": 0.8,
+        "player_name": "Joyner Holmes",
+        "team": "LVA"
+      },
+      "Julie Allemand|LAS": {
+        "min": 28.3,
+        "pf": 1.6,
+        "player_name": "Julie Allemand",
+        "team": "LAS"
+      },
+      "Julie Vanloo|LAS": {
+        "min": 12.8,
+        "pf": 1.3,
+        "player_name": "Julie Vanloo",
+        "team": "LAS"
+      },
+      "Kahleah Copper|PHX": {
+        "min": 26.9,
+        "pf": 2.6,
+        "player_name": "Kahleah Copper",
+        "team": "PHX"
+      },
+      "Kaila Charles|GSV": {
+        "min": 17.6,
+        "pf": 2.0,
+        "player_name": "Kaila Charles",
+        "team": "GSV"
+      },
+      "Kaitlyn Chen|GSV": {
+        "min": 10.3,
+        "pf": 0.7,
+        "player_name": "Kaitlyn Chen",
+        "team": "GSV"
+      },
+      "Kalani Brown|PHX": {
+        "min": 12.8,
+        "pf": 1.6,
+        "player_name": "Kalani Brown",
+        "team": "PHX"
+      },
+      "Kamiah Smalls|ATL": {
+        "min": 1.1,
+        "pf": 0.0,
+        "player_name": "Kamiah Smalls",
+        "team": "ATL"
+      },
+      "Kamilla Cardoso|CHI": {
+        "min": 27.6,
+        "pf": 2.8,
+        "player_name": "Kamilla Cardoso",
+        "team": "CHI"
+      },
+      "Kariata Diaby|CON": {
+        "min": 8.0,
+        "pf": 1.5,
+        "player_name": "Kariata Diaby",
+        "team": "CON"
+      },
+      "Karlie Samuelson|MIN": {
+        "min": 14.2,
+        "pf": 1.6,
+        "player_name": "Karlie Samuelson",
+        "team": "MIN"
+      },
+      "Kate Martin|GSV": {
+        "min": 16.4,
+        "pf": 1.1,
+        "player_name": "Kate Martin",
+        "team": "GSV"
+      },
+      "Kathryn Westbeld|PHX": {
+        "min": 18.4,
+        "pf": 1.5,
+        "player_name": "Kathryn Westbeld",
+        "team": "PHX"
+      },
+      "Kayla McBride|MIN": {
+        "min": 31.3,
+        "pf": 1.3,
+        "player_name": "Kayla McBride",
+        "team": "MIN"
+      },
+      "Kayla Thornton|GSV": {
+        "min": 30.1,
+        "pf": 2.4,
+        "player_name": "Kayla Thornton",
+        "team": "GSV"
+      },
+      "Kelsey Mitchell|IND": {
+        "min": 31.4,
+        "pf": 2.0,
+        "player_name": "Kelsey Mitchell",
+        "team": "IND"
+      },
+      "Kelsey Plum|LAS": {
+        "min": 35.1,
+        "pf": 2.7,
+        "player_name": "Kelsey Plum",
+        "team": "LAS"
+      },
+      "Kennedy Burke|NYL": {
+        "min": 21.6,
+        "pf": 1.3,
+        "player_name": "Kennedy Burke",
+        "team": "NYL"
+      },
+      "Kia Nurse|CHI": {
+        "min": 21.9,
+        "pf": 1.6,
+        "player_name": "Kia Nurse",
+        "team": "CHI"
+      },
+      "Kiah Stokes|LVA": {
+        "min": 12.9,
+        "pf": 1.2,
+        "player_name": "Kiah Stokes",
+        "team": "LVA"
+      },
+      "Kiana Williams|PHX": {
+        "min": 9.7,
+        "pf": 0.5,
+        "player_name": "Kiana Williams",
+        "team": "PHX"
+      },
+      "Kierstan Bell|LVA": {
+        "min": 12.2,
+        "pf": 0.9,
+        "player_name": "Kierstan Bell",
+        "team": "LVA"
+      },
+      "Kiki Iriafen|WAS": {
+        "min": 26.9,
+        "pf": 2.9,
+        "player_name": "Kiki Iriafen",
+        "team": "WAS"
+      },
+      "Kitija Laksa|PHX": {
+        "min": 19.0,
+        "pf": 1.5,
+        "player_name": "Kitija Laksa",
+        "team": "PHX"
+      },
+      "Kyara Linskens|GSV": {
+        "min": 6.7,
+        "pf": 1.8,
+        "player_name": "Kyara Linskens",
+        "team": "GSV"
+      },
+      "Kyra Lambert|IND": {
+        "min": 0.1,
+        "pf": 0.0,
+        "player_name": "Kyra Lambert",
+        "team": "IND"
+      },
+      "Laeticia Amihere|GSV": {
+        "min": 13.3,
+        "pf": 1.2,
+        "player_name": "Laeticia Amihere",
+        "team": "GSV"
+      },
+      "Leila Lacan|CON": {
+        "min": 26.6,
+        "pf": 3.3,
+        "player_name": "Leila Lacan",
+        "team": "CON"
+      },
+      "Leonie Fiebich|NYL": {
+        "min": 28.1,
+        "pf": 2.4,
+        "player_name": "Leonie Fiebich",
+        "team": "NYL"
+      },
+      "Lexi Held|PHX": {
+        "min": 14.7,
+        "pf": 1.2,
+        "player_name": "Lexi Held",
+        "team": "PHX"
+      },
+      "Lexie Brown|SEA": {
+        "min": 9.4,
+        "pf": 0.8,
+        "player_name": "Lexie Brown",
+        "team": "SEA"
+      },
+      "Lexie Hull|IND": {
+        "min": 27.0,
+        "pf": 2.8,
+        "player_name": "Lexie Hull",
+        "team": "IND"
+      },
+      "Li Yueru|DAL": {
+        "min": 16.8,
+        "pf": 1.8,
+        "player_name": "Li Yueru",
+        "team": "DAL"
+      },
+      "Liatu King|DAL": {
+        "min": 9.7,
+        "pf": 1.0,
+        "player_name": "Liatu King",
+        "team": "DAL"
+      },
+      "Lindsay Allen|CON": {
+        "min": 14.5,
+        "pf": 1.2,
+        "player_name": "Lindsay Allen",
+        "team": "CON"
+      },
+      "Lucy Olsen|WAS": {
+        "min": 12.4,
+        "pf": 1.1,
+        "player_name": "Lucy Olsen",
+        "team": "WAS"
+      },
+      "Luisa Geiselsoder|DAL": {
+        "min": 22.4,
+        "pf": 2.4,
+        "player_name": "Luisa Geiselsoder",
+        "team": "DAL"
+      },
+      "Mackenzie Holmes|SEA": {
+        "min": 5.8,
+        "pf": 0.7,
+        "player_name": "Mackenzie Holmes",
+        "team": "SEA"
+      },
+      "Maddy Siegrist|DAL": {
+        "min": 27.0,
+        "pf": 1.9,
+        "player_name": "Maddy Siegrist",
+        "team": "DAL"
+      },
+      "Maddy Westbeld|CHI": {
+        "min": 13.6,
+        "pf": 1.6,
+        "player_name": "Maddy Westbeld",
+        "team": "CHI"
+      },
+      "Madison Scott|WAS": {
+        "min": 5.2,
+        "pf": 0.9,
+        "player_name": "Madison Scott",
+        "team": "WAS"
+      },
+      "Makayla Timpson|IND": {
+        "min": 7.1,
+        "pf": 0.8,
+        "player_name": "Makayla Timpson",
+        "team": "IND"
+      },
+      "Mamignan Toure|CON": {
+        "min": 8.2,
+        "pf": 1.1,
+        "player_name": "Mamignan Toure",
+        "team": "CON"
+      },
+      "Maria Kliundikova|MIN": {
+        "min": 11.0,
+        "pf": 1.4,
+        "player_name": "Maria Kliundikova",
+        "team": "MIN"
+      },
+      "Marina Mabrey|CON": {
+        "min": 31.5,
+        "pf": 2.9,
+        "player_name": "Marina Mabrey",
+        "team": "CON"
+      },
+      "Marine Johannes|NYL": {
+        "min": 18.3,
+        "pf": 1.0,
+        "player_name": "Marine Johannes",
+        "team": "NYL"
+      },
+      "Mari\u00e8me Badiane|MIN": {
+        "min": 3.6,
+        "pf": 2.0,
+        "player_name": "Mari\u00e8me Badiane",
+        "team": "MIN"
+      },
+      "Marquesha Davis|CHI": {
+        "min": 4.7,
+        "pf": 0.3,
+        "player_name": "Marquesha Davis",
+        "team": "CHI"
+      },
+      "Maya Caldwell|ATL": {
+        "min": 18.5,
+        "pf": 1.6,
+        "player_name": "Maya Caldwell",
+        "team": "ATL"
+      },
+      "Megan Gustafson|LVA": {
+        "min": 11.3,
+        "pf": 2.1,
+        "player_name": "Megan Gustafson",
+        "team": "LVA"
+      },
+      "Megan McConnell|PHX": {
+        "min": 12.6,
+        "pf": 1.0,
+        "player_name": "Megan McConnell",
+        "team": "PHX"
+      },
+      "Mercedes Russell|LAS": {
+        "min": 8.2,
+        "pf": 0.9,
+        "player_name": "Mercedes Russell",
+        "team": "LAS"
+      },
+      "Michaela Onyenwere|CHI": {
+        "min": 16.9,
+        "pf": 1.8,
+        "player_name": "Michaela Onyenwere",
+        "team": "CHI"
+      },
+      "Monique Akoa Makani|PHX": {
+        "min": 21.5,
+        "pf": 2.5,
+        "player_name": "Monique Akoa Makani",
+        "team": "PHX"
+      },
+      "Monique Billings|GSV": {
+        "min": 18.2,
+        "pf": 1.7,
+        "player_name": "Monique Billings",
+        "team": "GSV"
+      },
+      "Moriah Jefferson|CHI": {
+        "min": 7.1,
+        "pf": 0.6,
+        "player_name": "Moriah Jefferson",
+        "team": "CHI"
+      },
+      "Murjanatu Musa|PHX": {
+        "min": 10.1,
+        "pf": 1.4,
+        "player_name": "Murjanatu Musa",
+        "team": "PHX"
+      },
+      "Myisha Hines-Allen|DAL": {
+        "min": 22.1,
+        "pf": 2.5,
+        "player_name": "Myisha Hines-Allen",
+        "team": "DAL"
+      },
+      "NaLyssa Smith|LVA": {
+        "min": 21.2,
+        "pf": 2.9,
+        "player_name": "NaLyssa Smith",
+        "team": "LVA"
+      },
+      "Napheesa Collier|MIN": {
+        "min": 32.3,
+        "pf": 2.4,
+        "player_name": "Napheesa Collier",
+        "team": "MIN"
+      },
+      "Natasha Cloud|NYL": {
+        "min": 29.0,
+        "pf": 2.9,
+        "player_name": "Natasha Cloud",
+        "team": "NYL"
+      },
+      "Natasha Howard|IND": {
+        "min": 24.1,
+        "pf": 2.7,
+        "player_name": "Natasha Howard",
+        "team": "IND"
+      },
+      "Natasha Mack|PHX": {
+        "min": 18.3,
+        "pf": 1.6,
+        "player_name": "Natasha Mack",
+        "team": "PHX"
+      },
+      "Natisha Hiedeman|MIN": {
+        "min": 18.9,
+        "pf": 1.6,
+        "player_name": "Natisha Hiedeman",
+        "team": "MIN"
+      },
+      "Naz Hillmon|ATL": {
+        "min": 25.5,
+        "pf": 1.7,
+        "player_name": "Naz Hillmon",
+        "team": "ATL"
+      },
+      "Nia Coffey|ATL": {
+        "min": 10.3,
+        "pf": 1.1,
+        "player_name": "Nia Coffey",
+        "team": "ATL"
+      },
+      "Nneka Ogwumike|SEA": {
+        "min": 30.9,
+        "pf": 1.9,
+        "player_name": "Nneka Ogwumike",
+        "team": "SEA"
+      },
+      "Nyara Sabally|NYL": {
+        "min": 17.9,
+        "pf": 2.2,
+        "player_name": "Nyara Sabally",
+        "team": "NYL"
+      },
+      "Odyssey Sims|IND": {
+        "min": 27.9,
+        "pf": 2.0,
+        "player_name": "Odyssey Sims",
+        "team": "IND"
+      },
+      "Olivia Nelson-Ododa|CON": {
+        "min": 21.6,
+        "pf": 2.4,
+        "player_name": "Olivia Nelson-Ododa",
+        "team": "CON"
+      },
+      "Paige Bueckers|DAL": {
+        "min": 33.3,
+        "pf": 2.3,
+        "player_name": "Paige Bueckers",
+        "team": "DAL"
+      },
+      "Rachel Banham|CHI": {
+        "min": 24.6,
+        "pf": 1.9,
+        "player_name": "Rachel Banham",
+        "team": "CHI"
+      },
+      "Rae Burrell|LAS": {
+        "min": 18.4,
+        "pf": 1.3,
+        "player_name": "Rae Burrell",
+        "team": "LAS"
+      },
+      "Rayah Marshall|CON": {
+        "min": 6.0,
+        "pf": 0.8,
+        "player_name": "Rayah Marshall",
+        "team": "CON"
+      },
+      "Rebecca Allen|CHI": {
+        "min": 18.7,
+        "pf": 1.4,
+        "player_name": "Rebecca Allen",
+        "team": "CHI"
+      },
+      "Rebekah Gardner|NYL": {
+        "min": 12.2,
+        "pf": 1.5,
+        "player_name": "Rebekah Gardner",
+        "team": "NYL"
+      },
+      "Rhyne Howard|ATL": {
+        "min": 34.9,
+        "pf": 2.9,
+        "player_name": "Rhyne Howard",
+        "team": "ATL"
+      },
+      "Rickea Jackson|LAS": {
+        "min": 30.9,
+        "pf": 1.9,
+        "player_name": "Rickea Jackson",
+        "team": "LAS"
+      },
+      "Robyn Parks|CON": {
+        "min": 10.5,
+        "pf": 1.2,
+        "player_name": "Robyn Parks",
+        "team": "CON"
+      },
+      "Sabrina Ionescu|NYL": {
+        "min": 31.4,
+        "pf": 1.7,
+        "player_name": "Sabrina Ionescu",
+        "team": "NYL"
+      },
+      "Sami Whitcomb|PHX": {
+        "min": 23.9,
+        "pf": 2.1,
+        "player_name": "Sami Whitcomb",
+        "team": "PHX"
+      },
+      "Sania Feagin|LAS": {
+        "min": 4.8,
+        "pf": 1.0,
+        "player_name": "Sania Feagin",
+        "team": "LAS"
+      },
+      "Saniya Rivers|CON": {
+        "min": 26.1,
+        "pf": 1.7,
+        "player_name": "Saniya Rivers",
+        "team": "CON"
+      },
+      "Sarah Ashlee Barker|LAS": {
+        "min": 14.1,
+        "pf": 1.3,
+        "player_name": "Sarah Ashlee Barker",
+        "team": "LAS"
+      },
+      "Satou Sabally|PHX": {
+        "min": 26.6,
+        "pf": 2.9,
+        "player_name": "Satou Sabally",
+        "team": "PHX"
+      },
+      "Serena Sundell|DAL": {
+        "min": 7.2,
+        "pf": 1.3,
+        "player_name": "Serena Sundell",
+        "team": "DAL"
+      },
+      "Sevgi Uzun|CHI": {
+        "min": 17.6,
+        "pf": 1.5,
+        "player_name": "Sevgi Uzun",
+        "team": "CHI"
+      },
+      "Shakira Austin|WAS": {
+        "min": 23.0,
+        "pf": 2.1,
+        "player_name": "Shakira Austin",
+        "team": "WAS"
+      },
+      "Shatori Walker-Kimbrough|ATL": {
+        "min": 8.6,
+        "pf": 0.6,
+        "player_name": "Shatori Walker-Kimbrough",
+        "team": "ATL"
+      },
+      "Shey Peddy|IND": {
+        "min": 17.6,
+        "pf": 1.3,
+        "player_name": "Shey Peddy",
+        "team": "IND"
+      },
+      "Sika Kone|ATL": {
+        "min": 4.5,
+        "pf": 0.6,
+        "player_name": "Sika Kone",
+        "team": "ATL"
+      },
+      "Skylar Diggins|SEA": {
+        "min": 31.2,
+        "pf": 2.3,
+        "player_name": "Skylar Diggins",
+        "team": "SEA"
+      },
+      "Sonia Citron|WAS": {
+        "min": 32.1,
+        "pf": 2.1,
+        "player_name": "Sonia Citron",
+        "team": "WAS"
+      },
+      "Sophie Cunningham|IND": {
+        "min": 25.2,
+        "pf": 2.2,
+        "player_name": "Sophie Cunningham",
+        "team": "IND"
+      },
+      "Stefanie Dolson|WAS": {
+        "min": 15.2,
+        "pf": 2.3,
+        "player_name": "Stefanie Dolson",
+        "team": "WAS"
+      },
+      "Stephanie Talbot|NYL": {
+        "min": 14.2,
+        "pf": 1.1,
+        "player_name": "Stephanie Talbot",
+        "team": "NYL"
+      },
+      "Sug Sutton|WAS": {
+        "min": 26.1,
+        "pf": 1.3,
+        "player_name": "Sug Sutton",
+        "team": "WAS"
+      },
+      "Sydney Colson|IND": {
+        "min": 13.5,
+        "pf": 1.1,
+        "player_name": "Sydney Colson",
+        "team": "IND"
+      },
+      "Taylor Thierry|ATL": {
+        "min": 2.1,
+        "pf": 0.1,
+        "player_name": "Taylor Thierry",
+        "team": "ATL"
+      },
+      "Te-Hina Paopao|ATL": {
+        "min": 16.7,
+        "pf": 1.1,
+        "player_name": "Te-Hina Paopao",
+        "team": "ATL"
+      },
+      "Teaira McCowan|DAL": {
+        "min": 12.9,
+        "pf": 1.4,
+        "player_name": "Teaira McCowan",
+        "team": "DAL"
+      },
+      "Temi Fagbenle|GSV": {
+        "min": 23.7,
+        "pf": 3.1,
+        "player_name": "Temi Fagbenle",
+        "team": "GSV"
+      },
+      "Tiffany Hayes|GSV": {
+        "min": 26.9,
+        "pf": 2.2,
+        "player_name": "Tiffany Hayes",
+        "team": "GSV"
+      },
+      "Tiffany Mitchell|SEA": {
+        "min": 13.1,
+        "pf": 1.3,
+        "player_name": "Tiffany Mitchell",
+        "team": "SEA"
+      },
+      "Tina Charles|CON": {
+        "min": 28.4,
+        "pf": 2.1,
+        "player_name": "Tina Charles",
+        "team": "CON"
+      },
+      "Tyasha Harris|DAL": {
+        "min": 16.5,
+        "pf": 1.0,
+        "player_name": "Tyasha Harris",
+        "team": "DAL"
+      },
+      "Veronica Burton|GSV": {
+        "min": 29.4,
+        "pf": 2.3,
+        "player_name": "Veronica Burton",
+        "team": "GSV"
+      },
+      "Yvonne Anderson|MIN": {
+        "min": 12.4,
+        "pf": 3.0,
+        "player_name": "Yvonne Anderson",
+        "team": "MIN"
+      },
+      "Zia Cooke|SEA": {
+        "min": 10.0,
+        "pf": 1.0,
+        "player_name": "Zia Cooke",
+        "team": "SEA"
+      }
+    }
+  }
+}

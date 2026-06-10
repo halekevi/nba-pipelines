@@ -1,0 +1,510 @@
+{
+  "date": "2026-05-30",
+  "sport_key": "basketball_wnba",
+  "snapshot": {
+    "brittney sykes|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "natisha hiedeman|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jade melbourne|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_points|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_points|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "flau'jae johnson|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "natisha hiedeman|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kiki rice|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nyara sabally|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jade melbourne|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_points_rebounds_assists|27.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brittney sykes|player_points_rebounds_assists|28.5": {
+      "open_line": 28.5,
+      "current_line": 27.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "marina mabrey|player_points_rebounds_assists|25.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "marina mabrey|player_points_rebounds_assists|26.5": {
+      "open_line": 26.5,
+      "current_line": 25.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "flau'jae johnson|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_rebounds|3.5": {
+      "open_line": 4.5,
+      "current_line": 3.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "marina mabrey|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 3.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "brittney sykes|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "natisha hiedeman|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "flau'jae johnson|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nyara sabally|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney griner|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aneesah morrow|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_points|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_points_rebounds_assists|26.5": {
+      "open_line": 26.5,
+      "current_line": 26.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_points_rebounds_assists|30.5": {
+      "open_line": 30.5,
+      "current_line": 30.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney griner|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aneesah morrow|player_rebounds|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "caitlin clark|player_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carla leite|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aliyah boston|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "aliyah boston|player_assists|3.5": {
+      "open_line": 2.5,
+      "current_line": 3.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "caitlin clark|player_points|21.5": {
+      "open_line": 21.5,
+      "current_line": 21.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kelsey mitchell|player_points|20.5": {
+      "open_line": 20.5,
+      "current_line": 22.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kelsey mitchell|player_points|22.5": {
+      "open_line": 20.5,
+      "current_line": 22.5,
+      "line_movement": 2.0,
+      "line_direction_shift": "moved_up"
+    },
+    "aliyah boston|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carla leite|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "lexie hull|player_points|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "caitlin clark|player_points_rebounds_assists|35.5": {
+      "open_line": 35.5,
+      "current_line": 35.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aliyah boston|player_points_rebounds_assists|27.5": {
+      "open_line": 27.5,
+      "current_line": 27.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aliyah boston|player_rebounds|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "caitlin clark|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "lexie hull|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "caitlin clark|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kelsey mitchell|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_points|10.5": {
+      "open_line": 10.5,
+      "current_line": 10.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_points|23.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_points_rebounds_assists|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_points_rebounds_assists|25.5": {
+      "open_line": 25.5,
+      "current_line": 25.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 23.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_points_rebounds_assists|20.5": {
+      "open_line": 20.5,
+      "current_line": 20.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_points_rebounds_assists|35.5": {
+      "open_line": 35.5,
+      "current_line": 35.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_rebounds|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    }
+  }
+}

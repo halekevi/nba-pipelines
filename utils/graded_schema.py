@@ -109,6 +109,34 @@ FIELD_ALIASES: dict[str, list[str]] = {
         "L5 Over",
         "last5_over",
     ],
+    "consistency_grade": [
+        "consistency_grade",
+        "Consistency Grade",
+        "CONSISTENCY_GRADE",
+    ],
+    "team_top3_rank": [
+        "team_top3_rank",
+        "Top3 Rank",
+        "top3_rank",
+    ],
+    "team_bottom3_rank": [
+        "team_bottom3_rank",
+        "Bottom3 Rank",
+        "bottom3_rank",
+    ],
+    "top3_weak_overperformer": [
+        "top3_weak_overperformer",
+        "Top3 Weak Over",
+    ],
+    "top3_elite_fader": [
+        "top3_elite_fader",
+        "Top3 Elite Fade",
+    ],
+    "def_boost_hist": [
+        "def_boost_hist",
+        "Def Boost Hist",
+        "def_boost",
+    ],
 }
 
 

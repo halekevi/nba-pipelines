@@ -1,0 +1,144 @@
+{
+  "slate_date": "2026-06-07",
+  "snapshotted_at": "2026-06-07T11:26:08.391546Z",
+  "limit_per_sport": 8,
+  "featured_count": 8,
+  "featured": [
+    {
+      "player": "Nyara Sabally",
+      "sport": "WNBA",
+      "tier": "medium",
+      "hit_rate": 0.6327,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 10,
+        "total": 10,
+        "hit_rate": 1.0
+      },
+      "slate_line": 10.0,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "CHI"
+    },
+    {
+      "player": "Marina Mabrey",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5897,
+      "display_prop": {
+        "prop_type": "Pts+Asts",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 15,
+        "hit_rate": 0.9333
+      },
+      "slate_line": 22.0,
+      "slate_pick_type": "Standard",
+      "team": "TOR",
+      "opp": "CHI"
+    },
+    {
+      "player": "Kelsey Plum",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.5132,
+      "display_prop": {
+        "prop_type": "3-PT Made",
+        "direction": "OVER",
+        "hits": 7,
+        "total": 8,
+        "hit_rate": 0.875
+      },
+      "slate_line": 1.5,
+      "slate_pick_type": "Goblin",
+      "team": "LAS",
+      "opp": "PDX"
+    },
+    {
+      "player": "Nneka Ogwumike",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4885,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 26,
+        "hit_rate": 0.5385
+      },
+      "slate_line": 5.5,
+      "slate_pick_type": "Goblin",
+      "team": "LAS",
+      "opp": "PDX"
+    },
+    {
+      "player": "Bridget Carleton",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4516,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 14,
+        "total": 34,
+        "hit_rate": 0.4118
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Goblin",
+      "team": "PDX",
+      "opp": "LAS"
+    },
+    {
+      "player": "Cameron Brink",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4483,
+      "display_prop": {
+        "prop_type": "Points",
+        "direction": "OVER",
+        "hits": 11,
+        "total": 17,
+        "hit_rate": 0.6471
+      },
+      "slate_line": 8.5,
+      "slate_pick_type": "Standard",
+      "team": "LAS",
+      "opp": "PDX"
+    },
+    {
+      "player": "Kamilla Cardoso",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4462,
+      "display_prop": {
+        "prop_type": "Rebounds",
+        "direction": "OVER",
+        "hits": 22,
+        "total": 43,
+        "hit_rate": 0.5116
+      },
+      "slate_line": 9.5,
+      "slate_pick_type": "Standard",
+      "team": "CHI",
+      "opp": "TOR"
+    },
+    {
+      "player": "Dearica Hamby",
+      "sport": "WNBA",
+      "tier": "high",
+      "hit_rate": 0.4384,
+      "display_prop": {
+        "prop_type": "Assists",
+        "direction": "OVER",
+        "hits": 13,
+        "total": 21,
+        "hit_rate": 0.619
+      },
+      "slate_line": 3.5,
+      "slate_pick_type": "Standard",
+      "team": "LAS",
+      "opp": "PDX"
+    }
+  ]
+}

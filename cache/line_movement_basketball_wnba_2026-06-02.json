@@ -1,0 +1,1368 @@
+{
+  "date": "2026-06-02",
+  "sport_key": "basketball_wnba",
+  "snapshot": {
+    "jordin canada|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "leila lacan|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "rhyne howard|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "angel reese|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "allisha gray|player_points|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rhyne howard|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "angel reese|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aneesah morrow|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney griner|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "leila lacan|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 12.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "leila lacan|player_points|12.5": {
+      "open_line": 11.5,
+      "current_line": 14.5,
+      "line_movement": 3.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "jordin canada|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 10.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jordin canada|player_points|10.5": {
+      "open_line": 9.5,
+      "current_line": 10.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "naz hillmon|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "angel reese|player_points_rebounds_assists|29.5": {
+      "open_line": 29.5,
+      "current_line": 29.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rhyne howard|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "rhyne howard|player_points_rebounds_assists|24.5": {
+      "open_line": 23.5,
+      "current_line": 24.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jordin canada|player_points_rebounds_assists|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "leila lacan|player_points_rebounds_assists|18.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "leila lacan|player_points_rebounds_assists|19.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "angel reese|player_rebounds|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aneesah morrow|player_rebounds|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "naz hillmon|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney griner|player_rebounds|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -115,
+      "implied_prob_book": "pinnacle"
+    },
+    "allisha gray|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rhyne howard|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jordin canada|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "leila lacan|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rhyne howard|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "allisha gray|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "skylar diggins-smith|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -102,
+      "under_price": -130,
+      "implied_prob_book": "pinnacle"
+    },
+    "natasha cloud|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_assists|5.5": {
+      "open_line": 4.5,
+      "current_line": 5.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "georgia amoore|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shakira austin|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "skylar diggins-smith|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 14.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -121,
+      "under_price": -109,
+      "implied_prob_book": "pinnacle"
+    },
+    "kiki iriafen|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kamilla cardoso|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -103,
+      "under_price": -129,
+      "implied_prob_book": "pinnacle"
+    },
+    "natasha cloud|player_points|10.5": {
+      "open_line": 10.5,
+      "current_line": 8.5,
+      "line_movement": -2.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "georgia amoore|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "michaela onyenwere|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "azura stevens|player_points|7.5": {
+      "open_line": 7.5,
+      "current_line": 8.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points_rebounds_assists|25.5": {
+      "open_line": 25.5,
+      "current_line": 25.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "natasha cloud|player_points_rebounds_assists|19.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "natasha cloud|player_points_rebounds_assists|20.5": {
+      "open_line": 19.5,
+      "current_line": 20.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kiki iriafen|player_rebounds|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kamilla cardoso|player_rebounds|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "shakira austin|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 8.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "shakira austin|player_rebounds|8.5": {
+      "open_line": 7.5,
+      "current_line": 8.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "natasha cloud|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "skylar diggins-smith|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_threes|0.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "skylar diggins-smith|player_threes|1.5": {
+      "open_line": 0.5,
+      "current_line": 1.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "veronica burton|player_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carla leite|player_assists|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "carla leite|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "janelle salaun|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kayla thornton|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "megan gustafson|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "emily engstler|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cecilia zandalasini|player_points|7.5": {
+      "open_line": 7.5,
+      "current_line": 8.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "cecilia zandalasini|player_points|8.5": {
+      "open_line": 7.5,
+      "current_line": 8.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "veronica burton|player_points_rebounds_assists|22.5": {
+      "open_line": 23.5,
+      "current_line": 22.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "veronica burton|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 22.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "gabby williams|player_points_rebounds_assists|22.5": {
+      "open_line": 23.5,
+      "current_line": 22.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "gabby williams|player_points_rebounds_assists|23.5": {
+      "open_line": 23.5,
+      "current_line": 22.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bridget carleton|player_points_rebounds_assists|18.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "bridget carleton|player_points_rebounds_assists|19.5": {
+      "open_line": 18.5,
+      "current_line": 19.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "kayla thornton|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "janelle salaun|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "emily engstler|player_rebounds|3.5": {
+      "open_line": 4.5,
+      "current_line": 3.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "emily engstler|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 3.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "gabby williams|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "megan gustafson|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "bridget carleton|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "janelle salaun|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "gabby williams|player_threes|1.5": {
+      "open_line": 2.5,
+      "current_line": 1.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "gabby williams|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 1.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "bridget carleton|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "bridget carleton|player_threes|2.5": {
+      "open_line": 1.5,
+      "current_line": 2.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "cecilia zandalasini|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "veronica burton|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kayla thornton|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ariel atkins|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_points|25.5": {
+      "open_line": 25.5,
+      "current_line": 25.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_points|16.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dearica hamby|player_points|17.5": {
+      "open_line": 17.5,
+      "current_line": 16.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "jackie young|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nneka ogwumike|player_points|16.5": {
+      "open_line": 16.5,
+      "current_line": 16.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chennedy carter|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ariel atkins|player_points|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_points|10.5": {
+      "open_line": 10.5,
+      "current_line": 10.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nalyssa smith|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rae burrell|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cameron brink|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_points_rebounds_assists|37.5": {
+      "open_line": 38.5,
+      "current_line": 37.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "a'ja wilson|player_points_rebounds_assists|38.5": {
+      "open_line": 38.5,
+      "current_line": 37.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down"
+    },
+    "dearica hamby|player_points_rebounds_assists|28.5": {
+      "open_line": 28.5,
+      "current_line": 28.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_points_rebounds_assists|26.5": {
+      "open_line": 26.5,
+      "current_line": 27.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "jackie young|player_points_rebounds_assists|27.5": {
+      "open_line": 26.5,
+      "current_line": 27.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "nneka ogwumike|player_points_rebounds_assists|25.5": {
+      "open_line": 25.5,
+      "current_line": 25.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_points_rebounds_assists|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ariel atkins|player_points_rebounds_assists|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "a'ja wilson|player_rebounds|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dearica hamby|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "nalyssa smith|player_rebounds|6.5": {
+      "open_line": 6.5,
+      "current_line": 7.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "nalyssa smith|player_rebounds|7.5": {
+      "open_line": 6.5,
+      "current_line": 7.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up"
+    },
+    "nneka ogwumike|player_rebounds|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "cameron brink|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ariel atkins|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "rae burrell|player_rebounds|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jackie young|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "chelsea gray|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "ariel atkins|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "erica wheeler|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_assists|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonquel jones|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "breanna stewart|player_assists|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sabrina ionescu|player_assists|5.5": {
+      "open_line": 5.5,
+      "current_line": 5.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sabrina ionescu|player_points|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_points|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "satou sabally|player_points|10.5": {
+      "open_line": 10.5,
+      "current_line": 10.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "breanna stewart|player_points|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_points|17.5": {
+      "open_line": 17.5,
+      "current_line": 17.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonquel jones|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_points_rebounds_assists|25.5": {
+      "open_line": 25.5,
+      "current_line": 25.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "breanna stewart|player_points_rebounds_assists|29.5": {
+      "open_line": 29.5,
+      "current_line": 29.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonquel jones|player_points_rebounds_assists|24.5": {
+      "open_line": 24.5,
+      "current_line": 24.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sabrina ionescu|player_points_rebounds_assists|24.5": {
+      "open_line": 24.5,
+      "current_line": 24.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_points_rebounds_assists|26.5": {
+      "open_line": 26.5,
+      "current_line": 26.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "satou sabally|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "jonquel jones|player_rebounds|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "breanna stewart|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sabrina ionescu|player_rebounds|4.5": {
+      "open_line": 4.5,
+      "current_line": 4.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "marina mabrey|player_threes|2.5": {
+      "open_line": 2.5,
+      "current_line": 2.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "sabrina ionescu|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "brittney sykes|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alyssa thomas|player_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alyssa thomas|player_points|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dominique malonga|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kahleah copper|player_points|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alyssa thomas|player_points_rebounds_assists|31.5": {
+      "open_line": 31.5,
+      "current_line": 31.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "dominique malonga|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "alyssa thomas|player_rebounds|7.5": {
+      "open_line": 7.5,
+      "current_line": 7.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "kahleah copper|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable"
+    },
+    "aneesah morrow|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -123,
+      "under_price": -107,
+      "implied_prob_book": "pinnacle"
+    },
+    "aneesah morrow|player_points|14.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "brittney griner|player_points|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -123,
+      "under_price": -107,
+      "implied_prob_book": "pinnacle"
+    },
+    "brittney griner|player_points|13.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "kamilla cardoso|player_points|12.5": {
+      "open_line": 13.5,
+      "current_line": 12.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "leila lacan|player_points|13.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": -105,
+      "under_price": -126,
+      "implied_prob_book": "pinnacle"
+    },
+    "leila lacan|player_points|14.5": {
+      "open_line": 13.5,
+      "current_line": 14.5,
+      "line_movement": 1.0,
+      "line_direction_shift": "moved_up",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_points|8.5": {
+      "open_line": 9.5,
+      "current_line": 8.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 8.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": -126,
+      "under_price": -105,
+      "implied_prob_book": "pinnacle"
+    },
+    "saniya rivers|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -115,
+      "implied_prob_book": "pinnacle"
+    },
+    "saniya rivers|player_points|9.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points|14.5": {
+      "open_line": 15.5,
+      "current_line": 14.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points|16.5": {
+      "open_line": 15.5,
+      "current_line": 14.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "aneesah morrow|player_rebounds|10.5": {
+      "open_line": 10.5,
+      "current_line": 10.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -108,
+      "under_price": -122,
+      "implied_prob_book": "pinnacle"
+    },
+    "kamilla cardoso|player_rebounds|9.5": {
+      "open_line": 9.5,
+      "current_line": 9.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": -115,
+      "under_price": -115,
+      "implied_prob_book": "pinnacle"
+    },
+    "sydney taylor|player_points|8.5": {
+      "open_line": 9.5,
+      "current_line": 8.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "sydney taylor|player_points|9.5": {
+      "open_line": 9.5,
+      "current_line": 8.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "sydney taylor|player_points|10.5": {
+      "open_line": 9.5,
+      "current_line": 8.5,
+      "line_movement": -1.0,
+      "line_direction_shift": "moved_down",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_points|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points_assists|21.5": {
+      "open_line": 21.5,
+      "current_line": 21.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "leila lacan|player_points_assists|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_points_assists|14.5": {
+      "open_line": 14.5,
+      "current_line": 14.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_points_assists|11.5": {
+      "open_line": 11.5,
+      "current_line": 11.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "aneesah morrow|player_points_rebounds|24.5": {
+      "open_line": 24.5,
+      "current_line": 24.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "kamilla cardoso|player_points_rebounds|22.5": {
+      "open_line": 22.5,
+      "current_line": 22.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points_rebounds|19.5": {
+      "open_line": 19.5,
+      "current_line": 19.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "brittney griner|player_points_rebounds|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_points_rebounds|13.5": {
+      "open_line": 13.5,
+      "current_line": 13.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_points_rebounds|12.5": {
+      "open_line": 12.5,
+      "current_line": 12.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_points_rebounds_assists|24.5": {
+      "open_line": 24.5,
+      "current_line": 24.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_points_rebounds_assists|18.5": {
+      "open_line": 18.5,
+      "current_line": 18.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_points_rebounds_assists|15.5": {
+      "open_line": 15.5,
+      "current_line": 15.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_rebounds|3.5": {
+      "open_line": 3.5,
+      "current_line": 3.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "skylar diggins-smith|player_rebounds_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "natasha cloud|player_rebounds_assists|8.5": {
+      "open_line": 8.5,
+      "current_line": 8.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "azura stevens|player_rebounds_assists|6.5": {
+      "open_line": 6.5,
+      "current_line": 6.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "sydney taylor|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    },
+    "aneesah morrow|player_threes|1.5": {
+      "open_line": 1.5,
+      "current_line": 1.5,
+      "line_movement": 0.0,
+      "line_direction_shift": "stable",
+      "over_price": null,
+      "under_price": null,
+      "implied_prob_book": null
+    }
+  }
+}
