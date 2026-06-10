@@ -191,7 +191,8 @@ def run_backtest(
         out.to_csv(out_path, index=False, encoding="utf-8-sig")
         print(f"Wrote {out_path}")
 
-    print("\n=== Stack 70 lift (ALL) ===")
+    scope_label = sport.upper() if sport else "ALL"
+    print(f"\n=== Stack 70 lift ({scope_label}) ===")
     all_rows = out[out["scope"].eq("ALL") & (out["n"] >= min_n)]
     for _, r in all_rows.iterrows():
         lift = r["lift_vs_prev"]

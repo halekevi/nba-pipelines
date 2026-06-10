@@ -4,7 +4,11 @@
     "NO_DATA",
     "DNP",
     "NO_ACTUAL",
-    "NO_LINE"
+    "NO_LINE",
+    "POSTPONED",
+    "INJURY",
+    "SUSPENDED",
+    "CANCELED"
   ],
   "summary_rows": [
     {
@@ -27,8 +31,8 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-06-09\\graded_mlb_2026-06-09.xlsx",
       "status": "ok",
       "rows": 7636,
-      "void_rows": 1475,
-      "acceptable_void_rows": 1475,
+      "void_rows": 1392,
+      "acceptable_void_rows": 1392,
       "unacceptable_void_rows": 0
     },
     {

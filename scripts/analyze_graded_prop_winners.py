@@ -259,6 +259,20 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
         df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
     else:
         df["ml_prob"] = np.nan
+    for target, alts in (
+        ("l5_over", ("l5_over", "last5_over", "L5 Over")),
+        ("l5_under", ("l5_under", "last5_under", "L5 Under")),
+        ("hit_rate", ("hit_rate", "last5_hit_rate", "Hit Rate (5g)", "line_hit_rate_over_ou_5")),
+        ("strat_hit_rate", ("strat_hit_rate",)),
+        ("strat_n", ("strat_n",)),
+    ):
+        if target not in df.columns:
+            df[target] = np.nan
+        val = pd.to_numeric(df[target], errors="coerce")
+        for alt in alts:
+            if alt in df.columns and alt != target:
+                val = val.combine_first(pd.to_numeric(df[alt], errors="coerce"))
+        df[target] = val
     return df
 
 

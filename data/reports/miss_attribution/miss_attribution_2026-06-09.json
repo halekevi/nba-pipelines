@@ -1,0 +1,313 @@
+{
+  "date": "2026-06-09",
+  "leg_rows": 7986,
+  "hit_rate": 0.3290758827948911,
+  "miss_near_line_pct": 0.0,
+  "summary_slices": [
+    {
+      "slice": "MLB|ALL",
+      "n": 6240,
+      "hit_rate": 0.32740384615384616,
+      "avg_margin": -0.44134615384615383,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.37366056089743593
+    },
+    {
+      "slice": "MLB|HIT",
+      "n": 2043,
+      "hit_rate": 1.0,
+      "avg_margin": 1.636808614782183,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.49535261869799313
+    },
+    {
+      "slice": "MLB|MISS",
+      "n": 4197,
+      "hit_rate": 0.0,
+      "avg_margin": -1.4529425780319276,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.3144237550631403
+    },
+    {
+      "slice": "MLB|HIT|strong_ml",
+      "n": 729,
+      "hit_rate": 1.0,
+      "avg_margin": 2.175582990397805,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.84170877914952
+    },
+    {
+      "slice": "NHL|ALL",
+      "n": 342,
+      "hit_rate": 0.3333333333333333,
+      "avg_margin": -0.5619883040935673,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.4633307017543859
+    },
+    {
+      "slice": "NHL|HIT",
+      "n": 114,
+      "hit_rate": 1.0,
+      "avg_margin": 2.1763157894736844,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.6003131578947369
+    },
+    {
+      "slice": "NHL|MISS",
+      "n": 228,
+      "hit_rate": 0.0,
+      "avg_margin": -1.931140350877193,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.3948394736842105
+    },
+    {
+      "slice": "NHL|HIT|strong_ml",
+      "n": 55,
+      "hit_rate": 1.0,
+      "avg_margin": 2.192727272727273,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.8764763636363638
+    },
+    {
+      "slice": "TENNIS|ALL",
+      "n": 708,
+      "hit_rate": 0.23587570621468926,
+      "avg_margin": -3.141949152542373,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.4000735875706215
+    },
+    {
+      "slice": "TENNIS|HIT",
+      "n": 167,
+      "hit_rate": 1.0,
+      "avg_margin": 4.494011976047904,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.5502934131736527
+    },
+    {
+      "slice": "TENNIS|MISS",
+      "n": 541,
+      "hit_rate": 0.0,
+      "avg_margin": -5.499075785582255,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.3537025878003697
+    },
+    {
+      "slice": "TENNIS|HIT|strong_ml",
+      "n": 74,
+      "hit_rate": 1.0,
+      "avg_margin": 5.6891891891891895,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.7233567567567567
+    },
+    {
+      "slice": "WNBA|ALL",
+      "n": 696,
+      "hit_rate": 0.4367816091954023,
+      "avg_margin": -0.658477011494253,
+      "near_miss_pct": 0.004310344827586207,
+      "avg_ml_prob": 0.7434788793103447
+    },
+    {
+      "slice": "WNBA|HIT",
+      "n": 304,
+      "hit_rate": 1.0,
+      "avg_margin": 3.8046052631578946,
+      "near_miss_pct": 0.009868421052631578,
+      "avg_ml_prob": 0.8009023026315789
+    },
+    {
+      "slice": "WNBA|MISS",
+      "n": 392,
+      "hit_rate": 0.0,
+      "avg_margin": -4.119642857142857,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.6989464285714286
+    },
+    {
+      "slice": "WNBA|HIT|strong_ml",
+      "n": 225,
+      "hit_rate": 1.0,
+      "avg_margin": 4.149777777777778,
+      "near_miss_pct": 0.0,
+      "avg_ml_prob": 0.9422497777777779
+    }
+  ],
+  "top_miss_props": [
+    {
+      "sport": "MLB",
+      "prop_type": "Total Bases",
+      "outcome": "MISS",
+      "n": 790,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Hits+Runs+RBIs",
+      "outcome": "MISS",
+      "n": 783,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "RBIs",
+      "outcome": "MISS",
+      "n": 395,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Hits",
+      "outcome": "MISS",
+      "n": 333,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Hitter Strikeouts",
+      "outcome": "MISS",
+      "n": 327,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Runs",
+      "outcome": "MISS",
+      "n": 269,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Singles",
+      "outcome": "MISS",
+      "n": 256,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Doubles",
+      "outcome": "MISS",
+      "n": 227,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "TENNIS",
+      "prop_type": "Double Faults",
+      "outcome": "MISS",
+      "n": 196,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Home Runs",
+      "outcome": "MISS",
+      "n": 195,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Walks",
+      "outcome": "MISS",
+      "n": 192,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "TENNIS",
+      "prop_type": "Aces",
+      "outcome": "MISS",
+      "n": 168,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Stolen Bases",
+      "outcome": "MISS",
+      "n": 114,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Pitcher Strikeouts",
+      "outcome": "MISS",
+      "n": 106,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "TENNIS",
+      "prop_type": "Total Games Won",
+      "outcome": "MISS",
+      "n": 90,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "TENNIS",
+      "prop_type": "Total Games",
+      "outcome": "MISS",
+      "n": 87,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Hits Allowed",
+      "outcome": "MISS",
+      "n": 71,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "NHL",
+      "prop_type": "shots_on_goal",
+      "outcome": "MISS",
+      "n": 70,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "WNBA",
+      "prop_type": "Points",
+      "outcome": "MISS",
+      "n": 65,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "WNBA",
+      "prop_type": "Rebounds",
+      "outcome": "MISS",
+      "n": 64,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Pitcher Fantasy Score",
+      "outcome": "MISS",
+      "n": 46,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "MLB",
+      "prop_type": "Walks Allowed",
+      "outcome": "MISS",
+      "n": 40,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "WNBA",
+      "prop_type": "Pts+Rebs+Asts",
+      "outcome": "MISS",
+      "n": 40,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "WNBA",
+      "prop_type": "Assists",
+      "outcome": "MISS",
+      "n": 37,
+      "hit_rate": 0.0
+    },
+    {
+      "sport": "WNBA",
+      "prop_type": "Rebs+Asts",
+      "outcome": "MISS",
+      "n": 36,
+      "hit_rate": 0.0
+    }
+  ]
+}

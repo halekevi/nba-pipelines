@@ -15,6 +15,17 @@ STACK_CONTEXT_COLS: tuple[str, ...] = (
 )
 
 # Excel / Full Slate display headers (NBA-style step8 rename).
+# Persisted on graded JSON / Box Raw for stack backtests and tickets.
+GRADED_SIGNAL_COLS: tuple[str, ...] = (
+    "def_tier",
+    "l5_over",
+    "l5_under",
+    "hit_rate",
+    "strat_hit_rate",
+    "strat_n",
+    *STACK_CONTEXT_COLS,
+)
+
 STACK_CONTEXT_RENAME: dict[str, str] = {
     "consistency_grade": "Consistency Grade",
     "team_top3_rank": "Top3 Rank",

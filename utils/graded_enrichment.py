@@ -19,6 +19,7 @@ import pandas as pd
 
 from utils.defense_tiers import normalize_def_tier_label
 from utils.stack_70_eligible import attach_stack_70_columns
+from utils.stack_context_cols import GRADED_SIGNAL_COLS, STACK_CONTEXT_COLS
 
 _REPO = Path(__file__).resolve().parent.parent
 _STRAT_HIT_RATES_CSV = _REPO / "data" / "reports" / "graded_stratification" / "graded_strat_hit_rates.csv"
@@ -49,6 +50,31 @@ _OPP_ALIASES: dict[str, dict[str, str]] = {
 
 _EMPTY_MARKERS = frozenset({"", "nan", "none", "null", "n/a", "na", "—", "-", "unknown", "(missing)"})
 _LOOKUP_CACHE: dict[str, dict[str, str]] = {}
+_STEP8_LOOKUP_CACHE: dict[tuple[str, str], dict[str, dict[str, object]]] = {}
+
+_STEP8_RENAME: dict[str, str] = {
+    "Player": "player",
+    "Prop": "prop_type",
+    "Line": "line",
+    "Direction": "direction",
+    "Def Tier": "def_tier",
+    "Opp": "opp_team",
+    "L5 Over": "l5_over",
+    "L5 Under": "l5_under",
+    "last5_over": "l5_over",
+    "last5_under": "l5_under",
+    "over_L5_raw": "l5_over",
+    "under_L5_raw": "l5_under",
+    "Hit Rate (5g)": "hit_rate",
+    "line_hit_rate_over_ou_5": "hit_rate",
+    "composite_hr": "hit_rate",
+    "hit_rate": "hit_rate",
+    "Consistency Grade": "consistency_grade",
+    "Top3 Rank": "team_top3_rank",
+    "Bottom3 Rank": "team_bottom3_rank",
+    "Top3 Weak Over": "top3_weak_overperformer",
+    "Top3 Elite Fade": "top3_elite_fader",
+}
 
 
 def _repo_root() -> Path:
@@ -62,6 +88,89 @@ def is_empty_value(v: object) -> bool:
 
 def is_empty_def_tier(v: object) -> bool:
     return is_empty_value(v)
+
+
+def is_empty_numeric(v: object) -> bool:
+    return pd.isna(pd.to_numeric(v, errors="coerce"))
+
+
+def _row_pk(player: object, prop: object, line: object) -> str:
+    return (
+        f"{_norm_name(player)}|{_norm_prop(prop)}|"
+        f"{round(float(pd.to_numeric(line, errors='coerce') or 0), 2)}"
+    )
+
+
+def _scalar_cell(val: object) -> object:
+    if isinstance(val, pd.Series):
+        non_null = val.dropna()
+        return non_null.iloc[0] if not non_null.empty else np.nan
+    return val
+
+
+def _get_step8_lookup(sport: str, date: str, repo: Path) -> dict[str, dict[str, object]]:
+    cache_key = (sport, date)
+    if cache_key in _STEP8_LOOKUP_CACHE:
+        return _STEP8_LOOKUP_CACHE[cache_key]
+    paths = _step8_paths(sport, date, repo)
+    if not paths:
+        _STEP8_LOOKUP_CACHE[cache_key] = {}
+        return {}
+    try:
+        s8 = pd.read_excel(paths[0], sheet_name=0, engine="openpyxl")
+    except Exception:
+        _STEP8_LOOKUP_CACHE[cache_key] = {}
+        return {}
+    s8 = s8.loc[:, ~pd.Index(s8.columns).duplicated()].copy()
+    s8.columns = [str(c).strip() for c in s8.columns]
+    s8 = s8.reset_index(drop=True)
+    s8 = s8.rename(columns={k: v for k, v in _STEP8_RENAME.items() if k in s8.columns})
+    for col in STACK_CONTEXT_COLS:
+        if col in s8.columns:
+            continue
+        display = col.replace("_", " ").title()
+        if display in s8.columns:
+            s8 = s8.rename(columns={display: col})
+    if "player" not in s8.columns or "prop_type" not in s8.columns:
+        _STEP8_LOOKUP_CACHE[cache_key] = {}
+        return {}
+    lookup: dict[str, dict[str, object]] = {}
+    for _, row in s8.iterrows():
+        pk = _row_pk(row.get("player"), row.get("prop_type"), row.get("line"))
+        payload: dict[str, object] = {}
+        for field in GRADED_SIGNAL_COLS:
+            if field not in row.index:
+                continue
+            val = _scalar_cell(row.get(field))
+            if field == "def_tier":
+                if not is_empty_def_tier(val):
+                    payload[field] = normalize_def_tier_label(val)
+            elif field in {
+                "l5_over",
+                "l5_under",
+                "strat_n",
+                "top3_weak_overperformer",
+                "top3_elite_fader",
+                "top3_def_context",
+                "top3_under_context",
+            }:
+                num = pd.to_numeric(val, errors="coerce")
+                if pd.notna(num):
+                    payload[field] = int(num)
+            elif field in {"team_top3_rank", "team_bottom3_rank", "def_boost_hist"}:
+                num = pd.to_numeric(val, errors="coerce")
+                if pd.notna(num):
+                    payload[field] = float(num)
+            elif field in ("hit_rate", "strat_hit_rate"):
+                num = pd.to_numeric(val, errors="coerce")
+                if pd.notna(num):
+                    payload[field] = float(num)
+            elif not is_empty_value(val):
+                payload[field] = val
+        if payload:
+            lookup[pk] = payload
+    _STEP8_LOOKUP_CACHE[cache_key] = lookup
+    return lookup
 
 
 def load_defense_lookup(defense_path: Path) -> dict[str, str]:
@@ -185,13 +294,61 @@ def _step8_paths(sport: str, date: str, repo: Path) -> list[Path]:
     return [p for p in candidates if p.is_file()]
 
 
-def backfill_def_tier_from_step8(df: pd.DataFrame, *, repo: Path | None = None) -> pd.DataFrame:
-    """Second-pass def_tier fill by joining dated step8 slates on player+prop+line."""
+_SIGNAL_STRING_COLS = frozenset({"def_tier", "consistency_grade"})
+_SIGNAL_INT_COLS = frozenset({
+    "l5_over",
+    "l5_under",
+    "strat_n",
+    "top3_weak_overperformer",
+    "top3_elite_fader",
+    "top3_def_context",
+    "top3_under_context",
+})
+
+
+def _init_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    for col in GRADED_SIGNAL_COLS:
+        if col not in out.columns:
+            out[col] = "" if col in _SIGNAL_STRING_COLS else np.nan
+        elif col in _SIGNAL_STRING_COLS and pd.api.types.is_numeric_dtype(out[col]):
+            out[col] = out[col].astype(object)
+    return out
+
+
+def _assign_signal_value(df: pd.DataFrame, idx: object, field: str, val: object) -> None:
+    if field in _SIGNAL_STRING_COLS:
+        if pd.api.types.is_numeric_dtype(df[field]):
+            df[field] = df[field].astype(object)
+        df.at[idx, field] = str(val) if val is not None and not (isinstance(val, float) and np.isnan(val)) else ""
+        return
+    if field in _SIGNAL_INT_COLS:
+        num = pd.to_numeric(val, errors="coerce")
+        if pd.notna(num):
+            df.at[idx, field] = int(num)
+        return
+    num = pd.to_numeric(val, errors="coerce")
+    if pd.notna(num):
+        df.at[idx, field] = float(num)
+
+
+def _field_empty(col: str, val: object) -> bool:
+    if col == "def_tier":
+        return is_empty_def_tier(val)
+    if col in {"l5_over", "l5_under", "hit_rate", "strat_hit_rate", "strat_n"}:
+        return is_empty_numeric(val)
+    if col in {"top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context"}:
+        return int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0)) == 0
+    if col in {"team_top3_rank", "team_bottom3_rank", "def_boost_hist"}:
+        return is_empty_numeric(val)
+    return is_empty_value(val)
+
+
+def backfill_from_step8(df: pd.DataFrame, *, repo: Path | None = None) -> pd.DataFrame:
+    """Fill def_tier, L5 counts, hit_rate, and stack context from dated step8 slates."""
     if df is None or df.empty:
         return df
-    out = df.copy()
-    if "def_tier" not in out.columns:
-        out["def_tier"] = np.nan
+    out = _init_signal_columns(df)
     root = repo or _repo_root()
     date_col = "_slate_date" if "_slate_date" in out.columns else "file_date"
     if date_col not in out.columns:
@@ -199,53 +356,25 @@ def backfill_def_tier_from_step8(df: pd.DataFrame, *, repo: Path | None = None) 
 
     sport_keys = out.apply(_sport_key, axis=1)
     date_keys = out[date_col].astype(str).str[:10]
+    prop_col = next((c for c in ("prop", "prop_type", "prop_type_norm") if c in out.columns), None)
     for (sport, date), grp in out.groupby([sport_keys, date_keys], sort=False):
         if not sport or not date or date == "nan":
             continue
-        need = grp.index[grp["def_tier"].map(is_empty_def_tier)]
-        if len(need) == 0:
+        lookup = _get_step8_lookup(sport, date, root)
+        if not lookup:
             continue
-        paths = _step8_paths(sport, date, root)
-        if not paths:
-            continue
-        try:
-            s8 = pd.read_excel(paths[0], sheet_name=0, engine="openpyxl")
-        except Exception:
-            continue
-        s8.columns = [str(c).strip() for c in s8.columns]
-        ren = {
-            "Player": "player", "Prop": "prop_type", "Line": "line",
-            "Direction": "direction", "Def Tier": "def_tier", "Opp": "opp_team",
-        }
-        s8 = s8.rename(columns={k: v for k, v in ren.items() if k in s8.columns})
-        if "def_tier" not in s8.columns:
-            continue
-        s8 = s8[s8["def_tier"].map(lambda x: not is_empty_def_tier(x))].copy()
-        if s8.empty:
-            continue
-        s8["_pk"] = (
-            s8.get("player", "").astype(str).map(_norm_name)
-            + "|"
-            + s8.get("prop_type", "").astype(str).map(_norm_prop)
-            + "|"
-            + pd.to_numeric(s8.get("line"), errors="coerce").round(2).astype(str)
-        )
-        tier_map = s8.drop_duplicates("_pk").set_index("_pk")["def_tier"].to_dict()
-        for idx in need:
-            pk = (
-                _norm_name(out.at[idx, "player"] if "player" in out.columns else "")
-                + "|"
-                + _norm_prop(
-                    out.at[idx, "prop"]
-                    if "prop" in out.columns
-                    else out.at[idx, "prop_type"] if "prop_type" in out.columns else ""
-                )
-                + "|"
-                + str(round(float(pd.to_numeric(out.at[idx, "line"], errors="coerce") or 0), 2))
-            )
-            tier = tier_map.get(pk, "")
-            if tier and not is_empty_def_tier(tier):
-                out.at[idx, "def_tier"] = normalize_def_tier_label(tier)
+        for idx in grp.index:
+            prop_val = out.at[idx, prop_col] if prop_col else ""
+            pk = _row_pk(out.at[idx, "player"] if "player" in out.columns else "", prop_val, out.at[idx, "line"] if "line" in out.columns else "")
+            payload = lookup.get(pk)
+            if not payload:
+                continue
+            for field, val in payload.items():
+                if field not in out.columns:
+                    continue
+                if not _field_empty(field, out.at[idx, field]):
+                    continue
+                _assign_signal_value(out, idx, field, val)
     return out
 
 
@@ -346,21 +475,42 @@ def attach_strat_hit_rates(df: pd.DataFrame, *, min_n: int = 30) -> pd.DataFrame
     return out
 
 
+def _coalesce_l5_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    pairs = (
+        ("l5_over", ("l5_over", "last5_over", "L5 Over")),
+        ("l5_under", ("l5_under", "last5_under", "L5 Under")),
+        ("hit_rate", ("hit_rate", "last5_hit_rate", "Hit Rate (5g)", "line_hit_rate_over_ou_5", "composite_hr")),
+    )
+    for target, alts in pairs:
+        if target not in out.columns:
+            out[target] = np.nan
+        series = pd.to_numeric(out[target], errors="coerce")
+        for alt in alts:
+            if alt in out.columns and alt != target:
+                series = series.combine_first(pd.to_numeric(out[alt], errors="coerce"))
+        out[target] = series
+    return out
+
+
 def enrich_graded_for_analysis(
     df: pd.DataFrame,
     *,
     repo: Path | None = None,
     stack_eligible: bool = False,
+    attach_context: bool = True,
 ) -> pd.DataFrame:
     """Backfill def_tier then attach top-3 context; optional stack_70_eligible (slow on large frames)."""
     if df is None or df.empty:
         return df
-    out = backfill_def_tier_dataframe(df, repo=repo)
-    out = backfill_def_tier_from_step8(out, repo=repo)
+    out = _coalesce_l5_columns(df)
+    out = backfill_def_tier_dataframe(out, repo=repo)
+    out = backfill_from_step8(out, repo=repo)
     if "sport" not in out.columns and "_sport" in out.columns:
         out["sport"] = out["_sport"]
     out = attach_strat_hit_rates(out)
-    out = attach_stack_70_columns(out, repo=repo, compute_eligible=stack_eligible)
+    if attach_context:
+        out = attach_stack_70_columns(out, repo=repo, compute_eligible=stack_eligible)
     return out
 
 
@@ -375,6 +525,9 @@ def coverage_summary(df: pd.DataFrame) -> dict[str, Any]:
         top3_known = int(pd.to_numeric(df["team_top3_rank"], errors="coerce").notna().sum())
     stack_n = int(df["stack_70_eligible"].fillna(False).sum()) if "stack_70_eligible" in df.columns else 0
     strat_known = int(pd.to_numeric(df.get("strat_hit_rate"), errors="coerce").notna().sum()) if "strat_hit_rate" in df.columns else 0
+    l5_known = 0
+    if "l5_over" in df.columns:
+        l5_known = int(pd.to_numeric(df["l5_over"], errors="coerce").notna().sum())
     return {
         "n": total,
         "def_tier_known": def_known,
@@ -383,6 +536,8 @@ def coverage_summary(df: pd.DataFrame) -> dict[str, Any]:
         "top3_pct": round(100.0 * top3_known / total, 1),
         "strat_known": strat_known,
         "strat_pct": round(100.0 * strat_known / total, 1),
+        "l5_over_known": l5_known,
+        "l5_over_pct": round(100.0 * l5_known / total, 1),
         "stack_70_eligible": stack_n,
         "stack_70_pct": round(100.0 * stack_n / total, 1),
     }

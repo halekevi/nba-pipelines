@@ -28,7 +28,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 5,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -56,7 +61,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -84,7 +94,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.3051018279965651,
+      "l5_over": 5,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -112,7 +129,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -140,7 +162,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 5,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.5897959183673469,
+      "strat_n": 490
     },
     {
       "sport": "NBA",
@@ -168,7 +198,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -196,7 +231,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6044776119402985,
+      "strat_n": 268
     },
     {
       "sport": "NBA",
@@ -224,7 +264,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5897959183673469,
+      "strat_n": 490
     },
     {
       "sport": "NBA",
@@ -252,7 +297,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5897959183673469,
+      "strat_n": 490
     },
     {
       "sport": "NBA",
@@ -280,7 +330,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -308,7 +363,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -336,7 +396,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.72,
+      "strat_n": 325
     },
     {
       "sport": "NBA",
@@ -364,7 +429,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -392,7 +462,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5378378378378378,
+      "strat_n": 370
     },
     {
       "sport": "NBA",
@@ -420,7 +495,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -448,7 +528,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -476,7 +561,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 5,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.5897959183673469,
+      "strat_n": 490
     },
     {
       "sport": "NBA",
@@ -504,7 +596,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.9699081912239808,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.72,
+      "strat_n": 325
     },
     {
       "sport": "NBA",
@@ -532,7 +632,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -560,7 +668,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": 0.7732193804899179,
+      "top3_elite_fader": 1,
+      "l5_over": 5,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -588,7 +704,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -616,7 +737,12 @@
       "over_under": "UNDER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5670103092783505,
+      "strat_n": 97
     },
     {
       "sport": "NBA",
@@ -644,7 +770,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -672,7 +803,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5527638190954773,
+      "strat_n": 199
     },
     {
       "sport": "NBA",
@@ -700,7 +836,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": 0.7732193804899179,
+      "top3_elite_fader": 1,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -728,7 +872,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -756,7 +905,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -784,7 +940,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4743589743589743,
+      "strat_n": 312
     },
     {
       "sport": "NBA",
@@ -812,7 +973,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -840,7 +1006,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5378378378378378,
+      "strat_n": 370
     },
     {
       "sport": "NBA",
@@ -868,7 +1041,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -896,7 +1074,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -924,7 +1107,12 @@
       "over_under": "UNDER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5833333333333334,
+      "strat_n": 156
     },
     {
       "sport": "NBA",
@@ -952,7 +1140,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4715447154471545,
+      "strat_n": 492
     },
     {
       "sport": "NBA",
@@ -980,7 +1176,12 @@
       "over_under": "UNDER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5572519083969466,
+      "strat_n": 131
     },
     {
       "sport": "NBA",
@@ -1008,7 +1209,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -1036,7 +1245,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6059602649006622,
+      "strat_n": 906
     },
     {
       "sport": "NBA",
@@ -1064,7 +1280,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4743589743589743,
+      "strat_n": 312
     },
     {
       "sport": "NBA",
@@ -1092,7 +1316,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4715447154471545,
+      "strat_n": 492
     },
     {
       "sport": "NBA",
@@ -1120,7 +1349,16 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 4.521959272078621,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.65,
+      "strat_n": 560
     },
     {
       "sport": "NBA",
@@ -1148,7 +1386,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.3051018279965651,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5527638190954773,
+      "strat_n": 199
     },
     {
       "sport": "NBA",
@@ -1176,7 +1421,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -1204,7 +1454,12 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5833333333333334,
+      "strat_n": 156
     },
     {
       "sport": "NBA",
@@ -1232,7 +1487,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.72,
+      "strat_n": 325
     },
     {
       "sport": "NBA",
@@ -1260,7 +1520,12 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5572519083969466,
+      "strat_n": 131
     },
     {
       "sport": "NBA",
@@ -1288,7 +1553,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -1316,7 +1588,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -1344,7 +1621,14 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -0.6470247345247345,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5983606557377049,
+      "strat_n": 122
     },
     {
       "sport": "NBA",
@@ -1372,7 +1656,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -1400,7 +1689,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.4715447154471545,
+      "strat_n": 492
     },
     {
       "sport": "NBA",
@@ -1428,7 +1722,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.65,
+      "strat_n": 560
     },
     {
       "sport": "NBA",
@@ -1456,7 +1755,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -1484,7 +1786,13 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -1512,7 +1820,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -1540,7 +1851,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -1568,7 +1882,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -1596,7 +1915,16 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 4.521959272078621,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.65,
+      "strat_n": 560
     },
     {
       "sport": "NBA",
@@ -1624,7 +1952,13 @@
       "over_under": "UNDER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5833333333333334,
+      "strat_n": 156
     },
     {
       "sport": "NBA",
@@ -1652,7 +1986,14 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5323741007194245,
+      "strat_n": 139
     },
     {
       "sport": "NBA",
@@ -1680,7 +2021,13 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 2.0,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.65,
+      "strat_n": 560
     },
     {
       "sport": "NBA",
@@ -1708,7 +2055,13 @@
       "over_under": "UNDER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.4897959183673469,
+      "strat_n": 98
     },
     {
       "sport": "NBA",
@@ -1736,7 +2089,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.65,
+      "strat_n": 560
     },
     {
       "sport": "NBA",
@@ -1764,7 +2122,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -1792,7 +2153,16 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6243705941591138,
+      "strat_n": 993
     },
     {
       "sport": "NBA",
@@ -1820,7 +2190,16 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4560669456066946,
+      "strat_n": 478
     },
     {
       "sport": "NBA",
@@ -1848,7 +2227,13 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6243705941591138,
+      "strat_n": 993
     },
     {
       "sport": "NBA",
@@ -1876,7 +2261,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6243705941591138,
+      "strat_n": 993
     },
     {
       "sport": "NBA",
@@ -1904,7 +2294,15 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 2.161066737184928,
+      "top3_weak_overperformer": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.638235294117647,
+      "strat_n": 340
     },
     {
       "sport": "NBA",
@@ -1932,7 +2330,16 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6540447504302926,
+      "strat_n": 581
     },
     {
       "sport": "NBA",
@@ -1960,7 +2367,13 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 2.0,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.6197916666666666,
+      "strat_n": 384
     },
     {
       "sport": "NBA",
@@ -1988,7 +2401,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6540447504302926,
+      "strat_n": 581
     },
     {
       "sport": "NBA",
@@ -2016,7 +2434,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4715447154471545,
+      "strat_n": 492
     },
     {
       "sport": "NBA",
@@ -2044,7 +2469,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -2072,7 +2504,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4
     },
     {
       "sport": "NBA",
@@ -2100,7 +2535,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -2128,7 +2566,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4
     },
     {
       "sport": "NBA",
@@ -2156,7 +2601,14 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4743589743589743,
+      "strat_n": 312
     },
     {
       "sport": "NBA",
@@ -2184,7 +2636,16 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PRA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4983552631578947,
+      "strat_n": 608
     },
     {
       "sport": "NBA",
@@ -2212,7 +2673,13 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -2240,7 +2707,15 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": 0.7732193804899179,
+      "top3_elite_fader": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.5527638190954773,
+      "strat_n": 199
     },
     {
       "sport": "NBA",
@@ -2268,7 +2743,16 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4792243767313019,
+      "strat_n": 361
     },
     {
       "sport": "NBA",
@@ -2296,7 +2780,13 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -2324,7 +2814,13 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PRA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4983552631578947,
+      "strat_n": 608
     },
     {
       "sport": "NBA",
@@ -2352,7 +2848,16 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 4.521959272078621,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5034722222222222,
+      "strat_n": 288
     },
     {
       "sport": "NBA",
@@ -2380,7 +2885,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.3051018279965651,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -2408,7 +2918,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8
     },
     {
       "sport": "NBA",
@@ -2436,7 +2949,13 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4792243767313019,
+      "strat_n": 361
     },
     {
       "sport": "NBA",
@@ -2464,7 +2983,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4792243767313019,
+      "strat_n": 361
     },
     {
       "sport": "NBA",
@@ -2492,7 +3016,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4
     },
     {
       "sport": "NBA",
@@ -2520,7 +3047,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -2548,7 +3080,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5728155339805825,
+      "strat_n": 103
     },
     {
       "sport": "NBA",
@@ -2576,7 +3113,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.4743589743589743,
+      "strat_n": 312
     },
     {
       "sport": "NBA",
@@ -2604,7 +3146,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PRA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.4715447154471545,
+      "strat_n": 492
     },
     {
       "sport": "NBA",
@@ -2632,7 +3179,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5728155339805825,
+      "strat_n": 103
     },
     {
       "sport": "NBA",
@@ -2660,7 +3212,13 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 2.0,
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.5034722222222222,
+      "strat_n": 288
     },
     {
       "sport": "NBA",
@@ -2688,7 +3246,16 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_RA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 7.220873372645183,
+      "top3_weak_overperformer": 1,
+      "top3_elite_fader": 1,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4666666666666667,
+      "strat_n": 240
     },
     {
       "sport": "NBA",
@@ -2716,7 +3283,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 1,
+      "hit_rate": 0.8,
+      "strat_hit_rate": 0.5527638190954773,
+      "strat_n": 199
     },
     {
       "sport": "NBA",
@@ -2744,7 +3316,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_RA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.4549356223175965,
+      "strat_n": 233
     },
     {
       "sport": "NBA",
@@ -2772,7 +3349,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.56353591160221,
+      "strat_n": 181
     },
     {
       "sport": "NBA",
@@ -2800,7 +3382,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.5527638190954773,
+      "strat_n": 199
     },
     {
       "sport": "NBA",
@@ -2828,7 +3415,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -1.4067206547302882,
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.5652985074626866,
+      "strat_n": 536
     },
     {
       "sport": "NBA",
@@ -2856,7 +3450,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4743589743589743,
+      "strat_n": 312
     },
     {
       "sport": "NBA",
@@ -2884,7 +3483,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.4701298701298701,
+      "strat_n": 385
     },
     {
       "sport": "NBA",
@@ -2912,7 +3516,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4
     },
     {
       "sport": "NBA",
@@ -2940,7 +3547,15 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_RA",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.5111298204719268,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4549356223175965,
+      "strat_n": 233
     },
     {
       "sport": "NBA",
@@ -2968,7 +3583,13 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6540447504302926,
+      "strat_n": 581
     },
     {
       "sport": "NBA",
@@ -2996,7 +3617,14 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": -1.5329153006954734,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.72,
+      "strat_n": 325
     },
     {
       "sport": "NBA",
@@ -3024,7 +3652,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -3052,7 +3683,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.56353591160221,
+      "strat_n": 181
     },
     {
       "sport": "NBA",
@@ -3080,7 +3716,15 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.9699081912239808,
+      "top3_weak_overperformer": 1,
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6,
+      "strat_hit_rate": 0.4635416666666667,
+      "strat_n": 192
     },
     {
       "sport": "NBA",
@@ -3108,7 +3752,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA",
@@ -3136,7 +3783,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.375,
+      "strat_n": 104
     },
     {
       "sport": "NBA",
@@ -3164,7 +3816,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 3,
+      "hit_rate": 0.4,
+      "strat_hit_rate": 0.6353711790393013,
+      "strat_n": 458
     },
     {
       "sport": "NBA",
@@ -3192,7 +3849,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 4,
+      "hit_rate": 0.2,
+      "strat_hit_rate": 0.6540447504302926,
+      "strat_n": 581
     },
     {
       "sport": "NBA",
@@ -3220,7 +3882,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 2,
+      "hit_rate": 0.6
     },
     {
       "sport": "NBA1Q",
@@ -3248,7 +3913,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3276,7 +3946,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3304,7 +3981,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3332,7 +4014,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3360,7 +4049,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.89,
+      "strat_n": 100
     },
     {
       "sport": "NBA1Q",
@@ -3388,7 +4082,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3416,7 +4115,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.9047619047619048,
+      "strat_n": 210
     },
     {
       "sport": "NBA1Q",
@@ -3444,7 +4148,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3472,7 +4181,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3500,7 +4216,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 1.409011544011544,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.89,
+      "strat_n": 100
     },
     {
       "sport": "NBA1Q",
@@ -3528,7 +4251,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.89,
+      "strat_n": 100
     },
     {
       "sport": "NBA1Q",
@@ -3556,7 +4284,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3584,7 +4317,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.7685185185185185,
+      "strat_n": 216
     },
     {
       "sport": "NBA1Q",
@@ -3612,7 +4350,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.98,
+      "strat_n": 50
     },
     {
       "sport": "NBA1Q",
@@ -3640,7 +4383,13 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 1.0,
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.4769230769230769,
+      "strat_n": 65
     },
     {
       "sport": "NBA1Q",
@@ -3668,7 +4417,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3696,7 +4450,11 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_bottom3_rank": 3.0,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -3724,7 +4482,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.4769230769230769,
+      "strat_n": 65
     },
     {
       "sport": "NBA1Q",
@@ -3752,7 +4517,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -3780,7 +4548,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3808,7 +4581,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 1,
+      "hit_rate": 0.67,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3836,7 +4614,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.7685185185185185,
+      "strat_n": 216
     },
     {
       "sport": "NBA1Q",
@@ -3864,7 +4647,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 0.9529845151217704,
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.9047619047619048,
+      "strat_n": 210
     },
     {
       "sport": "NBA1Q",
@@ -3892,7 +4682,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.7685185185185185,
+      "strat_n": 216
     },
     {
       "sport": "NBA1Q",
@@ -3920,7 +4715,15 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": 0.6322644847412652,
+      "top3_elite_fader": 1,
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.89,
+      "strat_n": 100
     },
     {
       "sport": "NBA1Q",
@@ -3948,7 +4751,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 1,
+      "hit_rate": 0.67,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -3976,7 +4784,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.89,
+      "strat_n": 100
     },
     {
       "sport": "NBA1Q",
@@ -4004,7 +4817,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4032,7 +4848,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -5.966504726890758,
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -4060,7 +4883,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4088,7 +4914,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4116,7 +4947,12 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 4,
+      "l5_under": 0,
+      "hit_rate": 1.0,
+      "strat_hit_rate": 0.7685185185185185,
+      "strat_n": 216
     },
     {
       "sport": "NBA1Q",
@@ -4144,7 +4980,13 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": 0.154687892195076,
+      "top3_elite_fader": 1,
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4172,7 +5014,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 1,
+      "hit_rate": 0.67,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -4200,7 +5047,12 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 3.0,
+      "def_boost_hist": -1.525584415584416,
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4228,7 +5080,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4256,7 +5111,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4284,7 +5142,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5
     },
     {
       "sport": "NBA1Q",
@@ -4312,7 +5173,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 1,
+      "hit_rate": 0.75
     },
     {
       "sport": "NBA1Q",
@@ -4340,7 +5204,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5
     },
     {
       "sport": "NBA1Q",
@@ -4368,7 +5235,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -5.966504726890758,
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5,
+      "strat_hit_rate": 0.8994082840236687,
+      "strat_n": 169
     },
     {
       "sport": "NBA1Q",
@@ -4396,7 +5270,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4424,7 +5301,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 2,
+      "hit_rate": 0.33
     },
     {
       "sport": "NBA1Q",
@@ -4452,7 +5332,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4480,7 +5363,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 1,
+      "hit_rate": 0.75
     },
     {
       "sport": "NBA1Q",
@@ -4508,7 +5394,14 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "MISS",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 2.0,
+      "def_boost_hist": 0.9529845151217704,
+      "l5_over": 2,
+      "l5_under": 1,
+      "hit_rate": 0.67,
+      "strat_hit_rate": 0.9047619047619048,
+      "strat_n": 210
     },
     {
       "sport": "NBA1Q",
@@ -4536,7 +5429,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4564,7 +5460,10 @@
       "over_under": "OVER",
       "void_reason": "",
       "result": "HIT",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5
     },
     {
       "sport": "NBA1Q",
@@ -4592,7 +5491,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "NBA1Q",
@@ -4620,7 +5522,12 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "team_top3_rank": 1.0,
+      "def_boost_hist": -5.966504726890758,
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5
     },
     {
       "sport": "NBA1Q",
@@ -4648,7 +5555,10 @@
       "over_under": "UNDER",
       "void_reason": "BLOCKED_STD_UNDER_LOW_HR",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 2,
+      "hit_rate": 0.33
     },
     {
       "sport": "NBA1Q",
@@ -4676,7 +5586,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 3,
+      "l5_under": 1,
+      "hit_rate": 0.75,
+      "strat_hit_rate": 0.4769230769230769,
+      "strat_n": 65
     },
     {
       "sport": "NBA1Q",
@@ -4704,7 +5619,12 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_PTS",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 2,
+      "l5_under": 1,
+      "hit_rate": 0.67,
+      "strat_hit_rate": 0.4769230769230769,
+      "strat_n": 65
     },
     {
       "sport": "NBA1Q",
@@ -4732,7 +5652,10 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 1,
+      "hit_rate": 0.5
     },
     {
       "sport": "NBA1Q",
@@ -4760,7 +5683,10 @@
       "over_under": "OVER",
       "void_reason": "STD_OVER_EDGE_BELOW_MIN_AST",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "l5_over": 1,
+      "l5_under": 0,
+      "hit_rate": 1.0
     },
     {
       "sport": "CBB",
@@ -4788,7 +5714,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4816,7 +5744,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -4844,7 +5774,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4872,7 +5804,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4900,7 +5834,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4928,7 +5864,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4956,7 +5894,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -4984,7 +5924,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5040,7 +5982,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5068,7 +6012,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5096,7 +6042,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -5124,7 +6072,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5152,7 +6102,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5180,7 +6132,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5208,7 +6162,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5236,7 +6192,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5264,7 +6222,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -5292,7 +6252,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -5320,7 +6282,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -5376,7 +6340,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5404,7 +6370,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -5432,7 +6400,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -5460,7 +6430,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -5488,7 +6460,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -5544,7 +6518,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5600,7 +6576,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5628,7 +6606,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5684,7 +6664,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5712,7 +6694,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5768,7 +6752,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -5796,7 +6782,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5824,7 +6812,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -5880,7 +6870,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -5908,7 +6900,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -5964,7 +6958,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -6020,7 +7016,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6048,7 +7046,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -6076,7 +7076,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -6104,7 +7106,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -6132,7 +7136,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6188,7 +7194,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6328,7 +7336,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -6356,7 +7366,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -6384,7 +7396,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -6412,7 +7426,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6468,7 +7484,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6496,7 +7514,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6524,7 +7544,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -6580,7 +7602,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -6608,7 +7632,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -6692,7 +7718,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6720,7 +7748,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6748,7 +7778,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5238095238095238,
+      "strat_n": 42
     },
     {
       "sport": "CBB",
@@ -6776,7 +7808,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -6804,7 +7838,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5238095238095238,
+      "strat_n": 42
     },
     {
       "sport": "CBB",
@@ -6832,7 +7868,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6916,7 +7954,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -6944,7 +7984,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -7000,7 +8042,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -7028,7 +8072,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -7056,7 +8102,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -7084,7 +8132,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -7252,7 +8302,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -7280,7 +8332,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5,
+      "strat_n": 58
     },
     {
       "sport": "CBB",
@@ -7308,7 +8362,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -7336,7 +8392,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5686274509803921,
+      "strat_n": 51
     },
     {
       "sport": "CBB",
@@ -7364,7 +8422,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5454545454545454,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -7448,7 +8508,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -7476,7 +8538,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -7504,7 +8568,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -7532,7 +8598,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -7560,7 +8628,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -7588,7 +8658,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -7616,7 +8688,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5686274509803921,
+      "strat_n": 51
     },
     {
       "sport": "CBB",
@@ -7644,7 +8718,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -7672,7 +8748,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5454545454545454,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -7700,7 +8778,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -7728,7 +8808,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5686274509803921,
+      "strat_n": 51
     },
     {
       "sport": "CBB",
@@ -7756,7 +8838,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -7784,7 +8868,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -7812,7 +8898,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5,
+      "strat_n": 58
     },
     {
       "sport": "CBB",
@@ -7840,7 +8928,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -7868,7 +8958,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -7896,7 +8988,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -7924,7 +9018,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -7952,7 +9048,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -7980,7 +9078,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -8008,7 +9108,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -8036,7 +9138,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -8064,7 +9168,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -8092,7 +9198,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -8120,7 +9228,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -8148,7 +9258,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -8204,7 +9316,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -8232,7 +9346,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -8260,7 +9376,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -8288,7 +9406,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -8316,7 +9436,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -8344,7 +9466,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -8372,7 +9496,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -8400,7 +9526,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -8428,7 +9556,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5,
+      "strat_n": 58
     },
     {
       "sport": "CBB",
@@ -8456,7 +9586,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -8484,7 +9616,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -8512,7 +9646,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -8540,7 +9676,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5454545454545454,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -8568,7 +9706,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -8596,7 +9736,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -8624,7 +9766,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -8652,7 +9796,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5238095238095238,
+      "strat_n": 42
     },
     {
       "sport": "CBB",
@@ -8680,7 +9826,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -8708,7 +9856,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -8736,7 +9886,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -8764,7 +9916,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5238095238095238,
+      "strat_n": 42
     },
     {
       "sport": "CBB",
@@ -8792,7 +9946,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -8820,7 +9976,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -8848,7 +10006,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6212121212121212,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -8932,7 +10092,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5,
+      "strat_n": 58
     },
     {
       "sport": "CBB",
@@ -8960,7 +10122,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6212121212121212,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -8988,7 +10152,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -9016,7 +10182,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -9044,7 +10212,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5454545454545454,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -9072,7 +10242,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -9100,7 +10272,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -9128,7 +10302,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -9184,7 +10360,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -9212,7 +10390,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -9240,7 +10420,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -9268,7 +10450,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5454545454545454,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -9296,7 +10480,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -9324,7 +10510,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -9352,7 +10540,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -9380,7 +10570,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -9408,7 +10600,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -9436,7 +10630,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -9492,7 +10688,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -9520,7 +10718,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6304347826086957,
+      "strat_n": 46
     },
     {
       "sport": "CBB",
@@ -9548,7 +10748,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -9576,7 +10778,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -9632,7 +10836,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -9660,7 +10866,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -9688,7 +10896,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5686274509803921,
+      "strat_n": 51
     },
     {
       "sport": "CBB",
@@ -9716,7 +10926,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -9744,7 +10956,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -9772,7 +10986,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -9800,7 +11016,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -9828,7 +11046,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -9856,7 +11076,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -9912,7 +11134,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -9940,7 +11164,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.527027027027027,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -9968,7 +11194,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -9996,7 +11224,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -10024,7 +11254,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -10052,7 +11284,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -10080,7 +11314,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -10108,7 +11344,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -10136,7 +11374,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -10164,7 +11404,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -10192,7 +11434,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -10220,7 +11464,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -10248,7 +11494,9 @@
       "over_under": "UNDER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6212121212121212,
+      "strat_n": 66
     },
     {
       "sport": "CBB",
@@ -10276,7 +11524,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -10332,7 +11582,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -10388,7 +11640,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -10416,7 +11670,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.46875,
+      "strat_n": 32
     },
     {
       "sport": "CBB",
@@ -10444,7 +11700,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -10472,7 +11730,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -10500,7 +11760,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -10584,7 +11846,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -10612,7 +11876,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -10640,7 +11906,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -10696,7 +11964,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -10724,7 +11994,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -10752,7 +12024,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -10836,7 +12110,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -10864,7 +12140,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -10920,7 +12198,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -10976,7 +12256,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -11004,7 +12286,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -11032,7 +12316,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -11060,7 +12346,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -11088,7 +12376,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -11116,7 +12406,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -11144,7 +12436,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -11172,7 +12466,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.46875,
+      "strat_n": 32
     },
     {
       "sport": "CBB",
@@ -11200,7 +12496,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -11228,7 +12526,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -11256,7 +12556,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -11284,7 +12586,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -11312,7 +12616,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -11340,7 +12646,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -11368,7 +12676,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -11396,7 +12706,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -11424,7 +12736,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -11452,7 +12766,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -11480,7 +12796,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -11536,7 +12854,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -11564,7 +12884,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4848484848484848,
+      "strat_n": 33
     },
     {
       "sport": "CBB",
@@ -11592,7 +12914,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -11620,7 +12944,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -11704,7 +13030,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -11732,7 +13060,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -11760,7 +13090,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -11788,7 +13120,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -11816,7 +13150,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -11844,7 +13180,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -11872,7 +13210,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -11900,7 +13240,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -11928,7 +13270,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -12012,7 +13356,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4444444444444444,
+      "strat_n": 36
     },
     {
       "sport": "CBB",
@@ -12040,7 +13386,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12068,7 +13416,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -12096,7 +13446,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12152,7 +13504,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -12180,7 +13534,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -12208,7 +13564,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -12236,7 +13594,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -12264,7 +13624,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12292,7 +13654,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -12320,7 +13684,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -12348,7 +13714,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -12376,7 +13744,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -12404,7 +13774,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12432,7 +13804,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -12460,7 +13834,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4848484848484848,
+      "strat_n": 33
     },
     {
       "sport": "CBB",
@@ -12488,7 +13864,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -12516,7 +13894,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.46875,
+      "strat_n": 32
     },
     {
       "sport": "CBB",
@@ -12544,7 +13924,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12572,7 +13954,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -12600,7 +13984,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -12628,7 +14014,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -12684,7 +14072,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -12712,7 +14102,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -12740,7 +14132,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -12768,7 +14162,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -12796,7 +14192,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -12824,7 +14222,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -12880,7 +14280,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -12936,7 +14338,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -12964,7 +14368,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -12992,7 +14398,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6481481481481481,
+      "strat_n": 54
     },
     {
       "sport": "CBB",
@@ -13020,7 +14428,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4444444444444444,
+      "strat_n": 36
     },
     {
       "sport": "CBB",
@@ -13048,7 +14458,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -13076,7 +14488,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6114649681528662,
+      "strat_n": 157
     },
     {
       "sport": "CBB",
@@ -13104,7 +14518,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -13132,7 +14548,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -13160,7 +14578,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -13188,7 +14608,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -13216,7 +14638,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4444444444444444,
+      "strat_n": 36
     },
     {
       "sport": "CBB",
@@ -13244,7 +14668,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5813953488372093,
+      "strat_n": 43
     },
     {
       "sport": "CBB",
@@ -13272,7 +14698,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -13300,7 +14728,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13328,7 +14758,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6363636363636364,
+      "strat_n": 143
     },
     {
       "sport": "CBB",
@@ -13384,7 +14816,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13412,7 +14846,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13440,7 +14876,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -13468,7 +14906,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13496,7 +14936,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13524,7 +14966,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13552,7 +14996,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13580,7 +15026,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13608,7 +15056,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13636,7 +15086,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5405405405405406,
+      "strat_n": 148
     },
     {
       "sport": "CBB",
@@ -13664,7 +15116,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",
@@ -13692,7 +15146,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4516129032258064,
+      "strat_n": 62
     },
     {
       "sport": "CBB",
@@ -13720,7 +15176,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -13748,7 +15206,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4054054054054054,
+      "strat_n": 74
     },
     {
       "sport": "CBB",
@@ -13776,7 +15236,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.6262626262626263,
+      "strat_n": 99
     },
     {
       "sport": "CBB",
@@ -13804,7 +15266,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4848484848484848,
+      "strat_n": 33
     },
     {
       "sport": "CBB",
@@ -13832,7 +15296,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13860,7 +15326,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.3723404255319149,
+      "strat_n": 94
     },
     {
       "sport": "CBB",
@@ -13888,7 +15356,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.5327102803738317,
+      "strat_n": 107
     },
     {
       "sport": "CBB",
@@ -13916,7 +15386,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4193548387096774,
+      "strat_n": 124
     },
     {
       "sport": "CBB",
@@ -13944,7 +15416,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.396039603960396,
+      "strat_n": 101
     },
     {
       "sport": "CBB",
@@ -13972,7 +15446,9 @@
       "over_under": "OVER",
       "void_reason": "NO_ACTUAL",
       "result": "VOID",
-      "pp_projection_id": ""
+      "pp_projection_id": "",
+      "strat_hit_rate": 0.4057971014492754,
+      "strat_n": 69
     },
     {
       "sport": "CBB",

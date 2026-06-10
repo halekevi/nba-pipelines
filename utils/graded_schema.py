@@ -109,6 +109,25 @@ FIELD_ALIASES: dict[str, list[str]] = {
         "L5 Over",
         "last5_over",
     ],
+    "l5_under": [
+        "l5_under",
+        "L5 Under",
+        "last5_under",
+    ],
+    "hit_rate": [
+        "hit_rate",
+        "Hit Rate",
+        "Hit Rate (5g)",
+        "last5_hit_rate",
+        "line_hit_rate_over_ou_5",
+        "composite_hr",
+    ],
+    "strat_hit_rate": [
+        "strat_hit_rate",
+    ],
+    "strat_n": [
+        "strat_n",
+    ],
     "consistency_grade": [
         "consistency_grade",
         "Consistency Grade",

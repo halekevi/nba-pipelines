@@ -449,6 +449,10 @@ def prop_row_for_api(
     team_bottom3_rank = _pick("Bottom3 Rank", "team_bottom3_rank", "bottom3_rank")
     top3_weak_over = _pick("Top3 Weak Over", "top3_weak_overperformer")
     top3_elite_fade = _pick("Top3 Elite Fade", "top3_elite_fader")
+    l5_over = _pick("L5 Over", "l5_over", "last5_over", "over_L5_raw")
+    l5_under = _pick("L5 Under", "l5_under", "last5_under", "under_L5_raw")
+    strat_hit_rate = _pick("strat_hit_rate")
+    strat_n = _pick("strat_n")
     h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
@@ -548,6 +552,11 @@ def prop_row_for_api(
         "team_bottom3_rank": team_bottom3_rank or "",
         "top3_weak_overperformer": top3_weak_over or "",
         "top3_elite_fader": top3_elite_fade or "",
+        "l5_over": l5_over or "",
+        "l5_under": l5_under or "",
+        "hit_rate": hit_rate_for_pick or "",
+        "strat_hit_rate": strat_hit_rate or "",
+        "strat_n": strat_n or "",
         "h2h_bucket": h2h_bucket or "",
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Backfill def_tier and top-3 stack context on graded_props_*.json archives and graded xlsx Box Raw.
+Backfill stack signal columns on graded_props_*.json archives and graded xlsx Box Raw.
 
-Fills empty def_tier from sport defense summary CSVs (opp_team lookup) and dated step8 slates.
-Attaches top-3 flags from sport leader CSVs when missing.
+Fills def_tier, L5 counts, hit_rate, strat rates, and top-3 context from defense CSVs,
+dated step8 slates, and strat lookup when missing on archive rows.
 
 Usage:
   python scripts/backfill_graded_def_tier.py --dry-run
@@ -29,15 +29,30 @@ if str(_REPO) not in sys.path:
 from utils.graded_enrichment import (  # noqa: E402
     enrich_graded_for_analysis,
     is_empty_def_tier,
+    is_empty_numeric,
     is_empty_value,
 )
 from utils.graded_schema import normalize_graded_df, recover_direction_if_missing  # noqa: E402
-from utils.stack_context_cols import STACK_CONTEXT_COLS  # noqa: E402
+from utils.stack_context_cols import GRADED_SIGNAL_COLS  # noqa: E402
 
 _GRADED_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json$")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 _TOP3_INT_COLS = frozenset({"top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context"})
+_NUMERIC_COLS = frozenset({"l5_over", "l5_under", "hit_rate", "strat_hit_rate", "strat_n", "team_top3_rank", "team_bottom3_rank", "def_boost_hist"})
+
+
+def _apply_patch_value(entry: dict, col: str, val: object) -> None:
+    if col == "def_tier":
+        entry[col] = str(val)
+    elif col in _TOP3_INT_COLS:
+        entry[col] = int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0))
+    elif col in _NUMERIC_COLS:
+        num = pd.to_numeric(val, errors="coerce")
+        if pd.notna(num):
+            entry[col] = float(num) if col in {"hit_rate", "strat_hit_rate", "team_top3_rank", "team_bottom3_rank", "def_boost_hist"} else int(num)
+    else:
+        entry[col] = str(val)
 
 
 def _graded_json_dirs(repo: Path) -> list[Path]:
@@ -107,18 +122,23 @@ def _pick_sheet(xl: pd.ExcelFile) -> str | None:
 
 
 def _row_needs_patch(entry: dict, enriched: pd.Series) -> bool:
-    if is_empty_def_tier(entry.get("def_tier")) and not is_empty_def_tier(enriched.get("def_tier")):
-        return True
-    for col in STACK_CONTEXT_COLS:
+    for col in GRADED_SIGNAL_COLS:
         if col not in enriched.index:
             continue
+        new = enriched.get(col)
         cur = entry.get(col)
-        if col in _TOP3_INT_COLS:
+        if col == "def_tier":
+            if is_empty_def_tier(cur) and not is_empty_def_tier(new):
+                return True
+        elif col in _NUMERIC_COLS:
+            if is_empty_numeric(cur) and not is_empty_numeric(new):
+                return True
+        elif col in _TOP3_INT_COLS:
             cur_i = int(np.nan_to_num(pd.to_numeric(cur, errors="coerce"), nan=0.0))
-            new_i = int(np.nan_to_num(pd.to_numeric(enriched.get(col), errors="coerce"), nan=0.0))
+            new_i = int(np.nan_to_num(pd.to_numeric(new, errors="coerce"), nan=0.0))
             if cur_i == 0 and new_i != 0:
                 return True
-        elif is_empty_value(cur) and not is_empty_value(enriched.get(col)):
+        elif is_empty_value(cur) and not is_empty_value(new):
             return True
     return False
 
@@ -152,10 +172,7 @@ def patch_json_file(path: Path, *, dry_run: bool) -> tuple[int, int]:
                 "def_tier": e.get("def_tier"),
                 "opp_team": e.get("opp_team"),
                 "result": e.get("result"),
-                "l5_over": e.get("l5_over"),
-                "l5_under": e.get("l5_under"),
-                "hit_rate": e.get("hit_rate"),
-                **{c: e.get(c) for c in STACK_CONTEXT_COLS},
+                **{c: e.get(c) for c in GRADED_SIGNAL_COLS},
             }
         )
     df = pd.DataFrame(rows)
@@ -163,7 +180,7 @@ def patch_json_file(path: Path, *, dry_run: bool) -> tuple[int, int]:
         return 0, 0
     file_date = str(data.get("date") if isinstance(data, dict) else "")[:10] or path.stem.replace("graded_props_", "")[:10]
     df["_slate_date"] = file_date
-    enriched_df = enrich_graded_for_analysis(df, stack_eligible=False)
+    enriched_df = enrich_graded_for_analysis(df, stack_eligible=False, attach_context=False)
 
     checked = 0
     patched = 0
@@ -176,20 +193,19 @@ def patch_json_file(path: Path, *, dry_run: bool) -> tuple[int, int]:
             continue
         if not _row_needs_patch(entry, er):
             continue
-        if not is_empty_def_tier(er.get("def_tier")):
-            entry["def_tier"] = str(er.get("def_tier"))
-        for col in STACK_CONTEXT_COLS:
+        for col in GRADED_SIGNAL_COLS:
             if col not in er.index:
                 continue
             val = er.get(col)
-            if pd.isna(val) or is_empty_value(val):
+            if col in _NUMERIC_COLS:
+                if is_empty_numeric(val):
+                    continue
+            elif col in _TOP3_INT_COLS:
+                if int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0)) == 0:
+                    continue
+            elif is_empty_value(val):
                 continue
-            if col in _TOP3_INT_COLS:
-                entry[col] = int(pd.to_numeric(val, errors="coerce") or 0)
-            elif col in ("team_top3_rank", "team_bottom3_rank", "def_boost_hist"):
-                entry[col] = float(val) if pd.notna(pd.to_numeric(val, errors="coerce")) else val
-            else:
-                entry[col] = str(val)
+            _apply_patch_value(entry, col, val)
         patched += 1
 
     if patched and not dry_run:
@@ -232,7 +248,7 @@ def patch_workbook(path: Path, *, dry_run: bool) -> tuple[int, int]:
         if m:
             norm["_slate_date"] = m.group(1)
             break
-    enriched = enrich_graded_for_analysis(norm)
+    enriched = enrich_graded_for_analysis(norm, stack_eligible=False, attach_context=False)
     if len(enriched) != len(raw):
         return 0, 0
 

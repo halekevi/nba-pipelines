@@ -462,6 +462,13 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     "Top3 Elite Fade": "top3_elite_fader",
     "Top3 Def Context": "top3_def_context",
     "Top3 Under Context": "top3_under_context",
+    "L5 Over": "l5_over",
+    "L5 Under": "l5_under",
+    "last5_over": "l5_over",
+    "last5_under": "l5_under",
+    "Hit Rate (5g)": "hit_rate",
+    "Hit Rate": "hit_rate",
+    "last5_hit_rate": "hit_rate",
 })
     # fallback compatibility
     if "prop_type_norm" not in df.columns:
@@ -1414,8 +1421,9 @@ def write_raw(wb,df):
              'bet_direction','tier','def_tier','minutes_tier','shot_role','usage_role',
              'consistency_grade','team_top3_rank','team_bottom3_rank','def_boost_hist',
              'top3_weak_overperformer','top3_elite_fader','top3_def_context','top3_under_context',
-             'edge','abs_edge','last5_hit_rate','last5_avg','season_avg',
-             'last5_over','last5_under','projection','rank_score','ml_prob','ml_edge',
+             'edge','abs_edge','last5_hit_rate','hit_rate','last5_avg','season_avg',
+             'last5_over','last5_under','l5_over','l5_under','strat_hit_rate','strat_n',
+             'projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',
              'actual','result','margin','void_reason_grade']
     cols=[c for c in desired if c in df.columns]
