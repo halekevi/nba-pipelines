@@ -219,6 +219,10 @@ def load_graded_json_archive(
     if not rows:
         return pd.DataFrame()
     out = pd.DataFrame(rows)
+    if "confidence_tier" in out.columns:
+        has_tier = out["confidence_tier"].astype(str).str.strip().str.upper().isin({"HIGH", "MED", "LOW"})
+        if has_tier.all():
+            return out
     from utils.confidence_tier import attach_confidence_tier  # noqa: WPS433
 
     return attach_confidence_tier(out)

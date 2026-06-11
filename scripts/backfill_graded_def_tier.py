@@ -8,6 +8,7 @@ dated step8 slates, and strat lookup when missing on archive rows.
 Usage:
   python scripts/backfill_graded_def_tier.py --dry-run
   python scripts/backfill_graded_def_tier.py --date 2026-06-08
+  python scripts/backfill_graded_def_tier.py --confidence-only
   python scripts/backfill_graded_def_tier.py --workbooks
 """
 
@@ -33,7 +34,7 @@ from utils.graded_enrichment import (  # noqa: E402
     is_empty_value,
 )
 from utils.graded_schema import normalize_graded_df, recover_direction_if_missing  # noqa: E402
-from utils.stack_context_cols import GRADED_SIGNAL_COLS  # noqa: E402
+from utils.stack_context_cols import GRADED_SIGNAL_COLS, STACK_CONTEXT_COLS  # noqa: E402
 
 _GRADED_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json$")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -47,6 +48,12 @@ _NUMERIC_COLS = frozenset({
     "confidence_score",
     "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
 })
+_CONFIDENCE_COLS: tuple[str, ...] = (
+    "sport_signal_maturity",
+    "confidence_tier",
+    "confidence_score",
+    "confidence_note",
+)
 
 
 def _apply_patch_value(entry: dict, col: str, val: object) -> None:
@@ -148,6 +155,57 @@ def _row_needs_patch(entry: dict, enriched: pd.Series) -> bool:
         elif is_empty_value(cur) and not is_empty_value(new):
             return True
     return False
+
+
+def patch_json_confidence_tier(path: Path, *, dry_run: bool, force: bool = False) -> tuple[int, int]:
+    """Fast path: attach confidence_tier from fields already on archive rows."""
+    from utils.confidence_tier import attach_confidence_tier  # noqa: WPS433
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(data, list):
+        entries = data
+        wrap_list = True
+        root = None
+    else:
+        root = data
+        entries = data.get("props") or data.get("picks") or data.get("rows") or []
+        wrap_list = False
+    dict_entries = [e for e in entries if isinstance(e, dict)]
+    if not dict_entries:
+        return 0, 0
+
+    df = pd.DataFrame(dict_entries)
+    enriched = attach_confidence_tier(df)
+
+    checked = 0
+    patched = 0
+    for i, entry in enumerate(entries):
+        if not isinstance(entry, dict) or i >= len(enriched):
+            continue
+        checked += 1
+        er = enriched.iloc[i]
+        if not force and not is_empty_value(entry.get("confidence_tier")):
+            continue
+        for col in _CONFIDENCE_COLS:
+            if col not in er.index:
+                continue
+            val = er.get(col)
+            if is_empty_value(val):
+                continue
+            _apply_patch_value(entry, col, val)
+        patched += 1
+
+    if patched and not dry_run:
+        if wrap_list:
+            out = entries
+        else:
+            out = dict(root)
+            for k in ("props", "picks", "rows"):
+                if k in out:
+                    out[k] = entries
+                    break
+        path.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
+    return checked, patched
 
 
 def patch_json_file(path: Path, *, dry_run: bool) -> tuple[int, int]:
@@ -297,6 +355,12 @@ def main() -> int:
     ap.add_argument("--from", dest="min_date", default="", metavar="DATE")
     ap.add_argument("--to", dest="max_date", default="", metavar="DATE")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument(
+        "--confidence-only",
+        action="store_true",
+        help="Only backfill confidence_tier/score/note (fast; uses existing L5/L10/def on rows)",
+    )
+    ap.add_argument("--force", action="store_true", help="Overwrite existing confidence_tier values")
     ap.add_argument("--workbooks", action="store_true", help="Also patch graded_*.xlsx Box Raw sheets")
     ap.add_argument("--json-only", action="store_true", help="Skip workbook pass")
     args = ap.parse_args()
@@ -319,12 +383,17 @@ def main() -> int:
         return 1
 
     total_chk = total_patch = 0
+    patch_fn = patch_json_confidence_tier if args.confidence_only else patch_json_file
     for path in paths:
-        chk, patch = patch_json_file(path, dry_run=args.dry_run)
+        if args.confidence_only:
+            chk, patch = patch_fn(path, dry_run=args.dry_run, force=args.force)
+        else:
+            chk, patch = patch_fn(path, dry_run=args.dry_run)
         total_chk += chk
         total_patch += patch
         if patch:
-            print(f"  JSON {path.relative_to(repo)}: rows={chk:,} patched={patch:,}{' (dry)' if args.dry_run else ''}")
+            mode = " confidence" if args.confidence_only else ""
+            print(f"  JSON{mode} {path.relative_to(repo)}: rows={chk:,} patched={patch:,}{' (dry)' if args.dry_run else ''}")
 
     wb_changed = 0
     if args.workbooks and not args.json_only:
