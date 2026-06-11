@@ -8767,8 +8767,17 @@ def _golf_board_hit_rate_proxy(df: pd.DataFrame) -> pd.DataFrame:
     """Golf has no graded PP history — proxy hit_rate from blended_score when sparse."""
     out = df.copy()
     _tennis_hit_rate_zero_like_proxy(out, "load_golf")
-    bs = pd.to_numeric(out.get("blended_score"), errors="coerce")
-    hr = pd.to_numeric(out.get("hit_rate"), errors="coerce")
+    # df.get(col) → None when missing → pd.to_numeric(None) is scalar float64 → .notna() fails
+    bs = (
+        pd.to_numeric(out["blended_score"], errors="coerce")
+        if "blended_score" in out.columns
+        else pd.Series(np.nan, index=out.index, dtype=float)
+    )
+    hr = (
+        pd.to_numeric(out["hit_rate"], errors="coerce")
+        if "hit_rate" in out.columns
+        else pd.Series(np.nan, index=out.index, dtype=float)
+    )
     sparse = hr.isna() | (hr <= 0.01)
     if bs.notna().any() and sparse.any():
         out.loc[sparse, "hit_rate"] = bs[sparse].clip(0.0, 1.0)
