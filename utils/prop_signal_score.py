@@ -360,13 +360,13 @@ def apply_ml_rank_blend(
     if out is None or out.empty:
         return out
     df = out.copy()
-    rs = pd.to_numeric(df.get(rank_col), errors="coerce").fillna(0.0)
+    rs = _num_col(df, rank_col, default=0.0).fillna(0.0)
     rs_pct = rs.rank(method="average", pct=True).fillna(0.5)
 
-    ml = pd.to_numeric(df.get("ml_prob"), errors="coerce")
-    comp = pd.to_numeric(df.get(composite_hr_col), errors="coerce")
+    ml = _num_col(df, "ml_prob")
+    comp = _num_col(df, composite_hr_col)
     if comp.isna().all() and "composite_hit_rate" in df.columns:
-        comp = pd.to_numeric(df["composite_hit_rate"], errors="coerce")
+        comp = _num_col(df, "composite_hit_rate")
     comp = comp.fillna(0.5).clip(0.001, 0.999)
     ml = ml.where(ml.notna(), 0.45 + 0.40 * rs_pct).clip(0.001, 0.999)
     df["ml_prob"] = ml
