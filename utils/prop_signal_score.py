@@ -320,7 +320,12 @@ def graded_analysis_boost_series(df: pd.DataFrame, ctx: dict[str, Any] | None) -
     pick_raw = df.get("pick_type", pd.Series("Standard", index=df.index))
     direction = _direction_series(df)
     tier = df.get("tier", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
-    player_col = df.get("player", pd.Series("", index=df.index)).astype(str)
+    player_col = (
+        df.get("player", pd.Series("", index=df.index))
+        .fillna("")
+        .astype(str)
+        .str.strip()
+    )
 
     for i in df.index:
         pk = _norm_pick_key(pick_raw.at[i])
@@ -328,7 +333,7 @@ def graded_analysis_boost_series(df: pd.DataFrame, ctx: dict[str, Any] | None) -
         pri = slice_pri.get(sk)
         if pri is not None:
             boost.at[i] += max(0.0, 0.15 - 0.01 * float(pri))
-        player_key = (player_col.at[i].strip().casefold(), sport.at[i])
+        player_key = (player_col.at[i].casefold(), sport.at[i])
         if player_key in top_players:
             boost.at[i] += 0.04
         if player_key in bottom_players:
