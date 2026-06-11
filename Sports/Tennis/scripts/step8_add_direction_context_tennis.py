@@ -279,6 +279,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "hit_rate", "hit_rate_l5", "hit_rate_l10",
         "strat_hit_rate", "strat_n",
         "player_hr_historical", "opp_hr_historical",
+        "sport_signal_maturity", "confidence_tier", "confidence_score", "confidence_note",
         "edge_score",
         "blended_score",
         "line_hit_rate_over_ou_5",

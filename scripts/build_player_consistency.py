@@ -32,6 +32,11 @@ GRADED_GLOBS: list[tuple[str, str]] = [
     ("CBB", "graded_cbb_*.xlsx"),
     ("NHL", "graded_nhl_*.xlsx"),
     ("Soccer", "graded_soccer_*.xlsx"),
+    ("WNBA", "graded_wnba_*.xlsx"),
+    ("MLB", "graded_mlb_*.xlsx"),
+    ("Tennis", "graded_tennis_*.xlsx"),
+    ("NFL", "graded_nfl_*.xlsx"),
+    ("CFB", "graded_cfb_*.xlsx"),
 ]
 
 SYNTHETIC_DIR = REPO_ROOT / "outputs" / "synthetic"

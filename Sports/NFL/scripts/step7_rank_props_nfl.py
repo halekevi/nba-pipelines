@@ -25,6 +25,7 @@ from _nfl_pipeline_active import require_nfl_pipeline_active_or_exit
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
+from utils.consistency_grade_scores import apply_consistency_grade_scores
 from utils.defense_tiers import def_tier_from_overall_rank
 from utils.group_rank_tier import assign_tier_column, report_goblin_demon_standard_line_fill
 
@@ -106,10 +107,6 @@ def main() -> None:
     df["prop_score"] = rank_pts
     df["rank_score"] = rank_pts
 
-    df["ml_prob"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(0.35, 0.92)
-    df["tier"] = assign_tier_column(df, sport="nfl")
-    report_goblin_demon_standard_line_fill(df, "[NFL step7]")
-
     ts = df.get("start_time", df.get("game_time", ""))
     df["start_time"] = ts
     df["game_time"] = ts
@@ -117,6 +114,11 @@ def main() -> None:
     dir_u = np.where(df["edge"].fillna(0) >= 0, "OVER", "UNDER")
     df["recommended_side"] = dir_u
     df["bet_direction"] = dir_u
+
+    df["ml_prob"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(0.35, 0.92)
+    apply_consistency_grade_scores(df, "NFL")
+    df["tier"] = assign_tier_column(df, sport="nfl")
+    report_goblin_demon_standard_line_fill(df, "[NFL step7]")
 
     df["player_name"] = df[player_col].astype(str)
     df["stat_type"] = df[prop_col].astype(str)

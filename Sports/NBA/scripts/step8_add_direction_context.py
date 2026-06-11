@@ -411,6 +411,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'hit_rate', 'hit_rate_l5', 'hit_rate_l10',
         'strat_hit_rate', 'strat_n',
         'player_hr_historical', 'opp_hr_historical',
+        'sport_signal_maturity', 'confidence_tier', 'confidence_score', 'confidence_note',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',

@@ -36,6 +36,7 @@ import pandas as pd
 _WNBA_REPO = Path(__file__).resolve().parents[2]
 if str(_WNBA_REPO) not in sys.path:
     sys.path.insert(0, str(_WNBA_REPO))
+from utils.consistency_grade_scores import apply_consistency_grade_scores  # noqa: E402
 from utils.prop_signal_score import apply_ml_rank_blend  # noqa: E402
 from utils.group_rank_tier import (  # noqa: E402
     assign_tier_column,
@@ -571,6 +572,7 @@ def main():
         composite_hr_col="line_hit_rate",
         label="WNBA step7",
     )
+    apply_consistency_grade_scores(out, "WNBA")
     out["tier"] = assign_tier_column(out, sport="wnba")
     report_goblin_demon_standard_line_fill(out, "[WNBA step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[WNBA step7]")

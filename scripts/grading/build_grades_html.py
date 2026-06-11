@@ -461,6 +461,10 @@ def prop_row_for_api(
     hit_rate_l10 = _pick("hit_rate_l10", "Hit Rate L10")
     player_hr_hist = _pick("player_hr_historical", "Player HR Hist")
     opp_hr_hist = _pick("opp_hr_historical", "Opp HR Hist")
+    sport_maturity = _pick("sport_signal_maturity", "Sport Maturity")
+    confidence_tier = _pick("confidence_tier", "Confidence Tier")
+    confidence_score = _pick("confidence_score", "Confidence Score")
+    confidence_note = _pick("confidence_note", "Confidence Note")
     h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
@@ -573,6 +577,10 @@ def prop_row_for_api(
         "hit_rate_l10": hit_rate_l10 or "",
         "player_hr_historical": player_hr_hist or "",
         "opp_hr_historical": opp_hr_hist or "",
+        "sport_signal_maturity": sport_maturity or "",
+        "confidence_tier": confidence_tier or "",
+        "confidence_score": confidence_score or "",
+        "confidence_note": confidence_note or "",
         "h2h_bucket": h2h_bucket or "",
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",

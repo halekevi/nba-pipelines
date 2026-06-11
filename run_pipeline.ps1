@@ -1373,7 +1373,7 @@ if ($MLBOnly) {
         Print-Done
         exit
     }
-    if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
     if ($ok) {
         $MlbTop3Script = Join-Path $MLBDir "scripts\analyze_top_hitters_vs_defense.py"
@@ -2290,6 +2290,36 @@ $TennisJob = Start-Job -ScriptBlock {
     return $ok
 } -ArgumentList $TennisDir, $TennisDate, $SkipFetch, $Root, $TennisRunOutDir
 
+# -- Golf Job (PGA — step1 → step2 → step7 → step8) ---------------------------
+$GolfJob = Start-Job -ScriptBlock {
+    param($GolfDir, $Date, $SkipFetch, $GolfRunOutDir, $RepoRoot)
+    $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    function Run-Step-Job {
+        param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
+        Write-Output "[GOLF] --> $Label"
+        Push-Location $Dir
+        try {
+            $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[GOLF] FAILED: $Label (exit $exit)"; return $false }
+            Write-Output "[GOLF] OK: $Label"; return $true
+        } catch { Write-Output "[GOLF] EXCEPTION: $_"; return $false
+        } finally { Pop-Location }
+    }
+    $ok = $true
+    if (-not $SkipFetch) {
+        if ($ok) { $ok = Run-Step-Job "Golf Step 1 - Fetch PrizePicks" $GolfDir ".\scripts\step1_fetch_prizepicks_golf.py" "--league_id 1 --replace --output `"$GolfRunOutDir\step1_golf_props.csv`"" }
+    } else {
+        Write-Output "[Golf] Skipping step1 fetch"
+    }
+    if ($ok) { $ok = Run-Step-Job "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$GolfRunOutDir\step2_golf_context.csv`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`"" }
+    if ($ok) { $ok = Run-Step-Job "Golf Step 8 - Direction Context" $GolfDir ".\scripts\step8_add_direction_context_golf.py" "--input `"$GolfRunOutDir\step7_golf_ranked.xlsx`" --sheet ALL --output `"$GolfRunOutDir\step8_golf_direction.csv`" --xlsx `"$GolfRunOutDir\step8_golf_direction_clean.xlsx`" --date $Date" }
+    return $ok
+} -ArgumentList $GolfDir, $Date, $SkipFetch, $GolfRunOutDir, $Root
+
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
@@ -2491,7 +2521,7 @@ $MLBJob = Start-Job -ScriptBlock {
             }
         } finally { Pop-Location }
     }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
     if ($ok) {
         $MlbTop3Script = Join-Path $MLBDir "scripts\analyze_top_hitters_vs_defense.py"
@@ -2601,7 +2631,8 @@ $NFLJob = Start-Job -ScriptBlock {
         Write-Output "[NFL] off-season, skipping rankings refresh"
     }
     if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--defense-source auto" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 4b - Team Last-5 Form" $NFLDir ".\scripts\step4b_team_last5_games.py" "--season $DefenseSeason --output data\nfl_team_last5.csv" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--defense-source auto --team-form data\nfl_team_last5.csv" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output `"$NFLRunOutDir\step7_nfl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NFL" $RepoRoot "$NFLRunOutDir\step7_nfl_ranked.xlsx" }
@@ -2611,7 +2642,7 @@ $NFLJob = Start-Job -ScriptBlock {
 }
 
 # -- Wait + stream output -----------------------------------------------------
-$allJobs = @($NBAJob, $CBBJob, $CFBJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
+$allJobs = @($NBAJob, $CBBJob, $CFBJob, $NHLJob, $SoccerJob, $TennisJob, $GolfJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
 
 Write-Host "  [Waiting for all pipelines to finish...]" -ForegroundColor DarkGray
 Write-Host ""
@@ -2668,6 +2699,7 @@ $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.x
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
 $TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
+$GolfSuccess   = Test-Path (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx")
 $NFLSuccess    = if (-not $NFL_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx") }
 $WNBASuccess = $false
 if ($wnbaParallel) {
@@ -2713,6 +2745,12 @@ if ($TennisSuccess) {
         -DatedFileName "step8_tennis_direction_clean_$TennisDate.xlsx" `
         -Label "Tennis"
 }
+if ($GolfSuccess) {
+    Copy-DatedSlateOutput `
+        -SourcePath (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx") `
+        -DatedFileName "step8_golf_direction_clean_$Date.xlsx" `
+        -Label "Golf"
+}
 # WNBA dated step8 mirror: scripts/run_wnba_pipeline.ps1 Publish-WnbaStep8CleanArtifacts (clean only).
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
@@ -2726,6 +2764,8 @@ Write-Host ""
     @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false },
     @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false },
     @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },
+    @{ Name="Tennis"; Ok=$TennisSuccess; Skip=$false },
+    @{ Name="Golf";   Ok=$GolfSuccess; Skip=$false },
     @{ Name="NFL";    Ok=$NFLSuccess; Skip=(-not $NFL_PARALLEL_ACTIVE) }
 ) | ForEach-Object {
     if ($_.Skip) {

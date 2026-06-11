@@ -459,6 +459,10 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "strat_n":          r("strat_n"),
         "player_hr_historical": r("player_hr_historical"),
         "opp_hr_historical": r("opp_hr_historical"),
+        "sport_signal_maturity": r("sport_signal_maturity"),
+        "confidence_tier":      r("confidence_tier"),
+        "confidence_score":     r("confidence_score"),
+        "confidence_note":      r("confidence_note"),
         # Last 3 raw game values (from Step 4 fix)
         "last1_raw":        get_last_n_raw(raw, available_cols, 1),
         "last2_raw":        get_last_n_raw(raw, available_cols, 2),

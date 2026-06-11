@@ -278,6 +278,27 @@ PROP_NORM_MAP={
     '2pta':'two pointers attempted',
     '2pt made':'two pointers made',
     '2pt attempted':'two pointers attempted',
+    # NFL / CFB normalized prop types
+    'passing_yards': 'passing yards',
+    'passing_tds': 'passing tds',
+    'passing touchdowns': 'passing tds',
+    'rushing_yards': 'rushing yards',
+    'rushing_tds': 'rushing tds',
+    'receiving_yards': 'receiving yards',
+    'receiving_tds': 'receiving tds',
+    'rushing_attempts': 'rushing attempts',
+    'carries': 'rushing attempts',
+    'receptions': 'receptions',
+    'targets': 'targets',
+    'completions': 'completions',
+    'interceptions': 'interceptions',
+    'sacks': 'sacks',
+    'tackles_assists': 'tackles assists',
+    'kicking_points': 'kicking points',
+    'fantasy_score': 'fantasy score',
+    'anytime_td': 'anytime td',
+    'first_touchdown': 'first touchdown',
+    'first_td': 'first touchdown',
 }
 def norm_prop_key(p) -> str:
     s = str(p).lower().strip()
@@ -1435,6 +1456,7 @@ def write_raw(wb,df):
              'hit_rate','hit_rate_l5','hit_rate_l10',
              'strat_hit_rate','strat_n',
              'player_hr_historical','opp_hr_historical',
+             'sport_signal_maturity','confidence_tier','confidence_score','confidence_note',
              'projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',
              'actual','result','margin','void_reason_grade']
@@ -1614,7 +1636,7 @@ def _recompute_standard_tiers_from_directional_ml_prob(df: pd.DataFrame, sport: 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument('--sport', default='NBA', choices=['NBA', 'CBB', 'WNBA'])
+    ap.add_argument('--sport', default='NBA', choices=['NBA', 'CBB', 'WNBA', 'NFL', 'CFB'])
     ap.add_argument('--slate',default='')
     ap.add_argument('--actuals',default='')
     ap.add_argument('--output',default='')
@@ -1630,11 +1652,13 @@ def main():
     if not args.output: args.output=f'{args.sport.lower()}_graded_{args.date}.xlsx'
 
     print(f'Loading {args.sport} slate...')
-    if args.sport == "CBB":
+    if args.sport in ("CBB", "CFB"):
         df = load_cbb(args.slate)
+    elif args.sport == "NFL":
+        df = load_nba(args.slate, "NFL")
     else:
         df = load_nba(args.slate, "WNBA" if args.sport == "WNBA" else "NBA")
-    if args.sport in ("NBA", "WNBA"):
+    if args.sport in ("NBA", "WNBA", "NFL"):
         df = filter_nba_slate_by_grade_date(df, args.date)
     print(f'  {len(df)} props loaded')
 

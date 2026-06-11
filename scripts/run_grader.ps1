@@ -92,6 +92,11 @@ $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
 $TennisGradedFile = Join-Path $DateDir "graded_tennis_$TennisSlateDate.xlsx"
 $WNBAActuals = Join-Path $DateDir "actuals_wnba_$Date.csv"
 $WNBAGradedFile = Join-Path $DateDir "graded_wnba_$Date.xlsx"
+$NFLActuals = Join-Path $DateDir "actuals_nfl_$Date.csv"
+$NFLGradedFile = Join-Path $DateDir "graded_nfl_$Date.xlsx"
+$CFBActuals = Join-Path $DateDir "actuals_cfb_$Date.csv"
+$CFBGradedFile = Join-Path $DateDir "graded_cfb_$Date.xlsx"
+$FetchFootballActualsScript = Join-Path $Root "scripts\fetch_football_actuals.py"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
 # Local mobile bundle (grades.html loads slate_eval_{date}.html + graded_props_{date}.json from here).
@@ -122,6 +127,8 @@ function Copy-PropOracleGradedSlateBundle {
         "graded_mlb_$GradeDate.xlsx",
         "graded_soccer_$GradeDate.xlsx",
         "graded_wnba_$GradeDate.xlsx",
+        "graded_nfl_$GradeDate.xlsx",
+        "graded_cfb_$GradeDate.xlsx",
         $tennisGradedLeaf,
         "combined_tickets_graded_$GradeDate.xlsx"
     )
@@ -717,6 +724,52 @@ if ((Test-Path $WNBAActuals) -and $WNBASlateFile -and (Test-Path $WNBASlateFile)
 }
 else {
     Write-Host "Skipping WNBA slate grading (missing actuals_wnba, step8 WNBA slate, or slate_grader)." -ForegroundColor Yellow
+}
+
+$NFLStep8Dated = Join-Path $DateDir "nfl\step8_nfl_direction_clean.xlsx"
+$NFLStep8Bundle = Join-Path $DateDir "step8_nfl_direction_clean_$Date.xlsx"
+$NFLStep8Static = Join-Path $SportsRoot "NFL\outputs\step8_nfl_direction_clean.xlsx"
+$NFLSlateFile = Resolve-FirstExisting @($NFLStep8Dated, $NFLStep8Bundle, $NFLStep8Static)
+if ($NFLSlateFile) {
+    Write-Host "[GRADER] NFL slate: $(Split-Path $NFLSlateFile -Leaf)" -ForegroundColor Cyan
+    Warn-IfSlateFilenameMissingGradeDate -ResolvedPath $NFLSlateFile -GradeDate $Date -SportLabel "NFL"
+}
+if (-not (Test-Path $NFLActuals) -and (Test-Path $FetchFootballActualsScript)) {
+    Run-Py "Fetch NFL Actuals" $Root $FetchFootballActualsScript @("--league", "nfl", "--date", $Date, "--output", $NFLActuals)
+}
+if ((Test-Path $NFLActuals) -and $NFLSlateFile -and (Test-Path $NFLSlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade NFL Slate" $Root $SlateGraderScript @(
+        "--sport", "NFL",
+        "--slate", $NFLSlateFile,
+        "--actuals", $NFLActuals,
+        "--output", $NFLGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping NFL slate grading (missing actuals_nfl, step8 NFL slate, or slate_grader)." -ForegroundColor Yellow
+}
+
+$CFBStep6Dated = Join-Path $DateDir "cfb\step6_ranked_cfb.xlsx"
+$CFBStep6Static = Join-Path $SportsRoot "CFB\outputs\step6_ranked_cfb.xlsx"
+$CFBSlateFile = Resolve-FirstExisting @($CFBStep6Dated, $CFBStep6Static)
+if ($CFBSlateFile) {
+    Write-Host "[GRADER] CFB slate: $(Split-Path $CFBSlateFile -Leaf)" -ForegroundColor Cyan
+}
+if (-not (Test-Path $CFBActuals) -and (Test-Path $FetchFootballActualsScript)) {
+    Run-Py "Fetch CFB Actuals" $Root $FetchFootballActualsScript @("--league", "cfb", "--date", $Date, "--output", $CFBActuals)
+}
+if ((Test-Path $CFBActuals) -and $CFBSlateFile -and (Test-Path $CFBSlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade CFB Slate" $Root $SlateGraderScript @(
+        "--sport", "CFB",
+        "--slate", $CFBSlateFile,
+        "--actuals", $CFBActuals,
+        "--output", $CFBGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping CFB slate grading (missing actuals_cfb, step6 CFB slate, or slate_grader)." -ForegroundColor Yellow
 }
 
 # NBA 1H / 1Q must use period box scores. Do not fall back to full-game actuals_nba_*.csv

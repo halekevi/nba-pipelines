@@ -123,7 +123,10 @@ if ($ok) {
     $ok = Run-Step "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv"
 }
 if ($ok) {
-    $ok = Run-Step "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--input `"$s2`" --output `"$s3`" --defense-source auto"
+    $ok = Run-Step "NFL Step 4b - Team Last-5 Form" $NFLDir ".\scripts\step4b_team_last5_games.py" "--season $DefenseSeason --output data\nfl_team_last5.csv"
+}
+if ($ok) {
+    $ok = Run-Step "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--input `"$s2`" --output `"$s3`" --defense-source auto --team-form data\nfl_team_last5.csv"
 }
 if ($ok -and (Test-Path -LiteralPath $s3)) {
     Copy-Item -LiteralPath $s3 -Destination $s3dated -Force

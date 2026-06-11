@@ -44,12 +44,13 @@ _NUMERIC_COLS = frozenset({
     "hit_rate", "hit_rate_l5", "hit_rate_l10",
     "strat_hit_rate", "strat_n",
     "player_hr_historical", "opp_hr_historical",
+    "confidence_score",
     "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
 })
 
 
 def _apply_patch_value(entry: dict, col: str, val: object) -> None:
-    if col in {"def_tier", "l10_streak"}:
+    if col in {"def_tier", "l10_streak", "sport_signal_maturity", "confidence_tier", "confidence_note"}:
         entry[col] = str(val)
     elif col in _TOP3_INT_COLS:
         entry[col] = int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0))

@@ -31,6 +31,8 @@ HIT_WINDOW_COLS: tuple[str, ...] = (
     "l10_streak",
 )
 
+from utils.confidence_tier import CONFIDENCE_TIER_RENAME  # noqa: E402
+
 HIT_TRACKING_RENAME: dict[str, str] = {
     "hit_rate": "Hit Rate",
     "hit_rate_l5": "Hit Rate L5",
@@ -44,6 +46,7 @@ HIT_TRACKING_RENAME: dict[str, str] = {
     "l10_games_played": "L10 Games",
     "l10_streak": "L10 Streak",
     "l10_over_pct": "L10 Over%",
+    **CONFIDENCE_TIER_RENAME,
 }
 
 HIT_TRACKING_EXPORT_COLS: tuple[str, ...] = (
@@ -55,6 +58,10 @@ HIT_TRACKING_EXPORT_COLS: tuple[str, ...] = (
     "strat_n",
     "player_hr_historical",
     "opp_hr_historical",
+    "sport_signal_maturity",
+    "confidence_tier",
+    "confidence_score",
+    "confidence_note",
 )
 
 _COALESCE_PAIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
@@ -301,4 +308,7 @@ def attach_hit_tracking_columns(df: pd.DataFrame, sport: str, *, line_col: str =
 
     out = attach_strat_hit_rates(out)
     out = attach_archive_historical_hr(out, sport_u)
+    from utils.confidence_tier import attach_confidence_tier  # noqa: WPS433
+
+    out = attach_confidence_tier(out)
     return out

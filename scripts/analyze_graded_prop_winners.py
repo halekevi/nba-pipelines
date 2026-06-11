@@ -272,6 +272,7 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
         ("hit_rate_l10", ("hit_rate_l10", "Hit Rate L10")),
         ("player_hr_historical", ("player_hr_historical", "Player HR Hist")),
         ("opp_hr_historical", ("opp_hr_historical", "Opp HR Hist")),
+        ("confidence_score", ("confidence_score", "Confidence Score")),
     ):
         if target not in df.columns:
             df[target] = np.nan
@@ -279,6 +280,18 @@ def normalize_decided(raw: pd.DataFrame) -> pd.DataFrame:
         for alt in alts:
             if alt in df.columns and alt != target:
                 val = val.combine_first(pd.to_numeric(df[alt], errors="coerce"))
+        df[target] = val
+    for target, alts in (
+        ("sport_signal_maturity", ("sport_signal_maturity", "Sport Maturity")),
+        ("confidence_tier", ("confidence_tier", "Confidence Tier")),
+        ("confidence_note", ("confidence_note", "Confidence Note")),
+    ):
+        if target not in df.columns:
+            df[target] = ""
+        val = df[target].astype(str).str.strip()
+        for alt in alts:
+            if alt in df.columns and alt != target:
+                val = val.where(val.ne(""), df[alt].astype(str).str.strip())
         df[target] = val
     if "l10_streak" not in df.columns:
         df["l10_streak"] = ""

@@ -33,6 +33,7 @@ from edge_feature_engineering import apply_ticket_eligibility_voids, build_featu
 _MLB_REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_MLB_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_MLB_REPO_ROOT))
+from utils.consistency_grade_scores import apply_consistency_grade_scores  # noqa: E402
 from utils.group_rank_tier import (  # noqa: E402
     _resolve_ml_prob_cuts,
     assign_tier_column,
@@ -848,6 +849,7 @@ def main() -> None:
     # ── ML blend (activates when model file exists; graceful fallback otherwise) ─
     out = build_feature_vector(out, "MLB")   # must run before ML inference
     out = _apply_ml_blend_mlb(out)
+    apply_consistency_grade_scores(out, "MLB")
 
     _mlb_slug = "mlb"
     out["tier"] = assign_tier_column(out, sport=_mlb_slug)

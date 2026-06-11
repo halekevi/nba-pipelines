@@ -584,6 +584,9 @@ def enrich_graded_for_analysis(
         sport_hint = str(modes.iloc[0]) if len(modes) else "NBA"
     out = attach_archive_historical_hr(out, sport_hint or "NBA")
     out = attach_strat_hit_rates(out)
+    from utils.confidence_tier import attach_confidence_tier  # noqa: WPS433
+
+    out = attach_confidence_tier(out)
     if attach_context:
         out = attach_stack_70_columns(out, repo=repo, compute_eligible=stack_eligible)
     return out

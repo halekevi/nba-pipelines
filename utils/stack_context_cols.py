@@ -31,6 +31,10 @@ GRADED_SIGNAL_COLS: tuple[str, ...] = (
     "hit_rate_l10",
     "player_hr_historical",
     "opp_hr_historical",
+    "sport_signal_maturity",
+    "confidence_tier",
+    "confidence_score",
+    "confidence_note",
     *STACK_CONTEXT_COLS,
 )
 

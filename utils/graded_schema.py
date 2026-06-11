@@ -168,6 +168,22 @@ FIELD_ALIASES: dict[str, list[str]] = {
         "opp_hr_historical",
         "Opp HR Hist",
     ],
+    "sport_signal_maturity": [
+        "sport_signal_maturity",
+        "Sport Maturity",
+    ],
+    "confidence_tier": [
+        "confidence_tier",
+        "Confidence Tier",
+    ],
+    "confidence_score": [
+        "confidence_score",
+        "Confidence Score",
+    ],
+    "confidence_note": [
+        "confidence_note",
+        "Confidence Note",
+    ],
     "consistency_grade": [
         "consistency_grade",
         "Consistency Grade",
