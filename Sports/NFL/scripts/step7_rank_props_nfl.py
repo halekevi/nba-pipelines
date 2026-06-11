@@ -73,7 +73,7 @@ def main() -> None:
         return pd.Series(np.nan, index=df.index)
 
     line = _num(_col_series("line_score", "line"))
-    proj = _num(_col_series("projection", "proj"))
+    proj = _num(_col_series("projection", "proj", "stat_last5_avg", "stat_last10_avg"))
     if proj.isna().all() and line.notna().any():
         proj = line.copy()
     edge = proj - line

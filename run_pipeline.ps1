@@ -2641,7 +2641,8 @@ $NFLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 4b - Team Last-5 Form" $NFLDir ".\scripts\step4b_team_last5_games.py" "--season $DefenseSeason --output data\nfl_team_last5.csv" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "--defense-source auto --team-form data\nfl_team_last5.csv" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 5 - Boxscore Stats" $NFLDir ".\scripts\step5_attach_boxscore_stats_nfl.py" "--input data\outputs\step3_nfl_with_defense.csv --output data\outputs\step5_nfl_with_stats.csv --date $Date --cache data\cache\nfl_boxscore_cache.csv --days 120" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "--input data\outputs\step5_nfl_with_stats.csv --output data\outputs\step6_hit_rates.csv" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output `"$NFLRunOutDir\step7_nfl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NFL" $RepoRoot "$NFLRunOutDir\step7_nfl_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--date $Date --output `"$NFLRunOutDir\step8_nfl_direction_clean.xlsx`"" }

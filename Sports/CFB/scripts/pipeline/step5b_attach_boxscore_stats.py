@@ -80,9 +80,31 @@ def date_range(end_date: dt.date, days_back: int) -> List[str]:
 
 
 def pull_scoreboard(d: str) -> dict:
-    return request_json(ESPN_SCOREBOARD_URL.format(league=ESPN_LEAGUE),
-                        params={"dates": d, "groups": "50", "limit": "500"},
-                        sleep=0.10) or {}
+    params = {"dates": d, "limit": "500"}
+    if ESPN_LEAGUE == "college-football":
+        params["groups"] = "50"
+    return request_json(ESPN_SCOREBOARD_URL.format(league=ESPN_LEAGUE), params=params, sleep=0.10) or {}
+
+
+def _nfl_abbr_to_team_id() -> dict[str, str]:
+    """ESPN team abbreviation -> team id (NFL scoreboard filter)."""
+    data = request_json(
+        "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams",
+        params={"limit": "50"},
+        sleep=0.05,
+    ) or {}
+    out: dict[str, str] = {}
+    for ent in (data.get("sports") or [{}])[0].get("leagues", [{}])[0].get("teams", []) or []:
+        t = ent.get("team") or {}
+        ab = str(t.get("abbreviation") or "").strip().upper()
+        tid = str(t.get("id") or "").strip()
+        if ab and tid:
+            out[ab] = tid
+    _SLATE = {"LA": "LAR", "WAS": "WSH", "JAC": "JAX"}
+    for k, v in _SLATE.items():
+        if v in out and k not in out:
+            out[k] = out[v]
+    return out
 
 
 def extract_events(sb: dict) -> List[Tuple[str, str, str, str]]:
@@ -182,10 +204,18 @@ def parse_players(summary: dict, game_date: str = "", event_id: str = "") -> Lis
                 if cat == "passing":
                     y = idx("YDS")
                     td = idx("TD")
+                    cmp_i = idx("C")
+                    if cmp_i is None:
+                        cmp_i = idx("CMP")
+                    int_i = idx("INT")
                     if y is not None and y < len(st):
                         row["PASS_YDS"] = _f(st[y])
                     if td is not None and td < len(st):
                         row["PASS_TD"] = _f(st[td])
+                    if cmp_i is not None and cmp_i < len(st):
+                        row["PASS_CMP"] = _f(st[cmp_i])
+                    if int_i is not None and int_i < len(st):
+                        row["PASS_INT"] = _f(st[int_i])
                 elif cat == "rushing":
                     y = idx("YDS")
                     td = idx("TD")
@@ -203,12 +233,30 @@ def parse_players(summary: dict, game_date: str = "", event_id: str = "") -> Lis
                         row["REC_YDS"] = _f(st[y])
                     if td is not None and td < len(st):
                         row["REC_TD"] = _f(st[td])
+                elif cat == "defensive":
+                    tot = idx("TOT")
+                    sack = idx("SACK")
+                    dint = idx("INT")
+                    if tot is not None and tot < len(st):
+                        row["TACK_TOT"] = _f(st[tot])
+                    if sack is not None and sack < len(st):
+                        row["SACK"] = _f(st[sack])
+                    if dint is not None and dint < len(st):
+                        row["DEF_INT"] = _f(st[dint])
+                elif cat == "kicking":
+                    pts = idx("PTS")
+                    if pts is not None and pts < len(st):
+                        row["KICK_PTS"] = _f(st[pts])
 
+    _stat_keys = (
+        "PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD",
+        "PASS_CMP", "PASS_INT", "SACK", "TACK_TOT", "KICK_PTS", "DEF_INT",
+    )
     rows: List[dict] = []
     for row in by_ath.values():
-        if not any(row.get(k) for k in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD")):
+        if not any(row.get(k) for k in _stat_keys):
             continue
-        for k in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD"):
+        for k in _stat_keys:
             row.setdefault(k, 0.0)
         # CFB boxscores have no MIN column; mark participation for rolling-window filters.
         row["MIN"] = 1.0
@@ -220,7 +268,13 @@ def game_played_for_prop(g: dict, prop: str) -> bool:
     """True when this cached game should count toward L5/L10 (prop stat exists or any CFB stat)."""
     if prop and prop_value(prop, g) is not None:
         return True
-    return any(float(g.get(k, 0) or 0) != 0 for k in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD"))
+    return any(
+        float(g.get(k, 0) or 0) != 0
+        for k in (
+            "PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD",
+            "PASS_CMP", "PASS_INT", "SACK", "TACK_TOT", "KICK_PTS",
+        )
+    )
 
 
 def fantasy(r: dict) -> float:
@@ -246,9 +300,25 @@ def prop_value(prop_norm: str, r: dict) -> Optional[float]:
         "rush_td": r.get("RUSH_TD"),
         "rec_td": r.get("REC_TD"),
         "rec": r.get("REC"),
-        "int": r.get("INT"),
+        "int": r.get("PASS_INT") or r.get("DEF_INT"),
+        "passing_yards": r.get("PASS_YDS"),
+        "rushing_yards": r.get("RUSH_YDS"),
+        "receiving_yards": r.get("REC_YDS"),
+        "passing_tds": r.get("PASS_TD"),
+        "rushing_tds": r.get("RUSH_TD"),
+        "receiving_tds": r.get("REC_TD"),
+        "receptions": r.get("REC"),
+        "pass_completions": r.get("PASS_CMP"),
+        "completions": r.get("PASS_CMP"),
+        "interceptions_thrown": r.get("PASS_INT"),
+        "interceptions": r.get("PASS_INT") or r.get("DEF_INT"),
+        "sacks": r.get("SACK"),
+        "tackles_assists": r.get("TACK_TOT"),
+        "kicking_points": r.get("KICK_PTS"),
         "fantasy": fantasy(r),
     }
+    if p in m and m[p] is not None:
+        return m[p]
     if "fantasy" in p:
         return fantasy(r)
     if "pass" in p and "yard" in p:
@@ -259,6 +329,14 @@ def prop_value(prop_norm: str, r: dict) -> Optional[float]:
         return r.get("REC_YDS")
     if "reception" in p or p == "rec":
         return r.get("REC")
+    if "completion" in p:
+        return r.get("PASS_CMP")
+    if "sack" in p:
+        return r.get("SACK")
+    if "kick" in p and "point" in p:
+        return r.get("KICK_PTS")
+    if "tackle" in p:
+        return r.get("TACK_TOT")
     return m.get(p)
 
 
@@ -328,7 +406,10 @@ def build_player_histories(
                     ("opp_team_abbr" in rr and str(rr.get("opp_team_abbr","")).strip() not in ("", "nan"))
                     or ("opp_team_id" in rr and str(rr.get("opp_team_id","")).strip() not in ("", "nan"))
                 )
-                for col in ("PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD"):
+                for col in (
+                    "PASS_YDS", "RUSH_YDS", "REC_YDS", "REC", "PASS_TD", "RUSH_TD", "REC_TD",
+                    "PASS_CMP", "PASS_INT", "SACK", "TACK_TOT", "KICK_PTS", "DEF_INT",
+                ):
                     if col in rr:
                         try:
                             rr[col] = float(rr[col])
@@ -455,7 +536,7 @@ def main():
     ap.add_argument(
         "--league",
         default="auto",
-        choices=["auto", "college-football", "wocollege-football"],
+        choices=["auto", "college-football", "wocollege-football", "nfl"],
         help="ESPN league slug for scoreboard/summary fetches (default: auto by wcbb in paths).",
     )
     ap.add_argument("--no_cache", action="store_true",
@@ -466,7 +547,10 @@ def main():
     global ESPN_LEAGUE
     if args.league == "auto":
         hint = f"{args.input} {args.output} {cache_path}".lower()
-        ESPN_LEAGUE = "wocollege-football" if "wcbb" in hint else "college-football"
+        if "nfl" in hint:
+            ESPN_LEAGUE = "nfl"
+        else:
+            ESPN_LEAGUE = "wocollege-football" if "wcbb" in hint else "college-football"
     else:
         ESPN_LEAGUE = args.league
     print(f"-> ESPN league: {ESPN_LEAGUE}")
@@ -484,7 +568,31 @@ def main():
         raise
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
     if "player_norm" not in df.columns:
-        df["player_norm"] = df["player"].astype(str).apply(norm)
+        pname_col = next((c for c in ("player", "player_name", "pp_player") if c in df.columns), None)
+        if pname_col:
+            df["player_norm"] = df[pname_col].astype(str).apply(norm)
+        else:
+            df["player_norm"] = ""
+    if ESPN_LEAGUE == "nfl":
+        if "player" not in df.columns and "player_name" in df.columns:
+            df["player"] = df["player_name"]
+        if "team_abbr" not in df.columns and "team" in df.columns:
+            df["team_abbr"] = df["team"].astype(str).str.strip().str.upper()
+        abbr_map = _nfl_abbr_to_team_id()
+        if "team_id" not in df.columns:
+            df["team_id"] = ""
+        if abbr_map and "team_abbr" in df.columns:
+            df["team_id"] = df["team_abbr"].map(abbr_map).fillna(df["team_id"]).astype(str)
+        ref_map = _PROPORACLE_ROOT / "data" / "reference" / "pp_to_espn_id_map_nfl.csv"
+        if ref_map.is_file() and "espn_athlete_id" not in df.columns:
+            try:
+                ref = pd.read_csv(ref_map, dtype=str).fillna("")
+                if "player_name" in ref.columns and "espn_athlete_id" in ref.columns:
+                    pn = df.get("player_name", df.get("player", "")).astype(str).str.strip()
+                    m = ref.drop_duplicates("player_name").set_index("player_name")["espn_athlete_id"]
+                    df["espn_athlete_id"] = pn.map(m).fillna("")
+            except Exception:
+                pass
     if "team_id" not in df.columns:
         df["team_id"] = ""
     if "espn_athlete_id" not in df.columns:
@@ -509,7 +617,10 @@ def main():
         df_2h = pd.DataFrame()
 
     # use prop_norm if available, else prop_type
-    prop_col = "prop_norm" if "prop_norm" in df.columns else "prop_type"
+    if ESPN_LEAGUE == "nfl" and "prop_type_normalized" in df.columns:
+        prop_col = "prop_type_normalized"
+    else:
+        prop_col = "prop_norm" if "prop_norm" in df.columns else "prop_type"
 
     # ── Bouncer (slate-level) ───────────────────────────────────────────────
     before = len(df)

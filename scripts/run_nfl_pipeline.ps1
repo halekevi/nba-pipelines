@@ -80,6 +80,7 @@ $s1 = Join-Path $OutDir "step1_pp_props_today.csv"
 $s2 = Join-Path $DataOutDir "step2_clean_props.csv"
 $s3 = Join-Path $DataOutDir "step3_nfl_with_defense.csv"
 $s3dated = Join-Path $OutDir "step3_nfl_with_defense.csv"
+$s5 = Join-Path $DataOutDir "step5_nfl_with_stats.csv"
 $s6 = Join-Path $DataOutDir "step6_hit_rates.csv"
 $s7 = Join-Path $OutDir "step7_nfl_ranked.xlsx"
 $s8 = Join-Path $OutDir "step8_nfl_direction_clean.xlsx"
@@ -132,7 +133,10 @@ if ($ok -and (Test-Path -LiteralPath $s3)) {
     Copy-Item -LiteralPath $s3 -Destination $s3dated -Force
 }
 if ($ok) {
-    $ok = Run-Step "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "--input `"$s3`" --output `"$s6`""
+    $ok = Run-Step "NFL Step 5 - Boxscore Stats" $NFLDir ".\scripts\step5_attach_boxscore_stats_nfl.py" "--input `"$s3`" --output `"$s5`" --date $Date --cache data\cache\nfl_boxscore_cache.csv --days 120"
+}
+if ($ok) {
+    $ok = Run-Step "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "--input `"$s5`" --output `"$s6`""
 }
 if ($ok) {
     $ok = Run-Step "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--input `"$s6`" --output `"$s7`""
