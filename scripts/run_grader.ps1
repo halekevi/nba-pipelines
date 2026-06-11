@@ -750,9 +750,11 @@ else {
     Write-Host "Skipping NFL slate grading (missing actuals_nfl, step8 NFL slate, or slate_grader)." -ForegroundColor Yellow
 }
 
+$CFBStep8Dated = Join-Path $DateDir "cfb\step8_cfb_direction_clean.xlsx"
+$CFBStep8Bundle = Join-Path $DateDir "step8_cfb_direction_clean_$Date.xlsx"
 $CFBStep6Dated = Join-Path $DateDir "cfb\step6_ranked_cfb.xlsx"
 $CFBStep6Static = Join-Path $SportsRoot "CFB\outputs\step6_ranked_cfb.xlsx"
-$CFBSlateFile = Resolve-FirstExisting @($CFBStep6Dated, $CFBStep6Static)
+$CFBSlateFile = Resolve-FirstExisting @($CFBStep8Dated, $CFBStep8Bundle, $CFBStep6Dated, $CFBStep6Static)
 if ($CFBSlateFile) {
     Write-Host "[GRADER] CFB slate: $(Split-Path $CFBSlateFile -Leaf)" -ForegroundColor Cyan
 }

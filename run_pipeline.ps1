@@ -1544,6 +1544,13 @@ if ($CFBOnly) {
     if ($ok) { $ok = Run-Step "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --date $Date --days 200 --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { $ok = Run-Step "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { Invoke-PropOracleStep7b "CFB" "$CFBRunOutDir\step6_ranked_cfb.xlsx" }
+    if ($ok) { $ok = Run-Step "CFB Step 8 - Direction Context"       $CFBDir ".\scripts\pipeline\step8_add_direction_context_cfb.py"          "--input `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --output `"$CFBRunOutDir\step8_cfb_direction_clean.xlsx`" --date $Date" }
+    if ($ok) {
+        Copy-DatedSlateOutput `
+            -SourcePath (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx") `
+            -DatedFileName "step8_cfb_direction_clean_$Date.xlsx" `
+            -Label "CFB"
+    }
     Write-Host ""
     if ($ok) { Write-Host "  CFB complete." -ForegroundColor Green } else { Write-Host "  CFB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after CFB" }
@@ -2036,6 +2043,7 @@ $CFBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "CFB Step 5 - Boxscore Stats"          $CFBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CFBRunOutDir\step3_cfb.csv`" --output `"$CFBRunOutDir\step5b_cfb.csv`" --date $Date --days 200 --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { $ok = Run-Step-Job "CFB Step 6 - Rank Props"              $CFBDir ".\scripts\pipeline\step6_rank_props_cfb.py"                       "--input `"$CFBRunOutDir\step5b_cfb.csv`" --output `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --cache data\cache\cfb_boxscore_cache.csv" }
     if ($ok) { Invoke-Step7b-Job "CFB" $RepoRoot "$CFBRunOutDir\step6_ranked_cfb.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "CFB Step 8 - Direction Context"       $CFBDir ".\scripts\pipeline\step8_add_direction_context_cfb.py"          "--input `"$CFBRunOutDir\step6_ranked_cfb.xlsx`" --output `"$CFBRunOutDir\step8_cfb_direction_clean.xlsx`" --date $Date" }
     return $ok
 } -ArgumentList $CFBDir, $Date, $SkipFetch, $Root, $CFBRunOutDir
 }
@@ -2694,7 +2702,7 @@ foreach ($job in $failedJobs) {
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
 $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
-$CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx") }
+$CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { (Test-Path (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx")) -or (Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx")) }
 $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
@@ -2750,6 +2758,12 @@ if ($GolfSuccess) {
         -SourcePath (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx") `
         -DatedFileName "step8_golf_direction_clean_$Date.xlsx" `
         -Label "Golf"
+}
+if ($CFBSuccess -and (Test-Path (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx"))) {
+    Copy-DatedSlateOutput `
+        -SourcePath (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx") `
+        -DatedFileName "step8_cfb_direction_clean_$Date.xlsx" `
+        -Label "CFB"
 }
 # WNBA dated step8 mirror: scripts/run_wnba_pipeline.ps1 Publish-WnbaStep8CleanArtifacts (clean only).
 
