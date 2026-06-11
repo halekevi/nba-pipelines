@@ -20,13 +20,11 @@ if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
 from scripts.analyze_graded_prop_winners import (  # noqa: E402
-    dedupe_graded_workbooks,
-    discover_graded_workbooks,
     exclude_non_rating_legs,
+    load_graded_json_archive,
     load_unified,
     normalize_decided,
 )
-from utils.graded_enrichment import enrich_graded_for_analysis  # noqa: E402
 
 _DEFAULT_ROOTS = [
     _REPO / "ui_runner" / "graded_slate",
@@ -45,27 +43,26 @@ def main() -> None:
     ap.add_argument("--sport", default="", help="Filter sport code (NBA, NHL, …)")
     ap.add_argument("--min-n", type=int, default=30)
     ap.add_argument("--out", default="data/reports/confidence_tier_lift.csv")
+    ap.add_argument(
+        "--xlsx",
+        action="store_true",
+        help="Load graded_*.xlsx workbooks instead of mobile JSON archives",
+    )
     args = ap.parse_args()
 
-    paths = discover_graded_workbooks(_DEFAULT_ROOTS)
-    paths = dedupe_graded_workbooks(paths)
-    if not paths:
-        print("No graded workbooks found.")
+    sport_filter = str(args.sport or "").strip().lower() or None
+    if args.xlsx:
+        raw = load_unified(_DEFAULT_ROOTS, sport=sport_filter)
+    else:
+        print("Loading graded_props JSON archives...")
+        raw = load_graded_json_archive(sport=sport_filter)
+        print(f"  {len(raw)} decided rows")
+    if raw.empty:
+        print("No graded rows found.")
         return
 
-    df = load_unified(paths)
-    df = exclude_non_rating_legs(df)
-    df = normalize_decided(df)
-    df = enrich_graded_for_analysis(df)
-
-    if args.sport:
-        su = str(args.sport).strip().upper()
-        if "sport" in df.columns:
-            df = df[df["sport"].astype(str).str.upper().str.contains(su, na=False)]
-        elif "Sport" in df.columns:
-            df = df[df["Sport"].astype(str).str.upper().str.contains(su, na=False)]
-
-    decided = df[df["is_hit"].notna()].copy()
+    decided = normalize_decided(raw)
+    decided = exclude_non_rating_legs(decided)
     if decided.empty:
         print("No decided legs after filters.")
         return

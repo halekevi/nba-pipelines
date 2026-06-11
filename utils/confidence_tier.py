@@ -191,6 +191,76 @@ def _signal_tier_from_score(score: float) -> str:
     return "LOW"
 
 
+def _vector_signal_scores(out: pd.DataFrame, l5_side: pd.Series) -> pd.Series:
+    """Vectorized twin of _row_signal_score for large graded archives."""
+    strat_hr = _num(out, "strat_hit_rate")
+    strat_n = _num(out, "strat_n")
+    hit_rate = _num(out, "hit_rate")
+    hit_rate_l5 = _num(out, "hit_rate_l5")
+    hit_rate_l10 = _num(out, "hit_rate_l10")
+    l10_gp = _num(out, "l10_games_played")
+    player_hr = _num(out, "player_hr_historical")
+    opp_hr = _num(out, "opp_hr_historical")
+    ml_prob = _num(out, "ml_prob")
+
+    score = pd.Series(0.0, index=out.index, dtype=float)
+    strat30 = strat_n.ge(30) & strat_hr.notna()
+    strat10 = strat_n.ge(10) & strat_hr.notna() & ~strat30
+    score = score + np.where(strat30, 28.0, np.where(strat10, 14.0, 0.0))
+
+    hr65 = hit_rate.ge(0.65)
+    hr55 = hit_rate.ge(0.55) & ~hr65
+    score = score + np.where(hr65, 14.0, np.where(hr55, 8.0, 0.0))
+
+    l5_4 = l5_side.ge(4)
+    l5_3 = l5_side.ge(3) & ~l5_4
+    score = score + np.where(l5_4, 14.0, np.where(l5_3, 7.0, 0.0))
+
+    score = score + np.where(hit_rate_l5.ge(0.60), 6.0, 0.0)
+    l10_ok = hit_rate_l10.ge(0.60) & l10_gp.ge(5)
+    score = score + np.where(l10_ok, 6.0, 0.0)
+
+    streak = (
+        out["l10_streak"].astype(str).str.strip().str.upper()
+        if "l10_streak" in out.columns
+        else pd.Series("", index=out.index)
+    )
+    score = score + np.where(streak.eq("HOT"), 4.0, 0.0)
+
+    if "def_tier" in out.columns:
+        def_known = _def_tier_known(out["def_tier"])
+    else:
+        def_known = pd.Series(False, index=out.index)
+    score = score + np.where(def_known, 8.0, 0.0)
+
+    top3_rank = _num(out, "team_top3_rank")
+    bot_rank = _num(out, "team_bottom3_rank")
+    top3_weak = _num(out, "top3_weak_overperformer").fillna(0)
+    top3_fade = _num(out, "top3_elite_fader").fillna(0)
+    top3_known = (
+        (top3_rank.notna() & top3_rank.ne(0))
+        | (bot_rank.notna() & bot_rank.ne(0))
+        | top3_weak.ne(0)
+        | top3_fade.ne(0)
+    )
+    score = score + np.where(top3_known, 6.0, 0.0)
+
+    if "consistency_grade" in out.columns:
+        consistency_ok = _consistency_strong(out["consistency_grade"])
+    else:
+        consistency_ok = pd.Series(False, index=out.index)
+    score = score + np.where(consistency_ok, 6.0, 0.0)
+
+    score = score + np.where(player_hr.notna(), 4.0, 0.0)
+    score = score + np.where(opp_hr.notna(), 4.0, 0.0)
+    ml_edge = ml_prob.notna() & (ml_prob.sub(0.5).abs().ge(0.06))
+    score = score + np.where(ml_edge, 5.0, 0.0)
+
+    thin = strat_hr.isna() & hit_rate.isna() & (l5_side.isna() | l5_side.lt(2))
+    score = score - np.where(thin, 18.0, 0.0)
+    return score.clip(0.0, 100.0).round(1)
+
+
 def attach_confidence_tier(df: pd.DataFrame) -> pd.DataFrame:
     """Attach sport_signal_maturity (info) + unified confidence_tier/score/note."""
     if df is None or df.empty:
@@ -205,56 +275,21 @@ def attach_confidence_tier(df: pd.DataFrame) -> pd.DataFrame:
     l5u = _num(out, "l5_under")
     l5_side = pd.Series(np.where(is_under, l5u, l5o), index=out.index, dtype=float)
 
-    maturity: list[str] = []
-    tiers: list[str] = []
-    scores: list[float] = []
-    notes: list[str] = []
-
-    for idx in out.index:
-        sport_u = sport_col.loc[idx] if idx in sport_col.index else "NBA"
-        mat = sport_signal_maturity(sport_u)
-
-        def_raw = out.at[idx, "def_tier"] if "def_tier" in out.columns else out.get("DEF_TIER", pd.Series(dtype=object)).get(idx, "")
-        def_known = bool(_def_tier_known(pd.Series([def_raw])).iloc[0])
-
-        top3_rank = _num(out, "team_top3_rank").get(idx, np.nan)
-        bot_rank = _num(out, "team_bottom3_rank").get(idx, np.nan)
-        top3_weak = _num(out, "top3_weak_overperformer").get(idx, 0)
-        top3_fade = _num(out, "top3_elite_fader").get(idx, 0)
-        top3_known = any(
-            pd.notna(x) and float(x) != 0
-            for x in (top3_rank, bot_rank, top3_weak, top3_fade)
-        )
-
-        cg = out.at[idx, "consistency_grade"] if "consistency_grade" in out.columns else ""
-        consistency_ok = bool(_consistency_strong(pd.Series([cg])).iloc[0])
-
-        streak = str(out.at[idx, "l10_streak"] if "l10_streak" in out.columns else "").strip().upper()
-
-        score, tags = _row_signal_score(
-            strat_hr=_num(out, "strat_hit_rate").get(idx, np.nan),
-            strat_n=_num(out, "strat_n").get(idx, np.nan),
-            hit_rate=_num(out, "hit_rate").get(idx, np.nan),
-            hit_rate_l5=_num(out, "hit_rate_l5").get(idx, np.nan),
-            hit_rate_l10=_num(out, "hit_rate_l10").get(idx, np.nan),
-            l5_side=l5_side.get(idx, np.nan),
-            l10_gp=_num(out, "l10_games_played").get(idx, np.nan),
-            l10_streak=streak,
-            def_known=def_known,
-            top3_known=top3_known,
-            consistency_ok=consistency_ok,
-            player_hr=_num(out, "player_hr_historical").get(idx, np.nan),
-            opp_hr=_num(out, "opp_hr_historical").get(idx, np.nan),
-            ml_prob=_num(out, "ml_prob").get(idx, np.nan),
-        )
-
-        tier = _signal_tier_from_score(score)
-        note_parts = [f"sport={sport_u}", f"data_depth={mat}"] + tags
-
-        maturity.append(mat)
-        tiers.append(tier)
-        scores.append(round(score, 1))
-        notes.append(",".join(note_parts)[:120])
+    maturity = sport_col.map(sport_signal_maturity)
+    scores = _vector_signal_scores(out, l5_side)
+    tiers = np.where(
+        scores.ge(_TIER_HIGH_MIN),
+        "HIGH",
+        np.where(scores.ge(_TIER_MED_MIN), "MED", "LOW"),
+    )
+    notes = (
+        "sport="
+        + sport_col.astype(str)
+        + ",data_depth="
+        + maturity.astype(str)
+        + ",score="
+        + scores.astype(str)
+    ).str.slice(0, 120)
 
     out["sport_signal_maturity"] = maturity
     out["confidence_tier"] = tiers

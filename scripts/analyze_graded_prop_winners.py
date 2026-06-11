@@ -11,6 +11,7 @@ Head-to-head columns are rarely persisted on graded sheets; when absent, the
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -53,6 +54,12 @@ def _sport_from_name(name: str) -> str | None:
         return "mlb"
     if "tennis" in n:
         return "tennis"
+    if "nfl" in n:
+        return "nfl"
+    if "cfb" in n:
+        return "cfb"
+    if "golf" in n:
+        return "golf"
     return None
 
 
@@ -154,6 +161,67 @@ def dedupe_graded_workbooks(paths: list[Path]) -> list[Path]:
         if prev is None or _workbook_priority(p) > _workbook_priority(prev):
             best[base] = p
     return sorted(best.values(), key=lambda x: str(x))
+
+
+def load_graded_json_archive(
+    *,
+    sport: str | None = None,
+    json_dir: Path | None = None,
+    since: str | None = None,
+) -> pd.DataFrame:
+    """Load decided props from mobile/www graded_props_*.json (fast, canonical history)."""
+    root = json_dir or (_repo_root() / "mobile" / "www")
+    if not root.is_dir():
+        return pd.DataFrame()
+    sport_f = str(sport or "").strip().lower()
+    since_ts = pd.to_datetime(since, errors="coerce") if since else None
+    rows: list[dict] = []
+    for path in sorted(root.glob("graded_props_*.json")):
+        if ".bak_" in path.name:
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        file_date = str(raw.get("date") or path.stem.replace("graded_props_", ""))[:10]
+        if since_ts is not None and pd.notna(since_ts):
+            try:
+                if pd.Timestamp(file_date) < since_ts:
+                    continue
+            except Exception:
+                pass
+        chunk = raw.get("props", raw.get("rows", []))
+        if not isinstance(chunk, list):
+            continue
+        for r in chunk:
+            if not isinstance(r, dict):
+                continue
+            sp = str(r.get("sport") or "").strip().lower()
+            if not sp:
+                continue
+            if sport_f and sp != sport_f:
+                continue
+            res = str(r.get("result") or "").strip().upper()
+            if res not in ("HIT", "MISS"):
+                continue
+            row = dict(r)
+            row["result"] = res
+            row["sport"] = sp
+            row["date"] = file_date
+            row["_sport"] = sp
+            row["_source_file"] = path.name
+            row["_slate_date"] = file_date
+            if "direction" not in row or not str(row.get("direction") or "").strip():
+                row["direction"] = r.get("over_under") or r.get("bet_direction") or ""
+            if "prop" not in row or not str(row.get("prop") or "").strip():
+                row["prop"] = r.get("prop_type") or ""
+            rows.append(row)
+    if not rows:
+        return pd.DataFrame()
+    out = pd.DataFrame(rows)
+    from utils.confidence_tier import attach_confidence_tier  # noqa: WPS433
+
+    return attach_confidence_tier(out)
 
 
 def load_unified(roots: list[Path], *, sport: str | None = None) -> pd.DataFrame:

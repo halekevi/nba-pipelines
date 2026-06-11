@@ -562,6 +562,14 @@ def _graded_workbook_sheet_order(name: str) -> tuple[int, int]:
     return (2, 0)
 
 
+def _pick_graded_sheet(names: list[str]) -> str | None:
+    lowered = {str(n).strip().lower(): n for n in names}
+    for p in ("box raw", "graded", "all", "props", "sheet1"):
+        if p in lowered:
+            return lowered[p]
+    return names[0] if names else None
+
+
 def _read_graded_frame(path: Path) -> pd.DataFrame | None:
     try:
         xl = pd.ExcelFile(path, engine="openpyxl")
@@ -587,13 +595,9 @@ def _read_graded_frame(path: Path) -> pd.DataFrame | None:
         except Exception:
             return None
 
-    sheet = None
-    for name in names:
-        if str(name).strip().lower() == "graded props":
-            sheet = name
-            break
+    sheet = _pick_graded_sheet(names)
     if sheet is None:
-        sheet = names[0]
+        return None
     try:
         return pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
     except Exception:
@@ -608,9 +612,9 @@ def _append_rows_from_graded_frame(
     rows: list[dict[str, Any]],
 ) -> None:
     c_player = _find_column(df, "player", "player_name", "Player")
-    c_prop = _find_column(df, "prop_type", "stat_type", "Prop Type", "prop type")
+    c_prop = _find_column(df, "prop_type", "stat_type", "Prop Type", "prop type", "prop", "Prop")
     c_line = _find_column(df, "line", "Line")
-    c_dir = _find_column(df, "direction", "Direction")
+    c_dir = _find_column(df, "direction", "Direction", "bet_direction", "over_under")
     c_res = _find_column(df, "result", "Result")
     c_date = _find_column(df, "date", "created_at", "Date", "game_date")
     c_tier = _find_column(df, "tier", "Tier")
@@ -685,25 +689,99 @@ def _append_rows_from_graded_frame(
         )
 
 
+def _sport_from_graded_json_name(name: str) -> str | None:
+    low = name.lower()
+    if "wnba" in low:
+        return "WNBA"
+    if "wcbb" in low:
+        return "CBB"
+    if "nba1q" in low or "nba1h" in low:
+        return "NBA"
+    if "nba" in low:
+        return "NBA"
+    if "cbb" in low:
+        return "CBB"
+    if "nhl" in low:
+        return "NHL"
+    if "soccer" in low:
+        return "Soccer"
+    if "mlb" in low:
+        return "MLB"
+    if "tennis" in low:
+        return "Tennis"
+    if "nfl" in low:
+        return "NFL"
+    if "cfb" in low:
+        return "CFB"
+    return None
+
+
+def load_graded_json_rows(sport_filter: str | None, since: str | None) -> list[dict[str, Any]]:
+    """Load decided props from mobile/www/graded_props_*.json archives."""
+    rows: list[dict[str, Any]] = []
+    since_ts = pd.to_datetime(since, errors="coerce") if since else None
+    json_dir = REPO_ROOT / "mobile" / "www"
+    if not json_dir.is_dir():
+        return rows
+    for path in sorted(json_dir.glob("graded_props_*.json")):
+        if ".bak_" in path.name:
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        file_date = str(raw.get("date") or path.stem.replace("graded_props_", ""))[:10]
+        chunk = raw.get("props", raw.get("rows", []))
+        if not isinstance(chunk, list) or not chunk:
+            continue
+        by_sport: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for r in chunk:
+            if not isinstance(r, dict):
+                continue
+            sp = str(r.get("sport") or _sport_from_graded_json_name(path.name) or "").strip()
+            if not sp:
+                continue
+            if sport_filter and sp.upper() != sport_filter.upper():
+                continue
+            res = str(r.get("result") or "").strip().upper()
+            if res not in ("HIT", "MISS"):
+                continue
+            by_sport[sp].append(
+                {
+                    "player": r.get("player", ""),
+                    "prop": r.get("prop", r.get("prop_type", "")),
+                    "line": r.get("line", ""),
+                    "direction": r.get("direction") or r.get("over_under") or r.get("bet_direction", ""),
+                    "result": res,
+                    "date": file_date,
+                    "tier": r.get("tier", r.get("pick_type", "Standard")),
+                }
+            )
+        for sp, frame_rows in by_sport.items():
+            _append_rows_from_graded_frame(pd.DataFrame(frame_rows), sp, since_ts, 1.0, rows)
+    return rows
+
+
 def load_real_graded_rows(sport_filter: str | None, since: str | None) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     since_ts = pd.to_datetime(since, errors="coerce") if since else None
 
+    search_roots = [REPO_ROOT / "outputs", REPO_ROOT / "ui_runner" / "graded_slate"]
     for sport, pattern in GRADED_GLOBS:
         if sport_filter and sport.upper() != sport_filter.upper():
             continue
-        out_dir = REPO_ROOT / "outputs"
-        if not out_dir.is_dir():
-            continue
-        for path in out_dir.rglob(pattern):
-            if not path.is_file():
+        for out_dir in search_roots:
+            if not out_dir.is_dir():
                 continue
-            if "synthetic" in path.as_posix().lower():
-                continue
-            df = _read_graded_frame(path)
-            if df is None or df.empty:
-                continue
-            _append_rows_from_graded_frame(df, sport, since_ts, 1.0, rows)
+            for path in out_dir.rglob(pattern):
+                if not path.is_file():
+                    continue
+                if "synthetic" in path.as_posix().lower():
+                    continue
+                df = _read_graded_frame(path)
+                if df is None or df.empty:
+                    continue
+                _append_rows_from_graded_frame(df, sport, since_ts, 1.0, rows)
     return rows
 
 
@@ -831,10 +909,15 @@ def load_all_graded_rows(
     sport_filter: str | None,
     since: str | None,
     sources: str = "real",
+    *,
+    include_xlsx: bool = True,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     if sources in ("all", "real"):
-        rows.extend(load_real_graded_rows(sport_filter, since))
+        # JSON archives are the canonical mobile graded history (fast, complete).
+        rows.extend(load_graded_json_rows(sport_filter, since))
+        if include_xlsx:
+            rows.extend(load_real_graded_rows(sport_filter, since))
     if sources in ("all", "synthetic"):
         rows.extend(load_synthetic_graded_rows(sport_filter, since))
     if sources == "all":
@@ -1006,9 +1089,14 @@ def upsert_cell(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Build player_consistency.db from graded workbooks.")
-    ap.add_argument("--sport", default=None, help="NBA, CBB, NHL, or Soccer")
+    ap.add_argument("--sport", default=None, help="NBA, CBB, NHL, Soccer, WNBA, MLB, Tennis, NFL, CFB")
     ap.add_argument("--since", default=None, help="Only include graded rows on/after this date (YYYY-MM-DD)")
     ap.add_argument("--rebuild", action="store_true", help="Drop and recreate table from all history")
+    ap.add_argument(
+        "--include-xlsx",
+        action="store_true",
+        help="Also scan graded_*.xlsx under outputs/ (skipped on --rebuild by default)",
+    )
     ap.add_argument(
         "--sources",
         choices=("all", "real", "synthetic"),
@@ -1019,8 +1107,18 @@ def main() -> None:
 
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    rows = load_all_graded_rows(args.sport, args.since, args.sources)
+    include_xlsx = bool(args.include_xlsx or not args.rebuild)
+    print("Loading graded history...")
+    if args.rebuild and not include_xlsx:
+        print("  Source: mobile/www graded_props_*.json only (use --include-xlsx to add workbooks)")
+    rows = load_all_graded_rows(args.sport, args.since, args.sources, include_xlsx=include_xlsx)
+    print(f"  Loaded {len(rows)} raw rows")
     rows = dedupe_rows(rows)
+    print(f"  {len(rows)} rows after dedupe")
+    if not rows:
+        print("ERROR: No graded rows found — refusing to rebuild an empty player_consistency.db.")
+        print("  Expected graded_props_*.json under mobile/www/ or graded_*.xlsx under outputs/.")
+        return
 
     by_cell: dict[tuple[str, str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for r in rows:
