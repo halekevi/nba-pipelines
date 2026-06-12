@@ -1415,16 +1415,20 @@ else {
 # =============================================================================
 Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
 $railwayCopies = @(
-    @{ Src = "NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "NBA\step8_all_direction_clean.xlsx" },
-    @{ Src = "Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Soccer\step8_soccer_direction_clean.xlsx" },
-    @{ Src = "outputs\$Today\mlb\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
-    @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
-    @{ Src = "Tennis\outputs\step8_tennis_direction_clean.xlsx"; Dst = "Tennis\step8_tennis_direction_clean.xlsx" }
+    @{ Src = "Sports\NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "Sports\NBA\step8_all_direction_clean.xlsx" },
+    @{ Src = "Sports\Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Sports\Soccer\step8_soccer_direction_clean.xlsx" },
+    @{ Src = "outputs\$Today\mlb\step8_mlb_direction_clean.xlsx"; Dst = "Sports\MLB\step8_mlb_direction_clean.xlsx" },
+    @{ Src = "Sports\MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "Sports\MLB\step8_mlb_direction_clean.xlsx" },
+    @{ Src = "Sports\Tennis\outputs\step8_tennis_direction_clean.xlsx"; Dst = "Sports\Tennis\step8_tennis_direction_clean.xlsx" }
 )
 foreach ($rc in $railwayCopies) {
     $srcPath = Join-Path $Root $rc.Src
     $dstPath = Join-Path $Root $rc.Dst
     if (Test-Path $srcPath) {
+        $dstDir = Split-Path $dstPath -Parent
+        if ($dstDir -and -not (Test-Path $dstDir)) {
+            New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
+        }
         Preserve-ExistingFile -Path $dstPath -Reason "pre-STEP D2 Railway copy"
         Copy-Item -LiteralPath $srcPath -Destination $dstPath -Force
         Write-Log "STEP D2 - Copied $($rc.Src) -> $($rc.Dst)"
@@ -1575,14 +1579,14 @@ else {
         git -C $Root add -- "ui_runner/templates/*_matchup_edge.json"
         git -C $Root add -- "mobile/www/data/*_matchup_edge.json"
         $optionalAdds = @(
-            "NBA\step8_all_direction_clean.xlsx",
-            "NBA\step8_nba1h_direction_clean.xlsx",
-            "NBA\step8_nba1q_direction_clean.xlsx",
-            "Soccer\step8_soccer_direction_clean.xlsx",
-            "MLB\step8_mlb_direction_clean.xlsx",
-            "Tennis\step8_tennis_direction_clean.xlsx",
+            "Sports\NBA\step8_all_direction_clean.xlsx",
+            "Sports\NBA\step8_nba1h_direction_clean.xlsx",
+            "Sports\NBA\step8_nba1q_direction_clean.xlsx",
+            "Sports\Soccer\step8_soccer_direction_clean.xlsx",
+            "Sports\MLB\step8_mlb_direction_clean.xlsx",
+            "Sports\Tennis\step8_tennis_direction_clean.xlsx",
             # CBB deactivated - season over (April 2026)
-            "NHL\outputs\step8_nhl_direction_clean.xlsx"
+            "Sports\NHL\outputs\step8_nhl_direction_clean.xlsx"
         )
         foreach ($rel in $optionalAdds) {
             $full = Join-Path $Root $rel
