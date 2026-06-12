@@ -1575,7 +1575,36 @@ if ($GolfOnly) {
         $ok = Run-Step "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`""
     }
     if ($ok) {
-        $ok = Run-Step "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$GolfRunOutDir\step2_golf_context.csv`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`""
+        Push-Location $Root
+        try {
+            Write-Host "  --> Golf Step 4 - Player Round Stats" -ForegroundColor Yellow
+            & py -3.14 "Sports\Golf\scripts\step4_attach_player_stats_golf.py" `
+                --input  "$GolfRunOutDir\step2_golf_context.csv" `
+                --output "$GolfRunOutDir\step4_golf_with_stats.csv" `
+                --cache  "Sports\Golf\cache\golf_round_cache.csv"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[Golf] step4 failed — continuing without round history"
+            }
+            Write-Host "  --> Golf Step 5 - Line Hit Rates" -ForegroundColor Yellow
+            & py -3.14 "Sports\Golf\scripts\step5_add_line_hit_rates_golf.py" `
+                --input  "$GolfRunOutDir\step4_golf_with_stats.csv" `
+                --output "$GolfRunOutDir\step5_golf_hit_rates.csv"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "[Golf] step5 failed — continuing without hit rates"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
+    $golfStep7Input = if (Test-Path -LiteralPath "$GolfRunOutDir\step5_golf_hit_rates.csv") {
+        "$GolfRunOutDir\step5_golf_hit_rates.csv"
+    } elseif (Test-Path -LiteralPath "$GolfRunOutDir\step4_golf_with_stats.csv") {
+        "$GolfRunOutDir\step4_golf_with_stats.csv"
+    } else {
+        "$GolfRunOutDir\step2_golf_context.csv"
+    }
+    if ($ok) {
+        $ok = Run-Step "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$golfStep7Input`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`""
     }
     if ($ok) {
         $ok = Run-Step "Golf Step 8 - Direction Context" $GolfDir ".\scripts\step8_add_direction_context_golf.py" "--input `"$GolfRunOutDir\step7_golf_ranked.xlsx`" --sheet ALL --output `"$GolfRunOutDir\step8_golf_direction.csv`" --xlsx `"$GolfRunOutDir\step8_golf_direction_clean.xlsx`" --date $Date"
@@ -2492,7 +2521,7 @@ $TennisJob = Start-Job -ScriptBlock {
     return $ok
 } -ArgumentList $TennisDir, $TennisDate, $SkipFetch, $Root, $TennisRunOutDir
 
-# -- Golf Job (PGA — step1 → step2 → step7 → step8) ---------------------------
+# -- Golf Job (PGA — step1 → step2 → step4 → step5 → step7 → step8) -----------
 $GolfJob = Start-Job -ScriptBlock {
     param($GolfDir, $Date, $SkipFetch, $GolfRunOutDir, $RepoRoot)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
@@ -2517,7 +2546,32 @@ $GolfJob = Start-Job -ScriptBlock {
         Write-Output "[Golf] Skipping step1 fetch"
     }
     if ($ok) { $ok = Run-Step-Job "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$GolfRunOutDir\step2_golf_context.csv`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`"" }
+    if ($ok) {
+        Push-Location $RepoRoot
+        try {
+            Write-Output "[GOLF] --> Golf Step 4 - Player Round Stats"
+            $output = & py -3.14 "Sports\Golf\scripts\step4_attach_player_stats_golf.py" `
+                --input  "$GolfRunOutDir\step2_golf_context.csv" `
+                --output "$GolfRunOutDir\step4_golf_with_stats.csv" `
+                --cache  "Sports\Golf\cache\golf_round_cache.csv" 2>&1
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($LASTEXITCODE -ne 0) { Write-Output "[GOLF] WARN: step4 failed — continuing without round history" }
+            Write-Output "[GOLF] --> Golf Step 5 - Line Hit Rates"
+            $output = & py -3.14 "Sports\Golf\scripts\step5_add_line_hit_rates_golf.py" `
+                --input  "$GolfRunOutDir\step4_golf_with_stats.csv" `
+                --output "$GolfRunOutDir\step5_golf_hit_rates.csv" 2>&1
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($LASTEXITCODE -ne 0) { Write-Output "[GOLF] WARN: step5 failed — continuing without hit rates" }
+        } finally { Pop-Location }
+    }
+    $golfStep7Input = if (Test-Path -LiteralPath "$GolfRunOutDir\step5_golf_hit_rates.csv") {
+        "$GolfRunOutDir\step5_golf_hit_rates.csv"
+    } elseif (Test-Path -LiteralPath "$GolfRunOutDir\step4_golf_with_stats.csv") {
+        "$GolfRunOutDir\step4_golf_with_stats.csv"
+    } else {
+        "$GolfRunOutDir\step2_golf_context.csv"
+    }
+    if ($ok) { $ok = Run-Step-Job "Golf Step 7 - Rank Props" $GolfDir ".\scripts\step7_rank_props_golf.py" "--input `"$golfStep7Input`" --output `"$GolfRunOutDir\step7_golf_ranked.xlsx`"" }
     if ($ok) { $ok = Run-Step-Job "Golf Step 8 - Direction Context" $GolfDir ".\scripts\step8_add_direction_context_golf.py" "--input `"$GolfRunOutDir\step7_golf_ranked.xlsx`" --sheet ALL --output `"$GolfRunOutDir\step8_golf_direction.csv`" --xlsx `"$GolfRunOutDir\step8_golf_direction_clean.xlsx`" --date $Date" }
     return $ok
 } -ArgumentList $GolfDir, $Date, $SkipFetch, $GolfRunOutDir, $Root
