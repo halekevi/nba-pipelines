@@ -221,6 +221,21 @@ def main() -> None:
         print(f"[WARN] Empty sheet {sheet!r} in {xlsx} — skip.")
         return
 
+    # Only score non-void rows — void rows keep existing blended_score / ml_prob.
+    if "void_reason" in df.columns:
+        eligible_mask = df["void_reason"].isna() | (df["void_reason"].astype(str).str.strip() == "")
+    else:
+        eligible_mask = pd.Series(True, index=df.index)
+    n_eligible = int(eligible_mask.sum())
+    n_total = len(df)
+    if n_eligible < n_total:
+        print(f"  [step7b] {sp}: scoring {n_eligible}/{n_total} eligible rows")
+    if n_eligible == 0:
+        print(f"[WARN] 0 eligible rows for {sp} — skip.")
+        return
+
+    eligible_df = df.loc[eligible_mask].copy()
+
     preserve_cols = [
         "minutes_tier",
         "shot_role",
@@ -229,9 +244,9 @@ def main() -> None:
         "fga_player_avg",
         "pts_player_avg",
     ]
-    preserved = {c: df[c].copy() for c in preserve_cols if c in df.columns}
+    preserved = {c: eligible_df[c].copy() for c in preserve_cols if c in eligible_df.columns}
 
-    df2 = build_feature_vector(df, feat_sp)
+    df2 = build_feature_vector(eligible_df, feat_sp)
     if len(df2) == 0:
         print(f"[WARN] 0 rows after feature build for {sp} (feat={feat_sp}) — skip.")
         return
@@ -325,30 +340,34 @@ def main() -> None:
     else:
         blended = 0.3 * ml_s + 0.7 * comp
 
-    df2["ml_prob"] = ml_s
-    df2["edge_score"] = edge_score.values
-    df2["blended_score"] = blended.values
+    scored_cols = ["ml_prob", "edge_score", "blended_score"]
+    for col in scored_cols:
+        if col not in df.columns:
+            df[col] = np.nan
+    df.loc[eligible_mask, "ml_prob"] = ml_s.values
+    df.loc[eligible_mask, "edge_score"] = edge_score.values
+    df.loc[eligible_mask, "blended_score"] = blended.values
     # Restore context labels for downstream UI exports after model inference.
     for c, s in preserved.items():
         if len(s) == len(df2):
-            df2[c] = s.values
+            df.loc[eligible_mask, c] = s.values
     # Do not re-sort NHL — it uses explicit rank ordering in its step7 output
     if sp.upper() != "NHL":
-        df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
+        df = df.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
 
     xl_obj = pd.ExcelFile(xlsx, engine="openpyxl")
     all_sheets: dict[str, pd.DataFrame] = {}
     for sn in xl_obj.sheet_names:
         if sn == sheet:
-            all_sheets[sn] = df2
+            all_sheets[sn] = df
         else:
             all_sheets[sn] = pd.read_excel(xlsx, sheet_name=sn, engine="openpyxl")
     with pd.ExcelWriter(xlsx, engine="openpyxl") as w:
         for sn, frame in all_sheets.items():
             frame.to_excel(w, sheet_name=sn, index=False)
 
-    print(f"  Scored {len(df2)} rows for {sp} -> {xlsx} (sheet={sheet!r})")
-    top = df2.head(5)
+    print(f"  Scored {n_eligible} eligible / {n_total} rows for {sp} -> {xlsx} (sheet={sheet!r})")
+    top = df.head(5)
     pc = next((c for c in ("player_name", "player", "pp_player") if c in top.columns), None)
     prop_c = next((c for c in ("prop_norm", "prop_type", "stat_norm") if c in top.columns), None)
     for rank, (_, row) in enumerate(top.iterrows(), start=1):

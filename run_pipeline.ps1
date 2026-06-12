@@ -2906,7 +2906,7 @@ Write-Host ""
 
 $waitStart = Get-Date
 $lastHeartbeat = $waitStart
-$maxParallelMinutes = 45
+$maxParallelMinutes = 75
 
 while (($allJobs | Where-Object { $_.State -eq 'Running' }).Count -gt 0) {
     foreach ($job in $allJobs) {
