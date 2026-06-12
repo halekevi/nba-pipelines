@@ -629,6 +629,36 @@ finally {
 }
 
 # =============================================================================
+# STEP A1e — Graded-prop slice analysis (ticket builder JSON)
+# =============================================================================
+$gradedAnalysisScript = Join-Path $Root "scripts\analyze_graded_history.py"
+if (Test-Path $gradedAnalysisScript) {
+    Write-Log "STEP A1e - Graded analysis refresh: START"
+    Push-Location $Root
+    try {
+        & py -3.14 $gradedAnalysisScript
+        $gae = $LASTEXITCODE
+        if ($gae -ne 0) {
+            Write-Log "STEP A1e - Graded analysis refresh: WARN (exit $gae)"
+            Write-Warning "analyze_graded_history.py failed (exit $gae)"
+        }
+        else {
+            Write-Log "STEP A1e - Graded analysis refresh: OK"
+        }
+    }
+    catch {
+        Write-Log "STEP A1e - Graded analysis refresh: WARN ($($_.Exception.Message))"
+        Write-Warning "analyze_graded_history.py error: $_"
+    }
+    finally {
+        Pop-Location
+    }
+}
+else {
+    Write-Log "STEP A1e - Graded analysis refresh: SKIP (script missing)"
+}
+
+# =============================================================================
 # STEP A2 — Build player consistency after grading
 # =============================================================================
 if ($SkipConsistency) {
@@ -1601,7 +1631,9 @@ else {
         $ticketMlArtifacts = @(
             "data\ml\ticket_model_eval_history.csv",
             "data\ml\ticket_model_eval_by_date.csv",
-            "data\ml\ticket_model_eval_summary_latest.json"
+            "data\ml\ticket_model_eval_summary_latest.json",
+            "data\graded_analysis_latest.json"
+        )
         )
         foreach ($rel in $ticketMlArtifacts) {
             $full = Join-Path $Root $rel

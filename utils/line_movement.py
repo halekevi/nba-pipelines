@@ -424,10 +424,37 @@ def _http_get_json(url: str, timeout: int = 25) -> Any:
         return json.loads(resp.read().decode("utf-8"))
 
 
+def _probe_odds_quota(api_key: str) -> None:
+    """Lightweight quota check (GET /sports) so _odds_quota_low() works before event fetches."""
+    if not api_key:
+        return
+    try:
+        qs = urllib.parse.urlencode({"apiKey": api_key})
+        _http_get_json(f"{ODDS_API_BASE}/sports?{qs}", timeout=15)
+    except Exception as exc:
+        _log.warning("line_movement: quota probe failed — %s", exc)
+
+
 def _odds_quota_low() -> bool:
     if _ODDS_API_REMAINING is None:
         return False
     return _ODDS_API_REMAINING < 50
+
+
+def _stale_snapshot_or_empty(
+    sport_key: str,
+    before_date: str,
+) -> dict[tuple[str, str, float], dict[str, Any]]:
+    stale = _find_stale_line_cache(sport_key, before_date)
+    if not stale:
+        return {}
+    stale_date, snap = stale
+    _log.warning(
+        "line_movement: Odds API quota low (remaining=%s) — using stale cache %s",
+        _ODDS_API_REMAINING,
+        stale_date,
+    )
+    return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
 
 
 def _is_target_event(event: dict) -> bool:
@@ -844,6 +871,8 @@ def fetch_line_snapshot(
         _log.info("line_movement: ODDS_API_KEY missing — skipping fetch")
         return {}
 
+    _probe_odds_quota(api_key)
+
     if not force_refresh:
         cached = _load_cache(sport_key, today)
         if cached is not None and _snapshot_has_prices(cached):
@@ -858,15 +887,9 @@ def fetch_line_snapshot(
             )
 
     if _odds_quota_low():
-        stale = _find_stale_line_cache(sport_key, today)
-        if stale:
-            stale_date, snap = stale
-            _log.warning(
-                "line_movement: Odds API quota low (remaining=%s) — using stale cache %s",
-                _ODDS_API_REMAINING,
-                stale_date,
-            )
-            return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
+        snap = _stale_snapshot_or_empty(sport_key, today)
+        if snap:
+            return snap
 
     try:
         events = _fetch_events(sport_key, api_key)

@@ -466,13 +466,19 @@ def _resolve_slate_path(repo: Path, slate_date: str) -> Path | None:
     candidates = [
         repo / "outputs" / slate_date / "soccer" / "step6_soccer_role_context.csv",
         repo / "outputs" / slate_date / "soccer" / "step5_soccer_hit_rates.csv",
-        repo / "Sports" / "Soccer" / "outputs" / "step6_soccer_role_context.csv",
-        repo / "Sports" / "Soccer" / "step6_soccer_role_context.csv",
+        repo / "outputs" / slate_date / "soccer" / "step8_soccer_direction_clean.csv",
     ]
     for p in candidates:
         if p.is_file():
             return p
     return None
+
+
+def _col_series(df: pd.DataFrame, *names: str, default: str = "") -> pd.Series:
+    for name in names:
+        if name in df.columns:
+            return df[name]
+    return pd.Series(default, index=df.index)
 
 
 def attach_slate(leaders: pd.DataFrame, slate_path: Path) -> pd.DataFrame:
@@ -518,12 +524,13 @@ def attach_slate(leaders: pd.DataFrame, slate_path: Path) -> pd.DataFrame:
         left_on=["PLAYER_NORM", "category"],
         right_on=["player_norm", "prop_norm"],
         how="left",
+        suffixes=("", "_slate"),
     )
-    merged["on_slate"] = merged.get("player", pd.Series(dtype=object)).notna()
+    merged["on_slate"] = _col_series(merged, "player").notna()
     merged["slate_edge_signal"] = False
 
     opp_rank = pd.to_numeric(merged.get("slate_opp_def_rank"), errors="coerce")
-    direction = merged.get("final_bet_direction", merged.get("bet_direction", "")).astype(str).str.upper()
+    direction = _col_series(merged, "final_bet_direction", "bet_direction").astype(str).str.upper()
     boost = merged["overperform_vs_weak"].fillna(False)
     weak_opp = opp_rank >= np.nanpercentile(opp_rank.dropna(), 67) if opp_rank.notna().any() else False
     tier = merged.get("slate_opp_def_tier", pd.Series("", index=merged.index)).astype(str)
@@ -538,7 +545,8 @@ def _print_summary(df: pd.DataFrame) -> None:
     if df.empty:
         print("No rows produced.")
         return
-    print(f"Teams: {df['team_slate'].nunique()} | Props: {df['prop_norm'].nunique()} | Rows: {len(df)}")
+    prop_col = "prop_norm" if "prop_norm" in df.columns else "category"
+    print(f"Teams: {df['team_slate'].nunique()} | Props: {df[prop_col].nunique()} | Rows: {len(df)}")
     if "def_bucket" in df.columns:
         print("Def buckets:", df["def_bucket"].value_counts().to_dict())
     boosters = df[df["overperform_vs_weak"].fillna(False)]
