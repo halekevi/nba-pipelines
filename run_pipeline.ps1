@@ -477,6 +477,8 @@ function Get-Step1DateHealth {
         $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
     } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
         $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+    } elseif ($rows[0].PSObject.Properties.Name -contains "game_start") {
+        $match = $rows | Where-Object { "$($_.game_start)".Length -ge 10 -and "$($_.game_start)".Substring(0, 10) -eq $TargetDate }
     } else {
         return @{ ok = $false; rows = $rows.Count; reason = "missing_date_columns" }
     }
@@ -492,6 +494,75 @@ function Get-NBAStep1DateHealth {
 function Get-MLBStep1DateHealth {
     param([string]$CsvPath, [string]$TargetDate)
     return (Get-Step1DateHealth -CsvPath $CsvPath -TargetDate $TargetDate)
+}
+
+function Test-Step1NoSlate {
+    param([string]$CsvPath)
+    if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+    try {
+        $rows = Import-Csv -LiteralPath $CsvPath
+    } catch {
+        return $true
+    }
+    return (-not $rows -or $rows.Count -eq 0)
+}
+
+function Clear-NHLGeneratedOutputs {
+    param([string]$BaseDir)
+    foreach ($p in @(
+        "step2_nhl_picktypes.csv",
+        "step3_nhl_with_defense.csv",
+        "step3b_nhl_with_goalies.csv",
+        "step4_nhl_with_stats.csv",
+        "step5_nhl_hit_rates.csv",
+        "step6_nhl_role_context.csv",
+        "step7_nhl_ranked.xlsx",
+        "step8_nhl_direction_clean.xlsx"
+    )) {
+        Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Clear-SoccerGeneratedOutputs {
+    param([string]$BaseDir)
+    foreach ($p in @(
+        "step2_soccer_picktypes.csv",
+        "step3_soccer_with_defense.csv",
+        "step4_soccer_with_stats.csv",
+        "step5_soccer_hit_rates.csv",
+        "step6_soccer_role_context.csv",
+        "step7_soccer_ranked.xlsx",
+        "step8_soccer_direction_clean.xlsx"
+    )) {
+        Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Write-PipelineSlateStatusJson {
+    param(
+        [string]$RunDate,
+        [hashtable]$Sports
+    )
+    if (-not $RunDate -or -not $Sports -or $Sports.Count -eq 0) { return }
+    $outDir = $OutDir
+    if (-not (Test-Path -LiteralPath $outDir)) {
+        New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+    }
+    $path = Join-Path $outDir "pipeline_slate_status.json"
+    $payload = [ordered]@{
+        run_date   = $RunDate
+        updated_at = (Get-Date).ToString("o")
+        sports     = [ordered]@{}
+    }
+    foreach ($key in ($Sports.Keys | Sort-Object)) {
+        $payload.sports[$key] = "$($Sports[$key])"
+    }
+    try {
+        $payload | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $path -Encoding utf8
+        Write-Host "  [slate-status] Wrote $path" -ForegroundColor DarkGray
+    } catch {
+        Write-Host "  [slate-status] WARN: failed to write $path ($($_.Exception.Message))" -ForegroundColor Yellow
+    }
 }
 
 function Clear-NBAGeneratedOutputs {
@@ -1224,6 +1295,14 @@ if ($NHLOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output `"$NHLRunOutDir\step1_nhl_props.csv`" --date $Date" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing $NHLRunOutDir\step1_nhl_props.csv" -ForegroundColor DarkGray }
+    if ($ok -and (Test-Step1NoSlate -CsvPath "$NHLRunOutDir\step1_nhl_props.csv")) {
+        Write-Host "  [NHL] No slate today — skipping steps 2-8." -ForegroundColor DarkGray
+        Clear-NHLGeneratedOutputs -BaseDir $NHLRunOutDir
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ nhl = "no_slate" }
+        Run-Combined "after NHL (no slate)"
+        Print-Done
+        exit 0
+    }
     if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }
@@ -1432,6 +1511,14 @@ if ($SoccerOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output `"$SoccerRunOutDir\step1_soccer_props.csv`" --date $Date" } } else { Write-Host "  [Soccer] Skipping step1 fetch -- using existing $SoccerRunOutDir\step1_soccer_props.csv" -ForegroundColor DarkGray }
+    if ($ok -and (Test-Step1NoSlate -CsvPath "$SoccerRunOutDir\step1_soccer_props.csv")) {
+        Write-Host "  [Soccer] No slate today — skipping steps 2-8." -ForegroundColor DarkGray
+        Clear-SoccerGeneratedOutputs -BaseDir $SoccerRunOutDir
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ soccer = "no_slate" }
+        Run-Combined "after Soccer (no slate)"
+        Print-Done
+        exit 0
+    }
     if ($ok) { $ok = Run-Step "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input `"$SoccerRunOutDir\step1_soccer_props.csv`" --output `"$SoccerRunOutDir\step2_soccer_picktypes.csv`"" }
     if ($ok) {
         if ($SkipDefenseRefresh) {
@@ -1444,6 +1531,21 @@ if ($SoccerOnly) {
     if ($ok) { $ok = Run-Step "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
     if ($ok) { $ok = Run-Step "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
+    if ($ok) {
+        $SoccerTop3Script = Join-Path $SoccerDir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $SoccerTop3Script) {
+            Write-Host "  --> Soccer Top-3 vs defense analysis (step7 input)" -ForegroundColor Yellow
+            Push-Location $Root
+            try {
+                & py -3.14 $SoccerTop3Script --slate-date $Date
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Warning "[Soccer] top-3 defense analysis failed — continuing"
+                } else {
+                    Write-Host "      OK" -ForegroundColor Green
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "Soccer" "$SoccerRunOutDir\step7_soccer_ranked.xlsx" }
     if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $SportsRoot "Soccer\scripts\step8_add_direction_context_soccer.py")  "--input `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`" --sheet ALL --output `"$SoccerRunOutDir\step8_soccer_direction.csv`" --xlsx `"$SoccerRunOutDir\step8_soccer_direction_clean.xlsx`" --date $Date" }
@@ -1619,6 +1721,14 @@ if ($NBAOnly) {
                 $ok = Invoke-NBAStep1Fetch -WorkDir $NBADir -PipelineDate $Date -OutputPath $nbaStep1Solo
             }
         }
+    }
+    if ($ok -and (Test-Step1NoSlate -CsvPath $nbaStep1Solo)) {
+        Write-Host "  [NBA] No slate today — skipping steps 2-8." -ForegroundColor DarkGray
+        Clear-NBAGeneratedOutputs -BaseDir $NBARunOutDir
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ nba = "no_slate"; nba1h = "no_slate"; nba1q = "no_slate" }
+        Run-Combined "after NBA (no slate)"
+        Print-Done
+        exit 0
     }
     $nbaHealthGate = Get-NBAStep1DateHealth -CsvPath $nbaStep1Solo -TargetDate $Date
     if (-not $nbaHealthGate.ok) {
@@ -1809,11 +1919,31 @@ $NBAJob = Start-Job -ScriptBlock {
             $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
         } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
             $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+        } elseif ($rows[0].PSObject.Properties.Name -contains "game_start") {
+            $match = $rows | Where-Object { "$($_.game_start)".Length -ge 10 -and "$($_.game_start)".Substring(0, 10) -eq $TargetDate }
         } else {
             return @{ ok = $false; reason = "missing_date_columns" }
         }
         $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
         return @{ ok = ($match.Count -gt 0); reason = $reason }
+    }
+    function Test-Step1NoSlate-Job {
+        param([string]$CsvPath)
+        if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+        try { $rows = Import-Csv -LiteralPath $CsvPath } catch { return $true }
+        return (-not $rows -or $rows.Count -eq 0)
+    }
+    function Clear-NBAGeneratedOutputs-Job {
+        param([string]$BaseDir)
+        foreach ($p in @(
+            "step2_with_picktypes.csv", "step3_with_defense.csv", "step4_with_stats.csv",
+            "step5_with_hit_rates.csv", "step6_with_team_role_context.csv", "step6a_with_opp_stats.csv",
+            "step6b_with_game_context.csv", "step6c_with_schedule_flags.csv", "step6d_with_h2h.csv",
+            "step6e_with_intel.csv", "step7_ranked_props.xlsx", "step8_all_direction.csv",
+            "step8_all_direction_clean.xlsx"
+        )) {
+            Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+        }
     }
     function Invoke-NBAStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
@@ -1880,10 +2010,15 @@ $NBAJob = Start-Job -ScriptBlock {
             }
         }
     }
+    if ($ok -and (Test-Step1NoSlate-Job -CsvPath $nbaStep1)) {
+        Write-Output "[NBA] No slate today — skipping steps 2-8."
+        Clear-NBAGeneratedOutputs-Job -BaseDir $NBARunOutDir
+        return $true
+    }
     $health = Get-Step1DateHealth-Job -CsvPath $nbaStep1 -TargetDate $Date
     if (-not $health.ok) {
         Write-Output "[NBA] Aborting steps 2-8: no valid step1 for $Date ($($health.reason))"
-        $ok = $false
+        return $false
     }
     if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$nbaStep1`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
@@ -2129,9 +2264,31 @@ $NHLJob = Start-Job -ScriptBlock {
         } catch { Write-Output "[NHL] step4b NST: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    function Test-Step1NoSlate-Job {
+        param([string]$CsvPath)
+        if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+        try { $rows = Import-Csv -LiteralPath $CsvPath } catch { return $true }
+        return (-not $rows -or $rows.Count -eq 0)
+    }
+    function Clear-NHLGeneratedOutputs-Job {
+        param([string]$BaseDir)
+        foreach ($p in @(
+            "step2_nhl_picktypes.csv", "step3_nhl_with_defense.csv", "step3b_nhl_with_goalies.csv",
+            "step4_nhl_with_stats.csv", "step5_nhl_hit_rates.csv", "step6_nhl_role_context.csv",
+            "step7_nhl_ranked.xlsx", "step8_nhl_direction_clean.xlsx"
+        )) {
+            Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+        }
+    }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$NHLRunOutDir\step1_nhl_props.csv`" --date $Date" } } else { Write-Output "[NHL] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
+    $nhlStep1 = Join-Path $NHLRunOutDir "step1_nhl_props.csv"
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$nhlStep1`" --date $Date" } } else { Write-Output "[NHL] Skipping step1 fetch" }
+    if ($ok -and (Test-Step1NoSlate-Job -CsvPath $nhlStep1)) {
+        Write-Output "[NHL] No slate today — skipping steps 2-8."
+        Clear-NHLGeneratedOutputs-Job -BaseDir $NHLRunOutDir
+        return $true
+    }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$nhlStep1`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 3b - Attach Goalies"    $NHLDir ".\scripts\step3b_attach_goalie_nhl.py"         "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`"" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3b_nhl_with_goalies.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
@@ -2226,9 +2383,31 @@ $SoccerJob = Start-Job -ScriptBlock {
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    function Test-Step1NoSlate-Job {
+        param([string]$CsvPath)
+        if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+        try { $rows = Import-Csv -LiteralPath $CsvPath } catch { return $true }
+        return (-not $rows -or $rows.Count -eq 0)
+    }
+    function Clear-SoccerGeneratedOutputs-Job {
+        param([string]$BaseDir)
+        foreach ($p in @(
+            "step2_soccer_picktypes.csv", "step3_soccer_with_defense.csv", "step4_soccer_with_stats.csv",
+            "step5_soccer_hit_rates.csv", "step6_soccer_role_context.csv", "step7_soccer_ranked.xlsx",
+            "step8_soccer_direction_clean.xlsx"
+        )) {
+            Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+        }
+    }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output `"$SoccerRunOutDir\step1_soccer_props.csv`" --date $Date" } } else { Write-Output "[Soccer] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input `"$SoccerRunOutDir\step1_soccer_props.csv`" --output `"$SoccerRunOutDir\step2_soccer_picktypes.csv`"" }
+    $soccerStep1 = Join-Path $SoccerRunOutDir "step1_soccer_props.csv"
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output `"$soccerStep1`" --date $Date" } } else { Write-Output "[Soccer] Skipping step1 fetch" }
+    if ($ok -and (Test-Step1NoSlate-Job -CsvPath $soccerStep1)) {
+        Write-Output "[Soccer] No slate today — skipping steps 2-8."
+        Clear-SoccerGeneratedOutputs-Job -BaseDir $SoccerRunOutDir
+        return $true
+    }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input `"$soccerStep1`" --output `"$SoccerRunOutDir\step2_soccer_picktypes.csv`"" }
     if ($ok) {
         if ($SkipDefenseRefresh) {
             Write-Output "[Soccer] Skipping defense refresh (-SkipDefenseRefresh)"
@@ -2240,6 +2419,21 @@ $SoccerJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
+    if ($ok) {
+        $SoccerTop3Script = Join-Path $SoccerDir "scripts\analyze_top_players_vs_defense.py"
+        if (Test-Path -LiteralPath $SoccerTop3Script) {
+            Write-Output "[Soccer] --> Top-3 vs defense analysis (step7 input)"
+            Push-Location $RepoRoot
+            try {
+                & py -3.14 $SoccerTop3Script --slate-date $Date
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Output "[Soccer] top-3 defense analysis WARN (exit $LASTEXITCODE) — continuing"
+                } else {
+                    Write-Output "[Soccer] top-3 defense OK"
+                }
+            } finally { Pop-Location }
+        }
+    }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "Soccer" $RepoRoot "$SoccerRunOutDir\step7_soccer_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $RepoRoot "Sports\Soccer\scripts\step8_add_direction_context_soccer.py")  "--input `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`" --sheet ALL --output `"$SoccerRunOutDir\step8_soccer_direction.csv`" --xlsx `"$SoccerRunOutDir\step8_soccer_direction_clean.xlsx`" --date $Date" }
@@ -2706,6 +2900,16 @@ $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join
 $CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { (Test-Path (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx")) -or (Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx")) }
 $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
+if (-not $NHLSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $NHLRunOutDir "step1_nhl_props.csv"))) {
+    Write-Host "  [NHL] no slate for $Date — not a failure." -ForegroundColor DarkGray
+    Clear-NHLGeneratedOutputs -BaseDir $NHLRunOutDir
+    $NHLSuccess = $true
+}
+if (-not $SoccerSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $SoccerRunOutDir "step1_soccer_props.csv"))) {
+    Write-Host "  [Soccer] no slate for $Date — not a failure." -ForegroundColor DarkGray
+    Clear-SoccerGeneratedOutputs -BaseDir $SoccerRunOutDir
+    $SoccerSuccess = $true
+}
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
 $TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
 $GolfSuccess   = Test-Path (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx")
@@ -2726,27 +2930,43 @@ if (-not $mlbStep1Health.ok) {
 }
 if ($MLBSuccess) { Publish-MlbStep8Artifacts -Reason "parallel" }
 
-$nbaStep1Health = Get-NBAStep1DateHealth -CsvPath (Join-Path $NBARunOutDir "step1_pp_props_today.csv") -TargetDate $Date
-if (-not $nbaStep1Health.ok) {
-    Write-Host "  [NBA] stale/invalid step1 for $Date ($($nbaStep1Health.reason)); clearing NBA outputs from this run." -ForegroundColor Yellow
+$nbaStep1Path = Join-Path $NBARunOutDir "step1_pp_props_today.csv"
+$nbaNoSlate = Test-Step1NoSlate -CsvPath $nbaStep1Path
+$nba1hNoSlate = $false
+$nba1qNoSlate = $false
+$NBA1HSuccess = $false
+$NBA1QSuccess = $false
+if ($nbaNoSlate) {
+    Write-Host "  [NBA] no slate for $Date — not a failure." -ForegroundColor DarkGray
     Clear-NBAGeneratedOutputs -BaseDir $NBARunOutDir
-    $NBASuccess = $false
-}
+    $NBASuccess = $true
+    $NBA1HSuccess = $true
+    $NBA1QSuccess = $true
+    $nba1hNoSlate = $true
+    $nba1qNoSlate = $true
+} else {
+    $nbaStep1Health = Get-NBAStep1DateHealth -CsvPath $nbaStep1Path -TargetDate $Date
+    if (-not $nbaStep1Health.ok) {
+        Write-Host "  [NBA] stale/invalid step1 for $Date ($($nbaStep1Health.reason)); clearing NBA outputs from this run." -ForegroundColor Yellow
+        Clear-NBAGeneratedOutputs -BaseDir $NBARunOutDir
+        $NBASuccess = $false
+    }
 
-# Dated NBA main step8 for run_grader (avoids empty grades after the live workbook rolls to the next slate day).
-$nbaMainStep8Parallel = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
-if (Test-Path $nbaMainStep8Parallel) {
-    Copy-DatedSlateOutput -SourcePath $nbaMainStep8Parallel -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
-}
+    # Dated NBA main step8 for run_grader (avoids empty grades after the live workbook rolls to the next slate day).
+    $nbaMainStep8Parallel = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
+    if (Test-Path $nbaMainStep8Parallel) {
+        Copy-DatedSlateOutput -SourcePath $nbaMainStep8Parallel -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
+    }
 
-# NBA period sub-slates are required by daily checks and combined defaults.
-$NBA1HSuccess  = $false
-$NBA1QSuccess  = $false
-if ($NBASuccess) {
-    $NBA1HSuccess = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch
-    $NBA1QSuccess = Run-NBAPeriodPipeline -Tag "nba1q" -LeagueId "192" -SkipFetchStep:$SkipFetch
+    # NBA period sub-slates are required by daily checks and combined defaults.
+    if ($NBASuccess) {
+        $NBA1HSuccess = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch
+        $NBA1QSuccess = Run-NBAPeriodPipeline -Tag "nba1q" -LeagueId "192" -SkipFetchStep:$SkipFetch
+    }
+    $NBASuccess = $NBASuccess -and $NBA1HSuccess -and $NBA1QSuccess
+    $nba1hNoSlate = $NBA1HSuccess -and -not (Test-Path (Join-Path $OutDir "nba1h\step8_nba1h_direction_clean.xlsx"))
+    $nba1qNoSlate = $NBA1QSuccess -and -not (Test-Path (Join-Path $OutDir "nba1q\step8_nba1q_direction_clean.xlsx"))
 }
-$NBASuccess = $NBASuccess -and $NBA1HSuccess -and $NBA1QSuccess
 
 if ($TennisSuccess) {
     Copy-DatedSlateOutput `
@@ -2772,12 +2992,39 @@ Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
 
 Write-Host ""
+$nhlNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $NHLRunOutDir "step1_nhl_props.csv")
+$soccerNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $SoccerRunOutDir "step1_soccer_props.csv")
+$mlbNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv")
+$tennisNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $TennisRunOutDir "step1_tennis_props.csv")
+$golfNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $GolfRunOutDir "step1_golf_props.csv")
+$wnbaNoSlate = $false
+if ($wnbaParallel) {
+    $wnbaNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $OutDir "wnba\step1_wnba_props.csv")
+}
+$slateStatusSports = @{
+    nba    = if ($nbaNoSlate) { "no_slate" } elseif ($NBASuccess) { "complete" } else { "failed" }
+    nba1h  = if ($nba1hNoSlate) { "no_slate" } elseif ($NBA1HSuccess) { "complete" } else { "failed" }
+    nba1q  = if ($nba1qNoSlate) { "no_slate" } elseif ($NBA1QSuccess) { "complete" } else { "failed" }
+    nhl    = if ($nhlNoSlate) { "no_slate" } elseif ($NHLSuccess) { "complete" } else { "failed" }
+    soccer = if ($soccerNoSlate) { "no_slate" } elseif ($SoccerSuccess) { "complete" } else { "failed" }
+    mlb    = if ($mlbNoSlate) { "no_slate" } elseif ($MLBSuccess) { "complete" } else { "failed" }
+    tennis = if ($tennisNoSlate) { "no_slate" } elseif ($TennisSuccess) { "complete" } else { "failed" }
+    golf   = if ($golfNoSlate) { "no_slate" } elseif ($GolfSuccess) { "complete" } else { "failed" }
+    cbb    = if (-not $CBB_PARALLEL_ACTIVE) { "off_season" } elseif ($CBBSuccess) { "complete" } else { "failed" }
+    cfb    = if (-not $CFB_PARALLEL_ACTIVE) { "off_season" } elseif ($CFBSuccess) { "complete" } else { "failed" }
+    nfl    = if (-not $NFL_PARALLEL_ACTIVE) { "off_season" } elseif ($NFLSuccess) { "complete" } else { "failed" }
+}
+if ($wnbaParallel) {
+    $slateStatusSports["wnba"] = if ($wnbaNoSlate) { "no_slate" } elseif ($WNBASuccess) { "complete" } else { "failed" }
+}
+Write-PipelineSlateStatusJson -RunDate $Date -Sports $slateStatusSports
+
 @(
-    @{ Name="NBA";    Ok=$NBASuccess; Skip=$false },
+    @{ Name="NBA";    Ok=$NBASuccess; Skip=$false; NoSlate=$nbaNoSlate },
     @{ Name="CBB";    Ok=$CBBSuccess; Skip=(-not $CBB_PARALLEL_ACTIVE) },
     @{ Name="CFB";    Ok=$CFBSuccess; Skip=(-not $CFB_PARALLEL_ACTIVE) },
-    @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false },
-    @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false },
+    @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false; NoSlate=$nhlNoSlate },
+    @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false; NoSlate=$soccerNoSlate },
     @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },
     @{ Name="Tennis"; Ok=$TennisSuccess; Skip=$false },
     @{ Name="Golf";   Ok=$GolfSuccess; Skip=$false },
@@ -2785,6 +3032,8 @@ Write-Host ""
 ) | ForEach-Object {
     if ($_.Skip) {
         Write-Host "  $($_.Name) skipped (off-season / not required)." -ForegroundColor DarkGray
+    } elseif ($_.Ok -and $_.NoSlate) {
+        Write-Host "  $($_.Name) no slate today (skipped)." -ForegroundColor DarkGray
     } elseif ($_.Ok) {
         Write-Host "  $($_.Name) complete." -ForegroundColor Green
     } else {

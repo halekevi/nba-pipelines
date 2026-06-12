@@ -35,6 +35,7 @@ _TOP3_PATHS: dict[str, Path] = {
     "WNBA": Path("Sports/WNBA/data/wnba_top3_vs_defense.csv"),
     "NHL": Path("Sports/NHL/data/nhl_top3_vs_defense.csv"),
     "MLB": Path("Sports/MLB/data/mlb_hitter_top3_vs_defense.csv"),
+    "SOCCER": Path("Sports/Soccer/data/soccer_top3_vs_defense.csv"),
 }
 
 _STRONG_CONSISTENCY = frozenset({"S", "A", "B"})

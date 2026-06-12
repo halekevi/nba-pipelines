@@ -150,6 +150,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
         "Hit Rate (5g)": 12, "Hit Rate (10g)": 12, "Last 5 Avg": 10, "Season Avg": 10,
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
+        "Def Boost Hist": 12, "Team Top3 Rank": 10, "Top3 Weak Over": 18, "Top3 Elite Fade": 14,
         "Min Tier": 9, "Starter Tier": 11, "Shot Role": 10, "Usage Role": 10,
         "Void Reason": 20,
         "Open Line": 8,
@@ -207,6 +208,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "last5_over", "last5_under",
         "l10_over", "l10_under", "l10_over_pct", "l10_streak", "l10_games_played",
         "OVERALL_DEF_RANK", "DEF_TIER", "def_tier",
+        "def_boost_hist", "team_top3_rank", "top3_weak_overperformer", "top3_elite_fader",
         "deviation_level", "opp_pace",
         "minutes_tier", "starter_tier", "shot_role", "usage_role",
         "void_reason",
@@ -244,6 +246,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in ["stat_last5_avg", "stat_season_avg"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(1)
+    if "def_boost_hist" in clean.columns:
+        clean["def_boost_hist"] = pd.to_numeric(clean["def_boost_hist"], errors="coerce").round(3)
+    if "team_top3_rank" in clean.columns:
+        clean["team_top3_rank"] = pd.to_numeric(clean["team_top3_rank"], errors="coerce").round(0)
     for col in ["last5_over", "last5_under"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").astype("Int64")
@@ -279,6 +285,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "stat_last5_avg": "Last 5 Avg", "stat_season_avg": "Season Avg",
         "last5_over": "L5 Over", "last5_under": "L5 Under",
         "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier", "def_tier": "Def Tier",
+        "def_boost_hist": "Def Boost Hist",
+        "team_top3_rank": "Team Top3 Rank",
+        "top3_weak_overperformer": "Top3 Weak Over",
+        "top3_elite_fader": "Top3 Elite Fade",
         "deviation_level": "Deviation Level", "opp_pace": "Opp Pace",
         "minutes_tier": "Min Tier", "starter_tier": "Starter Tier", "shot_role": "Shot Role", "usage_role": "Usage Role",
         "void_reason": "Void Reason",
