@@ -2866,17 +2866,22 @@ def _load_model_gate_recommendations() -> dict[str, dict]:
 
 
 def _nba1h_ticket_gate_reason() -> str:
-    """Reason string for NBA1H ticket gate (reads live AUC from gate JSON)."""
+    """Reason suffix for NBA1H ticket gate (streak policy + AUC from gate JSON)."""
     global _MODEL_GATE_CACHE
     if _MODEL_GATE_CACHE is None:
         _MODEL_GATE_CACHE = _load_model_gate_recommendations()
-    rec = (_MODEL_GATE_CACHE or {}).get("NBA1H") or {}
-    auc = rec.get("auc")
-    if isinstance(auc, (int, float)):
+    block = (_MODEL_GATE_CACHE or {}).get("NBA1H") or {}
+    streak = int(block.get("consecutive_days_above_052") or 0)
+    auc_raw = block.get("rolling_30d_auc", block.get("auc"))
+    auc = float(auc_raw) if isinstance(auc_raw, (int, float)) else 0.0
+    if auc < 0.50:
+        return f"AUC {auc:.4f} below 0.50 (inverted model)"
+    if streak < 3:
         return (
-            f"AUC {float(auc):.4f} — below {NBA1H_TICKET_GATE_MIN_AUC:.2f} revert threshold"
+            f"streak {streak}/3 days >= 0.52 "
+            f"(AUC {auc:.4f} OK, waiting for consistency)"
         )
-    return f"below {NBA1H_TICKET_GATE_MIN_AUC:.2f} revert threshold (see model_performance_log)"
+    return f"gate open (streak {streak}/3, AUC {auc:.4f})"
 
 
 def _nba1h_gated(gate_recs: dict) -> bool:
