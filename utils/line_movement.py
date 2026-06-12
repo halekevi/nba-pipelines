@@ -26,6 +26,8 @@ from utils.player_name_utils import normalize_player_name
 
 _log = logging.getLogger(__name__)
 
+_ODDS_API_REMAINING: int | None = None
+
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _CACHE_DIR = _REPO_ROOT / "cache"
@@ -316,6 +318,15 @@ def _deserialize_snapshot(raw: dict[str, Any]) -> dict[tuple[str, str, float], d
     return out
 
 
+def _snapshot_has_prices(snapshot: dict[tuple[str, str, float], dict[str, Any]]) -> bool:
+    for row in (snapshot or {}).values():
+        if not isinstance(row, dict):
+            continue
+        if row.get("over_price") is not None or row.get("under_price") is not None:
+            return True
+    return False
+
+
 def _load_cache(sport_key: str, today: str) -> dict[tuple[str, str, float], dict[str, Any]] | None:
     path = _cache_path(sport_key, today)
     if not path.is_file():
@@ -328,6 +339,31 @@ def _load_cache(sport_key: str, today: str) -> dict[tuple[str, str, float], dict
     except (OSError, json.JSONDecodeError, TypeError) as exc:
         _log.warning("line_movement: cache read failed (%s): %s", path, exc)
         return None
+
+
+def _find_stale_line_cache(
+    sport_key: str,
+    before_date: str,
+) -> tuple[str, dict[tuple[str, str, float], dict[str, Any]]] | None:
+    """Most recent non-empty cache strictly before before_date."""
+    best: tuple[str, dict[tuple[str, str, float], dict[str, Any]]] | None = None
+    pattern = f"line_movement_{sport_key}_*.json"
+    for path in sorted(_CACHE_DIR.glob(pattern), reverse=True):
+        date_part = path.stem.rsplit("_", 1)[-1]
+        if len(date_part) < 10 or date_part >= before_date:
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            snap = _deserialize_snapshot(payload.get("snapshot", {}))
+        except (OSError, json.JSONDecodeError, TypeError):
+            continue
+        if not snap:
+            continue
+        if not _snapshot_has_prices(snap):
+            continue
+        best = (date_part, snap)
+        break
+    return best
 
 
 def _merge_line_snapshot(
@@ -375,12 +411,23 @@ def _save_cache(sport_key: str, today: str, snapshot: dict[tuple[str, str, float
 
 
 def _http_get_json(url: str, timeout: int = 25) -> Any:
+    global _ODDS_API_REMAINING
     req = urllib.request.Request(url, headers={"User-Agent": "PropOracle/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         remaining = resp.headers.get("x-requests-remaining", "?")
         used = resp.headers.get("x-requests-used", "?")
+        try:
+            _ODDS_API_REMAINING = int(str(remaining).strip())
+        except (TypeError, ValueError):
+            pass
         _log.info("line_movement: Odds API quota used=%s remaining=%s", used, remaining)
         return json.loads(resp.read().decode("utf-8"))
+
+
+def _odds_quota_low() -> bool:
+    if _ODDS_API_REMAINING is None:
+        return False
+    return _ODDS_API_REMAINING < 50
 
 
 def _is_target_event(event: dict) -> bool:
@@ -799,11 +846,27 @@ def fetch_line_snapshot(
 
     if not force_refresh:
         cached = _load_cache(sport_key, today)
-        if cached is not None:
+        if cached is not None and _snapshot_has_prices(cached):
             _log.info("line_movement: using cache %s", _cache_path(sport_key, today))
             return {
                 k: _snapshot_row_defaults(v) for k, v in cached.items()
             }
+        if cached is not None and not _snapshot_has_prices(cached):
+            _log.warning(
+                "line_movement: ignoring empty-price cache %s — will refetch or use stale",
+                _cache_path(sport_key, today),
+            )
+
+    if _odds_quota_low():
+        stale = _find_stale_line_cache(sport_key, today)
+        if stale:
+            stale_date, snap = stale
+            _log.warning(
+                "line_movement: Odds API quota low (remaining=%s) — using stale cache %s",
+                _ODDS_API_REMAINING,
+                stale_date,
+            )
+            return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
 
     try:
         events = _fetch_events(sport_key, api_key)
@@ -843,7 +906,11 @@ def fetch_line_snapshot(
         snapshot = _parse_odds_events(event_payloads, markets)
         prior = _load_cache(sport_key, today) or {}
         snapshot = _merge_line_snapshot(prior, snapshot)
-        _save_cache(sport_key, today, snapshot)
+        if snapshot and _snapshot_has_prices(snapshot):
+            _save_cache(sport_key, today, snapshot)
+        elif prior and _snapshot_has_prices(prior):
+            snapshot = prior
+            _log.warning("line_movement: live fetch had no prices — keeping prior cache for %s", today)
         log_line_movement_market_fetch(sport_key, markets, snapshot)
         _log.info(
             "line_movement: parsed %d prop lines for %s (%d events)",
@@ -851,6 +918,13 @@ def fetch_line_snapshot(
             sport_key,
             len(event_payloads),
         )
+        if snapshot and _snapshot_has_prices(snapshot):
+            return snapshot
+        stale = _find_stale_line_cache(sport_key, today)
+        if stale:
+            stale_date, snap = stale
+            _log.warning("line_movement: using stale cache %s after weak live fetch", stale_date)
+            return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
         return snapshot
     except urllib.error.HTTPError as exc:
         body = ""
@@ -859,9 +933,19 @@ def fetch_line_snapshot(
         except Exception:
             pass
         _log.warning("line_movement: HTTP %s for %s — %s", exc.code, sport_key, body)
+        stale = _find_stale_line_cache(sport_key, today)
+        if stale:
+            stale_date, snap = stale
+            _log.warning("line_movement: HTTP error — using stale cache %s", stale_date)
+            return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
         return {}
     except Exception as exc:
         _log.warning("line_movement: fetch failed for %s — %s", sport_key, exc)
+        stale = _find_stale_line_cache(sport_key, today)
+        if stale:
+            stale_date, snap = stale
+            _log.warning("line_movement: fetch error — using stale cache %s", stale_date)
+            return {k: _snapshot_row_defaults(v) for k, v in snap.items()}
         return {}
 
 

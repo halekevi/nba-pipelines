@@ -173,6 +173,28 @@ function Get-CsvDataRowCount([string]$CsvPath) {
     }
 }
 
+function Get-PipelineSlateStatus {
+    param([string]$RunDate)
+    $path = Join-Path $Root "outputs\$RunDate\pipeline_slate_status.json"
+    if (-not (Test-Path -LiteralPath $path)) { return $null }
+    try {
+        $raw = Get-Content -LiteralPath $path -Raw -Encoding utf8 | ConvertFrom-Json
+        if (-not $raw -or -not $raw.sports) { return $null }
+        $sports = @{}
+        foreach ($prop in $raw.sports.PSObject.Properties) {
+            $sports[$prop.Name] = "$($prop.Value)"
+        }
+        return @{ path = $path; sports = $sports }
+    } catch {
+        return $null
+    }
+}
+
+function Test-SportStep1NoSlate {
+    param([string]$CsvPath)
+    return (Get-CsvDataRowCount -CsvPath $CsvPath) -eq 0
+}
+
 function Get-MissingTodaySlateOutputs {
     param(
         [string]$RunDate,
@@ -181,6 +203,17 @@ function Get-MissingTodaySlateOutputs {
     )
     $outDir = Join-Path $Root "outputs\$RunDate"
     $tennisDated = if ($TennisSlateDate -and $TennisSlateDate.Trim()) { $TennisSlateDate.Trim() } else { $RunDate }
+    $slateStatus = Get-PipelineSlateStatus -RunDate $RunDate
+    $noSlateExempt = @{
+        "step8_nba_direction_clean_$RunDate.xlsx"     = @{ key = "nba";    step1 = (Join-Path $outDir "nba\step1_pp_props_today.csv") }
+        "step8_nba1h_direction_clean_$RunDate.xlsx"   = @{ key = "nba1h";  step1 = (Join-Path $outDir "nba1h\step1_nba1h_props.csv") }
+        "step8_nba1q_direction_clean_$RunDate.xlsx"   = @{ key = "nba1q";  step1 = (Join-Path $outDir "nba1q\step1_nba1q_props.csv") }
+        "step8_nhl_direction_clean_$RunDate.xlsx"     = @{ key = "nhl";    step1 = (Join-Path $outDir "nhl\step1_nhl_props.csv") }
+        "step8_soccer_direction_clean_$RunDate.xlsx"  = @{ key = "soccer"; step1 = (Join-Path $outDir "soccer\step1_soccer_props.csv") }
+        "step8_mlb_direction_clean_$RunDate.xlsx"     = @{ key = "mlb";    step1 = (Join-Path $outDir "mlb\step1_mlb_props.csv") }
+        "step8_tennis_direction_clean_$tennisDated.xlsx" = @{ key = "tennis"; step1 = (Join-Path $outDir "tennis\step1_tennis_props.csv") }
+        "step8_wnba_direction_clean_$RunDate.xlsx"    = @{ key = "wnba";   step1 = (Join-Path $outDir "wnba\step1_wnba_props.csv") }
+    }
     $required = @(
         "step8_nba_direction_clean_$RunDate.xlsx",
         "step8_nba1h_direction_clean_$RunDate.xlsx",
@@ -241,6 +274,13 @@ function Get-MissingTodaySlateOutputs {
     }
     $missing = @()
     foreach ($name in $required) {
+        if ($noSlateExempt.ContainsKey($name)) {
+            $ex = $noSlateExempt[$name]
+            $sportKey = $ex.key
+            $status = if ($slateStatus -and $slateStatus.sports.ContainsKey($sportKey)) { $slateStatus.sports[$sportKey] } else { "" }
+            if ($status -in @("no_slate", "off_season")) { continue }
+            if (-not $status -and (Test-SportStep1NoSlate -CsvPath $ex.step1)) { continue }
+        }
         $p = Join-Path $outDir $name
         if (Test-Path $p) { continue }
         if ($fallbackRoots.ContainsKey($name)) {
@@ -433,6 +473,9 @@ if (-not $SkipGrader) {
         if (Test-Path $trackPerf) {
             & py -3.14 -X utf8 $trackPerf
             if ($LASTEXITCODE -ne 0) { Write-Warning "track_model_performance.py exited $LASTEXITCODE" }
+            Write-Host "  [A-track] NBA1H AUC monitor (post-tracker)" -ForegroundColor DarkGray
+            & py -3.14 -X utf8 $trackPerf --nba1h-monitor --date $Yesterday
+            if ($LASTEXITCODE -ne 0) { Write-Warning "NBA1H monitor exited $LASTEXITCODE" }
         }
         if (Test-Path $compareShadow) {
             & py -3.14 -X utf8 $compareShadow --days 7
@@ -1857,27 +1900,42 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
     }
 
-    Write-Host "[MLB] Fetching MLB props (same API fetcher as NBA, league_id=2)..." -ForegroundColor Cyan
-    $NBADir = Join-Path $SportsRoot "NBA"
+    Write-Host "[MLB] Fetching MLB props (CDP, then MLB step1 API, then Playwright)..." -ForegroundColor Cyan
     $MLBDir = Join-Path $SportsRoot "MLB"
     $mlbLateOut = Join-Path $Root "outputs\$Today\mlb\step1_mlb_props.csv"
     $mlbLateDir = Split-Path $mlbLateOut -Parent
     if (-not (Test-Path $mlbLateDir)) { New-Item -ItemType Directory -Force -Path $mlbLateDir | Out-Null }
-    Push-Location $NBADir
+    $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+    $mlbCdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
+    $mlbCdpReachable = $false
     try {
-        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_api.py" `
-            "--league_id" "2" `
-            "--game_mode" "pickem" `
-            "--per_page" "250" `
-            "--max_pages" "5" `
-            "--sleep" "2.0" `
-            "--cooldown_seconds" "90" `
-            "--max_cooldowns" "3" `
-            "--jitter_seconds" "10.0" `
-            "--append" `
-            "--allow-nearest-future" `
-            "--date" "$Today" `
-            "--output" $mlbLateOut
+        $mlbProbe = Invoke-RestMethod -Uri "$mlbCdpUrl/json/version" -TimeoutSec 2 -ErrorAction Stop
+        if ($mlbProbe) { $mlbCdpReachable = $true }
+    } catch { $mlbCdpReachable = $false }
+    Push-Location $MLBDir
+    try {
+        if ($mlbCdpReachable) {
+            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --cdp $mlbCdpUrl --timeout 120 --retries 1 --retry_delay 5 `
+                --append --allow-nearest-future --date "$Today" --output $mlbLateOut
+        }
+        if (-not $mlbCdpReachable -or $LASTEXITCODE -ne 0) {
+            if ($mlbCdpReachable) {
+                Write-Warning "[NBA_LATE_FETCH] MLB CDP fetch failed (exit $LASTEXITCODE) — trying direct API"
+            }
+            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --append --allow-nearest-future --date "$Today" --output $mlbLateOut `
+                --api-retries 4 --api-session-waves 2 `
+                --api-wave-gap-min 8 --api-wave-gap-max 15 `
+                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
+                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10
+        }
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE) — trying Playwright"
+            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                --playwright --timeout 120 --retries 1 --retry_delay 5 `
+                --append --allow-nearest-future --date "$Today" --output $mlbLateOut
+        }
     }
     finally {
         Pop-Location

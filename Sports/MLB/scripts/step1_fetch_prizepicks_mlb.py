@@ -467,6 +467,57 @@ def _backfill_opp_from_game_context(df: pd.DataFrame) -> pd.DataFrame:
 # The in-page fetch() inherits the authenticated session and DataDome trust
 # from the open tab — closing or relaunching Chrome resets that trust.
 
+
+def _align_cdp_context_for_datadome(context: Any) -> None:
+    try:
+        context.grant_permissions(
+            ["geolocation", "notifications"],
+            origin="https://app.prizepicks.com",
+        )
+    except Exception:
+        pass
+    try:
+        context.set_geolocation({"latitude": 33.7490, "longitude": -84.3880})
+    except Exception:
+        pass
+
+
+def _fetch_via_cdp_inpage(page: Any, league_id: str) -> Tuple[List[dict], List[dict]]:
+    """In-page fetch() from an attached Chrome tab (WNBA pattern — works when intercept misses XHR)."""
+    page.goto("https://app.prizepicks.com/", wait_until="domcontentloaded", timeout=30_000)
+    page.wait_for_timeout(4000)
+    page.goto(BOARD_URL, wait_until="domcontentloaded", timeout=30_000)
+    page.wait_for_timeout(5000)
+    payload = page.evaluate(
+        """async ({ leagueId }) => {
+            let pageNum = 1;
+            const allData = [];
+            const allIncluded = [];
+            let lastStatus = 200;
+            while (pageNum <= 12) {
+                const url = `https://api.prizepicks.com/projections?league_id=${leagueId}`
+                    + `&per_page=250&single_stat=true&page=${pageNum}`;
+                const r = await fetch(url, { credentials: "include" });
+                lastStatus = r.status;
+                if (!r.ok) break;
+                const j = await r.json();
+                const chunk = Array.isArray(j?.data) ? j.data : [];
+                if (Array.isArray(j?.included)) allIncluded.push(...j.included);
+                allData.push(...chunk);
+                if (chunk.length < 250) break;
+                pageNum += 1;
+            }
+            return { data: allData, included: allIncluded, status: lastStatus };
+        }""",
+        {"leagueId": str(league_id)},
+    )
+    data = list((payload or {}).get("data") or [])
+    included = list((payload or {}).get("included") or [])
+    status = (payload or {}).get("status", 200)
+    print(f"  [CDP in-page] projections_status={status} rows={len(data)}")
+    return data, included
+
+
 def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tuple[List[dict], List[dict]]:
     """
     Either launch Chromium (saved ~/.pp_browser_profile when present) or attach
@@ -583,6 +634,30 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
                 raise RuntimeError("CDP browser has no contexts (is Chrome running with --remote-debugging-port?)")
             context = browser.contexts[0]
             print(f"  Using browser context[0] (existing session / cookies).")
+            _align_cdp_context_for_datadome(context)
+            page = context.new_page()
+            if _apply_stealth_fn is not None:
+                _apply_stealth_fn(page)
+            try:
+                data, included = _fetch_via_cdp_inpage(page, MLB_LEAGUE_ID)
+                if data:
+                    print(f"  ✅ CDP in-page capture: {len(data)} projections")
+                    try:
+                        page.close()
+                    except Exception:
+                        pass
+                    try:
+                        browser.close()
+                    except Exception:
+                        pass
+                    return data, included
+                print("  ⚠️  CDP in-page fetch returned 0 rows — falling back to network intercept...")
+            except Exception as exc:
+                print(f"  ⚠️  CDP in-page fetch failed ({exc}) — falling back to network intercept...")
+            try:
+                page.close()
+            except Exception:
+                pass
         elif use_profile:
             print(f"🌐 Launching Chromium with saved profile: {PROFILE_DIR}")
             try:

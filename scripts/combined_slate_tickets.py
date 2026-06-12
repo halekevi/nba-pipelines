@@ -2883,9 +2883,13 @@ def _nba1h_gated(gate_recs: dict) -> bool:
     """True when NBA1H legs must not enter ticket pools (JSON + streak/AUC unblock)."""
     block = (gate_recs or {}).get("NBA1H") or {}
     streak = int(block.get("consecutive_days_above_052") or 0)
-    auc = block.get("rolling_30d_auc")
+    auc = block.get("rolling_30d_auc", block.get("auc"))
+    if auc is not None and float(auc) < 0.50:
+        return True
     if streak >= 3 and auc is not None and float(auc) >= NBA1H_TICKET_GATE_MIN_AUC:
         return False
+    if NBA1H_TICKET_GATE:
+        return True
     return bool(block.get("gate", True))
 
 

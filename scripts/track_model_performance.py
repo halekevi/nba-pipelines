@@ -170,8 +170,29 @@ def print_table(sports: dict[str, dict]) -> None:
         )
 
 
+_NBA1H_MONITOR_KEYS = (
+    "consecutive_days_above_052",
+    "rolling_30d_auc",
+    "rolling_7d_auc",
+    "inversion_flag",
+    "sample_n_30d",
+    "sample_n_7d",
+    "sample_n",
+    "trend",
+    "last_checked",
+)
+
+
 def write_gate_recommendations(sports: dict[str, dict]) -> dict[str, dict]:
     """Sport-level ticket gate flags for combined_slate_tickets auto-gate."""
+    prior: dict = {}
+    if _GATES.is_file():
+        try:
+            loaded = json.loads(_GATES.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                prior = loaded
+        except Exception:
+            prior = {}
     out: dict[str, dict] = {}
     for sport, metrics in sorted(sports.items()):
         su = str(sport).strip().upper()
@@ -198,6 +219,29 @@ def write_gate_recommendations(sports: dict[str, dict]) -> dict[str, dict]:
                 "auc": float(auc),
                 "reason": "OK",
             }
+    prior_nba1h = prior.get("NBA1H") if isinstance(prior.get("NBA1H"), dict) else {}
+    if prior_nba1h:
+        merged = dict(out.get("NBA1H", {}))
+        for key in _NBA1H_MONITOR_KEYS:
+            if key in prior_nba1h:
+                merged[key] = prior_nba1h[key]
+        if "consecutive_days_above_052" in prior_nba1h:
+            streak = int(prior_nba1h.get("consecutive_days_above_052") or 0)
+            roll_auc = prior_nba1h.get("rolling_30d_auc", merged.get("auc"))
+            hard_block = roll_auc is not None and float(roll_auc) < _GATE_AUC_THRESHOLD
+            unblocked = (
+                streak >= 3
+                and roll_auc is not None
+                and float(roll_auc) >= _NBA1H_UNBLOCK_AUC
+            )
+            merged["gate"] = bool(hard_block or not unblocked)
+            if hard_block:
+                merged["reason"] = f"AUC {float(roll_auc):.4f} < {_GATE_AUC_THRESHOLD}"
+            elif not unblocked:
+                merged["reason"] = (
+                    f"AUC {float(roll_auc):.4f} OK; streak {streak}/3 above {_NBA1H_UNBLOCK_AUC}"
+                )
+        out["NBA1H"] = merged
     _GATES.parent.mkdir(parents=True, exist_ok=True)
     _GATES.write_text(json.dumps(out, indent=2), encoding="utf-8")
     return out
@@ -360,12 +404,18 @@ def run_nba1h_monitor(run_date: date | None = None) -> None:
         )
     streak = _consecutive_days_above_052(daily)
 
-    gated = bool(auc_30d is not None and float(auc_30d) < _GATE_AUC_THRESHOLD)
+    hard_block = bool(auc_30d is not None and float(auc_30d) < _GATE_AUC_THRESHOLD)
+    unblocked = (
+        streak >= 3
+        and auc_30d is not None
+        and float(auc_30d) >= _NBA1H_UNBLOCK_AUC
+    )
+    gated = bool(hard_block or not unblocked)
     if auc_30d is None:
         reason = "insufficient data for 30d AUC"
-    elif gated:
+    elif hard_block:
         reason = f"AUC {float(auc_30d):.4f} < {_GATE_AUC_THRESHOLD}"
-    elif streak >= 3:
+    elif unblocked:
         reason = f"AUC {float(auc_30d):.4f} OK; streak {streak}/3 above {_NBA1H_UNBLOCK_AUC}"
     else:
         reason = f"AUC {float(auc_30d):.4f} OK; streak {streak}/3 above {_NBA1H_UNBLOCK_AUC}"
