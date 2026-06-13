@@ -313,7 +313,7 @@ def _auc_for_window(rows: list[dict], *, end: date, days: int, min_n: int) -> tu
 
 
 def _daily_nba1h_auc_from_log() -> list[tuple[date, float]]:
-    """Descending by date: (day, auc) from monitor lines and legacy sports.NBA1H entries."""
+    """Legacy log view (debug only). Do not use for streak — values are often re-written."""
     daily: dict[date, float] = {}
     if not _LOG.is_file():
         return []
@@ -344,6 +344,7 @@ def _daily_nba1h_auc_from_log() -> list[tuple[date, float]]:
 
 
 def _consecutive_days_above_052(daily_desc: list[tuple[date, float]], *, threshold: float = _NBA1H_UNBLOCK_AUC) -> int:
+    """Count consecutive calendar days (descending list) with AUC >= threshold."""
     if not daily_desc:
         return 0
     streak = 0
@@ -356,6 +357,46 @@ def _consecutive_days_above_052(daily_desc: list[tuple[date, float]], *, thresho
         streak += 1
         prev_day = day
     return streak
+
+
+def _nba1h_streak_consecutive_days(
+    rows: list[dict],
+    *,
+    end: date,
+    window_days: int = 30,
+    min_n: int = _NBA1H_MONITOR_MIN_30D,
+    threshold: float = _NBA1H_UNBLOCK_AUC,
+    max_days: int = 60,
+) -> int:
+    """
+    Consecutive calendar days ending on ``end`` where as-of 30d rolling NBA1H AUC >= threshold.
+    Computed from graded props (file_date window), not from performance log replay.
+    """
+    streak = 0
+    for offset in range(max_days):
+        day = end - timedelta(days=offset)
+        auc, _n = _auc_for_window(rows, end=day, days=window_days, min_n=min_n)
+        if auc is None or float(auc) < threshold:
+            break
+        streak += 1
+    return streak
+
+
+def _nba1h_asof_rolling_series(
+    rows: list[dict],
+    *,
+    end: date,
+    window_days: int = 30,
+    min_n: int = _NBA1H_MONITOR_MIN_30D,
+    days: int = 5,
+) -> list[tuple[date, float | None, int]]:
+    """Recent as-of rolling AUC snapshots for logging (newest first)."""
+    out: list[tuple[date, float | None, int]] = []
+    for offset in range(days):
+        day = end - timedelta(days=offset)
+        auc, n = _auc_for_window(rows, end=day, days=window_days, min_n=min_n)
+        out.append((day, auc, n))
+    return out
 
 
 def run_nba1h_monitor(run_date: date | None = None) -> None:
@@ -395,14 +436,8 @@ def run_nba1h_monitor(run_date: date | None = None) -> None:
         else:
             trend = "flat"
 
-    daily = _daily_nba1h_auc_from_log()
-    if auc_30d is not None:
-        daily = sorted(
-            {(end, float(auc_30d)), *daily},
-            key=lambda kv: kv[0],
-            reverse=True,
-        )
-    streak = _consecutive_days_above_052(daily)
+    streak = _nba1h_streak_consecutive_days(rows, end=end)
+    asof_tail = _nba1h_asof_rolling_series(rows, end=end, days=5)
 
     hard_block = bool(auc_30d is not None and float(auc_30d) < _GATE_AUC_THRESHOLD)
     unblocked = (
@@ -459,6 +494,14 @@ def run_nba1h_monitor(run_date: date | None = None) -> None:
         f"[NBA1H monitor] {end.isoformat()} | 30d AUC: {auc30_s} | 7d AUC: {auc7_s} | "
         f"n={n_30d} | trend: {trend} | streak={streak}/3 | gate: {gate_label}"
     )
+    streak_parts = []
+    for day, auc, n in asof_tail:
+        if auc is None:
+            streak_parts.append(f"{day.isoformat()}=—")
+        else:
+            streak_parts.append(f"{day.isoformat()}={float(auc):.4f}")
+    if streak_parts:
+        print(f"[NBA1H monitor] streak basis (as-of 30d): {', '.join(streak_parts)}")
 
 
 def _nba1h_gated_from_block(block: dict) -> bool:
