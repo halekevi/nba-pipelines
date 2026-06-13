@@ -538,6 +538,20 @@ function Clear-SoccerGeneratedOutputs {
     }
 }
 
+function Clear-GolfGeneratedOutputs {
+    param([string]$BaseDir)
+    foreach ($p in @(
+        "step2_golf_context.csv",
+        "step4_golf_with_stats.csv",
+        "step5_golf_hit_rates.csv",
+        "step7_golf_ranked.xlsx",
+        "step8_golf_direction.csv",
+        "step8_golf_direction_clean.xlsx"
+    )) {
+        Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+    }
+}
+
 function Write-PipelineSlateStatusJson {
     param(
         [string]$RunDate,
@@ -1571,6 +1585,15 @@ if ($GolfOnly) {
     } else {
         Write-Host "  [Golf] Skipping step1 fetch -- using existing $GolfRunOutDir\step1_golf_props.csv" -ForegroundColor DarkGray
     }
+    $golfStep1 = Join-Path $GolfRunOutDir "step1_golf_props.csv"
+    if ($ok -and (Test-Step1NoSlate -CsvPath $golfStep1)) {
+        Write-Host "  [Golf] step1 empty (0 props) — skipping steps 2-8" -ForegroundColor DarkGray
+        Clear-GolfGeneratedOutputs -BaseDir $GolfRunOutDir
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ golf = "no_slate" }
+        Run-Combined "after Golf (no slate)"
+        Print-Done
+        exit 0
+    }
     if ($ok) {
         $ok = Run-Step "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`""
     }
@@ -2540,12 +2563,37 @@ $GolfJob = Start-Job -ScriptBlock {
         } finally { Pop-Location }
     }
     $ok = $true
+    function Test-Step1NoSlate-Job {
+        param([string]$CsvPath)
+        if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+        try { $rows = Import-Csv -LiteralPath $CsvPath } catch { return $true }
+        return (-not $rows -or $rows.Count -eq 0)
+    }
+    function Clear-GolfGeneratedOutputs-Job {
+        param([string]$BaseDir)
+        foreach ($p in @(
+            "step2_golf_context.csv",
+            "step4_golf_with_stats.csv",
+            "step5_golf_hit_rates.csv",
+            "step7_golf_ranked.xlsx",
+            "step8_golf_direction.csv",
+            "step8_golf_direction_clean.xlsx"
+        )) {
+            Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+        }
+    }
+    $golfStep1 = Join-Path $GolfRunOutDir "step1_golf_props.csv"
     if (-not $SkipFetch) {
-        if ($ok) { $ok = Run-Step-Job "Golf Step 1 - Fetch PrizePicks" $GolfDir ".\scripts\step1_fetch_prizepicks_golf.py" "--league_id 1 --replace --output `"$GolfRunOutDir\step1_golf_props.csv`"" }
+        if ($ok) { $ok = Run-Step-Job "Golf Step 1 - Fetch PrizePicks" $GolfDir ".\scripts\step1_fetch_prizepicks_golf.py" "--league_id 1 --replace --output `"$golfStep1`"" }
     } else {
         Write-Output "[Golf] Skipping step1 fetch"
     }
-    if ($ok) { $ok = Run-Step-Job "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$GolfRunOutDir\step1_golf_props.csv`" --output `"$GolfRunOutDir\step2_golf_context.csv`"" }
+    if ($ok -and (Test-Step1NoSlate-Job -CsvPath $golfStep1)) {
+        Write-Output "[Golf] step1 empty (0 props) — skipping steps 2-8"
+        Clear-GolfGeneratedOutputs-Job -BaseDir $GolfRunOutDir
+        return $true
+    }
+    if ($ok) { $ok = Run-Step-Job "Golf Step 2 - Attach Context" $GolfDir ".\scripts\step2_attach_golf_context.py" "--input `"$golfStep1`" --output `"$GolfRunOutDir\step2_golf_context.csv`"" }
     if ($ok) {
         Push-Location $RepoRoot
         try {
@@ -2964,9 +3012,14 @@ if (-not $SoccerSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $SoccerRunOu
     Clear-SoccerGeneratedOutputs -BaseDir $SoccerRunOutDir
     $SoccerSuccess = $true
 }
+$GolfSuccess   = Test-Path (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx")
+if (-not $GolfSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $GolfRunOutDir "step1_golf_props.csv"))) {
+    Write-Host "  [Golf] no slate for $Date — not a failure." -ForegroundColor DarkGray
+    Clear-GolfGeneratedOutputs -BaseDir $GolfRunOutDir
+    $GolfSuccess = $true
+}
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
 $TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
-$GolfSuccess   = Test-Path (Join-Path $GolfRunOutDir "step8_golf_direction_clean.xlsx")
 $NFLSuccess    = if (-not $NFL_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx") }
 $WNBASuccess = $false
 if ($wnbaParallel) {
@@ -3081,7 +3134,7 @@ Write-PipelineSlateStatusJson -RunDate $Date -Sports $slateStatusSports
     @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false; NoSlate=$soccerNoSlate },
     @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },
     @{ Name="Tennis"; Ok=$TennisSuccess; Skip=$false },
-    @{ Name="Golf";   Ok=$GolfSuccess; Skip=$false },
+    @{ Name="Golf";   Ok=$GolfSuccess; Skip=$false; NoSlate=$golfNoSlate },
     @{ Name="NFL";    Ok=$NFLSuccess; Skip=(-not $NFL_PARALLEL_ACTIVE) }
 ) | ForEach-Object {
     if ($_.Skip) {
