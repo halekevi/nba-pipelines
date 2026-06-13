@@ -1,4 +1,2023 @@
 {
-  "generated_at": "2026-06-13T05:57:56.174722+00:00",
-  "examples": []
+  "generated_at": "2026-06-13T09:45:40.130737+00:00",
+  "examples": [
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs",
+          "line": 16.5,
+          "standard_line": 21.0,
+          "pick_type": "Demon",
+          "delta": 4.5,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "1S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Olivia Miles",
+          "prop_type": "Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 11.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Pts+Rebs",
+          "line": 16.5,
+          "standard_line": 21.0,
+          "pick_type": "Demon",
+          "delta": 4.5,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        }
+      ]
+    },
+    {
+      "composition": "2S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "2S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Olivia Miles",
+          "prop_type": "Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 11.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "3S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Olivia Miles",
+          "prop_type": "Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 11.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        }
+      ]
+    },
+    {
+      "composition": "4S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Olivia Miles",
+          "prop_type": "Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 11.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "OG Anunoby",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Josh Hart",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Stephon Castle",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Jalen Brunson",
+          "prop_type": "Assists",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "De'Aaron Fox",
+          "prop_type": "Points",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dylan Harper",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 18.5,
+          "standard_line": 24.5,
+          "pick_type": "Demon",
+          "delta": 6.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    }
+  ]
 }

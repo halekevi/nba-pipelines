@@ -24,10 +24,10 @@
     },
     {
       "sport": "WNBA",
-      "decided": 22626,
-      "paid": 9560,
-      "win_rate": 0.4225227614249094,
-      "net_dollars": -35060.0
+      "decided": 22992,
+      "paid": 9721,
+      "win_rate": 0.42279923451635354,
+      "net_dollars": -35500.0
     },
     {
       "sport": "MLB",
@@ -66,5 +66,5 @@
     }
   ],
   "source": "graded_props_json",
-  "signature": "n=112:mt=1781328318705155400"
+  "signature": "n=112:mt=1781341768444001400"
 }
