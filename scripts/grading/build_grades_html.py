@@ -402,6 +402,22 @@ def prop_row_for_api(
                 return v
         return ""
 
+    def _pick_scalar(*keys: str) -> str:
+        for k in keys:
+            v = row.get(k)
+            if v is None:
+                continue
+            if isinstance(v, float) and pd.isna(v):
+                continue
+            if isinstance(v, bool):
+                return "1" if v else "0"
+            if isinstance(v, (int, float)):
+                return str(v)
+            s = _cell_str(v)
+            if s:
+                return s
+        return ""
+
     player = _pick("Player", "player", "Name", "name")
     if not player:
         return None
@@ -468,6 +484,12 @@ def prop_row_for_api(
     h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
+    usage_vacuum = _pick_scalar("usage_vacuum", "Usage Vacuum")
+    team_star_out = _pick_scalar("team_star_out", "Team Star Out")
+    key_facilitator_out = _pick_scalar("key_facilitator_out", "Key Facilitator Out")
+    injury_boost_candidate = _pick_scalar("injury_boost_candidate", "Injury Boost Candidate", "Injury Boost")
+    usage_pct = _pick_scalar("usage_pct", "Usage %", "Usage Pct")
+    usage_tier = _pick("usage_tier", "Usage Tier")
     game_total_bucket = _pick("Game Total Bucket", "game_total_bucket", "OU Bucket", "ou_bucket", "Over Under Bucket", "over_under_bucket", "Total Bucket", "total_bucket")
     game_total = _pick("Game O/U", "game_ou", "Game Total", "game_total", "O/U Total", "ou_total")
     h2h_raw = _pick("H2H", "h2h", "Head To Head", "head_to_head")
@@ -584,6 +606,12 @@ def prop_row_for_api(
         "h2h_bucket": h2h_bucket or "",
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",
+        "usage_vacuum": usage_vacuum,
+        "team_star_out": team_star_out,
+        "key_facilitator_out": key_facilitator_out,
+        "injury_boost_candidate": injury_boost_candidate,
+        "usage_pct": usage_pct,
+        "usage_tier": usage_tier or "",
         "game_total_bucket": game_total_bucket or "",
         "game_total": game_total or "",
         "h2h_raw": h2h_raw or "",

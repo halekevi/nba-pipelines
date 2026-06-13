@@ -35,6 +35,12 @@ GRADED_SIGNAL_COLS: tuple[str, ...] = (
     "confidence_tier",
     "confidence_score",
     "confidence_note",
+    "usage_vacuum",
+    "team_star_out",
+    "key_facilitator_out",
+    "injury_boost_candidate",
+    "usage_pct",
+    "usage_tier",
     *STACK_CONTEXT_COLS,
 )
 

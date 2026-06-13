@@ -39,7 +39,10 @@ from utils.stack_context_cols import GRADED_SIGNAL_COLS, STACK_CONTEXT_COLS  # n
 _GRADED_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json$")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-_TOP3_INT_COLS = frozenset({"top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context"})
+_TOP3_INT_COLS = frozenset({
+    "top3_weak_overperformer", "top3_elite_fader", "top3_def_context", "top3_under_context",
+})
+_FLAG_INT_COLS = frozenset({"team_star_out", "key_facilitator_out", "injury_boost_candidate"})
 _NUMERIC_COLS = frozenset({
     "l5_over", "l5_under", "l10_over", "l10_under", "l10_games_played",
     "hit_rate", "hit_rate_l5", "hit_rate_l10",
@@ -47,6 +50,7 @@ _NUMERIC_COLS = frozenset({
     "player_hr_historical", "opp_hr_historical",
     "confidence_score",
     "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
+    "usage_pct", "usage_vacuum",
 })
 _CONFIDENCE_COLS: tuple[str, ...] = (
     "sport_signal_maturity",
@@ -64,7 +68,11 @@ def _apply_patch_value(entry: dict, col: str, val: object) -> None:
     elif col in _NUMERIC_COLS:
         num = pd.to_numeric(val, errors="coerce")
         if pd.notna(num):
-            entry[col] = float(num) if col in {"hit_rate", "strat_hit_rate", "team_top3_rank", "team_bottom3_rank", "def_boost_hist"} else int(num)
+            float_cols = {
+                "hit_rate", "strat_hit_rate", "team_top3_rank", "team_bottom3_rank",
+                "def_boost_hist", "usage_pct", "usage_vacuum",
+            }
+            entry[col] = float(num) if col in float_cols else int(num)
     else:
         entry[col] = str(val)
 
@@ -151,6 +159,9 @@ def _row_needs_patch(entry: dict, enriched: pd.Series) -> bool:
             cur_i = int(np.nan_to_num(pd.to_numeric(cur, errors="coerce"), nan=0.0))
             new_i = int(np.nan_to_num(pd.to_numeric(new, errors="coerce"), nan=0.0))
             if cur_i == 0 and new_i != 0:
+                return True
+        elif col in _FLAG_INT_COLS:
+            if is_empty_value(cur) and not is_empty_numeric(new):
                 return True
         elif is_empty_value(cur) and not is_empty_value(new):
             return True
@@ -267,6 +278,9 @@ def patch_json_file(path: Path, *, dry_run: bool) -> tuple[int, int]:
                     continue
             elif col in _TOP3_INT_COLS:
                 if int(np.nan_to_num(pd.to_numeric(val, errors="coerce"), nan=0.0)) == 0:
+                    continue
+            elif col in _FLAG_INT_COLS:
+                if not is_empty_value(entry.get(col)):
                     continue
             elif is_empty_value(val):
                 continue

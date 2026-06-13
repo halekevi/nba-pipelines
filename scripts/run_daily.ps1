@@ -1396,6 +1396,7 @@ else {
                         $controlArgs = @(
                             "-3.14", "-X", "utf8", $combinedScript,
                             "--date", $Today,
+                            "--tennis-date", $TennisDate,
                             "--nba", $resolved["nba"],
                             "--output", $controlOut,
                             "--tiers", "A,B,C,D",

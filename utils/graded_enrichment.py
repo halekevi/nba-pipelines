@@ -86,6 +86,14 @@ _STEP8_RENAME: dict[str, str] = {
     "Bottom3 Rank": "team_bottom3_rank",
     "Top3 Weak Over": "top3_weak_overperformer",
     "Top3 Elite Fade": "top3_elite_fader",
+    "Usage Vacuum": "usage_vacuum",
+    "Team Star Out": "team_star_out",
+    "Key Facilitator Out": "key_facilitator_out",
+    "Injury Boost Candidate": "injury_boost_candidate",
+    "Injury Boost": "injury_boost_candidate",
+    "Usage %": "usage_pct",
+    "Usage Pct": "usage_pct",
+    "Usage Tier": "usage_tier",
 }
 
 
@@ -168,17 +176,21 @@ def _get_step8_lookup(sport: str, date: str, repo: Path) -> dict[str, dict[str, 
                 "top3_elite_fader",
                 "top3_def_context",
                 "top3_under_context",
+                "team_star_out",
+                "key_facilitator_out",
+                "injury_boost_candidate",
             }:
                 num = pd.to_numeric(val, errors="coerce")
                 if pd.notna(num):
                     payload[field] = int(num)
-            elif field in {"team_top3_rank", "team_bottom3_rank", "def_boost_hist"}:
+            elif field in {"team_top3_rank", "team_bottom3_rank", "def_boost_hist", "usage_vacuum"}:
                 num = pd.to_numeric(val, errors="coerce")
                 if pd.notna(num):
                     payload[field] = float(num)
             elif field in (
                 "hit_rate", "hit_rate_l5", "hit_rate_l10",
                 "strat_hit_rate", "player_hr_historical", "opp_hr_historical",
+                "usage_pct",
             ):
                 num = pd.to_numeric(val, errors="coerce")
                 if pd.notna(num):
@@ -187,6 +199,9 @@ def _get_step8_lookup(sport: str, date: str, repo: Path) -> dict[str, dict[str, 
                 streak = str(val or "").strip().upper()
                 if streak and streak not in {"NAN", "NONE"}:
                     payload[field] = streak
+            elif field in _SIGNAL_STRING_COLS:
+                if not is_empty_value(val):
+                    payload[field] = str(val).strip()
             elif not is_empty_value(val):
                 payload[field] = val
         if payload:
@@ -312,11 +327,16 @@ def _step8_paths(sport: str, date: str, repo: Path) -> list[Path]:
         repo / "Sports" / sport / "outputs" / f"step8_{sp}_direction_clean.xlsx",
     ]
     if sport == "WNBA":
-        candidates.insert(0, repo / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx")
+        candidates.append(repo / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx")
     return [p for p in candidates if p.is_file()]
 
 
-_SIGNAL_STRING_COLS = frozenset({"def_tier", "consistency_grade", "l10_streak"})
+_SIGNAL_STRING_COLS = frozenset({
+    "def_tier",
+    "consistency_grade",
+    "l10_streak",
+    "usage_tier",
+})
 _SIGNAL_INT_COLS = frozenset({
     "l5_over",
     "l5_under",
@@ -328,6 +348,9 @@ _SIGNAL_INT_COLS = frozenset({
     "top3_elite_fader",
     "top3_def_context",
     "top3_under_context",
+    "team_star_out",
+    "key_facilitator_out",
+    "injury_boost_candidate",
 })
 
 
@@ -336,29 +359,37 @@ def _init_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
     for col in GRADED_SIGNAL_COLS:
         if col not in out.columns:
             out[col] = "" if col in _SIGNAL_STRING_COLS else np.nan
-        elif col in _SIGNAL_STRING_COLS and pd.api.types.is_numeric_dtype(out[col]):
-            out[col] = out[col].astype(object)
+        elif col in _SIGNAL_STRING_COLS:
+            if pd.api.types.is_numeric_dtype(out[col]) or pd.api.types.is_string_dtype(out[col]):
+                out[col] = out[col].astype(object)
+        elif pd.api.types.is_string_dtype(out[col]):
+            out[col] = pd.to_numeric(out[col], errors="coerce")
     return out
 
 
 def _assign_signal_value(df: pd.DataFrame, idx: object, field: str, val: object) -> None:
     if field in _SIGNAL_STRING_COLS:
-        if pd.api.types.is_numeric_dtype(df[field]):
+        if pd.api.types.is_numeric_dtype(df[field]) or pd.api.types.is_string_dtype(df[field]):
             df[field] = df[field].astype(object)
         df.at[idx, field] = str(val) if val is not None and not (isinstance(val, float) and np.isnan(val)) else ""
         return
     if field in _SIGNAL_INT_COLS:
         num = pd.to_numeric(val, errors="coerce")
         if pd.notna(num):
+            if pd.api.types.is_string_dtype(df[field]):
+                df[field] = pd.to_numeric(df[field], errors="coerce")
             df.at[idx, field] = int(num)
         return
     if field in {
         "hit_rate", "hit_rate_l5", "hit_rate_l10",
         "strat_hit_rate", "player_hr_historical", "opp_hr_historical",
         "team_top3_rank", "team_bottom3_rank", "def_boost_hist",
+        "usage_pct", "usage_vacuum",
     }:
         num = pd.to_numeric(val, errors="coerce")
         if pd.notna(num):
+            if pd.api.types.is_string_dtype(df[field]) or df[field].dtype == object:
+                df[field] = pd.to_numeric(df[field], errors="coerce")
             df.at[idx, field] = float(num)
         return
     num = pd.to_numeric(val, errors="coerce")
