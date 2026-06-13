@@ -1245,6 +1245,7 @@ def _train_unified_edge_model(
     isotonic_min_n: int = DEFAULT_SLICE_ISOTONIC_MIN_N,
     ablate_features: tuple[str, ...] = (),
     soccer_corr_diag: bool = False,
+    output_model: Path | None = None,
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
@@ -1259,6 +1260,8 @@ def _train_unified_edge_model(
         print(f"  [config] ablate_features={list(ablate_features)} (diagnostic — no .pkl write)")
     if input_csv is not None:
         print(f"  [config] input_csv={input_csv} sport_filter={sport_filter!r} dry_run={dry_run}")
+    if output_model is not None:
+        print(f"  [config] output_model={output_model} (skips edge_model_unified.pkl overwrite)")
     n_combined_files_omitted = 0
     if input_csv is not None:
         csv_path = Path(input_csv).expanduser().resolve()
@@ -1635,7 +1638,8 @@ def _train_unified_edge_model(
         )
         return
 
-    joblib.dump(calibrated, models_dir / "edge_model_unified.pkl", compress=3)
+    model_out = output_model if output_model is not None else (models_dir / "edge_model_unified.pkl")
+    joblib.dump(calibrated, model_out, compress=3)
     (models_dir / "edge_model_features.json").write_text(
         json.dumps(features_active, indent=2), encoding="utf-8"
     )
@@ -1678,8 +1682,12 @@ def _train_unified_edge_model(
         "edge_slice_isotonic_fitted_keys": iso_fitted[:250],
         "edge_slice_isotonic_skipped": iso_skipped[:400],
     }
+    if output_model is not None:
+        meta["output_model_path"] = str(output_model)
+        meta["tennis_excluded"] = "TENNIS" not in {str(k).upper() for k in rows_per_sport}
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
-    print(f"\nSaved: edge_model_unified.pkl, edge_model_features.json, edge_model_metadata.json -> {models_dir}")
+    saved_pkl = model_out.name if output_model is not None else "edge_model_unified.pkl"
+    print(f"\nSaved: {saved_pkl}, edge_model_features.json, edge_model_metadata.json -> {models_dir if output_model is None else model_out.parent}")
 
     print("\n=== Summary: Sport | Rows | Test Size | ROC-AUC | Status ===")
     print(f"{'Sport':<8} | {'Rows':>6} | {'Test':>6} | {'ROC-AUC':>10} | {'Status':<22}")
@@ -1795,6 +1803,15 @@ def main() -> None:
         dest="isotonic_min_n",
         help="Minimum slice sample size to fit isotonic calibrator (default 200).",
     )
+    ap.add_argument(
+        "--output-model",
+        type=Path,
+        default=None,
+        help=(
+            "Write calibrated .pkl here instead of models/edge_model_unified.pkl "
+            "(metadata/features/calibrators still update under models/)."
+        ),
+    )
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
 
@@ -1859,6 +1876,10 @@ def main() -> None:
         return
 
     ablate = tuple(dict.fromkeys(str(f).strip() for f in (args.ablate_features or []) if str(f).strip()))
+    output_model_resolved: Path | None = None
+    if args.output_model is not None:
+        p = Path(args.output_model)
+        output_model_resolved = (root / p).resolve() if not p.is_absolute() else p.expanduser().resolve()
     _train_unified_edge_model(
         root,
         recursive_outputs=not args.no_recursive_outputs,
@@ -1873,6 +1894,7 @@ def main() -> None:
         isotonic_min_n=int(args.isotonic_min_n),
         ablate_features=ablate,
         soccer_corr_diag=args.soccer_corr_diag,
+        output_model=output_model_resolved,
     )
 
 

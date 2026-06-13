@@ -324,7 +324,10 @@ def _canonicalize_step8_columns(df: pd.DataFrame) -> pd.DataFrame:
         "Line": "line",
         "Projection": "projection",
         "Game Date": "game_date",
-        "Composite Hit Rate": "composite_hit_rate",
+        "Opp Def Tier": "def_tier",
+        "opp_def_tier": "def_tier",
+        "OPP_DEF_TIER": "def_tier",
+        "line_hit_rate": "composite_hit_rate",
         "composite_hr": "composite_hit_rate",
         "Line Hit Rate": "line_hit_rate",
         "Hit Rate (5g)": "hit_rate_L5",
@@ -454,7 +457,45 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
                 return pd.read_excel(p, engine="openpyxl")
             return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
         return None
+    if sport_u == "CBB":
+        for p in _cbb_step6_paths(root):
+            df = _read_cbb_step6_table(p)
+            if df is not None:
+                return df
+        return None
     return None
+
+
+def _cbb_step6_paths(root: Path, file_date: str | None = None) -> list[Path]:
+    """CBB pipeline ends at step6_ranked (no step8 artifact)."""
+    static = [
+        root / "Sports" / "CBB" / "step6_ranked_cbb.xlsx",
+        root / "Sports" / "CBB" / "data" / "outputs" / "step6_ranked_cbb.xlsx",
+    ]
+    d = (file_date or "")[:10]
+    if len(d) != 10:
+        return static
+    dated = [
+        root / "outputs" / d / "cbb" / "step6_ranked_cbb.xlsx",
+        root / "outputs" / d / "cbb" / "step6_ranked_cbb.csv",
+        root / "outputs" / d / f"step6_ranked_cbb_{d}.xlsx",
+        root / "outputs" / d / f"step6_ranked_cbb_{d}_FILTERED.xlsx",
+        root / "outputs" / d / "step6_ranked_cbb.xlsx",
+    ]
+    return dated + static
+
+
+def _read_cbb_step6_table(path: Path) -> pd.DataFrame | None:
+    if not path.is_file():
+        return None
+    try:
+        if path.suffix.lower() == ".xlsx":
+            df = pd.read_excel(path, engine="openpyxl")
+        else:
+            df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+    except Exception:
+        return None
+    return df if df is not None and len(df) > 0 else None
 
 
 # Dated outputs/<YYYY-MM-DD>/ pipeline CSVs for NBA1H (not full-game step8_all_direction).
@@ -735,6 +776,22 @@ def load_step8_dated_snapshot(root: Path, sport: str, file_date: str) -> tuple[p
                 return pd.read_excel(p, engine="openpyxl"), False
             return pd.read_csv(p, encoding="utf-8-sig", low_memory=False), False
         return load_step8_sport(root, "Tennis"), True
+    if sport_u == "CBB":
+        dated_only = [
+            root / "outputs" / d / "cbb" / "step6_ranked_cbb.xlsx",
+            root / "outputs" / d / "cbb" / "step6_ranked_cbb.csv",
+            root / "outputs" / d / f"step6_ranked_cbb_{d}.xlsx",
+            root / "outputs" / d / f"step6_ranked_cbb_{d}_FILTERED.xlsx",
+            root / "outputs" / d / "step6_ranked_cbb.xlsx",
+        ]
+        for p in dated_only:
+            df = _read_cbb_step6_table(p)
+            if df is not None:
+                return df, False
+        df = load_step8_sport(root, sport)
+        if df is not None:
+            return df, True
+        return None, False
     return None, False
 
 
@@ -807,6 +864,14 @@ def has_dated_step8_snapshot(root: Path, sport: str, file_date: str) -> bool:
             root / "outputs" / d / "step8_nba1q_direction_clean.xlsx",
             root / "outputs" / d / f"step8_nba1q_direction_{d}.xlsx",
             root / "outputs" / d / f"step8_nba1q_direction_{d}.csv",
+        ]
+    elif sport_u == "CBB":
+        candidates = [
+            root / "outputs" / d / "cbb" / "step6_ranked_cbb.xlsx",
+            root / "outputs" / d / "cbb" / "step6_ranked_cbb.csv",
+            root / "outputs" / d / f"step6_ranked_cbb_{d}.xlsx",
+            root / "outputs" / d / f"step6_ranked_cbb_{d}_FILTERED.xlsx",
+            root / "outputs" / d / "step6_ranked_cbb.xlsx",
         ]
     return any(p.is_file() for p in candidates)
 
