@@ -24,17 +24,17 @@
     },
     {
       "sport": "WNBA",
-      "decided": 22380,
-      "paid": 9450,
-      "win_rate": 0.4222520107238606,
-      "net_dollars": -34800.0
+      "decided": 22626,
+      "paid": 9560,
+      "win_rate": 0.4225227614249094,
+      "net_dollars": -35060.0
     },
     {
       "sport": "MLB",
-      "decided": 227264,
-      "paid": 68434,
-      "win_rate": 0.30112116305266123,
-      "net_dollars": -903960.0
+      "decided": 233741,
+      "paid": 70535,
+      "win_rate": 0.30176562947878205,
+      "net_dollars": -926710.0
     },
     {
       "sport": "SOCCER",
@@ -66,6 +66,6 @@
     }
   ],
   "source": "graded_props_json",
-  "signature": "n=111:mt=1781305663952443300",
-  "updated_at": "2026-06-12T23:11:20Z"
+  "signature": "n=112:mt=1781331404932360000",
+  "updated_at": "2026-06-13T06:18:54Z"
 }
