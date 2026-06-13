@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-13T09:45:40.130737+00:00",
+  "generated_at": "2026-06-13T12:27:46.733885+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -424,14 +424,14 @@
           "hit_rate": 0.9
         },
         {
-          "player": "Olivia Miles",
+          "player": "Karl-Anthony Towns",
           "prop_type": "Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 11.5,
+          "line": 11.5,
+          "standard_line": 14.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -818,14 +818,14 @@
           "hit_rate": 0.9
         },
         {
-          "player": "Olivia Miles",
+          "player": "Karl-Anthony Towns",
           "prop_type": "Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 11.5,
+          "line": 11.5,
+          "standard_line": 14.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -1302,14 +1302,14 @@
           "hit_rate": 0.9
         },
         {
-          "player": "Olivia Miles",
+          "player": "Karl-Anthony Towns",
           "prop_type": "Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 11.5,
+          "line": 11.5,
+          "standard_line": 14.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -1876,14 +1876,14 @@
           "hit_rate": 0.9
         },
         {
-          "player": "Olivia Miles",
+          "player": "Karl-Anthony Towns",
           "prop_type": "Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 11.5,
+          "line": 11.5,
+          "standard_line": 14.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
