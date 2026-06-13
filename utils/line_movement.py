@@ -207,6 +207,7 @@ def log_line_movement_market_fetch(
         print(f"[LM] {label} markets empty (no book outcomes): {', '.join(dead)}")
 
 BM_PRIORITY = ("pinnacle", "draftkings", "fanduel", "betmgm", "caesars", "pointsbetus", "bovada")
+# Pinnacle is EU-licensed — player-prop fetches use regions=us,eu in _fetch_event_odds().
 _LINE_EPS = 0.05
 
 NHL_TEAM_ABBREV: dict[str, str] = {
@@ -439,6 +440,10 @@ def _odds_quota_low() -> bool:
     if _ODDS_API_REMAINING is None:
         return False
     return _ODDS_API_REMAINING < 50
+
+
+def _odds_quota_exhausted() -> bool:
+    return _ODDS_API_REMAINING is not None and _ODDS_API_REMAINING <= 0
 
 
 def _stale_snapshot_or_empty(
@@ -890,6 +895,15 @@ def fetch_line_snapshot(
         snap = _stale_snapshot_or_empty(sport_key, today)
         if snap:
             return snap
+        if _odds_quota_exhausted():
+            cached = _load_cache(sport_key, today)
+            _log.warning(
+                "line_movement: Odds API quota exhausted (remaining=%s) — skipping live fetch",
+                _ODDS_API_REMAINING,
+            )
+            if cached is not None:
+                return {k: _snapshot_row_defaults(v) for k, v in cached.items()}
+            return {}
 
     try:
         events = _fetch_events(sport_key, api_key)
@@ -1067,6 +1081,15 @@ def _row_bet_direction(row: pd.Series) -> str:
     return "OVER"
 
 
+_SPORT_KEY_LABEL: dict[str, str] = {
+    "icehockey_nhl": "NHL",
+    "basketball_nba": "NBA",
+    "baseball_mlb": "MLB",
+    "basketball_wnba": "WNBA",
+    "soccer_epl": "Soccer",
+}
+
+
 def enrich_with_line_movement(
     df: pd.DataFrame,
     sport_key: str,
@@ -1166,6 +1189,7 @@ def enrich_with_line_movement(
     out["implied_prob_under"] = implied_under
     out["implied_prob"] = implied_sel
     out["implied_prob_book"] = implied_books
+    sport_label = _SPORT_KEY_LABEL.get(str(sport_key or "").strip(), str(sport_key or "unknown").upper())
     bm_dist = Counter(out["implied_prob_book"].dropna())
-    print(f"[LM] {sport_key} bookmaker distribution: {dict(bm_dist)}")
+    print(f"[LM] {sport_label} bookmaker distribution: {dict(bm_dist)}")
     return out
