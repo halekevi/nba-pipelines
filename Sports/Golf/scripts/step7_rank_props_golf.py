@@ -44,6 +44,12 @@ def _forced_over_only(pick_type: str) -> int:
     return 1 if _norm_pick_type(pick_type) in ("Goblin", "Demon") else 0
 
 
+def _num_series(df: pd.DataFrame, col: str, default: float = np.nan) -> pd.Series:
+    if col not in df.columns:
+        return pd.Series(default, index=df.index, dtype=float)
+    return pd.to_numeric(df[col], errors="coerce")
+
+
 def main() -> None:
     root = Path(__file__).resolve().parent.parent
     ap = argparse.ArgumentParser(description="Golf step7 — rank props from step1/2 CSV.")
@@ -65,13 +71,13 @@ def main() -> None:
         raise SystemExit("No rows with valid line values.")
 
     line = work["line"]
-    l5 = pd.to_numeric(work.get("stat_last5_avg"), errors="coerce")
-    seas = pd.to_numeric(work.get("stat_season_avg"), errors="coerce")
+    l5 = _num_series(work, "stat_last5_avg")
+    seas = _num_series(work, "stat_season_avg")
     proj = l5.fillna(seas).fillna(line)
     edge = proj - line
 
-    hr5 = pd.to_numeric(work.get("line_hit_rate_over_ou_5"), errors="coerce")
-    hr10 = pd.to_numeric(work.get("line_hit_rate_over_ou_10"), errors="coerce")
+    hr5 = _num_series(work, "line_hit_rate_over_ou_5")
+    hr10 = _num_series(work, "line_hit_rate_over_ou_10")
     hr10 = hr10.fillna(hr5)
     composite_hr = (0.5 * hr5.fillna(0.5) + 0.5 * hr10.fillna(0.5)).clip(0.0, 1.0)
 
@@ -79,11 +85,11 @@ def main() -> None:
     forced = pick.map(_forced_over_only).astype(int)
     bet_dir = np.where(forced.eq(1), "OVER", np.where(edge >= 0, "OVER", "UNDER"))
 
-    course_fit = pd.to_numeric(work.get("course_fit_score"), errors="coerce").fillna(0.0).clip(-1.0, 1.0)
+    course_fit = _num_series(work, "course_fit_score", default=0.0).fillna(0.0).clip(-1.0, 1.0)
     sg_bonus = (
-        pd.to_numeric(work.get("sg_ott"), errors="coerce").fillna(0.0)
-        + pd.to_numeric(work.get("sg_app"), errors="coerce").fillna(0.0)
-        + pd.to_numeric(work.get("sg_arg"), errors="coerce").fillna(0.0)
+        _num_series(work, "sg_ott", default=0.0).fillna(0.0)
+        + _num_series(work, "sg_app", default=0.0).fillna(0.0)
+        + _num_series(work, "sg_arg", default=0.0).fillna(0.0)
     ).clip(-3.0, 3.0) * 0.05
 
     edge_z = (edge.abs().clip(0, 6) / 6.0).fillna(0.0)
@@ -124,17 +130,17 @@ def main() -> None:
             "line_hit_rate_over_ou_10": hr10,
             "stat_last5_avg": l5,
             "stat_season_avg": seas,
-            "last5_over": pd.to_numeric(work.get("last5_over"), errors="coerce"),
-            "last5_under": pd.to_numeric(work.get("last5_under"), errors="coerce"),
+            "last5_over": _num_series(work, "last5_over"),
+            "last5_under": _num_series(work, "last5_under"),
             "DEF_TIER": "LEAGUE AVG",
             "OVERALL_DEF_RANK": "N/A",
             "sport": "Golf",
             "pp_projection_id": work.get("projection_id", work.get("pp_projection_id", "")).fillna("").astype(str),
             "pp_game_id": work.get("pp_game_id", "").fillna("").astype(str),
-            "course_fit_score": pd.to_numeric(work.get("course_fit_score"), errors="coerce"),
-            "sg_ott": pd.to_numeric(work.get("sg_ott"), errors="coerce"),
-            "sg_app": pd.to_numeric(work.get("sg_app"), errors="coerce"),
-            "sg_arg": pd.to_numeric(work.get("sg_arg"), errors="coerce"),
+            "course_fit_score": _num_series(work, "course_fit_score"),
+            "sg_ott": _num_series(work, "sg_ott"),
+            "sg_app": _num_series(work, "sg_app"),
+            "sg_arg": _num_series(work, "sg_arg"),
             "weather_signal": work.get("weather_signal", pd.NA),
         }
     )

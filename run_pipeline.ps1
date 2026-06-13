@@ -448,6 +448,10 @@ function Invoke-MLBStep1Fetch {
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
         $finalHealth = Get-MLBStep1DateHealth -CsvPath $OutputPath -TargetDate $PipelineDate
         if (-not $finalHealth.ok) {
+            if ($finalHealth.reason -in @('empty_file', 'missing_file')) {
+                Write-Host "      OK (0 props — no slate for $PipelineDate)" -ForegroundColor DarkGray
+                return $true
+            }
             Write-Host "      FAILED: step1 unhealthy after all fetch paths ($($finalHealth.reason))" -ForegroundColor Red
             return $false
         }
@@ -1402,7 +1406,7 @@ if ($MLBOnly) {
         if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
-            if (-not $mlbStep1Health.ok) {
+            if (-not $mlbStep1Health.ok -and $mlbStep1Health.reason -notin @('empty_file', 'missing_file')) {
                 Write-Host "  [MLB] Step1 date health failed ($($mlbStep1Health.reason)); clearing MLB outputs to avoid stale carry-over." -ForegroundColor Yellow
                 Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
                 $ok = $false
@@ -1410,6 +1414,15 @@ if ($MLBOnly) {
         }
     } else {
         Write-Host "  [MLB] Skipping step1 fetch -- using existing $MLBRunOutDir\step1_mlb_props.csv" -ForegroundColor DarkGray
+    }
+    $mlbStep1Solo = Join-Path $MLBRunOutDir "step1_mlb_props.csv"
+    if (Test-Step1NoSlate -CsvPath $mlbStep1Solo) {
+        Write-Host "  [MLB] step1 empty (0 props) — skipping steps 2-8" -ForegroundColor DarkGray
+        Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ mlb = "no_slate" }
+        Run-Combined "after MLB (no slate)"
+        Print-Done
+        exit 0
     }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
@@ -2716,6 +2729,10 @@ $MLBJob = Start-Job -ScriptBlock {
             if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
             $finalHealth = Get-MLBStep1DateHealth-Job -CsvPath $OutputPath -TargetDate $PipelineDate
             if (-not $finalHealth.ok) {
+                if ($finalHealth.reason -in @('empty_file', 'missing_file')) {
+                    Write-Output "[MLB] OK: MLB Step 1 (0 props — no slate for $PipelineDate)"
+                    return $true
+                }
                 Write-Output "[MLB] FAILED: step1 unhealthy after all fetch paths ($($finalHealth.reason))"
                 return $false
             }
@@ -2761,13 +2778,19 @@ $MLBJob = Start-Job -ScriptBlock {
             Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
         }
     }
+    function Test-Step1NoSlate-Job {
+        param([string]$CsvPath)
+        if (-not (Test-Path -LiteralPath $CsvPath)) { return $true }
+        try { $rows = Import-Csv -LiteralPath $CsvPath } catch { return $true }
+        return (-not $rows -or $rows.Count -eq 0)
+    }
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
         if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
             $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
-            if (-not $health.ok) {
+            if (-not $health.ok -and $health.reason -notin @('empty_file', 'missing_file')) {
                 Write-Output "[MLB] Step1 date health failed ($($health.reason)); clearing MLB outputs to avoid stale carry-over."
                 Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
                 $ok = $false
@@ -2790,6 +2813,11 @@ $MLBJob = Start-Job -ScriptBlock {
         }
     }
     $mlbStep1Check = Join-Path $MLBRunOutDir "step1_mlb_props.csv"
+    if (Test-Step1NoSlate-Job -CsvPath $mlbStep1Check) {
+        Write-Output "[MLB] step1 empty (0 props) — skipping steps 2-8"
+        Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
+        return $true
+    }
     $mlbHealth = Get-MLBStep1DateHealth-Job -CsvPath $mlbStep1Check -TargetDate $Date
     if (-not $mlbHealth.ok) {
         Write-Output "[MLB] Aborting steps 2-8: no valid step1 for $Date ($($mlbHealth.reason))"
@@ -3019,6 +3047,21 @@ if (-not $GolfSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $GolfRunOutDir
     $GolfSuccess = $true
 }
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
+$mlbStep1Path = Join-Path $MLBRunOutDir "step1_mlb_props.csv"
+if (-not $MLBSuccess -and (Test-Step1NoSlate -CsvPath $mlbStep1Path)) {
+    Write-Host "  [MLB] no slate for $Date — not a failure." -ForegroundColor DarkGray
+    Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
+    $MLBSuccess = $true
+} else {
+    $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath $mlbStep1Path -TargetDate $Date
+    if (-not $mlbStep1Health.ok) {
+        Write-Host "  [MLB] stale/invalid step1 for $Date ($($mlbStep1Health.reason)); clearing MLB outputs from this run." -ForegroundColor Yellow
+        Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
+        $MLBSuccess = $false
+    } else {
+        $MLBSuccess = $MLBSuccess -and $true
+    }
+}
 $TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
 $NFLSuccess    = if (-not $NFL_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx") }
 $WNBASuccess = $false
@@ -3027,15 +3070,7 @@ if ($wnbaParallel) {
     $wnbaStep8Legacy = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
     $WNBASuccess = (Test-Path -LiteralPath $wnbaStep8Clean) -or (Test-Path -LiteralPath $wnbaStep8Legacy)
 }
-$mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
-if (-not $mlbStep1Health.ok) {
-    Write-Host "  [MLB] stale/invalid step1 for $Date ($($mlbStep1Health.reason)); clearing MLB outputs from this run." -ForegroundColor Yellow
-    Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
-    $MLBSuccess = $false
-} else {
-    $MLBSuccess = $MLBSuccess -and $true
-}
-if ($MLBSuccess) { Publish-MlbStep8Artifacts -Reason "parallel" }
+if ($MLBSuccess -and -not (Test-Step1NoSlate -CsvPath $mlbStep1Path)) { Publish-MlbStep8Artifacts -Reason "parallel" }
 
 $nbaStep1Path = Join-Path $NBARunOutDir "step1_pp_props_today.csv"
 $nbaNoSlate = Test-Step1NoSlate -CsvPath $nbaStep1Path
@@ -3132,7 +3167,7 @@ Write-PipelineSlateStatusJson -RunDate $Date -Sports $slateStatusSports
     @{ Name="CFB";    Ok=$CFBSuccess; Skip=(-not $CFB_PARALLEL_ACTIVE) },
     @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false; NoSlate=$nhlNoSlate },
     @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false; NoSlate=$soccerNoSlate },
-    @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },
+    @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false; NoSlate=$mlbNoSlate },
     @{ Name="Tennis"; Ok=$TennisSuccess; Skip=$false },
     @{ Name="Golf";   Ok=$GolfSuccess; Skip=$false; NoSlate=$golfNoSlate },
     @{ Name="NFL";    Ok=$NFLSuccess; Skip=(-not $NFL_PARALLEL_ACTIVE) }

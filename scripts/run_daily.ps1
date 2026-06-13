@@ -1634,7 +1634,6 @@ else {
             "data\ml\ticket_model_eval_summary_latest.json",
             "data\graded_analysis_latest.json"
         )
-        )
         foreach ($rel in $ticketMlArtifacts) {
             $full = Join-Path $Root $rel
             if (Test-Path $full) {
