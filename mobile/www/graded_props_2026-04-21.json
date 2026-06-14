@@ -9193,15 +9193,19 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9273,15 +9277,19 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9317,14 +9325,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9360,14 +9372,18 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9549,14 +9565,18 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9592,14 +9612,18 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9674,14 +9698,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9789,15 +9817,19 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9869,15 +9901,19 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9949,14 +9985,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -9992,14 +10032,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10035,15 +10079,19 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10079,15 +10127,19 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10303,15 +10355,19 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10347,14 +10403,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10500,14 +10560,18 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10615,14 +10679,18 @@
       "strat_n": 80,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10838,15 +10906,19 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 68,
-      "confidence_note": "sport=NHL,data_depth=MED,score=68.0",
+      "confidence_score": 74,
+      "confidence_note": "sport=NHL,data_depth=MED,score=74.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10882,14 +10954,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 10,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -10961,14 +11037,18 @@
       "strat_n": 95,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 0,
       "l10_under": 8,
       "l10_games_played": 8,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 1,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11076,15 +11156,19 @@
       "strat_n": 132,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 82,
-      "confidence_note": "sport=NHL,data_depth=MED,score=82.0",
+      "confidence_score": 88,
+      "confidence_note": "sport=NHL,data_depth=MED,score=88.0",
       "l10_over": 9,
       "l10_under": 1,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11411,15 +11495,19 @@
       "strat_n": 132,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 82,
-      "confidence_note": "sport=NHL,data_depth=MED,score=82.0",
+      "confidence_score": 88,
+      "confidence_note": "sport=NHL,data_depth=MED,score=88.0",
       "l10_over": 8,
       "l10_under": 2,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11453,15 +11541,19 @@
       "hit_rate": 0.69,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 54,
-      "confidence_note": "sport=NHL,data_depth=MED,score=54.0",
+      "confidence_score": 60,
+      "confidence_note": "sport=NHL,data_depth=MED,score=60.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11536,15 +11628,19 @@
       "strat_n": 39,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 88,
-      "confidence_note": "sport=NHL,data_depth=MED,score=88.0",
+      "confidence_score": 94,
+      "confidence_note": "sport=NHL,data_depth=MED,score=94.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11726,15 +11822,19 @@
       "strat_n": 111,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 78,
-      "confidence_note": "sport=NHL,data_depth=MED,score=78.0",
+      "confidence_score": 84,
+      "confidence_note": "sport=NHL,data_depth=MED,score=84.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11770,15 +11870,19 @@
       "strat_n": 186,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 64,
-      "confidence_note": "sport=NHL,data_depth=MED,score=64.0",
+      "confidence_score": 70,
+      "confidence_note": "sport=NHL,data_depth=MED,score=70.0",
       "l10_over": 4,
       "l10_under": 6,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11853,15 +11957,19 @@
       "strat_n": 111,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 84,
-      "confidence_note": "sport=NHL,data_depth=MED,score=84.0",
+      "confidence_score": 90,
+      "confidence_note": "sport=NHL,data_depth=MED,score=90.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -11938,15 +12046,19 @@
       "strat_n": 111,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 84,
-      "confidence_note": "sport=NHL,data_depth=MED,score=84.0",
+      "confidence_score": 90,
+      "confidence_note": "sport=NHL,data_depth=MED,score=90.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12124,15 +12236,19 @@
       "strat_n": 39,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 82,
-      "confidence_note": "sport=NHL,data_depth=MED,score=82.0",
+      "confidence_score": 88,
+      "confidence_note": "sport=NHL,data_depth=MED,score=88.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12166,15 +12282,19 @@
       "hit_rate": 0.7742,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 54,
-      "confidence_note": "sport=NHL,data_depth=MED,score=54.0",
+      "confidence_score": 60,
+      "confidence_note": "sport=NHL,data_depth=MED,score=60.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 1,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12257,7 +12377,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12293,15 +12417,19 @@
       "strat_n": 39,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 69,
-      "confidence_note": "sport=NHL,data_depth=MED,score=69.0",
+      "confidence_score": 75,
+      "confidence_note": "sport=NHL,data_depth=MED,score=75.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12551,15 +12679,19 @@
       "hit_rate": 0.6725,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 54,
-      "confidence_note": "sport=NHL,data_depth=MED,score=54.0",
+      "confidence_score": 60,
+      "confidence_note": "sport=NHL,data_depth=MED,score=60.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12634,16 +12766,20 @@
       "l5_under": 2,
       "hit_rate": 0.5617,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 43,
-      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 49,
+      "confidence_note": "sport=NHL,data_depth=MED,score=49.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12716,15 +12852,19 @@
       "hit_rate": 0.5533,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 37,
-      "confidence_note": "sport=NHL,data_depth=MED,score=37.0",
+      "confidence_score": 43,
+      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12762,15 +12902,19 @@
       "strat_n": 132,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 88,
-      "confidence_note": "sport=NHL,data_depth=MED,score=88.0",
+      "confidence_score": 94,
+      "confidence_note": "sport=NHL,data_depth=MED,score=94.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -12958,7 +13102,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13148,7 +13296,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13228,7 +13380,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13368,15 +13524,19 @@
       "hit_rate": 0.5467,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 29,
-      "confidence_note": "sport=NHL,data_depth=MED,score=29.0",
+      "confidence_score": 35,
+      "confidence_note": "sport=NHL,data_depth=MED,score=35.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13593,15 +13753,19 @@
       "hit_rate": 0.685,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 53,
-      "confidence_note": "sport=NHL,data_depth=MED,score=53.0",
+      "confidence_score": 59,
+      "confidence_note": "sport=NHL,data_depth=MED,score=59.0",
       "l10_over": 8,
       "l10_under": 2,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13669,15 +13833,19 @@
       "hit_rate": 0.5092,
       "sport_signal_maturity": "MED",
       "confidence_tier": "LOW",
-      "confidence_score": 16,
-      "confidence_note": "sport=NHL,data_depth=MED,score=16.0",
+      "confidence_score": 22,
+      "confidence_note": "sport=NHL,data_depth=MED,score=22.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13719,7 +13887,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13761,7 +13933,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13834,15 +14010,19 @@
       "hit_rate": 0.7486,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 56,
-      "confidence_note": "sport=NHL,data_depth=MED,score=56.0",
+      "confidence_score": 62,
+      "confidence_note": "sport=NHL,data_depth=MED,score=62.0",
       "l10_over": 5,
       "l10_under": 2,
       "l10_games_played": 7,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13921,15 +14101,19 @@
       "strat_n": 132,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 71,
-      "confidence_note": "sport=NHL,data_depth=MED,score=71.0",
+      "confidence_score": 77,
+      "confidence_note": "sport=NHL,data_depth=MED,score=77.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -13963,15 +14147,19 @@
       "hit_rate": 0.5792,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 37,
-      "confidence_note": "sport=NHL,data_depth=MED,score=37.0",
+      "confidence_score": 43,
+      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14013,7 +14201,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14127,7 +14319,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14169,7 +14365,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14211,7 +14411,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14247,16 +14451,20 @@
       "l5_under": 2,
       "hit_rate": 0.5617,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 43,
-      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 49,
+      "confidence_note": "sport=NHL,data_depth=MED,score=49.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14295,15 +14503,19 @@
       "strat_n": 132,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 71,
-      "confidence_note": "sport=NHL,data_depth=MED,score=71.0",
+      "confidence_score": 77,
+      "confidence_note": "sport=NHL,data_depth=MED,score=77.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14349,7 +14561,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14394,7 +14610,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14427,16 +14647,20 @@
       "l5_under": 1,
       "hit_rate": 0.6483,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 44,
-      "confidence_note": "sport=NHL,data_depth=MED,score=44.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 50,
+      "confidence_note": "sport=NHL,data_depth=MED,score=50.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14480,7 +14704,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14514,15 +14742,19 @@
       "hit_rate": 0.6217,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 41,
-      "confidence_note": "sport=NHL,data_depth=MED,score=41.0",
+      "confidence_score": 47,
+      "confidence_note": "sport=NHL,data_depth=MED,score=47.0",
       "l10_over": 7,
       "l10_under": 3,
       "l10_games_played": 10,
       "l10_streak": "HOT",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14564,7 +14796,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14635,16 +14871,20 @@
       "strat_hit_rate": 0.5606060606060606,
       "strat_n": 132,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 44,
-      "confidence_note": "sport=NHL,data_depth=MED,score=44.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 50,
+      "confidence_note": "sport=NHL,data_depth=MED,score=50.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14720,7 +14960,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14762,7 +15006,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14804,7 +15052,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14840,15 +15092,19 @@
       "hit_rate": 0.6517,
       "sport_signal_maturity": "MED",
       "confidence_tier": "HIGH",
-      "confidence_score": 56,
-      "confidence_note": "sport=NHL,data_depth=MED,score=56.0",
+      "confidence_score": 62,
+      "confidence_note": "sport=NHL,data_depth=MED,score=62.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14960,7 +15216,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -14994,15 +15254,19 @@
       "hit_rate": 0.5675,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 37,
-      "confidence_note": "sport=NHL,data_depth=MED,score=37.0",
+      "confidence_score": 43,
+      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15044,7 +15308,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15078,15 +15346,19 @@
       "hit_rate": 0.5717,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 37,
-      "confidence_note": "sport=NHL,data_depth=MED,score=37.0",
+      "confidence_score": 43,
+      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15128,7 +15400,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15248,7 +15524,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15319,16 +15599,20 @@
       "l5_under": 2,
       "hit_rate": 0.6008,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 43,
-      "confidence_note": "sport=NHL,data_depth=MED,score=43.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 49,
+      "confidence_note": "sport=NHL,data_depth=MED,score=49.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15370,7 +15654,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15407,16 +15695,20 @@
       "l5_under": 3,
       "hit_rate": 0.5192,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "LOW",
-      "confidence_score": 22,
-      "confidence_note": "sport=NHL,data_depth=MED,score=22.0",
+      "confidence_tier": "MED",
+      "confidence_score": 28,
+      "confidence_note": "sport=NHL,data_depth=MED,score=28.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15458,7 +15750,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15570,7 +15866,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15714,7 +16014,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15824,7 +16128,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15866,7 +16174,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -15978,7 +16290,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16020,7 +16336,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16089,16 +16409,20 @@
       "strat_hit_rate": 0.5454545454545454,
       "strat_n": 44,
       "sport_signal_maturity": "MED",
-      "confidence_tier": "MED",
-      "confidence_score": 44,
-      "confidence_note": "sport=NHL,data_depth=MED,score=44.0",
+      "confidence_tier": "HIGH",
+      "confidence_score": 50,
+      "confidence_note": "sport=NHL,data_depth=MED,score=50.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16210,7 +16534,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16252,7 +16580,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16294,7 +16626,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16372,7 +16708,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16406,15 +16746,19 @@
       "hit_rate": 0.5433,
       "sport_signal_maturity": "MED",
       "confidence_tier": "MED",
-      "confidence_score": 29,
-      "confidence_note": "sport=NHL,data_depth=MED,score=29.0",
+      "confidence_score": 35,
+      "confidence_note": "sport=NHL,data_depth=MED,score=35.0",
       "l10_over": 6,
       "l10_under": 4,
       "l10_games_played": 10,
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16456,7 +16800,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16498,7 +16846,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16540,7 +16892,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16582,7 +16938,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16661,7 +17021,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16703,7 +17067,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16747,7 +17115,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16789,7 +17161,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16865,7 +17241,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -16979,7 +17359,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17024,7 +17408,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17138,7 +17526,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17180,7 +17572,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17225,7 +17621,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17267,7 +17667,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17309,7 +17713,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17354,7 +17762,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17399,7 +17811,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17441,7 +17857,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17483,7 +17903,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17600,7 +18024,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17645,7 +18073,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17687,7 +18119,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17729,7 +18165,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17772,7 +18212,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17814,7 +18258,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17890,7 +18338,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -17966,7 +18418,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18008,7 +18464,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18050,7 +18510,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18092,7 +18556,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18134,7 +18602,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18178,7 +18650,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18220,7 +18696,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18300,7 +18780,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18342,7 +18826,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18384,7 +18872,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18569,7 +19061,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18648,7 +19144,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18864,7 +19364,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -18906,7 +19410,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19018,7 +19526,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19130,7 +19642,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19209,7 +19725,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19285,7 +19805,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19327,7 +19851,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19372,7 +19900,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19416,7 +19948,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19458,7 +19994,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19503,7 +20043,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19545,7 +20089,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19587,7 +20135,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19632,7 +20184,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19708,7 +20264,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19750,7 +20310,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19826,7 +20390,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19871,7 +20439,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19913,7 +20485,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -19955,7 +20531,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20033,7 +20613,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20075,7 +20659,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20117,7 +20705,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20159,7 +20751,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20201,7 +20797,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20243,7 +20843,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20288,7 +20892,11 @@
       "l10_streak": "NEUTRAL",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20331,7 +20939,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20373,7 +20985,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20557,7 +21173,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20633,7 +21253,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20709,7 +21333,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20751,7 +21379,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20793,7 +21425,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20835,7 +21471,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -20877,7 +21517,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21027,7 +21671,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21071,7 +21719,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21113,7 +21765,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21155,7 +21811,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21231,7 +21891,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21376,7 +22040,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21452,7 +22120,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21497,7 +22169,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21539,7 +22215,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21581,7 +22261,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21659,7 +22343,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21701,7 +22389,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21743,7 +22435,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21785,7 +22481,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21827,7 +22527,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21937,7 +22641,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -21979,7 +22687,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22057,7 +22769,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22099,7 +22815,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22144,7 +22864,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22188,7 +22912,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22230,7 +22958,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22272,7 +23004,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22314,7 +23050,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22356,7 +23096,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22398,7 +23142,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22516,7 +23264,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22561,7 +23313,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22605,7 +23361,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22647,7 +23407,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22689,7 +23453,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22731,7 +23499,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22773,7 +23545,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22818,7 +23594,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22894,7 +23674,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -22936,7 +23720,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23049,7 +23837,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23091,7 +23883,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23133,7 +23929,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23175,7 +23975,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23285,7 +24089,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23327,7 +24135,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23448,7 +24260,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23595,7 +24411,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23715,7 +24535,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23757,7 +24581,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23799,7 +24627,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23841,7 +24673,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23886,7 +24722,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -23928,7 +24768,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24038,7 +24882,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24114,7 +24962,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24196,7 +25048,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24311,7 +25167,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24355,7 +25215,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24397,7 +25261,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24650,7 +25518,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24794,7 +25666,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -24836,7 +25712,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25083,7 +25963,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25163,7 +26047,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25243,7 +26131,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25285,7 +26177,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25499,7 +26395,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25618,7 +26518,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25660,7 +26564,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25774,7 +26682,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25817,7 +26729,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25927,7 +26843,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -25969,7 +26889,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26011,7 +26935,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26121,7 +27049,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26197,7 +27129,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26374,7 +27310,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26720,7 +27660,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26762,7 +27706,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26837,7 +27785,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26913,7 +27865,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -26955,7 +27911,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27133,7 +28093,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27175,7 +28139,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27502,7 +28470,11 @@
       "l10_games_played": 10,
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27544,7 +28516,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27755,7 +28731,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -27833,7 +28813,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28016,7 +29000,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28126,7 +29114,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28168,7 +29160,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28244,7 +29240,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28388,7 +29388,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28430,7 +29434,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -28643,7 +29651,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -29194,7 +30206,11 @@
       "l10_games_played": 10,
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -29235,7 +30251,11 @@
       "l10_games_played": 10,
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
@@ -29277,7 +30297,11 @@
       "l10_streak": "COLD",
       "hit_rate_l5": 0,
       "player_hr_historical": 0,
-      "opp_hr_historical": 0
+      "opp_hr_historical": 0,
+      "hit_rate_l10": 0,
+      "team_star_out": "None",
+      "key_facilitator_out": "None",
+      "injury_boost_candidate": "None"
     },
     {
       "sport": "NHL",
