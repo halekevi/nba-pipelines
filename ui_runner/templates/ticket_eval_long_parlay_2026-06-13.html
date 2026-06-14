@@ -200,7 +200,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
   <a href="/income" class="">📈 Income</a>
   <a href="/payout" class="">💰 Payouts</a>
 </div>
-<div class="grade-eval-summary grade-eval-summary-empty"><div>Date: 2026-06-13 · Long Parlays (5-6 leg) · No fully graded tickets for payout summary (ungraded, all-void, or none).</div></div>
+<div class="grade-eval-summary"><div class="grade-eval-summary-line1">Date: 2026-06-13 · Long Parlays (5-6 leg) · 7 tickets graded</div><div class="grade-eval-summary-line2"><span>✅ Wins: 0</span><span>🛡️ Guarantees: 0</span><span>❌ Losses: 7</span></div><div class="grade-eval-summary-line3">Win rate (W+🛡️): 0% · Avg EV at entry: 2.56</div><div class="grade-eval-summary-line4">Total: −$70.00 net on $70 staked ($10/ticket flat) — loss</div></div>
 <div class="stats-bar">
 <div class="sum-row">
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">TICKET HIT RATE</div></div>
@@ -211,26 +211,26 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">WCBB TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">CFB TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">NFL TKT WIN RATE</div></div>
-<div class="sum-item sum-item-pending-sport" title="38 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE<span class="sum-lab-badge">38 pending</span></div></div>
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">MLB TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">NHL TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport" title="42 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE<span class="sum-lab-badge">42 pending</span></div></div>
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val green">20</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">26</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">390</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val green">74</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">66</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val void">11</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">285</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
-<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">NO PAYOUT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">NET @ $10/TKT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">ROI (FLAT $10)</div></div>
+<div class="sum-item"><div class="sum-val red">7</div><div class="sum-lab">NO PAYOUT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">-70.00</div><div class="sum-lab">NET @ $10/TKT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">-100.0%</div><div class="sum-lab">ROI (FLAT $10)</div></div>
 <div class="sum-item"><div class="sum-val sum-val-sm">436</div><div class="sum-lab">TOTAL LEGS</div></div>
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-06-13</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-13/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (390 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-13/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-13/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-13/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (285 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-13/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-13/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-wnba">
 <summary><span>WNBA</span><span class="ticket-bucket-meta">38 sections · 38 tickets</span></summary>
@@ -240,7 +240,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #1</span>
-<span class="tg">0✓ 1✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -265,14 +265,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.05</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Azzi Fudd</div>
+<div class="pl-hit">Azzi Fudd</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">9</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="legrow leg-miss">
@@ -285,14 +285,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">2</div>
 <div class="leg-extra miss-leg-cell">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Emily Engstler</div>
+<div class="pl-hit">Emily Engstler</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.15</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -303,7 +303,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #2</span>
-<span class="tg">0✓ 1✗ / 5</span>
+<span class="tg">2✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -328,34 +328,34 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Azzi Fudd</div>
+<div class="pl-hit">Azzi Fudd</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">14.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.95</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Jackie Young</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">14.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">10</div>
+<div class="leg-extra miss-leg-cell">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">0.95</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -366,19 +366,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #3</span>
-<span class="tg">0✓ 1✗ / 5</span>
+<span class="tg">1✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">23</div>
 <div class="leg-extra">2</div>
 </div>
 <div class="legrow leg-pend">
@@ -425,76 +425,78 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 5-Leg #4</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #4</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">2✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 2</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Paige Bueckers</div>
+<div class="pl-void">Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">4 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.15</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">17.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.65</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">17.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">1.65</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">3</div>
 <div class="leg-extra">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">NaLyssa Smith</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Free Throws Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.85</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">NaLyssa Smith</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Free Throws Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">15</div>
 <div class="leg-extra">1</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 2 miss, 1 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>20.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>31.3%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>5.27 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 5-Leg #5</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #5</span>
-<span class="tg">0✓ 2✗ / 5</span>
+<span class="tg">1✓ 4✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 4</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
@@ -507,15 +509,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">1</div>
 <div class="leg-extra miss-leg-cell">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Kayla McBride</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.86</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Kayla McBride</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.86</div>
 </div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
@@ -527,27 +529,27 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">4</div>
 <div class="leg-extra miss-leg-cell">0.6</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">22 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">34</div>
 <div class="leg-extra">4.64</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Natasha Howard</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.36</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Natasha Howard</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.36</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (1 hit, 4 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>20.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>15.6%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>2.12 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 5-Leg #6</h2>
@@ -555,7 +557,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #6</span>
-<span class="tg">0✓ 1✗ / 5</span>
+<span class="tg">0✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -580,15 +582,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">4.84</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Pts+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">29.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">25</div>
+<div class="leg-extra miss-leg-cell">4.84</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -600,14 +602,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.65</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite + Paige Bueckers</div>
+<div class="pl-void">Carla Leite + Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">PDX / DAL vs DAL / PDX</div></div>
 <div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.75</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -618,19 +620,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #7</span>
-<span class="tg">1✓ 0✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young + Kayla McBride</div>
+<div class="pl-hit">Jackie Young + Kayla McBride</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">LVA / MIN vs MIN / LVA</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">35</div>
 <div class="leg-extra">2.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -643,24 +645,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.02</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Steals</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-0.35</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Chelsea Gray</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Steals</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">-0.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Paige Bueckers</div>
+<div class="pl-void">Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-hit">
@@ -681,7 +683,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #8</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -706,35 +708,35 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">25.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">3.15</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">25.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">24</div>
+<div class="leg-extra miss-leg-cell">3.15</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">27</div>
 <div class="leg-extra">3.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">6 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.71</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">6 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">3</div>
+<div class="leg-extra miss-leg-cell">0.71</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -807,7 +809,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #10</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -822,34 +824,34 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.3</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">1.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">16.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">26</div>
 <div class="leg-extra">3.56</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
+<div class="pl-void">A&#x27;ja Wilson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Defensive Rebounds</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">8 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">8</div>
 <div class="leg-extra">-8</div>
 </div>
 <div class="legrow leg-pend">
@@ -870,7 +872,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #11</span>
-<span class="tg">0✓ 2✗ / 5</span>
+<span class="tg">0✓ 3✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -905,90 +907,91 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">0.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite + Paige Bueckers</div>
+<div class="pl-void">Carla Leite + Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Assists (Combo)</div><div class="meta-muted">PDX / DAL vs DAL / PDX</div></div>
 <div class="leg-extra">11 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Arike Ogunbowale</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
-<div class="leg-extra">7.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-1.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Arike Ogunbowale</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
+<div class="leg-extra miss-leg-cell">7.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">9</div>
+<div class="leg-extra miss-leg-cell">-1.1</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 5-Leg #12</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #12</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">3✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 2</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray + Natasha Howard</div>
+<div class="pl-hit">Chelsea Gray + Natasha Howard</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">LVA / MIN vs MIN / LVA</div></div>
 <div class="leg-extra">26.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">45</div>
 <div class="leg-extra">4.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">16.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">22</div>
 <div class="leg-extra">2.72</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
+<div class="pl-hit">Olivia Miles</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">1.15</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Arike Ogunbowale</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
-<div class="leg-extra">13.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-1.85</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Arike Ogunbowale</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>FG Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
+<div class="leg-extra miss-leg-cell">13.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">16</div>
+<div class="leg-extra miss-leg-cell">-1.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.7</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">13.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">11</div>
+<div class="leg-extra miss-leg-cell">2.7</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (3 hit, 2 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>20.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>11.3%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>1.27 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 5-Leg #13</h2>
@@ -996,30 +999,30 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 5-Leg #13</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">16</div>
 <div class="leg-extra">2.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Arike Ogunbowale</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
-<div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-0.8</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Arike Ogunbowale</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
+<div class="leg-extra miss-leg-cell">2.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">5</div>
+<div class="leg-extra miss-leg-cell">-0.8</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1041,14 +1044,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite</div>
+<div class="pl-hit">Carla Leite</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">7 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">13</div>
 <div class="leg-extra">1.75</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1059,7 +1062,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #1</span>
-<span class="tg">0✓ 1✗ / 6</span>
+<span class="tg">2✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1084,14 +1087,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.05</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Azzi Fudd</div>
+<div class="pl-hit">Azzi Fudd</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">9</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="legrow leg-miss">
@@ -1104,14 +1107,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">2</div>
 <div class="leg-extra miss-leg-cell">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Emily Engstler</div>
+<div class="pl-hit">Emily Engstler</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.15</div>
 </div>
 <div class="legrow leg-pend">
@@ -1132,7 +1135,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #2</span>
-<span class="tg">0✓ 1✗ / 6</span>
+<span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1147,34 +1150,34 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">2</div>
 <div class="leg-extra miss-leg-cell">0.45</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Azzi Fudd</div>
+<div class="pl-hit">Azzi Fudd</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">14.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.95</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Jackie Young</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">14.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">10</div>
+<div class="leg-extra miss-leg-cell">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">0.95</div>
 </div>
 <div class="legrow leg-pend">
@@ -1205,19 +1208,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #3</span>
-<span class="tg">0✓ 1✗ / 6</span>
+<span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">23</div>
 <div class="leg-extra">2</div>
 </div>
 <div class="legrow leg-miss">
@@ -1240,67 +1243,68 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.05</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Paige Bueckers</div>
+<div class="pl-void">Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">4 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.15</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">17.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.65</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">17.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">1.65</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">3</div>
 <div class="leg-extra">0.95</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 6-Leg #4</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #4</span>
-<span class="tg">0✓ 2✗ / 6</span>
+<span class="tg">1✓ 5✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 5</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">NaLyssa Smith</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Free Throws Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.85</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">NaLyssa Smith</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Free Throws Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>FG Attempted</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">15</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-miss">
@@ -1313,15 +1317,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">1</div>
 <div class="leg-extra miss-leg-cell">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Kayla McBride</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.86</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Kayla McBride</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.86</div>
 </div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
@@ -1333,17 +1337,17 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">4</div>
 <div class="leg-extra miss-leg-cell">0.6</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Natasha Howard</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.36</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Natasha Howard</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">0.36</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (1 hit, 5 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>40.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>12.5%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>4.02 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Standard 6-Leg #5</h2>
@@ -1351,19 +1355,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #5</span>
-<span class="tg">0✓ 1✗ / 6</span>
+<span class="tg">1✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">22 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">34</div>
 <div class="leg-extra">4.64</div>
 </div>
 <div class="legrow leg-pend">
@@ -1386,15 +1390,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">4.84</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Pts+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">29.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">25</div>
+<div class="leg-extra miss-leg-cell">4.84</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1406,14 +1410,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.65</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite + Paige Bueckers</div>
+<div class="pl-void">Carla Leite + Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">PDX / DAL vs DAL / PDX</div></div>
 <div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.75</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1424,19 +1428,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #6</span>
-<span class="tg">1✓ 0✗ / 6</span>
+<span class="tg">2✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young + Kayla McBride</div>
+<div class="pl-hit">Jackie Young + Kayla McBride</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">LVA / MIN vs MIN / LVA</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">35</div>
 <div class="leg-extra">2.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -1449,24 +1453,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.02</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Steals</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-0.35</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Chelsea Gray</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Steals</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">-0.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Paige Bueckers</div>
+<div class="pl-void">Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Two Pointers Made</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-hit">
@@ -1497,7 +1501,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #7</span>
-<span class="tg">1✓ 0✗ / 6</span>
+<span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1512,15 +1516,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.36</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">25.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">3.15</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Points</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">25.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">24</div>
+<div class="leg-extra miss-leg-cell">3.15</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1532,25 +1536,25 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.21</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray</div>
+<div class="pl-hit">Chelsea Gray</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">27</div>
 <div class="leg-extra">3.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">6 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.71</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">6 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">3</div>
+<div class="leg-extra miss-leg-cell">0.71</div>
 </div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
@@ -1570,7 +1574,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #8</span>
-<span class="tg">0✓ 1✗ / 6</span>
+<span class="tg">1✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1615,24 +1619,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.3</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">1.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">16.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">26</div>
 <div class="leg-extra">3.56</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1648,14 +1652,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
+<div class="pl-void">A&#x27;ja Wilson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Defensive Rebounds</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">8 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">8</div>
 <div class="leg-extra">-8</div>
 </div>
 <div class="legrow leg-pend">
@@ -1698,14 +1702,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">0.85</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite + Paige Bueckers</div>
+<div class="pl-void">Carla Leite + Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Assists (Combo)</div><div class="meta-muted">PDX / DAL vs DAL / PDX</div></div>
 <div class="leg-extra">11 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1716,60 +1720,60 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Standard 6-Leg #10</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">3✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Arike Ogunbowale</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
-<div class="leg-extra">7.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-1.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Arike Ogunbowale</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Two Pointers Attempted</div><div class="meta-muted">DAL vs PDX</div></div>
+<div class="leg-extra miss-leg-cell">7.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">9</div>
+<div class="leg-extra miss-leg-cell">-1.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chelsea Gray + Natasha Howard</div>
+<div class="pl-hit">Chelsea Gray + Natasha Howard</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points (Combo)</div><div class="meta-muted">LVA / MIN vs MIN / LVA</div></div>
 <div class="leg-extra">26.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">45</div>
 <div class="leg-extra">4.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">16.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">22</div>
 <div class="leg-extra">2.72</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
+<div class="pl-hit">Olivia Miles</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">1.15</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.7</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">A&#x27;ja Wilson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebs+Asts</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">13.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">11</div>
+<div class="leg-extra miss-leg-cell">2.7</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1785,23 +1789,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 5-Leg #2</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #2</span>
-<span class="tg">1✓ 1✗ / 5</span>
+<span class="tg">2✓ 3✗ / 5</span>
 <span class="payout">PWR 3.3× · FLEX 1.65×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 3</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Emily Engstler</div>
+<div class="pl-hit">Emily Engstler</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">2.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -1814,15 +1819,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.91</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Olivia Miles</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">4.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">1.91</div>
 </div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
@@ -1834,17 +1839,17 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.21</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">4.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">3</div>
+<div class="leg-extra miss-leg-cell">2.21</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 3 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>4.50x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>62.1%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>1.80 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 5-Leg #3</h2>
@@ -1852,39 +1857,39 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #3</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">3✓ 1✗ / 5</span>
 <span class="payout">PWR 3.6× · FLEX 1.8×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite</div>
+<div class="pl-hit">Carla Leite</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">8</div>
 <div class="leg-extra">2.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Kayla McBride</div>
+<div class="pl-hit">Kayla McBride</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.36</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Emily Engstler</div>
+<div class="pl-hit">Emily Engstler</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">1.9</div>
 </div>
 <div class="legrow leg-pend">
@@ -1897,15 +1902,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.6</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.21</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">5.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">3</div>
+<div class="leg-extra miss-leg-cell">1.21</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -1915,7 +1920,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #5</span>
-<span class="tg">1✓ 0✗ / 5</span>
+<span class="tg">3✓ 1✗ / 5</span>
 <span class="payout">PWR 12.24× · FLEX 6.12×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1930,35 +1935,35 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">0.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
+<div class="pl-hit">A&#x27;ja Wilson</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
+<div class="pl-hit">Nia Coffey</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">1.45</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.91</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Olivia Miles</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">5.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">0.91</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1978,7 +1983,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #9</span>
-<span class="tg">1✓ 1✗ / 5</span>
+<span class="tg">3✓ 1✗ / 5</span>
 <span class="payout">PWR 9.04× · FLEX 4.52×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2013,24 +2018,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.55</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">3</div>
 <div class="leg-extra">1.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Courtney Williams</div>
+<div class="pl-hit">Courtney Williams</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.31</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -2041,7 +2046,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #10</span>
-<span class="tg">2✓ 1✗ / 5</span>
+<span class="tg">2✓ 2✗ / 5</span>
 <span class="payout">PWR 13.45× · FLEX 6.72×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2076,15 +2081,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.4</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Jackie Young</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">1.4</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2104,7 +2109,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #11</span>
-<span class="tg">1✓ 0✗ / 5</span>
+<span class="tg">3✓ 0✗ / 5</span>
 <span class="payout">PWR 5.79× · FLEX 2.89×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2129,14 +2134,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Natasha Howard</div>
+<div class="pl-hit">Natasha Howard</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">2</div>
 <div class="leg-extra">1.36</div>
 </div>
 <div class="legrow leg-pend">
@@ -2149,14 +2154,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Arike Ogunbowale</div>
+<div class="pl-hit">Arike Ogunbowale</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -2167,7 +2172,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #13</span>
-<span class="tg">2✓ 0✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 12.24× · FLEX 6.12×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2212,15 +2217,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chennedy Carter</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.8</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Chennedy Carter</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">0.8</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -2230,29 +2235,29 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 5-Leg #14</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 7.06× · FLEX 3.53×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PDX vs DAL</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.4</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Megan Gustafson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">PDX vs DAL</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">0.4</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -2275,27 +2280,28 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Bridget Carleton</div>
+<div class="pl-hit">Bridget Carleton</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.05</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 6-Leg #2</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #2</span>
-<span class="tg">1✓ 1✗ / 6</span>
+<span class="tg">3✓ 3✗ / 6</span>
 <span class="payout">PWR 5.41× · FLEX 3.38×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 3</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
@@ -2308,15 +2314,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.91</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Olivia Miles</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">4.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">1.91</div>
 </div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
@@ -2328,37 +2334,37 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.2</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.21</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nia Coffey</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Rebounds</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">4.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">3</div>
+<div class="leg-extra miss-leg-cell">2.21</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Carla Leite</div>
+<div class="pl-hit">Carla Leite</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">8</div>
 <div class="leg-extra">2.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Kayla McBride</div>
+<div class="pl-hit">Kayla McBride</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.36</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (3 hit, 3 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>8.40x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>52.8%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>3.44 — OK</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 6-Leg #4</h2>
@@ -2366,20 +2372,20 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #4</span>
-<span class="tg">1✓ 0✗ / 6</span>
+<span class="tg">3✓ 2✗ / 6</span>
 <span class="payout">PWR 15.66× · FLEX 9.79×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jessica Shepard</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">DAL vs PDX</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.05</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Jessica Shepard</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">DAL vs PDX</div></div>
+<div class="leg-extra miss-leg-cell">3.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">2.05</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2401,35 +2407,35 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">0.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">A&#x27;ja Wilson</div>
+<div class="pl-hit">A&#x27;ja Wilson</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Nia Coffey</div>
+<div class="pl-hit">Nia Coffey</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">1.45</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Olivia Miles</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
-<div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.91</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Olivia Miles</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
+<div class="leg-extra miss-leg-cell">5.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">0.91</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -2439,19 +2445,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #7</span>
-<span class="tg">1✓ 2✗ / 6</span>
+<span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 13.33× · FLEX 8.33×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Paige Bueckers</div>
+<div class="pl-void">Paige Bueckers<span class="warning-chip" title="INJURY_REPORT_DNP">INJURY_REPORT_DNP</span></div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">DAL vs PDX</div></div>
 <div class="leg-extra">4.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2</div>
 </div>
 <div class="legrow leg-miss">
@@ -2464,14 +2470,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">2</div>
 <div class="leg-extra miss-leg-cell">1.06</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
+<div class="pl-hit">Jackie Young</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">10</div>
 <div class="leg-extra">1.75</div>
 </div>
 <div class="legrow leg-miss">
@@ -2508,13 +2514,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 6-Leg #8</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #8</span>
-<span class="tg">1✓ 2✗ / 6</span>
+<span class="tg">3✓ 3✗ / 6</span>
 <span class="payout">PWR 22.05× · FLEX 13.78×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 3</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
@@ -2527,24 +2534,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra val-miss miss-leg-cell">0</div>
 <div class="leg-extra miss-leg-cell">0.55</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">3</div>
 <div class="leg-extra">1.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Courtney Williams</div>
+<div class="pl-hit">Courtney Williams</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.31</div>
 </div>
 <div class="legrow leg-miss">
@@ -2567,17 +2574,17 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.4</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Jackie Young</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">1</div>
+<div class="leg-extra miss-leg-cell">1.4</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (3 hit, 3 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>8.40x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>12.4%</td><td>❌</td></tr><tr><td>EV at Entry</td><td>0.04 — MARGINAL</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">WNBA Goblin 6-Leg #9</h2>
@@ -2585,7 +2592,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #9</span>
-<span class="tg">2✓ 0✗ / 6</span>
+<span class="tg">3✓ 0✗ / 6</span>
 <span class="payout">PWR 11.57× · FLEX 7.23×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2630,14 +2637,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Natasha Howard</div>
+<div class="pl-hit">Natasha Howard</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">MIN vs LVA</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">2</div>
 <div class="leg-extra">1.36</div>
 </div>
 <div class="legrow leg-pend">
@@ -2658,7 +2665,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #11</span>
-<span class="tg">2✓ 0✗ / 6</span>
+<span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 24.48× · FLEX 15.3×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2703,25 +2710,25 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Chennedy Carter</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.8</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Chennedy Carter</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">LVA vs MIN</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">0.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PDX vs DAL</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0.4</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Megan Gustafson</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>3-PT Made</div><div class="meta-muted">PDX vs DAL</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">0.4</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -2731,19 +2738,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">WNBA Goblin 6-Leg #12</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">4✓ 0✗ / 6</span>
 <span class="payout">PWR 9.03× · FLEX 5.65×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Sarah Ashlee Barker</div>
+<div class="pl-hit">Sarah Ashlee Barker</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -2766,34 +2773,34 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.95</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Bridget Carleton</div>
+<div class="pl-hit">Bridget Carleton</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.05</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Jackie Young</div>
+<div class="pl-hit">Jackie Young</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">LVA vs MIN</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">1.55</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">WNBA</span></div>
-<div class="pl-pend">Megan Gustafson</div>
+<div class="pl-hit">Megan Gustafson</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>3-PT Attempted</div><div class="meta-muted">PDX vs DAL</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">2</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
