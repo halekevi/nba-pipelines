@@ -5425,7 +5425,7 @@ LONG_PARLAY_MAX_LEGS = 6
 # Main graded export: win-rate builder (Goblin OVER / Tier-A standard, NBA family only).
 MAIN_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_MAIN_MIN_LEG_PROB", "0.65"))
 MAIN_MIN_ML_PROB_LEG: float = float(os.getenv("PROPORACLE_MAIN_MIN_ML_PROB_LEG", "0.58"))
-MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.15"))
+MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.33"))
 MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "15")))
 MAIN_ALLOWED_SPORTS: frozenset[str] = frozenset(
     s.strip().upper()
