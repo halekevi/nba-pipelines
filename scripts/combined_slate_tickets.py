@@ -11120,6 +11120,19 @@ def _rerank_tickets_live(tickets: list[dict], max_tickets: int) -> list[dict]:
 # ── STRONG-eligible Goblin + HOT builder ─────────────────────────────────────
 STRONG_BUILDER_MAX_TICKETS: int = max(5, int(os.getenv("PROPORACLE_STRONG_BUILDER_MAX", "25")))
 STRONG_BUILDER_TOP_K: int = max(10, int(os.getenv("PROPORACLE_STRONG_BUILDER_TOP_K", "50")))
+STRONG_BUILDER_SPORTS: frozenset[str] = frozenset({"NBA", "NBA1Q", "WNBA"})
+STRONG_BUILDER_CORE_PROPS_NORM: frozenset[str] = frozenset(
+    x.replace("+", "").replace(" ", "")
+    for x in ("points", "rebounds", "pts+rebs", "pts+rebs+asts", "assists")
+)
+
+
+def _strong_builder_prop_norm(v: object) -> str:
+    return str(v or "").lower().replace("-", "").replace("+", "").replace(" ", "")
+
+
+def _strong_builder_prop_allowed(v: object) -> bool:
+    return _strong_builder_prop_norm(v) in STRONG_BUILDER_CORE_PROPS_NORM
 
 
 def _prepare_strong_builder_pool(df: pd.DataFrame) -> pd.DataFrame:
@@ -11141,10 +11154,20 @@ def _strong_candidate_legs(df: pd.DataFrame) -> pd.DataFrame:
     pick = df.get("pick_type", pd.Series("", index=df.index)).astype(str).str.lower()
     tier = df.get("tier", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
     streak = df.get("l10_streak", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    sport = df.get("sport", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    if "prop_type" in df.columns:
+        prop_raw = df["prop_type"]
+    elif "prop" in df.columns:
+        prop_raw = df["prop"]
+    else:
+        prop_raw = pd.Series("", index=df.index)
+    prop_ok = prop_raw.map(_strong_builder_prop_allowed)
     mask = (
         pick.str.contains("goblin", na=False)
         & tier.isin(["A", "B"])
         & streak.eq("HOT")
+        & sport.isin(STRONG_BUILDER_SPORTS)
+        & prop_ok.fillna(False)
     )
     return df[mask].copy()
 

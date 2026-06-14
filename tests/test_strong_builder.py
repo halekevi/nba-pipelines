@@ -105,6 +105,40 @@ def test_strong_candidate_legs_filters_goblin_hot_ab():
     assert players == {"Alpha One", "Beta Two"}
 
 
+def test_strong_candidate_legs_excludes_mlb_and_non_core_props():
+    df = pd.DataFrame(
+        [
+            {
+                "sport": "MLB",
+                "player": "Hitter One",
+                "prop_type": "Hits",
+                "pick_type": "Goblin",
+                "tier": "A",
+                "l10_streak": "HOT",
+            },
+            {
+                "sport": "WNBA",
+                "player": "Shooter One",
+                "prop_type": "3-PT Made",
+                "pick_type": "Goblin",
+                "tier": "A",
+                "l10_streak": "HOT",
+            },
+            {
+                "sport": "WNBA",
+                "player": "Scorer One",
+                "prop_type": "Points",
+                "pick_type": "Goblin",
+                "tier": "A",
+                "l10_streak": "HOT",
+            },
+        ]
+    )
+    out = _strong_candidate_legs(df)
+    assert len(out) == 1
+    assert str(out.iloc[0]["player"]) == "Scorer One"
+
+
 def test_build_strong_tickets_produces_labeled_slips():
     tickets = build_strong_tickets(_sample_df(), max_tickets=5, date_str="2026-06-14")
     assert len(tickets) >= 1
