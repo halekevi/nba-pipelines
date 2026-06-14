@@ -7,8 +7,9 @@ distribution, with small absolute floors so tiers stay meaningful on thin slates
 
 STRONG is leg-count aware: percentile tiers are computed within each leg-count bucket
 so 6-leg parlays are not labeled STRONG just because they rank high among all slips.
-Additional gates demote STRONG→OK when p_win is too low for the leg count or when
-cross-sport (default: cross-sport cannot be STRONG).
+Additional gates demote STRONG→OK when p_win is too low for the leg count, when
+cross-sport (default: cross-sport cannot be STRONG), or when any leg fails Goblin +
+Tier A/B + HOT streak quality checks.
 """
 from __future__ import annotations
 
@@ -161,8 +162,56 @@ def _slip_p_win(ticket: Mapping[str, Any]) -> float | None:
     return None
 
 
-def _demote_strong_recommendation(rec: str, ticket: Mapping[str, Any]) -> str:
-    """STRONG must be short, same-sport, and meet minimum modeled p_win."""
+def _leg_strong_quality_fail_reason(leg: Mapping[str, Any]) -> str | None:
+    """Return goblin/tier/streak when leg fails STRONG quality; None if leg passes."""
+    pick_type = str(leg.get("pick_type") or "").lower()
+    if "goblin" not in pick_type:
+        return "goblin"
+    tier = str(leg.get("tier") or "").upper()
+    if tier not in ("A", "B"):
+        return "tier"
+    streak = str(leg.get("l10_streak") or "").upper()
+    if streak != "HOT":
+        return "streak"
+    return None
+
+
+def all_legs_strong_quality(legs: Sequence[Mapping[str, Any]]) -> bool:
+    """Every leg must be Goblin, Tier A/B, and HOT streak."""
+    if not legs:
+        return False
+    for leg in legs:
+        if not isinstance(leg, dict):
+            return False
+        if _leg_strong_quality_fail_reason(leg):
+            return False
+    return True
+
+
+def _track_strong_leg_quality(legs: Sequence[object], gate_stats: MutableMapping[str, int]) -> bool:
+    """Record per-leg failure counts; return True when all legs pass STRONG quality."""
+    ok = True
+    for leg in legs or []:
+        gate_stats["legs_checked"] = gate_stats.get("legs_checked", 0) + 1
+        if not isinstance(leg, dict):
+            gate_stats["failed_tier"] = gate_stats.get("failed_tier", 0) + 1
+            ok = False
+            continue
+        reason = _leg_strong_quality_fail_reason(leg)
+        if reason:
+            key = f"failed_{reason}"
+            gate_stats[key] = gate_stats.get(key, 0) + 1
+            ok = False
+    return ok
+
+
+def _demote_strong_recommendation(
+    rec: str,
+    ticket: Mapping[str, Any],
+    *,
+    gate_stats: MutableMapping[str, int] | None = None,
+) -> str:
+    """STRONG must be short, same-sport, high p_win, and all legs pass quality gates."""
     if rec != "STRONG":
         return rec
     n = _slip_leg_count(ticket)
@@ -173,12 +222,30 @@ def _demote_strong_recommendation(rec: str, ticket: Mapping[str, Any]) -> str:
         return "OK"
     p_win = _slip_p_win(ticket)
     if p_win is None:
-        return rec
+        return "OK"
     if n <= 2 and p_win < STRONG_MIN_P_WIN_2LEG:
         return "OK"
     if n == 3 and p_win < STRONG_MIN_P_WIN_3LEG:
         return "OK"
+    legs = [leg for leg in (ticket.get("legs") or []) if isinstance(leg, dict)]
+    if gate_stats is not None:
+        if not _track_strong_leg_quality(legs, gate_stats):
+            return "OK"
+    elif not all_legs_strong_quality(legs):
+        return "OK"
     return rec
+
+
+def log_strong_gate(payload: Mapping[str, Any], gate_stats: Mapping[str, int], *, n_strong: int) -> None:
+    """Print daily STRONG gate summary for ticket build logs."""
+    date = str(payload.get("date") or "unknown")[:10]
+    print(
+        f"[strong-gate] {date}: {n_strong} STRONG tickets "
+        f"({int(gate_stats.get('legs_checked', 0))} legs checked, "
+        f"{int(gate_stats.get('failed_goblin', 0))} failed goblin, "
+        f"{int(gate_stats.get('failed_tier', 0))} failed tier, "
+        f"{int(gate_stats.get('failed_streak', 0))} failed streak)"
+    )
 
 
 def collect_payload_payout_evs(payload: Mapping[str, Any]) -> list[float]:
@@ -243,6 +310,12 @@ def apply_slate_ev_tier_recommendations(
 
     counts = {"STRONG": 0, "OK": 0, "MARGINAL": 0, "SKIP": 0}
     demoted = 0
+    gate_stats: dict[str, int] = {
+        "legs_checked": 0,
+        "failed_goblin": 0,
+        "failed_tier": 0,
+        "failed_streak": 0,
+    }
     for t in _iter_tickets(payload):
         pay = t.get("payout")
         if not isinstance(pay, dict):
@@ -258,9 +331,8 @@ def apply_slate_ev_tier_recommendations(
             continue
         n = _slip_leg_count(t)
         th = thresholds_by_legs.get(str(n), global_thresholds) if stratify_by_legs else global_thresholds
-        rec = recommendation_from_ev(ev, th)
-        before = rec
-        rec = _demote_strong_recommendation(rec, t)
+        before = "STRONG" if t.get("strong_builder") else recommendation_from_ev(ev, th)
+        rec = _demote_strong_recommendation(before, t, gate_stats=gate_stats)
         if before == "STRONG" and rec != "STRONG":
             demoted += 1
         pay["recommendation"] = rec
@@ -276,7 +348,11 @@ def apply_slate_ev_tier_recommendations(
         "min_p_win_2leg": STRONG_MIN_P_WIN_2LEG,
         "min_p_win_3leg": STRONG_MIN_P_WIN_3LEG,
         "allow_cross_sport": STRONG_ALLOW_CROSS_SPORT,
+        "require_goblin": True,
+        "require_tier_ab": True,
+        "require_hot_streak": True,
     }
+    payload["strong_gate_stats"] = dict(gate_stats)
     if percentiles:
         payload["tier_ev_percentiles"] = {**payload["tier_ev_percentiles"], **dict(percentiles)}
 
@@ -289,6 +365,7 @@ def apply_slate_ev_tier_recommendations(
             f"MARGINAL={counts['MARGINAL']} SKIP={counts['SKIP']}"
             + (f" strong_demoted={demoted}" if demoted else "")
         )
+        log_strong_gate(payload, gate_stats, n_strong=counts["STRONG"])
     return global_thresholds
 
 

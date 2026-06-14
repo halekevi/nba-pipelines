@@ -74,7 +74,7 @@ import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Iterable, List, Optional
+from typing import Any, Iterable, List, Mapping, Optional
 from zoneinfo import ZoneInfo
 
 _SLATE_TZ = ZoneInfo("America/New_York")
@@ -132,7 +132,11 @@ from utils.stack_70_eligible import (
     filter_stack_70_only,
     is_invalid_market_side,
 )
+from utils.prop_signal_score import l10_streak_series
 from utils.ticket_ev_tiers import (
+    STRONG_ALLOW_CROSS_SPORT,
+    STRONG_MIN_P_WIN_2LEG,
+    STRONG_MIN_P_WIN_3LEG,
     apply_slate_ev_tier_recommendations,
     recommendation_from_ev,
 )
@@ -5730,6 +5734,50 @@ def _write_long_parlay_ticket_snapshot(payload: dict, date_str: str) -> None:
     )
 
 
+def _extract_strong_builder_slips(payload: Mapping[str, Any]) -> list[dict]:
+    """Return strong_builder slips from a full ticket export payload."""
+    out: list[dict] = []
+    for g in payload.get("groups") or []:
+        if not isinstance(g, dict):
+            continue
+        for t in g.get("tickets") or []:
+            if isinstance(t, dict) and t.get("strong_builder"):
+                out.append(t)
+    return out
+
+
+def inject_strong_builder_tickets(full_payload: dict, main_payload: dict) -> dict:
+    """Prepend STRONG Goblin HOT builder slips into the curated main web export."""
+    strong_slips = _extract_strong_builder_slips(full_payload)
+    if not strong_slips:
+        return main_payload
+    out = dict(main_payload)
+    groups = list(out.get("groups") or [])
+    n_legs = int(strong_slips[0].get("n_legs") or len(strong_slips[0].get("legs") or []) or 2)
+    groups.insert(
+        0,
+        {
+            "group_name": "STRONG Goblin HOT",
+            "n_legs": n_legs,
+            "tickets": strong_slips,
+            "hot_legs": sum(int(t.get("hot_legs") or 0) for t in strong_slips),
+            "cold_legs": sum(int(t.get("cold_legs") or 0) for t in strong_slips),
+        },
+    )
+    out["groups"] = groups
+    out["strong_builder_count"] = len(strong_slips)
+    return out
+
+
+def write_full_ticket_export_snapshot(payload: dict, date_str: str) -> None:
+    """Persist the full multi-group ticket export for backtests and dated ML snapshots."""
+    path = os.path.join(REPO_ROOT, "ui_runner", "data", f"combined_slate_tickets_{date_str}.json")
+    _write_json_file(path, payload)
+    n_slips = sum(len(g.get("tickets") or []) for g in payload.get("groups") or [])
+    n_strong = len(_extract_strong_builder_slips(payload))
+    print(f"  [OK] Full ticket export -> {path} ({n_slips} slips, {n_strong} STRONG-builder)")
+
+
 def _count_l10_streak_legs(legs: list) -> tuple[int, int]:
     hot = cold = 0
     for leg in legs or []:
@@ -5824,6 +5872,7 @@ def ticket_groups_to_payload(
                 "flat_multiplier_flex_nn": _safe_float(t.get("flat_multiplier_flex_nn")),
                 "using_flat_fallback": bool(t.get("using_flat_fallback")),
                 "has_data_warning": False,
+                "strong_builder": bool(t.get("strong_builder")),
                 "legs": [],
             }
 
@@ -7192,13 +7241,14 @@ def write_web_outputs(
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, json_filename)
     if skip_ui_filters:
-        apply_slate_ev_tier_recommendations(payload)
         _finalize_payload_l10_streaks(payload)
+        apply_slate_ev_tier_recommendations(payload)
         payload = _sanitize_for_json(payload)
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
         print(f"[OK] Web JSON  -> {json_path}")
         return
+    _finalize_payload_l10_streaks(payload)
     apply_slate_ev_tier_recommendations(payload)
     payload = filter_web_tickets_for_ui(
         payload,
@@ -7225,7 +7275,6 @@ def write_web_outputs(
                 print("  [web-merge] skipped: existing tickets_latest.json has a different slate date")
         except Exception as exc:
             print(f"  [web-merge] WARN: could not merge existing tickets_latest.json ({exc})")
-    _finalize_payload_l10_streaks(payload)
     payload = _sanitize_for_json(payload)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
@@ -11068,6 +11117,173 @@ def _rerank_tickets_live(tickets: list[dict], max_tickets: int) -> list[dict]:
     return scored[:keep_n]
 
 
+# ── STRONG-eligible Goblin + HOT builder ─────────────────────────────────────
+STRONG_BUILDER_MAX_TICKETS: int = max(5, int(os.getenv("PROPORACLE_STRONG_BUILDER_MAX", "25")))
+STRONG_BUILDER_TOP_K: int = max(10, int(os.getenv("PROPORACLE_STRONG_BUILDER_TOP_K", "50")))
+
+
+def _prepare_strong_builder_pool(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensure signal columns and prop quality before STRONG candidate filtering."""
+    if df is None or df.empty:
+        return df
+    out = ensure_prop_signal_columns(df.copy())
+    if "prop_quality_score" not in out.columns:
+        out = add_prop_quality_score(out)
+    if "l10_streak" not in out.columns or out["l10_streak"].astype(str).str.strip().eq("").all():
+        out["l10_streak"] = l10_streak_series(out)
+    return out
+
+
+def _strong_candidate_legs(df: pd.DataFrame) -> pd.DataFrame:
+    """Goblin + Tier A/B + HOT streak legs for STRONG ticket stacking."""
+    if df is None or df.empty:
+        return df.iloc[0:0].copy()
+    pick = df.get("pick_type", pd.Series("", index=df.index)).astype(str).str.lower()
+    tier = df.get("tier", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    streak = df.get("l10_streak", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    mask = (
+        pick.str.contains("goblin", na=False)
+        & tier.isin(["A", "B"])
+        & streak.eq("HOT")
+    )
+    return df[mask].copy()
+
+
+def _log_strong_builder(
+    date_str: str,
+    n_candidates: int,
+    tickets: list[dict],
+    candidates: pd.DataFrame,
+) -> None:
+    print(
+        f"[strong-builder] {date_str}: {n_candidates} candidate legs, "
+        f"{len(tickets)} STRONG tickets built"
+    )
+    if candidates is None or candidates.empty:
+        return
+    top = candidates.sort_values("prop_quality_score", ascending=False).head(5)
+    for _, row in top.iterrows():
+        leg_p, _ = _resolve_leg_prob(pd.Series(row))
+        hit_pct = float(leg_p) if leg_p is not None else float(row.get("hit_rate") or 0.0)
+        print(
+            f"  Top leg: {row.get('player')} {row.get('prop_type')} {row.get('sport')} "
+            f"({hit_pct:.0%} HOT {row.get('tier')})"
+        )
+
+
+def build_strong_tickets(
+    df: pd.DataFrame,
+    *,
+    max_tickets: int | None = None,
+    min_p_win_2leg: float | None = None,
+    min_p_win_3leg: float | None = None,
+    max_legs: int = 3,
+    player_ticket_counts: dict[str, int] | None = None,
+    date_str: str = "",
+) -> list[dict]:
+    """
+    Build 2–3 leg power tickets from Goblin A/B HOT legs only.
+    Tickets are tagged strong_builder=True for STRONG tier assignment.
+    """
+    prepared = _prepare_strong_builder_pool(df)
+    candidates = _strong_candidate_legs(prepared)
+    n_candidates = len(candidates)
+    cap = int(max_tickets if max_tickets is not None else STRONG_BUILDER_MAX_TICKETS)
+    floor_2 = float(min_p_win_2leg if min_p_win_2leg is not None else STRONG_MIN_P_WIN_2LEG)
+    floor_3 = float(min_p_win_3leg if min_p_win_3leg is not None else STRONG_MIN_P_WIN_3LEG)
+    if n_candidates < 2:
+        _log_strong_builder(date_str, n_candidates, [], candidates)
+        return []
+
+    if "prop_quality_score" not in candidates.columns:
+        candidates = add_prop_quality_score(candidates)
+    candidates = candidates.sort_values("prop_quality_score", ascending=False).reset_index(drop=True)
+    top_k = min(len(candidates), STRONG_BUILDER_TOP_K)
+    top_rows = [candidates.iloc[i].to_dict() for i in range(top_k)]
+
+    tickets: list[dict] = []
+    seen_keys: set[frozenset] = set()
+    scan_cap = max(8_000, cap * 800)
+
+    for n_legs in (2, 3):
+        if n_legs > int(max_legs) or len(top_rows) < n_legs:
+            continue
+        min_p_win = floor_2 if n_legs <= 2 else floor_3
+        scanned = 0
+        for combo in itertools.combinations(top_rows, n_legs):
+            scanned += 1
+            if scanned > scan_cap or len(tickets) >= cap:
+                break
+            rows = list(combo)
+            players = [str(r.get("player", "")).strip().lower() for r in rows]
+            if len(set(p for p in players if p)) != len([p for p in players if p]):
+                continue
+            player_props = {
+                f"{p}::{_norm_prop_label(r.get('prop_type', ''))}"
+                for p, r in zip(players, rows)
+                if p
+            }
+            if len(player_props) != len(rows):
+                continue
+            sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
+            if len(sports) > 1 and not STRONG_ALLOW_CROSS_SPORT:
+                continue
+            key = frozenset(_leg_fp_tuple(r) for r in rows)
+            if key in seen_keys:
+                continue
+            if not _ticket_cap_can_add(rows, player_ticket_counts):
+                continue
+
+            leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
+            cmult, caudit = _correlation_multiplier_and_audit(rows)
+            ep = win_prob(leg_probs, n_legs) * cmult
+            if ep < min_p_win:
+                continue
+
+            pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
+            adj_power = calc_adjusted_payout(pout["power"], rows)
+            hrs = [float(r.get("hit_rate", 0.5) or 0.5) for r in rows]
+            rss = [float(r.get("rank_score", 0.0) or 0.0) for r in rows]
+            sport_label = next(iter(sports)) if len(sports) == 1 else "MIX"
+
+            tickets.append(
+                {
+                    "key": key,
+                    "rows": rows,
+                    "avg_hit_rate": float(np.mean(hrs)) if hrs else 0.0,
+                    "avg_rank_score": float(np.mean(rss)) if rss else 0.0,
+                    "est_win_prob": ep,
+                    "power_payout": adj_power,
+                    "flex_payout": calc_adjusted_payout(pout["flex"], rows),
+                    "base_power_payout": pout["power"],
+                    "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
+                    "ev_power": round(ep * adj_power, 4),
+                    "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
+                    "n_legs": n_legs,
+                    "ticket_type": "Power Play",
+                    "sport": sport_label,
+                    "strong_builder": True,
+                    "correlation_multiplier": cmult,
+                    "correlation_audit": caudit,
+                    "leg_prob_sources": ",".join(
+                        sorted({src for _, src in leg_probs})
+                    ),
+                }
+            )
+            seen_keys.add(key)
+            _ticket_cap_register(rows, player_ticket_counts)
+
+    tickets.sort(
+        key=lambda t: (
+            -float(t.get("est_win_prob") or 0.0),
+            -float(t.get("avg_rank_score") or 0.0),
+        )
+    )
+    tickets = tickets[:cap]
+    _log_strong_builder(date_str, n_candidates, tickets, candidates)
+    return tickets
+
+
 # ── Build tickets ──────────────────────────────────────────────────────────────
 def build_tickets(
     pool: pd.DataFrame,
@@ -14603,6 +14819,24 @@ def main():
     print(f"  [handoff] sports in eligible pool: {eligible_sports}")
     print(f"  [handoff] sports in assembly loop: {sports_to_build}")
 
+    strong_pool_frames = [df for _, df in sport_pool_map if df is not None and len(df) > 0]
+    if strong_pool_frames:
+        strong_df = pd.concat(strong_pool_frames, ignore_index=True)
+        strong_tickets = build_strong_tickets(
+            strong_df,
+            max_tickets=int(args.max_tickets),
+            player_ticket_counts=counters["player_ticket_counts"],
+            date_str=str(args.date),
+        )
+        if strong_tickets:
+            strong_display = "STRONG Goblin HOT"
+            strong_sname = _excel_ticket_sheet_title_unique(strong_display, wb.sheetnames)
+            write_ticket_sheet(wb, strong_tickets, strong_sname, C["hdr_mix"], label=strong_display)
+            all_ticket_groups.insert(0, (strong_display, strong_tickets, None))
+            for st in strong_tickets:
+                nl = int(st.get("n_legs") or len(st.get("rows") or []))
+                _group_counts_by_size[strong_display][nl] += 1
+
     for sport_label, sdf in sport_pool_map:
         if sdf is None or len(sdf) == 0:
             _zero_ticket_reasons[sport_label] = "empty eligible pool"
@@ -14942,6 +15176,8 @@ def main():
                 pool_fn=lambda f: pool(f, for_win_rate=True),
                 graded_analysis=_load_graded_analysis(),
             )
+            payload = inject_strong_builder_tickets(full_payload, payload)
+            write_full_ticket_export_snapshot(full_payload, str(args.date))
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
@@ -15017,6 +15253,8 @@ def main():
                 pool_fn=lambda f: pool(f, for_win_rate=True),
                 graded_analysis=_load_graded_analysis(),
             )
+            payload = inject_strong_builder_tickets(full_payload, payload)
+            write_full_ticket_export_snapshot(full_payload, str(args.date))
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
