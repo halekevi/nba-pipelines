@@ -1322,7 +1322,11 @@ else {
 
         $trackPerf = Join-Path $Root "scripts\track_model_performance.py"
         if (Test-Path $trackPerf) {
-            try {
+            if ((Get-Date) -lt [datetime]"2026-10-01") {
+                Write-Host "  [NBA1H] Off-season — monitor paused until 2026-10-01" -ForegroundColor DarkGray
+                Write-Log "STEP D1g3b - NBA1H AUC monitor: SKIP (off-season)"
+            }
+            else {
                 Write-Host "  [D1g3b] NBA1H AUC monitor" -ForegroundColor DarkGray
                 Write-Log "STEP D1g3b - NBA1H AUC monitor: START"
                 & py -3.14 -X utf8 $trackPerf --nba1h-monitor --date $Yesterday
@@ -1332,9 +1336,6 @@ else {
                 else {
                     Write-Log "STEP D1g3b - NBA1H AUC monitor: WARN (exit $LASTEXITCODE)"
                 }
-            }
-            catch {
-                Write-Log "STEP D1g3b - NBA1H AUC monitor: WARN ($($_.Exception.Message))"
             }
         }
         else {

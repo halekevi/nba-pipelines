@@ -167,6 +167,11 @@ $NFLDir    = Join-Path $SportsRoot "NFL"
 # WNBA regular season: include in full parallel runs on/after this date (ISO yyyy-MM-dd).
 # 2026 opener starts May 1, so keep WNBA active for same-day fresh slates.
 $WNBA_SEASON_START = "2026-05-01"
+
+# NBA off-season: pause NBA / NBA1H / NBA1Q until this date (summer ops).
+$NBA_SEASON_RESUME = "2026-10-01"
+$NBASeasonResume = [datetime]::ParseExact($NBA_SEASON_RESUME, "yyyy-MM-dd", $null)
+$NBAOffSeason = (Get-Date) -lt $NBASeasonResume
 $OutDir    = Join-Path $Root "outputs\$Date"
 $NBARunOutDir = Join-Path $OutDir "nba"
 $NBA1HRunOutDir = Join-Path $OutDir "nba1h"
@@ -633,6 +638,11 @@ function Run-NBAPeriodPipeline {
     if ($tagLower -notin @("nba1h", "nba1q")) {
         Write-Host "  [NBA-PERIOD] Unknown tag '$Tag' (expected nba1h|nba1q)" -ForegroundColor Yellow
         return $false
+    }
+
+    if ($NBAOffSeason) {
+        Write-Host "  [NBA] Off-season — paused until 2026-10-01" -ForegroundColor DarkGray
+        return $true
     }
 
     Write-Host ""
@@ -1753,6 +1763,14 @@ if ($NBAOnly) {
     Write-Host "[ NBA PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
 
+    if ($NBAOffSeason) {
+        Write-Host "  [NBA] Off-season — paused until 2026-10-01" -ForegroundColor DarkGray
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ nba = "off_season"; nba1h = "off_season"; nba1q = "off_season" }
+        Run-Combined "after NBA (off-season)"
+        Print-Done
+        exit 0
+    }
+
     if (Test-Path (Join-Path $NBADir "RUN_COMPLETE.flag")) { Remove-Item (Join-Path $NBADir "RUN_COMPLETE.flag") -Force }
 
     if ($RefreshCache) {
@@ -1946,6 +1964,10 @@ if (-not $CFB_PARALLEL_ACTIVE) {
     Write-Host "  [CFB] Parallel job skipped (off-season for $Date; active months Aug–Jan)." -ForegroundColor DarkGray
 }
 
+if ($NBAOffSeason) {
+    Write-Host "  [NBA] Off-season — paused until 2026-10-01" -ForegroundColor DarkGray
+}
+
 $parallelLabel = if ($wnbaParallel) {
     "[ PARALLEL PIPELINE: NBA + CBB + CFB + NHL + Soccer + Tennis + MLB + NFL + WNBA ]"
 } else {
@@ -1957,9 +1979,15 @@ Write-Host "  Starting all pipelines simultaneously..." -ForegroundColor Cyan
 Write-Host ""
 
 # -- NBA Job ------------------------------------------------------------------
+$NBAJob = $null
+if (-not $NBAOffSeason) {
 $NBAJob = Start-Job -ScriptBlock {
-    param($NBADir, $Date, $OddsApiKey, $SkipFetch, $RepoRoot, $NBARunOutDir)
+    param($NBADir, $Date, $OddsApiKey, $SkipFetch, $RepoRoot, $NBARunOutDir, $OffSeason)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    if ($OffSeason) {
+        Write-Output "[NBA] Off-season — paused until 2026-10-01"
+        return $true
+    }
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
         Write-Output "[NBA] --> $Label"
@@ -2130,7 +2158,8 @@ $NBAJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot "$NBARunOutDir\step7_ranked_props.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "Sports\NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
     return $ok
-} -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root, $NBARunOutDir
+} -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root, $NBARunOutDir, $NBAOffSeason
+}
 
 # -- CBB Job ------------------------------------------------------------------
 $CBBJob = $null
@@ -3025,7 +3054,7 @@ foreach ($job in $failedJobs) {
 }
 
 # -- Results ------------------------------------------------------------------
-$NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
+$NBASuccess    = if ($NBAOffSeason) { $true } else { Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx") }
 $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
 $CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { (Test-Path (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx")) -or (Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx")) }
 $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
@@ -3073,12 +3102,17 @@ if ($wnbaParallel) {
 if ($MLBSuccess -and -not (Test-Step1NoSlate -CsvPath $mlbStep1Path)) { Publish-MlbStep8Artifacts -Reason "parallel" }
 
 $nbaStep1Path = Join-Path $NBARunOutDir "step1_pp_props_today.csv"
-$nbaNoSlate = Test-Step1NoSlate -CsvPath $nbaStep1Path
+$nbaNoSlate = $false
 $nba1hNoSlate = $false
 $nba1qNoSlate = $false
 $NBA1HSuccess = $false
 $NBA1QSuccess = $false
-if ($nbaNoSlate) {
+if ($NBAOffSeason) {
+    $NBASuccess = $true
+    $NBA1HSuccess = $true
+    $NBA1QSuccess = $true
+} elseif (Test-Step1NoSlate -CsvPath $nbaStep1Path) {
+    $nbaNoSlate = $true
     Write-Host "  [NBA] no slate for $Date — not a failure." -ForegroundColor DarkGray
     Clear-NBAGeneratedOutputs -BaseDir $NBARunOutDir
     $NBASuccess = $true
@@ -3144,9 +3178,9 @@ if ($wnbaParallel) {
     $wnbaNoSlate = Test-Step1NoSlate -CsvPath (Join-Path $OutDir "wnba\step1_wnba_props.csv")
 }
 $slateStatusSports = @{
-    nba    = if ($nbaNoSlate) { "no_slate" } elseif ($NBASuccess) { "complete" } else { "failed" }
-    nba1h  = if ($nba1hNoSlate) { "no_slate" } elseif ($NBA1HSuccess) { "complete" } else { "failed" }
-    nba1q  = if ($nba1qNoSlate) { "no_slate" } elseif ($NBA1QSuccess) { "complete" } else { "failed" }
+    nba    = if ($NBAOffSeason) { "off_season" } elseif ($nbaNoSlate) { "no_slate" } elseif ($NBASuccess) { "complete" } else { "failed" }
+    nba1h  = if ($NBAOffSeason) { "off_season" } elseif ($nba1hNoSlate) { "no_slate" } elseif ($NBA1HSuccess) { "complete" } else { "failed" }
+    nba1q  = if ($NBAOffSeason) { "off_season" } elseif ($nba1qNoSlate) { "no_slate" } elseif ($NBA1QSuccess) { "complete" } else { "failed" }
     nhl    = if ($nhlNoSlate) { "no_slate" } elseif ($NHLSuccess) { "complete" } else { "failed" }
     soccer = if ($soccerNoSlate) { "no_slate" } elseif ($SoccerSuccess) { "complete" } else { "failed" }
     mlb    = if ($mlbNoSlate) { "no_slate" } elseif ($MLBSuccess) { "complete" } else { "failed" }
@@ -3162,7 +3196,7 @@ if ($wnbaParallel) {
 Write-PipelineSlateStatusJson -RunDate $Date -Sports $slateStatusSports
 
 @(
-    @{ Name="NBA";    Ok=$NBASuccess; Skip=$false; NoSlate=$nbaNoSlate },
+    @{ Name="NBA";    Ok=$NBASuccess; Skip=$NBAOffSeason; NoSlate=$nbaNoSlate },
     @{ Name="CBB";    Ok=$CBBSuccess; Skip=(-not $CBB_PARALLEL_ACTIVE) },
     @{ Name="CFB";    Ok=$CFBSuccess; Skip=(-not $CFB_PARALLEL_ACTIVE) },
     @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false; NoSlate=$nhlNoSlate },
