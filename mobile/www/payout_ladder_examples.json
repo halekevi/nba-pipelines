@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-14T12:24:56.888896+00:00",
+  "generated_at": "2026-06-15T09:06:25.419603+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
           "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -162,34 +162,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -198,34 +198,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -234,34 +234,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -270,34 +270,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -306,34 +306,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -342,34 +342,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -378,34 +378,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Bridget Carleton",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -414,44 +414,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -460,44 +460,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -506,44 +506,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -552,44 +552,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -598,44 +598,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -644,44 +644,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -690,44 +690,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Bridget Carleton",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -736,54 +736,54 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -792,54 +792,54 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -848,54 +848,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -904,54 +904,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -960,54 +960,54 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1016,54 +1016,54 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Leonie Fiebich",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1072,19 +1072,29 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1092,34 +1102,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Bridget Carleton",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.8500000000000001
         }
       ]
     },
@@ -1128,19 +1128,29 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1148,28 +1158,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1178,14 +1168,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1194,19 +1194,29 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1214,28 +1224,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1244,14 +1234,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1260,19 +1260,29 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1280,28 +1290,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1310,14 +1300,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1326,19 +1326,29 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1346,28 +1356,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1376,14 +1366,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1392,19 +1392,29 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1412,28 +1422,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1442,14 +1432,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1458,19 +1458,29 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Jewell Loyd",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1478,28 +1488,8 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Shakira Austin",
+          "player": "Nneka Ogwumike",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marine Johannes",
-          "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1508,14 +1498,24 @@
           "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Leonie Fiebich",
-          "prop_type": "Rebounds",
+          "player": "Natasha Howard",
+          "prop_type": "Assists",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1524,64 +1524,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Tiffany Hayes",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.9
         },
         {
-          "player": "Julie Allemand",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Shakira Austin",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Jewell Loyd",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Leonie Fiebich",
+          "player": "Nia Coffey",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Nneka Ogwumike",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Emily Engstler",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.9
+        },
+        {
+          "player": "Bridget Carleton",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.8500000000000001
         }
       ]
     }
