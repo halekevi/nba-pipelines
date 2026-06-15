@@ -388,18 +388,60 @@ function Invoke-NBAStep1Fetch {
     }
 }
 
+function Get-MlbStep1HttpArgList {
+    param(
+        [string]$PipelineDate,
+        [string]$OutputPath,
+        [switch]$Append,
+        [switch]$AllowNearestFuture
+    )
+    $list = @(
+        "--date", $PipelineDate,
+        "--output", $OutputPath,
+        "--per-page", "250",
+        "--max-pages", "10",
+        "--api-retries", "5",
+        "--api-session-waves", "3",
+        "--api-403-cooldown-after", "5",
+        "--api-403-cooldown-seconds", "90",
+        "--api-403-cooldown-jitter-min", "12",
+        "--api-403-cooldown-jitter-max", "40"
+    )
+    if ($Append) { $list += "--append" }
+    if ($AllowNearestFuture) { $list += "--allow-nearest-future" }
+    return $list
+}
+
 function Invoke-MLBStep1Fetch {
     param(
         [string]$WorkDir,
         [string]$PipelineDate,
         [string]$OutputPath = "step1_mlb_props.csv"
     )
-    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (CDP, then direct API, then Playwright)" -ForegroundColor Yellow
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (HTTP first, then CDP, then Playwright)" -ForegroundColor Yellow
     Push-Location $WorkDir
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
         $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"   # match WNBA — chrome120 hits DataDome 403
+
+        $httpArgs = Get-MlbStep1HttpArgList -PipelineDate $PipelineDate -OutputPath $OutputPath
+        $cmdHttpDisplay = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py $($httpArgs -join ' ')"
+        Write-Host "        CMD: $cmdHttpDisplay" -ForegroundColor DarkGray
+        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" @httpArgs 2>&1
+        $exit = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -eq 0) {
+            $httpHealth = Get-MLBStep1DateHealth -CsvPath $OutputPath -TargetDate $PipelineDate
+            if ($httpHealth.ok) {
+                Write-Host "      OK (HTTP)" -ForegroundColor Green
+                return $true
+            }
+            Write-Host "      [MLB] HTTP returned exit 0 but step1 is unhealthy ($($httpHealth.reason)) — falling back to CDP..." -ForegroundColor Yellow
+        } else {
+            Write-Host "      MLB HTTP fetch failed (exit $exit); falling back to CDP..." -ForegroundColor Yellow
+        }
+
         $cdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
         $cdpReachable = $false
         try {
@@ -421,27 +463,15 @@ function Invoke-MLBStep1Fetch {
                     Write-Host "      OK (CDP)" -ForegroundColor Green
                     return $true
                 }
-                Write-Host "      [MLB] CDP returned exit 0 but step1 is empty ($($cdpHealth.reason)) — falling back to direct API..." -ForegroundColor Yellow
+                Write-Host "      [MLB] CDP returned exit 0 but step1 is unhealthy ($($cdpHealth.reason)) — trying Playwright..." -ForegroundColor Yellow
             } else {
-                Write-Host "      MLB CDP fetch failed (exit $exit); falling back to direct API..." -ForegroundColor Yellow
+                Write-Host "      MLB CDP fetch failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
             }
         } else {
-            Write-Host "      CDP endpoint not reachable at $cdpUrl; using direct API fallback." -ForegroundColor Yellow
+            Write-Host "      CDP endpoint not reachable at $cdpUrl; trying Playwright fallback." -ForegroundColor Yellow
         }
 
-        # Use call operator (&) so $LASTEXITCODE reflects Python — Invoke-Expression + capture can leave a stale 0 and skip Playwright after a failed fetch.
-        $cmd1Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath --api-retries 4 ..."
-        Write-Host "        CMD: $cmd1Display" -ForegroundColor DarkGray
-        $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-            --date $PipelineDate --output $OutputPath `
-            --api-retries 4 --api-session-waves 2 `
-            --api-wave-gap-min 8 --api-wave-gap-max 15 `
-            --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
-            --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
-        $exit = $LASTEXITCODE
-        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
-        if ($exit -ne 0) {
-            Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
+        if ($exit -ne 0 -or -not (Get-MLBStep1DateHealth -CsvPath $OutputPath -TargetDate $PipelineDate).ok) {
             $cmd2Display = "py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
             Write-Host "        CMD: $cmd2Display" -ForegroundColor DarkGray
             $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
@@ -2701,14 +2731,54 @@ $MLBJob = Start-Job -ScriptBlock {
         $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
         return @{ ok = ($match.Count -gt 0); reason = $reason }
     }
+    function Get-MlbStep1HttpArgList-Job {
+        param(
+            [string]$PipelineDate,
+            [string]$OutputPath,
+            [switch]$Append,
+            [switch]$AllowNearestFuture
+        )
+        $list = @(
+            "--date", $PipelineDate,
+            "--output", $OutputPath,
+            "--per-page", "250",
+            "--max-pages", "10",
+            "--api-retries", "5",
+            "--api-session-waves", "3",
+            "--api-403-cooldown-after", "5",
+            "--api-403-cooldown-seconds", "90",
+            "--api-403-cooldown-jitter-min", "12",
+            "--api-403-cooldown-jitter-max", "40"
+        )
+        if ($Append) { $list += "--append" }
+        if ($AllowNearestFuture) { $list += "--allow-nearest-future" }
+        return $list
+    }
     function Invoke-MLBStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
-        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (CDP, then direct API, then Playwright)"
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (HTTP first, then CDP, then Playwright)"
         Push-Location $Dir
         try {
             $env:PYTHONUTF8 = "1"
             $env:PYTHONIOENCODING = "utf-8"
             $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+
+            $httpArgs = Get-MlbStep1HttpArgList-Job -PipelineDate $PipelineDate -OutputPath $OutputPath
+            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py $($httpArgs -join ' ')"
+            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" @httpArgs 2>&1
+            $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -eq 0) {
+                $httpHealth = Get-MLBStep1DateHealth-Job -CsvPath $OutputPath -TargetDate $PipelineDate
+                if ($httpHealth.ok) {
+                    Write-Output "[MLB] OK: MLB Step 1 (HTTP)"
+                    return $true
+                }
+                Write-Output "[MLB] HTTP returned exit 0 but step1 is unhealthy ($($httpHealth.reason)) — falling back to CDP"
+            } else {
+                Write-Output "[MLB] HTTP failed (exit $exit); falling back to CDP"
+            }
+
             $cdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
             $cdpReachable = $false
             try {
@@ -2729,25 +2799,15 @@ $MLBJob = Start-Job -ScriptBlock {
                         Write-Output "[MLB] OK: MLB Step 1 (CDP)"
                         return $true
                     }
-                    Write-Output "[MLB] CDP returned exit 0 but step1 is empty ($($cdpHealth.reason)) — falling back to direct API"
+                    Write-Output "[MLB] CDP returned exit 0 but step1 is unhealthy ($($cdpHealth.reason)) — trying Playwright"
                 } else {
-                    Write-Output "[MLB] CDP failed (exit $exit); falling back to direct API"
+                    Write-Output "[MLB] CDP failed (exit $exit); trying Playwright"
                 }
             } else {
-                Write-Output "[MLB] CDP endpoint not reachable at $cdpUrl; using direct API fallback"
+                Write-Output "[MLB] CDP endpoint not reachable at $cdpUrl; trying Playwright fallback"
             }
 
-            Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --date $PipelineDate --output $OutputPath (direct API)"
-            $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                --date $PipelineDate --output $OutputPath `
-                --api-retries 4 --api-session-waves 2 `
-                --api-wave-gap-min 8 --api-wave-gap-max 15 `
-                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
-                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10 2>&1
-            $exit = $LASTEXITCODE
-            foreach ($line in $output) { Write-Output "        $line" }
-            if ($exit -ne 0) {
-                Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
+            if ($exit -ne 0 -or -not (Get-MLBStep1DateHealth-Job -CsvPath $OutputPath -TargetDate $PipelineDate).ok) {
                 Write-Output "        CMD: py -3.14 -u .\scripts\step1_fetch_prizepicks_mlb.py --playwright --date $PipelineDate --output $OutputPath"
                 $output = & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                     --playwright --timeout 120 --retries 1 --retry_delay 5 `

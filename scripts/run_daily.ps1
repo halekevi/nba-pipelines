@@ -61,6 +61,18 @@ $SportsRoot = Join-Path $Root "Sports"
 # WNBA: must match $WNBA_SEASON_START in repo-root run_pipeline.ps1 (parallel job + dated step8 gate).
 $WNBA_SEASON_START = "2026-05-01"
 
+function Test-PpCdpReachable {
+    param([string]$CdpBaseUrl = "http://127.0.0.1:9222")
+    try {
+        $u = ($CdpBaseUrl.TrimEnd("/")) + "/json/version"
+        $null = Invoke-RestMethod -Uri $u -TimeoutSec 2 -ErrorAction Stop
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
 # Ensure local cache folder exists
 # (excluded from OneDrive, must be created locally)
 $CacheDir = Join-Path $Root "data\cache"
@@ -757,6 +769,37 @@ else {
 # STEP C — Full pipeline for today
 # =============================================================================
 if (-not $SkipPipeline) {
+    # STEP C0a — PrizePicks Chrome CDP warmup (MLB board). One human captcha solve keeps session warm all day.
+    if (-not $SkipFetch) {
+        $ppChromePs1 = Join-Path $Root "scripts\launch_prizepicks_chrome_cdp.ps1"
+        $ppCdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
+        if (Test-Path -LiteralPath $ppChromePs1) {
+            if (Test-PpCdpReachable -CdpBaseUrl $ppCdpUrl) {
+                Write-Host "  [C0a] PP Chrome CDP already up ($ppCdpUrl)" -ForegroundColor DarkGray
+                Write-Log "STEP C0a - PP Chrome CDP: SKIP (already running)"
+            }
+            else {
+                Write-Host "  [C0a] Launching PP Chrome (MLB board) for DataDome bypass..." -ForegroundColor Cyan
+                Write-Log "STEP C0a - PP Chrome CDP: START (launch MLB board)"
+                & pwsh -NoProfile -File $ppChromePs1 -OpenBoard -LeagueId 2
+                Start-Sleep -Seconds 5
+                if (Test-PpCdpReachable -CdpBaseUrl $ppCdpUrl) {
+                    Write-Log "STEP C0a - PP Chrome CDP: OK (CDP ready — solve captcha if board blocked)"
+                }
+                else {
+                    Write-Log "STEP C0a - PP Chrome CDP: WARN (CDP not responding yet)"
+                }
+            }
+            Write-Host "  [C0a] PP Chrome CDP is optional fallback for MLB step1 (HTTP is primary)." -ForegroundColor DarkGray
+        }
+        else {
+            Write-Log "STEP C0a - PP Chrome CDP: SKIP (launcher missing)"
+        }
+    }
+    else {
+        Write-Log "STEP C0a - PP Chrome CDP: SKIPPED (-SkipFetch)"
+    }
+
     if ($SkipGameLines) {
         Write-Log "STEP C0 - Fetch game lines: SKIPPED (-SkipGameLines)"
     }
@@ -1937,12 +1980,26 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
     }
 
-    Write-Host "[MLB] Fetching MLB props (CDP, then MLB step1 API, then Playwright)..." -ForegroundColor Cyan
+    Write-Host "[MLB] Fetching MLB props (HTTP first, then CDP, then Playwright)..." -ForegroundColor Cyan
     $MLBDir = Join-Path $SportsRoot "MLB"
     $mlbLateOut = Join-Path $Root "outputs\$Today\mlb\step1_mlb_props.csv"
     $mlbLateDir = Split-Path $mlbLateOut -Parent
     if (-not (Test-Path $mlbLateDir)) { New-Item -ItemType Directory -Force -Path $mlbLateDir | Out-Null }
     $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+    $mlbHttpArgs = @(
+        "--date", "$Today",
+        "--output", $mlbLateOut,
+        "--per-page", "250",
+        "--max-pages", "10",
+        "--api-retries", "5",
+        "--api-session-waves", "3",
+        "--api-403-cooldown-after", "5",
+        "--api-403-cooldown-seconds", "90",
+        "--api-403-cooldown-jitter-min", "12",
+        "--api-403-cooldown-jitter-max", "40",
+        "--append",
+        "--allow-nearest-future"
+    )
     $mlbCdpUrl = if ($env:PROPORACLE_MLB_CDP_URL) { "$($env:PROPORACLE_MLB_CDP_URL)".Trim() } else { "http://127.0.0.1:9222" }
     $mlbCdpReachable = $false
     try {
@@ -1951,24 +2008,21 @@ if ($NowHour -ge 10) {
     } catch { $mlbCdpReachable = $false }
     Push-Location $MLBDir
     try {
-        if ($mlbCdpReachable) {
-            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                --cdp $mlbCdpUrl --timeout 120 --retries 1 --retry_delay 5 `
-                --append --allow-nearest-future --date "$Today" --output $mlbLateOut
-        }
-        if (-not $mlbCdpReachable -or $LASTEXITCODE -ne 0) {
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" @mlbHttpArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[NBA_LATE_FETCH] MLB HTTP fetch failed (exit $LASTEXITCODE) — trying CDP"
             if ($mlbCdpReachable) {
-                Write-Warning "[NBA_LATE_FETCH] MLB CDP fetch failed (exit $LASTEXITCODE) — trying direct API"
+                & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                    --cdp $mlbCdpUrl --timeout 120 --retries 1 --retry_delay 5 `
+                    --append --allow-nearest-future --date "$Today" --output $mlbLateOut
             }
-            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-                --append --allow-nearest-future --date "$Today" --output $mlbLateOut `
-                --api-retries 4 --api-session-waves 2 `
-                --api-wave-gap-min 8 --api-wave-gap-max 15 `
-                --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 `
-                --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10
         }
         if ($LASTEXITCODE -ne 0) {
-            Write-Warning "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE) — trying Playwright"
+            if (-not $mlbCdpReachable) {
+                Write-Warning "[NBA_LATE_FETCH] MLB CDP not reachable — trying Playwright"
+            } else {
+                Write-Warning "[NBA_LATE_FETCH] MLB CDP fetch failed (exit $LASTEXITCODE) — trying Playwright"
+            }
             & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                 --playwright --timeout 120 --retries 1 --retry_delay 5 `
                 --append --allow-nearest-future --date "$Today" --output $mlbLateOut
