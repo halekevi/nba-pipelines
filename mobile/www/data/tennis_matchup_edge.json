@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-15T09:47:18.849437+00:00",
+  "generated_at": "2026-06-15T12:30:08.686762+00:00",
   "slate_note": "Tennis match day 2026-06-16 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-16.xlsx)",
   "tennis_match_date": "2026-06-16",
   "n_teams": 300,
@@ -769,14 +769,6 @@
       "team_def_rank": 56,
       "team_def_tier": "Below Avg"
     },
-    "ben shelton": {
-      "opponent_slate": "nick kyrgios",
-      "opponent_name": "NICK KYRGIOS",
-      "opponent_def_rank": 75,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 5,
-      "team_def_tier": "Elite"
-    },
     "rafael jodar": {
       "opponent_slate": "ignacio buse",
       "opponent_name": "IGNACIO BUSE",
@@ -792,6 +784,14 @@
       "opponent_def_tier": "Avg",
       "team_def_rank": 16,
       "team_def_tier": "Above Avg"
+    },
+    "ben shelton": {
+      "opponent_slate": "nick kyrgios",
+      "opponent_name": "NICK KYRGIOS",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 5,
+      "team_def_tier": "Elite"
     },
     "alex de minaur": {
       "opponent_slate": "gabriel diallo",
@@ -840,6 +840,14 @@
       "opponent_def_tier": "Avg",
       "team_def_rank": 35,
       "team_def_tier": "Avg"
+    },
+    "alina korneeva": {
+      "opponent_slate": "fangran tian",
+      "opponent_name": "FANGRAN TIAN",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 97,
+      "team_def_tier": "Below Avg"
     },
     "ugo humbert": {
       "opponent_slate": "marin cilic",
@@ -969,6 +977,14 @@
       "team_def_rank": 7,
       "team_def_tier": "Elite"
     },
+    "jil teichmann": {
+      "opponent_slate": "matilde jorge",
+      "opponent_name": "MATILDE JORGE",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 130,
+      "team_def_tier": "Weak"
+    },
     "ann li": {
       "opponent_slate": "kimberly birrell",
       "opponent_name": "KIMBERLY BIRRELL",
@@ -1041,25 +1057,17 @@
       "team_def_rank": 140,
       "team_def_tier": "Weak"
     },
-    "alina korneeva": {
-      "opponent_slate": "fangran tian",
-      "opponent_name": "FANGRAN TIAN",
-      "opponent_def_rank": 75,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 97,
-      "team_def_tier": "Below Avg"
-    },
-    "elena micic": {
-      "opponent_slate": "francisca jorge",
-      "opponent_name": "FRANCISCA JORGE",
+    "aliona falei": {
+      "opponent_slate": "martyna kubka",
+      "opponent_name": "MARTYNA KUBKA",
       "opponent_def_rank": 75,
       "opponent_def_tier": "Below Avg",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "aliona falei": {
-      "opponent_slate": "martyna kubka",
-      "opponent_name": "MARTYNA KUBKA",
+    "elena micic": {
+      "opponent_slate": "francisca jorge",
+      "opponent_name": "FRANCISCA JORGE",
       "opponent_def_rank": 75,
       "opponent_def_tier": "Below Avg",
       "team_def_rank": null,
@@ -1088,14 +1096,6 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": null,
       "team_def_tier": ""
-    },
-    "jil teichmann": {
-      "opponent_slate": "matilde jorge",
-      "opponent_name": "MATILDE JORGE",
-      "opponent_def_rank": 75,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 130,
-      "team_def_tier": "Weak"
     },
     "sofia kenin": {
       "opponent_slate": "viktorija golubic",
@@ -1193,6 +1193,14 @@
       "team_def_rank": 76,
       "team_def_tier": "Below Avg"
     },
+    "fabian marozsan": {
+      "opponent_slate": "miomir kecmanovic",
+      "opponent_name": "MIOMIR KECMANOVIC",
+      "opponent_def_rank": 50,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 61,
+      "team_def_tier": "Below Avg"
+    },
     "martyna kubka": {
       "opponent_slate": "aliona falei",
       "opponent_name": "ALIONA FALEI",
@@ -1279,14 +1287,6 @@
       "opponent_def_rank": 31,
       "opponent_def_tier": "Avg",
       "team_def_rank": 87,
-      "team_def_tier": "Below Avg"
-    },
-    "fabian marozsan": {
-      "opponent_slate": "miomir kecmanovic",
-      "opponent_name": "MIOMIR KECMANOVIC",
-      "opponent_def_rank": 50,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 61,
       "team_def_tier": "Below Avg"
     },
     "mattia bellucci": {
@@ -1499,34 +1499,6 @@
         }
       ]
     },
-    "ben shelton|match_total_games": {
-      "team_slate": "ben shelton",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "nick kyrgios",
-        "name": "NICK KYRGIOS",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Ben Shelton",
-          "player_norm": "ben shelton",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 28.2,
-          "game_score": 28.2,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +11.9 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 19.5,
-          "pp_edge": 11.9
-        }
-      ]
-    },
     "rafael jodar|match_total_games": {
       "team_slate": "rafael jodar",
       "category": "match_total_games",
@@ -1583,6 +1555,34 @@
         }
       ]
     },
+    "ben shelton|match_total_games": {
+      "team_slate": "ben shelton",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "nick kyrgios",
+        "name": "NICK KYRGIOS",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Ben Shelton",
+          "player_norm": "ben shelton",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 28.2,
+          "game_score": 28.2,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +11.9 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 19.5,
+          "pp_edge": 11.9
+        }
+      ]
+    },
     "francisco cerundolo|match_total_games": {
       "team_slate": "francisco cerundolo",
       "category": "match_total_games",
@@ -1636,6 +1636,34 @@
           "def_boost": null,
           "pp_line": 17.5,
           "pp_edge": 4.7
+        }
+      ]
+    },
+    "alina korneeva|match_total_games": {
+      "team_slate": "alina korneeva",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "fangran tian",
+        "name": "FANGRAN TIAN",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Alina Korneeva",
+          "player_norm": "alina korneeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 21.6,
+          "game_score": 21.6,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +7.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": 7.5
         }
       ]
     },
@@ -1919,6 +1947,34 @@
         }
       ]
     },
+    "jil teichmann|match_total_games": {
+      "team_slate": "jil teichmann",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "matilde jorge",
+        "name": "MATILDE JORGE",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Jil Teichmann",
+          "player_norm": "jil teichmann",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 20.4,
+          "game_score": 20.4,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 18.5,
+          "pp_edge": 1.5
+        }
+      ]
+    },
     "ann li|match_total_games": {
       "team_slate": "ann li",
       "category": "match_total_games",
@@ -1994,12 +2050,12 @@
           "rank_on_team": 1,
           "season_avg": 21.6,
           "game_score": 21.6,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.9 on board tonight.",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.9 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 18.5,
-          "pp_edge": 1.9
+          "pp_line": 17.5,
+          "pp_edge": 2.9
         }
       ]
     },
@@ -2031,34 +2087,6 @@
         }
       ]
     },
-    "alina korneeva|match_total_games": {
-      "team_slate": "alina korneeva",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "fangran tian",
-        "name": "FANGRAN TIAN",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Alina Korneeva",
-          "player_norm": "alina korneeva",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 21.6,
-          "game_score": 21.6,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +6.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 18.5,
-          "pp_edge": 6.5
-        }
-      ]
-    },
     "aliona falei|match_total_games": {
       "team_slate": "aliona falei",
       "category": "match_total_games",
@@ -2078,12 +2106,12 @@
           "rank_on_team": 1,
           "season_avg": 17.7,
           "game_score": 17.7,
-          "edge": "AVOID",
-          "notes": "PP edge -2.8 on board \u2014 lean UNDER or skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 20.5,
-          "pp_edge": -2.83
+          "pp_line": 19.5,
+          "pp_edge": -1.83
         }
       ]
     },
@@ -2135,11 +2163,11 @@
           "season_avg": 24.9,
           "game_score": 24.9,
           "edge": "TOP_EDGE",
-          "notes": "PP edge +3.1 on board tonight.",
+          "notes": "PP edge +4.1 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 21.5,
-          "pp_edge": 3.1
+          "pp_line": 20.5,
+          "pp_edge": 4.1
         }
       ]
     },
@@ -2280,34 +2308,6 @@
           "def_boost": null,
           "pp_line": 20.0,
           "pp_edge": 1.8
-        }
-      ]
-    },
-    "jil teichmann|match_total_games": {
-      "team_slate": "jil teichmann",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "matilde jorge",
-        "name": "MATILDE JORGE",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Jil Teichmann",
-          "player_norm": "jil teichmann",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 20.4,
-          "game_score": 20.4,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#75).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 19.5,
-          "pp_edge": 0.5
         }
       ]
     },
@@ -3599,6 +3599,34 @@
         }
       ]
     },
+    "fabian marozsan|games_won": {
+      "team_slate": "fabian marozsan",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "miomir kecmanovic",
+        "name": "MIOMIR KECMANOVIC",
+        "def_rank": 50,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Fabian Marozsan",
+          "player_norm": "fabian marozsan",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.1,
+          "game_score": 11.1,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#50).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -1.7
+        }
+      ]
+    },
     "dayana yastremska|games_won": {
       "team_slate": "dayana yastremska",
       "category": "games_won",
@@ -4319,11 +4347,11 @@
           "season_avg": 5.6,
           "game_score": 5.6,
           "edge": "AVOID",
-          "notes": "PP edge -5.7 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -6.7 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 10.5,
-          "pp_edge": -5.7
+          "pp_line": 11.5,
+          "pp_edge": -6.7
         }
       ]
     },
@@ -4411,6 +4439,34 @@
         }
       ]
     },
+    "matilde jorge|games_won": {
+      "team_slate": "matilde jorge",
+      "category": "games_won",
+      "category_label": "Games won",
+      "threshold": 12.0,
+      "opponent": {
+        "slate_abbr": "jil teichmann",
+        "name": "JIL TEICHMANN",
+        "def_rank": 130,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Matilde Jorge",
+          "player_norm": "matilde jorge",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "AVOID",
+          "notes": "PP edge -3.0 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 7.5,
+          "pp_edge": -3.0
+        }
+      ]
+    },
     "aliona falei|games_won": {
       "team_slate": "aliona falei",
       "category": "games_won",
@@ -4464,34 +4520,6 @@
           "def_boost": null,
           "pp_line": 6.5,
           "pp_edge": -0.5
-        }
-      ]
-    },
-    "matilde jorge|games_won": {
-      "team_slate": "matilde jorge",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "jil teichmann",
-        "name": "JIL TEICHMANN",
-        "def_rank": 130,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Matilde Jorge",
-          "player_norm": "matilde jorge",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "AVOID",
-          "notes": "PP edge -4.0 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 8.5,
-          "pp_edge": -4.0
         }
       ]
     },
@@ -5783,6 +5811,34 @@
         }
       ]
     },
+    "tomas martin etcheverry|aces": {
+      "team_slate": "tomas martin etcheverry",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "daniil medvedev",
+        "name": "DANIIL MEDVEDEV",
+        "def_rank": 7,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Tomas Martin Etcheverry",
+          "player_norm": "tomas martin etcheverry",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#7).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -1.3
+        }
+      ]
+    },
     "miomir kecmanovic|aces": {
       "team_slate": "miomir kecmanovic",
       "category": "aces",
@@ -5864,34 +5920,6 @@
           "def_boost": null,
           "pp_line": 7.5,
           "pp_edge": -4.1
-        }
-      ]
-    },
-    "tomas martin etcheverry|aces": {
-      "team_slate": "tomas martin etcheverry",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "daniil medvedev",
-        "name": "DANIIL MEDVEDEV",
-        "def_rank": 7,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Tomas Martin Etcheverry",
-          "player_norm": "tomas martin etcheverry",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.7,
-          "game_score": 2.7,
-          "edge": "AVOID",
-          "notes": "PP edge -2.3 vs elite opponent (#7).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 5.5,
-          "pp_edge": -2.3
         }
       ]
     },
@@ -9675,6 +9703,62 @@
         }
       ]
     },
+    "hubert hurkacz|break_points_won": {
+      "team_slate": "hubert hurkacz",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "andrey rublev",
+        "name": "ANDREY RUBLEV",
+        "def_rank": 13,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Hubert Hurkacz",
+          "player_norm": "hubert hurkacz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "AVOID",
+          "notes": "Elite opponent (#13); production below threshold.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "raphael collignon|break_points_won": {
+      "team_slate": "raphael collignon",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "alexei popyrin",
+        "name": "ALEXEI POPYRIN",
+        "def_rank": 90,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Raphael Collignon",
+          "player_norm": "raphael collignon",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
     "joao fonseca|break_points_won": {
       "team_slate": "joao fonseca",
       "category": "break_points_won",
@@ -9927,34 +10011,6 @@
         }
       ]
     },
-    "emma raducanu|break_points_won": {
-      "team_slate": "emma raducanu",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "karolina pliskova",
-        "name": "KAROLINA PLISKOVA",
-        "def_rank": 87,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Emma Raducanu",
-          "player_norm": "emma raducanu",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "katie volynets|break_points_won": {
       "team_slate": "katie volynets",
       "category": "break_points_won",
@@ -10011,6 +10067,34 @@
         }
       ]
     },
+    "emma raducanu|break_points_won": {
+      "team_slate": "emma raducanu",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "karolina pliskova",
+        "name": "KAROLINA PLISKOVA",
+        "def_rank": 87,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Emma Raducanu",
+          "player_norm": "emma raducanu",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
     "tallon griekspoor|break_points_won": {
       "team_slate": "tallon griekspoor",
       "category": "break_points_won",
@@ -10039,21 +10123,21 @@
         }
       ]
     },
-    "raphael collignon|break_points_won": {
-      "team_slate": "raphael collignon",
+    "miomir kecmanovic|break_points_won": {
+      "team_slate": "miomir kecmanovic",
       "category": "break_points_won",
       "category_label": "Break points won",
       "threshold": 4.0,
       "opponent": {
-        "slate_abbr": "alexei popyrin",
-        "name": "ALEXEI POPYRIN",
-        "def_rank": 90,
+        "slate_abbr": "fabian marozsan",
+        "name": "FABIAN MAROZSAN",
+        "def_rank": 61,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Raphael Collignon",
-          "player_norm": "raphael collignon",
+          "player": "Miomir Kecmanovic",
+          "player_norm": "miomir kecmanovic",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 1.5,
