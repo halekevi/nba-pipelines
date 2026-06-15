@@ -185,6 +185,8 @@ DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.
 DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
 DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
 DISABLED_SPORTS: set[str] = set()
+# Match run_pipeline.ps1 $NBA_SEASON_RESUME — skip stale NBA-family step8 in combined.
+NBA_OFF_SEASON_RESUME = "2026-10-01"
 DEFAULT_SOCCER_PATH = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
 DEFAULT_GOLF_PATH = os.path.join(REPO_ROOT, "Sports", "Golf", "outputs", "step8_golf_direction_clean.xlsx")
@@ -196,6 +198,17 @@ DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 def _outputs_dir_for_date(date_str: str) -> str:
     d = str(date_str).strip()[:10]
     return os.path.join(REPO_ROOT, "outputs", d)
+
+
+def _nba_family_off_season(slate_date: str) -> bool:
+    """True when NBA / NBA1H / NBA1Q pipeline is paused (summer ops)."""
+    td = str(slate_date).strip()[:10]
+    try:
+        resume = datetime.strptime(NBA_OFF_SEASON_RESUME, "%Y-%m-%d").date()
+        slate = datetime.strptime(td, "%Y-%m-%d").date()
+        return slate < resume
+    except ValueError:
+        return False
 
 
 def _first_existing_path(*candidates: str) -> str:
@@ -2130,7 +2143,7 @@ def _join_sport_key(sport: object) -> str:
     s = str(sport or "").strip().upper()
     if s in ("NBA1Q", "NBA1H"):
         return "NBA"
-    if s == "SOCCER":
+    if s == "SOCCER" or s.startswith("SOCCER") or s.startswith("WORLDCUP") or "WORLD CUP" in s:
         return "SOCCER"
     return s
 
@@ -2155,7 +2168,23 @@ def _norm_team_join(team: object, sport: object) -> str:
 
 def _ud_join_sport(ud_sid: object) -> str:
     u = str(ud_sid or "").strip().upper()
-    m = {"FIFA": "SOCCER", "MASL": "SOCCER", "UFL": "SOCCER", "EPL": "SOCCER"}
+    m = {
+        "FIFA": "SOCCER",
+        "MASL": "SOCCER",
+        "UFL": "SOCCER",
+        "EPL": "SOCCER",
+        "WORLD CUP": "SOCCER",
+        "WORLD CUP 1H": "SOCCER",
+        "WORLD CUP 2H": "SOCCER",
+        "WORLD CUP TRNY": "SOCCER",
+        "WORLDCUP": "SOCCER",
+        "WORLDCUP1H": "SOCCER",
+        "WORLDCUP2H": "SOCCER",
+        "WORLDCUPTRNY": "SOCCER",
+        "SOCCER1H": "SOCCER",
+        "SOCCER2H": "SOCCER",
+        "SOCCERSZN": "SOCCER",
+    }
     return m.get(u, u)
 
 
@@ -13341,16 +13370,21 @@ def main():
     }
 
     print(f"Loading NBA slate from {args.nba}...")
-    try:
-        nba = load_nba(args.nba)
-        nba = enforce_target_date(
-            nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-        )
-        print(f"  {len(nba)} NBA props loaded")
-    except (FileNotFoundError, OSError) as e:
-        print(f"  WARNING: NBA slate unavailable ({type(e).__name__}: {e}); continuing with 0 NBA props.")
+    if _nba_family_off_season(args.date):
+        print("  [NBA] Off-season — skipped until 2026-10-01")
         nba = pd.DataFrame()
-    _load_audit_row("NBA", args.nba, nba)
+        _load_audit_row("NBA", "", nba)
+    else:
+        try:
+            nba = load_nba(args.nba)
+            nba = enforce_target_date(
+                nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            print(f"  {len(nba)} NBA props loaded")
+        except (FileNotFoundError, OSError) as e:
+            print(f"  WARNING: NBA slate unavailable ({type(e).__name__}: {e}); continuing with 0 NBA props.")
+            nba = pd.DataFrame()
+        _load_audit_row("NBA", args.nba, nba)
 
     if "CBB" in DISABLED_SPORTS:
         print("Loading CBB slate skipped (deactivated season).")
@@ -13470,26 +13504,32 @@ def main():
             mlb = None
 
     nba1q = None
-    nba1q_path = str(args.nba1q or "").strip() or (DEFAULT_NBA1Q_PATH if os.path.exists(DEFAULT_NBA1Q_PATH) else "")
-    if nba1q_path:
-        try:
-            nba1q = load_nba1q(nba1q_path)
-            nba1q = attach_standard_refs(nba1q)
-            print(f"  {len(nba1q)} NBA1Q props loaded")
-        except Exception as e:
-            print(f"  WARNING: Could not load NBA1Q file: {e}")
-            nba1q = None
+    if _nba_family_off_season(args.date):
+        print("  [NBA1Q] Off-season — skipped until 2026-10-01")
+    else:
+        nba1q_path = str(args.nba1q or "").strip() or (DEFAULT_NBA1Q_PATH if os.path.exists(DEFAULT_NBA1Q_PATH) else "")
+        if nba1q_path:
+            try:
+                nba1q = load_nba1q(nba1q_path)
+                nba1q = attach_standard_refs(nba1q)
+                print(f"  {len(nba1q)} NBA1Q props loaded")
+            except Exception as e:
+                print(f"  WARNING: Could not load NBA1Q file: {e}")
+                nba1q = None
 
     nba1h = None
-    nba1h_path = str(args.nba1h or "").strip() or (DEFAULT_NBA1H_PATH if os.path.exists(DEFAULT_NBA1H_PATH) else "")
-    if nba1h_path:
-        try:
-            nba1h = load_nba1h(nba1h_path)
-            nba1h = attach_standard_refs(nba1h)
-            print(f"  {len(nba1h)} NBA1H props loaded")
-        except Exception as e:
-            print(f"  WARNING: Could not load NBA1H file: {e}")
-            nba1h = None
+    if _nba_family_off_season(args.date):
+        print("  [NBA1H] Off-season — skipped until 2026-10-01")
+    else:
+        nba1h_path = str(args.nba1h or "").strip() or (DEFAULT_NBA1H_PATH if os.path.exists(DEFAULT_NBA1H_PATH) else "")
+        if nba1h_path:
+            try:
+                nba1h = load_nba1h(nba1h_path)
+                nba1h = attach_standard_refs(nba1h)
+                print(f"  {len(nba1h)} NBA1H props loaded")
+            except Exception as e:
+                print(f"  WARNING: Could not load NBA1H file: {e}")
+                nba1h = None
 
     nfl = None
     nfl_path = str(args.nfl or "").strip()

@@ -43,6 +43,14 @@ ODDS_CACHE_SLUG = "soccer"
 SOCCER_LEAGUE_MAP = {
     "EPL": "soccer_epl",
     "MLS": "soccer_usa_mls",
+    "WORLDCUP": "soccer_fifa_world_cup",
+    "WORLDCUP1H": "soccer_fifa_world_cup",
+    "WORLDCUP2H": "soccer_fifa_world_cup",
+    "WORLDCUPTRNY": "soccer_fifa_world_cup",
+    "WORLD CUP": "soccer_fifa_world_cup",
+    "WORLD CUP 1H": "soccer_fifa_world_cup",
+    "WORLD CUP 2H": "soccer_fifa_world_cup",
+    "WORLD CUP TRNY": "soccer_fifa_world_cup",
 }
 
 SOCCER_TEAM_NAME_MAP = {

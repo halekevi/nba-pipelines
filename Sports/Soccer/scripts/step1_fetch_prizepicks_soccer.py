@@ -1,12 +1,13 @@
 """
 Step 1 — Fetch PrizePicks Soccer Board
-Fetches all soccer props from the PrizePicks API directly (no browser needed).
-PrizePicks soccer is a single board (league_id=82 SOCCER) — EPL/MLS/etc. are
-determined by player/game data inside the response, not separate API endpoints.
+HTTP first (curl_cffi chrome131 via shared API module), urllib fallback.
+PrizePicks soccer boards — club soccer plus FIFA World Cup (separate PP league_ids).
+Club leagues (EPL/MLS/etc.) appear inside league_id=82; World Cup has its own boards.
 
 Usage:
     py step1_fetch_prizepicks_soccer.py --output s1_soccer_props.csv
     py step1_fetch_prizepicks_soccer.py --include_halves --output s1_soccer_props.csv
+    py step1_fetch_prizepicks_soccer.py --no-world-cup   # skip WC boards when inactive
     py step1_fetch_prizepicks_soccer.py --league_id 82 --output s1_soccer_props.csv
 """
 
@@ -26,18 +27,25 @@ _PROPORACLE_ROOT = Path(__file__).resolve().parents[3]
 if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
+from utils.prizepicks_http import fetch_pp_projections, make_pp_session, ensure_chrome131
 from utils.step1_slate_date_filter import (
     apply_game_date_filter,
     no_props_log_line,
     should_preserve_append_output,
 )
 
-# PrizePicks internal soccer league IDs
+# PrizePicks internal soccer league IDs (from GET /leagues)
 SOCCER_BOARDS = {
-    "82":  "SOCCER",      # full game (main board)
-    "242": "SOCCER1H",    # first half
-    "243": "SOCCER2H",    # second half
-    "262": "SOCCERSZN",   # season props
+    "82":  "SOCCER",       # club soccer (full game)
+    "242": "SOCCER1H",     # club first half
+    "243": "SOCCER2H",     # club second half
+    "262": "SOCCERSZN",    # club season props
+}
+WORLD_CUP_BOARDS = {
+    "241": "WORLDCUP",     # World Cup full game
+    "458": "WORLDCUP1H",   # World Cup first half
+    "459": "WORLDCUP2H",   # World Cup second half
+    "457": "WORLDCUPTRNY", # World Cup tournament props
 }
 
 PICKTYPE_MAP = {
@@ -60,12 +68,11 @@ def _default_et_date_str() -> str:
     return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
 
 
-def fetch_board(league_id: str, league_name: str, per_page: int = 250) -> tuple[list, list]:
-    """Fetch all props for a single PrizePicks board via direct API calls."""
+def _fetch_board_urllib(league_id: str, league_name: str, per_page: int = 250) -> tuple[list, list]:
+    """Legacy urllib fetch (both in_game flags) — fallback when curl_cffi fails."""
     all_data = []
     all_included = []
 
-    # PrizePicks paginates — fetch both in_game=false and in_game=true
     for in_game in ("false", "true"):
         url = (
             f"https://api.prizepicks.com/projections"
@@ -80,11 +87,11 @@ def fetch_board(league_id: str, league_name: str, per_page: int = 250) -> tuple[
                 req = urllib.request.Request(url, headers=HEADERS)
                 with urllib.request.urlopen(req, timeout=30) as resp:
                     j = json.loads(resp.read())
-                data  = j.get("data") or []
-                incl  = j.get("included") or []
+                data = j.get("data") or []
+                incl = j.get("included") or []
                 all_data.extend(data)
                 all_included.extend(incl)
-                print(f"    in_game={in_game}: {len(data)} props")
+                print(f"    urllib in_game={in_game}: {len(data)} props")
                 break
             except urllib.error.HTTPError as e:
                 if e.code == 429:
@@ -97,6 +104,69 @@ def fetch_board(league_id: str, league_name: str, per_page: int = 250) -> tuple[
             except Exception as e:
                 print(f"    Error fetching {league_name} in_game={in_game}: {e}")
                 break
+
+    return all_data, all_included
+
+
+def fetch_board(league_id: str, league_name: str, per_page: int = 250) -> tuple[list, list]:
+    """Fetch props for a board — HTTP (curl_cffi) first, urllib fallback."""
+    all_data: list = []
+    all_included: list = []
+    seen: set[str] = set()
+
+    def _extend(data: list, included: list) -> int:
+        added = 0
+        for obj in data or []:
+            oid = str(obj.get("id", "")).strip()
+            if oid and oid not in seen:
+                seen.add(oid)
+                all_data.append(obj)
+                added += 1
+        all_included.extend(included or [])
+        return added
+
+    http_ok = False
+    try:
+        ensure_chrome131()
+        data, included = fetch_pp_projections(
+            str(league_id),
+            per_page=per_page,
+            max_pages=10,
+        )
+        if data:
+            n = _extend(data, included)
+            http_ok = True
+            print(f"    HTTP (curl_cffi) in_game=false: {n} props")
+    except Exception as e:
+        print(f"    HTTP fetch failed ({type(e).__name__}: {e})")
+
+    if not http_ok:
+        print(f"    Falling back to urllib for {league_name}...")
+        return _fetch_board_urllib(league_id, league_name, per_page=per_page)
+
+    # Live in-game board supplement (not covered by fetch_pp_projections defaults)
+    try:
+        session = make_pp_session(HEADERS)
+        url = (
+            f"https://api.prizepicks.com/projections"
+            f"?league_id={league_id}"
+            f"&per_page={per_page}"
+            f"&single_stat=true"
+            f"&in_game=true"
+            f"&game_mode=pickem"
+        )
+        r = session.get(url, timeout=30)
+        if r.status_code == 200:
+            j = r.json()
+            n = _extend(j.get("data") or [], j.get("included") or [])
+            if n:
+                print(f"    HTTP in_game=true supplement: +{n} props")
+        elif r.status_code == 403:
+            print("    HTTP in_game=true: 403 (skipped)")
+        else:
+            print(f"    HTTP in_game=true: status {r.status_code}")
+    except Exception as e:
+        print(f"    in_game=true supplement skipped: {e}")
 
     return all_data, all_included
 
@@ -156,6 +226,9 @@ def build_rows(data: list, included: list, league_name: str) -> list:
         sub_league = str(attrs.get("league", p.get("league", league_name))).strip()
         if not sub_league:
             sub_league = league_name
+        # PrizePicks API returns "WORLD CUP" text; keep board tag (WORLDCUP, WORLDCUP2H, …) for pipeline keys
+        if str(league_name).upper().startswith("WORLDCUP"):
+            sub_league = league_name
 
         odds_type = str(attrs.get("odds_type", "")).strip().lower()
         pick_type = PICKTYPE_MAP.get(odds_type, "Standard")
@@ -197,6 +270,11 @@ def main():
                     help="Also fetch SOCCER1H and SOCCER2H boards")
     ap.add_argument("--include_season",  action="store_true",
                     help="Also fetch SOCCERSZN board")
+    ap.add_argument(
+        "--no-world-cup",
+        action="store_true",
+        help="Skip World Cup boards (241/458/459/457). Default: include when PP has WC slate.",
+    )
     ap.add_argument("--league_id", default=None, metavar="ID",
                     help="Primary board PrizePicks league_id (default 82). "
                          "Half/season extras still come from --include_halves / --include_season.")
@@ -223,10 +301,13 @@ def main():
     if not primary_id.isdigit():
         print(f"❌ --league_id must be numeric, got {args.league_id!r}")
         sys.exit(2)
-    boards_to_fetch = {primary_id: "SOCCER"}
+    boards_to_fetch = {primary_id: SOCCER_BOARDS.get(primary_id, "SOCCER")}
+    if not args.no_world_cup:
+        boards_to_fetch.update(WORLD_CUP_BOARDS)
     if args.include_halves:
         boards_to_fetch["242"] = "SOCCER1H"
         boards_to_fetch["243"] = "SOCCER2H"
+        # WC halves already in WORLD_CUP_BOARDS when --no-world-cup is off
     if args.include_season:
         boards_to_fetch["262"] = "SOCCERSZN"
 
