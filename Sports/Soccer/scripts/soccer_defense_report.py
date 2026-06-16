@@ -55,7 +55,13 @@ LEAGUES = [
     ("eng.w.1",        "WSL"),
     ("tur.1",          "Süper Lig"),
     ("gre.1",          "Super League Greece"),
+    ("fifa.world",     "World Cup"),
 ]
+
+LEAGUE_MIN_GP: Dict[str, int] = {
+    "World Cup": 1,
+}
+MIN_GP = 3  # club leagues default
 
 ESPN_STANDINGS  = "https://site.api.espn.com/apis/v2/sports/soccer/{slug}/standings"
 ESPN_TEAM_STATS = "https://site.api.espn.com/apis/site/v2/sports/soccer/{slug}/teams/{team_id}/statistics"
@@ -283,6 +289,57 @@ PP_NAME_MAP: Dict[str, str] = {
     # Super League Greece
     "Olympiacos": "OLYMPIACOS", "Panathinaikos": "PANATHINAIKOS",
     "PAOK": "PAOK", "AEK Athens": "AEK",
+    # FIFA World Cup 2026 — ESPN displayName → PP uppercase country label
+    "Algeria": "ALGERIA",
+    "Argentina": "ARGENTINA",
+    "Australia": "AUSTRALIA",
+    "Austria": "AUSTRIA",
+    "Belgium": "BELGIUM",
+    "Bosnia-Herzegovina": "BOSNIA-HERZEGOVINA",
+    "Brazil": "BRAZIL",
+    "Canada": "CANADA",
+    "Cape Verde": "CAPE VERDE",
+    "Colombia": "COLOMBIA",
+    "Congo DR": "CONGO DR",
+    "Croatia": "CROATIA",
+    "Curaçao": "CURACAO",
+    "Curacao": "CURACAO",
+    "Czechia": "CZECHIA",
+    "Ecuador": "ECUADOR",
+    "Egypt": "EGYPT",
+    "England": "ENGLAND",
+    "France": "FRANCE",
+    "Germany": "GERMANY",
+    "Ghana": "GHANA",
+    "Haiti": "HAITI",
+    "Iran": "IRAN",
+    "Iraq": "IRAQ",
+    "Ivory Coast": "IVORY COAST",
+    "Japan": "JAPAN",
+    "Jordan": "JORDAN",
+    "Mexico": "MEXICO",
+    "Morocco": "MOROCCO",
+    "Netherlands": "NETHERLANDS",
+    "New Zealand": "NEW ZEALAND",
+    "Norway": "NORWAY",
+    "Panama": "PANAMA",
+    "Paraguay": "PARAGUAY",
+    "Portugal": "PORTUGAL",
+    "Qatar": "QATAR",
+    "Saudi Arabia": "SAUDI ARABIA",
+    "Scotland": "SCOTLAND",
+    "Senegal": "SENEGAL",
+    "South Africa": "SOUTH AFRICA",
+    "South Korea": "SOUTH KOREA",
+    "Spain": "SPAIN",
+    "Sweden": "SWEDEN",
+    "Switzerland": "SWITZERLAND",
+    "Tunisia": "TUNISIA",
+    "Türkiye": "TURKEY",
+    "Turkey": "TURKEY",
+    "United States": "UNITED STATES",
+    "Uruguay": "URUGUAY",
+    "Uzbekistan": "UZBEKISTAN",
 }
 
 
@@ -346,7 +403,7 @@ def fetch_league_defense(slug: str, league_name: str) -> List[dict]:
             gc    = float(stats.get("pointsagainst", stats.get("goalsagainst", 0)) or 0)
             cs    = int(stats.get("cleansheets", 0) or 0)
             wins  = int(stats.get("wins", 0) or 0)
-            draws = int(stats.get("draws", 0) or 0)
+            draws = int(stats.get("draws", stats.get("ties", 0)) or 0)
             losses= int(stats.get("losses", 0) or 0)
 
             rows.append({
@@ -384,15 +441,13 @@ def fetch_league_defense(slug: str, league_name: str) -> List[dict]:
     return rows
 
 
-MIN_GP = 3
-
-
 def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
     out = []
     for league, grp in df.groupby("league"):
+        min_gp = LEAGUE_MIN_GP.get(str(league), MIN_GP)
         g      = grp.copy().reset_index(drop=True)
         gp_num = pd.to_numeric(g["gp"], errors="coerce").fillna(0)
-        ok     = gp_num >= MIN_GP
+        ok     = gp_num >= min_gp
         n      = int(ok.sum())
         gcpg   = pd.to_numeric(g["goals_conceded_pg"], errors="coerce")
         ranked = gcpg.where(ok, other=float("nan"))
@@ -406,7 +461,7 @@ def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
             return def_tier_from_overall_rank(r, n)
 
         g["DEF_TIER"] = g.apply(
-            lambda row: "Avg" if gp_num[row.name] < MIN_GP else _tier(row["OVERALL_DEF_RANK"]),
+            lambda row: "Avg" if gp_num[row.name] < min_gp else _tier(row["OVERALL_DEF_RANK"]),
             axis=1
         )
         out.append(g)

@@ -1,375 +1,423 @@
 ﻿team_name,pp_name,league,gp,goals_conceded,goals_conceded_pg,shots_conceded_pg,clean_sheets,wins,draws,losses,OVERALL_DEF_RANK,DEF_TIER
-Newcastle Jets,NEWCASTLE JETS,A-League,26,39.0,1.5,,0,15,0,8,7,Avg
-Adelaide United,ADELAIDE,A-League,26,36.0,1.385,,0,12,0,7,5,Above Avg
-Auckland FC,AUCKLAND,A-League,26,29.0,1.115,,0,11,0,6,2,Elite
-Melbourne Victory,MELBOURNE VICTORY,A-League,26,33.0,1.269,,0,11,0,8,3,Elite
-Sydney FC,SYDNEY,A-League,26,25.0,0.962,,0,11,0,9,1,Elite
-Melbourne City FC,MELBOURNE CITY,A-League,26,33.0,1.269,,0,10,0,8,3,Elite
-Macarthur FC,MACARTHUR,A-League,26,44.0,1.692,,0,9,0,10,11,Weak
-Wellington Phoenix FC,WELLINGTON PHOENIX,A-League,26,48.0,1.846,,0,9,0,11,12,Weak
-Central Coast Mariners,CENTRAL COAST,A-League,26,42.0,1.615,,0,8,0,10,9,Below Avg
-Perth Glory,PERTH,A-League,26,39.0,1.5,,0,8,0,11,7,Avg
-Brisbane Roar,BRISBANE,A-League,26,36.0,1.385,,0,6,0,12,5,Above Avg
-Western Sydney Wanderers,WSW,A-League,26,43.0,1.654,,0,5,0,15,10,Below Avg
-Boca Juniors,BOCA JUNIORS,Argentina,16,9.0,0.562,,0,8,0,2,2,Elite
-Estudiantes de La Plata,ESTUDIANTES,Argentina,16,7.0,0.438,,0,9,0,3,1,Elite
-Independiente,INDEPENDIENTE,Argentina,16,20.0,1.25,,0,6,0,4,22,Below Avg
-Lanús,LANÚS,Argentina,16,15.0,0.938,,0,6,0,4,11,Above Avg
-Newell's Old Boys,NEWELL'S,Argentina,16,27.0,1.688,,0,3,0,7,30,Weak
-San Lorenzo,SAN LORENZO,Argentina,16,14.0,0.875,,0,5,0,4,10,Above Avg
-Talleres (Córdoba),TALLERES,Argentina,16,13.0,0.812,,0,7,0,4,6,Elite
-Unión (Santa Fe),UNIÓN,Argentina,16,20.0,1.25,,0,5,0,5,22,Below Avg
-Vélez Sarsfield,VÉLEZ,Argentina,16,12.0,0.75,,0,7,0,2,3,Elite
-Instituto (Córdoba),INSTITUTO,Argentina,16,17.0,1.062,,0,6,0,7,18,Avg
-Platense,PLATENSE,Argentina,16,15.0,0.938,,0,3,0,6,11,Above Avg
-Defensa y Justicia,DEF Y JUSTICIA,Argentina,16,21.0,1.312,,0,4,0,5,26,Weak
-Gimnasia (Mendoza),GIMNASIA (MENDOZA),Argentina,16,22.0,1.375,,0,5,0,7,28,Weak
-Central Córdoba (Santiago del Estero),CENTRAL CÓRDOBA,Argentina,16,21.0,1.312,,0,4,0,8,26,Weak
-Deportivo Riestra,RIESTRA,Argentina,16,12.0,0.75,,0,1,0,7,3,Elite
-Argentinos Juniors,ARGENTINOS,Argentina,16,13.0,0.812,,0,8,0,3,6,Elite
-Belgrano (Córdoba),BELGRANO,Argentina,16,13.0,0.812,,0,7,0,4,6,Elite
-Gimnasia La Plata,GELP,Argentina,16,19.0,1.188,,0,8,0,6,19,Below Avg
-Huracán,HURACÁN,Argentina,16,13.0,0.812,,0,5,0,4,6,Elite
-Racing Club,RACING,Argentina,16,15.0,0.938,,0,5,0,5,11,Above Avg
-River Plate,RIVER,Argentina,16,12.0,0.75,,0,9,0,5,3,Elite
-Rosario Central,ROSARIO,Argentina,16,16.0,1.0,,0,8,0,4,17,Avg
-Banfield,BANFIELD,Argentina,16,19.0,1.188,,0,5,0,8,19,Below Avg
-Tigre,TIGRE,Argentina,16,15.0,0.938,,0,4,0,4,11,Above Avg
-Aldosivi,ALDOSIVI,Argentina,16,19.0,1.188,,0,0,0,8,19,Below Avg
-Independiente Rivadavia,INDEPENDIENTE RIVADAVIA,Argentina,16,15.0,0.938,,0,10,0,2,11,Above Avg
-Atlético Tucumán,ATLETICO TUCUMAN,Argentina,16,20.0,1.25,,0,3,0,8,22,Below Avg
-Barracas Central,BARRACAS,Argentina,16,15.0,0.938,,0,5,0,5,11,Above Avg
-Sarmiento (Junín),SARMIENTO,Argentina,16,20.0,1.25,,0,6,0,9,22,Below Avg
-Estudiantes de Río Cuarto,ESTUDIANTES DE RÍO CUARTO,Argentina,16,24.0,1.5,,0,1,0,13,29,Weak
-Palmeiras,PALMEIRAS,Brazil,17,13.0,0.765,,0,11,0,1,1,Elite
-Flamengo,FLAMENGO,Brazil,16,16.0,1.0,,0,9,0,3,2,Elite
-Fluminense,FLUMINENSE,Brazil,17,22.0,1.294,,0,9,0,5,10,Avg
-Athletico Paranaense,ATHLETICO PARANAENSE,Brazil,17,18.0,1.059,,0,8,0,6,3,Elite
-Red Bull Bragantino,RED BULL BRAGANTINO,Brazil,17,18.0,1.059,,0,8,0,7,3,Elite
-Coritiba,CORITIBA,Brazil,17,21.0,1.235,,0,7,0,5,9,Avg
-São Paulo,SAO PAULO,Brazil,17,19.0,1.118,,0,7,0,6,6,Above Avg
-Bahia,BAHIA,Brazil,16,22.0,1.375,,0,6,0,5,12,Avg
-Cruzeiro,CRUZEIRO,Brazil,17,27.0,1.588,,0,6,0,6,15,Below Avg
-Botafogo,BOTAFOGO,Brazil,16,29.0,1.812,,0,6,0,6,19,Weak
-Vitória,VITÓRIA,Brazil,16,22.0,1.375,,0,6,0,6,12,Avg
-Atlético-MG,ATLÉTICO-MG,Brazil,17,23.0,1.353,,0,6,0,8,11,Avg
-Internacional,INTERNACIONAL,Brazil,17,19.0,1.118,,0,5,0,6,6,Above Avg
-Grêmio,GREMIO,Brazil,17,20.0,1.176,,0,5,0,6,8,Above Avg
-Corinthians,CORINTHIANS,Brazil,17,18.0,1.059,,0,5,0,6,3,Elite
-Vasco da Gama,VASCO,Brazil,17,28.0,1.647,,0,5,0,7,16,Below Avg
-Santos,SANTOS,Brazil,17,28.0,1.647,,0,4,0,7,16,Below Avg
-Mirassol,MIRASSOL,Brazil,16,23.0,1.438,,0,4,0,8,14,Below Avg
-Remo,REMO,Brazil,17,29.0,1.706,,0,3,0,8,18,Weak
-Chapecoense,CHAPECOENSE,Brazil,16,32.0,2.0,,0,1,0,9,20,Weak
-Bayern Munich,BAYERN MUNICH,Bundesliga,34,36.0,1.059,,0,28,0,1,2,Elite
-Borussia Dortmund,DORTMUND,Bundesliga,34,34.0,1.0,,0,22,0,5,1,Elite
-RB Leipzig,LEIPZIG,Bundesliga,34,47.0,1.382,,0,20,0,9,3,Elite
-VfB Stuttgart,STUTTGART,Bundesliga,34,49.0,1.441,,0,18,0,8,5,Above Avg
-TSG Hoffenheim,HOFFENHEIM,Bundesliga,34,52.0,1.529,,0,18,0,9,6,Above Avg
-Bayer Leverkusen,LEVERKUSEN,Bundesliga,34,47.0,1.382,,0,17,0,9,3,Elite
-SC Freiburg,FREIBURG,Bundesliga,34,57.0,1.676,,0,13,0,13,10,Avg
-Eintracht Frankfurt,FRANKFURT,Bundesliga,34,65.0,1.912,,0,11,0,12,16,Weak
-FC Augsburg,AUGSBURG,Bundesliga,34,61.0,1.794,,0,12,0,15,14,Below Avg
-Mainz,MAINZ,Bundesliga,34,53.0,1.559,,0,10,0,14,7,Above Avg
-1. FC Union Berlin,UNION BERLIN,Bundesliga,34,58.0,1.706,,0,10,0,15,11,Avg
-Borussia Mönchengladbach,GLADBACH,Bundesliga,34,53.0,1.559,,0,9,0,14,7,Above Avg
-Hamburg SV,HAMBURG,Bundesliga,34,54.0,1.588,,0,9,0,14,9,Avg
-FC Cologne,KOLN,Bundesliga,34,63.0,1.853,,0,7,0,16,15,Below Avg
-Werder Bremen,WERDER BREMEN,Bundesliga,34,60.0,1.765,,0,8,0,18,12,Below Avg
-VfL Wolfsburg,VFL WOLFSBURG,Bundesliga,34,69.0,2.029,,0,7,0,19,17,Weak
-1. FC Heidenheim 1846,1. FC HEIDENHEIM 1846,Bundesliga,34,72.0,2.118,,0,6,0,20,18,Weak
-St. Pauli,ST. PAULI,Bundesliga,34,60.0,1.765,,0,6,0,20,12,Below Avg
-Coventry City,COVENTRY CITY,Championship,46,45.0,0.978,,0,28,0,7,1,Elite
-Ipswich Town,IPSWICH,Championship,46,47.0,1.022,,0,23,0,8,2,Elite
-Millwall,MILLWALL,Championship,46,49.0,1.065,,0,24,0,11,4,Elite
-Southampton,SOUTHAMPTON,Championship,46,56.0,1.217,,0,22,0,10,5,Elite
-Middlesbrough,MIDDLESBROUGH,Championship,46,47.0,1.022,,0,22,0,10,2,Elite
-Hull City,HULL,Championship,46,66.0,1.435,,0,21,0,15,20,Below Avg
-Wrexham,WREXHAM,Championship,46,65.0,1.413,,0,19,0,13,18,Below Avg
-Derby County,DERBY,Championship,46,59.0,1.283,,0,20,0,17,12,Avg
-Norwich City,NORWICH,Championship,46,56.0,1.217,,0,19,0,19,5,Elite
-Birmingham City,BIRMINGHAM,Championship,46,56.0,1.217,,0,17,0,16,5,Elite
-Swansea City,SWANSEA,Championship,46,59.0,1.283,,0,18,0,18,12,Avg
-Bristol City,BRISTOL CITY,Championship,46,59.0,1.283,,0,17,0,18,12,Avg
-Sheffield United,SHEFF UTD,Championship,46,66.0,1.435,,0,18,0,22,20,Below Avg
-Preston North End,PRESTON,Championship,46,62.0,1.348,,0,15,0,16,16,Below Avg
-Queens Park Rangers,QPR,Championship,46,73.0,1.587,,0,16,0,20,23,Weak
-Watford,WATFORD,Championship,46,65.0,1.413,,0,14,0,17,18,Below Avg
-Stoke City,STOKE CITY,Championship,46,56.0,1.217,,0,15,0,21,5,Elite
-Portsmouth,PORTSMOUTH,Championship,46,64.0,1.391,,0,14,0,19,17,Below Avg
-Charlton Athletic,CHARLTON ATHLETIC,Championship,46,58.0,1.261,,0,13,0,19,10,Above Avg
-Blackburn Rovers,BLACKBURN,Championship,46,56.0,1.217,,0,13,0,20,5,Elite
-West Bromwich Albion,WEST BROM,Championship,46,58.0,1.261,,0,13,0,19,10,Above Avg
-Oxford United,OXFORD,Championship,46,59.0,1.283,,0,11,0,21,12,Avg
-Leicester City,LEICESTER,Championship,46,68.0,1.478,,0,12,0,18,22,Weak
-Sheffield Wednesday,SHEFF WED,Championship,46,89.0,1.935,,0,2,0,32,24,Weak
-Arsenal,ARSENAL,EPL,38,27.0,0.711,,0,26,0,5,1,Elite
-Manchester City,MAN CITY,EPL,38,35.0,0.921,,0,23,0,6,2,Elite
-Manchester United,MAN UNITED,EPL,38,50.0,1.316,,0,20,0,7,6,Above Avg
-Aston Villa,ASTON VILLA,EPL,38,49.0,1.289,,0,19,0,11,5,Above Avg
-Liverpool,LIVERPOOL,EPL,38,53.0,1.395,,0,17,0,12,13,Below Avg
-AFC Bournemouth,AFC BOURNEMOUTH,EPL,38,54.0,1.421,,0,13,0,7,14,Below Avg
-Sunderland,SUNDERLAND,EPL,38,48.0,1.263,,0,14,0,12,4,Elite
-Brighton & Hove Albion,BRIGHTON,EPL,38,46.0,1.211,,0,14,0,13,3,Elite
-Brentford,BRENTFORD,EPL,38,52.0,1.368,,0,14,0,13,11,Avg
-Chelsea,CHELSEA,EPL,38,52.0,1.368,,0,14,0,14,11,Avg
-Fulham,FULHAM,EPL,38,51.0,1.342,,0,15,0,16,8,Above Avg
-Newcastle United,NEWCASTLE,EPL,38,55.0,1.447,,0,14,0,17,15,Below Avg
-Everton,EVERTON,EPL,38,50.0,1.316,,0,13,0,15,6,Above Avg
-Leeds United,LEEDS,EPL,38,56.0,1.474,,0,11,0,13,16,Below Avg
-Crystal Palace,CRYSTAL PALACE,EPL,38,51.0,1.342,,0,11,0,15,8,Above Avg
-Nottingham Forest,NOTTM FOREST,EPL,38,51.0,1.342,,0,11,0,16,8,Above Avg
-Tottenham Hotspur,SPURS,EPL,38,57.0,1.5,,0,10,0,17,17,Weak
-West Ham United,WEST HAM,EPL,38,65.0,1.711,,0,10,0,19,18,Weak
-Burnley,BURNLEY,EPL,38,75.0,1.974,,0,4,0,24,20,Weak
-Wolverhampton Wanderers,WOLVES,EPL,38,68.0,1.789,,0,3,0,24,19,Weak
-PSV Eindhoven,PSV EINDHOVEN,Eredivisie,34,45.0,1.324,,0,27,0,4,5,Above Avg
-Feyenoord Rotterdam,FEYENOORD ROTTERDAM,Eredivisie,34,44.0,1.294,,0,19,0,7,4,Elite
-NEC Nijmegen,NEC NIJMEGEN,Eredivisie,34,53.0,1.559,,0,16,0,7,8,Above Avg
-FC Twente,FC TWENTE,Eredivisie,34,40.0,1.176,,0,15,0,6,1,Elite
-Ajax Amsterdam,AJAX AMSTERDAM,Eredivisie,34,41.0,1.206,,0,14,0,6,2,Elite
-FC Utrecht,FC UTRECHT,Eredivisie,34,42.0,1.235,,0,15,0,11,3,Elite
-AZ Alkmaar,AZ ALKMAAR,Eredivisie,34,51.0,1.5,,0,14,0,10,7,Above Avg
-Heerenveen,HEERENVEEN,Eredivisie,34,53.0,1.559,,0,14,0,11,8,Above Avg
-FC Groningen,FC GRONINGEN,Eredivisie,34,45.0,1.324,,0,14,0,14,5,Above Avg
-Sparta Rotterdam,SPARTA ROTTERDAM,Eredivisie,34,62.0,1.824,,0,12,0,15,15,Below Avg
-Fortuna Sittard,FORTUNA SITTARD,Eredivisie,34,63.0,1.853,,0,11,0,17,16,Weak
-Go Ahead Eagles,GO AHEAD EAGLES,Eredivisie,34,53.0,1.559,,0,8,0,12,8,Above Avg
-Excelsior,EXCELSIOR,Eredivisie,34,56.0,1.647,,0,10,0,16,13,Below Avg
-Telstar,TELSTAR,Eredivisie,34,55.0,1.618,,0,9,0,15,11,Avg
-PEC Zwolle,PEC ZWOLLE,Eredivisie,34,71.0,2.088,,0,9,0,15,17,Weak
-FC Volendam,FC VOLENDAM,Eredivisie,34,55.0,1.618,,0,8,0,18,11,Avg
-NAC Breda,NAC BREDA,Eredivisie,34,58.0,1.706,,0,6,0,17,14,Below Avg
-Heracles Almelo,HERACLES ALMELO,Eredivisie,34,85.0,2.5,,0,5,0,25,18,Weak
-Barcelona,BARCELONA,La Liga,38,36.0,0.947,,0,31,0,6,2,Elite
-Real Madrid,REAL MADRID,La Liga,38,35.0,0.921,,0,27,0,6,1,Elite
-Villarreal,VILLARREAL,La Liga,38,46.0,1.211,,0,22,0,10,6,Above Avg
-Atlético Madrid,ATLÉTICO MADRID,La Liga,38,44.0,1.158,,0,21,0,11,4,Elite
-Real Betis,BETIS,La Liga,38,48.0,1.263,,0,15,0,8,7,Above Avg
-Celta Vigo,CELTA,La Liga,38,48.0,1.263,,0,14,0,12,7,Above Avg
-Getafe,GETAFE,La Liga,38,38.0,1.0,,0,15,0,17,3,Elite
-Rayo Vallecano,RAYO,La Liga,38,44.0,1.158,,0,12,0,12,4,Elite
-Valencia,VALENCIA,La Liga,38,55.0,1.447,,0,13,0,15,10,Avg
-Real Sociedad,REAL SOCIEDAD,La Liga,38,61.0,1.605,,0,11,0,14,19,Weak
-Espanyol,ESPANYOL,La Liga,38,55.0,1.447,,0,12,0,16,10,Avg
-Athletic Club,ATHLETIC BILBAO,La Liga,38,58.0,1.526,,0,13,0,19,16,Below Avg
-Sevilla,SEVILLA,La Liga,38,60.0,1.579,,0,12,0,19,17,Weak
-Alavés,ALAVÉS,La Liga,38,56.0,1.474,,0,11,0,17,13,Below Avg
-Elche,ELCHE,La Liga,38,57.0,1.5,,0,10,0,15,14,Below Avg
-Levante,LEVANTE,La Liga,38,61.0,1.605,,0,11,0,18,19,Weak
-Osasuna,OSASUNA,La Liga,38,50.0,1.316,,0,11,0,18,9,Avg
-Mallorca,MALLORCA,La Liga,38,57.0,1.5,,0,11,0,18,14,Below Avg
-Girona,GIRONA,La Liga,38,55.0,1.447,,0,9,0,15,10,Avg
-Real Oviedo,REAL OVIEDO,La Liga,38,60.0,1.579,,0,6,0,21,17,Weak
-Pumas UNAM,PUMAS,Liga MX,17,17.0,1.0,,0,10,0,1,2,Elite
-Guadalajara,GUADALAJARA,Liga MX,17,17.0,1.0,,0,11,0,3,2,Elite
-Cruz Azul,CRUZ AZUL,Liga MX,17,18.0,1.059,,0,9,0,2,6,Above Avg
-Pachuca,PACHUCA,Liga MX,17,19.0,1.118,,0,9,0,4,9,Avg
-Toluca,TOLUCA,Liga MX,17,16.0,0.941,,0,8,0,3,1,Elite
-Atlas,ATLAS,Liga MX,17,18.0,1.059,,0,7,0,5,6,Above Avg
-Tigres UANL,TIGRES,Liga MX,17,18.0,1.059,,0,7,0,6,6,Above Avg
-América,AMÉRICA,Liga MX,17,17.0,1.0,,0,7,0,6,2,Elite
-Tijuana,TIJUANA,Liga MX,17,17.0,1.0,,0,5,0,4,2,Elite
-León,LEON,Liga MX,17,32.0,1.882,,0,7,0,9,15,Below Avg
-Querétaro,QUERETARO,Liga MX,17,21.0,1.235,,0,4,0,5,10,Avg
-FC Juarez,FC JUAREZ,Liga MX,17,32.0,1.882,,0,5,0,8,15,Below Avg
-Monterrey,MONTERREY,Liga MX,17,24.0,1.412,,0,5,0,9,11,Avg
-Atlético de San Luis,ATLÉTICO DE SAN LUIS,Liga MX,17,27.0,1.588,,0,5,0,9,14,Below Avg
-Necaxa,NECAXA,Liga MX,17,25.0,1.471,,0,5,0,9,12,Below Avg
-Mazatlán FC,MAZATLAN,Liga MX,17,37.0,2.176,,0,4,0,10,17,Weak
-Puebla,PUEBLA,Liga MX,17,26.0,1.529,,0,3,0,10,13,Below Avg
-Santos,SANTOS,Liga MX,17,38.0,2.235,,0,3,0,11,18,Weak
-Paris Saint-Germain,PSG,Ligue 1,34,29.0,0.853,,0,24,0,6,1,Elite
-Lens,LENS,Ligue 1,34,35.0,1.029,,0,22,0,8,2,Elite
-Lille,LILLE,Ligue 1,34,37.0,1.088,,0,18,0,9,3,Elite
-Lyon,LYON,Ligue 1,34,40.0,1.176,,0,18,0,10,4,Elite
-Marseille,MARSEILLE,Ligue 1,34,45.0,1.324,,0,18,0,11,7,Above Avg
-Stade Rennais,RENNES,Ligue 1,34,50.0,1.471,,0,17,0,9,11,Avg
-AS Monaco,MONACO,Ligue 1,34,54.0,1.588,,0,16,0,12,15,Below Avg
-Strasbourg,STRASBOURG,Ligue 1,34,47.0,1.382,,0,15,0,11,8,Above Avg
-Lorient,LORIENT,Ligue 1,34,51.0,1.5,,0,11,0,11,13,Below Avg
-Toulouse,TOULOUSE,Ligue 1,33,46.0,1.394,,0,12,0,13,9,Avg
-Paris FC,PARIS,Ligue 1,34,50.0,1.471,,0,11,0,12,11,Avg
-Brest,BREST,Ligue 1,34,55.0,1.618,,0,10,0,15,16,Weak
-Angers,ANGERS,Ligue 1,34,48.0,1.412,,0,9,0,16,10,Avg
-Le Havre AC,LE HAVRE,Ligue 1,34,44.0,1.294,,0,7,0,13,5,Above Avg
-AJ Auxerre,AJ AUXERRE,Ligue 1,34,44.0,1.294,,0,8,0,16,5,Above Avg
-Nice,NICE,Ligue 1,34,60.0,1.765,,0,7,0,16,17,Weak
-Nantes,NANTES,Ligue 1,33,52.0,1.576,,0,5,0,20,14,Below Avg
-Metz,METZ,Ligue 1,34,76.0,2.235,,0,3,0,23,18,Weak
-Chicago Fire FC,CHICAGO,MLS,14,16.0,1.143,,0,8,0,4,6,Elite
-Columbus Crew,COLUMBUS,MLS,15,23.0,1.533,,0,4,0,7,14,Avg
-New England Revolution,NEW ENGLAND,MLS,14,18.0,1.286,,0,8,0,5,7,Above Avg
-Red Bull New York,RED BULL NEW YORK,MLS,15,32.0,2.133,,0,6,0,5,26,Weak
-D.C. United,DC UNITED,MLS,15,25.0,1.667,,0,4,0,5,19,Below Avg
-Toronto FC,TORONTO,MLS,14,29.0,2.071,,0,3,0,6,25,Weak
-CF Montréal,MONTREAL,MLS,14,31.0,2.214,,0,4,0,8,27,Weak
-Philadelphia Union,PHILADELPHIA,MLS,15,30.0,2.0,,0,1,0,10,22,Below Avg
-Orlando City SC,ORLANDO,MLS,15,44.0,2.933,,0,4,0,9,30,Weak
-New York City FC,NYCFC,MLS,15,21.0,1.4,,0,5,0,6,9,Above Avg
-FC Cincinnati,CINCINNATI,MLS,15,37.0,2.467,,0,5,0,5,28,Weak
-Atlanta United FC,ATLANTA UNITED,MLS,14,23.0,1.643,,0,3,0,9,17,Avg
-Nashville SC,NASHVILLE,MLS,14,11.0,0.786,,0,10,0,1,1,Elite
-Inter Miami CF,INTER MIAMI,MLS,15,28.0,1.867,,0,9,0,2,21,Below Avg
-Charlotte FC,CHARLOTTE,MLS,15,23.0,1.533,,0,6,0,6,14,Avg
-Colorado Rapids,COLORADO,MLS,15,24.0,1.6,,0,5,0,9,16,Avg
-FC Dallas,FC DALLAS,MLS,15,22.0,1.467,,0,7,0,4,11,Above Avg
-Sporting Kansas City,SPORTING KC,MLS,14,36.0,2.571,,0,3,0,9,29,Weak
-LA Galaxy,LA GALAXY,MLS,15,22.0,1.467,,0,5,0,5,11,Above Avg
-San Jose Earthquakes,SAN JOSE,MLS,15,15.0,1.0,,0,10,0,3,4,Elite
-Real Salt Lake,REAL SALT LAKE,MLS,14,19.0,1.357,,0,8,0,4,8,Above Avg
-Houston Dynamo FC,HOUSTON,MLS,14,23.0,1.643,,0,7,0,6,17,Avg
-Portland Timbers,PORTLAND,MLS,14,28.0,2.0,,0,4,0,8,22,Below Avg
-Seattle Sounders FC,SEATTLE,MLS,13,11.0,0.846,,0,7,0,3,2,Elite
-Vancouver Whitecaps,VANCOUVER WHITECAPS,MLS,14,12.0,0.857,,0,10,0,2,3,Elite
-Minnesota United FC,MINNESOTA,MLS,15,22.0,1.467,,0,6,0,5,11,Above Avg
-LAFC,LAFC,MLS,15,17.0,1.133,,0,7,0,5,5,Elite
-Austin FC,AUSTIN,MLS,15,31.0,2.067,,0,3,0,7,24,Below Avg
-St. Louis CITY SC,ST. LOUIS,MLS,14,20.0,1.429,,0,4,0,6,10,Above Avg
-San Diego FC,SAN DIEGO,MLS,15,27.0,1.8,,0,4,0,6,20,Below Avg
-Utah Royals,UTAH ROYALS,NWSL,11,8.0,0.727,,0,7,0,2,2,Elite
-Portland Thorns FC,THORNS,NWSL,12,12.0,1.0,,0,7,0,3,4,Elite
-San Diego Wave FC,SD WAVE,NWSL,12,13.0,1.083,,0,7,0,4,5,Above Avg
-Washington Spirit,SPIRIT,NWSL,10,8.0,0.8,,0,5,0,2,3,Elite
-Gotham FC,GOTHAM,NWSL,10,5.0,0.5,,0,5,0,2,1,Elite
-Kansas City Current,KC CURRENT,NWSL,11,17.0,1.545,,0,6,0,5,12,Below Avg
-North Carolina Courage,NC COURAGE,NWSL,10,12.0,1.2,,0,4,0,3,7,Above Avg
-Orlando Pride,ORLANDO PRIDE,NWSL,11,16.0,1.455,,0,4,0,5,11,Below Avg
-Seattle Reign FC,SEATTLE REIGN,NWSL,10,11.0,1.1,,0,4,0,4,6,Above Avg
-Houston Dash,HOUSTON DASH,NWSL,11,18.0,1.636,,0,4,0,5,13,Below Avg
-Angel City FC,ANGEL CITY,NWSL,10,12.0,1.2,,0,4,0,5,7,Above Avg
-Denver Summit FC,DENVER SUMMIT,NWSL,10,13.0,1.3,,0,3,0,4,9,Avg
-Bay FC,BAY FC,NWSL,10,14.0,1.4,,0,3,0,5,10,Avg
-Boston Legacy FC,BOSTON LEGACY,NWSL,11,18.0,1.636,,0,2,0,6,13,Below Avg
-Chicago Stars FC,CHICAGO STARS,NWSL,11,22.0,2.0,,0,3,0,8,16,Weak
-Racing Louisville FC,LOUISVILLE,NWSL,10,19.0,1.9,,0,2,0,7,15,Weak
-FC Porto,FC PORTO,Primeira Liga,34,18.0,0.529,,0,28,0,2,1,Elite
-Sporting CP,SPORTING CP,Primeira Liga,34,24.0,0.706,,0,25,0,2,2,Elite
-Benfica,BENFICA,Primeira Liga,34,25.0,0.735,,0,23,0,0,3,Elite
-Braga,BRAGA,Primeira Liga,34,36.0,1.059,,0,16,0,7,5,Above Avg
-FC Famalicao,FC FAMALICAO,Primeira Liga,34,29.0,0.853,,0,15,0,8,4,Elite
-Gil Vicente,GIL VICENTE,Primeira Liga,34,38.0,1.118,,0,13,0,10,6,Above Avg
-Moreirense,MOREIRENSE,Primeira Liga,34,49.0,1.441,,0,12,0,15,9,Avg
-Arouca,AROUCA,Primeira Liga,34,64.0,1.882,,0,12,0,16,17,Weak
-Vitória de Guimaraes,VITÓRIA DE GUIMARAES,Primeira Liga,34,51.0,1.5,,0,12,0,16,10,Avg
-Estoril,ESTORIL,Primeira Liga,34,57.0,1.676,,0,10,0,15,14,Below Avg
-Alverca,ALVERCA,Primeira Liga,34,52.0,1.529,,0,10,0,15,11,Avg
-Rio Ave,RIO AVE,Primeira Liga,34,57.0,1.676,,0,8,0,14,14,Below Avg
-Santa Clara,SANTA CLARA,Primeira Liga,34,41.0,1.206,,0,9,0,16,7,Above Avg
-C.D. Nacional,C.D. NACIONAL,Primeira Liga,34,45.0,1.324,,0,9,0,18,8,Above Avg
-Estrela,ESTRELA,Primeira Liga,34,56.0,1.647,,0,6,0,16,13,Below Avg
-Casa Pia,CASA PIA,Primeira Liga,34,57.0,1.676,,0,6,0,16,14,Below Avg
-Tondela,TONDELA,Primeira Liga,34,55.0,1.618,,0,6,0,18,12,Below Avg
-AVS,AVS,Primeira Liga,34,67.0,1.971,,0,3,0,19,18,Weak
-Celtic,CELTIC,Scottish Prem,38,41.0,1.079,,0,26,0,8,3,Elite
-Heart of Midlothian,HEART OF MIDLOTHIAN,Scottish Prem,38,34.0,0.895,,0,24,0,6,1,Elite
-Rangers,RANGERS,Scottish Prem,38,43.0,1.132,,0,20,0,6,4,Above Avg
-Motherwell,MOTHERWELL,Scottish Prem,38,36.0,0.947,,0,16,0,9,2,Elite
-Hibernian,HIBERNIAN,Scottish Prem,38,44.0,1.158,,0,15,0,11,5,Above Avg
-Falkirk,FALKIRK,Scottish Prem,38,62.0,1.632,,0,14,0,17,10,Below Avg
-Dundee United,DUNDEE UNITED,Scottish Prem,38,60.0,1.579,,0,10,0,13,8,Avg
-Dundee,DUNDEE,Scottish Prem,38,61.0,1.605,,0,11,0,18,9,Below Avg
-Aberdeen,ABERDEEN,Scottish Prem,38,55.0,1.447,,0,11,0,20,6,Avg
-Kilmarnock,KILMARNOCK,Scottish Prem,38,68.0,1.789,,0,10,0,18,11,Weak
-St Mirren,ST MIRREN,Scottish Prem,38,55.0,1.447,,0,8,0,20,6,Avg
-Livingston,LIVINGSTON,Scottish Prem,38,75.0,1.974,,0,2,0,21,12,Weak
-Internazionale,INTERNAZIONALE,Serie A,38,35.0,0.921,,0,27,0,5,4,Elite
-Napoli,NAPOLI,Serie A,38,36.0,0.947,,0,23,0,8,6,Above Avg
-AS Roma,ROMA,Serie A,38,31.0,0.816,,0,23,0,11,2,Elite
-Como,COMO,Serie A,38,29.0,0.763,,0,20,0,7,1,Elite
-AC Milan,MILAN,Serie A,38,35.0,0.921,,0,20,0,8,4,Elite
-Juventus,JUVENTUS,Serie A,38,34.0,0.895,,0,19,0,7,3,Elite
-Atalanta,ATALANTA,Serie A,38,36.0,0.947,,0,15,0,9,6,Above Avg
-Bologna,BOLOGNA,Serie A,38,46.0,1.211,,0,16,0,14,9,Avg
-Lazio,LAZIO,Serie A,38,40.0,1.053,,0,14,0,12,8,Above Avg
-Udinese,UDINESE,Serie A,38,48.0,1.263,,0,14,0,16,11,Avg
-Sassuolo,SASSUOLO,Serie A,38,50.0,1.316,,0,14,0,17,12,Avg
-Torino,TORINO,Serie A,38,63.0,1.658,,0,12,0,17,19,Weak
-Parma,PARMA,Serie A,38,46.0,1.211,,0,11,0,15,9,Avg
-Cagliari,CAGLIARI,Serie A,38,53.0,1.395,,0,11,0,17,16,Below Avg
-Fiorentina,FIORENTINA,Serie A,38,50.0,1.316,,0,9,0,14,12,Avg
-Genoa,GENOA,Serie A,38,51.0,1.342,,0,10,0,17,15,Below Avg
-Lecce,LECCE,Serie A,38,50.0,1.316,,0,10,0,20,12,Avg
-Cremonese,CREMONESE,Serie A,38,57.0,1.5,,0,8,0,20,17,Weak
-Hellas Verona,VERONA,Serie A,38,61.0,1.605,,0,3,0,23,18,Weak
-Pisa,PISA,Serie A,38,71.0,1.868,,0,2,0,24,20,Weak
-Olympiacos,OLYMPIACOS,Super League Greece,32,17.0,0.531,,0,19,0,4,1,Elite
-Panathinaikos,PANATHINAIKOS,Super League Greece,32,33.0,1.031,,0,14,0,8,5,Above Avg
-PAOK Salonika,PAOK SALONIKA,Super League Greece,32,25.0,0.781,,0,18,0,4,3,Elite
-AEK Athens,AEK,Super League Greece,32,20.0,0.625,,0,21,0,2,2,Elite
-OFI Crete,OFI CRETE,Super League Greece,6,10.0,1.667,,0,2,0,3,11,Below Avg
-Levadiakos,LEVADIAKOS,Super League Greece,6,10.0,1.667,,0,3,0,2,11,Below Avg
-Aris,ARIS,Super League Greece,6,5.0,0.833,,0,5,0,0,4,Above Avg
-Volos NFC,VOLOS NFC,Super League Greece,6,17.0,2.833,,0,0,0,5,14,Weak
-Atromitos,ATROMITOS,Super League Greece,36,42.0,1.167,,0,12,0,14,6,Above Avg
-Asteras Tripoli,ASTERAS TRIPOLI,Super League Greece,36,49.0,1.361,,0,8,0,16,7,Avg
-Larissa FC,LARISSA,Super League Greece,36,56.0,1.556,,0,5,0,16,10,Below Avg
-Panetolikos,PANETOLIKOS,Super League Greece,36,51.0,1.417,,0,9,0,18,8,Avg
-Kifisia,KIFISIA,Super League Greece,36,51.0,1.417,,0,9,0,13,8,Avg
-Panserraikos FC,PANSERRAIKOS,Super League Greece,36,73.0,2.028,,0,7,0,21,13,Weak
-Galatasaray,GALATASARAY,Süper Lig,34,30.0,0.882,,0,24,0,5,1,Elite
-Fenerbahce,FENERBAHCE,Süper Lig,34,37.0,1.088,,0,21,0,2,4,Elite
-Trabzonspor,TRABZONSPOR,Süper Lig,34,39.0,1.147,,0,20,0,5,6,Above Avg
-Besiktas,BESIKTAS,Süper Lig,34,40.0,1.176,,0,17,0,8,7,Above Avg
-Istanbul Basaksehir,ISTANBUL BASAKSEHIR,Süper Lig,34,35.0,1.029,,0,16,0,9,3,Elite
-Goztepe,GOZTEPE,Süper Lig,34,32.0,0.941,,0,14,0,7,2,Elite
-Samsunspor,SAMSUNSPOR,Süper Lig,34,45.0,1.324,,0,13,0,9,9,Avg
-Caykur Rizespor,CAYKUR RIZESPOR,Süper Lig,34,52.0,1.529,,0,10,0,13,14,Below Avg
-Konyaspor,KONYASPOR,Süper Lig,34,50.0,1.471,,0,10,0,14,13,Below Avg
-Kocaelispor,KOCAELISPOR,Süper Lig,34,38.0,1.118,,0,9,0,15,5,Above Avg
-Alanyaspor,ALANYASPOR,Süper Lig,34,41.0,1.206,,0,7,0,11,8,Above Avg
-Gaziantep FK,GAZIANTEP,Süper Lig,34,58.0,1.706,,0,9,0,15,17,Weak
-Kasimpasa,KASIMPASA,Süper Lig,34,49.0,1.441,,0,8,0,15,12,Below Avg
-Genclerbirligi,GENCLERBIRLIGI,Süper Lig,34,47.0,1.382,,0,9,0,18,10,Avg
-Eyupspor,EYUPSPOR,Süper Lig,34,48.0,1.412,,0,8,0,17,11,Avg
-Antalyaspor,ANTALYASPOR,Süper Lig,34,55.0,1.618,,0,8,0,18,16,Weak
-Kayserispor,KAYSERISPOR,Süper Lig,34,62.0,1.824,,0,6,0,16,18,Weak
-Fatih Karagümrük,FATIH KARAGÜMRÜK,Süper Lig,34,54.0,1.588,,0,8,0,20,15,Below Avg
+Newcastle Jets,NEWCASTLE JETS,A-League,26,39.0,1.5,,0,15,3,8,7,Avg
+Adelaide United,ADELAIDE,A-League,26,36.0,1.385,,0,12,7,7,5,Above Avg
+Auckland FC,AUCKLAND,A-League,26,29.0,1.115,,0,11,9,6,2,Elite
+Melbourne Victory,MELBOURNE VICTORY,A-League,26,33.0,1.269,,0,11,7,8,3,Elite
+Sydney FC,SYDNEY,A-League,26,25.0,0.962,,0,11,6,9,1,Elite
+Melbourne City FC,MELBOURNE CITY,A-League,26,33.0,1.269,,0,10,8,8,3,Elite
+Macarthur FC,MACARTHUR,A-League,26,44.0,1.692,,0,9,7,10,11,Weak
+Wellington Phoenix FC,WELLINGTON PHOENIX,A-League,26,48.0,1.846,,0,9,6,11,12,Weak
+Central Coast Mariners,CENTRAL COAST,A-League,26,42.0,1.615,,0,8,8,10,9,Below Avg
+Perth Glory,PERTH,A-League,26,39.0,1.5,,0,8,7,11,7,Avg
+Brisbane Roar,BRISBANE,A-League,26,36.0,1.385,,0,6,8,12,5,Above Avg
+Western Sydney Wanderers,WSW,A-League,26,43.0,1.654,,0,5,6,15,10,Below Avg
+Boca Juniors,BOCA JUNIORS,Argentina,16,9.0,0.562,,0,8,6,2,2,Elite
+Estudiantes de La Plata,ESTUDIANTES,Argentina,16,7.0,0.438,,0,9,4,3,1,Elite
+Independiente,INDEPENDIENTE,Argentina,16,20.0,1.25,,0,6,6,4,22,Below Avg
+Lanús,LANÚS,Argentina,16,15.0,0.938,,0,6,6,4,11,Above Avg
+Newell's Old Boys,NEWELL'S,Argentina,16,27.0,1.688,,0,3,6,7,30,Weak
+San Lorenzo,SAN LORENZO,Argentina,16,14.0,0.875,,0,5,7,4,10,Above Avg
+Talleres (Córdoba),TALLERES,Argentina,16,13.0,0.812,,0,7,5,4,6,Elite
+Unión (Santa Fe),UNIÓN,Argentina,16,20.0,1.25,,0,5,6,5,22,Below Avg
+Vélez Sarsfield,VÉLEZ,Argentina,16,12.0,0.75,,0,7,7,2,3,Elite
+Instituto (Córdoba),INSTITUTO,Argentina,16,17.0,1.062,,0,6,3,7,18,Avg
+Platense,PLATENSE,Argentina,16,15.0,0.938,,0,3,7,6,11,Above Avg
+Defensa y Justicia,DEF Y JUSTICIA,Argentina,16,21.0,1.312,,0,4,7,5,26,Weak
+Gimnasia (Mendoza),GIMNASIA (MENDOZA),Argentina,16,22.0,1.375,,0,5,4,7,28,Weak
+Central Córdoba (Santiago del Estero),CENTRAL CÓRDOBA,Argentina,16,21.0,1.312,,0,4,4,8,26,Weak
+Deportivo Riestra,RIESTRA,Argentina,16,12.0,0.75,,0,1,8,7,3,Elite
+Argentinos Juniors,ARGENTINOS,Argentina,16,13.0,0.812,,0,8,5,3,6,Elite
+Belgrano (Córdoba),BELGRANO,Argentina,16,13.0,0.812,,0,7,5,4,6,Elite
+Gimnasia La Plata,GELP,Argentina,16,19.0,1.188,,0,8,2,6,19,Below Avg
+Huracán,HURACÁN,Argentina,16,13.0,0.812,,0,5,7,4,6,Elite
+Racing Club,RACING,Argentina,16,15.0,0.938,,0,5,6,5,11,Above Avg
+River Plate,RIVER,Argentina,16,12.0,0.75,,0,9,2,5,3,Elite
+Rosario Central,ROSARIO,Argentina,16,16.0,1.0,,0,8,4,4,17,Avg
+Banfield,BANFIELD,Argentina,16,19.0,1.188,,0,5,3,8,19,Below Avg
+Tigre,TIGRE,Argentina,16,15.0,0.938,,0,4,8,4,11,Above Avg
+Aldosivi,ALDOSIVI,Argentina,16,19.0,1.188,,0,0,8,8,19,Below Avg
+Independiente Rivadavia,INDEPENDIENTE RIVADAVIA,Argentina,16,15.0,0.938,,0,10,4,2,11,Above Avg
+Atlético Tucumán,ATLETICO TUCUMAN,Argentina,16,20.0,1.25,,0,3,5,8,22,Below Avg
+Barracas Central,BARRACAS,Argentina,16,15.0,0.938,,0,5,6,5,11,Above Avg
+Sarmiento (Junín),SARMIENTO,Argentina,16,20.0,1.25,,0,6,1,9,22,Below Avg
+Estudiantes de Río Cuarto,ESTUDIANTES DE RÍO CUARTO,Argentina,16,24.0,1.5,,0,1,2,13,29,Weak
+Palmeiras,PALMEIRAS,Brazil,18,13.0,0.722,,0,12,5,1,1,Elite
+Flamengo,FLAMENGO,Brazil,17,16.0,0.941,,0,10,4,3,2,Elite
+Fluminense,FLUMINENSE,Brazil,18,23.0,1.278,,0,9,4,5,8,Above Avg
+Athletico Paranaense,ATHLETICO PARANAENSE,Brazil,18,18.0,1.0,,0,9,3,6,3,Elite
+Red Bull Bragantino,RED BULL BRAGANTINO,Brazil,18,19.0,1.056,,0,9,2,7,4,Elite
+Bahia,BAHIA,Brazil,17,23.0,1.353,,0,7,5,5,12,Avg
+Coritiba,CORITIBA,Brazil,18,24.0,1.333,,0,7,5,6,11,Avg
+São Paulo,SAO PAULO,Brazil,18,20.0,1.111,,0,7,4,7,6,Above Avg
+Atlético-MG,ATLÉTICO-MG,Brazil,18,23.0,1.278,,0,7,3,8,8,Above Avg
+Corinthians,CORINTHIANS,Brazil,18,19.0,1.056,,0,6,6,6,4,Elite
+Cruzeiro,CRUZEIRO,Brazil,18,28.0,1.556,,0,6,6,6,15,Below Avg
+Botafogo,BOTAFOGO,Brazil,17,31.0,1.824,,0,6,4,7,19,Weak
+Vitória,VITÓRIA,Brazil,17,25.0,1.471,,0,6,4,7,14,Below Avg
+Internacional,INTERNACIONAL,Brazil,18,22.0,1.222,,0,5,6,7,7,Above Avg
+Santos,SANTOS,Brazil,18,29.0,1.611,,0,5,6,7,16,Below Avg
+Grêmio,GREMIO,Brazil,18,23.0,1.278,,0,5,6,7,8,Above Avg
+Vasco da Gama,VASCO,Brazil,18,29.0,1.611,,0,5,5,8,16,Below Avg
+Remo,REMO,Brazil,18,29.0,1.611,,0,4,6,8,16,Below Avg
+Mirassol,MIRASSOL,Brazil,17,24.0,1.412,,0,4,4,9,13,Below Avg
+Chapecoense,CHAPECOENSE,Brazil,17,33.0,1.941,,0,1,6,10,20,Weak
+Bayern Munich,BAYERN MUNICH,Bundesliga,34,36.0,1.059,,0,28,5,1,2,Elite
+Borussia Dortmund,DORTMUND,Bundesliga,34,34.0,1.0,,0,22,7,5,1,Elite
+RB Leipzig,LEIPZIG,Bundesliga,34,47.0,1.382,,0,20,5,9,3,Elite
+VfB Stuttgart,STUTTGART,Bundesliga,34,49.0,1.441,,0,18,8,8,5,Above Avg
+TSG Hoffenheim,HOFFENHEIM,Bundesliga,34,52.0,1.529,,0,18,7,9,6,Above Avg
+Bayer Leverkusen,LEVERKUSEN,Bundesliga,34,47.0,1.382,,0,17,8,9,3,Elite
+SC Freiburg,FREIBURG,Bundesliga,34,57.0,1.676,,0,13,8,13,10,Avg
+Eintracht Frankfurt,FRANKFURT,Bundesliga,34,65.0,1.912,,0,11,11,12,16,Weak
+FC Augsburg,AUGSBURG,Bundesliga,34,61.0,1.794,,0,12,7,15,14,Below Avg
+Mainz,MAINZ,Bundesliga,34,53.0,1.559,,0,10,10,14,7,Above Avg
+1. FC Union Berlin,UNION BERLIN,Bundesliga,34,58.0,1.706,,0,10,9,15,11,Avg
+Borussia Mönchengladbach,GLADBACH,Bundesliga,34,53.0,1.559,,0,9,11,14,7,Above Avg
+Hamburg SV,HAMBURG,Bundesliga,34,54.0,1.588,,0,9,11,14,9,Avg
+FC Cologne,KOLN,Bundesliga,34,63.0,1.853,,0,7,11,16,15,Below Avg
+Werder Bremen,WERDER BREMEN,Bundesliga,34,60.0,1.765,,0,8,8,18,12,Below Avg
+VfL Wolfsburg,VFL WOLFSBURG,Bundesliga,34,69.0,2.029,,0,7,8,19,17,Weak
+1. FC Heidenheim 1846,1. FC HEIDENHEIM 1846,Bundesliga,34,72.0,2.118,,0,6,8,20,18,Weak
+St. Pauli,ST. PAULI,Bundesliga,34,60.0,1.765,,0,6,8,20,12,Below Avg
+Coventry City,COVENTRY CITY,Championship,46,45.0,0.978,,0,28,11,7,1,Elite
+Ipswich Town,IPSWICH,Championship,46,47.0,1.022,,0,23,15,8,2,Elite
+Millwall,MILLWALL,Championship,46,49.0,1.065,,0,24,11,11,4,Elite
+Southampton,SOUTHAMPTON,Championship,46,56.0,1.217,,0,22,14,10,5,Elite
+Middlesbrough,MIDDLESBROUGH,Championship,46,47.0,1.022,,0,22,14,10,2,Elite
+Hull City,HULL,Championship,46,66.0,1.435,,0,21,10,15,20,Below Avg
+Wrexham,WREXHAM,Championship,46,65.0,1.413,,0,19,14,13,18,Below Avg
+Derby County,DERBY,Championship,46,59.0,1.283,,0,20,9,17,12,Avg
+Norwich City,NORWICH,Championship,46,56.0,1.217,,0,19,8,19,5,Elite
+Birmingham City,BIRMINGHAM,Championship,46,56.0,1.217,,0,17,13,16,5,Elite
+Swansea City,SWANSEA,Championship,46,59.0,1.283,,0,18,10,18,12,Avg
+Bristol City,BRISTOL CITY,Championship,46,59.0,1.283,,0,17,11,18,12,Avg
+Sheffield United,SHEFF UTD,Championship,46,66.0,1.435,,0,18,6,22,20,Below Avg
+Preston North End,PRESTON,Championship,46,62.0,1.348,,0,15,15,16,16,Below Avg
+Queens Park Rangers,QPR,Championship,46,73.0,1.587,,0,16,10,20,23,Weak
+Watford,WATFORD,Championship,46,65.0,1.413,,0,14,15,17,18,Below Avg
+Stoke City,STOKE CITY,Championship,46,56.0,1.217,,0,15,10,21,5,Elite
+Portsmouth,PORTSMOUTH,Championship,46,64.0,1.391,,0,14,13,19,17,Below Avg
+Charlton Athletic,CHARLTON ATHLETIC,Championship,46,58.0,1.261,,0,13,14,19,10,Above Avg
+Blackburn Rovers,BLACKBURN,Championship,46,56.0,1.217,,0,13,13,20,5,Elite
+West Bromwich Albion,WEST BROM,Championship,46,58.0,1.261,,0,13,14,19,10,Above Avg
+Oxford United,OXFORD,Championship,46,59.0,1.283,,0,11,14,21,12,Avg
+Leicester City,LEICESTER,Championship,46,68.0,1.478,,0,12,16,18,22,Weak
+Sheffield Wednesday,SHEFF WED,Championship,46,89.0,1.935,,0,2,12,32,24,Weak
+Arsenal,ARSENAL,EPL,38,27.0,0.711,,0,26,7,5,1,Elite
+Manchester City,MAN CITY,EPL,38,35.0,0.921,,0,23,9,6,2,Elite
+Manchester United,MAN UNITED,EPL,38,50.0,1.316,,0,20,11,7,6,Above Avg
+Aston Villa,ASTON VILLA,EPL,38,49.0,1.289,,0,19,8,11,5,Above Avg
+Liverpool,LIVERPOOL,EPL,38,53.0,1.395,,0,17,9,12,13,Below Avg
+AFC Bournemouth,AFC BOURNEMOUTH,EPL,38,54.0,1.421,,0,13,18,7,14,Below Avg
+Sunderland,SUNDERLAND,EPL,38,48.0,1.263,,0,14,12,12,4,Elite
+Brighton & Hove Albion,BRIGHTON,EPL,38,46.0,1.211,,0,14,11,13,3,Elite
+Brentford,BRENTFORD,EPL,38,52.0,1.368,,0,14,11,13,11,Avg
+Chelsea,CHELSEA,EPL,38,52.0,1.368,,0,14,10,14,11,Avg
+Fulham,FULHAM,EPL,38,51.0,1.342,,0,15,7,16,8,Above Avg
+Newcastle United,NEWCASTLE,EPL,38,55.0,1.447,,0,14,7,17,15,Below Avg
+Everton,EVERTON,EPL,38,50.0,1.316,,0,13,10,15,6,Above Avg
+Leeds United,LEEDS,EPL,38,56.0,1.474,,0,11,14,13,16,Below Avg
+Crystal Palace,CRYSTAL PALACE,EPL,38,51.0,1.342,,0,11,12,15,8,Above Avg
+Nottingham Forest,NOTTM FOREST,EPL,38,51.0,1.342,,0,11,11,16,8,Above Avg
+Tottenham Hotspur,SPURS,EPL,38,57.0,1.5,,0,10,11,17,17,Weak
+West Ham United,WEST HAM,EPL,38,65.0,1.711,,0,10,9,19,18,Weak
+Burnley,BURNLEY,EPL,38,75.0,1.974,,0,4,10,24,20,Weak
+Wolverhampton Wanderers,WOLVES,EPL,38,68.0,1.789,,0,3,11,24,19,Weak
+ADO Den Haag,ADO DEN HAAG,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+AZ Alkmaar,AZ ALKMAAR,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Ajax Amsterdam,AJAX AMSTERDAM,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+SC Cambuur,SC CAMBUUR,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Excelsior,EXCELSIOR,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Feyenoord Rotterdam,FEYENOORD ROTTERDAM,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Fortuna Sittard,FORTUNA SITTARD,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Go Ahead Eagles,GO AHEAD EAGLES,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+FC Groningen,FC GRONINGEN,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Heerenveen,HEERENVEEN,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+NEC Nijmegen,NEC NIJMEGEN,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+PEC Zwolle,PEC ZWOLLE,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+PSV Eindhoven,PSV EINDHOVEN,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Sparta Rotterdam,SPARTA ROTTERDAM,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Telstar,TELSTAR,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+FC Twente,FC TWENTE,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+FC Utrecht,FC UTRECHT,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Willem II,WILLEM II,Eredivisie,0,0.0,0.0,,0,0,0,0,1,Avg
+Barcelona,BARCELONA,La Liga,38,36.0,0.947,,0,31,1,6,2,Elite
+Real Madrid,REAL MADRID,La Liga,38,35.0,0.921,,0,27,5,6,1,Elite
+Villarreal,VILLARREAL,La Liga,38,46.0,1.211,,0,22,6,10,6,Above Avg
+Atlético Madrid,ATLÉTICO MADRID,La Liga,38,44.0,1.158,,0,21,6,11,4,Elite
+Real Betis,BETIS,La Liga,38,48.0,1.263,,0,15,15,8,7,Above Avg
+Celta Vigo,CELTA,La Liga,38,48.0,1.263,,0,14,12,12,7,Above Avg
+Getafe,GETAFE,La Liga,38,38.0,1.0,,0,15,6,17,3,Elite
+Rayo Vallecano,RAYO,La Liga,38,44.0,1.158,,0,12,14,12,4,Elite
+Valencia,VALENCIA,La Liga,38,55.0,1.447,,0,13,10,15,10,Avg
+Real Sociedad,REAL SOCIEDAD,La Liga,38,61.0,1.605,,0,11,13,14,19,Weak
+Espanyol,ESPANYOL,La Liga,38,55.0,1.447,,0,12,10,16,10,Avg
+Athletic Club,ATHLETIC BILBAO,La Liga,38,58.0,1.526,,0,13,6,19,16,Below Avg
+Sevilla,SEVILLA,La Liga,38,60.0,1.579,,0,12,7,19,17,Weak
+Alavés,ALAVÉS,La Liga,38,56.0,1.474,,0,11,10,17,13,Below Avg
+Elche,ELCHE,La Liga,38,57.0,1.5,,0,10,13,15,14,Below Avg
+Levante,LEVANTE,La Liga,38,61.0,1.605,,0,11,9,18,19,Weak
+Osasuna,OSASUNA,La Liga,38,50.0,1.316,,0,11,9,18,9,Avg
+Mallorca,MALLORCA,La Liga,38,57.0,1.5,,0,11,9,18,14,Below Avg
+Girona,GIRONA,La Liga,38,55.0,1.447,,0,9,14,15,10,Avg
+Real Oviedo,REAL OVIEDO,La Liga,38,60.0,1.579,,0,6,11,21,17,Weak
+Atlante,ATLANTE,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Atlas,ATLAS,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Atlético de San Luis,ATLÉTICO DE SAN LUIS,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+América,AMÉRICA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Cruz Azul,CRUZ AZUL,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Guadalajara,GUADALAJARA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+FC Juarez,FC JUAREZ,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+León,LEON,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Monterrey,MONTERREY,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Necaxa,NECAXA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Pachuca,PACHUCA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Puebla,PUEBLA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Pumas UNAM,PUMAS,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Querétaro,QUERETARO,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Santos,SANTOS,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Tigres UANL,TIGRES,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Tijuana,TIJUANA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Toluca,TOLUCA,Liga MX,0,0.0,0.0,,0,0,0,0,1,Avg
+Angers,ANGERS,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+AJ Auxerre,AJ AUXERRE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Brest,BREST,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Le Havre AC,LE HAVRE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Le Mans,LE MANS,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Lens,LENS,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Lille,LILLE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Lorient,LORIENT,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Lyon,LYON,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Marseille,MARSEILLE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+AS Monaco,MONACO,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Nice,NICE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Paris FC,PARIS,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Paris Saint-Germain,PSG,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Stade Rennais,RENNES,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Strasbourg,STRASBOURG,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Toulouse,TOULOUSE,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Troyes,TROYES,Ligue 1,0,0.0,0.0,,0,0,0,0,1,Avg
+Chicago Fire FC,CHICAGO,MLS,14,16.0,1.143,,0,8,2,4,6,Elite
+Columbus Crew,COLUMBUS,MLS,15,23.0,1.533,,0,4,4,7,14,Avg
+New England Revolution,NEW ENGLAND,MLS,14,18.0,1.286,,0,8,1,5,7,Above Avg
+Red Bull New York,RED BULL NEW YORK,MLS,15,32.0,2.133,,0,6,4,5,26,Weak
+D.C. United,DC UNITED,MLS,15,25.0,1.667,,0,4,6,5,19,Below Avg
+Toronto FC,TORONTO,MLS,14,29.0,2.071,,0,3,5,6,25,Weak
+CF Montréal,MONTREAL,MLS,14,31.0,2.214,,0,4,2,8,27,Weak
+Philadelphia Union,PHILADELPHIA,MLS,15,30.0,2.0,,0,1,4,10,22,Below Avg
+Orlando City SC,ORLANDO,MLS,15,44.0,2.933,,0,4,2,9,30,Weak
+New York City FC,NYCFC,MLS,15,21.0,1.4,,0,5,4,6,9,Above Avg
+FC Cincinnati,CINCINNATI,MLS,15,37.0,2.467,,0,5,5,5,28,Weak
+Atlanta United FC,ATLANTA UNITED,MLS,14,23.0,1.643,,0,3,2,9,17,Avg
+Nashville SC,NASHVILLE,MLS,14,11.0,0.786,,0,10,3,1,1,Elite
+Inter Miami CF,INTER MIAMI,MLS,15,28.0,1.867,,0,9,4,2,21,Below Avg
+Charlotte FC,CHARLOTTE,MLS,15,23.0,1.533,,0,6,3,6,14,Avg
+Colorado Rapids,COLORADO,MLS,15,24.0,1.6,,0,5,1,9,16,Avg
+FC Dallas,FC DALLAS,MLS,15,22.0,1.467,,0,7,4,4,11,Above Avg
+Sporting Kansas City,SPORTING KC,MLS,14,36.0,2.571,,0,3,2,9,29,Weak
+LA Galaxy,LA GALAXY,MLS,15,22.0,1.467,,0,5,5,5,11,Above Avg
+San Jose Earthquakes,SAN JOSE,MLS,15,15.0,1.0,,0,10,2,3,4,Elite
+Real Salt Lake,REAL SALT LAKE,MLS,14,19.0,1.357,,0,8,2,4,8,Above Avg
+Houston Dynamo FC,HOUSTON,MLS,14,23.0,1.643,,0,7,1,6,17,Avg
+Portland Timbers,PORTLAND,MLS,14,28.0,2.0,,0,4,2,8,22,Below Avg
+Seattle Sounders FC,SEATTLE,MLS,13,11.0,0.846,,0,7,3,3,2,Elite
+Vancouver Whitecaps,VANCOUVER WHITECAPS,MLS,14,12.0,0.857,,0,10,2,2,3,Elite
+Minnesota United FC,MINNESOTA,MLS,15,22.0,1.467,,0,6,4,5,11,Above Avg
+LAFC,LAFC,MLS,15,17.0,1.133,,0,7,3,5,5,Elite
+Austin FC,AUSTIN,MLS,15,31.0,2.067,,0,3,5,7,24,Below Avg
+St. Louis CITY SC,ST. LOUIS,MLS,14,20.0,1.429,,0,4,4,6,10,Above Avg
+San Diego FC,SAN DIEGO,MLS,15,27.0,1.8,,0,4,5,6,20,Below Avg
+San Diego Wave FC,SD WAVE,NWSL,13,13.0,1.0,,0,8,1,4,4,Elite
+Utah Royals,UTAH ROYALS,NWSL,12,10.0,0.833,,0,7,3,2,3,Elite
+Portland Thorns FC,THORNS,NWSL,13,14.0,1.077,,0,7,3,3,5,Above Avg
+Washington Spirit,SPIRIT,NWSL,11,9.0,0.818,,0,6,3,2,2,Elite
+Gotham FC,GOTHAM,NWSL,11,5.0,0.455,,0,6,3,2,1,Elite
+Kansas City Current,KC CURRENT,NWSL,12,17.0,1.417,,0,7,0,5,10,Avg
+North Carolina Courage,NC COURAGE,NWSL,11,13.0,1.182,,0,5,3,3,6,Above Avg
+Orlando Pride,ORLANDO PRIDE,NWSL,12,17.0,1.417,,0,5,2,5,10,Avg
+Denver Summit FC,DENVER SUMMIT,NWSL,11,13.0,1.182,,0,4,3,4,6,Above Avg
+Seattle Reign FC,SEATTLE REIGN,NWSL,11,13.0,1.182,,0,4,2,5,6,Above Avg
+Houston Dash,HOUSTON DASH,NWSL,12,19.0,1.583,,0,4,2,6,13,Below Avg
+Angel City FC,ANGEL CITY,NWSL,11,14.0,1.273,,0,4,1,6,9,Avg
+Bay FC,BAY FC,NWSL,11,17.0,1.545,,0,3,2,6,12,Below Avg
+Boston Legacy FC,BOSTON LEGACY,NWSL,12,19.0,1.583,,0,2,3,7,13,Below Avg
+Chicago Stars FC,CHICAGO STARS,NWSL,12,24.0,2.0,,0,3,0,9,16,Weak
+Racing Louisville FC,LOUISVILLE,NWSL,11,20.0,1.818,,0,2,1,8,15,Weak
+FC Porto,FC PORTO,Primeira Liga,34,18.0,0.529,,0,28,4,2,1,Elite
+Sporting CP,SPORTING CP,Primeira Liga,34,24.0,0.706,,0,25,7,2,2,Elite
+Benfica,BENFICA,Primeira Liga,34,25.0,0.735,,0,23,11,0,3,Elite
+Braga,BRAGA,Primeira Liga,34,36.0,1.059,,0,16,11,7,5,Above Avg
+FC Famalicao,FC FAMALICAO,Primeira Liga,34,29.0,0.853,,0,15,11,8,4,Elite
+Gil Vicente,GIL VICENTE,Primeira Liga,34,38.0,1.118,,0,13,11,10,6,Above Avg
+Moreirense,MOREIRENSE,Primeira Liga,34,49.0,1.441,,0,12,7,15,9,Avg
+Arouca,AROUCA,Primeira Liga,34,64.0,1.882,,0,12,6,16,17,Weak
+Vitória de Guimaraes,VITÓRIA DE GUIMARAES,Primeira Liga,34,51.0,1.5,,0,12,6,16,10,Avg
+Estoril,ESTORIL,Primeira Liga,34,57.0,1.676,,0,10,9,15,14,Below Avg
+Alverca,ALVERCA,Primeira Liga,34,52.0,1.529,,0,10,9,15,11,Avg
+Rio Ave,RIO AVE,Primeira Liga,34,57.0,1.676,,0,8,12,14,14,Below Avg
+Santa Clara,SANTA CLARA,Primeira Liga,34,41.0,1.206,,0,9,9,16,7,Above Avg
+C.D. Nacional,C.D. NACIONAL,Primeira Liga,34,45.0,1.324,,0,9,7,18,8,Above Avg
+Estrela,ESTRELA,Primeira Liga,34,56.0,1.647,,0,6,12,16,13,Below Avg
+Casa Pia,CASA PIA,Primeira Liga,34,57.0,1.676,,0,6,12,16,14,Below Avg
+Tondela,TONDELA,Primeira Liga,34,55.0,1.618,,0,6,10,18,12,Below Avg
+AVS,AVS,Primeira Liga,34,67.0,1.971,,0,3,12,19,18,Weak
+Celtic,CELTIC,Scottish Prem,38,41.0,1.079,,0,26,4,8,3,Elite
+Heart of Midlothian,HEART OF MIDLOTHIAN,Scottish Prem,38,34.0,0.895,,0,24,8,6,1,Elite
+Rangers,RANGERS,Scottish Prem,38,43.0,1.132,,0,20,12,6,4,Above Avg
+Motherwell,MOTHERWELL,Scottish Prem,38,36.0,0.947,,0,16,13,9,2,Elite
+Hibernian,HIBERNIAN,Scottish Prem,38,44.0,1.158,,0,15,12,11,5,Above Avg
+Falkirk,FALKIRK,Scottish Prem,38,62.0,1.632,,0,14,7,17,10,Below Avg
+Dundee United,DUNDEE UNITED,Scottish Prem,38,60.0,1.579,,0,10,15,13,8,Avg
+Dundee,DUNDEE,Scottish Prem,38,61.0,1.605,,0,11,9,18,9,Below Avg
+Aberdeen,ABERDEEN,Scottish Prem,38,55.0,1.447,,0,11,7,20,6,Avg
+Kilmarnock,KILMARNOCK,Scottish Prem,38,68.0,1.789,,0,10,10,18,11,Weak
+St Mirren,ST MIRREN,Scottish Prem,38,55.0,1.447,,0,8,10,20,6,Avg
+Livingston,LIVINGSTON,Scottish Prem,38,75.0,1.974,,0,2,15,21,12,Weak
+AC Milan,MILAN,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Atalanta,ATALANTA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Bologna,BOLOGNA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Cagliari,CAGLIARI,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Como,COMO,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Fiorentina,FIORENTINA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Frosinone,FROSINONE,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Genoa,GENOA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Internazionale,INTERNAZIONALE,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Juventus,JUVENTUS,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Lazio,LAZIO,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Lecce,LECCE,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Monza,MONZA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Napoli,NAPOLI,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Parma,PARMA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+AS Roma,ROMA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Sassuolo,SASSUOLO,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Torino,TORINO,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Udinese,UDINESE,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Venezia,VENEZIA,Serie A,0,0.0,0.0,,0,0,0,0,1,Avg
+Olympiacos,OLYMPIACOS,Super League Greece,32,17.0,0.531,,0,19,9,4,1,Elite
+Panathinaikos,PANATHINAIKOS,Super League Greece,32,33.0,1.031,,0,14,10,8,5,Above Avg
+PAOK Salonika,PAOK SALONIKA,Super League Greece,32,25.0,0.781,,0,18,10,4,3,Elite
+AEK Athens,AEK,Super League Greece,32,20.0,0.625,,0,21,9,2,2,Elite
+OFI Crete,OFI CRETE,Super League Greece,6,10.0,1.667,,0,2,1,3,11,Below Avg
+Levadiakos,LEVADIAKOS,Super League Greece,6,10.0,1.667,,0,3,1,2,11,Below Avg
+Aris,ARIS,Super League Greece,6,5.0,0.833,,0,5,1,0,4,Above Avg
+Volos NFC,VOLOS NFC,Super League Greece,6,17.0,2.833,,0,0,1,5,14,Weak
+Atromitos,ATROMITOS,Super League Greece,36,42.0,1.167,,0,12,10,14,6,Above Avg
+Asteras Tripoli,ASTERAS TRIPOLI,Super League Greece,36,49.0,1.361,,0,8,12,16,7,Avg
+Larissa FC,LARISSA,Super League Greece,36,56.0,1.556,,0,5,15,16,10,Below Avg
+Panetolikos,PANETOLIKOS,Super League Greece,36,51.0,1.417,,0,9,9,18,8,Avg
+Kifisia,KIFISIA,Super League Greece,36,51.0,1.417,,0,9,14,13,8,Avg
+Panserraikos FC,PANSERRAIKOS,Super League Greece,36,73.0,2.028,,0,7,8,21,13,Weak
+Galatasaray,GALATASARAY,Süper Lig,34,30.0,0.882,,0,24,5,5,1,Elite
+Fenerbahce,FENERBAHCE,Süper Lig,34,37.0,1.088,,0,21,11,2,4,Elite
+Trabzonspor,TRABZONSPOR,Süper Lig,34,39.0,1.147,,0,20,9,5,6,Above Avg
+Besiktas,BESIKTAS,Süper Lig,34,40.0,1.176,,0,17,9,8,7,Above Avg
+Istanbul Basaksehir,ISTANBUL BASAKSEHIR,Süper Lig,34,35.0,1.029,,0,16,9,9,3,Elite
+Goztepe,GOZTEPE,Süper Lig,34,32.0,0.941,,0,14,13,7,2,Elite
+Samsunspor,SAMSUNSPOR,Süper Lig,34,45.0,1.324,,0,13,12,9,9,Avg
+Caykur Rizespor,CAYKUR RIZESPOR,Süper Lig,34,52.0,1.529,,0,10,11,13,14,Below Avg
+Konyaspor,KONYASPOR,Süper Lig,34,50.0,1.471,,0,10,10,14,13,Below Avg
+Kocaelispor,KOCAELISPOR,Süper Lig,34,38.0,1.118,,0,9,10,15,5,Above Avg
+Alanyaspor,ALANYASPOR,Süper Lig,34,41.0,1.206,,0,7,16,11,8,Above Avg
+Gaziantep FK,GAZIANTEP,Süper Lig,34,58.0,1.706,,0,9,10,15,17,Weak
+Kasimpasa,KASIMPASA,Süper Lig,34,49.0,1.441,,0,8,11,15,12,Below Avg
+Genclerbirligi,GENCLERBIRLIGI,Süper Lig,34,47.0,1.382,,0,9,7,18,10,Avg
+Eyupspor,EYUPSPOR,Süper Lig,34,48.0,1.412,,0,8,9,17,11,Avg
+Antalyaspor,ANTALYASPOR,Süper Lig,34,55.0,1.618,,0,8,8,18,16,Weak
+Kayserispor,KAYSERISPOR,Süper Lig,34,62.0,1.824,,0,6,12,16,18,Weak
+Fatih Karagümrük,FATIH KARAGÜMRÜK,Süper Lig,34,54.0,1.588,,0,8,6,20,15,Below Avg
 Arsenal,ARSENAL,UCL,8,4.0,0.5,,0,8,0,0,1,Elite
 Bayern Munich,BAYERN MUNICH,UCL,8,8.0,1.0,,0,7,0,1,5,Elite
 Liverpool,LIVERPOOL,UCL,8,8.0,1.0,,0,6,0,2,5,Elite
-Tottenham Hotspur,SPURS,UCL,8,7.0,0.875,,0,5,0,1,2,Elite
-Barcelona,BARCELONA,UCL,8,14.0,1.75,,0,5,0,2,17,Avg
-Chelsea,CHELSEA,UCL,8,10.0,1.25,,0,5,0,2,8,Elite
-Sporting CP,SPORTING CP,UCL,8,11.0,1.375,,0,5,0,2,11,Above Avg
-Manchester City,MAN CITY,UCL,8,9.0,1.125,,0,5,0,2,7,Elite
+Tottenham Hotspur,SPURS,UCL,8,7.0,0.875,,0,5,2,1,2,Elite
+Barcelona,BARCELONA,UCL,8,14.0,1.75,,0,5,1,2,17,Avg
+Chelsea,CHELSEA,UCL,8,10.0,1.25,,0,5,1,2,8,Elite
+Sporting CP,SPORTING CP,UCL,8,11.0,1.375,,0,5,1,2,11,Above Avg
+Manchester City,MAN CITY,UCL,8,9.0,1.125,,0,5,1,2,7,Elite
 Real Madrid,REAL MADRID,UCL,8,12.0,1.5,,0,5,0,3,15,Above Avg
 Internazionale,INTERNAZIONALE,UCL,8,7.0,0.875,,0,5,0,3,2,Elite
-Paris Saint-Germain,PSG,UCL,8,11.0,1.375,,0,4,0,2,11,Above Avg
-Newcastle United,NEWCASTLE,UCL,8,7.0,0.875,,0,4,0,2,2,Elite
-Juventus,JUVENTUS,UCL,8,10.0,1.25,,0,3,0,1,8,Elite
-Atlético Madrid,ATLÉTICO MADRID,UCL,8,15.0,1.875,,0,4,0,3,23,Below Avg
-Atalanta,ATALANTA,UCL,8,10.0,1.25,,0,4,0,3,8,Elite
-Bayer Leverkusen,LEVERKUSEN,UCL,8,14.0,1.75,,0,3,0,2,17,Avg
-Borussia Dortmund,DORTMUND,UCL,8,17.0,2.125,,0,3,0,3,27,Below Avg
-Olympiacos,OLYMPIACOS,UCL,8,14.0,1.75,,0,3,0,3,17,Avg
-Club Brugge,CLUB BRUGGE,UCL,8,17.0,2.125,,0,3,0,4,27,Below Avg
-Galatasaray,GALATASARAY,UCL,8,11.0,1.375,,0,3,0,4,11,Above Avg
-AS Monaco,MONACO,UCL,8,14.0,1.75,,0,2,0,2,17,Avg
-FK Qarabag,FK QARABAG,UCL,8,21.0,2.625,,0,3,0,4,32,Weak
-Bodo/Glimt,BODO/GLIMT,UCL,8,15.0,1.875,,0,2,0,3,23,Below Avg
+Paris Saint-Germain,PSG,UCL,8,11.0,1.375,,0,4,2,2,11,Above Avg
+Newcastle United,NEWCASTLE,UCL,8,7.0,0.875,,0,4,2,2,2,Elite
+Juventus,JUVENTUS,UCL,8,10.0,1.25,,0,3,4,1,8,Elite
+Atlético Madrid,ATLÉTICO MADRID,UCL,8,15.0,1.875,,0,4,1,3,23,Below Avg
+Atalanta,ATALANTA,UCL,8,10.0,1.25,,0,4,1,3,8,Elite
+Bayer Leverkusen,LEVERKUSEN,UCL,8,14.0,1.75,,0,3,3,2,17,Avg
+Borussia Dortmund,DORTMUND,UCL,8,17.0,2.125,,0,3,2,3,27,Below Avg
+Olympiacos,OLYMPIACOS,UCL,8,14.0,1.75,,0,3,2,3,17,Avg
+Club Brugge,CLUB BRUGGE,UCL,8,17.0,2.125,,0,3,1,4,27,Below Avg
+Galatasaray,GALATASARAY,UCL,8,11.0,1.375,,0,3,1,4,11,Above Avg
+AS Monaco,MONACO,UCL,8,14.0,1.75,,0,2,4,2,17,Avg
+FK Qarabag,FK QARABAG,UCL,8,21.0,2.625,,0,3,1,4,32,Weak
+Bodo/Glimt,BODO/GLIMT,UCL,8,15.0,1.875,,0,2,3,3,23,Below Avg
 Benfica,BENFICA,UCL,8,12.0,1.5,,0,3,0,5,15,Above Avg
 Marseille,MARSEILLE,UCL,8,14.0,1.75,,0,3,0,5,17,Avg
-Pafos,PAFOS,UCL,8,11.0,1.375,,0,2,0,3,11,Above Avg
+Pafos,PAFOS,UCL,8,11.0,1.375,,0,2,3,3,11,Above Avg
 Union St.-Gilloise,UNION ST.-GILLOISE,UCL,8,17.0,2.125,,0,3,0,5,27,Below Avg
-PSV Eindhoven,PSV EINDHOVEN,UCL,8,16.0,2.0,,0,2,0,4,26,Below Avg
-Athletic Club,ATHLETIC BILBAO,UCL,8,14.0,1.75,,0,2,0,4,17,Avg
-Napoli,NAPOLI,UCL,8,15.0,1.875,,0,2,0,4,23,Below Avg
-F.C. København,F.C. KØBENHAVN,UCL,8,21.0,2.625,,0,2,0,4,32,Weak
+PSV Eindhoven,PSV EINDHOVEN,UCL,8,16.0,2.0,,0,2,2,4,26,Below Avg
+Athletic Club,ATHLETIC BILBAO,UCL,8,14.0,1.75,,0,2,2,4,17,Avg
+Napoli,NAPOLI,UCL,8,15.0,1.875,,0,2,2,4,23,Below Avg
+F.C. København,F.C. KØBENHAVN,UCL,8,21.0,2.625,,0,2,2,4,32,Weak
 Ajax Amsterdam,AJAX AMSTERDAM,UCL,8,21.0,2.625,,0,2,0,6,32,Weak
-Eintracht Frankfurt,FRANKFURT,UCL,8,21.0,2.625,,0,1,0,6,32,Weak
-Slavia Prague,SLAVIA PRAGUE,UCL,8,19.0,2.375,,0,0,0,5,31,Weak
-Villarreal,VILLARREAL,UCL,8,18.0,2.25,,0,0,0,7,30,Weak
-Kairat Almaty,KAIRAT ALMATY,UCL,8,22.0,2.75,,0,0,0,7,36,Weak
-Manchester City,MAN CITY,WSL,22,19.0,0.864,,0,18,0,3,2,Elite
-Arsenal,ARSENAL,WSL,22,14.0,0.636,,0,15,0,1,1,Elite
-Chelsea,CHELSEA,WSL,22,20.0,0.909,,0,15,0,3,3,Elite
-Manchester United,MAN UNITED,WSL,22,22.0,1.0,,0,11,0,4,4,Above Avg
-Tottenham Hotspur,SPURS,WSL,22,38.0,1.727,,0,11,0,8,9,Below Avg
-London City Lionesses,LONDON CITY LIONESSES,WSL,22,35.0,1.591,,0,8,0,11,7,Avg
-Brighton & Hove Albion,BRIGHTON,WSL,22,28.0,1.273,,0,7,0,10,5,Above Avg
-Everton,EVERTON,WSL,22,37.0,1.682,,0,7,0,13,8,Avg
-Aston Villa,ASTON VILLA,WSL,22,48.0,2.182,,0,5,0,12,11,Weak
-West Ham United,WEST HAM,WSL,22,45.0,2.045,,0,5,0,13,10,Below Avg
-Liverpool,LIVERPOOL,WSL,22,34.0,1.545,,0,4,0,13,6,Avg
-Leicester City,LEICESTER,WSL,22,52.0,2.364,,0,2,0,17,12,Weak
+Eintracht Frankfurt,FRANKFURT,UCL,8,21.0,2.625,,0,1,1,6,32,Weak
+Slavia Prague,SLAVIA PRAGUE,UCL,8,19.0,2.375,,0,0,3,5,31,Weak
+Villarreal,VILLARREAL,UCL,8,18.0,2.25,,0,0,1,7,30,Weak
+Kairat Almaty,KAIRAT ALMATY,UCL,8,22.0,2.75,,0,0,1,7,36,Weak
+Manchester City,MAN CITY,WSL,22,19.0,0.864,,0,18,1,3,2,Elite
+Arsenal,ARSENAL,WSL,22,14.0,0.636,,0,15,6,1,1,Elite
+Chelsea,CHELSEA,WSL,22,20.0,0.909,,0,15,4,3,3,Elite
+Manchester United,MAN UNITED,WSL,22,22.0,1.0,,0,11,7,4,4,Above Avg
+Tottenham Hotspur,SPURS,WSL,22,38.0,1.727,,0,11,3,8,9,Below Avg
+London City Lionesses,LONDON CITY LIONESSES,WSL,22,35.0,1.591,,0,8,3,11,7,Avg
+Brighton & Hove Albion,BRIGHTON,WSL,22,28.0,1.273,,0,7,5,10,5,Above Avg
+Everton,EVERTON,WSL,22,37.0,1.682,,0,7,2,13,8,Avg
+Aston Villa,ASTON VILLA,WSL,22,48.0,2.182,,0,5,5,12,11,Weak
+West Ham United,WEST HAM,WSL,22,45.0,2.045,,0,5,4,13,10,Below Avg
+Liverpool,LIVERPOOL,WSL,22,34.0,1.545,,0,4,5,13,6,Avg
+Leicester City,LEICESTER,WSL,22,52.0,2.364,,0,2,3,17,12,Weak
+Mexico,MEXICO,World Cup,1,0.0,0.0,,0,1,0,0,1,Elite
+Czechia,CZECHIA,World Cup,1,2.0,2.0,,0,0,0,1,23,Below Avg
+South Korea,SOUTH KOREA,World Cup,1,1.0,1.0,,0,1,0,0,7,Above Avg
+South Africa,SOUTH AFRICA,World Cup,1,2.0,2.0,,0,0,0,1,23,Below Avg
+Canada,CANADA,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Bosnia-Herzegovina,BOSNIA-HERZEGOVINA,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Switzerland,SWITZERLAND,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Qatar,QATAR,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Brazil,BRAZIL,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Scotland,SCOTLAND,World Cup,1,0.0,0.0,,0,1,0,0,1,Elite
+Haiti,HAITI,World Cup,1,1.0,1.0,,0,0,0,1,7,Above Avg
+Morocco,MOROCCO,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Paraguay,PARAGUAY,World Cup,1,4.0,4.0,,0,0,0,1,28,Weak
+Türkiye,TURKEY,World Cup,1,2.0,2.0,,0,0,0,1,23,Below Avg
+Australia,AUSTRALIA,World Cup,1,0.0,0.0,,0,1,0,0,1,Elite
+United States,UNITED STATES,World Cup,1,1.0,1.0,,0,1,0,0,7,Above Avg
+Ecuador,ECUADOR,World Cup,1,1.0,1.0,,0,0,0,1,7,Above Avg
+Germany,GERMANY,World Cup,1,1.0,1.0,,0,1,0,0,7,Above Avg
+Ivory Coast,IVORY COAST,World Cup,1,0.0,0.0,,0,1,0,0,1,Elite
+Curaçao,CURACAO,World Cup,1,7.0,7.0,,0,0,0,1,30,Weak
+Netherlands,NETHERLANDS,World Cup,1,2.0,2.0,,0,0,1,0,23,Below Avg
+Sweden,SWEDEN,World Cup,1,1.0,1.0,,0,1,0,0,7,Above Avg
+Japan,JAPAN,World Cup,1,2.0,2.0,,0,0,1,0,23,Below Avg
+Tunisia,TUNISIA,World Cup,1,5.0,5.0,,0,0,0,1,29,Weak
+Belgium,BELGIUM,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Iran,IRAN,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Egypt,EGYPT,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+New Zealand,NEW ZEALAND,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Spain,SPAIN,World Cup,1,0.0,0.0,,0,0,1,0,1,Elite
+Uruguay,URUGUAY,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Saudi Arabia,SAUDI ARABIA,World Cup,1,1.0,1.0,,0,0,1,0,7,Above Avg
+Cape Verde,CAPE VERDE,World Cup,1,0.0,0.0,,0,0,1,0,1,Elite
+Norway,NORWAY,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+France,FRANCE,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Senegal,SENEGAL,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Iraq,IRAQ,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Argentina,ARGENTINA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Austria,AUSTRIA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Algeria,ALGERIA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Jordan,JORDAN,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Colombia,COLOMBIA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Portugal,PORTUGAL,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Uzbekistan,UZBEKISTAN,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Congo DR,CONGO DR,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+England,ENGLAND,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Croatia,CROATIA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Panama,PANAMA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
+Ghana,GHANA,World Cup,0,0.0,0.0,,0,0,0,0,16,Avg
