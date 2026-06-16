@@ -146,6 +146,10 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "WNBA": [
         REPO_ROOT / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
     ],
+    "TENNIS": [
+        REPO_ROOT / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+        REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+    ],
 }
 
 
@@ -221,7 +225,11 @@ body.ticket-eval-page{
 """
 
 
-def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
+def _dated_candidates(
+    date_str: str,
+    *,
+    tennis_match_date: str | None = None,
+) -> dict[str, list[Path]]:
     """
     Returns a copy of SPORT_XLSX_CANDIDATES with dated archive paths prepended
     for each sport bucket. Dated paths follow the naming convention used by
@@ -238,17 +246,35 @@ def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
         "SOCCER": dated_dir / f"step8_soccer_direction_clean_{date_str}.xlsx",
         "MLB": dated_dir / f"step8_mlb_direction_clean_{date_str}.xlsx",
         "WNBA": dated_dir / f"step8_wnba_direction_clean_{date_str}.xlsx",
+        "TENNIS": dated_dir / f"step8_tennis_direction_clean_{date_str}.xlsx",
     }
     result: dict[str, list[Path]] = {}
     for bucket, live_paths in SPORT_XLSX_CANDIDATES.items():
         prepend: list[Path] = []
         dated_path = dated_map.get(bucket)
+        if bucket == "TENNIS":
+            tmd = str(tennis_match_date or "").strip()[:10]
+            if re.match(r"^\d{4}-\d{2}-\d{2}$", tmd) and tmd != date_str:
+                # Bundle dated step8 uses slate day; tennis props target match day (+1).
+                dated_path = None
         if dated_path and dated_path.is_file():
             prepend.append(dated_path)
         if bucket == "WNBA":
             alt = dated_dir / "wnba" / "step8_wnba_direction_clean.xlsx"
             if alt.is_file() and alt not in prepend:
                 prepend.append(alt)
+        if bucket == "TENNIS":
+            tennis_subdir = dated_dir / "tennis" / "step8_tennis_direction_clean.xlsx"
+            tmd = str(tennis_match_date or "").strip()[:10]
+            if re.match(r"^\d{4}-\d{2}-\d{2}$", tmd) and tmd != date_str:
+                match_day = dated_dir / f"step8_tennis_direction_clean_{tmd}.xlsx"
+                if match_day.is_file() and match_day not in prepend:
+                    prepend.insert(0, match_day)
+            if tennis_subdir.is_file() and tennis_subdir not in prepend:
+                if prepend:
+                    prepend.insert(1, tennis_subdir)
+                else:
+                    prepend.append(tennis_subdir)
         if prepend:
             result[bucket] = prepend + list(live_paths)
         else:
@@ -728,9 +754,16 @@ def debug_ungraded_report(
     payload: dict[str, Any],
     sport_candidates: dict[str, list[Path]],
     graded_merge_dates: list[str],
+    *,
+    slate_date: str = "",
 ) -> None:
     """Print UNGRADED leg counts by observational bucket and graded source row counts."""
-    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    indices = _load_actuals_indices(
+        sport_candidates,
+        graded_merge_dates,
+        slate_date=slate_date,
+        payload=payload,
+    )
     injury_dnp_by_sport = _injury_dnp_by_sport(graded_merge_dates)
     bucket_order = (
         "MISSING_ACTUAL",
@@ -1548,6 +1581,7 @@ def _merge_strict_graded_date_workbooks(
         "mlb": "MLB",
         "nba1h": "NBA1H",
         "nba1q": "NBA1Q",
+        "tennis": "TENNIS",
     }
     for graded_file in sorted(graded_dir.glob(f"graded_*_{arg_date}.xlsx")):
         m = re.match(r"^graded_(.+)_(\d{4}-\d{2}-\d{2})$", graded_file.stem)
@@ -1625,6 +1659,8 @@ def _sport_buckets_for_graded_filename(path: Path) -> list[str]:
         return ["NBA1Q"]
     if "nba" in n:
         return ["NBA"]
+    if "tennis" in n:
+        return ["TENNIS"]
     return []
 
 
@@ -1688,8 +1724,30 @@ def _game_dates_from_ticket_payload(payload: dict[str, Any], slate_date: str) ->
 # combined_slate_tickets_*.xlsx often omits Game Time; evening pipeline slips still target the next
 # calendar day for these books. Used only when no leg game_time / start_time was parsed.
 _TEAM_SPORTS_INFER_NEXT_DAY_GRADED: frozenset[str] = frozenset(
-    {"NBA", "NBA1H", "NBA1Q", "WNBA", "MLB", "NHL", "SOCCER", "CBB", "WCBB"}
+    {"NBA", "NBA1H", "NBA1Q", "WNBA", "MLB", "NHL", "SOCCER", "CBB", "WCBB", "TENNIS"}
 )
+
+
+def _payload_has_tennis_legs(payload: dict[str, Any]) -> bool:
+    for group in payload.get("groups") or []:
+        for ticket in group.get("tickets") or []:
+            for leg in ticket.get("legs") or []:
+                if str(leg.get("sport") or "").strip().upper() == "TENNIS":
+                    return True
+    return False
+
+
+def _resolve_tennis_match_date_from_payload(
+    slate_date: str,
+    payload: dict[str, Any],
+) -> str | None:
+    """Tennis board is bundle date + 1 unless payload carries an explicit tennis_date."""
+    if not _payload_has_tennis_legs(payload):
+        return None
+    td = str(payload.get("tennis_date") or "").strip()[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", td):
+        return td
+    return _inferred_next_calendar_game_date(slate_date)
 
 
 def _payload_has_infer_next_day_sport_legs(payload: dict[str, Any]) -> bool:
@@ -1724,6 +1782,9 @@ def resolve_ticket_eval_graded_merge_dates(
     """
     parsed = _game_dates_from_ticket_payload(payload, slate_date)
     from_legs: set[str] = set(parsed)
+    tennis_match = _resolve_tennis_match_date_from_payload(slate_date, payload)
+    if tennis_match:
+        from_legs.add(tennis_match)
     if not from_legs and _payload_has_infer_next_day_sport_legs(payload):
         nxt = _inferred_next_calendar_game_date(slate_date)
         if nxt:
@@ -1762,6 +1823,9 @@ def _merge_graded_workbooks_for_date(
 def _load_actuals_indices(
     sport_candidates: dict[str, list[Path]],
     graded_merge_dates: list[str],
+    *,
+    slate_date: str = "",
+    payload: dict[str, Any] | None = None,
 ) -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
     """Per sport-bucket indices (NBA1H separate from NBA, etc.)."""
     out: dict[str, tuple[dict, dict]] = {}
@@ -1783,7 +1847,68 @@ def _load_actuals_indices(
     for gd in graded_merge_dates:
         if gd and re.match(r"^\d{4}-\d{2}-\d{2}$", str(gd).strip()):
             _merge_graded_workbooks_for_date(out, str(gd).strip())
+    if payload and slate_date:
+        _merge_extra_tennis_graded_workbooks(out, slate_date, graded_merge_dates, payload)
     return out
+
+
+def _collect_tennis_graded_workbook_paths(
+    slate_date: str,
+    graded_merge_dates: list[str],
+    payload: dict[str, Any],
+) -> list[Path]:
+    """
+    graded_tennis may be named for bundle day or ESPN match day in either folder.
+    Later merges win, so match-day exports overlay bundle-day pre-match rows.
+    """
+    names: set[str] = set()
+    tennis_match = _resolve_tennis_match_date_from_payload(slate_date, payload)
+    if tennis_match:
+        names.add(f"graded_tennis_{tennis_match}.xlsx")
+    sd = str(slate_date).strip()[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", sd):
+        names.add(f"graded_tennis_{sd}.xlsx")
+    for gd in graded_merge_dates:
+        gds = str(gd).strip()[:10]
+        if re.match(r"^\d{4}-\d{2}-\d{2}$", gds):
+            names.add(f"graded_tennis_{gds}.xlsx")
+
+    found: list[Path] = []
+    seen: set[str] = set()
+    dirs: list[Path] = []
+    for gd in graded_merge_dates:
+        gds = str(gd).strip()[:10]
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", gds):
+            continue
+        dirs.append(_graded_slate_bundle_dir(gds))
+        dirs.append(REPO_ROOT / "outputs" / gds)
+    if tennis_match and tennis_match not in {str(g).strip()[:10] for g in graded_merge_dates}:
+        dirs.append(_graded_slate_bundle_dir(tennis_match))
+        dirs.append(REPO_ROOT / "outputs" / tennis_match)
+
+    for d in dirs:
+        if not d.is_dir():
+            continue
+        for name in sorted(names):
+            p = d / name
+            if not p.is_file():
+                continue
+            key = str(p.resolve())
+            if key in seen:
+                continue
+            seen.add(key)
+            found.append(p)
+    return found
+
+
+def _merge_extra_tennis_graded_workbooks(
+    indices: dict[str, tuple[dict, dict]],
+    slate_date: str,
+    graded_merge_dates: list[str],
+    payload: dict[str, Any],
+) -> int:
+    paths = _collect_tennis_graded_workbook_paths(slate_date, graded_merge_dates, payload)
+    return _merge_graded_workbooks_into_indices(indices, paths)
 
 
 # CBB graded workbook (Box Raw sheet) uses abbreviated prop_type_norm values.
@@ -2057,7 +2182,12 @@ def debug_report(
             else:
                 print(f"  {label} -> (not found)")
 
-    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    indices = _load_actuals_indices(
+        sport_candidates,
+        graded_merge_dates,
+        slate_date=arg_date,
+        payload=payload,
+    )
     print("\nGraded workbook(s) merged into indices (per date in merge order; later overwrites keys):")
     any_g = False
     for gd in graded_merge_dates:
@@ -2985,7 +3115,12 @@ def _build_html(
     eval_track: str = "graded_main",
 ) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
-    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    indices = _load_actuals_indices(
+        sport_candidates,
+        graded_merge_dates,
+        slate_date=arg_date,
+        payload=payload,
+    )
     injury_dnp_by_sport = _injury_dnp_by_sport(graded_merge_dates)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
@@ -4547,8 +4682,6 @@ def main() -> int:
     else:
         arg_date = (date.today() - timedelta(days=1)).isoformat()
 
-    sport_candidates = _dated_candidates(arg_date)
-
     override_raw = (args.tickets or args.slate or "").strip()
     override_path = Path(override_raw).resolve() if override_raw else None
 
@@ -4601,6 +4734,9 @@ def main() -> int:
         print(f"ERROR: Failed to read ticket file: {e}")
         return 1
 
+    tennis_match_date = _resolve_tennis_match_date_from_payload(arg_date, payload)
+    sport_candidates = _dated_candidates(arg_date, tennis_match_date=tennis_match_date)
+
     extra_game_dates: list[str] = list(args.game_date) if args.game_date else []
     graded_merge_dates, leg_game_dates_for_log = resolve_ticket_eval_graded_merge_dates(
         arg_date, payload, extra_game_dates
@@ -4652,7 +4788,9 @@ def main() -> int:
     print("  (Serve /tickets from tickets_latest.json; graded view: Grades → Ticket evaluation.)")
 
     if args.debug_ungraded:
-        debug_ungraded_report(payload, sport_candidates, graded_merge_dates)
+        debug_ungraded_report(
+            payload, sport_candidates, graded_merge_dates, slate_date=arg_date
+        )
 
     return 0
 

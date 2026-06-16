@@ -5829,10 +5829,12 @@ def ticket_groups_to_payload(
     *,
     ticket_track: str = "graded_main",
     payload_mode: str | None = None,
+    tennis_date: str | None = None,
 ):
     payload = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "date": date_str,
+        "tennis_date": str(tennis_date or default_tennis_match_date(date_str)).strip()[:10],
         "filters": thresholds,
         "bankroll": float(bankroll) if bankroll and bankroll > 0 else None,
         "ticket_track": str(ticket_track or "graded_main"),
