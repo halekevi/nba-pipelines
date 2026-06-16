@@ -301,21 +301,32 @@ def main():
     if not primary_id.isdigit():
         print(f"❌ --league_id must be numeric, got {args.league_id!r}")
         sys.exit(2)
-    boards_to_fetch = {primary_id: SOCCER_BOARDS.get(primary_id, "SOCCER")}
-    if not args.no_world_cup:
-        boards_to_fetch.update(WORLD_CUP_BOARDS)
-    if args.include_halves:
-        boards_to_fetch["242"] = "SOCCER1H"
-        boards_to_fetch["243"] = "SOCCER2H"
-        # WC halves already in WORLD_CUP_BOARDS when --no-world-cup is off
-    if args.include_season:
-        boards_to_fetch["262"] = "SOCCERSZN"
 
-    print(f"📡 Fetching PrizePicks Soccer | boards: {list(boards_to_fetch.values())}")
+    # World Cup boards first — they succeed quickly; club SOCCER (82) often hits
+    # DataDome cooldowns and wastes ~20 min if fetched before live WC slate.
+    boards_to_fetch: list[tuple[str, str]] = []
+    seen_ids: set[str] = set()
+
+    def _add_board(lid: str, lname: str) -> None:
+        if lid not in seen_ids:
+            seen_ids.add(lid)
+            boards_to_fetch.append((lid, lname))
+
+    if not args.no_world_cup:
+        for lid, lname in WORLD_CUP_BOARDS.items():
+            _add_board(lid, lname)
+    _add_board(primary_id, SOCCER_BOARDS.get(primary_id, "SOCCER"))
+    if args.include_halves:
+        _add_board("242", "SOCCER1H")
+        _add_board("243", "SOCCER2H")
+    if args.include_season:
+        _add_board("262", "SOCCERSZN")
+
+    print(f"📡 Fetching PrizePicks Soccer | boards: {[n for _, n in boards_to_fetch]}")
 
     all_rows = []
 
-    for lid, lname in boards_to_fetch.items():
+    for lid, lname in boards_to_fetch:
         print(f"\n  → {lname} (league_id={lid})")
         data, included = fetch_board(lid, lname)
         if data:
