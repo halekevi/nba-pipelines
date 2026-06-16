@@ -13850,6 +13850,40 @@ def main():
             )
         else:
             filtered_df["pick_type"] = "Standard"
+        # Main ticket assembly hard gates:
+        # - Demon is data-only (never allowed in tickets)
+        # - Tier D legs are excluded from the main pool
+        # - Tennis is excluded from main ticket assembly (kept on full-slate exports)
+        n_demon_main_ex = int(
+            filtered_df["pick_type"].astype(str).str.strip().str.upper().eq("DEMON").sum()
+        )
+        if n_demon_main_ex:
+            filtered_df = filtered_df[
+                ~filtered_df["pick_type"].astype(str).str.strip().str.upper().eq("DEMON")
+            ].copy()
+        n_tier_d_main_ex = 0
+        if "tier" in filtered_df.columns:
+            n_tier_d_main_ex = int(
+                filtered_df["tier"].astype(str).str.strip().str.upper().eq("D").sum()
+            )
+            if n_tier_d_main_ex:
+                filtered_df = filtered_df[
+                    ~filtered_df["tier"].astype(str).str.strip().str.upper().eq("D")
+                ].copy()
+        n_tennis_main_ex = 0
+        if sport == "TENNIS" and len(filtered_df) > 0:
+            n_tennis_main_ex = int(len(filtered_df))
+            filtered_df = filtered_df.iloc[0:0].copy()
+        print(
+            f"  [main-pool] filtered: {n_demon_main_ex} demon, "
+            f"{n_tier_d_main_ex} tier-D, {n_tennis_main_ex} tennis legs removed"
+        )
+        print(f"  [main-pool] remaining: {len(filtered_df)} eligible legs")
+        if n_demon_main_ex:
+            print(
+                f"  [pool] {n_demon_main_ex} Demon legs excluded "
+                f"(data-only, not for tickets)"
+            )
         if mlb_ex_n:
             print(f"  [pool] Excluded {mlb_ex_n} MLB legs (home_runs/stolen_bases)")
         if rel_ex_n:
