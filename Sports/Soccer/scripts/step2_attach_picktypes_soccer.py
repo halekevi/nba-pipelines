@@ -15,6 +15,7 @@ Changes:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -60,6 +61,13 @@ LEAGUE_SLUGS_FOR_ROSTER = [
 
 ESPN_TEAMS_URL  = "https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams?limit=100"
 ESPN_ROSTER_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/roster"
+
+FIFA_WORLD_LEAGUE = "fifa.world"
+# norm_team(PP label) -> ESPN fifa.world national-team id (expand as tournament progresses)
+WC_ESPN_TEAM_IDS: Dict[str, str] = {
+    "iran": "469",
+    "newzealand": "2666",
+}
 
 PROP_NORM_MAP = {
     "shots": "shots",
@@ -451,6 +459,230 @@ def build_espn_id_cache_concurrent(
     print(f"  Resolved {resolved}/{len(need)} players ({failed} not found in rosters)")
     return cache
 
+
+def _default_wc_roster_cache_path() -> Path:
+    return Path(__file__).resolve().parent.parent / "cache" / "wc_roster_cache.json"
+
+
+def _load_wc_roster_cache(cache_path: Path) -> dict:
+    if not cache_path.is_file():
+        return {"entries": [], "team_registry": {}}
+    try:
+        with cache_path.open(encoding="utf-8") as fh:
+            data = json.load(fh)
+        if isinstance(data, dict):
+            data.setdefault("entries", [])
+            data.setdefault("team_registry", {})
+            return data
+    except Exception as e:
+        print(f"  [WC roster] Could not load cache {cache_path}: {e}")
+    return {"entries": [], "team_registry": {}}
+
+
+def _save_wc_roster_cache(cache_path: Path, payload: dict) -> None:
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    with cache_path.open("w", encoding="utf-8") as fh:
+        json.dump(payload, fh, indent=2, ensure_ascii=False)
+    print(f"  [WC roster] Saved cache -> {cache_path}")
+
+
+def _wc_rosters_from_entries(
+    entries: List[dict],
+) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str], Dict[str, List[Tuple[str, str]]]]:
+    roster_map: Dict[str, str] = {}
+    by_last_team: Dict[Tuple[str, str], str] = {}
+    single_bucket: Dict[str, List[Tuple[str, str]]] = {}
+    for e in entries:
+        pnorm = str(e.get("player_norm", "")).strip()
+        aid = str(e.get("espn_athlete_id", "")).strip()
+        tnorm = str(e.get("team_norm", "")).strip()
+        if not pnorm or not aid:
+            continue
+        roster_map[pnorm] = aid
+        parts = pnorm.split()
+        if parts and tnorm:
+            by_last_team[(parts[-1], tnorm)] = aid
+        _single_bucket_add(single_bucket, pnorm, aid, tnorm)
+    return roster_map, by_last_team, single_bucket
+
+
+def ensure_wc_fifa_world_rosters(
+    pp_teams: List[str],
+    cache_path: Path,
+    force_refresh: bool = False,
+) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str], Dict[str, List[Tuple[str, str]]]]:
+    """Load/fetch ESPN fifa.world NT rosters for mapped PP national teams."""
+    cache = _load_wc_roster_cache(cache_path)
+    entries: List[dict] = list(cache.get("entries") or [])
+    registry: Dict[str, dict] = dict(cache.get("team_registry") or {})
+
+    fetch_plan: List[Tuple[str, str, str]] = []
+    seen_team_norms: set[str] = set()
+    for raw_team in pp_teams:
+        for part in re.split(r"[/+]", str(raw_team or "")):
+            part = part.strip()
+            if not part:
+                continue
+            tnorm = norm_team(part)
+            espn_tid = WC_ESPN_TEAM_IDS.get(tnorm)
+            if not espn_tid or tnorm in seen_team_norms:
+                continue
+            seen_team_norms.add(tnorm)
+            reg = registry.get(tnorm, {})
+            stale = True
+            if not force_refresh and reg.get("fetched_at"):
+                try:
+                    fetched = datetime.fromisoformat(str(reg["fetched_at"]))
+                    stale = (datetime.now() - fetched).total_seconds() > ROSTER_CACHE_MAX_AGE_DAYS * 86400
+                except Exception:
+                    stale = True
+            has_team_rows = any(str(e.get("team_norm", "")) == tnorm for e in entries)
+            if force_refresh or stale or not has_team_rows:
+                fetch_plan.append((tnorm, espn_tid, part.upper()))
+
+    for tnorm, espn_tid, pp_label in fetch_plan:
+        print(f"  [WC roster] Fetching fifa.world {pp_label} (espn_team_id={espn_tid})...")
+        roster = _fetch_roster(FIFA_WORLD_LEAGUE, espn_tid, pp_label)
+        entries = [e for e in entries if str(e.get("team_norm", "")) != tnorm]
+        for pnorm, (aid, team_norm) in roster.items():
+            entries.append(
+                {
+                    "player_norm": pnorm,
+                    "espn_athlete_id": aid,
+                    "team_norm": team_norm or tnorm,
+                    "espn_team_id": espn_tid,
+                }
+            )
+        registry[tnorm] = {
+            "espn_team_id": espn_tid,
+            "pp_team": pp_label,
+            "fetched_at": datetime.now().isoformat(timespec="seconds"),
+            "player_count": len(roster),
+        }
+        print(f"  [WC roster] {pp_label}: {len(roster)} players")
+
+    if fetch_plan:
+        _save_wc_roster_cache(
+            cache_path,
+            {
+                "updated_at": datetime.now().isoformat(timespec="seconds"),
+                "entries": entries,
+                "team_registry": registry,
+            },
+        )
+    elif entries:
+        print(f"  [WC roster] Using cached fifa.world entries ({len(entries)} players)")
+
+    unmapped = sorted(
+        {
+            p.strip().upper()
+            for raw in pp_teams
+            for p in re.split(r"[/+]", str(raw or ""))
+            if p.strip() and norm_team(p) not in WC_ESPN_TEAM_IDS
+        }
+    )
+    if unmapped:
+        print(f"  [WC roster] No ESPN NT mapping yet for: {unmapped}")
+
+    return _wc_rosters_from_entries(entries)
+
+
+def apply_wc_fifa_world_roster_pass(
+    df: pd.DataFrame,
+    manual_map: Dict[Tuple[str, str], str],
+    cache_path: Optional[Path] = None,
+    force_refresh: bool = False,
+) -> None:
+    """Second-pass ESPN ID resolution for WORLDCUP rows via fifa.world NT rosters."""
+    wc_mask = df["league"].astype(str).str.upper().str.startswith("WORLDCUP")
+    if not wc_mask.any():
+        return
+
+    unresolved = df["espn_player_id"].astype(str).str.strip() == ""
+    wc_unresolved = wc_mask & unresolved
+    wc_total = int(wc_mask.sum())
+    pre_resolved = int((df.loc[wc_mask, "espn_player_id"].astype(str).str.strip() != "").sum())
+    pre_rate = pre_resolved / wc_total if wc_total else 0.0
+
+    if not wc_unresolved.any():
+        print(f"[SOCCER ID WC] WORLDCUP already fully resolved ({pre_resolved}/{wc_total})")
+        return
+
+    singles_mask = df["is_combo_player"].astype(int) == 0
+    combos_mask = df["is_combo_player"].astype(int) == 1
+    wc_singles = wc_unresolved & singles_mask
+    wc_combos = wc_unresolved & combos_mask
+
+    pp_teams: List[str] = []
+    if wc_singles.any():
+        pp_teams.extend(df.loc[wc_singles, "team"].astype(str).tolist())
+    if wc_combos.any():
+        for col in ("team_1", "team_2"):
+            if col in df.columns:
+                pp_teams.extend(df.loc[wc_combos, col].astype(str).tolist())
+
+    cache_path = cache_path or _default_wc_roster_cache_path()
+    print(
+        f"[SOCCER ID WC] fifa.world roster pass | unresolved={int(wc_unresolved.sum())} "
+        f"| pre={pre_rate*100:.1f}% ({pre_resolved}/{wc_total})"
+    )
+
+    roster_map, roster_last_team, single_bucket = ensure_wc_fifa_world_rosters(
+        pp_teams, cache_path, force_refresh=force_refresh
+    )
+
+    resolved_s = resolved_c = 0
+    for idx in df.index[wc_singles]:
+        aid = resolve_soccer_player_espn_id(
+            df.at[idx, "player"],
+            df.at[idx, "team"],
+            roster_map,
+            roster_last_team,
+            manual_map,
+            single_bucket,
+        )
+        if aid:
+            df.at[idx, "espn_player_id"] = aid
+            df.at[idx, "id_status"] = "OK"
+            resolved_s += 1
+
+    for idx in df.index[wc_combos]:
+        id1 = resolve_soccer_player_espn_id(
+            df.at[idx, "player_1"],
+            df.at[idx, "team_1"],
+            roster_map,
+            roster_last_team,
+            manual_map,
+            single_bucket,
+        )
+        id2 = resolve_soccer_player_espn_id(
+            df.at[idx, "player_2"],
+            df.at[idx, "team_2"],
+            roster_map,
+            roster_last_team,
+            manual_map,
+            single_bucket,
+        )
+        if id1 and id2:
+            ids = sorted([int(id1), int(id2)])
+            df.at[idx, "espn_player_id"] = f"{ids[0]}{COMBO_SEP}{ids[1]}"
+            df.at[idx, "id_status"] = "OK"
+            resolved_c += 1
+
+    post_resolved = int((df.loc[wc_mask, "espn_player_id"].astype(str).str.strip() != "").sum())
+    post_rate = post_resolved / wc_total if wc_total else 0.0
+    print(f"[SOCCER ID WC] Resolved +{resolved_s} singles, +{resolved_c} combos via fifa.world")
+    print(f"[SOCCER ID WC] WORLDCUP: {pre_rate*100:.1f}% -> {post_rate*100:.1f}% ({post_resolved}/{wc_total})")
+
+    for team_label in sorted({str(t).strip().upper() for t in pp_teams if str(t).strip() and "/" not in str(t)}):
+        tm = df["team"].astype(str).str.upper() == team_label
+        wc_tm = tm & wc_mask
+        if not wc_tm.any():
+            continue
+        r = int((df.loc[wc_tm, "espn_player_id"].astype(str).str.strip() != "").sum())
+        print(f"[SOCCER ID WC]   {team_label}: {r}/{int(wc_tm.sum())} resolved")
+
+
 # ── Opponent derivation ──────────────────────────────────────────────────────
 
 def build_opp_team_from_home_away(df: pd.DataFrame) -> pd.Series:
@@ -679,6 +911,25 @@ def main() -> None:
                 ids = sorted([int(id1), int(id2)])
                 df.at[idx, "espn_player_id"] = f"{ids[0]}{COMBO_SEP}{ids[1]}"
             df.loc[df.index[combos_mask][~both_ok.values], "id_status"] = "UNRESOLVED_COMBO"
+
+        # WORLDCUP-only second pass: ESPN fifa.world national-team rosters (club path unchanged).
+        apply_wc_fifa_world_roster_pass(
+            df,
+            manual_map,
+            force_refresh=args.refresh_roster,
+        )
+        for idx in df.index[singles_mask]:
+            aid = str(df.at[idx, "espn_player_id"]).strip()
+            if aid and COMBO_SEP not in aid:
+                k = norm_name(df.at[idx, "player"])
+                if k:
+                    id_cache[k] = aid
+        resolved_entries = [
+            {"player_norm": k, "espn_athlete_id": v}
+            for k, v in id_cache.items()
+            if v and str(v).strip()
+        ]
+        pd.DataFrame(resolved_entries).to_csv(args.idcache, index=False, encoding="utf-8-sig")
 
         new_match_rate = float((df["espn_player_id"].astype(str).str.strip() != "").mean())
         print(f"[SOCCER ID] New match rate (after fallbacks): {new_match_rate*100:.1f}%")

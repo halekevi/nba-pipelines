@@ -1,0 +1,331 @@
+{
+  "updated_at": "2026-06-15T21:19:58",
+  "entries": [
+    {
+      "player_norm": "hossein hosseini",
+      "espn_athlete_id": "185648",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "alireza beiranvand",
+      "espn_athlete_id": "214798",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "payam niazmand",
+      "espn_athlete_id": "284219",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "shoja khalilzadeh",
+      "espn_athlete_id": "180674",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "ehsan hajsafi",
+      "espn_athlete_id": "203453",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "ramin rezaeian",
+      "espn_athlete_id": "218086",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "milad mohammadi",
+      "espn_athlete_id": "226302",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "hossein kanani",
+      "espn_athlete_id": "243943",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "ali nemati",
+      "espn_athlete_id": "302404",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "saleh hardani",
+      "espn_athlete_id": "317748",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "arya yousefi",
+      "espn_athlete_id": "339178",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "danial iri",
+      "espn_athlete_id": "401990",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "alireza jahanbakhsh",
+      "espn_athlete_id": "188055",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "saeid ezatolahi",
+      "espn_athlete_id": "194863",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "mehdi torabi",
+      "espn_athlete_id": "226301",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "saman ghoddos",
+      "espn_athlete_id": "235519",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "roozbeh cheshmi",
+      "espn_athlete_id": "253376",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "mohammad mohebbi",
+      "espn_athlete_id": "296999",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "mohammad ghorbani",
+      "espn_athlete_id": "355158",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "amirmohammad razzaghinia",
+      "espn_athlete_id": "372049",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "mehdi taremi",
+      "espn_athlete_id": "219611",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "ali alipour",
+      "espn_athlete_id": "219617",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "mehdi ghayedi",
+      "espn_athlete_id": "256581",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "amirhossein hosseinzadeh",
+      "espn_athlete_id": "266729",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "dennis dargahi",
+      "espn_athlete_id": "272489",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "shahriyar moghanloo",
+      "espn_athlete_id": "308077",
+      "team_norm": "iran",
+      "espn_team_id": "469"
+    },
+    {
+      "player_norm": "max crocombe",
+      "espn_athlete_id": "168747",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "michael woud",
+      "espn_athlete_id": "228288",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "alex paulsen",
+      "espn_athlete_id": "297800",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "michael boxall",
+      "espn_athlete_id": "101934",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "tommy smith",
+      "espn_athlete_id": "103819",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "tim payne",
+      "espn_athlete_id": "159470",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "francis de vries",
+      "espn_athlete_id": "254441",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "liberato cacace",
+      "espn_athlete_id": "266554",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "callan elliot",
+      "espn_athlete_id": "282239",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "nando pijnaker",
+      "espn_athlete_id": "288469",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "finn surman",
+      "espn_athlete_id": "332367",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "tyler bindon",
+      "espn_athlete_id": "367427",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "ryan thomas",
+      "espn_athlete_id": "156146",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "alex rufer",
+      "espn_athlete_id": "194736",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "callum mccowatt",
+      "espn_athlete_id": "228279",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "sarpreet singh",
+      "espn_athlete_id": "228283",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "joe bell",
+      "espn_athlete_id": "228294",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "marko stamenic",
+      "espn_athlete_id": "297798",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "matthew garbett",
+      "espn_athlete_id": "297803",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "lachlan bayliss",
+      "espn_athlete_id": "351369",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "chris wood",
+      "espn_athlete_id": "134190",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "kosta barbarouses",
+      "espn_athlete_id": "175958",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "elijah just",
+      "espn_athlete_id": "266555",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "ben waine",
+      "espn_athlete_id": "277113",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "jesse randall",
+      "espn_athlete_id": "297794",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    },
+    {
+      "player_norm": "ben old",
+      "espn_athlete_id": "297802",
+      "team_norm": "newzealand",
+      "espn_team_id": "2666"
+    }
+  ],
+  "team_registry": {
+    "iran": {
+      "espn_team_id": "469",
+      "pp_team": "IRAN",
+      "fetched_at": "2026-06-15T21:19:58",
+      "player_count": 26
+    },
+    "newzealand": {
+      "espn_team_id": "2666",
+      "pp_team": "NEW ZEALAND",
+      "fetched_at": "2026-06-15T21:19:58",
+      "player_count": 26
+    }
+  }
+}
