@@ -218,9 +218,9 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="sum-item sum-item-pending-sport" title="55 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE<span class="sum-lab-badge">55 pending</span></div></div>
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val green">62</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">50</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val red">52</div><div class="sum-lab">MISSES</div></div>
 <div class="sum-item"><div class="sum-val void">2</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">284</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val pend">282</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
 <div class="sum-item"><div class="sum-val red">18</div><div class="sum-lab">NO PAYOUT</div></div>
@@ -230,7 +230,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-06-15</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-15/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (284 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-15/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-15/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-15/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (282 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-15/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-15/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-wnba">
 <summary><span>WNBA</span><span class="ticket-bucket-meta">18 sections · 18 tickets</span></summary>
@@ -1539,7 +1539,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #2</span>
-<span class="tg">2✓ 0✗ / 5</span>
+<span class="tg">2✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1584,15 +1584,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Ugo Humbert</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">UGO HUMBERT vs MARIN CILIC</div></div>
-<div class="leg-extra">25.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">5.7</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Ugo Humbert</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">UGO HUMBERT vs MARIN CILIC</div></div>
+<div class="leg-extra miss-leg-cell">25.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">21</div>
+<div class="leg-extra miss-leg-cell">5.7</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -3439,7 +3439,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #2</span>
-<span class="tg">2✓ 0✗ / 6</span>
+<span class="tg">2✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3474,15 +3474,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">5.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Ugo Humbert</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">UGO HUMBERT vs MARIN CILIC</div></div>
-<div class="leg-extra">25.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">5.7</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Ugo Humbert</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">UGO HUMBERT vs MARIN CILIC</div></div>
+<div class="leg-extra miss-leg-cell">25.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">21</div>
+<div class="leg-extra miss-leg-cell">5.7</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
