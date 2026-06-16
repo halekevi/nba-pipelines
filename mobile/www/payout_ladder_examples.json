@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-16T09:40:12.623236+00:00",
+  "generated_at": "2026-06-16T12:25:36.414520+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -434,14 +434,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -480,14 +480,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -526,14 +526,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -572,14 +572,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -618,14 +618,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -664,14 +664,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Sophie Cunningham",
@@ -756,14 +756,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -812,14 +812,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -868,14 +868,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -924,14 +924,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -980,14 +980,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1036,14 +1036,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1064,62 +1064,6 @@
           "delta": 3.0,
           "direction": "OVER",
           "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "3S+2G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Rebounds",
-          "line": 7.5,
-          "standard_line": 8.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
         }
       ]
     },
@@ -1148,14 +1092,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1168,14 +1112,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Caitlin Clark",
           "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
@@ -1214,14 +1158,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1234,14 +1178,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Caitlin Clark",
           "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
@@ -1280,14 +1224,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1300,14 +1244,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Caitlin Clark",
           "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
@@ -1346,14 +1290,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1366,14 +1310,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Caitlin Clark",
           "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
@@ -1412,14 +1356,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
+          "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.7
         },
         {
           "player": "Aliyah Boston + Brittney Sykes",
@@ -1432,14 +1376,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Caitlin Clark",
           "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
@@ -1478,26 +1422,6 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
           "player": "Aliyah Boston",
           "prop_type": "FG Attempted",
           "line": 11.5,
@@ -1508,40 +1432,14 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 3.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "4S+2G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.65
         },
         {
           "player": "Caitlin Clark",
@@ -1554,34 +1452,14 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
           "player": "Sophie Cunningham",
           "prop_type": "Points",
           "line": 7.5,
           "standard_line": 8.0,
           "pick_type": "Goblin",
-          "delta": 2.0,
+          "delta": 3.0,
           "direction": "OVER",
           "hit_rate": 0.75
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Rebounds",
-          "line": 7.5,
-          "standard_line": 8.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
         }
       ]
     }

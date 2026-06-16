@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-16T10:34:03.086377+00:00",
+  "generated_at": "2026-06-16T13:25:54.594676+00:00",
   "slate_note": "Tennis match day 2026-06-17 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-17.xlsx)",
   "tennis_match_date": "2026-06-17",
   "n_teams": 300,
@@ -2273,6 +2273,62 @@
         }
       ]
     },
+    "qinwen zheng|break_points_won": {
+      "team_slate": "qinwen zheng",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "talia gibson",
+        "name": "TALIA GIBSON",
+        "def_rank": 66,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Qinwen Zheng",
+          "player_norm": "qinwen zheng",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#66).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "zizou bergs|break_points_won": {
+      "team_slate": "zizou bergs",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "taylor fritz",
+        "name": "TAYLOR FRITZ",
+        "def_rank": 9,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Zizou Bergs",
+          "player_norm": "zizou bergs",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "AVOID",
+          "notes": "Elite opponent (#9); production below threshold.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 0.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
     "yuliia starodubtseva|break_points_won": {
       "team_slate": "yuliia starodubtseva",
       "category": "break_points_won",
@@ -2318,13 +2374,125 @@
           "player_norm": "talia gibson",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
+          "season_avg": 3.5,
+          "game_score": 3.5,
           "edge": "OK_EDGE",
           "notes": "Solid vs average opponent (#75).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 2.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "emma navarro|break_points_won": {
+      "team_slate": "emma navarro",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "yuliia starodubtseva",
+        "name": "YULIIA STARODUBTSEVA",
+        "def_rank": 59,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Emma Navarro",
+          "player_norm": "emma navarro",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#59).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "taylor fritz|break_points_won": {
+      "team_slate": "taylor fritz",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "zizou bergs",
+        "name": "ZIZOU BERGS",
+        "def_rank": 48,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Taylor Fritz",
+          "player_norm": "taylor fritz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "elise mertens|break_points_won": {
+      "team_slate": "elise mertens",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "nikola bartunkova",
+        "name": "NIKOLA BARTUNKOVA",
+        "def_rank": 62,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Elise Mertens",
+          "player_norm": "elise mertens",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#62).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
+    "ekaterina alexandrova|break_points_won": {
+      "team_slate": "ekaterina alexandrova",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "aryna sabalenka",
+        "name": "ARYNA SABALENKA",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Ekaterina Alexandrova",
+          "player_norm": "ekaterina alexandrova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "AVOID",
+          "notes": "Elite opponent (#1); production below threshold.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
           "pp_edge": 0.0
         }
       ]
