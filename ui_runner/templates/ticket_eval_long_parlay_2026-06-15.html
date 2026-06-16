@@ -217,10 +217,10 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="sum-item sum-item-pending-sport"><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>
 <div class="sum-item sum-item-pending-sport" title="55 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE<span class="sum-lab-badge">55 pending</span></div></div>
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val green">50</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">46</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val green">52</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">50</div><div class="sum-lab">MISSES</div></div>
 <div class="sum-item"><div class="sum-val void">2</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">300</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val pend">294</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
 <div class="sum-item"><div class="sum-val red">18</div><div class="sum-lab">NO PAYOUT</div></div>
@@ -230,7 +230,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-06-15</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-15/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (300 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-15/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-15/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-15/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (294 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-15/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-15/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-wnba">
 <summary><span>WNBA</span><span class="ticket-bucket-meta">18 sections · 18 tickets</span></summary>
@@ -1728,7 +1728,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #5</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1753,15 +1753,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Brandon Nakashima</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">BRANDON NAKASHIMA vs MARTON FUCSOVICS</div></div>
-<div class="leg-extra">23.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">9.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Brandon Nakashima</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">BRANDON NAKASHIMA vs MARTON FUCSOVICS</div></div>
+<div class="leg-extra miss-leg-cell">23.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">18</div>
+<div class="leg-extra miss-leg-cell">9.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1854,7 +1854,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #7</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -1889,15 +1889,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">8.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Madison Keys</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
-<div class="leg-extra">21.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Madison Keys</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">20</div>
+<div class="leg-extra miss-leg-cell">2.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3303,7 +3303,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #30</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3318,14 +3318,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-1.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Madison Keys</div>
+<div class="pl-hit">Madison Keys</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">13</div>
 <div class="leg-extra">0.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -3585,7 +3585,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #4</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3630,15 +3630,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Brandon Nakashima</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">BRANDON NAKASHIMA vs MARTON FUCSOVICS</div></div>
-<div class="leg-extra">23.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">9.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Brandon Nakashima</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">BRANDON NAKASHIMA vs MARTON FUCSOVICS</div></div>
+<div class="leg-extra miss-leg-cell">23.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">18</div>
+<div class="leg-extra miss-leg-cell">9.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3731,7 +3731,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #6</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3766,15 +3766,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">8.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Madison Keys</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
-<div class="leg-extra">21.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Madison Keys</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">20</div>
+<div class="leg-extra miss-leg-cell">2.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5118,7 +5118,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #25</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5143,14 +5143,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-1.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Madison Keys</div>
+<div class="pl-hit">Madison Keys</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">MADISON KEYS vs XINYU WANG</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">13</div>
 <div class="leg-extra">0.3</div>
 </div>
 <div class="legrow leg-pend">
