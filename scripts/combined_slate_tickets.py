@@ -3013,6 +3013,44 @@ def _mlb_postponed_exclusion_mask(df: pd.DataFrame, slate_date: str) -> pd.Serie
 # Tennis: short slips only (max 3 legs). Relaxed per-leg floors vs NBA — no graded PP history yet.
 MAX_LEGS_TENNIS = 3
 TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
+TENNIS_ELIGIBLE_PROPS = frozenset({
+    "total games won",
+    "total games",
+    "games won",
+    "games played",
+})
+
+
+def _tennis_leg_prop_label(leg) -> str:
+    if isinstance(leg, dict):
+        raw = leg.get("prop_type") or leg.get("prop") or ""
+    else:
+        raw = leg.get("prop_type") or leg.get("prop") or ""
+    return str(raw).lower()
+
+
+def tennis_allowed_leg(leg) -> bool:
+    """Goblin OVER on game totals, or Standard UNDER — graded 30d edge slices only."""
+    if isinstance(leg, dict):
+        sport = str(leg.get("sport", "")).upper()
+        pick_type = str(leg.get("pick_type", "")).strip().lower()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    else:
+        sport = str(leg.get("sport", "")).upper()
+        pick_type = str(leg.get("pick_type", "")).strip().lower()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    if sport != "TENNIS":
+        return False
+    prop_label = _tennis_leg_prop_label(leg)
+    if (
+        pick_type == "goblin"
+        and direction == "OVER"
+        and any(p in prop_label for p in TENNIS_ELIGIBLE_PROPS)
+    ):
+        return True
+    if pick_type == "standard" and direction == "UNDER":
+        return True
+    return False
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
 ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL", "CFB")
@@ -10451,14 +10489,8 @@ def build_single_structure_ticket(
     if cand.empty:
         return None
 
-    # Tennis: OVER only for Aces + Games Won; Double Faults (and other props) allow UNDER.
-    if sport_up == "TENNIS" and "prop_type" in cand.columns and "direction" in cand.columns:
-        pn = cand["prop_type"].apply(_norm_prop_label)
-        ddir = cand["direction"].astype(str).str.upper().str.strip()
-        ace_games_won = pn.str.contains("ace", na=False) | (
-            pn.str.contains("game", na=False) & pn.str.contains("won", na=False) & ~pn.str.contains("set", na=False)
-        )
-        cand = cand[~(ace_games_won & (ddir == "UNDER"))].copy()
+    if sport_up == "TENNIS" and len(cand) > 0:
+        cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
 
     if cand.empty:
         return None
@@ -10649,13 +10681,8 @@ def build_structure_ticket_variants(
     if cand.empty:
         return []
 
-    if sport_up == "TENNIS" and "prop_type" in cand.columns and "direction" in cand.columns:
-        pn = cand["prop_type"].apply(_norm_prop_label)
-        ddir = cand["direction"].astype(str).str.upper().str.strip()
-        ace_games_won = pn.str.contains("ace", na=False) | (
-            pn.str.contains("game", na=False) & pn.str.contains("won", na=False) & ~pn.str.contains("set", na=False)
-        )
-        cand = cand[~(ace_games_won & (ddir == "UNDER"))].copy()
+    if sport_up == "TENNIS" and len(cand) > 0:
+        cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
 
     if cand.empty:
         return []
@@ -13853,7 +13880,7 @@ def main():
         # Main ticket assembly hard gates:
         # - Demon is data-only (never allowed in tickets)
         # - Tier D legs are excluded from the main pool
-        # - Tennis is excluded from main ticket assembly (kept on full-slate exports)
+        # - Tennis: Goblin OVER game totals + Standard UNDER only (full slate unchanged)
         n_demon_main_ex = int(
             filtered_df["pick_type"].astype(str).str.strip().str.upper().eq("DEMON").sum()
         )
@@ -13862,7 +13889,14 @@ def main():
                 ~filtered_df["pick_type"].astype(str).str.strip().str.upper().eq("DEMON")
             ].copy()
         n_tier_d_main_ex = 0
-        if "tier" in filtered_df.columns:
+        n_tennis_excluded = 0
+        n_tennis_allowed = 0
+        if sport == "TENNIS" and len(filtered_df) > 0:
+            _tennis_mask = filtered_df.apply(tennis_allowed_leg, axis=1)
+            n_tennis_allowed = int(_tennis_mask.sum())
+            n_tennis_excluded = int((~_tennis_mask).sum())
+            filtered_df = filtered_df[_tennis_mask].copy()
+        elif "tier" in filtered_df.columns:
             n_tier_d_main_ex = int(
                 filtered_df["tier"].astype(str).str.strip().str.upper().eq("D").sum()
             )
@@ -13870,14 +13904,16 @@ def main():
                 filtered_df = filtered_df[
                     ~filtered_df["tier"].astype(str).str.strip().str.upper().eq("D")
                 ].copy()
-        n_tennis_main_ex = 0
-        if sport == "TENNIS" and len(filtered_df) > 0:
-            n_tennis_main_ex = int(len(filtered_df))
-            filtered_df = filtered_df.iloc[0:0].copy()
         print(
             f"  [main-pool] filtered: {n_demon_main_ex} demon, "
-            f"{n_tier_d_main_ex} tier-D, {n_tennis_main_ex} tennis legs removed"
+            f"{n_tier_d_main_ex} tier-D, {n_tennis_excluded} tennis "
+            f"(ineligible prop/direction) legs removed"
         )
+        if sport == "TENNIS":
+            print(
+                f"  [main-pool] tennis allowed: {n_tennis_allowed} legs "
+                f"(Goblin OVER totals + Standard UNDER only)"
+            )
         print(f"  [main-pool] remaining: {len(filtered_df)} eligible legs")
         if n_demon_main_ex:
             print(
@@ -14018,16 +14054,6 @@ def main():
 
         # MLB: allow both OVER and UNDER; directional edge + L5 consistency now controls selection.
 
-        # Tennis: OVER only for Aces + Games Won; other props keep both directions.
-        if sport == "TENNIS" and {"direction", "prop_type"}.issubset(filtered_df.columns):
-            _pn = filtered_df["prop_type"].apply(_norm_prop_label)
-            _dd = filtered_df["direction"].astype(str).str.upper().str.strip()
-            _og = _pn.str.contains("ace", na=False) | (
-                _pn.str.contains("game", na=False) & _pn.str.contains("won", na=False)
-                & ~_pn.str.contains("set", na=False)
-            )
-            filtered_df = filtered_df[~(_og & (_dd == "UNDER"))].copy()
-
         # NHL/Soccer demon pool inclusion requires quality gate.
         if sport in ("NHL", "SOCCER") and "pick_type" in filtered_df.columns:
             _pt = filtered_df["pick_type"].astype(str).str.strip().str.upper()
@@ -14055,15 +14081,18 @@ def main():
         # Main win-rate builder must see the full eligible pool (for_win_rate=True).
         if not getattr(args, "win_rate_mode", False) and not for_win_rate and len(filtered_df) > 0:
             _hr_min_prob = float(getattr(args, "min_leg_prob", 0.55) or 0.55)
-            _hr_mask = filtered_df.apply(
-                lambda r: _row_high_leg_hr_reserved(
-                    r,
+
+            def _reserve_for_win_rate(row: pd.Series) -> bool:
+                if sport == "TENNIS" and tennis_allowed_leg(row):
+                    return False
+                return _row_high_leg_hr_reserved(
+                    row,
                     min_leg_prob=_hr_min_prob,
                     min_composite_hr=0.52,
                     graded_ctx=_graded_ctx_main,
-                ),
-                axis=1,
-            )
+                )
+
+            _hr_mask = filtered_df.apply(_reserve_for_win_rate, axis=1)
             _hr_n = int(_hr_mask.sum())
             if _hr_n > 0:
                 filtered_df = filtered_df[~_hr_mask].copy()
