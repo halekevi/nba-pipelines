@@ -135,6 +135,7 @@ from utils.stack_70_eligible import (
 from utils.ticket_tier_defense_gates import (
     apply_tier_defense_ticket_pool_filter,
     leg_passes_tier_defense_gate,
+    tier_defense_exclusion_mask,
 )
 from utils.prop_signal_score import l10_streak_series
 from utils.ticket_ev_tiers import (
@@ -3058,6 +3059,37 @@ def nhl_allowed_leg(leg) -> bool:
     if direction == "OVER" and pick_type == "goblin":
         return True
     return False
+
+
+def _tennis_prop_label_series(df: pd.DataFrame) -> pd.Series:
+    for c in ("prop_type", "prop", "prop_norm"):
+        if c in df.columns:
+            return df[c].astype(str).str.lower()
+    return pd.Series("", index=df.index)
+
+
+def _tennis_allowed_mask(df: pd.DataFrame) -> pd.Series:
+    """Vectorized tennis_allowed_leg: Goblin OVER totals + Standard UNDER (tier×def)."""
+    if df.empty:
+        return pd.Series(dtype=bool, index=df.index)
+    pick = df.get("pick_type", pd.Series("", index=df.index)).astype(str).str.strip().str.lower()
+    direction = pd.Series("OVER", index=df.index)
+    for c in ("direction", "over_under"):
+        if c in df.columns:
+            direction = df[c].astype(str).str.upper().str.strip()
+            break
+    prop_label = _tennis_prop_label_series(df)
+    eligible_prop = pd.Series(False, index=df.index)
+    for p in TENNIS_ELIGIBLE_PROPS:
+        eligible_prop = eligible_prop | prop_label.str.contains(p, na=False, regex=False)
+    goblin_ok = (pick == "goblin") & direction.eq("OVER") & eligible_prop
+    std_under = (pick == "standard") & direction.eq("UNDER")
+    allowed = goblin_ok.copy()
+    if std_under.any():
+        sub_idx = std_under[std_under].index
+        tier_pass = ~tier_defense_exclusion_mask(df.loc[sub_idx], sport="TENNIS")
+        allowed.loc[sub_idx] = tier_pass
+    return allowed.fillna(False)
 
 
 def tennis_allowed_leg(leg) -> bool:
@@ -13948,7 +13980,7 @@ def main():
         n_nhl_excluded = 0
         n_nhl_allowed = 0
         if sport == "TENNIS" and len(filtered_df) > 0:
-            _tennis_mask = filtered_df.apply(tennis_allowed_leg, axis=1)
+            _tennis_mask = _tennis_allowed_mask(filtered_df)
             n_tennis_allowed = int(_tennis_mask.sum())
             n_tennis_excluded = int((~_tennis_mask).sum())
             filtered_df = filtered_df[_tennis_mask].copy()

@@ -78,6 +78,13 @@ def _pick_type_series(df: pd.DataFrame) -> pd.Series:
     return df["pick_type"].astype(str).str.upper().str.strip()
 
 
+def _numeric_col(df: pd.DataFrame, col: str) -> pd.Series:
+    """Numeric column aligned to df.index (df.get returns None → scalar if col missing)."""
+    if col in df.columns:
+        return pd.to_numeric(df[col], errors="coerce")
+    return pd.Series(np.nan, index=df.index, dtype=float)
+
+
 def _goblin_over_mask(df: pd.DataFrame) -> pd.Series:
     """Goblin is OVER-only; these legs bypass tier×defense gates."""
     pick = _pick_type_series(df)
@@ -138,8 +145,8 @@ def _tennis_exclusion_mask(df: pd.DataFrame) -> pd.Series:
     if df.empty:
         return pd.Series(dtype=bool)
     direction = _direction_series(df)
-    player_rank = pd.to_numeric(df.get("player_atp_rank"), errors="coerce")
-    opp_rank = pd.to_numeric(df.get("opponent_rank"), errors="coerce")
+    player_rank = _numeric_col(df, "player_atp_rank")
+    opp_rank = _numeric_col(df, "opponent_rank")
     cat_top3, cat_bot3 = _tennis_category_ranks(df)
 
     atp_top = player_rank.le(TENNIS_ELITE_RANK) & player_rank.notna()
@@ -182,8 +189,8 @@ def _tennis_blanket_exclusion_mask(df: pd.DataFrame) -> pd.Series:
         return pd.Series(dtype=bool)
     direction = _direction_series(df)
     pick = _pick_type_series(df)
-    player_rank = pd.to_numeric(df.get("player_atp_rank"), errors="coerce")
-    opp_rank = pd.to_numeric(df.get("opponent_rank"), errors="coerce")
+    player_rank = _numeric_col(df, "player_atp_rank")
+    opp_rank = _numeric_col(df, "opponent_rank")
     cat_top3, cat_bot3 = _tennis_category_ranks(df)
     atp_top = player_rank.le(TENNIS_ELITE_RANK) & player_rank.notna()
     atp_bottom = player_rank.ge(TENNIS_WEAK_RANK) & player_rank.notna()
