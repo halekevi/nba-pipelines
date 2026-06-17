@@ -1887,6 +1887,8 @@ MLB_EXCLUDED_PROPS = frozenset({"home_runs", "stolen_bases"})
 
 # NHL: Apr 13 graded slate — SOG OVER only (UNDER retained); faceoffs_won both directions.
 # Legacy exclusions kept from prior calibration (goals / assists / plus-minus).
+# Direction gate (graded history): UNDER ~63% vs non-Goblin OVER ~24% — block Standard/Demon OVER.
+NHL_UNDER_PREFERRED: bool = True
 NHL_EXCLUDED_PROPS_SOG_OVER_ONLY = frozenset({"shots_on_goal"})
 NHL_EXCLUDED_PROPS_ALL_DIRS = frozenset({"faceoffs_won"})
 NHL_POOL_EXCLUDE_LEGACY = frozenset({"goals", "assists", "plus/minus"})
@@ -2106,11 +2108,11 @@ def _mlb_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int]:
     return m, int(m.sum())
 
 
-def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, int, int]:
+def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, int, int, int]:
     """Mask rows to drop from NHL (or combined) ticket pools; counts by rule bucket."""
     if not {"sport", "prop_type"}.issubset(df.columns):
         z = pd.Series(False, index=df.index)
-        return z, 0, 0, 0
+        return z, 0, 0, 0, 0
     sp = df["sport"].astype(str).str.upper().str.strip()
     ps = df["prop_type"].apply(_pool_prop_snake)
     nhl = sp.eq("NHL")
@@ -2118,11 +2120,15 @@ def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, i
         dir_u = df["direction"].astype(str).str.upper().str.strip()
     else:
         dir_u = pd.Series("", index=df.index)
+    pick = df.get("pick_type", pd.Series("", index=df.index)).astype(str).str.lower()
     m_sog = nhl & ps.isin(NHL_EXCLUDED_PROPS_SOG_OVER_ONLY) & dir_u.eq("OVER")
     m_fc = nhl & ps.isin(NHL_EXCLUDED_PROPS_ALL_DIRS)
     m_leg = nhl & ps.isin(NHL_POOL_EXCLUDE_LEGACY)
-    m_all = m_sog | m_fc | m_leg
-    return m_all, int(m_sog.sum()), int(m_fc.sum()), int(m_leg.sum())
+    m_over_non_gob = pd.Series(False, index=df.index)
+    if NHL_UNDER_PREFERRED:
+        m_over_non_gob = nhl & dir_u.eq("OVER") & ~pick.str.contains("goblin", na=False)
+    m_all = m_sog | m_fc | m_leg | m_over_non_gob
+    return m_all, int(m_sog.sum()), int(m_fc.sum()), int(m_leg.sum()), int(m_over_non_gob.sum())
 
 
 def _is_attempt_prop_series(prop_s: pd.Series) -> pd.Series:
@@ -3031,6 +3037,27 @@ def _tennis_leg_prop_label(leg) -> str:
     else:
         raw = leg.get("prop_type") or leg.get("prop") or ""
     return str(raw).lower()
+
+
+def nhl_allowed_leg(leg) -> bool:
+    """NHL tickets: UNDER or Goblin OVER only (block Standard/Demon OVER)."""
+    if isinstance(leg, dict):
+        sport = str(leg.get("sport", "")).upper()
+        pick_type = str(leg.get("pick_type", "")).strip().lower()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    else:
+        sport = str(leg.get("sport", "")).upper()
+        pick_type = str(leg.get("pick_type", "")).strip().lower()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    if sport != "NHL":
+        return True
+    if not NHL_UNDER_PREFERRED:
+        return True
+    if direction == "UNDER":
+        return True
+    if direction == "OVER" and pick_type == "goblin":
+        return True
+    return False
 
 
 def tennis_allowed_leg(leg) -> bool:
@@ -10507,6 +10534,9 @@ def build_single_structure_ticket(
     if sport_up == "TENNIS" and len(cand) > 0:
         cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
 
+    if sport_up == "NHL" and len(cand) > 0:
+        cand = cand[cand.apply(nhl_allowed_leg, axis=1)].copy()
+
     if len(cand) > 0:
         cand = _apply_tier_defense_pool_gate(cand, sport_up)
 
@@ -10701,6 +10731,9 @@ def build_structure_ticket_variants(
 
     if sport_up == "TENNIS" and len(cand) > 0:
         cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
+
+    if sport_up == "NHL" and len(cand) > 0:
+        cand = cand[cand.apply(nhl_allowed_leg, axis=1)].copy()
 
     if len(cand) > 0:
         cand = _apply_tier_defense_pool_gate(cand, sport_up)
@@ -13880,10 +13913,10 @@ def main():
 
         mlb_ex_n = 0
         rel_ex_n = 0
-        nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = 0
+        nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = nhl_over_dir_ex_n = 0
         if {"sport", "prop_type"}.issubset(filtered_df.columns):
             m_mlb, mlb_ex_n = _mlb_ticket_pool_exclusion_mask(filtered_df)
-            m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
+            m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n, nhl_over_dir_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
             filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
             filtered_df, rel_ex_n = _apply_reliability_pool_filter(filtered_df, reliability_index)
         # Normalize pick types for assembly compatibility.
@@ -13912,11 +13945,18 @@ def main():
         n_tier_d_main_ex = 0
         n_tennis_excluded = 0
         n_tennis_allowed = 0
+        n_nhl_excluded = 0
+        n_nhl_allowed = 0
         if sport == "TENNIS" and len(filtered_df) > 0:
             _tennis_mask = filtered_df.apply(tennis_allowed_leg, axis=1)
             n_tennis_allowed = int(_tennis_mask.sum())
             n_tennis_excluded = int((~_tennis_mask).sum())
             filtered_df = filtered_df[_tennis_mask].copy()
+        elif sport == "NHL" and len(filtered_df) > 0:
+            _nhl_mask = filtered_df.apply(nhl_allowed_leg, axis=1)
+            n_nhl_allowed = int(_nhl_mask.sum())
+            n_nhl_excluded = int((~_nhl_mask).sum())
+            filtered_df = filtered_df[_nhl_mask].copy()
         elif "tier" in filtered_df.columns:
             n_tier_d_main_ex = int(
                 filtered_df["tier"].astype(str).str.strip().str.upper().eq("D").sum()
@@ -13934,6 +13974,11 @@ def main():
             print(
                 f"  [main-pool] tennis allowed: {n_tennis_allowed} legs "
                 f"(Goblin OVER totals + Standard UNDER only)"
+            )
+        if sport == "NHL" and NHL_UNDER_PREFERRED:
+            print(
+                f"  [main-pool] NHL: {nhl_over_dir_ex_n} OVER legs blocked (non-Goblin), "
+                f"{len(filtered_df)} NHL legs remaining"
             )
         filtered_df = _apply_tier_defense_pool_gate(filtered_df, sport)
         print(f"  [main-pool] remaining: {len(filtered_df)} eligible legs")
@@ -13955,6 +14000,11 @@ def main():
         if nhl_leg_ex_n:
             print(
                 f"  [pool] Excluded {nhl_leg_ex_n} NHL legs (goals/assists/plus-minus)"
+            )
+        if sport == "NHL" and nhl_over_dir_ex_n:
+            print(
+                f"  [pool] Excluded {nhl_over_dir_ex_n} NHL legs "
+                "(Standard/Demon OVER — UNDER-preferred gate)"
             )
         # Direction-aware defense tier bonus/penalty before threshold checks.
         # Research-calibrated behavior:
@@ -14218,11 +14268,12 @@ def main():
         # Low-signal prop exclusions (mirror pool(): SOG OVER, faceoffs all dirs, legacy props)
         t_prop = t_tier.copy()
         if {"sport", "prop_type"}.issubset(t_prop.columns):
-            m_nhl, n_sog, n_fc, n_leg = _nhl_ticket_pool_exclusion_mask(t_prop)
+            m_nhl, n_sog, n_fc, n_leg, n_over_dir = _nhl_ticket_pool_exclusion_mask(t_prop)
             t_prop = t_prop[~m_nhl].copy()
             print(
                 f"  [NHL GATE TRACE] After low-signal prop filter: {len(t_prop)} "
-                f"(shots_on_goal OVER={n_sog}, faceoffs_won={n_fc}, legacy={n_leg})"
+                f"(shots_on_goal OVER={n_sog}, faceoffs_won={n_fc}, legacy={n_leg}, "
+                f"OVER non-Goblin={n_over_dir})"
             )
         else:
             print(f"  [NHL GATE TRACE] After low-signal prop filter: {len(t_prop)}")
