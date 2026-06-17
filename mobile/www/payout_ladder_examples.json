@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-16T12:25:36.414520+00:00",
+  "generated_at": "2026-06-16T18:35:26.677553+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -16,14 +16,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -32,9 +32,9 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -42,14 +42,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -58,9 +58,9 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -68,14 +68,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -84,9 +84,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -94,14 +94,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -110,9 +110,9 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -120,14 +120,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -136,9 +136,9 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -146,14 +146,14 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -162,16 +162,6 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -182,14 +172,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -198,16 +198,6 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -218,14 +208,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -234,16 +234,6 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -254,14 +244,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -270,16 +270,6 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -290,14 +280,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -306,16 +306,6 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -326,14 +316,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -342,16 +342,6 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -362,14 +352,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -378,9 +378,9 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Marina Mabrey",
+          "prop_type": "Assists",
+          "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -388,24 +388,24 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Pts+Rebs",
+          "line": 9.5,
+          "standard_line": 10.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.75
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Rebounds",
-          "line": 7.5,
-          "standard_line": 8.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
         }
       ]
     },
@@ -414,16 +414,6 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -444,14 +434,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -460,16 +460,6 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -490,14 +480,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -506,16 +506,6 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -536,14 +526,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -552,16 +552,6 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -582,14 +572,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -598,16 +598,6 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -628,14 +618,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -644,16 +644,6 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -674,14 +664,24 @@
           "hit_rate": 0.7
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston + Brittney Sykes",
+          "prop_type": "Points (Combo)",
+          "line": 35.5,
+          "standard_line": 35.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -690,16 +690,6 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -710,24 +700,34 @@
           "hit_rate": 0.6499999999999999
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Aliyah Boston",
+          "prop_type": "FG Attempted",
+          "line": 11.5,
+          "standard_line": 11.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Pts+Rebs",
+          "line": 9.5,
+          "standard_line": 10.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.75
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Rebounds",
-          "line": 7.5,
-          "standard_line": 8.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
         }
       ]
     },
@@ -736,16 +736,6 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -776,14 +766,24 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -792,16 +792,6 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -832,14 +822,24 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -848,16 +848,6 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -888,14 +878,24 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -904,16 +904,6 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -944,14 +934,24 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -960,16 +960,6 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -1000,14 +990,24 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
@@ -1016,16 +1016,6 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -1056,230 +1046,32 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
+          "player": "Caitlin Clark",
+          "prop_type": "FG Attempted",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.65
+        },
+        {
+          "player": "Lexie Hull",
           "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "line": 4.5,
+          "standard_line": 6.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.6499999999999999
         }
       ]
     },
     {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 0.5,
-      "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 0.5,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 1.0,
-      "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 1.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
+      "composition": "3S+2G+0D",
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
           "line": 2.5,
@@ -1310,20 +1102,20 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.6499999999999999
         },
         {
           "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "prop_type": "Pts+Rebs",
+          "line": 9.5,
+          "standard_line": 10.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1332,19 +1124,9 @@
       ]
     },
     {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 2.5,
+      "composition": "4S+2G+0D",
+      "goblin_delta": 2.0,
       "legs": [
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
         {
           "player": "Marina Mabrey",
           "prop_type": "Assists",
@@ -1386,78 +1168,22 @@
           "hit_rate": 0.65
         },
         {
-          "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
-          "pick_type": "Goblin",
-          "delta": 2.5,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 3.0,
-      "legs": [
-        {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
+          "standard_line": 6.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
         },
         {
           "player": "Sophie Cunningham",
-          "prop_type": "Points",
-          "line": 7.5,
-          "standard_line": 8.0,
+          "prop_type": "Pts+Rebs",
+          "line": 9.5,
+          "standard_line": 10.5,
           "pick_type": "Goblin",
-          "delta": 3.0,
+          "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.75
         }
