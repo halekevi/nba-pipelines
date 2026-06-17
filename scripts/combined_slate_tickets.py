@@ -132,6 +132,10 @@ from utils.stack_70_eligible import (
     filter_stack_70_only,
     is_invalid_market_side,
 )
+from utils.ticket_tier_defense_gates import (
+    apply_tier_defense_ticket_pool_filter,
+    leg_passes_tier_defense_gate,
+)
 from utils.prop_signal_score import l10_streak_series
 from utils.ticket_ev_tiers import (
     STRONG_ALLOW_CROSS_SPORT,
@@ -3030,7 +3034,7 @@ def _tennis_leg_prop_label(leg) -> str:
 
 
 def tennis_allowed_leg(leg) -> bool:
-    """Goblin OVER on game totals, or Standard UNDER — graded 30d edge slices only."""
+    """Goblin OVER on game totals (no tier gate), or Standard UNDER (tier×def gate)."""
     if isinstance(leg, dict):
         sport = str(leg.get("sport", "")).upper()
         pick_type = str(leg.get("pick_type", "")).strip().lower()
@@ -3049,8 +3053,19 @@ def tennis_allowed_leg(leg) -> bool:
     ):
         return True
     if pick_type == "standard" and direction == "UNDER":
-        return True
+        return leg_passes_tier_defense_gate(leg, sport="TENNIS")
     return False
+
+
+def _apply_tier_defense_pool_gate(df: pd.DataFrame, sport: str) -> pd.DataFrame:
+    """Hard-remove legs that violate top/bottom-3 × direction × opponent gates."""
+    if df is None or df.empty:
+        return df
+    out, n_removed, reasons = apply_tier_defense_ticket_pool_filter(df, sport=sport)
+    if n_removed:
+        detail = ", ".join(f"{k}={v}" for k, v in sorted(reasons.items()))
+        print(f"  [tier-def-gate] {sport}: removed {n_removed} legs ({detail})")
+    return out
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
 ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL", "CFB")
@@ -10492,6 +10507,9 @@ def build_single_structure_ticket(
     if sport_up == "TENNIS" and len(cand) > 0:
         cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
 
+    if len(cand) > 0:
+        cand = _apply_tier_defense_pool_gate(cand, sport_up)
+
     if cand.empty:
         return None
 
@@ -10683,6 +10701,9 @@ def build_structure_ticket_variants(
 
     if sport_up == "TENNIS" and len(cand) > 0:
         cand = cand[cand.apply(tennis_allowed_leg, axis=1)].copy()
+
+    if len(cand) > 0:
+        cand = _apply_tier_defense_pool_gate(cand, sport_up)
 
     if cand.empty:
         return []
@@ -13914,6 +13935,7 @@ def main():
                 f"  [main-pool] tennis allowed: {n_tennis_allowed} legs "
                 f"(Goblin OVER totals + Standard UNDER only)"
             )
+        filtered_df = _apply_tier_defense_pool_gate(filtered_df, sport)
         print(f"  [main-pool] remaining: {len(filtered_df)} eligible legs")
         if n_demon_main_ex:
             print(
