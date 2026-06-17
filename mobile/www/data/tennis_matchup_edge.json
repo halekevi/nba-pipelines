@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-17T10:05:27.463662+00:00",
+  "generated_at": "2026-06-17T13:23:50.192752+00:00",
   "slate_note": "Tennis match day 2026-06-18 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-18.xlsx)",
   "tennis_match_date": "2026-06-18",
   "n_teams": 300,
@@ -1523,11 +1523,11 @@
           "season_avg": 4.0,
           "game_score": 4.0,
           "edge": "AVOID",
-          "notes": "PP edge -2.5 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": -2.5
+          "pp_line": 7.5,
+          "pp_edge": -3.5
         }
       ]
     },
@@ -2987,34 +2987,6 @@
         }
       ]
     },
-    "botic van de zandschulp|double_faults": {
-      "team_slate": "botic van de zandschulp",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "tommy paul",
-        "name": "TOMMY PAUL",
-        "def_rank": 28,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Botic Van de Zandschulp",
-          "player_norm": "botic van de zandschulp",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.4,
-          "game_score": 3.4,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#28).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": 0.9
-        }
-      ]
-    },
     "ugo humbert|double_faults": {
       "team_slate": "ugo humbert",
       "category": "double_faults",
@@ -3040,6 +3012,34 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": 0.7
+        }
+      ]
+    },
+    "botic van de zandschulp|double_faults": {
+      "team_slate": "botic van de zandschulp",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "tommy paul",
+        "name": "TOMMY PAUL",
+        "def_rank": 28,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Botic Van de Zandschulp",
+          "player_norm": "botic van de zandschulp",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.4,
+          "game_score": 3.4,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#28).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 0.9
         }
       ]
     },
