@@ -1,0 +1,198 @@
+C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\numpy\lib\_function_base_impl.py:3023: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\numpy\lib\_function_base_impl.py:3024: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+Loading graded_props from 2026-02-24 ...
+  rows after dedupe: 953,366
+  decided legs (HIT/MISS): 593,816  overall HR 36.0%
+
+============================================================
+CBB: 26,438 legs, 49.4% HR
+  Top positive lifts (min n):
+    prop_cat=fantasy: 64.1% (82/128) lift +14.7pp
+    prop_cat=stl: 62.2% (253/407) lift +12.8pp
+    prop_cat=assists: 61.5% (418/680) lift +12.1pp
+    prop_cat=rebounds: 58.5% (664/1136) lift +9.0pp
+    prop_cat=fg3m: 57.5% (235/409) lift +8.1pp
+  Worst lifts:
+    tier_dir_player=nan: 55.5% (1775/3197) lift +6.1pp
+    tier_dir_player=nan: 54.8% (638/1165) lift +5.4pp
+    tier_dir_player=nan: 54.0% (519/962) lift +4.5pp
+    tier_dir_player=nan: 38.2% (66/173) lift -11.3pp
+    tier_dir_player=nan: 35.4% (3297/9318) lift -14.0pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.697 hit_mean=3.9532233557629692 miss_mean=-3.351283482142857
+    edge: corr=+0.184 hit_mean=0.43986396083872964 miss_mean=-0.5113595387050577
+    strat_hit_rate: corr=+0.147 hit_mean=0.5542689269919495 miss_mean=0.5276228565019733
+    ml_prob: corr=+0.107 hit_mean=0.590464946006828 miss_mean=0.566558093358671
+    strat_n: corr=+0.036 hit_mean=86.97614503816794 miss_mean=84.13483146067416
+
+============================================================
+MLB: 257,790 legs, 30.1% HR
+  Top positive lifts (min n):
+    prop_cat=pitching outs: 49.8% (520/1045) lift +19.7pp
+    prop_cat=pitcher fantasy score: 47.5% (546/1149) lift +17.4pp
+    prop_cat=pitches thrown: 46.4% (688/1484) lift +16.3pp
+    prop_cat=walks allowed: 44.5% (1034/2326) lift +14.4pp
+    prop_cat=hits allowed: 39.5% (1920/4861) lift +9.4pp
+  Worst lifts:
+    tier_dir_player=nan: 42.9% (175/408) lift +12.8pp
+    tier_dir_player=nan: 39.6% (946/2391) lift +9.5pp
+    tier_dir_player=nan: 23.8% (8978/37659) lift -6.2pp
+    tier_dir_player=nan: 22.1% (28095/127179) lift -8.0pp
+    tier_dir_player=nan: 20.9% (3426/16368) lift -9.1pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.539 hit_mean=1.2664895537786949 miss_mean=-1.2803994452149792
+    l10_side: corr=+0.331 hit_mean=3.9691235916401477 miss_mean=2.283876215476763
+    l10_over: corr=+0.328 hit_mean=3.8933516814311515 miss_mean=2.25148815025696
+    l5_side: corr=+0.299 hit_mean=2.031774956740119 miss_mean=1.1681486608806773
+    l10_under: corr=-0.297 hit_mean=5.62277457641696 miss_mean=7.258697822309314
+
+============================================================
+NBA: 128,967 legs, 54.9% HR
+  Top positive lifts (min n):
+    prop_cat=fantasy score: 62.4% (3049/4889) lift +7.5pp
+    prop_cat=rebounds: 56.6% (6900/12190) lift +1.7pp
+    prop_cat=assists: 56.4% (4550/8073) lift +1.5pp
+    prop_cat=points: 55.9% (34346/61426) lift +1.0pp
+    prop_cat=turnovers: 54.1% (1284/2375) lift -0.8pp
+  Worst lifts:
+    tier_dir_player=nan: 50.2% (119/237) lift -4.7pp
+    tier_dir_player=nan: 49.8% (10754/21574) lift -5.1pp
+    tier_dir_player=nan: 48.9% (605/1237) lift -6.0pp
+    tier_dir_player=nan: 48.5% (22218/45814) lift -6.4pp
+    tier_dir_player=nan: 47.6% (239/502) lift -7.3pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.662 hit_mean=4.631602287974013 miss_mean=-3.5130600735875652
+    l10_side: corr=+0.285 hit_mean=6.40606948874903 miss_mean=5.156442901234568
+    l10_under: corr=-0.262 hit_mean=3.7275627209242175 miss_mean=4.903645833333333
+    l10_over: corr=+0.260 hit_mean=6.17898094663333 miss_mean=4.999614197530864
+    l5_side: corr=+0.154 hit_mean=3.308270513820293 miss_mean=2.971722928540114
+
+============================================================
+NBA1H: 2,584 legs, 50.6% HR
+  Top positive lifts (min n):
+    prop_cat=points: 51.5% (1018/1976) lift +0.9pp
+    prop_cat=fantasy score: 51.3% (193/376) lift +0.7pp
+    prop_cat=free throws made: 42.5% (45/106) lift -8.1pp
+    prop_cat=threes: 40.5% (51/126) lift -10.1pp
+    pick_type_norm=nan: 50.9% (27/53) lift +0.4pp
+  Worst lifts:
+    tier_dir_player=nan: 51.2% (42/82) lift +0.6pp
+    tier_dir_player=nan: 47.8% (271/567) lift -2.8pp
+    tier_dir_player=nan: 43.9% (112/255) lift -6.7pp
+    tier_dir_player=nan: 42.2% (35/83) lift -8.4pp
+    tier_dir_player=nan: 42.0% (115/274) lift -8.6pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.768 hit_mean=3.955256312165264 miss_mean=-3.465450274079875
+    l10_under: corr=-0.076 hit_mean=3.7458100558659218 miss_mean=4.038461538461538
+    edge: corr=-0.068 hit_mean=4.161624282198523 miss_mean=5.212377192982456
+    l5_under: corr=-0.052 hit_mean=1.8510869565217392 miss_mean=1.9780755176613884
+    strat_n: corr=+0.051 hit_mean=69.90440487347703 miss_mean=67.56801661474559
+
+============================================================
+NBA1Q: 10,918 legs, 59.1% HR
+  Top positive lifts (min n):
+    prop_cat=assists: 62.3% (1214/1949) lift +3.2pp
+    prop_cat=points: 59.3% (3559/6006) lift +0.2pp
+    prop_cat=rebounds: 57.4% (1614/2810) lift -1.7pp
+    prop_cat=free throws made: 44.6% (33/74) lift -14.5pp
+    prop_cat=threes: 41.8% (33/79) lift -17.3pp
+  Worst lifts:
+    tier_dir_player=nan: 48.0% (36/75) lift -11.1pp
+    tier_dir_player=nan: 45.6% (67/147) lift -13.5pp
+    tier_dir_player=nan: 43.1% (956/2217) lift -16.0pp
+    tier_dir_player=nan: 36.8% (732/1990) lift -22.3pp
+    tier_dir_player=nan: 29.4% (50/170) lift -29.7pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.702 hit_mean=2.2387261738726174 miss_mean=-1.756326987681971
+    l10_side: corr=+0.397 hit_mean=6.570190641247834 miss_mean=4.3698224852071
+    l10_over: corr=+0.386 hit_mean=6.478336221837089 miss_mean=4.329881656804734
+    l10_under: corr=-0.386 hit_mean=3.440207972270364 miss_mean=5.60207100591716
+    hit_rate: corr=+0.326 hit_mean=0.7958036984352774 miss_mean=0.6138576439283986
+
+============================================================
+NHL: 58,637 legs, 29.3% HR
+  Top positive lifts (min n):
+    prop_cat=time_on_ice: 55.2% (132/239) lift +25.9pp
+    prop_cat=time on ice: 53.5% (386/721) lift +24.2pp
+    prop_cat=hits: 50.0% (609/1218) lift +20.7pp
+    prop_cat=tennis_totals: 48.9% (279/571) lift +19.5pp
+    prop_cat=stocks: 39.5% (764/1935) lift +10.1pp
+  Worst lifts:
+    tier_dir_player=nan: 28.2% (3545/12550) lift -1.1pp
+    tier_dir_player=nan: 24.8% (135/545) lift -4.6pp
+    tier_dir_player=nan: 23.5% (7657/32560) lift -5.8pp
+    tier_dir_player=nan: 22.7% (10/44) lift -6.6pp
+    tier_dir_player=nan: 8.4% (151/1787) lift -20.9pp
+  Strongest numeric correlations with hit:
+    l10_side: corr=+0.343 hit_mean=4.207640051196219 miss_mean=2.3748625422555287
+    l5_side: corr=+0.306 hit_mean=2.102786255784188 miss_mean=1.167067160835743
+    strat_hit_rate: corr=+0.262 hit_mean=0.6239933769259102 miss_mean=0.5368382100435728
+    l10_over: corr=+0.217 hit_mean=3.162252633651669 miss_mean=2.2076324685374495
+    hit_rate: corr=+0.213 hit_mean=0.318623885005415 miss_mean=0.22178731723211012
+
+============================================================
+SOCCER: 68,128 legs, 18.8% HR
+  Top positive lifts (min n):
+    prop_cat=scoring: 21.4% (8872/41469) lift +2.6pp
+    prop_cat=tackles: 21.0% (176/839) lift +2.2pp
+    prop_cat=fouls: 17.3% (1392/8051) lift -1.5pp
+    prop_cat=assists: 13.2% (2321/17581) lift -5.5pp
+    prop_cat=passes attempted: 0.0% (0/112) lift -18.8pp
+  Worst lifts:
+    tier_dir_player=nan: 15.3% (6423/42114) lift -3.5pp
+    tier_dir_player=nan: 14.8% (393/2653) lift -3.9pp
+    tier_dir_player=nan: 3.0% (9/297) lift -15.7pp
+    tier_dir_player=nan: 2.4% (3/124) lift -16.3pp
+    tier_dir_player=nan: 2.1% (48/2257) lift -16.6pp
+  Strongest numeric correlations with hit:
+    edge: corr=+0.605 hit_mean=0.826910129951464 miss_mean=-1.0964998012790403
+    margin: corr=+0.419 hit_mean=1.0874401577020558 miss_mean=-1.2110546226056325
+    l5_side: corr=+0.332 hit_mean=1.4489854793730166 miss_mean=0.538655444233193
+    l5_over: corr=+0.306 hit_mean=1.3178190210597174 miss_mean=0.5234880690436009
+    hit_rate: corr=+0.281 hit_mean=0.3129962943356273 miss_mean=0.14430388664918392
+
+============================================================
+TENNIS: 12,917 legs, 25.8% HR
+  Top positive lifts (min n):
+    prop_cat=tennis_totals: 34.4% (3324/9654) lift +8.6pp
+    prop_cat=double faults: 0.2% (7/3263) lift -25.6pp
+    pick_type_norm=nan: 40.7% (1643/4032) lift +15.0pp
+    pick_type_norm=nan: 31.5% (839/2662) lift +5.7pp
+    pick_type_norm=nan: 13.6% (849/6223) lift -12.1pp
+  Worst lifts:
+    tier_dir_player=nan: 67.8% (78/115) lift +42.0pp
+    tier_dir_player=nan: 53.1% (34/64) lift +27.3pp
+    tier_dir_player=nan: 52.2% (95/182) lift +26.4pp
+    tier_dir_player=nan: 38.1% (24/63) lift +12.3pp
+    tier_dir_player=nan: 24.7% (3069/12435) lift -1.1pp
+  Strongest numeric correlations with hit:
+    strat_hit_rate: corr=+0.604 hit_mean=0.6433095082895035 miss_mean=0.2764656192898743
+    hit_rate: corr=+0.237 hit_mean=0.4086617532971296 miss_mean=0.2641731770833334
+    strat_n: corr=+0.227 hit_mean=568.6386206896552 miss_mean=437.93166441136674
+    ml_prob: corr=+0.185 hit_mean=0.5209023482053003 miss_mean=0.42922762020693855
+    edge: corr=+0.168 hit_mean=-0.5230157665213017 miss_mean=-2.3087425441265976
+
+============================================================
+WNBA: 27,437 legs, 42.0% HR
+  Top positive lifts (min n):
+    prop_cat=fg attempted: 53.0% (214/404) lift +11.0pp
+    prop_cat=turnovers: 52.5% (203/387) lift +10.5pp
+    prop_cat=blks+stls: 51.8% (191/369) lift +9.8pp
+    prop_cat=fg made: 50.0% (192/384) lift +8.0pp
+    prop_cat=free throws attempted: 50.0% (160/320) lift +8.0pp
+  Worst lifts:
+    tier_dir_player=nan: 33.5% (842/2517) lift -8.5pp
+    tier_dir_player=nan: 33.0% (1018/3088) lift -9.0pp
+    tier_dir_player=nan: 32.3% (140/433) lift -9.7pp
+    tier_dir_player=nan: 26.6% (81/304) lift -15.3pp
+    tier_dir_player=nan: 22.7% (76/335) lift -19.3pp
+  Strongest numeric correlations with hit:
+    margin: corr=+0.698 hit_mean=4.205302898802291 miss_mean=-4.748765315739869
+    l10_side: corr=+0.301 hit_mean=4.908322812469652 miss_mean=3.4773392832240972
+    l10_under: corr=-0.289 hit_mean=5.085656016315432 miss_mean=6.449937247245852
+    l10_over: corr=+0.279 hit_mean=4.534913081480043 miss_mean=3.2602844791521406
+    l5_side: corr=+0.256 hit_mean=2.5484432411525817 miss_mean=1.8308395677472984
+
+Wrote reports -> H:\halek\ProfileFromC\Desktop\PropORACLE\data\reports\hit_miss_drivers

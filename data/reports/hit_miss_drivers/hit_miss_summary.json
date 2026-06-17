@@ -1,0 +1,82 @@
+{
+  "date_from": "2026-02-24",
+  "date_to": null,
+  "overall": {
+    "n_decided": 593816,
+    "hit_rate": 0.3603826774623789,
+    "sports": [
+      {
+        "sport": "CBB",
+        "n_decided": 26438,
+        "hits": 13061,
+        "hit_rate": 0.4940237536878735,
+        "date_min": "2026-02-24",
+        "date_max": "2026-04-06"
+      },
+      {
+        "sport": "MLB",
+        "n_decided": 257790,
+        "hits": 77540,
+        "hit_rate": 0.3007874626634082,
+        "date_min": "2026-03-30",
+        "date_max": "2026-06-16"
+      },
+      {
+        "sport": "NBA",
+        "n_decided": 128967,
+        "hits": 70805,
+        "hit_rate": 0.5490164150519125,
+        "date_min": "2026-02-24",
+        "date_max": "2026-06-13"
+      },
+      {
+        "sport": "NBA1H",
+        "n_decided": 2584,
+        "hits": 1307,
+        "hit_rate": 0.5058049535603715,
+        "date_min": "2026-02-24",
+        "date_max": "2026-06-13"
+      },
+      {
+        "sport": "NBA1Q",
+        "n_decided": 10918,
+        "hits": 6453,
+        "hit_rate": 0.5910423154423887,
+        "date_min": "2026-02-24",
+        "date_max": "2026-06-13"
+      },
+      {
+        "sport": "NHL",
+        "n_decided": 58637,
+        "hits": 17208,
+        "hit_rate": 0.29346658253321284,
+        "date_min": "2026-02-25",
+        "date_max": "2026-06-15"
+      },
+      {
+        "sport": "SOCCER",
+        "n_decided": 68128,
+        "hits": 12774,
+        "hit_rate": 0.1875,
+        "date_min": "2026-03-10",
+        "date_max": "2026-05-31"
+      },
+      {
+        "sport": "TENNIS",
+        "n_decided": 12917,
+        "hits": 3331,
+        "hit_rate": 0.25787721607184333,
+        "date_min": "2026-05-04",
+        "date_max": "2026-06-16"
+      },
+      {
+        "sport": "WNBA",
+        "n_decided": 27437,
+        "hits": 11522,
+        "hit_rate": 0.4199438714145132,
+        "date_min": "2026-05-01",
+        "date_max": "2026-06-16"
+      }
+    ]
+  }
+}
