@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260531scroll"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
-<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260617pillgrid"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -497,6 +497,44 @@ body{
   .edge-line-badge{font-size:9px;max-width:88px;}
   .slate-table-wrap{padding:0 10px 12px;}
   .home-cat>summary{font-size:clamp(18px,5vw,22px);padding:14px 16px;min-height:48px;box-sizing:border-box;}
+}
+@media(max-width:640px){
+  .pipeline-status-bar{
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:8px!important;
+  }
+  .pipeline-status-pills{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+    flex:none!important;
+  }
+  .pipeline-status-pill{
+    display:flex!important;
+    border-radius:10px!important;
+    padding:5px 3px!important;
+    font-size:9px!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+  .pipeline-pill-sport{font-size:10px!important;}
+  .pipeline-pill-status{font-size:8px!important;margin-top:1px!important;}
+  .pipeline-status-right{
+    margin-left:0!important;
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:6px!important;
+  }
+  .pipeline-offseason-toggle{width:100%!important;text-align:center!important;}
+  .pipeline-last-run{
+    width:100%!important;
+    text-align:center!important;
+    white-space:normal!important;
+    font-size:9px!important;
+  }
 }
 @media(max-width:520px){
   .edge-card-top{padding:8px 9px;}
@@ -1221,6 +1259,43 @@ body > nav.snav.glass-card {
     letter-spacing:.06em;
     color:var(--muted2);
     white-space:nowrap;
+  }
+  @media(max-width:640px){
+    .pipeline-status-bar{
+      flex-direction:column;
+      align-items:stretch;
+      gap:8px;
+    }
+    .pipeline-status-pills{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:6px;
+      width:100%;
+    }
+    .pipeline-status-pill{
+      display:flex;
+      border-radius:10px;
+      padding:5px 3px;
+      font-size:9px;
+      width:100%;
+      box-sizing:border-box;
+    }
+    .pipeline-pill-sport{font-size:10px;}
+    .pipeline-pill-status{font-size:8px;margin-top:1px;}
+    .pipeline-status-right{
+      margin-left:0;
+      width:100%;
+      flex-direction:column;
+      align-items:stretch;
+      gap:6px;
+    }
+    .pipeline-offseason-toggle{width:100%;text-align:center;}
+    .pipeline-last-run{
+      width:100%;
+      text-align:center;
+      white-space:normal;
+      font-size:9px;
+    }
   }
   .scard.stale { opacity: 0.42; transition: opacity 0.2s; }
   .scard.stale:hover { opacity: 0.75; }
