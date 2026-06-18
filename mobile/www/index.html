@@ -3652,6 +3652,23 @@ function ymdInEastern(d) {
   }).format(d);
 }
 
+/** Match run_pipeline.ps1 / combined_slate_tickets NBA_OFF_SEASON_RESUME. */
+const NBA_OFF_SEASON_RESUME = "2026-10-01";
+function isNbaFamilyOffSeason() {
+  const today = ymdInEastern(new Date());
+  return Boolean(today && today < NBA_OFF_SEASON_RESUME);
+}
+function getOffseasonSportIds() {
+  const ids = ["cbb", "cfb", "nfl", "wcbb"];
+  if (isNbaFamilyOffSeason()) ids.push("nba", "nba1h", "nba1q");
+  return ids;
+}
+function getDefaultBootSlateSport() {
+  if (!isNbaFamilyOffSeason()) return "nba";
+  for (const sport of ["wnba", "soccer", "mlb", "nhl", "tennis"]) return sport;
+  return "wnba";
+}
+
 /** Tennis always targets the next ET calendar day (tomorrow's board). */
 function ymdTomorrowEt() {
   const today = ymdInEastern(new Date());
@@ -5409,7 +5426,7 @@ function sortSlateDynamic(sport, key) {
     injectSlatePlatformButtons();
     injectSlateL5Buttons();
     loadSlateData();
-    fetchSlateSport('nba');
+    fetchSlateSport(getDefaultBootSlateSport());
     window.setTimeout(() => {
       try {
         if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
@@ -5428,7 +5445,7 @@ function sortSlateDynamic(sport, key) {
 
 <script>
 (function initHomePipelineAndDefaults() {
-  const OFFSEASON_IDS = ["cbb", "cfb", "nfl", "wcbb"];
+  const OFFSEASON_IDS = getOffseasonSportIds();
 
   function bindOffseasonToggle() {
     const headerRow = document.getElementById("slate-panel-header-row");
