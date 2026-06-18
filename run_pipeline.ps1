@@ -172,6 +172,11 @@ $WNBA_SEASON_START = "2026-05-01"
 $NBA_SEASON_RESUME = "2026-10-01"
 $NBASeasonResume = [datetime]::ParseExact($NBA_SEASON_RESUME, "yyyy-MM-dd", $null)
 $NBAOffSeason = (Get-Date) -lt $NBASeasonResume
+
+# NHL off-season: pause until September (next season prep).
+$NHL_SEASON_RESUME = "2026-09-01"
+$NHLSeasonResume = [datetime]::ParseExact($NHL_SEASON_RESUME, "yyyy-MM-dd", $null)
+$NHLOffSeason = (Get-Date) -lt $NHLSeasonResume
 $OutDir    = Join-Path $Root "outputs\$Date"
 $NBARunOutDir = Join-Path $OutDir "nba"
 $NBA1HRunOutDir = Join-Path $OutDir "nba1h"
@@ -1352,6 +1357,13 @@ if ($NFLOnly) {
 #  NHL ONLY
 # =============================================================================
 if ($NHLOnly) {
+    if ($NHLOffSeason) {
+        Write-Host "  [NHL] Off-season — paused until $NHL_SEASON_RESUME" -ForegroundColor DarkGray
+        Write-PipelineSlateStatusJson -RunDate $Date -Sports @{ nhl = "off_season" }
+        Run-Combined "after NHL (off-season)"
+        Print-Done
+        exit 0
+    }
     Write-Host "[ NHL PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
@@ -2311,6 +2323,10 @@ $CFBJob = Start-Job -ScriptBlock {
 }
 
 # -- NHL Job ------------------------------------------------------------------
+$NHLJob = $null
+if ($NHLOffSeason) {
+    Write-Host "  [NHL] Off-season — paused until $NHL_SEASON_RESUME" -ForegroundColor DarkGray
+} else {
 $NHLJob = Start-Job -ScriptBlock {
     param($NHLDir, $SkipFetch, $RepoRoot, $Date, $NHLRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
@@ -2472,6 +2488,7 @@ $NHLJob = Start-Job -ScriptBlock {
     }
     return $ok
 } -ArgumentList $NHLDir, $SkipFetch, $Root, $Date, $NHLRunOutDir
+}
 
 # -- Soccer Job ---------------------------------------------------------------
 $SoccerJob = Start-Job -ScriptBlock {
@@ -3120,7 +3137,7 @@ foreach ($job in $failedJobs) {
 $NBASuccess    = if ($NBAOffSeason) { $true } else { Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx") }
 $CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
 $CFBSuccess    = if (-not $CFB_PARALLEL_ACTIVE) { $true } else { (Test-Path (Join-Path $CFBRunOutDir "step8_cfb_direction_clean.xlsx")) -or (Test-Path (Join-Path $CFBRunOutDir "step6_ranked_cfb.xlsx")) }
-$NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
+$NHLSuccess    = if ($NHLOffSeason) { $true } else { Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx") }
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
 if (-not $NHLSuccess -and (Test-Step1NoSlate -CsvPath (Join-Path $NHLRunOutDir "step1_nhl_props.csv"))) {
     Write-Host "  [NHL] no slate for $Date — not a failure." -ForegroundColor DarkGray
@@ -3244,7 +3261,7 @@ $slateStatusSports = @{
     nba    = if ($NBAOffSeason) { "off_season" } elseif ($nbaNoSlate) { "no_slate" } elseif ($NBASuccess) { "complete" } else { "failed" }
     nba1h  = if ($NBAOffSeason) { "off_season" } elseif ($nba1hNoSlate) { "no_slate" } elseif ($NBA1HSuccess) { "complete" } else { "failed" }
     nba1q  = if ($NBAOffSeason) { "off_season" } elseif ($nba1qNoSlate) { "no_slate" } elseif ($NBA1QSuccess) { "complete" } else { "failed" }
-    nhl    = if ($nhlNoSlate) { "no_slate" } elseif ($NHLSuccess) { "complete" } else { "failed" }
+    nhl    = if ($NHLOffSeason) { "off_season" } elseif ($nhlNoSlate) { "no_slate" } elseif ($NHLSuccess) { "complete" } else { "failed" }
     soccer = if ($soccerNoSlate) { "no_slate" } elseif ($SoccerSuccess) { "complete" } else { "failed" }
     mlb    = if ($mlbNoSlate) { "no_slate" } elseif ($MLBSuccess) { "complete" } else { "failed" }
     tennis = if ($tennisNoSlate) { "no_slate" } elseif ($TennisSuccess) { "complete" } else { "failed" }
@@ -3262,7 +3279,7 @@ Write-PipelineSlateStatusJson -RunDate $Date -Sports $slateStatusSports
     @{ Name="NBA";    Ok=$NBASuccess; Skip=$NBAOffSeason; NoSlate=$nbaNoSlate },
     @{ Name="CBB";    Ok=$CBBSuccess; Skip=(-not $CBB_PARALLEL_ACTIVE) },
     @{ Name="CFB";    Ok=$CFBSuccess; Skip=(-not $CFB_PARALLEL_ACTIVE) },
-    @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false; NoSlate=$nhlNoSlate },
+    @{ Name="NHL";    Ok=$NHLSuccess; Skip=$NHLOffSeason; NoSlate=$nhlNoSlate },
     @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false; NoSlate=$soccerNoSlate },
     @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false; NoSlate=$mlbNoSlate },
     @{ Name="Tennis"; Ok=$TennisSuccess; Skip=$false },

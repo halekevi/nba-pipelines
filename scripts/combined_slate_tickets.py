@@ -192,6 +192,7 @@ DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nf
 DISABLED_SPORTS: set[str] = set()
 # Match run_pipeline.ps1 $NBA_SEASON_RESUME — skip stale NBA-family step8 in combined.
 NBA_OFF_SEASON_RESUME = "2026-10-01"
+NHL_OFF_SEASON_RESUME = "2026-09-01"
 DEFAULT_SOCCER_PATH = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
 DEFAULT_GOLF_PATH = os.path.join(REPO_ROOT, "Sports", "Golf", "outputs", "step8_golf_direction_clean.xlsx")
@@ -210,6 +211,17 @@ def _nba_family_off_season(slate_date: str) -> bool:
     td = str(slate_date).strip()[:10]
     try:
         resume = datetime.strptime(NBA_OFF_SEASON_RESUME, "%Y-%m-%d").date()
+        slate = datetime.strptime(td, "%Y-%m-%d").date()
+        return slate < resume
+    except ValueError:
+        return False
+
+
+def _nhl_off_season(slate_date: str) -> bool:
+    """True when NHL pipeline is paused (summer off-season)."""
+    td = str(slate_date).strip()[:10]
+    try:
+        resume = datetime.strptime(NHL_OFF_SEASON_RESUME, "%Y-%m-%d").date()
         slate = datetime.strptime(td, "%Y-%m-%d").date()
         return slate < resume
     except ValueError:
@@ -13608,7 +13620,9 @@ def main():
         _load_audit_row("CBB", args.cbb, cbb)
 
     nhl = None
-    if str(args.nhl).strip():
+    if _nhl_off_season(args.date):
+        print(f"  [NHL] Off-season — skipped until {NHL_OFF_SEASON_RESUME}")
+    elif str(args.nhl).strip():
         try:
             nhl = load_nhl(args.nhl)
             if nhl is not None and not nhl.empty:
