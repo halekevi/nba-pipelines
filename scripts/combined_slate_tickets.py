@@ -1348,16 +1348,71 @@ def _ticket_meets_min_web_payout(ticket: dict, *, group_name: str = "") -> bool:
     min_required = float(MIN_WEB_PAYOUT_X)
     gn_u = str(group_name or "").upper()
     if "GOBLIN" in gn_u:
-        m = re.search(r"(\d+)\s*-\s*LEG", gn_u)
-        if m:
-            try:
-                n_legs = int(m.group(1))
-                if n_legs in (3, 4):
-                    # Allow short goblin slips on /tickets; these usually do not clear the 3x floor.
-                    min_required = float(MIN_WEB_PAYOUT_X_GOBLIN_SHORT)
-            except (TypeError, ValueError):
-                pass
+        # Goblin-adjusted payouts often sit below the 3x power floor (especially 2-leg NBA).
+        min_required = float(MIN_WEB_PAYOUT_X_GOBLIN_SHORT)
     return min(payout_vals) >= min_required
+
+
+def _is_win_rate_main_web_payload(payload: dict | None) -> bool:
+    return isinstance(payload, dict) and str(payload.get("main_source") or "").strip().lower() == "win_rate"
+
+
+def _ensure_win_rate_leg_diversity(
+    out_groups: list[dict],
+    groups_in: list[dict],
+    *,
+    target_leg_counts: tuple[int, ...] = (3, 4),
+) -> list[dict]:
+    """Keep at least one 3-leg and 4-leg slip on /tickets when win-rate main pool has them."""
+    present: set[int] = set()
+    for g in out_groups:
+        if not isinstance(g, dict):
+            continue
+        for t in g.get("tickets") or []:
+            if isinstance(t, dict):
+                present.add(_ticket_n_legs(t))
+    missing = [n for n in target_leg_counts if n not in present]
+    if not missing:
+        return out_groups
+
+    flat: list[tuple[tuple[float, int, float], dict, str]] = []
+    for g in groups_in:
+        if not isinstance(g, dict):
+            continue
+        group_name = str(g.get("group_name") or "")
+        for t in g.get("tickets") or []:
+            if isinstance(t, dict):
+                flat.append((_ticket_rank_tuple(t), t, group_name))
+    flat.sort(key=lambda x: x[0], reverse=True)
+
+    out = [dict(g) for g in out_groups if isinstance(g, dict)]
+    existing_names = {str(g.get("group_name") or "") for g in out}
+    for target_n in missing:
+        for _rank, ticket, src_group in flat:
+            if _ticket_n_legs(ticket) != target_n:
+                continue
+            inserted = False
+            for g in out:
+                if str(g.get("group_name") or "") == src_group:
+                    tickets_cur = [x for x in list(g.get("tickets") or []) if isinstance(x, dict)]
+                    if not any(_ticket_n_legs(x) == target_n for x in tickets_cur):
+                        tickets_cur.append(ticket)
+                        g["tickets"] = tickets_cur
+                    inserted = True
+                    break
+            if not inserted and src_group not in existing_names:
+                out.append(
+                    {
+                        "group_name": src_group,
+                        "n_legs": target_n,
+                        "power_payout": ticket.get("power_payout") or ticket.get("base_power_payout"),
+                        "flex_payout": ticket.get("flex_payout"),
+                        "tickets": [ticket],
+                    }
+                )
+                existing_names.add(src_group)
+            break
+    return out
 
 
 def _ticket_primary_sport(ticket: dict) -> str:
@@ -1479,6 +1534,8 @@ def filter_web_tickets_for_ui(
 ) -> dict:
     """Build /tickets JSON groups: optional positive-EV gate, then optional WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
+    win_rate_main = _is_win_rate_main_web_payload(payload)
+    skip_payout_gate = win_rate_main and not require_positive_ev
     out_groups: list[dict] = []
     sport_candidates: dict[str, tuple[tuple[float, int, float], dict, str]] = {}
     for g in groups_in:
@@ -1515,7 +1572,9 @@ def filter_web_tickets_for_ui(
             for t in tickets_in:
                 if not isinstance(t, dict):
                     continue
-                if not _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or "")):
+                if not skip_payout_gate and not _ticket_meets_min_web_payout(
+                    t, group_name=str(g.get("group_name") or "")
+                ):
                     if discard_tracker is not None:
                         discard_tracker.log_count(sport_key, "payout_below_3x", 1)
                     continue
@@ -1527,6 +1586,9 @@ def filter_web_tickets_for_ui(
         out_groups.append(ng)
     if apply_template_cap:
         out_groups = _apply_web_ticket_template(out_groups)
+
+    if win_rate_main and not require_positive_ev:
+        out_groups = _ensure_win_rate_leg_diversity(out_groups, groups_in)
 
     # Keep at least one single-sport ticket visible per sport in /tickets UI.
     # This prevents strict web gates from hiding entire sports (e.g. NBA1H/SOCCER/WNBA)
@@ -4297,7 +4359,7 @@ def build_win_rate_ticket_groups(
     graded_analysis: dict | None = None,
 ) -> list[tuple[str, list, None]]:
     """Build up to max_tickets win-rate slips (2–max_legs legs), sorted by p_win."""
-    max_legs = max(2, min(3, int(max_legs)))
+    max_legs = max(2, min(4, int(max_legs)))
     graded_ctx = _graded_analysis_context(graded_analysis)
     frames_by_sport: dict[str, pd.DataFrame] = {}
     for label, raw_df in sport_frames:
@@ -4360,6 +4422,27 @@ def build_win_rate_ticket_groups(
     )
     seen: set[frozenset] = set()
     picked: list[dict] = []
+    # Ensure longer-leg coverage in win-rate output when valid candidates exist.
+    if max_legs >= 3:
+        for target_n in (3, 4):
+            if target_n > max_legs:
+                continue
+            for t in candidates:
+                rows = [dict(r) for r in (t.get("rows") or [])]
+                if len(rows) != target_n:
+                    continue
+                if _winrate_ticket_same_game_bench_stack(t):
+                    continue
+                if any(_leg_dnp_risk(r) for r in rows):
+                    continue
+                key = _ticket_row_dedup_key(rows)
+                if key in seen:
+                    continue
+                seen.add(key)
+                picked.append(t)
+                break
+            if len(picked) >= int(max_tickets):
+                break
     for t in candidates:
         if _winrate_ticket_same_game_bench_stack(t):
             continue
@@ -5563,12 +5646,13 @@ def _finalize_payload_l10_streaks(payload: dict) -> None:
 
 # Graded KPI split: main = 2-leg NBA-family win-rate slips; long_parlay = 5–6 (tracked separately).
 MAIN_GRADED_MIN_LEGS = 2
-MAIN_GRADED_MAX_LEGS = 2
+# Main graded track now supports 2-4 legs; long-parlay track remains 5-6 legs.
+MAIN_GRADED_MAX_LEGS = 4
 LONG_PARLAY_MIN_LEGS = 5
 LONG_PARLAY_MAX_LEGS = 6
 
 # Main graded export: win-rate builder (Goblin OVER / Tier-A standard, NBA family only).
-MAIN_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_MAIN_MIN_LEG_PROB", "0.65"))
+MAIN_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_MAIN_MIN_LEG_PROB", "0.62"))
 MAIN_MIN_ML_PROB_LEG: float = float(os.getenv("PROPORACLE_MAIN_MIN_ML_PROB_LEG", "0.58"))
 MAIN_MIN_P_WIN_FLOOR: float = float(os.getenv("PROPORACLE_MAIN_MIN_P_WIN_FLOOR", "0.33"))
 MAIN_MAX_SLIPS: int = max(5, int(os.getenv("PROPORACLE_MAIN_MAX_SLIPS", "15")))
@@ -5763,11 +5847,9 @@ def build_graded_main_win_rate_payload(
     max_legs: int | None = None,
     max_tickets: int | None = None,
 ) -> dict:
-    """Build main graded track from win-rate ticket groups (NBA-family, 2-leg power slips)."""
-    wr_max_legs = max(
-        MAIN_GRADED_MIN_LEGS,
-        min(MAIN_GRADED_MAX_LEGS, int(max_legs or MAIN_GRADED_MAX_LEGS)),
-    )
+    """Build main graded track from win-rate ticket groups (NBA-family, 2-4 leg power slips)."""
+    # Main graded leg cap is independent of --max-ticket-legs (workbook/EV builder knob).
+    wr_max_legs = max(MAIN_GRADED_MIN_LEGS, int(MAIN_GRADED_MAX_LEGS))
     wr_min_prob = float(min_leg_prob if min_leg_prob is not None else MAIN_MIN_LEG_PROB)
     wr_max_tickets = int(max_tickets or MAIN_MAX_SLIPS)
     wr_groups = build_win_rate_ticket_groups(
@@ -5778,10 +5860,13 @@ def build_graded_main_win_rate_payload(
         max_tickets=wr_max_tickets,
         graded_analysis=graded_analysis,
     )
+    filters_out = dict(thresholds or {})
+    filters_out["max_ticket_legs"] = wr_max_legs
+    filters_out["main_min_leg_prob"] = wr_min_prob
     payload = ticket_groups_to_payload(
         wr_groups,
         date_str,
-        thresholds,
+        filters_out,
         bankroll=max(0.0, float(bankroll)),
         curve_stake_usd=float(curve_stake_usd),
         ticket_track="graded_main",
@@ -13259,6 +13344,15 @@ def main():
         help="Write tickets_latest.json for web/Railway (graded HTML via build_ticket_eval.py)",
     )
     ap.add_argument(
+        "--write-slate-web-only",
+        action="store_true",
+        dest="write_slate_web_only",
+        help=(
+            "Load sport step8 boards and write slate_latest.json + slate_sport_*.json only "
+            "(no workbook or ticket JSON). Used by generate_mobile_bundle when templates are stale."
+        ),
+    )
+    ap.add_argument(
         "--long-leg-supplement",
         action="store_true",
         help=(
@@ -13380,8 +13474,8 @@ def main():
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     if getattr(args, "win_rate_mode", False):
-        cap = int(args.max_legs) if args.max_legs is not None else 3
-        args.max_ticket_legs = max(2, min(3, cap))
+        cap = int(args.max_legs) if args.max_legs is not None else MAIN_GRADED_MAX_LEGS
+        args.max_ticket_legs = max(2, min(MAIN_GRADED_MAX_LEGS, cap))
     args.ticket_gen_starts = max(1, min(64, int(args.ticket_gen_starts)))
     args.nba_structured_variants = max(1, min(8, int(args.nba_structured_variants)))
     args.ticket_model_weight = max(0.0, min(1.0, float(args.ticket_model_weight)))
@@ -13787,6 +13881,28 @@ def main():
     nba1h = drop_demon_over_rows(nba1h, "NBA1H")
     nfl = drop_demon_over_rows(nfl, "NFL")
     cfb = drop_demon_over_rows(cfb, "CFB")
+
+    if bool(getattr(args, "write_slate_web_only", False)):
+        write_slate_json(
+            nba,
+            cbb,
+            nhl,
+            soccer,
+            args.date,
+            args.web_outdir,
+            wcbb=wcbb,
+            mlb=mlb,
+            nba1q=nba1q,
+            nba1h=nba1h,
+            tennis=tennis,
+            golf=golf,
+            nfl=nfl,
+            wnba=wnba,
+            cfb=cfb,
+            tennis_date=getattr(args, "tennis_date", None),
+        )
+        print("[OK] Slate web JSON only (skipped workbook + tickets).")
+        return
 
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
@@ -14360,8 +14476,14 @@ def main():
 
     if getattr(args, "win_rate_mode", False):
         print("\n[win-rate] Generating win-rate optimized tickets (separate from EV pool)...")
-        wr_max_legs = max(2, min(3, int(args.max_legs) if args.max_legs is not None else 3))
-        wr_min_prob = float(getattr(args, "min_leg_prob", 0.55) or 0.55)
+        wr_max_legs = max(
+            2,
+            min(
+                MAIN_GRADED_MAX_LEGS,
+                int(args.max_legs) if args.max_legs is not None else MAIN_GRADED_MAX_LEGS,
+            ),
+        )
+        wr_min_prob = float(getattr(args, "min_leg_prob", MAIN_MIN_LEG_PROB) or MAIN_MIN_LEG_PROB)
         graded_analysis = _load_graded_analysis()
         if graded_analysis:
             dr = graded_analysis.get("date_range") or {}
@@ -15415,7 +15537,8 @@ def main():
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
             print(
-                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-leg win-rate, NBA-family) | "
+                f"  Web payload: {n_groups} groups, {n_slips} main slips "
+                f"({MAIN_GRADED_MIN_LEGS}-{MAIN_GRADED_MAX_LEGS} leg win-rate, NBA-family) | "
                 f"{n_long} long-parlay slips (5-6 leg, separate grade track)."
             )
             gated_preview = filter_positive_ev_tickets_payload(
@@ -15492,7 +15615,8 @@ def main():
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             n_long = sum(len(g.get("tickets") or []) for g in long_payload.get("groups") or [])
             print(
-                f"  Web payload: {n_groups} groups, {n_slips} main slips (2-leg win-rate) | "
+                f"  Web payload: {n_groups} groups, {n_slips} main slips "
+                f"({MAIN_GRADED_MIN_LEGS}-{MAIN_GRADED_MAX_LEGS} leg win-rate) | "
                 f"{n_long} long-parlay slips (FINAL fallback)."
             )
             gated_preview = filter_positive_ev_tickets_payload(

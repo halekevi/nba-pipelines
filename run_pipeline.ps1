@@ -213,6 +213,9 @@ if (-not (Test-Path $CanonicalMobileAppDir)) { New-Item -ItemType Directory -For
 # -- Encoding -----------------------------------------------------------------
 $env:PYTHONUTF8       = "1"
 $env:PYTHONIOENCODING = "utf-8"
+if (-not "$($env:PROPORACLE_CURL_IMPERSONATE)".Trim()) {
+    $env:PROPORACLE_CURL_IMPERSONATE = "chrome131"
+}
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 try { chcp 65001 | Out-Null } catch { }
 
@@ -1125,7 +1128,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --tennis-date $TennisDate --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B --min-hit-rate 0.65 --min-edge -0.25 --max-tickets 15 --max-ticket-legs 2 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --tennis-date $TennisDate --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B --min-hit-rate 0.65 --min-edge -0.25 --max-tickets 15 --max-ticket-legs 4 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -1140,8 +1143,8 @@ function Run-Combined {
             "--date", $Date,
             "--allow-cross-date-fallback",
             "--output", "`"$WinrateOut`"",
-            "--max-legs", "2",
-            "--min-leg-prob", "0.65",
+            "--max-legs", "4",
+            "--min-leg-prob", "0.62",
             "--win-rate-mode",
             "--tiers", "A,B",
             "--max-tickets", "15",
