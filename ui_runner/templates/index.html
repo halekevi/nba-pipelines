@@ -499,42 +499,7 @@ body{
   .home-cat>summary{font-size:clamp(18px,5vw,22px);padding:14px 16px;min-height:48px;box-sizing:border-box;}
 }
 @media(max-width:640px){
-  .pipeline-status-bar{
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:8px!important;
-  }
-  .pipeline-status-pills{
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:6px!important;
-    width:100%!important;
-    flex:none!important;
-  }
-  .pipeline-status-pill{
-    display:flex!important;
-    border-radius:10px!important;
-    padding:5px 3px!important;
-    font-size:9px!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-  .pipeline-pill-sport{font-size:10px!important;}
-  .pipeline-pill-status{font-size:8px!important;margin-top:1px!important;}
-  .pipeline-status-right{
-    margin-left:0!important;
-    width:100%!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:6px!important;
-  }
-  .pipeline-offseason-toggle{width:100%!important;text-align:center!important;}
-  .pipeline-last-run{
-    width:100%!important;
-    text-align:center!important;
-    white-space:normal!important;
-    font-size:9px!important;
-  }
+  .slate-explorer-toolbar .pipeline-offseason-toggle{width:100%!important;text-align:center!important;}
 }
 @media(max-width:520px){
   .edge-card-top{padding:8px 9px;}
@@ -1084,13 +1049,6 @@ body > nav.snav.glass-card {
       </h1>
     </div>
     
-  <div class="pipeline-status-bar" id="pipeline-status-bar">
-    <div class="pipeline-status-pills" id="pipeline-status-pills"></div>
-    <div class="pipeline-status-right">
-      <button type="button" class="pipeline-offseason-toggle" id="pipeline-offseason-toggle">Show off-season</button>
-      <span class="pipeline-last-run" id="pipeline-last-run">Last run: --</span>
-    </div>
-  </div>
   <!-- SLATE STATUS CARDS -->
   <details class="home-cat" open id="slate-explorer">
     <summary><span class="home-cat-title">Slate <span>Explorer</span></span></summary>
@@ -1160,81 +1118,12 @@ body > nav.snav.glass-card {
     background:rgba(212,175,55,.08);
     box-shadow:0 0 0 1px rgba(212,175,55,.2),0 4px 18px rgba(0,0,0,.35);
   }
-  .pipeline-status-bar{
+  .slate-explorer-toolbar{
     display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin:0 0 10px 0;
-    padding:10px 12px;
-    border-radius:14px;
-    background:var(--glass-bg);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(var(--blur));
-    -webkit-backdrop-filter:blur(var(--blur));
-    box-shadow:var(--glass-shadow);
-  }
-  .pipeline-status-pills{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:8px;
-    min-width:0;
-  }
-  .pipeline-status-pill{
-    display:inline-flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:1px;
-    font-size:10px;
-    font-family:"Inter",sans-serif;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    border-radius:999px;
-    padding:5px 10px;
-    border:1px solid rgba(255,255,255,.16);
-    color:var(--muted);
-    background:rgba(255,255,255,.06);
-    white-space:normal;
-    text-align:center;
-    line-height:1.12;
-    min-width:0;
-  }
-  .pipeline-pill-sport{
-    font-weight:800;
-    letter-spacing:.06em;
-  }
-  .pipeline-pill-status{
-    font-size:.82em;
-    font-weight:700;
-    letter-spacing:.05em;
-    opacity:.92;
-  }
-  .pipeline-status-pill.fresh{
-    color:var(--green);
-    border-color:color-mix(in srgb, var(--green) 50%, transparent);
-    background:color-mix(in srgb, var(--green) 16%, transparent);
-  }
-  .pipeline-status-pill.stale{
-    color:var(--muted2);
-    border-color:rgba(255,255,255,.12);
-    background:rgba(255,255,255,.03);
-    opacity:.78;
-  }
-  .pipeline-status-pill.pending{
-    color:var(--amber);
-    border-color:color-mix(in srgb, var(--amber) 45%, transparent);
-    background:color-mix(in srgb, var(--amber) 14%, transparent);
-  }
-  .pipeline-status-right{
-    margin-left:auto;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
     justify-content:flex-end;
+    align-items:center;
+    padding:0 0 10px 0;
+    gap:8px;
   }
   .pipeline-offseason-toggle{
     border-radius:999px;
@@ -1246,7 +1135,7 @@ body > nav.snav.glass-card {
     font-weight:700;
     letter-spacing:.08em;
     text-transform:uppercase;
-    padding:6px 10px;
+    padding:6px 12px;
     cursor:pointer;
     transition:background .2s,border-color .2s,color .2s;
   }
@@ -1254,48 +1143,9 @@ body > nav.snav.glass-card {
     background:rgba(212,175,55,.16);
     border-color:rgba(212,175,55,.42);
   }
-  .pipeline-last-run{
-    font-size:10px;
-    letter-spacing:.06em;
-    color:var(--muted2);
-    white-space:nowrap;
-  }
   @media(max-width:640px){
-    .pipeline-status-bar{
-      flex-direction:column;
-      align-items:stretch;
-      gap:8px;
-    }
-    .pipeline-status-pills{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:6px;
-      width:100%;
-    }
-    .pipeline-status-pill{
-      display:flex;
-      border-radius:10px;
-      padding:5px 3px;
-      font-size:9px;
-      width:100%;
-      box-sizing:border-box;
-    }
-    .pipeline-pill-sport{font-size:10px;}
-    .pipeline-pill-status{font-size:8px;margin-top:1px;}
-    .pipeline-status-right{
-      margin-left:0;
-      width:100%;
-      flex-direction:column;
-      align-items:stretch;
-      gap:6px;
-    }
-    .pipeline-offseason-toggle{width:100%;text-align:center;}
-    .pipeline-last-run{
-      width:100%;
-      text-align:center;
-      white-space:normal;
-      font-size:9px;
-    }
+    .slate-explorer-toolbar{justify-content:stretch;}
+    .slate-explorer-toolbar .pipeline-offseason-toggle{width:100%;text-align:center;}
   }
   .scard.stale { opacity: 0.42; transition: opacity 0.2s; }
   .scard.stale:hover { opacity: 0.75; }
@@ -1600,6 +1450,9 @@ body > nav.snav.glass-card {
   </style>
 
   <div class="slate-panel-wrap">
+    <div class="slate-explorer-toolbar">
+      <button type="button" class="pipeline-offseason-toggle" id="pipeline-offseason-toggle">Show off-season</button>
+    </div>
     <div class="slate-panel-header-row" id="slate-panel-header-row">
 
       <div class="scard loading" id="sc-nba" onclick="toggleSlatePanel('nba')">
@@ -3610,30 +3463,6 @@ function applyStatusCard(id, info, _label, opts) {
   card.classList.add(cls); badge.classList.add(cls);
   val.textContent = formatSlateModifiedDisplay(info.modified || "—");
   badge.textContent = fresh ? "FRESH" : "STALE";
-  updatePipelineStatusBar();
-}
-
-function updatePipelineStatusBar() {
-  const pillsWrap = document.getElementById("pipeline-status-pills");
-  if (!pillsWrap) return;
-  const lastRunEl = document.getElementById("pipeline-last-run");
-  const nowLabel = document.querySelector(".nav-local-datetime");
-  if (lastRunEl) {
-    const txt = (nowLabel?.textContent || "").trim();
-    lastRunEl.textContent = `Last run: ${txt || "--"}`;
-  }
-  const excluded = new Set(["cbb", "cfb", "nfl", "wcbb"]);
-  const cards = Array.from(document.querySelectorAll('.scard[id^="sc-"]')).filter((card) => {
-    const sport = String(card.id || "").replace(/^sc-/, "").trim().toLowerCase();
-    return sport && !excluded.has(sport);
-  });
-  pillsWrap.innerHTML = cards.map((card) => {
-    const sport = String(card.id || "").replace(/^sc-/, "").trim().toUpperCase();
-    const badgeTxt = String(card.querySelector(".sbadge")?.textContent || "").trim().toUpperCase();
-    const status = badgeTxt === "FRESH" ? "fresh" : (badgeTxt === "STALE" ? "stale" : "pending");
-    const statusLabel = badgeTxt || "PENDING";
-    return `<span class="pipeline-status-pill ${status}"><span class="pipeline-pill-sport">${sport}</span><span class="pipeline-pill-status">${statusLabel}</span></span>`;
-  }).join("");
 }
 
 function sportDisplayLabel(rawSport) {
@@ -3671,7 +3500,6 @@ async function refreshStatus() {
   const statusIds = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
   if (!d) {
     for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
-    updatePipelineStatusBar();
     return;
   }
   const strictGameDay = {};
@@ -3707,7 +3535,6 @@ async function refreshStatus() {
   if (tennisVal && tennisMd) tennisVal.textContent = tennisMd;
   applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate", statusOpts("wnba"));
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
-  updatePipelineStatusBar();
 }
 setInterval(refreshStatus, 60000);
 refreshStatus();
@@ -5340,7 +5167,9 @@ function sortSlateDynamic(sport, key) {
       const showing = headerRow.classList.contains("show-inactive");
       toggleBtn.textContent = showing ? "Hide off-season" : "Show off-season";
     };
-    toggleBtn.addEventListener("click", () => {
+    toggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       headerRow.classList.toggle("show-inactive");
       syncText();
     });
@@ -5393,27 +5222,8 @@ function sortSlateDynamic(sport, key) {
     ensureEmptyState();
   }
 
-  function bindPipelineStatusObservers() {
-    if (typeof updatePipelineStatusBar !== "function") return;
-    updatePipelineStatusBar();
-    const navTs = document.querySelector(".nav-local-datetime");
-    if (navTs) {
-      new MutationObserver(updatePipelineStatusBar).observe(navTs, { childList: true, characterData: true, subtree: true });
-    }
-    const row = document.getElementById("slate-panel-header-row");
-    if (row) {
-      new MutationObserver(updatePipelineStatusBar).observe(row, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-    }
-  }
-
   function run() {
     bindOffseasonToggle();
-    bindPipelineStatusObservers();
     collapseNonSlateSections();
     bindHotPlayersEmptyState();
   }
