@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-18T10:22:17.114207+00:00",
+  "generated_at": "2026-06-18T13:05:29.687874+00:00",
   "slate_note": "Tennis match day 2026-06-19 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-19.xlsx)",
   "tennis_match_date": "2026-06-19",
   "n_teams": 300,
@@ -473,6 +473,34 @@
         }
       ]
     },
+    "alina charaeva|match_total_games": {
+      "team_slate": "alina charaeva",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "",
+        "name": "",
+        "def_rank": null,
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Alina Charaeva",
+          "player_norm": "alina charaeva",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 18.4,
+          "game_score": 18.4,
+          "edge": "AVOID",
+          "notes": "PP edge -3.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 21.5,
+          "pp_edge": -3.1
+        }
+      ]
+    },
     "jessica bouzas maneiro|games_won": {
       "team_slate": "jessica bouzas maneiro",
       "category": "games_won",
@@ -809,34 +837,6 @@
         }
       ]
     },
-    "brandon nakashima|aces": {
-      "team_slate": "brandon nakashima",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "alex de minaur",
-        "name": "ALEX DE MINAUR",
-        "def_rank": 6,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Brandon Nakashima",
-          "player_norm": "brandon nakashima",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 8.1,
-          "game_score": 8.1,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +3.3 but elite opponent (#6) \u2014 tough matchup.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": 3.3
-        }
-      ]
-    },
     "daniel altmaier|aces": {
       "team_slate": "daniel altmaier",
       "category": "aces",
@@ -862,6 +862,34 @@
           "def_boost": null,
           "pp_line": 2.5,
           "pp_edge": 2.3
+        }
+      ]
+    },
+    "brandon nakashima|aces": {
+      "team_slate": "brandon nakashima",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alex de minaur",
+        "name": "ALEX DE MINAUR",
+        "def_rank": 6,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Brandon Nakashima",
+          "player_norm": "brandon nakashima",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.1,
+          "game_score": 8.1,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +3.3 but elite opponent (#6) \u2014 tough matchup.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 3.3
         }
       ]
     },
@@ -966,8 +994,8 @@
           "player_norm": "felix augeraliassime",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 16.5,
-          "game_score": 16.5,
+          "season_avg": 15.5,
+          "game_score": 15.5,
           "edge": "OK_EDGE",
           "notes": "Solid vs average opponent (#26).",
           "overperform_vs_weak": false,
