@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-16T18:35:26.677553+00:00",
+  "generated_at": "2026-06-18T09:32:26.372591+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -162,34 +162,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -198,34 +198,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -234,34 +234,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -270,34 +270,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -306,34 +306,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -342,34 +342,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -378,30 +378,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         },
         {
-          "player": "Sophie Cunningham",
-          "prop_type": "Pts+Rebs",
-          "line": 9.5,
-          "standard_line": 10.5,
+          "player": "Rhyne Howard",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -414,8 +414,28 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -425,33 +445,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -460,8 +460,28 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -471,33 +491,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -506,8 +506,28 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -517,33 +537,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -552,8 +552,28 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -563,33 +583,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -598,8 +598,28 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -609,33 +629,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -644,8 +644,28 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -655,33 +675,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -690,40 +690,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
-          "line": 2.5,
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         },
         {
-          "player": "Sophie Cunningham",
-          "prop_type": "Pts+Rebs",
-          "line": 9.5,
-          "standard_line": 10.5,
+          "player": "Rhyne Howard",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -736,7 +736,37 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -747,43 +777,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -792,7 +792,37 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -803,43 +833,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -848,7 +848,37 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -859,43 +889,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -904,7 +904,37 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -915,43 +945,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -960,7 +960,37 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -971,43 +1001,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -1016,7 +1016,37 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -1027,43 +1057,13 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         }
       ]
     },
@@ -1072,8 +1072,28 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
-          "prop_type": "Assists",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
           "line": 2.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1083,41 +1103,417 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Rhyne Howard",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
         },
         {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.65
+          "hit_rate": 0.8
         },
         {
           "player": "Lexie Hull",
           "prop_type": "Points",
           "line": 4.5,
-          "standard_line": 6.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.6499999999999999
         },
         {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
           "player": "Sophie Cunningham",
-          "prop_type": "Pts+Rebs",
-          "line": 9.5,
-          "standard_line": 10.5,
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Caitlin Clark + Angel Reese",
+          "prop_type": "Points (Combo)",
+          "line": 34.5,
+          "standard_line": 34.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Aliyah Boston",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 3.0,
           "direction": "OVER",
           "hit_rate": 0.75
         }
@@ -1128,7 +1524,37 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marina Mabrey",
+          "player": "Sophie Cunningham",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Lexie Hull",
+          "prop_type": "Points",
+          "line": 4.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Jordin Canada",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.6499999999999999
+        },
+        {
+          "player": "Angel Reese",
           "prop_type": "Assists",
           "line": 2.5,
           "standard_line": null,
@@ -1139,49 +1565,19 @@
         },
         {
           "player": "Aliyah Boston",
-          "prop_type": "FG Attempted",
-          "line": 11.5,
-          "standard_line": 11.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston + Brittney Sykes",
-          "prop_type": "Points (Combo)",
-          "line": 35.5,
-          "standard_line": 35.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Caitlin Clark",
-          "prop_type": "FG Attempted",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.65
-        },
-        {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.75
         },
         {
-          "player": "Sophie Cunningham",
-          "prop_type": "Pts+Rebs",
-          "line": 9.5,
-          "standard_line": 10.5,
+          "player": "Rhyne Howard",
+          "prop_type": "Points",
+          "line": 16.5,
+          "standard_line": 18.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",

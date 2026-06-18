@@ -3831,8 +3831,15 @@ function slateRowsFromPayload(data) {
 function rowGameDateEt(row) {
   const gd = String(row?.game_date || "").trim().slice(0, 10);
   if (/^\d{4}-\d{2}-\d{2}$/.test(gd)) return gd;
-  const m = String(row?.game_time || "").trim().match(/^(\d{4}-\d{2}-\d{2})/);
-  return m ? m[1] : null;
+  const gt = String(row?.game_time || "").trim();
+  const mIso = gt.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (mIso) return mIso[1];
+  const mMd = gt.match(/^(\d{1,2})\/(\d{1,2})(?:\b|[\sT])/);
+  if (mMd) {
+    const y = ymdInEastern(new Date()).slice(0, 4);
+    return `${y}-${String(mMd[1]).padStart(2, "0")}-${String(mMd[2]).padStart(2, "0")}`;
+  }
+  return null;
 }
 
 async function sportSlateHasGamesOnDay(sportId, targetYmd) {
