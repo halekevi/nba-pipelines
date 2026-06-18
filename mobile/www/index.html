@@ -1208,6 +1208,11 @@ body > nav.snav.glass-card {
     min-width:0;
   }
   .pipeline-status-pill{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1px;
     font-size:10px;
     font-family:"Inter",sans-serif;
     font-weight:700;
@@ -1218,7 +1223,20 @@ body > nav.snav.glass-card {
     border:1px solid rgba(255,255,255,.16);
     color:var(--muted);
     background:rgba(255,255,255,.06);
-    white-space:nowrap;
+    white-space:normal;
+    text-align:center;
+    line-height:1.12;
+    min-width:0;
+  }
+  .pipeline-pill-sport{
+    font-weight:800;
+    letter-spacing:.06em;
+  }
+  .pipeline-pill-status{
+    font-size:.82em;
+    font-weight:700;
+    letter-spacing:.05em;
+    opacity:.92;
   }
   .pipeline-status-pill.fresh{
     color:var(--green);
@@ -1267,6 +1285,40 @@ body > nav.snav.glass-card {
     letter-spacing:.06em;
     color:var(--muted2);
     white-space:nowrap;
+  }
+  @media(max-width:640px){
+    .pipeline-status-bar{
+      flex-direction:column;
+      align-items:stretch;
+      gap:8px;
+    }
+    .pipeline-status-pills{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:6px;
+      width:100%;
+    }
+    .pipeline-status-pill{
+      border-radius:10px;
+      padding:5px 3px;
+      font-size:9px;
+    }
+    .pipeline-pill-sport{font-size:10px;}
+    .pipeline-pill-status{font-size:8px;margin-top:1px;}
+    .pipeline-status-right{
+      margin-left:0;
+      width:100%;
+      flex-direction:column;
+      align-items:stretch;
+      gap:6px;
+    }
+    .pipeline-offseason-toggle{width:100%;text-align:center;}
+    .pipeline-last-run{
+      width:100%;
+      text-align:center;
+      white-space:normal;
+      font-size:9px;
+    }
   }
   .scard.stale { opacity: 0.42; transition: opacity 0.2s; }
   .scard.stale:hover { opacity: 0.75; }
@@ -3806,7 +3858,8 @@ function updatePipelineStatusBar() {
     const sport = String(card.id || "").replace(/^sc-/, "").trim().toUpperCase();
     const badgeTxt = String(card.querySelector(".sbadge")?.textContent || "").trim().toUpperCase();
     const status = badgeTxt === "FRESH" ? "fresh" : (badgeTxt === "STALE" ? "stale" : "pending");
-    return `<span class="pipeline-status-pill ${status}">${sport} ${status}</span>`;
+    const statusLabel = badgeTxt || "PENDING";
+    return `<span class="pipeline-status-pill ${status}"><span class="pipeline-pill-sport">${sport}</span><span class="pipeline-pill-status">${statusLabel}</span></span>`;
   }).join("");
 }
 

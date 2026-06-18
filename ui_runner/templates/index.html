@@ -1144,6 +1144,11 @@ body > nav.snav.glass-card {
     min-width:0;
   }
   .pipeline-status-pill{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1px;
     font-size:10px;
     font-family:"Inter",sans-serif;
     font-weight:700;
@@ -1154,7 +1159,20 @@ body > nav.snav.glass-card {
     border:1px solid rgba(255,255,255,.16);
     color:var(--muted);
     background:rgba(255,255,255,.06);
-    white-space:nowrap;
+    white-space:normal;
+    text-align:center;
+    line-height:1.12;
+    min-width:0;
+  }
+  .pipeline-pill-sport{
+    font-weight:800;
+    letter-spacing:.06em;
+  }
+  .pipeline-pill-status{
+    font-size:.82em;
+    font-weight:700;
+    letter-spacing:.05em;
+    opacity:.92;
   }
   .pipeline-status-pill.fresh{
     color:var(--green);
@@ -3531,7 +3549,8 @@ function updatePipelineStatusBar() {
     const sport = String(card.id || "").replace(/^sc-/, "").trim().toUpperCase();
     const badgeTxt = String(card.querySelector(".sbadge")?.textContent || "").trim().toUpperCase();
     const status = badgeTxt === "FRESH" ? "fresh" : (badgeTxt === "STALE" ? "stale" : "pending");
-    return `<span class="pipeline-status-pill ${status}">${sport} ${status}</span>`;
+    const statusLabel = badgeTxt || "PENDING";
+    return `<span class="pipeline-status-pill ${status}"><span class="pipeline-pill-sport">${sport}</span><span class="pipeline-pill-status">${statusLabel}</span></span>`;
   }).join("");
 }
 
