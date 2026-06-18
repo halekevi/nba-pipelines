@@ -315,6 +315,8 @@ body::after{content:'';position:fixed;inset:0;
   background:rgba(212,175,55,.08)!important;
   box-shadow:0 0 0 1px rgba(212,175,55,.2),0 4px 18px rgba(0,0,0,.35)!important;
 }
+#slate-panel-header-row .scard.inactive-sport{display:none!important;}
+#slate-panel-header-row.show-inactive .scard.inactive-sport{display:flex!important;}
 
 /* edge cards */
 .edge-card{background:var(--glass-bg);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid var(--glass-border);border-radius:18px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
@@ -1216,8 +1218,8 @@ body > nav.snav.glass-card {
   .scard.loading { opacity: 0.38; transition: opacity 0.2s; }
   .scard.loading:hover { opacity: 0.65; }
   .scard.fresh { border-color: rgba(212,175,55,0.35) !important; box-shadow: 0 0 0 1px rgba(212,175,55,0.15), var(--glass-shadow); }
-  .scard.inactive-sport { display: none; }
-  #slate-panel-header-row.show-inactive .scard.inactive-sport { display: flex; }
+  .scard.inactive-sport { display: none !important; }
+  #slate-panel-header-row.show-inactive .scard.inactive-sport { display: flex !important; }
   .slate-panel-header-row .scard-toggle{font-size:14px;color:var(--muted);transition:transform .25s;flex-shrink:0;line-height:1;}
   .slate-panel-header-row .scard.active .scard-toggle{transform:rotate(180deg);}
   /* expand area */
@@ -1519,7 +1521,7 @@ body > nav.snav.glass-card {
     </div>
     <div class="slate-panel-header-row" id="slate-panel-header-row">
 
-      <div class="scard loading" id="sc-nba" onclick="toggleSlatePanel('nba')">
+      <div class="scard loading" id="sc-nba" data-offseason-resume="2026-10-01" onclick="toggleSlatePanel('nba')">
         <div class="scard-head">
           <div class="scard-icon nba">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5">
@@ -1534,7 +1536,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-nba-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-nba1h" onclick="toggleSlatePanel('nba1h')">
+      <div class="scard loading" id="sc-nba1h" data-offseason-resume="2026-10-01" onclick="toggleSlatePanel('nba1h')">
         <div class="scard-head">
           <div class="scard-icon nba1h">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffb27d" stroke-width="1.5">
@@ -1549,7 +1551,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-nba1h-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-nba1q" onclick="toggleSlatePanel('nba1q')">
+      <div class="scard loading" id="sc-nba1q" data-offseason-resume="2026-10-01" onclick="toggleSlatePanel('nba1q')">
         <div class="scard-head">
           <div class="scard-icon nba1q">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffd87a" stroke-width="1.5">
@@ -1564,7 +1566,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-nba1q-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-cbb" onclick="toggleSlatePanel('cbb')">
+      <div class="scard loading inactive-sport" id="sc-cbb" onclick="toggleSlatePanel('cbb')">
         <div class="scard-head">
           <div class="scard-icon cbb">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#7fc7d9" stroke-width="1.5">
@@ -1579,7 +1581,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-cbb-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-cfb" onclick="toggleSlatePanel('cfb')">
+      <div class="scard loading inactive-sport" id="sc-cfb" onclick="toggleSlatePanel('cfb')">
         <div class="scard-head">
           <div class="scard-icon cfb">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#e8c88a" stroke-width="1.5">
@@ -1594,7 +1596,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-cfb-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-nhl" onclick="toggleSlatePanel('nhl')">
+      <div class="scard loading" id="sc-nhl" data-offseason-resume="2026-09-01" onclick="toggleSlatePanel('nhl')">
         <div class="scard-head">
           <div class="scard-icon nhl">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5">
@@ -1639,7 +1641,7 @@ body > nav.snav.glass-card {
         <div class="scard-val" id="sc-mlb-val">Checking...</div>
       </div>
 
-      <div class="scard loading" id="sc-nfl" onclick="toggleSlatePanel('nfl')">
+      <div class="scard loading inactive-sport" id="sc-nfl" onclick="toggleSlatePanel('nfl')">
         <div class="scard-head">
           <div class="scard-icon nfl">
             <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#00c896" stroke-width="1.5">
@@ -1699,6 +1701,23 @@ body > nav.snav.glass-card {
       </div>
 
     </div><!-- /header-row -->
+    <script>
+    (function applySlateOffseasonCardsNow() {
+      try {
+        const today = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "America/New_York",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date());
+        document.querySelectorAll("#slate-panel-header-row [data-offseason-resume]").forEach((el) => {
+          const resume = String(el.getAttribute("data-offseason-resume") || "").trim();
+          if (resume && today < resume) el.classList.add("inactive-sport");
+          else el.classList.remove("inactive-sport");
+        });
+      } catch (e) {}
+    })();
+    </script>
 
     <!-- EXPAND PANELS — one per sport -->
     <div class="slate-expand" id="sp-nba">
@@ -3683,6 +3702,18 @@ function getDefaultBootSlateSport() {
   }
   return "wnba";
 }
+function applyOffseasonSportCards() {
+  const today = ymdInEastern(new Date());
+  ["cbb", "cfb", "nfl", "wcbb"].forEach((id) => {
+    document.getElementById(`sc-${id}`)?.classList.add("inactive-sport");
+  });
+  if (!today) return;
+  document.querySelectorAll("#slate-panel-header-row [data-offseason-resume]").forEach((el) => {
+    const resume = String(el.getAttribute("data-offseason-resume") || "").trim();
+    if (resume && today < resume) el.classList.add("inactive-sport");
+    else el.classList.remove("inactive-sport");
+  });
+}
 
 /** Tennis always targets the next ET calendar day (tomorrow's board). */
 function ymdTomorrowEt() {
@@ -3807,6 +3838,7 @@ async function refreshStatus() {
   const statusIds = ["nba", "nba1h", "nba1q", "cbb", "cfb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
   if (!d) {
     for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
+    applyOffseasonSportCards();
     return;
   }
   const strictGameDay = {};
@@ -3842,6 +3874,7 @@ async function refreshStatus() {
   if (tennisVal && tennisMd) tennisVal.textContent = tennisMd;
   applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate", statusOpts("wnba"));
   applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
+  applyOffseasonSportCards();
 }
 setInterval(refreshStatus, 60000);
 refreshStatus();
@@ -5460,16 +5493,11 @@ function sortSlateDynamic(sport, key) {
 
 <script>
 (function initHomePipelineAndDefaults() {
-  const OFFSEASON_IDS = getOffseasonSportIds();
-
   function bindOffseasonToggle() {
     const headerRow = document.getElementById("slate-panel-header-row");
     const toggleBtn = document.getElementById("pipeline-offseason-toggle");
     if (!headerRow || !toggleBtn) return;
-    OFFSEASON_IDS.forEach((id) => {
-      const card = document.getElementById(`sc-${id}`);
-      if (card) card.classList.add("inactive-sport");
-    });
+    applyOffseasonSportCards();
     const syncText = () => {
       const showing = headerRow.classList.contains("show-inactive");
       toggleBtn.textContent = showing ? "Hide off-season" : "Show off-season";
