@@ -36,9 +36,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a14;color:var(--text);min-hei
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 header,.main{position:relative;z-index:1}
 
-header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
-box-shadow:0 8px 32px rgba(0,0,0,.28)}
+header{background:transparent;border:none;border-radius:0;padding:12px 20px 0;display:flex;flex-direction:column;align-items:stretch;gap:0;box-shadow:none}
 .slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
 .grades-hub-toolbar-host{flex:1 1 100%;align-self:stretch;width:100%;max-width:100%;min-height:0;box-sizing:border-box}
 .logo{display:flex;align-items:center;gap:14px}
@@ -134,8 +132,14 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.04)}
 td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px)}
 .rate-cell{display:flex;align-items:center;gap:10px}
-.rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
-.rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.rate-bar-bg{display:flex;flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.rate-bar-fill{height:100%;flex-shrink:0;transition:width .4s}
+.rate-bar-fill:only-child{border-radius:3px}
+.rate-bar-fill:first-child:not(:last-child){border-radius:3px 0 0 3px}
+.rate-bar-fill:last-child:not(:first-child){border-radius:0 3px 3px 0}
+.rate-bar-fill--hit{background:var(--green)}
+.rate-bar-fill--miss{background:var(--red)}
+.rate-bar-fill--empty{background:rgba(255,255,255,.06)}
 .rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
 .chip{display:inline-flex;align-items:center;flex-shrink:0;min-width:max-content;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.35px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd);box-sizing:border-box;vertical-align:middle;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important;max-width:none}
@@ -261,7 +265,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">233</td>
           <td class="right mono neg">195</td>
           <td class="mono right">54.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.4%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:54.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:45.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -270,7 +274,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">91</td>
           <td class="right mono neg">66</td>
           <td class="mono right">58.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.0%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:58.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:42.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -279,7 +283,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">83</td>
           <td class="right mono neg">73</td>
           <td class="mono right">53.2%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.2%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:53.2%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:46.8%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -288,7 +292,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">56</td>
           <td class="right mono neg">49</td>
           <td class="mono right">53.3%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.3%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:53.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:46.7%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -297,7 +301,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">0</td>
           <td class="right mono neg">2</td>
           <td class="mono right">0.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -306,7 +310,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">54</td>
           <td class="right mono neg">36</td>
           <td class="mono right">60.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.0%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:60.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:40.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -315,7 +319,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">28</td>
           <td class="right mono neg">23</td>
           <td class="mono right">54.9%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.9%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:54.9%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:45.1%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -324,7 +328,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">30</td>
           <td class="right mono neg">26</td>
           <td class="mono right">53.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.6%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:53.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:46.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -333,7 +337,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">217</td>
           <td class="right mono neg">118</td>
           <td class="mono right">64.8%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.8%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:64.8%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:35.2%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -342,7 +346,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">767</td>
           <td class="right mono neg">406</td>
           <td class="mono right">65.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.4%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:65.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:34.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -351,7 +355,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">184</td>
           <td class="right mono neg">89</td>
           <td class="mono right">67.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:67.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:32.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -360,7 +364,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">68</td>
           <td class="right mono neg">94</td>
           <td class="mono right">42.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:42.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:42.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:58.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -369,7 +373,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">107</td>
           <td class="right mono neg">285</td>
           <td class="mono right">27.3%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:27.3%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:27.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:72.7%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -378,7 +382,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">112</td>
           <td class="right mono neg">489</td>
           <td class="mono right">18.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.6%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:18.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:81.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -387,7 +391,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">112</td>
           <td class="right mono neg">363</td>
           <td class="mono right">23.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:23.6%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:23.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:76.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -396,7 +400,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">1,030</td>
           <td class="right mono neg">3,475</td>
           <td class="mono right">22.9%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:22.9%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:22.9%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:77.1%;background:var(--red)"></div></div></td>
         </tr></tbody>
         </table></div>
       </div>
@@ -445,7 +449,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">3</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
         </tr><tr>
           <td><strong>Jackson Merrill</strong></td>
           <td class="mono muted">SD</td>
@@ -453,7 +457,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">26</td>
           <td class="right mono pos">23</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:88.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">88.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:88.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:11.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">88.5%</div></div></td>
         </tr><tr>
           <td><strong>Carla Leite</strong></td>
           <td class="mono muted">PDX</td>
@@ -461,7 +465,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">48</td>
           <td class="right mono pos">42</td>
           <td class="right mono neg">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:87.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:12.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
         </tr><tr>
           <td><strong>Cody Bellinger</strong></td>
           <td class="mono muted">NYY</td>
@@ -469,7 +473,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">23</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:87.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:13.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">87.0%</div></div></td>
         </tr><tr>
           <td><strong>Dominic Canzone</strong></td>
           <td class="mono muted">SEA</td>
@@ -477,7 +481,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">19</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:86.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">86.4%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:86.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:13.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">86.4%</div></div></td>
         </tr><tr>
           <td><strong>Natisha Hiedeman</strong></td>
           <td class="mono muted">SEA</td>
@@ -485,7 +489,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">49</td>
           <td class="right mono pos">42</td>
           <td class="right mono neg">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:85.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:14.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
         </tr><tr>
           <td><strong>Joe Mack</strong></td>
           <td class="mono muted">MIA</td>
@@ -493,7 +497,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">17</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:85.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:15.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">85.0%</div></div></td>
         </tr><tr>
           <td><strong>Kyle Stowers</strong></td>
           <td class="mono muted">MIA</td>
@@ -501,7 +505,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:83.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -516,7 +520,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">27</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">27</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Luis García Jr.</strong></td>
           <td class="mono muted">WSH</td>
@@ -524,7 +528,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Daylen Lile</strong></td>
           <td class="mono muted">WSH</td>
@@ -532,7 +536,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Carlos Cortes</strong></td>
           <td class="mono muted">ATH</td>
@@ -540,7 +544,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Max Muncy</strong></td>
           <td class="mono muted">LAD</td>
@@ -548,7 +552,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Adley Rutschman</strong></td>
           <td class="mono muted">BAL</td>
@@ -556,7 +560,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">21</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Edouard Julien</strong></td>
           <td class="mono muted">COL</td>
@@ -564,7 +568,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">21</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Kameron Misner</strong></td>
           <td class="mono muted">KC</td>
@@ -572,7 +576,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">20</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -825,7 +829,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">23</td>
           <td class="right mono neg">23</td>
           <td class="mono right">50.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:50.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:50.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -834,7 +838,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">2</td>
           <td class="right mono neg">9</td>
           <td class="mono right">18.2%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.2%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:18.2%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:81.8%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -843,7 +847,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">81</td>
           <td class="right mono neg">73</td>
           <td class="mono right">52.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.6%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:52.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:47.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -852,7 +856,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">2</td>
           <td class="right mono neg">1</td>
           <td class="mono right">66.7%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:66.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:33.3%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-empty">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -870,7 +874,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">54</td>
           <td class="right mono neg">34</td>
           <td class="mono right">61.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.4%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:61.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:38.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-empty">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -888,7 +892,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">30</td>
           <td class="right mono neg">24</td>
           <td class="mono right">55.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.6%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:55.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:44.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -897,7 +901,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">29</td>
           <td class="right mono neg">24</td>
           <td class="mono right">54.7%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.7%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:54.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:45.3%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -906,7 +910,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">654</td>
           <td class="right mono neg">326</td>
           <td class="mono right">66.7%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:66.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:33.3%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -915,7 +919,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">91</td>
           <td class="right mono neg">28</td>
           <td class="mono right">76.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.5%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:76.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:23.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -924,7 +928,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">8</td>
           <td class="right mono neg">6</td>
           <td class="mono right">57.1%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:57.1%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:42.9%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -933,7 +937,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">66</td>
           <td class="right mono neg">204</td>
           <td class="mono right">24.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.4%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:24.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:75.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -942,7 +946,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">46</td>
           <td class="right mono neg">241</td>
           <td class="mono right">16.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:16.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:16.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:84.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -951,7 +955,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">3</td>
           <td class="right mono neg">52</td>
           <td class="mono right">5.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:5.5%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:5.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:94.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -960,7 +964,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">963</td>
           <td class="right mono neg">3,011</td>
           <td class="mono right">24.2%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.2%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:24.2%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:75.8%;background:var(--red)"></div></div></td>
         </tr></tbody>
         </table></div>
       </div>
@@ -985,7 +989,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">3</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
         </tr><tr>
           <td><strong>Jackson Merrill</strong></td>
           <td class="mono muted">SD</td>
@@ -993,7 +997,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">26</td>
           <td class="right mono pos">23</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:88.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">88.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:88.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:11.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">88.5%</div></div></td>
         </tr><tr>
           <td><strong>Cody Bellinger</strong></td>
           <td class="mono muted">NYY</td>
@@ -1001,7 +1005,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">23</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:87.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:13.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">87.0%</div></div></td>
         </tr><tr>
           <td><strong>Dominic Canzone</strong></td>
           <td class="mono muted">SEA</td>
@@ -1009,7 +1013,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">19</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:86.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">86.4%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:86.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:13.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">86.4%</div></div></td>
         </tr><tr>
           <td><strong>Joe Mack</strong></td>
           <td class="mono muted">MIA</td>
@@ -1017,7 +1021,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">17</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:85.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:15.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">85.0%</div></div></td>
         </tr><tr>
           <td><strong>Kyle Stowers</strong></td>
           <td class="mono muted">MIA</td>
@@ -1025,7 +1029,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:83.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
         </tr><tr>
           <td><strong>Christian Yelich</strong></td>
           <td class="mono muted">MIL</td>
@@ -1033,7 +1037,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:83.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
         </tr><tr>
           <td><strong>Carter Jensen</strong></td>
           <td class="mono muted">KC</td>
@@ -1041,7 +1045,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">20</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:83.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1056,7 +1060,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">27</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">27</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Luis García Jr.</strong></td>
           <td class="mono muted">WSH</td>
@@ -1064,7 +1068,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Daylen Lile</strong></td>
           <td class="mono muted">WSH</td>
@@ -1072,7 +1076,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Carlos Cortes</strong></td>
           <td class="mono muted">ATH</td>
@@ -1080,7 +1084,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Max Muncy</strong></td>
           <td class="mono muted">LAD</td>
@@ -1088,7 +1092,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Adley Rutschman</strong></td>
           <td class="mono muted">BAL</td>
@@ -1096,7 +1100,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">21</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Edouard Julien</strong></td>
           <td class="mono muted">COL</td>
@@ -1104,7 +1108,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">21</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Kameron Misner</strong></td>
           <td class="mono muted">KC</td>
@@ -1112,7 +1116,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">20</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1150,7 +1154,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">210</td>
           <td class="right mono neg">172</td>
           <td class="mono right">55.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.0%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:55.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:45.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -1159,7 +1163,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">87</td>
           <td class="right mono neg">53</td>
           <td class="mono right">62.1%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.1%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:62.1%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:37.9%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -1168,7 +1172,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">2</td>
           <td class="right mono neg">0</td>
           <td class="mono right">100.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:100.0%;background:var(--green)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -1177,7 +1181,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">54</td>
           <td class="right mono neg">48</td>
           <td class="mono right">52.9%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.9%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:52.9%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:47.1%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -1186,7 +1190,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">0</td>
           <td class="right mono neg">2</td>
           <td class="mono right">0.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -1195,7 +1199,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">0</td>
           <td class="right mono neg">2</td>
           <td class="mono right">0.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -1204,7 +1208,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">23</td>
           <td class="right mono neg">15</td>
           <td class="mono right">60.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.5%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:60.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:39.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss matrix-sparse">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -1213,7 +1217,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">0</td>
           <td class="right mono neg">2</td>
           <td class="mono right">0.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -1222,7 +1226,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">188</td>
           <td class="right mono neg">94</td>
           <td class="mono right">66.7%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:66.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:33.3%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -1231,7 +1235,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">113</td>
           <td class="right mono neg">80</td>
           <td class="mono right">58.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.5%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:58.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:41.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-hit">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -1240,7 +1244,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">93</td>
           <td class="right mono neg">61</td>
           <td class="mono right">60.4%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.4%;background:var(--green)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:60.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:39.6%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-warn">
           <td><span class="chip chip-goblin">🎃 Goblin</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -1249,7 +1253,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">24</td>
           <td class="right mono neg">17</td>
           <td class="mono right">58.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.5%;background:var(--gold)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:58.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:41.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -1258,7 +1262,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">41</td>
           <td class="right mono neg">81</td>
           <td class="mono right">33.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.6%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:33.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:66.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -1267,7 +1271,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">66</td>
           <td class="right mono neg">248</td>
           <td class="mono right">21.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:21.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:79.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-c">TIER C</span></td>
@@ -1276,7 +1280,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">109</td>
           <td class="right mono neg">311</td>
           <td class="mono right">26.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:26.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:74.0%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-miss">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -1285,7 +1289,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">50</td>
           <td class="right mono neg">306</td>
           <td class="mono right">14.0%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:14.0%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:14.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:86.0%;background:var(--red)"></div></div></td>
         </tr></tbody>
         </table></div>
       </div>
@@ -1334,7 +1338,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">48</td>
           <td class="right mono pos">42</td>
           <td class="right mono neg">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:87.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:12.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
         </tr><tr>
           <td><strong>Natisha Hiedeman</strong></td>
           <td class="mono muted">SEA</td>
@@ -1342,7 +1346,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">49</td>
           <td class="right mono pos">42</td>
           <td class="right mono neg">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:85.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:14.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
         </tr><tr>
           <td><strong>Michaela Onyenwere</strong></td>
           <td class="mono muted">WAS</td>
@@ -1350,7 +1354,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">23</td>
           <td class="right mono pos">19</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:82.6%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">82.6%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:82.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:17.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">82.6%</div></div></td>
         </tr><tr>
           <td><strong>Sonia Citron</strong></td>
           <td class="mono muted">WAS</td>
@@ -1358,7 +1362,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">50</td>
           <td class="right mono pos">39</td>
           <td class="right mono neg">11</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:78.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">78.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:78.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:22.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">78.0%</div></div></td>
         </tr><tr>
           <td><strong>Gabriela Jaquez</strong></td>
           <td class="mono muted">CHI</td>
@@ -1366,7 +1370,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">22</td>
           <td class="right mono pos">17</td>
           <td class="right mono neg">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:77.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">77.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:77.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:22.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">77.3%</div></div></td>
         </tr><tr>
           <td><strong>Leonie Fiebich</strong></td>
           <td class="mono muted">NYL</td>
@@ -1374,7 +1378,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">15</td>
           <td class="right mono neg">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:75.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">75.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:75.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">75.0%</div></div></td>
         </tr><tr>
           <td><strong>Dominique Malonga</strong></td>
           <td class="mono muted">SEA</td>
@@ -1382,7 +1386,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">35</td>
           <td class="right mono pos">26</td>
           <td class="right mono neg">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:74.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">74.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:74.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:25.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">74.3%</div></div></td>
         </tr><tr>
           <td><strong>Gabby Williams</strong></td>
           <td class="mono muted">GSV</td>
@@ -1390,7 +1394,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">49</td>
           <td class="right mono pos">34</td>
           <td class="right mono neg">15</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:69.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">69.4%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:69.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:30.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">69.4%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1405,7 +1409,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">3</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Marine Johannes</strong></td>
           <td class="mono muted">NYL</td>
@@ -1413,7 +1417,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">33</td>
           <td class="right mono pos">1</td>
           <td class="right mono neg">32</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:3.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">3.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:3.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:97.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">3.0%</div></div></td>
         </tr><tr>
           <td><strong>Monique Akoa Makani</strong></td>
           <td class="mono muted">PHX</td>
@@ -1421,7 +1425,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">42</td>
           <td class="right mono pos">2</td>
           <td class="right mono neg">40</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:4.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">4.8%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:4.8%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:95.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">4.8%</div></div></td>
         </tr><tr>
           <td><strong>Jewell Loyd</strong></td>
           <td class="mono muted">LVA</td>
@@ -1429,7 +1433,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">30</td>
           <td class="right mono pos">2</td>
           <td class="right mono neg">28</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:6.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">6.7%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:6.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:93.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">6.7%</div></div></td>
         </tr><tr>
           <td><strong>Saniya Rivers</strong></td>
           <td class="mono muted">CON</td>
@@ -1437,7 +1441,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">38</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">35</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.9%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:7.9%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:92.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.9%</div></div></td>
         </tr><tr>
           <td><strong>Nneka Ogwumike</strong></td>
           <td class="mono muted">LAS</td>
@@ -1445,7 +1449,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">55</td>
           <td class="right mono pos">5</td>
           <td class="right mono neg">50</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:9.1%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:90.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
         </tr><tr>
           <td><strong>Cecilia Zandalasini</strong></td>
           <td class="mono muted">GSV</td>
@@ -1453,7 +1457,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">32</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.4%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:9.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:90.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.4%</div></div></td>
         </tr><tr>
           <td><strong>Natasha Mack</strong></td>
           <td class="mono muted">PHX</td>
@@ -1461,7 +1465,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">38</td>
           <td class="right mono pos">4</td>
           <td class="right mono neg">34</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:10.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:10.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:89.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.5%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1508,7 +1512,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">2</td>
           <td class="right mono neg">4</td>
           <td class="mono right">33.3%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:33.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:66.7%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-empty">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-b">TIER B</span></td>
@@ -1553,7 +1557,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">5</td>
           <td class="right mono neg">8</td>
           <td class="mono right">38.5%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:38.5%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:38.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:61.5%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-empty">
           <td><span class="chip chip-std">⭐ Standard</span></td>
           <td><span class="chip chip-d">TIER D</span></td>
@@ -1598,7 +1602,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">36</td>
           <td class="right mono neg">71</td>
           <td class="mono right">33.6%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.6%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:33.6%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:66.4%;background:var(--red)"></div></div></td>
         </tr><tr class="matrix-empty">
           <td><span class="chip chip-demon">😈 Demon</span></td>
           <td><span class="chip chip-a">TIER A</span></td>
@@ -1634,7 +1638,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono pos">17</td>
           <td class="right mono neg">158</td>
           <td class="mono right">9.7%</td>
-          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.7%;background:var(--red)"></div></div></td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:9.7%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:90.3%;background:var(--red)"></div></div></td>
         </tr></tbody>
         </table></div>
       </div>
@@ -1659,7 +1663,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">14</td>
           <td class="right mono neg">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">70.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:70.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:30.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--green)">70.0%</div></div></td>
         </tr><tr>
           <td><strong>Jil Teichmann</strong></td>
           <td class="mono muted">JIL TEICHMANN</td>
@@ -1667,7 +1671,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">8</td>
           <td class="right mono pos">4</td>
           <td class="right mono neg">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:50.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:50.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
         </tr><tr>
           <td><strong>Zizou Bergs</strong></td>
           <td class="mono muted">ZIZOU BERGS</td>
@@ -1675,7 +1679,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">16</td>
           <td class="right mono pos">6</td>
           <td class="right mono neg">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:37.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:62.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
         </tr><tr>
           <td><strong>Alexandra Eala</strong></td>
           <td class="mono muted">ALEXANDRA EALA</td>
@@ -1683,7 +1687,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">19</td>
           <td class="right mono pos">7</td>
           <td class="right mono neg">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.8%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:36.8%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:63.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.8%</div></div></td>
         </tr><tr>
           <td><strong>Arthur Fery</strong></td>
           <td class="mono muted">ARTHUR FERY</td>
@@ -1691,7 +1695,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">20</td>
           <td class="right mono pos">6</td>
           <td class="right mono neg">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:30.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">30.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:30.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:70.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">30.0%</div></div></td>
         </tr><tr>
           <td><strong>Fiona Ferro</strong></td>
           <td class="mono muted">FIONA FERRO</td>
@@ -1699,7 +1703,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">8</td>
           <td class="right mono pos">2</td>
           <td class="right mono neg">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:25.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:75.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
         </tr><tr>
           <td><strong>Adrian Mannarino</strong></td>
           <td class="mono muted">ADRIAN MANNARINO</td>
@@ -1707,7 +1711,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">13</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:23.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">23.1%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:23.1%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:76.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">23.1%</div></div></td>
         </tr><tr>
           <td><strong>Hubert Hurkacz</strong></td>
           <td class="mono muted">HUBERT HURKACZ</td>
@@ -1715,7 +1719,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">14</td>
           <td class="right mono pos">3</td>
           <td class="right mono neg">11</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.4%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:21.4%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:78.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.4%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1730,7 +1734,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">17</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">17</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Donna Vekic</strong></td>
           <td class="mono muted">DONNA VEKIC</td>
@@ -1738,7 +1742,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">14</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Ignacio Buse</strong></td>
           <td class="mono muted">IGNACIO BUSE</td>
@@ -1746,7 +1750,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">13</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Alex de Minaur</strong></td>
           <td class="mono muted">ALEX DE MINAUR</td>
@@ -1754,7 +1758,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">10</td>
           <td class="right mono pos">0</td>
           <td class="right mono neg">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--miss" style="width:100.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
         </tr><tr>
           <td><strong>Jenson Brooksby</strong></td>
           <td class="mono muted">JENSON BROOKSBY</td>
@@ -1762,7 +1766,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">14</td>
           <td class="right mono pos">1</td>
           <td class="right mono neg">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.1%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:7.1%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:92.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.1%</div></div></td>
         </tr><tr>
           <td><strong>Daniil Medvedev</strong></td>
           <td class="mono muted">DANIIL MEDVEDEV</td>
@@ -1770,7 +1774,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">24</td>
           <td class="right mono pos">2</td>
           <td class="right mono neg">22</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:8.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">8.3%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:8.3%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:91.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">8.3%</div></div></td>
         </tr><tr>
           <td><strong>Sho Shimabukuro</strong></td>
           <td class="mono muted">SHO SHIMABUKURO</td>
@@ -1778,7 +1782,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">10</td>
           <td class="right mono pos">1</td>
           <td class="right mono neg">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:10.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.0%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:10.0%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:90.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.0%</div></div></td>
         </tr><tr>
           <td><strong>Francisco Cerundolo</strong></td>
           <td class="mono muted">FRANCISCO CERUNDOLO</td>
@@ -1786,7 +1790,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">19</td>
           <td class="right mono pos">2</td>
           <td class="right mono neg">17</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:10.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.5%</div></div></td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill rate-bar-fill--hit" style="width:10.5%;background:var(--green)"></div><div class="rate-bar-fill rate-bar-fill--miss" style="width:89.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.5%</div></div></td>
         </tr></tbody>
     </table></div>
       </div>
@@ -1856,12 +1860,63 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
   }
   function barPct(tr, c) {
     var td = tr.cells[c];
+    var hitFill = td.querySelector(".rate-bar-fill--hit");
+    if (hitFill && hitFill.style && hitFill.style.width) {
+      var hw = parseFloat(hitFill.style.width);
+      if (!isNaN(hw)) return hw;
+    }
     var fill = td.querySelector(".rate-bar-fill");
     if (fill && fill.style && fill.style.width) {
       var w = parseFloat(fill.style.width);
       if (!isNaN(w)) return w;
     }
     return pctCell(tr, c);
+  }
+  function hydrateStackedRateBars(table) {
+    var ths = table.querySelectorAll("thead th");
+    if (!ths.length) return;
+    var headers = Array.prototype.map.call(ths, function (th) {
+      return (th.textContent || "").trim().toUpperCase();
+    });
+    var hi = headers.indexOf("H");
+    if (hi < 0) hi = headers.indexOf("HITS");
+    var mi = headers.indexOf("M");
+    if (mi < 0) mi = headers.indexOf("MISSES");
+    if (hi < 0 || mi < 0) return;
+    var rateIdx = -1;
+    for (var i = 0; i < headers.length; i++) {
+      if (headers[i] === "RATE" || headers[i].indexOf("HIT RATE") >= 0) {
+        rateIdx = i;
+        break;
+      }
+    }
+    var barIdx = headers.indexOf("BAR");
+    table.querySelectorAll("tbody tr").forEach(function (tr) {
+      var h = parseInt((tr.cells[hi].textContent || "").replace(/,/g, ""), 10) || 0;
+      var m = parseInt((tr.cells[mi].textContent || "").replace(/,/g, ""), 10) || 0;
+      var tot = h + m;
+      if (tot <= 0) return;
+      var hitPct = h / tot * 100;
+      var missPct = m / tot * 100;
+      var cell = null;
+      if (rateIdx >= 0 && tr.cells[rateIdx]) {
+        cell = tr.cells[rateIdx];
+      } else if (barIdx >= 0 && tr.cells[barIdx]) {
+        cell = tr.cells[barIdx];
+      }
+      if (!cell) return;
+      var bg = cell.querySelector(".rate-bar-bg");
+      if (!bg) return;
+      var segs = "";
+      if (hitPct > 0) {
+        segs += '<div class="rate-bar-fill rate-bar-fill--hit" style="width:' + hitPct.toFixed(1) + '%;background:var(--green)"></div>';
+      }
+      if (missPct > 0) {
+        segs += '<div class="rate-bar-fill rate-bar-fill--miss" style="width:' + missPct.toFixed(1) + '%;background:var(--red)"></div>';
+      }
+      bg.style.display = "flex";
+      bg.innerHTML = segs;
+    });
   }
   var extractors = {
     pick: pickOrder,
@@ -1886,6 +1941,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
     return 0;
   }
   function initTable(table) {
+    hydrateStackedRateBars(table);
     var ths = table.querySelectorAll("thead th[data-sort-key]");
     ths.forEach(function (th) {
       th.setAttribute("tabindex", "0");
@@ -1918,6 +1974,9 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
     });
   }
   document.querySelectorAll("table.table-sortable").forEach(initTable);
+  document.querySelectorAll("table").forEach(function (table) {
+    if (!table.classList.contains("table-sortable")) hydrateStackedRateBars(table);
+  });
 })();
 </script>
 

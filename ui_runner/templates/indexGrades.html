@@ -2462,7 +2462,56 @@ function ensureFrameCollapseCss(doc) {
       letter-spacing:1px;
       opacity:.72;
     }
+    /* Hit/miss rate bars — hub hydrates stacked fills for all slate_eval vintages. */
+    .rate-cell{display:flex!important;align-items:center!important;gap:10px!important;min-width:9rem!important}
+    .rate-bar-bg{display:flex!important;flex:1 1 auto!important;height:8px!important;min-width:3rem!important;
+      background:rgba(255,255,255,.12)!important;border-radius:4px!important;overflow:hidden!important}
+    .rate-bar-fill{height:100%!important;flex-shrink:0!important;min-height:8px!important}
+    .rate-bar-fill--hit,.rate-bar-fill[style*="--green"]{background:#39ff6e!important}
+    .rate-bar-fill--miss,.rate-bar-fill[style*="--red"]{background:#ff4d4d!important}
+    .rate-num{flex-shrink:0!important;min-width:48px!important;text-align:right!important}
   `;
+}
+
+/** Rebuild rate bars from H/M columns (fixes 0% width:0 blank bars on cached slate_eval HTML). */
+function hydrateStackedRateBarsInDoc(doc) {
+  if (!doc) return;
+  doc.querySelectorAll('table').forEach((table) => {
+    const ths = table.querySelectorAll('thead th');
+    if (!ths.length) return;
+    const headers = Array.from(ths).map((th) => (th.textContent || '').trim().toUpperCase());
+    let hi = headers.indexOf('H');
+    if (hi < 0) hi = headers.indexOf('HITS');
+    let mi = headers.indexOf('M');
+    if (mi < 0) mi = headers.indexOf('MISSES');
+    if (hi < 0 || mi < 0) return;
+    let rateIdx = headers.findIndex((h) => h === 'RATE' || h.indexOf('HIT RATE') >= 0);
+    const barIdx = headers.indexOf('BAR');
+    table.querySelectorAll('tbody tr').forEach((tr) => {
+      if (!tr.cells || tr.cells.length <= Math.max(hi, mi)) return;
+      const h = parseInt((tr.cells[hi].textContent || '').replace(/,/g, ''), 10) || 0;
+      const m = parseInt((tr.cells[mi].textContent || '').replace(/,/g, ''), 10) || 0;
+      const tot = h + m;
+      if (tot <= 0) return;
+      const hitPct = (h / tot) * 100;
+      const missPct = (m / tot) * 100;
+      let cell = null;
+      if (rateIdx >= 0 && tr.cells[rateIdx]) cell = tr.cells[rateIdx];
+      else if (barIdx >= 0 && tr.cells[barIdx]) cell = tr.cells[barIdx];
+      if (!cell) return;
+      const bg = cell.querySelector('.rate-bar-bg');
+      if (!bg) return;
+      let segs = '';
+      if (hitPct > 0) {
+        segs += `<div class="rate-bar-fill rate-bar-fill--hit" style="width:${hitPct.toFixed(1)}%;background:#39ff6e"></div>`;
+      }
+      if (missPct > 0) {
+        segs += `<div class="rate-bar-fill rate-bar-fill--miss" style="width:${missPct.toFixed(1)}%;background:#ff4d4d"></div>`;
+      }
+      bg.style.display = 'flex';
+      bg.innerHTML = segs;
+    });
+  });
 }
 
 function gradesFrameMobileLayout() {
@@ -2537,6 +2586,7 @@ function collapseSportsInSlateFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
   ensureFrameCollapseCss(doc);
+  hydrateStackedRateBarsInDoc(doc);
   unwrapDoubleWrappedNativeSports(doc);
   const sections = Array.from(doc.querySelectorAll('.sport-section')).filter(
     el => !el.closest('.grades-sport-bucket')

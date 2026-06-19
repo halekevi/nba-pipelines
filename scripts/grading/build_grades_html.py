@@ -91,13 +91,58 @@ def rate_color(f: float) -> str:
     if f >= 50: return "var(--gold)"
     return "var(--red)"
 
-def rate_bar_html(f: float) -> str:
-    col = rate_color(f)
+def _stacked_bar_inner(hit_pct: float, miss_pct: float) -> str:
+    """Green = hits share, red = misses share; always spans 100% when either segment exists."""
+    parts: list[str] = []
+    if hit_pct > 0:
+        parts.append(
+            f'<div class="rate-bar-fill rate-bar-fill--hit" '
+            f'style="width:{hit_pct:.1f}%;background:var(--green)"></div>'
+        )
+    if miss_pct > 0:
+        parts.append(
+            f'<div class="rate-bar-fill rate-bar-fill--miss" '
+            f'style="width:{miss_pct:.1f}%;background:var(--red)"></div>'
+        )
+    if not parts:
+        return '<div class="rate-bar-fill rate-bar-fill--empty" style="width:100%"></div>'
+    return "".join(parts)
+
+
+def rate_bar_html(f: float, *, hits: int | None = None, misses: int | None = None) -> str:
+    decided = 0
+    if hits is not None and misses is not None:
+        decided = int(hits) + int(misses)
+        if decided > 0:
+            hit_pct = int(hits) / decided * 100.0
+            miss_pct = int(misses) / decided * 100.0
+            f = hit_pct
+            inner = _stacked_bar_inner(hit_pct, miss_pct)
+        else:
+            inner = _stacked_bar_inner(0.0, 0.0)
+    else:
+        hit_pct = min(max(float(f), 0.0), 100.0)
+        col = rate_color(f)
+        inner = f'<div class="rate-bar-fill" style="width:{hit_pct:.1f}%;background:{col}"></div>'
     txt = "var(--red)" if f < 50 else ("var(--gold)" if f < 58 else "var(--green)")
-    return (f'<div class="rate-cell">'
-            f'<div class="rate-bar-bg"><div class="rate-bar-fill" style="width:{min(f,100):.1f}%;background:{col}"></div></div>'
-            f'<div class="rate-num" style="color:{txt}">{f:.1f}%</div>'
-            f'</div>')
+    return (
+        f'<div class="rate-cell">'
+        f'<div class="rate-bar-bg">{inner}</div>'
+        f'<div class="rate-num" style="color:{txt}">{f:.1f}%</div>'
+        f'</div>'
+    )
+
+
+def stacked_rate_bar_bg(hits: int, misses: int) -> str:
+    decided = int(hits) + int(misses)
+    if decided <= 0:
+        inner = '<div class="rate-bar-fill rate-bar-fill--empty" style="width:100%"></div>'
+    else:
+        inner = _stacked_bar_inner(
+            int(hits) / decided * 100.0,
+            int(misses) / decided * 100.0,
+        )
+    return f'<div class="rate-bar-bg">{inner}</div>'
 
 def safe_int(v: Any) -> int:
     try: return int(float(str(v).replace(",","")))
@@ -1290,11 +1335,7 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
         row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
         if d < int(min_decided):
             row_cls += " matrix-sparse"
-        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
-        bar_html = (
-            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
-            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
-        )
+        bar_html = stacked_rate_bar_bg(h_, m_)
         body_rows += f"""<tr class="{row_cls}">
           <td>{pt_chip}</td>
           <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier_u}</span></td>
@@ -1341,13 +1382,14 @@ def pick_type_row(label: str, icon: str, agg: dict, extra_html: str = "") -> str
       <td class="right mono">{fmt_num(d)}</td>
       <td class="right mono pos">{fmt_num(h_)}</td>
       <td class="right mono neg">{fmt_num(m)}</td>
-      <td>{rate_bar_html(hr)}</td>
+      <td>{rate_bar_html(hr, hits=h_, misses=m)}</td>
     </tr>"""
 
 
 def tier_row(tier: str, agg: dict, extra: str = "") -> str:
     d   = agg["decided"]
     h_  = agg["hits"]
+    m   = agg.get("misses", max(0, d - h_))
     hr  = agg["hit_rate"]
     row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
     chip_cls = {"A":"chip-a","B":"chip-b","C":"chip-c"}.get(tier.upper(), "chip-d")
@@ -1366,7 +1408,7 @@ def tier_row(tier: str, agg: dict, extra: str = "") -> str:
       <div style="font-size:12px;color:var(--muted2);margin-top:4px">{dir_html}{extra}</div></td>
       <td class="right mono">{fmt_num(d)}</td>
       <td class="right mono pos">{fmt_num(h_)}</td>
-      <td>{rate_bar_html(hr)}</td>
+      <td>{rate_bar_html(hr, hits=h_, misses=m)}</td>
     </tr>"""
 
 
@@ -1382,7 +1424,7 @@ def prop_type_table(data: list[dict], label: str, min_decided: int = 10) -> str:
           <td class="mono">{h(d['key'])}</td>
           <td class="right mono">{fmt_num(d['decided'])}</td>
           <td class="right mono pos">{fmt_num(d['hits'])}</td>
-          <td>{rate_bar_html(d['hit_rate'])}</td>
+          <td>{rate_bar_html(d['hit_rate'], hits=d['hits'], misses=d.get('misses', max(0, d['decided'] - d['hits'])))}</td>
         </tr>"""
     return f"""<div class="table-wrap"><table>
       <thead><tr><th>{label}</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -1471,7 +1513,7 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
           <td class="right mono">{fmt_num(c['decided'])}</td>
           <td class="right mono pos">{fmt_num(c['hits'])}</td>
           <td class="right mono neg">{fmt_num(c['misses'])}</td>
-          <td>{rate_bar_html(c['hit_rate'])}</td>
+          <td>{rate_bar_html(c['hit_rate'], hits=c['hits'], misses=c['misses'])}</td>
         </tr>"""
     return f"""<div class="table-wrap"><table>
       <thead><tr><th>PLAYER</th><th>TEAM</th><th>PROPS</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
@@ -1960,8 +2002,14 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.04)}
 td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px)}
 .rate-cell{display:flex;align-items:center;gap:10px}
-.rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
-.rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.rate-bar-bg{display:flex;flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.rate-bar-fill{height:100%;flex-shrink:0;transition:width .4s}
+.rate-bar-fill:only-child{border-radius:3px}
+.rate-bar-fill:first-child:not(:last-child){border-radius:3px 0 0 3px}
+.rate-bar-fill:last-child:not(:first-child){border-radius:0 3px 3px 0}
+.rate-bar-fill--hit{background:var(--green)}
+.rate-bar-fill--miss{background:var(--red)}
+.rate-bar-fill--empty{background:rgba(255,255,255,.06)}
 .rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
 .chip{display:inline-flex;align-items:center;flex-shrink:0;min-width:max-content;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.35px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd);box-sizing:border-box;vertical-align:middle;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important;max-width:none}
@@ -2084,12 +2132,63 @@ TABLE_SORT_JS = """
   }
   function barPct(tr, c) {
     var td = tr.cells[c];
+    var hitFill = td.querySelector(".rate-bar-fill--hit");
+    if (hitFill && hitFill.style && hitFill.style.width) {
+      var hw = parseFloat(hitFill.style.width);
+      if (!isNaN(hw)) return hw;
+    }
     var fill = td.querySelector(".rate-bar-fill");
     if (fill && fill.style && fill.style.width) {
       var w = parseFloat(fill.style.width);
       if (!isNaN(w)) return w;
     }
     return pctCell(tr, c);
+  }
+  function hydrateStackedRateBars(table) {
+    var ths = table.querySelectorAll("thead th");
+    if (!ths.length) return;
+    var headers = Array.prototype.map.call(ths, function (th) {
+      return (th.textContent || "").trim().toUpperCase();
+    });
+    var hi = headers.indexOf("H");
+    if (hi < 0) hi = headers.indexOf("HITS");
+    var mi = headers.indexOf("M");
+    if (mi < 0) mi = headers.indexOf("MISSES");
+    if (hi < 0 || mi < 0) return;
+    var rateIdx = -1;
+    for (var i = 0; i < headers.length; i++) {
+      if (headers[i] === "RATE" || headers[i].indexOf("HIT RATE") >= 0) {
+        rateIdx = i;
+        break;
+      }
+    }
+    var barIdx = headers.indexOf("BAR");
+    table.querySelectorAll("tbody tr").forEach(function (tr) {
+      var h = parseInt((tr.cells[hi].textContent || "").replace(/,/g, ""), 10) || 0;
+      var m = parseInt((tr.cells[mi].textContent || "").replace(/,/g, ""), 10) || 0;
+      var tot = h + m;
+      if (tot <= 0) return;
+      var hitPct = h / tot * 100;
+      var missPct = m / tot * 100;
+      var cell = null;
+      if (rateIdx >= 0 && tr.cells[rateIdx]) {
+        cell = tr.cells[rateIdx];
+      } else if (barIdx >= 0 && tr.cells[barIdx]) {
+        cell = tr.cells[barIdx];
+      }
+      if (!cell) return;
+      var bg = cell.querySelector(".rate-bar-bg");
+      if (!bg) return;
+      var segs = "";
+      if (hitPct > 0) {
+        segs += '<div class="rate-bar-fill rate-bar-fill--hit" style="width:' + hitPct.toFixed(1) + '%;background:var(--green)"></div>';
+      }
+      if (missPct > 0) {
+        segs += '<div class="rate-bar-fill rate-bar-fill--miss" style="width:' + missPct.toFixed(1) + '%;background:var(--red)"></div>';
+      }
+      bg.style.display = "flex";
+      bg.innerHTML = segs;
+    });
   }
   var extractors = {
     pick: pickOrder,
@@ -2114,6 +2213,7 @@ TABLE_SORT_JS = """
     return 0;
   }
   function initTable(table) {
+    hydrateStackedRateBars(table);
     var ths = table.querySelectorAll("thead th[data-sort-key]");
     ths.forEach(function (th) {
       th.setAttribute("tabindex", "0");
@@ -2146,6 +2246,9 @@ TABLE_SORT_JS = """
     });
   }
   document.querySelectorAll("table.table-sortable").forEach(initTable);
+  document.querySelectorAll("table").forEach(function (table) {
+    if (!table.classList.contains("table-sortable")) hydrateStackedRateBars(table);
+  });
 })();
 </script>
 """
