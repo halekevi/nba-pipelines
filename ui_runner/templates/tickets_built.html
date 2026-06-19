@@ -16,7 +16,6 @@
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/tickets-built-content.css?v=20260520pwin1"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260522gradesframe"/>
-<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260515utp4"/>
 <link rel="stylesheet" href="/static/tickets-redesign.css?v=20260526rd1"/>
 </head>
 <body class="page-tickets">
@@ -35,37 +34,9 @@
 <div id="app" class="page-tickets">
 {# Slips, empirical payout panel (sweep multiplier), and filter pills including TOP PAYOUT are rendered by scripts/combined_slate_tickets.render_tickets_body_html #}
 {{ tickets_body|safe }}
-
-{# Uniform-bucket tickets — toggle in filter bar; panel docks below it via JS. #}
-{% include '_uniform_tickets_panel_tickets.html' %}
 </div>
 
-<script>
-(function () {
-  if (!document.body.classList.contains('page-tickets')) return;
-  document.querySelectorAll('.page-tickets .utp-root').forEach(function (root) {
-    if (!root.getAttribute('data-mode')) root.setAttribute('data-mode', 'tickets');
-    root.querySelectorAll('.utp-toggle').forEach(function (el) { el.remove(); });
-  });
-  var bar = document.querySelector('.tickets-built .ticket-filter-bar');
-  if (!bar || bar.querySelector('[data-utp="toggle"]')) return;
-  var btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'ticket-filter-bar-action utp-bar-toggle';
-  btn.id = 'uniform-buckets-toggle';
-  btn.setAttribute('data-utp', 'toggle');
-  btn.setAttribute('aria-expanded', 'false');
-  btn.setAttribute('title', "Today's tickets grouped by realized hit-rate band");
-  btn.style.borderRadius = '999px';
-  btn.textContent = '\uD83C\uDFAB UNIFORM';
-  var spacer = bar.querySelector('.ticket-filter-bar-spacer');
-  if (spacer) bar.insertBefore(btn, spacer);
-  else bar.appendChild(btn);
-})();
-</script>
-
 <script src="/static/tickets-redesign.js?v=20260609rd2" defer></script>
-<script src="/static/uniform-tickets-panel.js?v=20260515utp4" defer></script>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>

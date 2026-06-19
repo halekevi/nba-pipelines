@@ -16644,11 +16644,6 @@ def _tickets_filter_pills_html(attr_rows: list[dict], *, slate_date: str = "") -
             title_attr=' title="Highest payout × win probability (top 3 groups)"',
         )
     )
-    chunks.append(
-        '<button type="button" class="ticket-filter-bar-action utp-bar-toggle" data-utp="toggle" '
-        'id="uniform-buckets-toggle" style="border-radius:999px;" aria-expanded="false" '
-        'title="Today&apos;s tickets grouped by realized hit-rate band">🎫 UNIFORM</button>'
-    )
     chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
     chunks.append(
         '<label class="ticket-filter-sort-wrap" for="ticket-sort-select">'
@@ -17745,9 +17740,6 @@ def render_tickets_body_html(
     visible.forEach(function(g){ g.style.display = ''; frag.appendChild(g); });
     if(bar){
       var insertBefore = bar.nextElementSibling;
-      if(insertBefore && insertBefore.classList && insertBefore.classList.contains('utp-root')){
-        insertBefore = insertBefore.nextElementSibling;
-      }
       if(insertBefore){
         shell.insertBefore(frag, insertBefore);
       } else {
