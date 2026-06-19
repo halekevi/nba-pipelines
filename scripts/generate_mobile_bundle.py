@@ -3,6 +3,7 @@ import sys
 import shutil
 import re
 import json
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -130,6 +131,125 @@ def _normalize_sport_label(raw):
     s = str(raw or "").strip().upper()
     aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "CFB", "NBA1Q": "NBA", "NBA1H": "NBA"}
     return aliases.get(s, s)
+
+
+def _today_et_ymd() -> str:
+    return datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")
+
+
+_SLATE_STRICT_GAME_DAY_SPORTS = frozenset(
+    {"nhl", "nfl", "mlb", "nba1h", "nba1q", "soccer", "wnba"}
+)
+
+
+def _row_game_date_et(row: dict, target_year: int) -> str:
+    """Match home-page rowGameDateEt (ISO + MM/DD game_time)."""
+    gd = str((row or {}).get("game_date") or "").strip()[:10]
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", gd):
+        return gd
+    gt = str((row or {}).get("game_time") or "").strip()
+    m_iso = re.match(r"^(\d{4}-\d{2}-\d{2})", gt)
+    if m_iso:
+        return m_iso.group(1)
+    m_md = re.match(r"^(\d{1,2})/(\d{1,2})(?:\b|[\sT])", gt)
+    if m_md:
+        return f"{target_year}-{int(m_md.group(1)):02d}-{int(m_md.group(2)):02d}"
+    return ""
+
+
+def _sport_rows_missing_game_day(rows: list, target_ymd: str) -> bool:
+    if not isinstance(rows, list) or not rows:
+        return False
+    year = int(target_ymd[:4]) if len(target_ymd) >= 4 and target_ymd[:4].isdigit() else datetime.now().year
+    return not any(_row_game_date_et(r, year) == target_ymd for r in rows if isinstance(r, dict))
+
+
+def _outputs_have_slate_for_date(root_dir: Path, slate_date: str) -> bool:
+    """True when at least one sport step8 exists under outputs/<date>/."""
+    day_dir = root_dir / "outputs" / slate_date
+    if not day_dir.is_dir():
+        return False
+    patterns = (
+        "nba/step8_all_direction_clean.xlsx",
+        "soccer/step8_soccer_direction_clean.xlsx",
+        "mlb/step8_mlb_direction_clean.xlsx",
+        "nhl/step8_nhl_direction_clean.xlsx",
+        "wnba/step8_wnba_direction_clean.xlsx",
+        "tennis/step8_tennis_direction_clean.xlsx",
+    )
+    return any((day_dir / p).exists() for p in patterns)
+
+
+def _slate_templates_need_refresh(templates_dir: Path, target_ymd: str) -> tuple[bool, str]:
+    slate_path = templates_dir / "slate_latest.json"
+    if not slate_path.exists():
+        return True, "missing slate_latest.json"
+    try:
+        payload = json.loads(slate_path.read_text(encoding="utf-8"))
+    except Exception:
+        return True, "unreadable slate_latest.json"
+    slate_date = str((payload or {}).get("date") or "").strip()[:10]
+    if slate_date and slate_date < target_ymd:
+        return True, f"slate date {slate_date} < today {target_ymd}"
+    sports = (payload or {}).get("sports") if isinstance(payload, dict) else {}
+    if not isinstance(sports, dict):
+        return True, "invalid sports payload"
+    stale_sports = []
+    for sid in sorted(_SLATE_STRICT_GAME_DAY_SPORTS):
+        rows = sports.get(sid) or []
+        if isinstance(rows, list) and rows and _sport_rows_missing_game_day(rows, target_ymd):
+            stale_sports.append(sid)
+    if stale_sports:
+        return True, f"strict game-day sports stale: {', '.join(stale_sports)}"
+    return False, ""
+
+
+def _refresh_slate_web_templates(root_dir: Path, templates_dir: Path, slate_date: str) -> bool:
+    script = root_dir / "scripts" / "combined_slate_tickets.py"
+    if not script.exists():
+        print(f"  [slate-refresh] missing {script}")
+        return False
+    cmd = [
+        sys.executable,
+        str(script),
+        "--date",
+        slate_date,
+        "--write-slate-web-only",
+        "--allow-cross-date-fallback",
+        "--web-outdir",
+        str(templates_dir),
+        "--tennis-date",
+        slate_date,
+    ]
+    print(f"  [slate-refresh] rebuilding slate web JSON for {slate_date} ...")
+    try:
+        proc = subprocess.run(cmd, cwd=str(root_dir), capture_output=True, text=True, check=False)
+    except Exception as exc:
+        print(f"  [slate-refresh] failed to launch combined_slate_tickets: {exc}")
+        return False
+    for line in (proc.stdout or "").splitlines():
+        if line.strip():
+            print(f"        {line}")
+    for line in (proc.stderr or "").splitlines():
+        if line.strip():
+            print(f"        {line}")
+    if proc.returncode != 0:
+        print(f"  [slate-refresh] combined_slate_tickets exited {proc.returncode}")
+        return False
+    print("  [slate-refresh] OK")
+    return True
+
+
+def _ensure_fresh_slate_templates(root_dir: Path, templates_dir: Path) -> None:
+    today_et = _today_et_ymd()
+    needs, reason = _slate_templates_need_refresh(templates_dir, today_et)
+    if not needs:
+        return
+    if not _outputs_have_slate_for_date(root_dir, today_et):
+        print(f"  [slate-refresh] skip ({reason}); no outputs/{today_et} step8 boards yet")
+        return
+    print(f"  [slate-refresh] {reason}")
+    _refresh_slate_web_templates(root_dir, templates_dir, today_et)
 
 
 def _read_template_json_date(templates_dir: Path) -> str:
@@ -396,21 +516,6 @@ def generate_bundle():
 
     if (path.includes('/api/grades/report_dates')) {
       return _origFetch('grades_report_dates.json', init);
-    }
-    if (path.includes('/api/uniform-tickets/dates')) {
-      return _origFetch('uniform_tickets_dates.json', init);
-    }
-    if (path.includes('/api/uniform-tickets/backtest')) {
-      return _origFetch('uniform_tickets_backtest.json', init);
-    }
-    if (path.includes('/api/uniform-tickets/latest')) {
-      return _origFetch('uniform_tickets_latest.json', init);
-    }
-    {
-      const m = path.match(/\\/api\\/uniform-tickets\\/(\\d{4}-\\d{2}-\\d{2})$/);
-      if (m) {
-        return _origFetch(`uniform_tickets_${m[1]}.json`, init);
-      }
     }
     if (path.includes('/api/grades/insights')) {
       return _jsonResp({ calibration: [], clv_by_sport: [], edge_bucket_hit_rate: [], clv_by_prop_type: [], clv_by_tier: [] });
@@ -817,6 +922,7 @@ async function fetch_smart(localPath) {
     )
 
     # Home page local slate source for mobile/offline bundle.
+    _ensure_fresh_slate_templates(ROOT_DIR, TEMPLATES_DIR)
     src_slate_latest = TEMPLATES_DIR / "slate_latest.json"
     if src_slate_latest.exists():
         try:
@@ -895,7 +1001,7 @@ async function fetch_smart(localPath) {
         )
 
         # Static replacement for /api/pipeline/status (used by home status cards).
-        slate_date = _read_template_json_date(TEMPLATES_DIR) or str(
+        slate_date = _today_et_ymd() or _read_template_json_date(TEMPLATES_DIR) or str(
             (slate_payload.get("date") if isinstance(slate_payload, dict) else "") or ""
         ).strip()[:10]
         modified_default = f"{slate_date} 12:00:00" if slate_date else ""

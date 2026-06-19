@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260517platform"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260523utp2"/>
 <link rel="stylesheet" href="/static/player-consistency.css?v=20260523pc"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
@@ -170,15 +169,6 @@ html.page-grades-root #props-eval-panel{
   inset:auto!important;
   width:100%!important;
   max-width:100%!important;
-}
-html.page-grades-root body.page-grades #uniform-tickets-panel:not([hidden]){
-  overflow-x:hidden!important;
-  overflow-y:visible!important;
-  -webkit-overflow-scrolling:auto!important;
-  position:relative!important;
-  inset:auto!important;
-  height:auto!important;
-  touch-action:pan-y;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
@@ -512,20 +502,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell-stage[data-grades-tab="props"] #ticket-frame-inline,
 .iframe-shell-stage[data-grades-tab="tickets"] #grade-frame,
 .iframe-shell-stage[data-grades-tab="tickets"] #grade-frame-inline,
-.iframe-shell-stage[data-grades-tab="uniform"] #grade-frame,
-.iframe-shell-stage[data-grades-tab="uniform"] #grade-frame-inline,
-.iframe-shell-stage[data-grades-tab="uniform"] #ticket-frame,
-.iframe-shell-stage[data-grades-tab="uniform"] #ticket-frame-inline,
 .iframe-shell-stage[data-grades-tab="slate"] #props-eval-panel,
-.iframe-shell-stage[data-grades-tab="slate"] #uniform-tickets-panel,
 .iframe-shell-stage[data-grades-tab="slate"] #player-evaluator-panel,
-.iframe-shell-stage[data-grades-tab="props"] #uniform-tickets-panel,
 .iframe-shell-stage[data-grades-tab="props"] #player-evaluator-panel,
 .iframe-shell-stage[data-grades-tab="tickets"] #props-eval-panel,
-.iframe-shell-stage[data-grades-tab="tickets"] #uniform-tickets-panel,
-.iframe-shell-stage[data-grades-tab="tickets"] #player-evaluator-panel,
-.iframe-shell-stage[data-grades-tab="uniform"] #props-eval-panel,
-.iframe-shell-stage[data-grades-tab="uniform"] #player-evaluator-panel{
+.iframe-shell-stage[data-grades-tab="tickets"] #player-evaluator-panel{
   display:none !important;
   visibility:hidden !important;
   pointer-events:none !important;
@@ -536,18 +517,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   opacity:0 !important;
 }
 .iframe-shell-stage[data-grades-tab="props"] #props-eval-panel{
-  display:block !important;
-  visibility:visible !important;
-  pointer-events:auto !important;
-  height:auto !important;
-  min-height:0 !important;
-  max-height:none !important;
-  overflow-x:hidden !important;
-  overflow-y:visible !important;
-  opacity:1 !important;
-  z-index:6;
-}
-.iframe-shell-stage[data-grades-tab="uniform"] #uniform-tickets-panel{
   display:block !important;
   visibility:visible !important;
   pointer-events:auto !important;
@@ -665,18 +634,6 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
     -webkit-backdrop-filter:none !important;
     background:rgba(6,8,18,0.94) !important;
   }
-  html.page-grades-root #uniform-tickets-panel,
-  .iframe-shell-stage[data-grades-tab="uniform"] #uniform-tickets-panel{
-    overflow:visible !important;
-    height:auto !important;
-    max-height:none !important;
-    position:relative !important;
-    touch-action:pan-y;
-  }
-  #uniform-tickets-panel .utp-root{
-    max-width:100%;
-    padding:0 4px;
-  }
   .date-pills .dpill{
     flex:0 0 auto;
     max-width:none;
@@ -721,16 +678,23 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 .tab-icon{width:14px;height:14px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
 .ticket-track-bar{
-  flex-shrink:0;margin:6px 1rem 0;padding:4px 8px;display:none;gap:8px;align-items:center;flex-wrap:wrap;
-  background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;
+  flex-shrink:0;margin:6px 1rem 0;padding:0;display:none;gap:16px;align-items:center;flex-wrap:wrap;
+  background:transparent !important;border:none !important;box-shadow:none !important;
 }
-.ticket-track-bar.visible{display:flex;}
+.ticket-track-bar[hidden]{display:none !important;}
+.ticket-track-bar.visible{display:flex !important;}
 .ticket-track-btn{
-  padding:5px 10px;border-radius:10px;font-size:10px;letter-spacing:.6px;text-transform:uppercase;
-  color:var(--muted2);background:transparent;border:1px solid transparent;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  padding:2px 0;border-radius:0;font-size:14px;line-height:1.35;letter-spacing:.2px;text-transform:none;
+  color:var(--muted2);background:none !important;background-color:transparent !important;
+  border:none !important;box-shadow:none !important;outline:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:500;
 }
-.ticket-track-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.1);}
-.ticket-track-btn.active{color:#ffd54f;border-color:rgba(255,213,79,0.45);background:rgba(255,213,79,0.08);}
+.ticket-track-btn:hover{color:var(--text);}
+.ticket-track-btn:focus-visible{outline:1px solid rgba(255,213,79,0.45);outline-offset:2px;}
+.ticket-track-btn.active{color:#ffd54f !important;background:none !important;border:none !important;font-weight:600;}
+[data-theme="light"] body.page-grades .ticket-track-btn{color:rgba(15,45,80,0.62)!important;background:none!important;border:none!important;}
+[data-theme="light"] body.page-grades .ticket-track-btn.active{color:#8a6a00!important;}
 
 @media(max-width:768px){
   .date-bar{margin-left:12px;margin-right:12px;padding:7px 10px;min-height:42px;gap:8px;}
@@ -1540,14 +1504,11 @@ select option,
             <button type="button" class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-uniform" onclick="switchTab('uniform')">
-              <span class="tab-icon">🎫</span>UNIFORM TICKETS
-            </button>
             <button type="button" class="tab-btn" id="tab-players" onclick="switchTab('players')">
               <span class="tab-icon">📊</span>PLAYERS
             </button>
           </div>
-          <div class="ticket-track-bar" id="ticket-track-bar" aria-label="Ticket evaluation track">
+          <div class="ticket-track-bar" id="ticket-track-bar" hidden aria-label="Ticket evaluation track">
             <button type="button" class="ticket-track-btn active" id="ticket-track-main" onclick="setTicketEvalTrack('main')">Main (2-leg, win-rate)</button>
             <button type="button" class="ticket-track-btn" id="ticket-track-long" onclick="setTicketEvalTrack('long_parlay')">Long parlays (5-6)</button>
           </div>
@@ -1615,9 +1576,6 @@ select option,
       <div class="props-eval-grid" id="props-eval-grid"></div>
       <p class="insights-card-sub" id="props-eval-foot" style="margin-top:8px;"></p>
     </div>
-  </div>
-  <div id="uniform-tickets-panel" class="grades-analytics-wrap" hidden aria-label="Uniform-bucket tickets for the report date">
-    {% include '_uniform_tickets_panel.html' %}
   </div>
   {% include '_player_evaluator_panel.html' %}
   </div><!-- /.iframe-shell-stage -->
@@ -3185,27 +3143,18 @@ function switchTab(tab) {
   const ts = gradesEl('tab-slate');
   const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
-  const tu = gradesEl('tab-uniform');
   const tpl = gradesEl('tab-players');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
-  if (tu) tu.classList.toggle('active', tab === 'uniform');
   if (tpl) tpl.classList.toggle('active', tab === 'players');
   const pe = document.getElementById('props-eval-panel');
-  const utp = document.getElementById('uniform-tickets-panel');
   setGradesHubFrameDisplay('grade-frame', tab === 'slate');
   setGradesHubFrameDisplay('ticket-frame', tab === 'tickets');
   if (pe) {
     pe.hidden = tab !== 'props';
     if (tab === 'props') {
       pe.removeAttribute('hidden');
-    }
-  }
-  if (utp) {
-    utp.hidden = tab !== 'uniform';
-    if (tab === 'uniform') {
-      utp.removeAttribute('hidden');
     }
   }
   const pep = document.getElementById('player-evaluator-panel');
@@ -3227,13 +3176,7 @@ function switchTab(tab) {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
-  if (tab === 'uniform') {
-    hideGradesHubLoadOverlay();
-    const es0u = document.getElementById('empty-state');
-    if (es0u) es0u.hidden = true;
-    const dsU = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
-    syncUniformTicketsDate(dsU);
-  } else if (tab === 'props') {
+  if (tab === 'props') {
     hideGradesHubLoadOverlay();
     const es0 = document.getElementById('empty-state');
     if (es0) es0.hidden = true;
@@ -3632,7 +3575,10 @@ function setTicketEvalTrack(track) {
 
 function syncTicketTrackBarVisibility() {
   const bar = document.getElementById('ticket-track-bar');
-  if (bar) bar.classList.toggle('visible', activeTab === 'tickets');
+  if (!bar) return;
+  const show = activeTab === 'tickets';
+  bar.classList.toggle('visible', show);
+  bar.hidden = !show;
 }
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
@@ -4443,34 +4389,7 @@ function loadDate(dateStr){
   if (activeTab === 'props') {
     loadGradesProps(dateStr);
   }
-  if (activeTab === 'uniform') {
-    syncUniformTicketsDate(dateStr);
-  }
   refreshControlsSummary();
-}
-
-// ─── UNIFORM TICKETS tab integration ──────────────────────────────────────────
-function syncUniformTicketsDate(dateStr) {
-  try {
-    const root = document.querySelector('#uniform-tickets-panel .utp-root');
-    if (!root) return;
-    // Auto-expand the inner panel the first time the tab is opened on Grades.
-    const toggle = root.querySelector('[data-utp="toggle"]');
-    const panel = root.querySelector('.utp-panel');
-    if (toggle && panel && panel.hasAttribute('hidden')) {
-      toggle.click();
-    }
-    if (!dateStr) return;
-    const tryApply = (attempts) => {
-      const ctrl = root.__utp;
-      if (ctrl && typeof ctrl.setDate === 'function') {
-        ctrl.setDate(dateStr);
-        return;
-      }
-      if (attempts > 0) setTimeout(() => tryApply(attempts - 1), 150);
-    };
-    tryApply(20);
-  } catch (_e) {}
 }
 
 // ─── DATE NAV ─────────────────────────────────────────────────────────────────
@@ -4754,7 +4673,6 @@ window.addEventListener('resize', () => {
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
-<script src="/static/uniform-tickets-panel.js?v=20260523utp2" defer></script>
 
 <script>
 (function() {
@@ -4806,6 +4724,9 @@ window.addEventListener('resize', () => {
     try {
       if (typeof window.syncGradesTabStage === 'function') {
         window.syncGradesTabStage(window.__gradesActiveTab || 'slate');
+      }
+      if (typeof syncTicketTrackBarVisibility === 'function') {
+        syncTicketTrackBarVisibility();
       }
     } catch (_e0) {}
   });
