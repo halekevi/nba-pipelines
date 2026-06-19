@@ -2480,7 +2480,45 @@ function ensureFrameCollapseCss(doc) {
     tr.player-miss td,
     tr.player-warn td{background:transparent!important;opacity:1!important}
     .table-wrap table:not(.table-sortable) tr:hover td{background:transparent!important}
+    /* Def tier breakdown — brighter percentages, labels, and sample counts. */
+    .def-tier-subgrid-table{font-size:13px!important}
+    .def-tier-subgrid-table thead th{color:rgba(255,255,255,0.82)!important}
+    .def-subgrid-corner-hdr,.def-subgrid-group-hdr,.def-subgrid-rank-hdr{color:rgba(255,255,255,0.8)!important}
+    .def-subgrid-label{color:rgba(255,255,255,0.92)!important;font-weight:600!important;font-size:13px!important}
+    .def-subgrid-pct,.def-tier-subgrid-table td > span[style*="font-weight:700"]{font-size:15px!important;font-weight:700!important;line-height:1.15!important}
+    .def-pct-hit,.def-tier-subgrid-table td > span[style*="#1D9E75"],.def-tier-subgrid-table td > span[style*="#1d9e75"]{color:#5ef598!important}
+    .def-pct-mid,.def-tier-subgrid-table td > span[style*="#BA7517"],.def-tier-subgrid-table td > span[style*="#ba7517"]{color:#f5c842!important}
+    .def-pct-miss,.def-tier-subgrid-table td > span[style*="#A32D2D"],.def-tier-subgrid-table td > span[style*="#a32d2d"]{color:#ff7070!important}
+    .def-subgrid-n,.def-tier-subgrid-table td > span[style*="font-size:10px"]{font-size:11px!important;color:rgba(255,255,255,0.62)!important;font-weight:500!important}
+    .def-subgrid-empty,.def-tier-subgrid-table td[style*="color:var(--color-text-tertiary"]{color:rgba(255,255,255,0.38)!important}
+    .def-subgrid-total-row td,.def-tier-subgrid-table tbody tr:nth-child(odd) td{background:transparent!important}
   `;
+}
+
+/** Upgrade legacy def-tier inline colors to brighter palette (cached slate_eval HTML). */
+function brightenDefTierSubgridInDoc(doc) {
+  if (!doc) return;
+  const legacyPct = {
+    '#1d9e75': '#5ef598',
+    '#ba7517': '#f5c842',
+    '#a32d2d': '#ff7070',
+  };
+  doc.querySelectorAll('.def-tier-subgrid-table td > span').forEach((span) => {
+    const raw = (span.style.color || '').trim().toLowerCase();
+    if (legacyPct[raw]) span.style.color = legacyPct[raw];
+    if (span.style.fontWeight === '700' || span.style.fontWeight === 'bold') {
+      span.classList.add('def-subgrid-pct');
+      span.style.fontSize = '15px';
+    }
+    if ((span.style.fontSize || '').indexOf('10px') >= 0) {
+      span.classList.add('def-subgrid-n');
+      span.style.fontSize = '11px';
+      span.style.color = 'rgba(255,255,255,0.62)';
+    }
+  });
+  doc.querySelectorAll('.def-tier-subgrid-table .def-subgrid-label, .def-tier-subgrid-table tbody td:first-child').forEach((td) => {
+    td.classList.add('def-subgrid-label');
+  });
 }
 
 /** Rebuild rate bars from H/M columns (fixes 0% width:0 blank bars on cached slate_eval HTML). */
@@ -2597,6 +2635,7 @@ function collapseSportsInSlateFrame(frame) {
   if (!doc) return;
   ensureFrameCollapseCss(doc);
   hydrateStackedRateBarsInDoc(doc);
+  brightenDefTierSubgridInDoc(doc);
   unwrapDoubleWrappedNativeSports(doc);
   const sections = Array.from(doc.querySelectorAll('.sport-section')).filter(
     el => !el.closest('.grades-sport-bucket')

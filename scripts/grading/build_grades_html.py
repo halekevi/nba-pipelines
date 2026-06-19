@@ -1114,12 +1114,12 @@ def _rows_for_def_subgrid_cell(
     return out
 
 
-def _subgrid_hit_color_hex(hit_rate: float) -> str:
+def _subgrid_pct_class(hit_rate: float) -> str:
     if hit_rate >= 65.0:
-        return "#1D9E75"
+        return "def-pct-hit"
     if hit_rate >= 50.0:
-        return "#BA7517"
-    return "#A32D2D"
+        return "def-pct-mid"
+    return "def-pct-miss"
 
 
 def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) -> tuple[str, int]:
@@ -1137,10 +1137,8 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
     )
     ranks = ("A", "B", "C", "D")
 
-    mute = "var(--color-text-tertiary, var(--muted2))"
-    br_sec = "var(--color-border-secondary, rgba(255,255,255,0.14))"
-    br_ter = "var(--color-border-tertiary, rgba(255,255,255,0.08))"
-    bg_sec = "var(--color-background-secondary, rgba(255,255,255,0.04))"
+    br_sec = "var(--color-border-secondary, rgba(255,255,255,0.18))"
+    br_ter = "var(--color-border-tertiary, rgba(255,255,255,0.10))"
 
     def _cell_td(stats: dict, col_idx: int) -> str:
         """col_idx 1..16 — determines group boundary borders."""
@@ -1151,14 +1149,14 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
         )
         d = int(stats.get("decided", 0) or 0)
         if d <= 0:
-            return f'<td style="{base};color:{mute}">—</td>'
+            return f'<td class="def-subgrid-cell def-subgrid-empty" style="{base}">—</td>'
         hr = float(stats.get("hit_rate", 0.0))
-        col = _subgrid_hit_color_hex(hr)
+        pct_cls = _subgrid_pct_class(hr)
         pct_s = f"{hr:.0f}%"
         return (
-            f'<td style="{base}">'
-            f'<span style="color:{col};font-weight:700">{pct_s}</span>'
-            f'<span style="font-size:10px;color:{mute};display:block;margin-top:1px">({fmt_num(d)})</span>'
+            f'<td class="def-subgrid-cell" style="{base}">'
+            f'<span class="def-subgrid-pct {pct_cls}">{pct_s}</span>'
+            f'<span class="def-subgrid-n">({fmt_num(d)})</span>'
             f"</td>"
         )
 
@@ -1177,7 +1175,7 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
                 col_idx += 1
         body_rows += (
             f'<tr class="def-subgrid-data-row">'
-            f'<td style="padding:6px 8px;text-align:left;font-weight:500;font-size:12px;border-left:none">{def_label}</td>'
+            f'<td class="def-subgrid-label" style="padding:6px 8px;text-align:left;border-left:none">{def_label}</td>'
             f"{row_cells}</tr>"
         )
 
@@ -1191,8 +1189,8 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
             tcol_idx += 1
 
     body_rows += (
-        f'<tr style="background:{bg_sec};font-weight:500">'
-        f'<td style="padding:6px 8px;text-align:left;font-size:12px;font-weight:500;border-left:none">Total</td>'
+        f'<tr class="def-subgrid-total-row">'
+        f'<td class="def-subgrid-label def-subgrid-label-total" style="padding:6px 8px;text-align:left;border-left:none">Total</td>'
         f"{total_cells}</tr>"
     )
 
@@ -1204,24 +1202,21 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
             within = (col_idx - 1) % 4
             bl = f"border-left:1.5px solid {br_sec}" if within == 0 else f"border-left:0.5px solid {br_ter}"
             hdr2 += (
-                f'<th style="padding:4px 6px;font-size:10px;font-weight:500;color:{mute};{bl}">{rank}</th>'
+                f'<th class="def-subgrid-rank-hdr" style="padding:4px 6px;{bl}">{rank}</th>'
             )
 
     hdr1_cells = ""
     for glabel, _p, _d in groups:
         hdr1_cells += (
-            f'<th colspan="4" style="padding:6px 8px;font-size:11px;color:var(--color-text-secondary, var(--muted));'
-            f"text-align:center;font-weight:500;border-left:1.5px solid {br_sec}\">{h(glabel)}</th>"
+            f'<th colspan="4" class="def-subgrid-group-hdr" style="padding:6px 8px;'
+            f"text-align:center;border-left:1.5px solid {br_sec}\">{h(glabel)}</th>"
         )
 
-    table_html = f"""<style>
-.def-tier-subgrid-table tbody tr.def-subgrid-data-row:hover td {{ background:{bg_sec}; }}
-</style>
-<div class="table-wrap">
-<table class="def-tier-subgrid-table" style="min-width:920px;border-collapse:collapse;font-size:12px;width:100%">
+    table_html = f"""<div class="table-wrap">
+<table class="def-tier-subgrid-table" style="min-width:920px;border-collapse:collapse;width:100%">
   <thead>
     <tr>
-      <th rowspan="2" style="padding:6px 8px;text-align:left;font-size:11px;font-weight:600;border-left:none;vertical-align:bottom">Def Tier</th>
+      <th rowspan="2" class="def-subgrid-corner-hdr" style="padding:6px 8px;text-align:left;border-left:none;vertical-align:bottom">Def Tier</th>
       {hdr1_cells}
     </tr>
     <tr>
@@ -1965,9 +1960,23 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .pbw-heatmap th:first-child,.pbw-heatmap td:first-child{position:sticky;left:0;background:#0f1324;text-align:left;z-index:1}
 .pbw-cell-rate{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px}
 .pbw-cell-dec{font-size:11px;color:rgba(0,0,0,0.65)}
-.def-tier-subgrid-table thead th{font-family:'Bebas Neue',sans-serif;letter-spacing:1.6px;color:var(--muted)}
+.def-tier-subgrid-table{font-size:13px}
+.def-tier-subgrid-table thead th{font-family:'Bebas Neue',sans-serif;letter-spacing:1.6px;color:rgba(255,255,255,0.82)}
+.def-subgrid-corner-hdr{font-size:12px!important;font-weight:600!important;color:rgba(255,255,255,0.88)!important}
+.def-subgrid-group-hdr{font-size:12px!important;font-weight:600!important;color:rgba(255,255,255,0.8)!important}
+.def-subgrid-rank-hdr{font-size:11px!important;font-weight:600!important;color:rgba(255,255,255,0.72)!important}
 .def-tier-subgrid-table tbody td{font-family:'Inter',sans-serif}
-.def-tier-subgrid-table tbody tr:nth-child(odd) td{background:rgba(255,255,255,0.01)}
+.def-subgrid-label{color:var(--text);font-weight:600;font-size:13px}
+.def-subgrid-label-total{font-weight:700}
+.def-subgrid-pct{font-weight:700;font-size:15px;letter-spacing:0.02em;line-height:1.15}
+.def-pct-hit{color:#5ef598}
+.def-pct-mid{color:#f5c842}
+.def-pct-miss{color:#ff7070}
+.def-subgrid-n{font-size:11px;color:rgba(255,255,255,0.62);display:block;margin-top:2px;font-weight:500}
+.def-subgrid-empty{color:rgba(255,255,255,0.38)!important}
+.def-subgrid-total-row td{background:transparent}
+.def-tier-subgrid-table tbody tr:nth-child(odd) td{background:transparent}
+.def-tier-subgrid-table tbody tr.def-subgrid-data-row:hover td{background:rgba(255,255,255,0.03)}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
