@@ -662,12 +662,12 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 }
 /* tabs — glass, gold active */
 .tabs-bar{
-  flex-shrink:0;margin:4px 1rem 0;padding:8px 12px;display:flex;gap:10px;align-items:center;min-height:46px;z-index:90;position:relative;
+  flex-shrink:0;margin:4px 1rem 0;padding:10px 14px;display:flex;gap:12px;align-items:center;min-height:52px;z-index:90;position:relative;
   font-family:'Inter',sans-serif;
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.tab-btn{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-size:11px;letter-spacing:.65px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
+.tab-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;font-size:13px;letter-spacing:.55px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);}
 .tab-btn.active{
   color:var(--accent-gold);
@@ -675,7 +675,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
   background:rgba(212,160,23,0.12);
   box-shadow:0 0 22px rgba(212,160,23,0.15),inset 0 -2px 0 var(--accent-gold);
 }
-.tab-icon{width:16px;height:16px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.tab-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
 .ticket-track-bar{
   flex-shrink:0;margin:6px 1rem 0;padding:0;display:none;gap:16px;align-items:center;flex-wrap:wrap;
@@ -2256,7 +2256,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href='static/grades-iframe-toolbar.css?v=20260619type';
+    link.href='static/grades-iframe-toolbar.css?v=20260619tabs2';
   doc.head.appendChild(link);
 }
 
