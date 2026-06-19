@@ -1515,7 +1515,8 @@ SOCCER_STAT_MAP = {
     "shots_on_target": ["SOG", "SOT", "SHOTSONTARGET", "ONTARGETSCORINGATT",
                         "SHT_ON_TARGET", "SHOTS_ON_TARGET"],
     # Total shots
-    "shots":           ["SH", "TOTALSHOTS", "SHOTS", "SHT", "ATTSHOT"],
+    # Total shots — World Cup roster feed uses SHOT (club feeds often use SH)
+    "shots":           ["SHOT", "SH", "TOTALSHOTS", "SHOTS", "SHT", "ATTSHOT"],
     # Goals
     "goals":           ["G", "GOALS", "GL", "GLS"],
     # Assists — ESPN uses "A" (goalAssists)
@@ -1530,6 +1531,8 @@ SOCCER_STAT_MAP = {
     "tackles":         ["TK", "TOTALTACKLE", "TACKLES", "TCKS"],
     # Fouls committed — ESPN uses "FC" (foulsCommitted)
     "fouls":           ["FC", "FOULSCOMMITTED", "FL", "FOULS", "FOULSC"],
+    # Fouls drawn / suffered — ESPN World Cup uses "FA" (foulsSuffered)
+    "fouls_drawn":     ["FA", "FOULSSUFFERED", "FDRAWN", "FOULSDRAWN"],
     # Yellow cards — ESPN uses "YC" (yellowCards)
     "yellow_cards":    ["YC", "YELLOWCARDS", "YELLOW", "YELLOWS"],
 }
@@ -1589,9 +1592,10 @@ def _emit_soccer_rows(name: str, t_abbr: str, label_map: dict, league_id: str,
     kp  = _get_soccer_stat(label_map, "key_passes")
     tk  = _get_soccer_stat(label_map, "tackles")
     fl  = _get_soccer_stat(label_map, "fouls")
+    fd  = _get_soccer_stat(label_map, "fouls_drawn")
     yc  = _get_soccer_stat(label_map, "yellow_cards")
 
-    if all(x is None for x in [sot, sh, g, ast, sv, pa, kp, tk, fl, yc]):
+    if all(x is None for x in [sot, sh, g, ast, sv, pa, kp, tk, fl, fd, yc]):
         return []
 
     prop_map = {
@@ -1604,6 +1608,7 @@ def _emit_soccer_rows(name: str, t_abbr: str, label_map: dict, league_id: str,
         "Key Passes":       kp,
         "Tackles":          tk,
         "Fouls":            fl,
+        "Fouls Drawn":      fd,
         "Yellow Cards":     yc,
     }
     raw = {"SOT": sot, "SH": sh, "G": g, "A": ast,

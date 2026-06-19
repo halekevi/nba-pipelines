@@ -354,9 +354,24 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
 
         ndf["Tier"] = tier_series.astype(str).values
         # Pick Type was only used for tier recompute; matrix / breakdowns need it on each row.
-        ps = pick_series.astype(str).str.strip()
-        ps = ps.replace({"": "Standard", "nan": "Standard", "None": "Standard"})
-        ndf["Pick Type"] = ps.values
+        if sport_key == "soccer":
+            def _soccer_pick_type_row(row: pd.Series) -> str:
+                raw = str(row.get("Pick Type", "") or "").strip().lower()
+                if raw in ("goblin", "demon"):
+                    return raw.title()
+                return _derive_soccer_pick_type(
+                    str(row.get("Tier", "") or ""),
+                    str(row.get("Edge", row.get("edge", "")) or ""),
+                    str(row.get("ML Prob", row.get("ml_prob", "")) or ""),
+                    str(row.get("Hit Rate", row.get("hit_rate", "")) or ""),
+                    str(row.get("Blended Score", row.get("blended_score", "")) or ""),
+                )
+
+            ndf["Pick Type"] = ndf.apply(_soccer_pick_type_row, axis=1)
+        else:
+            ps = pick_series.astype(str).str.strip()
+            ps = ps.replace({"": "Standard", "nan": "Standard", "None": "Standard"})
+            ndf["Pick Type"] = ps.values
         normalized = ndf.to_dict(orient="records")
     return _filter_prop_level_rows(normalized)
 
@@ -1166,14 +1181,18 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
     for def_label in canon_defs:
         row_cells = ""
         col_idx = 1
+        row_decided = 0
         for _gh, pick, direction in groups:
             for rank in ranks:
                 cell_rows = _rows_for_def_subgrid_cell(rows, def_label, pick, direction, rank)
                 st = overall_stats(cell_rows)
+                row_decided += int(st.get("decided", 0) or 0)
                 if int(st.get("decided", 0)) >= int(min_decided):
                     n_ge += 1
                 row_cells += _cell_td(st, col_idx)
                 col_idx += 1
+        if row_decided <= 0:
+            continue
         body_rows += (
             f'<tr class="def-subgrid-data-row">'
             f'<td class="def-subgrid-label" style="padding:6px 8px;text-align:left;border-left:none">{def_label}</td>'
