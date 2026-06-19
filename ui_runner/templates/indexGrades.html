@@ -275,29 +275,29 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* date bar — glass pill */
 .date-bar{
-  flex-shrink:0;margin:6px 1rem 0;padding:8px 12px;min-height:44px;height:auto;display:flex;align-items:center;gap:8px;position:relative;z-index:100;
+  flex-shrink:0;margin:6px 1rem 0;padding:10px 14px;min-height:48px;height:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:100;
   font-family:'Inter',sans-serif;
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.date-bar-label{flex-shrink:0;font-size:9px;letter-spacing:1.05px;color:var(--muted2);white-space:nowrap;}
+.date-bar-label{flex-shrink:0;font-size:11px;letter-spacing:1.05px;color:var(--muted2);white-space:nowrap;}
 .date-pills{flex:1 1 0;min-width:0;display:flex;gap:10px;align-items:center;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .date-pills::-webkit-scrollbar{display:none;}
-.dpill{font-size:10px;letter-spacing:.65px;padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.42);cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.dpill{font-size:12px;letter-spacing:.5px;padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.42);cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
 .dpill:hover{color:var(--text);border-color:var(--bd2);background:rgba(255,255,255,0.07);}
 .dpill.active{color:var(--accent-gold);border-color:rgba(212,160,23,0.55);background:rgba(212,160,23,0.15);box-shadow:0 0 18px rgba(212,160,23,0.14);}
-.dpill .dpill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:none;}
+.dpill .dpill-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:none;}
 .dpill.active .dpill-dot{display:block;box-shadow:0 0 8px var(--green);}
-.date-sep{width:1px;height:22px;background:rgba(255,255,255,0.1);flex-shrink:0;}
-.date-nav-btn{flex-shrink:0;width:30px;height:30px;border-radius:10px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;}
+.date-sep{width:1px;height:24px;background:rgba(255,255,255,0.1);flex-shrink:0;}
+.date-nav-btn{flex-shrink:0;width:34px;height:34px;border-radius:10px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;}
 .date-nav-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);}
 .date-nav-btn:disabled{opacity:.3;cursor:default;}
 .date-bar-right{flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:10px;}
 .date-input-wrap{display:flex;align-items:center;gap:6px;}
-.date-input-label{font-size:9px;letter-spacing:.8px;color:var(--muted2);}
-.date-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);border:1px solid var(--glass-panel-border);border-radius:10px;color:var(--text);font-size:10px;padding:5px 9px;outline:none;transition:border-color .15s;width:122px;font-family:'Inter',sans-serif;}
+.date-input-label{font-size:11px;letter-spacing:.7px;color:var(--muted2);}
+.date-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);border:1px solid var(--glass-panel-border);border-radius:10px;color:var(--text);font-size:12px;padding:6px 10px;outline:none;transition:border-color .15s;width:132px;font-family:'Inter',sans-serif;}
 .date-input:focus{border-color:rgba(212,160,23,0.45);}
-.date-go-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.8px;padding:5px 9px;border-radius:10px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
+.date-go-btn{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.7px;padding:6px 11px;border-radius:10px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
 .date-go-btn:hover{background:rgba(212,160,23,.18);border-color:rgba(240,165,0,.55);}
 
 /* iframe shell: layout only — no outer “card” so slate header is the sole chrome */
@@ -662,12 +662,12 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 }
 /* tabs — glass, gold active */
 .tabs-bar{
-  flex-shrink:0;margin:4px 1rem 0;padding:6px 10px;display:flex;gap:8px;align-items:center;min-height:40px;z-index:90;position:relative;
+  flex-shrink:0;margin:4px 1rem 0;padding:8px 12px;display:flex;gap:10px;align-items:center;min-height:46px;z-index:90;position:relative;
   font-family:'Inter',sans-serif;
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.tab-btn{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:12px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-size:11px;letter-spacing:.65px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);}
 .tab-btn.active{
   color:var(--accent-gold);
@@ -675,7 +675,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
   background:rgba(212,160,23,0.12);
   box-shadow:0 0 22px rgba(212,160,23,0.15),inset 0 -2px 0 var(--accent-gold);
 }
-.tab-icon{width:14px;height:14px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.tab-icon{width:16px;height:16px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
 .ticket-track-bar{
   flex-shrink:0;margin:6px 1rem 0;padding:0;display:none;gap:16px;align-items:center;flex-wrap:wrap;
@@ -700,7 +700,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
   .date-bar{margin-left:12px;margin-right:12px;padding:7px 10px;min-height:42px;gap:8px;}
   .date-bar-right{display:none;}
   .tabs-bar{margin-left:12px;margin-right:12px;padding:6px 8px;min-height:38px;}
-  .dpill{font-size:10px;padding:6px 9px;}
+  .dpill{font-size:12px;padding:7px 10px;}
   /* Narrow phones: 2×2 tab grid so all four tabs stay fully visible without horizontal scroll */
   .tabs-bar{
     display:grid;
@@ -725,7 +725,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
     justify-content:center;
     align-items:center;
     text-align:center;
-    font-size:clamp(10px,2.8vw,12px);
+    font-size:clamp(11px,3vw,13px);
     padding:8px 4px;
     white-space:normal;
     line-height:1.2;
@@ -791,7 +791,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
     line-height:1.18;
     gap:5px;
     padding:8px 6px;
-    font-size:clamp(9px,2.6vw,11px);
+    font-size:clamp(11px,2.8vw,13px);
     letter-spacing:0.04em;
     border-radius:12px;
     border:2px solid rgba(255,255,255,0.06);
@@ -844,7 +844,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
     min-height:0;
     gap:7px;
   }
-  .tabs-bar .tab-btn{min-height:54px;padding:8px 5px;font-size:clamp(9px,2.5vw,11px);}
+  .tabs-bar .tab-btn{min-height:54px;padding:8px 5px;font-size:clamp(11px,2.7vw,13px);}
 }
 
 /* Phone landscape: short viewport — compact toolbar/tabs, hide live line, tighter stage */
@@ -864,7 +864,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
     margin-left:max(6px, env(safe-area-inset-left, 0px));
     margin-right:max(6px, env(safe-area-inset-right, 0px));
   }
-  .dpill{font-size:9px;padding:4px 8px;}
+  .dpill{font-size:11px;padding:5px 9px;}
   .date-nav-btn{width:28px;height:28px;font-size:13px;}
   .grades-analytics-wrap{
     padding:10px max(10px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
@@ -1971,7 +1971,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260619flat';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260619type';
   doc.head.appendChild(link);
 }
 

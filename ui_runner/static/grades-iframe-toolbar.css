@@ -108,12 +108,12 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
   max-width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 8px 12px;
-  min-height: 44px;
+  padding: 10px 14px;
+  min-height: 48px;
   height: auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   position: relative;
   z-index: 2;
   font-family: "Inter", sans-serif;
@@ -127,7 +127,7 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 
 .date-bar-label {
   flex-shrink: 0;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 1.05px;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
   white-space: nowrap;
@@ -149,9 +149,9 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 }
 
 .dpill {
-  font-size: 10px;
-  letter-spacing: 0.65px;
-  padding: 5px 9px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 6px 11px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -200,8 +200,8 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 
 .date-nav-btn {
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 10px;
   border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
   background: rgba(255, 255, 255, 0.04);
@@ -210,7 +210,7 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   transition: all 0.15s;
 }
 
@@ -240,8 +240,8 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 }
 
 .date-input-label {
-  font-size: 9px;
-  letter-spacing: 0.8px;
+  font-size: 11px;
+  letter-spacing: 0.7px;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
 }
 
@@ -250,8 +250,8 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
   border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
   border-radius: 10px;
   color: var(--text, #fff);
-  font-size: 10px;
-  padding: 5px 9px;
+  font-size: 12px;
+  padding: 6px 10px;
   outline: none;
   width: 144px;
   font-family: "Inter", sans-serif;
@@ -263,9 +263,9 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 
 .date-go-btn {
   font-family: "Inter", sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.8px;
-  padding: 5px 9px;
+  font-size: 11px;
+  letter-spacing: 0.7px;
+  padding: 6px 11px;
   border-radius: 10px;
   border: 1px solid rgba(212, 160, 23, 0.35);
   background: rgba(212, 160, 23, 0.1);
@@ -286,8 +286,8 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
   max-width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 6px 10px;
-  min-height: 40px;
+  padding: 8px 12px;
+  min-height: 46px;
   display: flex;
   gap: 10px;
   align-items: center;
@@ -306,11 +306,11 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 .tab-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 9px;
+  gap: 7px;
+  padding: 8px 12px;
   border-radius: 12px;
-  font-size: 9px;
-  letter-spacing: 0.8px;
+  font-size: 11px;
+  letter-spacing: 0.65px;
   text-transform: uppercase;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
   background: rgba(255, 255, 255, 0.03);
@@ -335,13 +335,13 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 }
 
 .tab-icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .tab-btn.active .tab-icon {
@@ -390,7 +390,7 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
     line-height: 1.18;
     gap: 5px;
     padding: 8px 6px;
-    font-size: clamp(9px, 2.6vw, 11px);
+    font-size: clamp(11px, 2.8vw, 13px);
     letter-spacing: 0.04em;
     border-radius: 12px;
     border: 2px solid rgba(255, 255, 255, 0.06);
@@ -434,7 +434,7 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
 
   .dpill {
     flex: 0 0 auto;
-    font-size: 10px;
+    font-size: 12px;
     padding: 6px 9px;
   }
 
@@ -453,7 +453,7 @@ header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
   }
 
   .tabs-bar .tab-btn {
-    font-size: clamp(9px, 2.5vw, 11px);
+    font-size: clamp(11px, 2.7vw, 13px);
     min-height: 56px;
     padding: 8px 6px;
     width: 100%;
