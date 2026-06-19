@@ -1938,13 +1938,9 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .matrix-collapsible[open]>summary::before{transform:rotate(90deg)}
 .matrix-body{padding:12px}
 .matrix-summary{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin:0 0 10px}
-.matrix-collapsible tr.matrix-hit td{background:rgba(57,255,110,0.06)}
 .matrix-collapsible tr.matrix-hit td:first-child{border-left:3px solid var(--green)}
-.matrix-collapsible tr.matrix-miss td{background:rgba(255,77,77,0.10)}
 .matrix-collapsible tr.matrix-miss td:first-child{border-left:3px solid var(--red)}
-.matrix-collapsible tr.matrix-warn td{background:rgba(240,165,0,0.06)}
 .matrix-collapsible tr.matrix-warn td:first-child{border-left:3px solid var(--gold)}
-.matrix-collapsible tr.matrix-empty td,.matrix-collapsible tr.matrix-sparse td{opacity:.88}
 .matrix-collapsible tr.matrix-sparse td:first-child{border-left:3px dashed rgba(255,255,255,0.12)}
 .pbw-controls{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 14px}
 .pbw-control{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);border:1px solid var(--glass-bd);border-radius:10px;padding:6px 10px}
@@ -1999,7 +1995,8 @@ background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid v
 th.right{text-align:right}
 td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.04)}
+.matrix-collapsible tr:hover td,.table-wrap table.table-sortable tr:hover td{background:rgba(255,255,255,.03)}
+.table-wrap table:not(.table-sortable) tr:hover td{background:transparent}
 td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px)}
 .rate-cell{display:flex;align-items:center;gap:10px}
 .rate-bar-bg{display:flex;flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
@@ -2032,11 +2029,8 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
 .insight-body{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
-tr.player-hit td{background:rgba(57,255,110,0.04)}
 tr.player-hit td:first-child{border-left:3px solid var(--green)}
-tr.player-miss td{background:rgba(255,77,77,0.08)}
 tr.player-miss td:first-child{border-left:3px solid var(--red)}
-tr.player-warn td{background:rgba(240,165,0,0.06)}
 tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
 .alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px);max-width:100%;box-sizing:border-box}

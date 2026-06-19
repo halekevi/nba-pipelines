@@ -2470,6 +2470,16 @@ function ensureFrameCollapseCss(doc) {
     .rate-bar-fill--hit,.rate-bar-fill[style*="--green"]{background:#39ff6e!important}
     .rate-bar-fill--miss,.rate-bar-fill[style*="--red"]{background:#ff4d4d!important}
     .rate-num{flex-shrink:0!important;min-width:48px!important;text-align:right!important}
+    /* Drop row tint overlays — keep left-edge hit-rate cue only (chips/bars stay vivid). */
+    .matrix-collapsible tr.matrix-hit td,
+    .matrix-collapsible tr.matrix-miss td,
+    .matrix-collapsible tr.matrix-warn td,
+    .matrix-collapsible tr.matrix-empty td,
+    .matrix-collapsible tr.matrix-sparse td,
+    tr.player-hit td,
+    tr.player-miss td,
+    tr.player-warn td{background:transparent!important;opacity:1!important}
+    .table-wrap table:not(.table-sortable) tr:hover td{background:transparent!important}
   `;
 }
 
