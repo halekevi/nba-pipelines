@@ -294,6 +294,7 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
             # Normalize result/grade column
             if nk.lower() == "result":              nk = "Result"
             if nk.lower() == "grade":               nk = "Result"
+            if nk.lower() == "direction":           nk = "Direction"
             if nk.lower() == "void_reason_grade":   nk = "void_reason"
             if nk.lower() == "bet_direction":       nk = "Direction"
             if nk.lower() == "prop_type_norm":      nk = "Prop Type"

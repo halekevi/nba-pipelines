@@ -600,6 +600,8 @@ NHL_API_BOX_URL      = "https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscor
 
 # ── Soccer ESPN URL paths ─────────────────────────────────────────────────────
 SOCCER_LEAGUES = [
+    # FIFA World Cup — PrizePicks WORLDCUP / WORLDCUP1H / WORLDCUP2H boards (Jun 2026+).
+    ("fifa.world", "FIFA World Cup"),
     ("eng.1",  "EPL"),
     ("eng.2",  "EFL Championship"),
     ("esp.1",  "La Liga"),
