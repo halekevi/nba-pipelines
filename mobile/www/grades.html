@@ -309,9 +309,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 .iframe-shell-toolbar{
   position:sticky;top:0;z-index:60;
-  flex-shrink:0;padding:8px 12px 2px;border-bottom:1px solid var(--glass-panel-border);
+  flex-shrink:0;padding:8px 12px 0;border-bottom:none;
   display:flex;flex-direction:column;gap:6px;
-  background:rgba(255,255,255,0.02);
+  background:transparent;
   transition:padding .28s ease;
 }
 /* Date row + Slate/Ticket tabs — collapse on scroll (see setupGradesBarsScrollHide) */
@@ -1318,9 +1318,9 @@ select option,
   box-shadow:none !important;
 }
 [data-theme="light"] .iframe-shell-toolbar{
-  border-color:rgba(100,125,155,0.28) !important;
-  background:rgba(205,218,236,0.88) !important;
-  box-shadow:0 4px 24px rgba(15,45,80,0.10),inset 0 1px 0 rgba(230,236,246,0.55) !important;
+  border:none !important;
+  background:transparent !important;
+  box-shadow:none !important;
 }
 [data-theme="light"] .ist-title{color:#8b6914 !important;}
 [data-theme="light"] .gc-live{color:#1a6b7a !important;}
@@ -1416,9 +1416,11 @@ select option,
     -webkit-backdrop-filter: none !important;
   }
   .date-bar,
-  .tabs-bar,
-  .iframe-shell-toolbar {
+  .tabs-bar {
     background: rgba(12, 12, 22, 0.94) !important;
+  }
+  .iframe-shell-toolbar {
+    background: transparent !important;
   }
   .iframe-shell {
     background: transparent !important;
@@ -1432,9 +1434,11 @@ select option,
     filter: none !important;
   }
   [data-theme="light"] .date-bar,
-  [data-theme="light"] .tabs-bar,
-  [data-theme="light"] .iframe-shell-toolbar {
+  [data-theme="light"] .tabs-bar {
     background: rgba(255, 255, 255, 0.94) !important;
+  }
+  [data-theme="light"] .iframe-shell-toolbar {
+    background: transparent !important;
   }
   [data-theme="light"] .iframe-shell {
     background: transparent !important;
@@ -2252,7 +2256,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href='static/grades-iframe-toolbar.css?v=20260523utp2';
+    link.href='static/grades-iframe-toolbar.css?v=20260619flat';
   doc.head.appendChild(link);
 }
 
@@ -2615,6 +2619,18 @@ function ensureFrameCollapseCss(doc) {
       width:100%;
       max-width:none;
       box-sizing:border-box;
+      background:transparent!important;
+      border:none!important;
+      box-shadow:none!important;
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      padding:0!important;
+    }
+    body > header .slate-header-top{display:none!important;}
+    .grades-hub-toolbar-host{
+      margin-top:0!important;
+      padding-top:0!important;
+      border-top:none!important;
     }
     body > .main{
       max-width:none;

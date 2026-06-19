@@ -36,9 +36,30 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Grades hub: drop the slate_eval header shell — keep glass on date/tabs/sport rows only */
+header:has(.grades-hub-toolbar-host) {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+header:has(.grades-hub-toolbar-host) .slate-header-top {
+  display: none !important;
+}
+
+header:has(.grades-hub-toolbar-host) .grades-hub-toolbar-host {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
 }
 
 .iframe-shell-toolbar--embedded {
@@ -333,9 +354,9 @@ body {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 @media (max-width: 900px) {

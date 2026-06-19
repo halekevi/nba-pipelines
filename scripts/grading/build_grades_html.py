@@ -1864,9 +1864,7 @@ body{font-family:'Inter',sans-serif;background:#0a0a14;color:var(--text);min-hei
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 header,.main{position:relative;z-index:1}
 
-header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
-box-shadow:0 8px 32px rgba(0,0,0,.28)}
+header{background:transparent;border:none;border-radius:0;padding:12px 20px 0;display:flex;flex-direction:column;align-items:stretch;gap:0;box-shadow:none}
 .slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
 .grades-hub-toolbar-host{flex:1 1 100%;align-self:stretch;width:100%;max-width:100%;min-height:0;box-sizing:border-box}
 .logo{display:flex;align-items:center;gap:14px}
