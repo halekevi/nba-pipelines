@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-18T12:12:28.462331+00:00",
+  "generated_at": "2026-06-19T09:42:52.869016+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -162,34 +162,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -198,34 +198,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -234,34 +234,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -270,34 +270,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -306,34 +306,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -342,34 +342,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -378,34 +378,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Rhyne Howard",
-          "prop_type": "Points",
-          "line": 16.5,
-          "standard_line": 18.0,
+          "player": "Veronica Burton",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 1.0
         }
       ]
     },
@@ -414,44 +414,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -460,44 +460,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -506,44 +506,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -552,44 +552,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -598,44 +598,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -644,44 +644,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -690,44 +690,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         },
         {
-          "player": "Rhyne Howard",
-          "prop_type": "Points",
-          "line": 16.5,
-          "standard_line": 18.0,
+          "player": "Veronica Burton",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 1.0
         }
       ]
     },
@@ -736,19 +736,39 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -756,34 +776,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -792,19 +792,39 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -812,34 +832,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -848,19 +848,39 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -868,34 +888,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -904,19 +904,39 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -924,34 +944,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -960,19 +960,39 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -980,34 +1000,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1016,19 +1016,39 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1036,34 +1056,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1072,54 +1072,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Aliyah Boston",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Rhyne Howard",
-          "prop_type": "Points",
-          "line": 16.5,
-          "standard_line": 18.0,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Veronica Burton",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1128,19 +1128,39 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1148,44 +1168,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1194,19 +1194,39 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1214,44 +1234,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1260,19 +1260,39 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1280,44 +1300,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1326,19 +1326,39 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1346,44 +1366,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1392,19 +1392,39 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1412,44 +1432,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1458,19 +1458,39 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
+          "player": "Satou Sabally",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
@@ -1478,44 +1498,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Jordin Canada",
+          "player": "Sonia Citron",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Maria Conde",
           "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Angel Reese",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6499999999999999
-        },
-        {
-          "player": "Caitlin Clark + Angel Reese",
-          "prop_type": "Points (Combo)",
-          "line": 34.5,
-          "standard_line": 34.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1524,64 +1524,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Sophie Cunningham",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         },
         {
-          "player": "Lexie Hull",
-          "prop_type": "Points",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Jordin Canada",
+          "player": "Satou Sabally",
           "prop_type": "Rebounds",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.95
         },
         {
-          "player": "Angel Reese",
+          "player": "Jonquel Jones",
           "prop_type": "Assists",
-          "line": 2.5,
+          "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6499999999999999
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Aliyah Boston",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "player": "Julie Allemand",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.75
         },
         {
-          "player": "Rhyne Howard",
-          "prop_type": "Points",
-          "line": 16.5,
-          "standard_line": 18.0,
+          "player": "Maria Conde",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.95
+        },
+        {
+          "player": "Veronica Burton",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     }

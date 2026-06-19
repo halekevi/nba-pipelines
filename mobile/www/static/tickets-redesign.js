@@ -77,7 +77,22 @@
     /* 1. Tag sections with sport */
     built.querySelectorAll('.ticket-group-section').forEach(function (sec) {
       var header = sec.querySelector('.group-title');
-      var sport = sportFromTitle(header ? header.textContent : '');
+      var sport = sec.getAttribute('data-sport') || '';
+      if (sport) {
+        sport = sport.toUpperCase();
+        if (sport === 'SOCCER') sport = 'Soccer';
+        else sport = sport.charAt(0) + sport.slice(1).toLowerCase();
+        if (sport === 'Wnba') sport = 'WNBA';
+        if (sport === 'Nba') sport = 'NBA';
+        if (sport === 'Nba1q') sport = 'NBA1Q';
+        if (sport === 'Nba1h') sport = 'NBA1H';
+        if (sport === 'Mlb') sport = 'MLB';
+        if (sport === 'Nhl') sport = 'NHL';
+        if (sport === 'Cbb') sport = 'CBB';
+        if (sport === 'Nfl') sport = 'NFL';
+      } else {
+        sport = sportFromTitle(header ? header.textContent : '');
+      }
       if (sport) {
         sec.setAttribute('data-sport', sport);
         var color = SPORT_COLORS[sport] || '';
