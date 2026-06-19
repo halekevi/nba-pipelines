@@ -2,7 +2,7 @@
   "sport": "nba1h",
   "display_name": "NBA 1H",
   "matchup_mode": "team",
-  "generated_at": "2026-06-19T10:44:45.652425+00:00",
+  "generated_at": "2026-06-19T13:32:21.203176+00:00",
   "slate_note": "",
   "n_teams": 30,
   "elite_rank_cut": 4,
@@ -37,14 +37,6 @@
     }
   ],
   "matchups": {
-    "NYK": {
-      "opponent_slate": "SAS",
-      "opponent_name": "SAS",
-      "opponent_def_rank": 10,
-      "opponent_def_tier": "Above Avg",
-      "team_def_rank": 3,
-      "team_def_tier": "Elite"
-    },
     "SAS": {
       "opponent_slate": "NYK",
       "opponent_name": "NYK",
@@ -52,6 +44,14 @@
       "opponent_def_tier": "Elite",
       "team_def_rank": 10,
       "team_def_tier": "Above Avg"
+    },
+    "NYK": {
+      "opponent_slate": "SAS",
+      "opponent_name": "SAS",
+      "opponent_def_rank": 10,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 3,
+      "team_def_tier": "Elite"
     }
   },
   "players_by_team_cat": {
