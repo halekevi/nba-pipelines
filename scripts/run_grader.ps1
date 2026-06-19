@@ -1284,6 +1284,35 @@ if (Test-Path $TicketEvalBuilderScript) {
             Write-Host "[GRADER] Mobile copy: ticket_eval_high_leg_$Date.html -> mobile\www\" -ForegroundColor DarkGray
         }
     }
+
+    # Win-rate Goblin opt3 shadow (Tier A only) — separate validation track, not production main.
+    $Opt3ShadowJson = Join-Path $Root "ui_runner\data\combined_slate_tickets_winrate_goblin_opt3_$Date.json"
+    if (Test-Path $Opt3ShadowJson) {
+        $TeOpt3Out = Join-Path $TemplatesDir "ticket_eval_winrate_goblin_opt3_$Date.html"
+        $TeOpt3Args = @(
+            "--date", $Date,
+            "--track", "winrate_goblin_opt3_shadow",
+            "--tickets", $Opt3ShadowJson,
+            "--out", $TeOpt3Out
+        )
+        if ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -and $env:PROPORACLE_TICKET_EVAL_GAME_DATE.Trim()) {
+            foreach ($gd in ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -split ',')) {
+                $t = $gd.Trim()
+                if ($t -match '^\d{4}-\d{2}-\d{2}$') {
+                    $TeOpt3Args += @("--game-date", $t)
+                }
+            }
+        }
+        Run-Py "Build Win-Rate Goblin Opt3 Shadow Ticket Eval" $Root $TicketEvalBuilderScript $TeOpt3Args
+        if ((Test-Path -LiteralPath $MobileWwwDir) -and (Test-Path -LiteralPath $TeOpt3Out)) {
+            Copy-Item -LiteralPath $TeOpt3Out -Destination (Join-Path $MobileWwwDir "ticket_eval_winrate_goblin_opt3_$Date.html") -Force -ErrorAction SilentlyContinue
+            Write-Host "[GRADER] Mobile copy: ticket_eval_winrate_goblin_opt3_$Date.html -> mobile\www\" -ForegroundColor DarkGray
+        }
+        $CompareOpt3Script = Join-Path $Root "scripts\compare_winrate_goblin_opt3_shadow.py"
+        if (Test-Path $CompareOpt3Script) {
+            Run-Py "Compare Win-Rate Goblin Opt3 Shadow vs Baseline" $Root $CompareOpt3Script @("--from", $Date, "--to", $Date)
+        }
+    }
 }
 else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow

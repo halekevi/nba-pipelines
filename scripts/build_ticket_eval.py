@@ -1293,6 +1293,7 @@ EVAL_TRACK_LABELS: dict[str, str] = {
     "graded_main": "Graded Main Slate (2-leg, win-rate)",
     "long_parlay": "Long Parlays (5-6 leg)",
     "high_leg_hr": "High Leg HR",
+    "winrate_goblin_opt3_shadow": "Win-Rate Goblin Opt3 Shadow (Tier A)",
 }
 
 
@@ -2401,6 +2402,29 @@ def find_high_leg_ticket_payload_path(
     return None
 
 
+def find_winrate_goblin_opt3_shadow_payload_path(
+    arg_date: str, override: Path | None = None
+) -> Path | None:
+    if override is not None:
+        return override if override.is_file() else None
+    for jp in (
+        REPO_ROOT / "ui_runner" / "data" / f"combined_slate_tickets_winrate_goblin_opt3_{arg_date}.json",
+        TEMPLATES_DIR / "winrate_goblin_opt3_shadow_latest.json",
+    ):
+        if jp.is_file():
+            if jp.name.endswith("_latest.json"):
+                try:
+                    with jp.open(encoding="utf-8") as f:
+                        hdr = json.load(f)
+                    if str(hdr.get("date") or "")[:10] == arg_date:
+                        return jp
+                except (OSError, json.JSONDecodeError, TypeError):
+                    pass
+            else:
+                return jp
+    return None
+
+
 def _normalize_eval_track(raw: str | None) -> str:
     t = str(raw or "graded_main").strip().lower()
     if t in ("main", "graded_main"):
@@ -2409,6 +2433,13 @@ def _normalize_eval_track(raw: str | None) -> str:
         return "long_parlay"
     if t in ("high_leg_hr", "high-leg-hr", "win_rate", "winrate"):
         return "high_leg_hr"
+    if t in (
+        "winrate_goblin_opt3_shadow",
+        "winrate-goblin-opt3-shadow",
+        "goblin_opt3_shadow",
+        "opt3_shadow",
+    ):
+        return "winrate_goblin_opt3_shadow"
     return "graded_main"
 
 
@@ -4669,8 +4700,18 @@ def main() -> int:
     ap.add_argument(
         "--track",
         default="graded_main",
-        choices=("graded_main", "main", "long_parlay", "high_leg_hr", "win_rate"),
-        help="Ticket track: graded_main (2-4 leg, default), long_parlay (5-6 leg), or high_leg_hr (win-rate panel).",
+        choices=(
+            "graded_main",
+            "main",
+            "long_parlay",
+            "high_leg_hr",
+            "win_rate",
+            "winrate_goblin_opt3_shadow",
+        ),
+        help=(
+            "Ticket track: graded_main (2-4 leg, default), long_parlay (5-6 leg), "
+            "high_leg_hr (win-rate panel), or winrate_goblin_opt3_shadow (Goblin Tier A shadow)."
+        ),
     )
     args = ap.parse_args()
     eval_track = _normalize_eval_track(args.track)
@@ -4705,6 +4746,17 @@ def main() -> int:
                 print(
                     "ERROR: No high-leg-HR ticket payload found "
                     "(combined_slate_tickets_high_leg_{date}.json or winrate_tickets_{date}.xlsx)."
+                )
+            return 1
+    elif eval_track == "winrate_goblin_opt3_shadow":
+        tpath = find_winrate_goblin_opt3_shadow_payload_path(arg_date, override=override_path)
+        if not tpath:
+            if override_raw:
+                print(f"ERROR: Opt3 shadow ticket file not found: {override_raw}")
+            else:
+                print(
+                    "ERROR: No opt3 shadow ticket payload found "
+                    "(combined_slate_tickets_winrate_goblin_opt3_{date}.json)."
                 )
             return 1
     else:
@@ -4761,6 +4813,7 @@ def main() -> int:
     dated_name = {
         "long_parlay": f"ticket_eval_long_parlay_{arg_date}.html",
         "high_leg_hr": f"ticket_eval_high_leg_{arg_date}.html",
+        "winrate_goblin_opt3_shadow": f"ticket_eval_winrate_goblin_opt3_{arg_date}.html",
     }.get(eval_track, f"ticket_eval_{arg_date}.html")
     out_dated = TEMPLATES_DIR / dated_name
     try:

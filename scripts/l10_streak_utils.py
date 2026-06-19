@@ -9,6 +9,58 @@ import pandas as pd
 L10_STREAK_HOT = 7
 L10_STREAK_COLD = 7
 
+_L10_COUNT_COLS = (
+    "l10_over",
+    "l10_under",
+    "l10_over_pct",
+    "l10_games_played",
+    "line_hits_over_10",
+    "line_hits_under_10",
+)
+
+
+def _coerce_l10_scalar(raw: object) -> float:
+    """Coerce one L10 count/rate to a scalar float (handles array-like Excel cells)."""
+    if raw is None:
+        return float("nan")
+    try:
+        if pd.isna(raw):
+            return float("nan")
+    except (TypeError, ValueError):
+        pass
+    if isinstance(raw, (list, tuple, np.ndarray)):
+        vals = pd.to_numeric(pd.Series(list(raw)), errors="coerce").dropna()
+        return float(vals.iloc[0]) if len(vals) else float("nan")
+    if isinstance(raw, str):
+        s = raw.strip()
+        if not s:
+            return float("nan")
+        if s.startswith("[") and s.endswith("]"):
+            vals = pd.to_numeric(pd.Series(s.strip("[]").split()), errors="coerce").dropna()
+            return float(vals.iloc[0]) if len(vals) else float("nan")
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return float("nan")
+
+
+def _ensure_l10_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = df
+    for col in _L10_COUNT_COLS:
+        if col not in out.columns:
+            out[col] = np.nan
+    if "l10_streak" not in out.columns:
+        out["l10_streak"] = pd.Series([None] * len(out), dtype=object)
+    return out
+
+
+def _scalarize_l10_count_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = _ensure_l10_columns(df)
+    for col in _L10_COUNT_COLS:
+        if col in out.columns:
+            out[col] = out[col].map(_coerce_l10_scalar)
+    return out
+
 
 def _direction_series(df: pd.DataFrame) -> pd.Series:
     if "direction" in df.columns:
@@ -78,7 +130,7 @@ def add_l10_ui_columns(
     """
     if df is None or df.empty:
         return df
-    out = df.copy()
+    out = _scalarize_l10_count_columns(df.copy())
     stat_cols = [c for c in [f"stat_g{i}" for i in range(1, 11)] if c in out.columns]
     if not stat_cols or line_col not in out.columns:
         return out
@@ -141,6 +193,7 @@ def finalize_l10_ui_columns(df: pd.DataFrame, *, line_col: str = "line") -> pd.D
     out = add_l10_ui_columns(df, line_col=line_col, min_games=1)
     if out is df:
         out = df.copy()
+    out = _scalarize_l10_count_columns(out)
     if "l10_streak" in out.columns:
         out["l10_streak"] = out["l10_streak"].astype(object)
 
@@ -176,8 +229,10 @@ def finalize_l10_ui_columns(df: pd.DataFrame, *, line_col: str = "line") -> pd.D
 
     ok = out["l10_over"].notna() & out["l10_under"].notna()
     if ok.any():
-        total = out.loc[ok, "l10_over"] + out.loc[ok, "l10_under"]
-        out.loc[ok, "l10_over_pct"] = out.loc[ok, "l10_over"] / total.replace(0, np.nan)
+        over_ok = pd.to_numeric(out.loc[ok, "l10_over"], errors="coerce")
+        under_ok = pd.to_numeric(out.loc[ok, "l10_under"], errors="coerce")
+        total = over_ok + under_ok
+        out.loc[ok, "l10_over_pct"] = over_ok / total.replace(0, np.nan)
         streaks = []
         for idx in out.index[ok]:
             streaks.append(
