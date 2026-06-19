@@ -16,18 +16,18 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
-  --bg-main:#0a0a14;
-  --glass-bg:rgba(20,20,20,0.62);
+  --bg-main:#050505;
+  --glass-bg:rgba(20,20,20,0.6);
   --glass-border:rgba(212,175,55,0.15);
   --glass-panel:rgba(255,255,255,0.03);
   --glass-panel-border:rgba(255,255,255,0.08);
   --text-primary:#ffffff;
-  --accent-gold:#d4a017;
-  --accent:#d4a017;
+  --accent-gold:#d4af37;
+  --accent:#d4af37;
   --f0a500:#f0a500;
-  --cyan:#00e5ff;
-  --green:#39ff6e;
-  --red:#ff4d4d;
+  --cyan:#7fc7d9;
+  --green:#9fd8a7;
+  --red:#d07a78;
   --amber:#c89a4a;
   --purple:#8f7ab8;
   --text:rgba(255,255,255,0.92);
@@ -37,18 +37,29 @@
   --bd2:rgba(255,255,255,0.14);
   --glass-shadow:0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.06) inset;
   --glass-shadow-lg:0 20px 60px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.07) inset;
+  --po-page-edge:5%;
+  --po-content-width:100%;
+  --po-content-max:min(98vw,2400px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;}
+html{
+  min-height:100%;
+  overflow-x:hidden;
+  overflow-y:scroll;
+  scrollbar-gutter:stable;
+  -webkit-overflow-scrolling:touch;
+}
 body{
   font-family:'Inter',sans-serif;
-  color:var(--text);
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
-  min-height:100dvh;
+  background:var(--bg-main);
+  color:var(--text-primary);
+  min-height:100%;
+  padding-bottom:clamp(48px,12vw,80px);
+  overflow-x:hidden;
+  overflow-y:visible;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
   position:relative;
-  background:linear-gradient(135deg,#0a0a1a 0%,#0d0b1e 50%,#0a0f1a 100%);
 }
 html.page-grades-root,
 html.page-grades-root body.page-grades{
@@ -174,17 +185,13 @@ body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
 }
-/* Transparent shell showed hub body::before/::after + .grain-layer under the toolbar strip; slate iframe used transparent body + its own ::before/::after (Grades-only). */
-body.page-grades::before,
-body.page-grades::after{display:none !important;}
-body.page-grades .grain-layer{display:none !important;}
 body.page-grades .iframe-shell-stage{
-  background:var(--bg-main);
+  background:transparent;
 }
 [data-theme="light"] body.page-grades .iframe-shell-stage{
-  background:#d2e2f4;
-  border-top:1px solid rgba(15,45,80,0.10);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.65);
+  background:transparent;
+  border-top:none;
+  box-shadow:none;
 }
 body::before{
   content:'';
@@ -193,11 +200,12 @@ body::before{
   z-index:0;
   pointer-events:none;
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(127,199,217,0.20) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(212,160,23,0.14) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(143,122,184,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 22% 88%, rgba(0,229,255,0.07) 0%, transparent 34%),
-    radial-gradient(ellipse at 78% 82%, rgba(212,160,23,0.06) 0%, transparent 30%);
+    radial-gradient(ellipse at 12% 8%, rgba(160,198,255,0.08) 0%, transparent 38%),
+    radial-gradient(ellipse at 88% 6%, rgba(225,188,101,0.18) 0%, transparent 36%),
+    radial-gradient(ellipse at 50% 55%, rgba(179,157,255,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 18% 86%, rgba(225,188,101,0.10) 0%, transparent 34%),
+    radial-gradient(ellipse at 82% 82%, rgba(159,204,255,0.10) 0%, transparent 30%),
+    linear-gradient(180deg,#050507 0%,#0d0b12 46%,#141017 100%);
 }
 body::after{
   content:'';
@@ -215,12 +223,57 @@ body::after{
   mix-blend-mode:screen;
   opacity:.55;
 }
-.grades-page{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
-.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.grades-page{position:relative;z-index:1;display:block;width:100%;min-height:0;}
+.grades-body{display:block;width:100%;min-height:0;}
+.shell{
+  position:relative;z-index:1;
+  width:var(--po-content-width);max-width:var(--po-content-max);
+  margin:0 auto;
+  padding:clamp(12px,2.5vw,28px) 0;
+  box-sizing:border-box;
+}
+.grades-hub-shell{
+  width:100%;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  background:rgba(255,255,255,.02);
+  backdrop-filter:blur(16px) saturate(170%);
+  -webkit-backdrop-filter:blur(16px) saturate(170%);
+  box-shadow:0 6px 24px rgba(0,0,0,.24);
+  overflow:hidden;
+  box-sizing:border-box;
+}
+[data-theme="light"] .grades-hub-shell{
+  background:rgba(205,218,236,.92);
+  border-color:rgba(70,100,130,.18);
+  box-shadow:0 4px 20px rgba(15,45,80,.10);
+}
+.grades-hub-shell .date-bar,
+.grades-hub-shell .tabs-bar,
+.grades-hub-shell .ticket-track-bar{
+  margin-left:0 !important;margin-right:0 !important;
+}
+.grades-hub-shell .iframe-shell-toolbar{
+  padding-left:clamp(10px,2vw,16px);
+  padding-right:clamp(10px,2vw,16px);
+  padding-bottom:clamp(10px,2vw,14px);
+}
 .gold-shimmer{background:linear-gradient(to bottom,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent;}
 
-/* nav — flush to viewport top (matches Tickets) */
-.snav{position:sticky;top:0;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);border-left:none;border-right:none;padding:0 36px;display:flex;align-items:center;height:72px;gap:0;margin:0 0 1rem 0;flex-shrink:0;border-radius:0;box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
+/* nav — match Home (centered glass bar) */
+.snav{
+  position:sticky;top:1rem;z-index:200;
+  width:var(--po-content-width);max-width:var(--po-content-max);
+  margin:clamp(12px,2vh,20px) auto 1rem auto;
+  background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid var(--glass-border);
+  padding:0 clamp(16px,2vw,40px);
+  display:flex;align-items:center;height:72px;gap:0;
+  flex-shrink:0;border-radius:20px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);
+  transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;
+  box-sizing:border-box;
+}
 .snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
 .nav-accent{position:absolute;top:0;left:0;right:0;height:2px;border-radius:0;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,var(--cyan) 40%,var(--purple) 65%,#c6ff00 85%,transparent 100%);opacity:.75;animation:accentShift 6s ease-in-out infinite alternate;}
 @keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(18deg);}}
@@ -275,7 +328,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* date bar — glass pill */
 .date-bar{
-  flex-shrink:0;margin:6px 1rem 0;padding:10px 14px;min-height:48px;height:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:100;
+  flex-shrink:0;margin:8px 0 0;padding:10px 14px;min-height:48px;height:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:100;
   font-family:'Inter',sans-serif;
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
@@ -309,7 +362,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 .iframe-shell-toolbar{
   position:sticky;top:0;z-index:60;
-  flex-shrink:0;padding:8px 12px 0;border-bottom:none;
+  flex-shrink:0;padding:8px 12px 12px;border-bottom:none;
   display:flex;flex-direction:column;gap:6px;
   background:transparent;
   transition:padding .28s ease;
@@ -355,7 +408,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell-stage[data-grades-tab="tickets"]{flex:none!important;overflow:visible!important;}
 /* Slate/ticket iframes follow #empty-state in DOM — without z-index, the iframe paints on top and hides
    “No report” / errors on desktop (mobile media query used to fix this only for small screens). */
-.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:var(--bg-main);min-width:0;box-sizing:border-box;z-index:1;}
+.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:transparent;min-width:0;box-sizing:border-box;z-index:1;}
 /* Ticket tab: pull iframe flush under toolbar (ticket_eval has its own KPI bar) */
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
@@ -662,7 +715,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 }
 /* tabs — glass, gold active */
 .tabs-bar{
-  flex-shrink:0;margin:4px 1rem 0;padding:10px 14px;display:flex;gap:12px;align-items:center;min-height:52px;z-index:90;position:relative;
+  flex-shrink:0;margin:4px 0 0;padding:10px 14px;display:flex;gap:12px;align-items:center;min-height:52px;z-index:90;position:relative;
   font-family:'Inter',sans-serif;
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
@@ -678,7 +731,7 @@ html.page-grades-root body.page-grades[data-grades-active-tab="tickets"] .iframe
 .tab-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
 .ticket-track-bar{
-  flex-shrink:0;margin:6px 1rem 0;padding:0;display:none;gap:16px;align-items:center;flex-wrap:wrap;
+  flex-shrink:0;margin:6px 0 0;padding:0;display:none;gap:16px;align-items:center;flex-wrap:wrap;
   background:transparent !important;border:none !important;box-shadow:none !important;
 }
 .ticket-track-bar[hidden]{display:none !important;}
@@ -1271,46 +1324,45 @@ select option,
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  contain: strict;
+  transform: translateZ(0);
   background:
-    conic-gradient(from var(--mesh-r1) at 20% 15%,
+    conic-gradient(from 210deg at 20% 15%,
       rgba(127,199,217,0.12) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(127,199,217,0.08) 360deg),
-    conic-gradient(from var(--mesh-r2) at 80% 20%,
+    conic-gradient(from 140deg at 80% 20%,
       rgba(212,175,55,0.10) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(212,175,55,0.06) 360deg),
-    conic-gradient(from var(--mesh-r3) at 50% 75%,
+    conic-gradient(from 320deg at 50% 75%,
       rgba(183,168,255,0.08) 0deg,
       transparent 90deg,
       transparent 270deg,
       rgba(127,199,217,0.05) 360deg);
-  animation:
-    meshR1 28s linear infinite,
-    meshR2 36s linear infinite,
-    meshR3 44s linear infinite;
-  filter: blur(32px);
+  filter: blur(28px);
 }
 [data-theme="light"] .mesh-bg {
   background:
-    conic-gradient(from var(--mesh-r1) at 20% 15%,
+    conic-gradient(from 210deg at 20% 15%,
       rgba(137,196,255,0.10) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(137,196,255,0.06) 360deg),
-    conic-gradient(from var(--mesh-r2) at 80% 20%,
+    conic-gradient(from 140deg at 80% 20%,
       rgba(169,220,255,0.08) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(169,220,255,0.05) 360deg),
-    conic-gradient(from var(--mesh-r3) at 50% 75%,
+    conic-gradient(from 320deg at 50% 75%,
       rgba(173,196,255,0.06) 0deg,
       transparent 90deg,
       transparent 270deg,
       rgba(137,196,255,0.04) 360deg);
 }
+.grain-layer{display:none!important;}
 
 [data-theme="light"] .iframe-shell{
   background:transparent !important;
@@ -1447,18 +1499,16 @@ select option,
 
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260608ticketembed4"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260525shell98"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
-<!-- Ambient orbs — match index.html depth -->
-<div class="orb-1" style="position:fixed;top:-15%;left:-8%;width:600px;height:600px;background:radial-gradient(circle,rgba(127,199,217,0.18) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbDrift1 18s ease-in-out infinite alternate;"></div>
-<div class="orb-1" style="position:fixed;top:20%;right:-10%;width:700px;height:700px;background:radial-gradient(circle,rgba(212,160,23,0.11) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbDrift2 22s ease-in-out infinite alternate;"></div>
-<div class="orb-2" style="position:fixed;bottom:5%;left:30%;width:580px;height:580px;background:radial-gradient(circle,rgba(183,168,255,0.09) 0%,transparent 70%);filter:blur(100px);z-index:0;pointer-events:none;animation:orbDrift3 26s ease-in-out infinite alternate;"></div>
+<!-- Ambient orbs — match Home (static, no drift animation) -->
+<div class="po-orb" style="top:-15%;left:-8%;width:min(520px,85vw);height:min(520px,85vw);background:radial-gradient(circle,rgba(127,199,217,0.16) 0%,transparent 70%);filter:blur(72px);"></div>
+<div class="po-orb" style="top:18%;right:-10%;width:min(560px,90vw);height:min(560px,90vw);background:radial-gradient(circle,rgba(212,175,55,0.09) 0%,transparent 70%);filter:blur(72px);"></div>
+<div class="po-orb" style="bottom:4%;left:28%;width:min(480px,80vw);height:min(480px,80vw);background:radial-gradient(circle,rgba(183,168,255,0.07) 0%,transparent 70%);filter:blur(64px);"></div>
 <style>
-@keyframes orbDrift1{from{transform:translate(0,0);}to{transform:translate(60px,80px);}}
-@keyframes orbDrift2{from{transform:translate(0,0);}to{transform:translate(-50px,60px);}}
-@keyframes orbDrift3{from{transform:translate(0,0);}to{transform:translate(40px,-50px);}}
+.po-orb{position:fixed;z-index:0;pointer-events:none;contain:strict;transform:translateZ(0);}
 </style>
 <div class="mesh-bg" aria-hidden="true"></div>
 <div class="grain-layer" aria-hidden="true"></div>
@@ -1467,6 +1517,8 @@ select option,
 {% set nav_pill_suffix = 'GRADES' %}
 {% include '_site_nav.html' %}
 
+<div class="shell">
+<div class="grades-hub-shell">
 <div class="grades-page">
 
 <div class="grades-body">
@@ -1586,6 +1638,8 @@ select option,
 </div>
 </div><!-- /.grades-body -->
 </div><!-- /.grades-page -->
+</div><!-- /.grades-hub-shell -->
+</div><!-- /.shell -->
 
 <script>
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
@@ -1971,7 +2025,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260619tabs2';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260619home';
   doc.head.appendChild(link);
 }
 
@@ -2074,8 +2128,8 @@ function ensureFrameCollapseCss(doc) {
   style.textContent = `
     /* v20260430mobilecol — hub-injected slate; column stack ≤768px + coarse pick-tier (desktop keeps 2-col). */
     /* Embedded slate: transparent body + fixed ::before/::after glows composite badly in WebView over glass (reads as film grain). */
-    html{background:#0a0a14!important;}
-    body{background:#0a0a14!important;}
+    html{background:transparent!important;}
+    body{background:transparent!important;}
     body::before,body::after{display:none!important;}
     /* Pick-type / tier badges: never wrap — table cells default min-width:auto can still squeeze inline-block text. */
     .chip,.chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std{

@@ -16,6 +16,7 @@ html {
   min-height: 100% !important;
   overflow-x: hidden !important;
   overflow-y: visible !important;
+  background: transparent !important;
 }
 body {
   min-height: 100% !important;
@@ -24,6 +25,7 @@ body {
   margin: 0 !important;
   overflow-x: hidden !important;
   overflow-y: visible !important;
+  background: transparent !important;
 }
 
 .iframe-shell-toolbar {
