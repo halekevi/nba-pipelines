@@ -2049,14 +2049,43 @@
   },
   {
     "date": "2026-06-18",
+    "track": "graded_main",
+    "n_tickets": 222,
+    "wins": 17,
+    "guarantees": 0,
+    "losses": 205,
+    "void_loss_ct": 1,
+    "win_rate": 0.0766,
+    "avg_ev_predicted": -0.2476,
+    "net_per_10": -7.57,
+    "roi_pct": -75.68,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 29,
+      "wins": 4
+    },
+    "marginal_tickets": {
+      "count": 6,
+      "wins": 2
+    },
+    "skip_tickets": {
+      "count": 187,
+      "wins": 11
+    }
+  },
+  {
+    "date": "2026-06-18",
     "track": "long_parlay",
-    "n_tickets": 8,
+    "n_tickets": 38,
     "wins": 0,
     "guarantees": 0,
-    "losses": 8,
+    "losses": 38,
     "void_loss_ct": 0,
     "win_rate": 0.0,
-    "avg_ev_predicted": 1.3435,
+    "avg_ev_predicted": -0.2183,
     "net_per_10": -10.0,
     "roi_pct": -100.0,
     "strong_tickets": {
@@ -2072,37 +2101,66 @@
       "wins": 0
     },
     "skip_tickets": {
-      "count": 2,
+      "count": 32,
       "wins": 0
     }
   },
   {
-    "date": "2026-06-18",
+    "date": "2026-06-19",
     "track": "graded_main",
-    "n_tickets": 40,
-    "wins": 7,
+    "n_tickets": 333,
+    "wins": 28,
     "guarantees": 0,
-    "losses": 33,
-    "void_loss_ct": 5,
-    "win_rate": 0.175,
-    "avg_ev_predicted": 0.5554,
-    "net_per_10": -4.0,
-    "roi_pct": -40.0,
+    "losses": 305,
+    "void_loss_ct": 1,
+    "win_rate": 0.0841,
+    "avg_ev_predicted": 0.3933,
+    "net_per_10": -5.02,
+    "roi_pct": -50.21,
     "strong_tickets": {
       "count": 0,
       "wins": 0
     },
     "ok_tickets": {
-      "count": 20,
-      "wins": 2
+      "count": 113,
+      "wins": 15
     },
     "marginal_tickets": {
-      "count": 5,
+      "count": 16,
       "wins": 2
     },
     "skip_tickets": {
-      "count": 15,
+      "count": 204,
+      "wins": 11
+    }
+  },
+  {
+    "date": "2026-06-19",
+    "track": "long_parlay",
+    "n_tickets": 70,
+    "wins": 3,
+    "guarantees": 0,
+    "losses": 67,
+    "void_loss_ct": 0,
+    "win_rate": 0.0429,
+    "avg_ev_predicted": 1.494,
+    "net_per_10": -1.43,
+    "roi_pct": -14.29,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 29,
       "wins": 3
+    },
+    "marginal_tickets": {
+      "count": 3,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 38,
+      "wins": 0
     }
   }
 ]
