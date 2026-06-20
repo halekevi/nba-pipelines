@@ -297,12 +297,18 @@ def _merged_combined_rows_for_mobile(sports_payload: dict) -> list:
 
 
 def _build_mobile_sport_breakdown(templates_dir):
-    from utils.income_sport_breakdown import build_from_graded_props, graded_props_signature
+    from utils.income_sport_breakdown import (
+        build_from_graded_props,
+        build_monthly_from_graded_props,
+        graded_props_signature,
+    )
 
     rows = build_from_graded_props(templates_dir, stake_per_pick=10.0)
+    monthly_rows = build_monthly_from_graded_props(templates_dir, stake_per_pick=10.0)
     return {
         "ok": True,
         "rows": rows,
+        "monthly_rows": monthly_rows,
         "source": "graded_props_json",
         "signature": graded_props_signature(templates_dir),
     }
@@ -641,45 +647,6 @@ async function fetch_smart(localPath) {
           .sort((a, b) => a.date.localeCompare(b.date));
       }
 
-      function aggregateMonths(rowsAsc) {
-        const buckets = {};
-        for (const r of rowsAsc) {
-          const month = r.date.slice(0, 7);
-          if (!/^\\d{4}-\\d{2}$/.test(month)) continue;
-          if (!buckets[month]) buckets[month] = { tickets: 0, decided: 0, paid: 0, net: 0 };
-          buckets[month].tickets += r.tickets;
-          buckets[month].decided += r.decided;
-          buckets[month].paid += r.paid;
-          buckets[month].net += r.net;
-        }
-        return Object.keys(buckets).sort().reverse().map((month) => {
-          const b = buckets[month];
-          const winRate = b.decided > 0 ? (b.paid / b.decided) * 100 : null;
-          const roi = b.tickets > 0 ? (b.net / (b.tickets * 10)) * 100 : 0;
-          return { month, ...b, winRate, roi };
-        });
-      }
-
-      function renderMonthly(rowsAsc) {
-        const monthlyBody = document.getElementById('monthly-breakdown-tbody');
-        if (!monthlyBody) return;
-        const months = aggregateMonths(rowsAsc);
-        monthlyBody.innerHTML = months.map((m) => {
-          const winText = m.winRate != null ? `${m.winRate.toFixed(1)}%` : '—';
-          return `
-            <tr>
-              <td>${m.month}</td>
-              <td>${m.tickets}</td>
-              <td>${m.decided}</td>
-              <td>${m.paid}</td>
-              <td>${winText}</td>
-              <td class="${clsFor(m.net)}">${fmtMoney(m.net)}</td>
-              <td class="${clsFor(m.roi)}">${m.roi.toFixed(2)}%</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
       function render(rowsAsc) {
         const rowsDesc = [...rowsAsc].reverse();
         const totalTickets = rowsAsc.reduce((s, r) => s + r.tickets, 0);
@@ -726,8 +693,6 @@ async function fetch_smart(localPath) {
           `).join('');
         }
 
-        renderMonthly(rowsAsc);
-
         const emptyNote = document.querySelector('.empty-note');
         if (emptyNote) emptyNote.style.display = rowsAsc.length ? 'none' : '';
 
@@ -763,26 +728,48 @@ async function fetch_smart(localPath) {
         }
       }
 
-      function renderSportBreakdown(rows) {
+      function renderSportBreakdown(payload) {
         const body = document.getElementById('sport-breakdown-tbody');
-        if (!body) return;
-        const safe = Array.isArray(rows) ? rows : [];
-        body.innerHTML = safe.map((r) => {
-          const decided = Number(r.decided || 0);
-          const paid = Number(r.paid || 0);
-          const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
-          const net = Number(r.net_dollars || 0);
-          const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
-          return `
-            <tr>
-              <td>${String(r.sport || '')}</td>
-              <td>${decided}</td>
-              <td>${paid}</td>
-              <td>${winText}</td>
-              <td class="${clsFor(net)}">${fmtMoney(net)}</td>
-            </tr>
-          `;
-        }).join('');
+        const monthlyBody = document.getElementById('sport-monthly-breakdown-tbody');
+        const rows = payload && Array.isArray(payload.rows) ? payload.rows : [];
+        const monthlyRows = payload && Array.isArray(payload.monthly_rows) ? payload.monthly_rows : [];
+        if (body) {
+          body.innerHTML = rows.map((r) => {
+            const decided = Number(r.decided || 0);
+            const paid = Number(r.paid || 0);
+            const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+            const net = Number(r.net_dollars || 0);
+            const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+            return `
+              <tr>
+                <td>${String(r.sport || '')}</td>
+                <td>${decided}</td>
+                <td>${paid}</td>
+                <td>${winText}</td>
+                <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+        if (monthlyBody) {
+          monthlyBody.innerHTML = monthlyRows.map((r) => {
+            const decided = Number(r.decided || 0);
+            const paid = Number(r.paid || 0);
+            const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+            const net = Number(r.net_dollars || 0);
+            const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+            return `
+              <tr>
+                <td>${String(r.sport || '')}</td>
+                <td>${String(r.month || '')}</td>
+                <td>${decided}</td>
+                <td>${paid}</td>
+                <td>${winText}</td>
+                <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
       }
 
       fetch(HISTORY_URL, { cache: 'no-store' })
@@ -791,9 +778,9 @@ async function fetch_smart(localPath) {
         .catch(() => render([]));
 
       fetch(SPORT_BREAKDOWN_URL, { cache: 'no-store' })
-        .then((r) => (r.ok ? r.json() : { rows: [] }))
-        .then((j) => renderSportBreakdown(j && j.rows))
-        .catch(() => renderSportBreakdown([]));
+        .then((r) => (r.ok ? r.json() : { rows: [], monthly_rows: [] }))
+        .then((j) => renderSportBreakdown(j))
+        .catch(() => renderSportBreakdown({ rows: [], monthly_rows: [] }));
     })();
   </script>
 """

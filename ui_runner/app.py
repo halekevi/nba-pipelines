@@ -65,10 +65,9 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
-from utils.income_monthly_breakdown import aggregate_monthly_from_daily_rows
 from utils.income_sport_breakdown import (
     graded_props_signature,
-    read_cached_rows,
+    read_cached_payload,
     refresh_cache as refresh_income_sport_breakdown_cache,
 )
 from utils.proporacle_data_root import (
@@ -5547,32 +5546,39 @@ def _current_streak_label(rows_asc: list[dict[str, Any]]) -> str:
 _SPORT_BREAKDOWN_MEM: dict[str, Any] = {}
 
 
-def _load_sport_breakdown_rows(*, stake_per_pick: float = 10.0) -> list[dict[str, Any]]:
+def _load_sport_breakdown_bundle(*, stake_per_pick: float = 10.0) -> dict[str, list[dict[str, Any]]]:
     """Fast path for /income: read sport_breakdown.json; avoid per-request xlsx/props scans."""
+    empty = {"rows": _empty_sport_breakdown_rows(), "monthly_rows": []}
     sig = graded_props_signature(TEMPLATES_DIR)
     force = os.environ.get("INCOME_REBUILD_SPORT", "").strip().lower() in ("1", "true", "yes", "on")
     if force:
-        rows = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
+        bundle = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
         _SPORT_BREAKDOWN_MEM["sig"] = sig
-        _SPORT_BREAKDOWN_MEM["rows"] = rows
-        return rows
+        _SPORT_BREAKDOWN_MEM["bundle"] = bundle
+        return bundle
 
-    mem_rows = _SPORT_BREAKDOWN_MEM.get("rows")
-    if _SPORT_BREAKDOWN_MEM.get("sig") == sig and mem_rows:
-        return mem_rows
+    mem_bundle = _SPORT_BREAKDOWN_MEM.get("bundle")
+    if _SPORT_BREAKDOWN_MEM.get("sig") == sig and isinstance(mem_bundle, dict):
+        return mem_bundle
 
-    cached = read_cached_rows(BASE_DIR, TEMPLATES_DIR, expected_signature=sig)
+    cached = read_cached_payload(BASE_DIR, TEMPLATES_DIR, expected_signature=sig)
     if cached is None:
-        cached = read_cached_rows(BASE_DIR, TEMPLATES_DIR)
+        cached = read_cached_payload(BASE_DIR, TEMPLATES_DIR)
+    if cached and (not cached.get("monthly_rows")):
+        cached = None
     if cached:
         _SPORT_BREAKDOWN_MEM["sig"] = sig
-        _SPORT_BREAKDOWN_MEM["rows"] = cached
+        _SPORT_BREAKDOWN_MEM["bundle"] = cached
         return cached
 
-    rows = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
+    bundle = refresh_income_sport_breakdown_cache(BASE_DIR, TEMPLATES_DIR, stake_per_pick=stake_per_pick)
     _SPORT_BREAKDOWN_MEM["sig"] = sig
-    _SPORT_BREAKDOWN_MEM["rows"] = rows
-    return rows
+    _SPORT_BREAKDOWN_MEM["bundle"] = bundle
+    return bundle
+
+
+def _load_sport_breakdown_rows(*, stake_per_pick: float = 10.0) -> list[dict[str, Any]]:
+    return _load_sport_breakdown_bundle(stake_per_pick=stake_per_pick)["rows"]
 
 
 @app.get("/income")
@@ -5593,8 +5599,7 @@ def page_income():
         cum_points.append({"date": r.get("date"), "cum_net": round(cum, 2)})
 
     rows_desc = list(reversed(rows_asc))
-    sport_rows = _load_sport_breakdown_rows(stake_per_pick=10.0)
-    monthly_rows = aggregate_monthly_from_daily_rows(rows_asc)
+    sport_bundle = _load_sport_breakdown_bundle(stake_per_pick=10.0)
     return render_template(
         "dashboard_income.html",
         ui_build_id=_UI_BUILD_ID,
@@ -5609,8 +5614,8 @@ def page_income():
         },
         daily_rows=rows_desc,
         chart_points=Markup(json.dumps(cum_points)),
-        monthly_rows=monthly_rows,
-        sport_rows=sport_rows,
+        sport_rows=sport_bundle["rows"],
+        sport_monthly_rows=sport_bundle["monthly_rows"],
     )
 
 

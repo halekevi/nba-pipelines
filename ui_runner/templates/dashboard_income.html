@@ -153,7 +153,7 @@
     </div>
     <section class="hero">
       <h1>P&L Log</h1>
-      <p>Flat stake model: $10 per ticket. <strong>Monthly breakdown</strong> rolls up <code>grade_history.json</code> by calendar month (ticket-level). <strong>Sport breakdown</strong> uses graded props (pick-level). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading. On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys.</p>
+      <p>Flat stake model: $10 per pick (sport breakdown uses graded props). Daily ticket rows come from <code>grade_history.json</code> via <code>scripts/build_ticket_eval.py</code> after grading. On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so history survives redeploys.</p>
     </section>
 
     <section class="summary-grid">
@@ -224,43 +224,9 @@
     </section>
 
     <section class="panel">
-      <h2>Monthly Breakdown</h2>
-      {% if monthly_rows and monthly_rows|length > 0 %}
-      <table class="tbl" aria-label="Monthly breakdown table">
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th>Tickets</th>
-            <th>Decided</th>
-            <th>Paid</th>
-            <th>Win%</th>
-            <th>Net $</th>
-            <th>ROI%</th>
-          </tr>
-        </thead>
-        <tbody id="monthly-breakdown-tbody">
-          {% for r in monthly_rows %}
-          <tr>
-            <td>{{ r.month }}</td>
-            <td>{{ r.tickets }}</td>
-            <td>{{ r.decided }}</td>
-            <td>{{ r.paid }}</td>
-            <td>{{ '%.1f%%'|format((r.win_rate or 0) * 100) if r.decided > 0 else '—' }}</td>
-            <td class="{{ 'num-pos' if r.net_dollars >= 0 else 'num-neg' }}">${{ '%.2f'|format(r.net_dollars) }}</td>
-            <td class="{{ 'num-pos' if r.roi_pct >= 0 else 'num-neg' }}">{{ '%.2f%%'|format(r.roi_pct) }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <div class="empty-note">No monthly data yet — run grading and <code>build_ticket_eval.py</code> to populate <code>grade_history.json</code>.</div>
-      {% endif %}
-    </section>
-
-    <section class="panel">
       <h2>Sport Breakdown</h2>
-      <p class="empty-note" style="margin:0 0 10px;padding:0;">Pick-level totals from graded props (not ticket counts).</p>
-      <table class="tbl" aria-label="Sport breakdown table">
+      <p class="empty-note" style="margin:0 0 10px;padding:0;">Pick-level totals from graded props ($10 flat stake per pick).</p>
+      <table class="tbl" aria-label="Sport breakdown totals">
         <thead>
           <tr>
             <th>Sport</th>
@@ -282,6 +248,36 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <h3 style="margin:18px 0 10px;font-size:1rem;">By Month</h3>
+      {% if sport_monthly_rows and sport_monthly_rows|length > 0 %}
+      <table class="tbl" aria-label="Sport breakdown by month">
+        <thead>
+          <tr>
+            <th>Sport</th>
+            <th>Month</th>
+            <th>Decided</th>
+            <th>Paid</th>
+            <th>Win%</th>
+            <th>Net $</th>
+          </tr>
+        </thead>
+        <tbody id="sport-monthly-breakdown-tbody">
+          {% for r in sport_monthly_rows %}
+          <tr>
+            <td>{{ r.sport }}</td>
+            <td>{{ r.month }}</td>
+            <td>{{ r.decided }}</td>
+            <td>{{ r.paid }}</td>
+            <td>{{ '%.1f%%'|format((r.win_rate or 0) * 100) if r.decided > 0 else '—' }}</td>
+            <td class="{{ 'num-pos' if r.net_dollars >= 0 else 'num-neg' }}">${{ '%.2f'|format(r.net_dollars) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-note">No monthly sport data yet — grade slates to populate <code>graded_props_*.json</code>.</div>
+      {% endif %}
     </section>
   </main>
 
@@ -366,45 +362,6 @@
           .sort((a, b) => a.date.localeCompare(b.date));
       }
 
-      function aggregateMonths(rowsAsc) {
-        const buckets = {};
-        for (const r of rowsAsc) {
-          const month = r.date.slice(0, 7);
-          if (!/^\d{4}-\d{2}$/.test(month)) continue;
-          if (!buckets[month]) buckets[month] = { tickets: 0, decided: 0, paid: 0, net: 0 };
-          buckets[month].tickets += r.tickets;
-          buckets[month].decided += r.decided;
-          buckets[month].paid += r.paid;
-          buckets[month].net += r.net;
-        }
-        return Object.keys(buckets).sort().reverse().map((month) => {
-          const b = buckets[month];
-          const winRate = b.decided > 0 ? (b.paid / b.decided) * 100 : null;
-          const roi = b.tickets > 0 ? (b.net / (b.tickets * 10)) * 100 : 0;
-          return { month, ...b, winRate, roi };
-        });
-      }
-
-      function renderMonthly(rowsAsc) {
-        const monthlyBody = document.getElementById('monthly-breakdown-tbody');
-        if (!monthlyBody) return;
-        const months = aggregateMonths(rowsAsc);
-        monthlyBody.innerHTML = months.map((m) => {
-          const winText = m.winRate != null ? `${m.winRate.toFixed(1)}%` : '—';
-          return `
-            <tr>
-              <td>${m.month}</td>
-              <td>${m.tickets}</td>
-              <td>${m.decided}</td>
-              <td>${m.paid}</td>
-              <td>${winText}</td>
-              <td class="${clsFor(m.net, 'num-pos', 'num-neg')}">${fmtMoney(m.net)}</td>
-              <td class="${clsFor(m.roi, 'num-pos', 'num-neg')}">${m.roi.toFixed(2)}%</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
       function render(rowsAsc) {
         const rowsDesc = [...rowsAsc].reverse();
         const totalTickets = rowsAsc.reduce((s, r) => s + r.tickets, 0);
@@ -460,8 +417,6 @@
           const emptyNote = dailyPanel.querySelector('.empty-note');
           if (emptyNote) emptyNote.style.display = rowsAsc.length ? 'none' : '';
         }
-
-        renderMonthly(rowsAsc);
 
         const pts = [];
         let cum = 0;
