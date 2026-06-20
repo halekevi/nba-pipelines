@@ -65,6 +65,7 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
+from utils.income_monthly_breakdown import aggregate_monthly_from_daily_rows
 from utils.income_sport_breakdown import (
     graded_props_signature,
     read_cached_rows,
@@ -5593,6 +5594,7 @@ def page_income():
 
     rows_desc = list(reversed(rows_asc))
     sport_rows = _load_sport_breakdown_rows(stake_per_pick=10.0)
+    monthly_rows = aggregate_monthly_from_daily_rows(rows_asc)
     return render_template(
         "dashboard_income.html",
         ui_build_id=_UI_BUILD_ID,
@@ -5607,6 +5609,7 @@ def page_income():
         },
         daily_rows=rows_desc,
         chart_points=Markup(json.dumps(cum_points)),
+        monthly_rows=monthly_rows,
         sport_rows=sport_rows,
     )
 
