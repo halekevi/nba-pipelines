@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-21T10:42:53.410268+00:00",
+  "generated_at": "2026-06-21T14:02:43.746052+00:00",
   "slate_note": "Tennis match day 2026-06-22 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-22.xlsx)",
   "tennis_match_date": "2026-06-22",
   "n_teams": 300,
@@ -529,6 +529,14 @@
       "team_def_rank": 33,
       "team_def_tier": "Avg"
     },
+    "jacob fearnley": {
+      "opponent_slate": "thiago agustin tirante",
+      "opponent_name": "THIAGO AGUSTIN TIRANTE",
+      "opponent_def_rank": 52,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 130,
+      "team_def_tier": "Weak"
+    },
     "emma navarro": {
       "opponent_slate": "eva lys",
       "opponent_name": "EVA LYS",
@@ -584,14 +592,6 @@
       "opponent_def_tier": "Above Avg",
       "team_def_rank": 16,
       "team_def_tier": "Above Avg"
-    },
-    "jacob fearnley": {
-      "opponent_slate": "thiago agustin tirante",
-      "opponent_name": "THIAGO AGUSTIN TIRANTE",
-      "opponent_def_rank": 52,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 130,
-      "team_def_tier": "Weak"
     },
     "terence atmane": {
       "opponent_slate": "gabriel diallo",
@@ -729,6 +729,14 @@
       "team_def_rank": 117,
       "team_def_tier": "Weak"
     },
+    "marton fucsovics": {
+      "opponent_slate": "corentin moutet",
+      "opponent_name": "CORENTIN MOUTET",
+      "opponent_def_rank": 36,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 76,
+      "team_def_tier": "Below Avg"
+    },
     "sara bejlek": {
       "opponent_slate": "laura siegemund",
       "opponent_name": "LAURA SIEGEMUND",
@@ -743,14 +751,6 @@
       "opponent_def_rank": 74,
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 68,
-      "team_def_tier": "Below Avg"
-    },
-    "marton fucsovics": {
-      "opponent_slate": "corentin moutet",
-      "opponent_name": "CORENTIN MOUTET",
-      "opponent_def_rank": 36,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 76,
       "team_def_tier": "Below Avg"
     },
     "mccartney kessler": {
@@ -817,6 +817,14 @@
       "team_def_rank": 84,
       "team_def_tier": "Below Avg"
     },
+    "corentin moutet": {
+      "opponent_slate": "marton fucsovics",
+      "opponent_name": "MARTON FUCSOVICS",
+      "opponent_def_rank": 76,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 36,
+      "team_def_tier": "Avg"
+    },
     "janlennard struff": {
       "opponent_slate": "martin landaluce",
       "opponent_name": "MARTIN LANDALUCE",
@@ -832,14 +840,6 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 53,
       "team_def_tier": "Below Avg"
-    },
-    "corentin moutet": {
-      "opponent_slate": "marton fucsovics",
-      "opponent_name": "MARTON FUCSOVICS",
-      "opponent_def_rank": 76,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 36,
-      "team_def_tier": "Avg"
     },
     "hannah klugman": {
       "opponent_slate": "tereza valentova",
@@ -1383,6 +1383,34 @@
         }
       ]
     },
+    "marton fucsovics|match_total_games": {
+      "team_slate": "marton fucsovics",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "corentin moutet",
+        "name": "CORENTIN MOUTET",
+        "def_rank": 36,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Marton Fucsovics",
+          "player_norm": "marton fucsovics",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 24.5,
+          "game_score": 24.5,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +6.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": 6.3
+        }
+      ]
+    },
     "viktorija golubic|match_total_games": {
       "team_slate": "viktorija golubic",
       "category": "match_total_games",
@@ -1520,34 +1548,6 @@
           "def_boost": null,
           "pp_line": 19.5,
           "pp_edge": 3.1
-        }
-      ]
-    },
-    "marton fucsovics|match_total_games": {
-      "team_slate": "marton fucsovics",
-      "category": "match_total_games",
-      "category_label": "Total games",
-      "threshold": 22.0,
-      "opponent": {
-        "slate_abbr": "corentin moutet",
-        "name": "CORENTIN MOUTET",
-        "def_rank": 36,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Marton Fucsovics",
-          "player_norm": "marton fucsovics",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 24.5,
-          "game_score": 24.5,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +5.3 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 21.5,
-          "pp_edge": 5.3
         }
       ]
     },
@@ -4119,11 +4119,11 @@
           "season_avg": 3.1,
           "game_score": 3.1,
           "edge": "AVOID",
-          "notes": "PP edge -4.3 vs elite opponent (#19).",
+          "notes": "PP edge -3.3 vs elite opponent (#19).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 7.5,
-          "pp_edge": -4.3
+          "pp_line": 6.5,
+          "pp_edge": -3.3
         }
       ]
     },
@@ -4236,6 +4236,34 @@
           "def_boost": null,
           "pp_line": 6.5,
           "pp_edge": -2.1
+        }
+      ]
+    },
+    "ekaterina alexandrova|aces": {
+      "team_slate": "ekaterina alexandrova",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "ann li",
+        "name": "ANN LI",
+        "def_rank": 29,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Ekaterina Alexandrova",
+          "player_norm": "ekaterina alexandrova",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.4,
+          "game_score": 4.4,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#29).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": -1.9
         }
       ]
     },
@@ -4491,34 +4519,6 @@
         }
       ]
     },
-    "ekaterina alexandrova|aces": {
-      "team_slate": "ekaterina alexandrova",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "ann li",
-        "name": "ANN LI",
-        "def_rank": 29,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Ekaterina Alexandrova",
-          "player_norm": "ekaterina alexandrova",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.4,
-          "game_score": 4.4,
-          "edge": "AVOID",
-          "notes": "PP edge -2.9 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 7.5,
-          "pp_edge": -2.9
-        }
-      ]
-    },
     "corentin moutet|aces": {
       "team_slate": "corentin moutet",
       "category": "aces",
@@ -4631,6 +4631,34 @@
         }
       ]
     },
+    "jacob fearnley|double_faults": {
+      "team_slate": "jacob fearnley",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "thiago agustin tirante",
+        "name": "THIAGO AGUSTIN TIRANTE",
+        "def_rank": 52,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Jacob Fearnley",
+          "player_norm": "jacob fearnley",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.2,
+          "game_score": 7.2,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +3.9 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": 3.9
+        }
+      ]
+    },
     "emma navarro|double_faults": {
       "team_slate": "emma navarro",
       "category": "double_faults",
@@ -4712,34 +4740,6 @@
           "def_boost": null,
           "pp_line": 1.5,
           "pp_edge": 2.1
-        }
-      ]
-    },
-    "jacob fearnley|double_faults": {
-      "team_slate": "jacob fearnley",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "thiago agustin tirante",
-        "name": "THIAGO AGUSTIN TIRANTE",
-        "def_rank": 52,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Jacob Fearnley",
-          "player_norm": "jacob fearnley",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 7.2,
-          "game_score": 7.2,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.9 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": 2.9
         }
       ]
     },
@@ -5415,34 +5415,6 @@
         }
       ]
     },
-    "maya joint|double_faults": {
-      "team_slate": "maya joint",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "viktorija golubic",
-        "name": "VIKTORIJA GOLUBIC",
-        "def_rank": 76,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Maya Joint",
-          "player_norm": "maya joint",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.3,
-          "game_score": 2.3,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#76).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -1.3
-        }
-      ]
-    },
     "laura siegemund|double_faults": {
       "team_slate": "laura siegemund",
       "category": "double_faults",
@@ -5468,6 +5440,34 @@
           "def_boost": null,
           "pp_line": 2.5,
           "pp_edge": 0.1
+        }
+      ]
+    },
+    "maya joint|double_faults": {
+      "team_slate": "maya joint",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "viktorija golubic",
+        "name": "VIKTORIJA GOLUBIC",
+        "def_rank": 76,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Maya Joint",
+          "player_norm": "maya joint",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.3,
+          "game_score": 2.3,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#76).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.3
         }
       ]
     },
@@ -6255,34 +6255,6 @@
         }
       ]
     },
-    "zizou bergs|break_points_won": {
-      "team_slate": "zizou bergs",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "jaume munar",
-        "name": "JAUME MUNAR",
-        "def_rank": 43,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Zizou Bergs",
-          "player_norm": "zizou bergs",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "gabriel diallo|break_points_won": {
       "team_slate": "gabriel diallo",
       "category": "break_points_won",
@@ -6298,6 +6270,34 @@
         {
           "player": "Gabriel Diallo",
           "player_norm": "gabriel diallo",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "zizou bergs|break_points_won": {
+      "team_slate": "zizou bergs",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "jaume munar",
+        "name": "JAUME MUNAR",
+        "def_rank": 43,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Zizou Bergs",
+          "player_norm": "zizou bergs",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 1.5,
@@ -6367,6 +6367,34 @@
         }
       ]
     },
+    "stefanos tsitsipas|break_points_won": {
+      "team_slate": "stefanos tsitsipas",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "ignacio buse",
+        "name": "IGNACIO BUSE",
+        "def_rank": 35,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Stefanos Tsitsipas",
+          "player_norm": "stefanos tsitsipas",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
     "hamad medjedovic|break_points_won": {
       "team_slate": "hamad medjedovic",
       "category": "break_points_won",
@@ -6384,8 +6412,8 @@
           "player_norm": "hamad medjedovic",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
+          "season_avg": 1.5,
+          "game_score": 1.5,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -6466,6 +6494,34 @@
         {
           "player": "Emma Navarro",
           "player_norm": "emma navarro",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
+    "corentin moutet|break_points_won": {
+      "team_slate": "corentin moutet",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "marton fucsovics",
+        "name": "MARTON FUCSOVICS",
+        "def_rank": 76,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Corentin Moutet",
+          "player_norm": "corentin moutet",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 0.5,
@@ -6591,34 +6647,6 @@
         }
       ]
     },
-    "viktorija golubic|break_points_won": {
-      "team_slate": "viktorija golubic",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "maya joint",
-        "name": "MAYA JOINT",
-        "def_rank": 53,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Viktorija Golubic",
-          "player_norm": "viktorija golubic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
     "madison keys|break_points_won": {
       "team_slate": "madison keys",
       "category": "break_points_won",
@@ -6731,6 +6759,34 @@
         }
       ]
     },
+    "viktorija golubic|break_points_won": {
+      "team_slate": "viktorija golubic",
+      "category": "break_points_won",
+      "category_label": "Break points won",
+      "threshold": 4.0,
+      "opponent": {
+        "slate_abbr": "maya joint",
+        "name": "MAYA JOINT",
+        "def_rank": 53,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Viktorija Golubic",
+          "player_norm": "viktorija golubic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": null,
+          "pp_edge": null
+        }
+      ]
+    },
     "jack draper|break_points_won": {
       "team_slate": "jack draper",
       "category": "break_points_won",
@@ -6774,34 +6830,6 @@
         {
           "player": "Daniel Altmaier",
           "player_norm": "daniel altmaier",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": null,
-          "pp_edge": null
-        }
-      ]
-    },
-    "stefanos tsitsipas|break_points_won": {
-      "team_slate": "stefanos tsitsipas",
-      "category": "break_points_won",
-      "category_label": "Break points won",
-      "threshold": 4.0,
-      "opponent": {
-        "slate_abbr": "ignacio buse",
-        "name": "IGNACIO BUSE",
-        "def_rank": 35,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Stefanos Tsitsipas",
-          "player_norm": "stefanos tsitsipas",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 1.5,
