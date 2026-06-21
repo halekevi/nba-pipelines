@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-20T12:30:48.616073+00:00",
+  "generated_at": "2026-06-21T09:44:14.616063+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -162,18 +162,18 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -182,14 +182,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -198,18 +198,18 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -218,14 +218,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -234,18 +234,18 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -254,14 +254,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -270,18 +270,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -290,14 +290,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -306,18 +306,18 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -326,14 +326,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -342,18 +342,18 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -362,14 +362,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -378,34 +378,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         },
         {
-          "player": "Naz Hillmon",
+          "player": "Courtney Williams",
           "prop_type": "Rebounds",
           "line": 3.5,
           "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8500000000000001
+          "hit_rate": 0.8
         }
       ]
     },
@@ -414,18 +414,18 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -434,24 +434,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -460,18 +460,18 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -480,24 +480,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -506,18 +506,18 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -526,24 +526,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -552,18 +552,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -572,24 +572,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -598,18 +598,18 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -618,24 +618,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -644,18 +644,18 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -664,24 +664,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -690,18 +690,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -710,24 +710,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         },
         {
-          "player": "Naz Hillmon",
+          "player": "Courtney Williams",
           "prop_type": "Rebounds",
           "line": 3.5,
           "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8500000000000001
+          "hit_rate": 0.8
         }
       ]
     },
@@ -736,18 +736,18 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -756,7 +756,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -766,24 +776,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -792,18 +792,18 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -812,7 +812,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -822,24 +832,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -848,18 +848,18 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -868,7 +868,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -878,24 +888,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -904,18 +904,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -924,7 +924,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -934,24 +944,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -960,18 +960,18 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -980,7 +980,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -990,24 +1000,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1016,18 +1016,18 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1036,7 +1036,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1046,24 +1056,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1072,18 +1072,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1092,34 +1092,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.8500000000000001
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         },
         {
-          "player": "Naz Hillmon",
+          "player": "Courtney Williams",
           "prop_type": "Rebounds",
           "line": 3.5,
           "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8500000000000001
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1128,18 +1128,18 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1148,7 +1148,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1158,34 +1168,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1194,18 +1194,18 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1214,7 +1214,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1224,34 +1234,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1260,18 +1260,18 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1280,7 +1280,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1290,34 +1300,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1326,18 +1326,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1346,7 +1346,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1356,34 +1366,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1392,18 +1392,18 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1412,7 +1412,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1422,34 +1432,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1458,18 +1458,18 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1478,7 +1478,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1488,34 +1498,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Natisha Hiedeman",
+          "player": "Erica Wheeler",
           "prop_type": "Assists",
           "line": 3.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         }
       ]
     },
@@ -1524,18 +1524,18 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Kahleah Copper",
+          "player": "Leonie Fiebich",
           "prop_type": "Rebounds",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.95
         },
         {
-          "player": "Jordin Canada",
-          "prop_type": "Rebounds",
+          "player": "Kayla McBride",
+          "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
           "pick_type": "Standard",
@@ -1544,7 +1544,17 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Arike Ogunbowale",
+          "player": "Nia Coffey",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8500000000000001
+        },
+        {
+          "player": "Natasha Howard",
           "prop_type": "Assists",
           "line": 1.5,
           "standard_line": null,
@@ -1554,34 +1564,24 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Skylar Diggins",
+          "player": "Lauren Betts",
           "prop_type": "Rebounds",
           "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Allisha Gray",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.75
+          "hit_rate": 0.9
         },
         {
-          "player": "Naz Hillmon",
+          "player": "Courtney Williams",
           "prop_type": "Rebounds",
           "line": 3.5,
           "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8500000000000001
+          "hit_rate": 0.8
         }
       ]
     }

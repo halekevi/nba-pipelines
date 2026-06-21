@@ -196,7 +196,7 @@
     </div>
     <section class="hero">
       <h1>P&L Log</h1>
-      <p>Flat stake model: $10 per ticket (sport breakdown uses single-sport graded tickets / props). Daily rows are appended when you run <code>scripts/build_ticket_eval.py</code> after grading (same as the Grades ticket eval). On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so <code>grade_history.json</code> survives redeploys; otherwise the app falls back to bundled <code>ui_runner/templates/grade_history.json</code>.</p>
+      <p>Flat stake model: $10 per pick (sport breakdown uses graded props). Daily ticket rows come from <code>grade_history.json</code> via <code>scripts/build_ticket_eval.py</code> after grading. On Railway, set a volume or <code>PROPORACLE_PERSISTENT_DATA_DIR</code> so history survives redeploys.</p>
     </section>
 
     <section class="summary-grid">
@@ -242,7 +242,7 @@
             <th>Day ROI%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="daily-pnl-tbody">
           
           <tr>
             <td></td>
@@ -268,7 +268,8 @@
 
     <section class="panel">
       <h2>Sport Breakdown</h2>
-      <table class="tbl" aria-label="Sport breakdown table">
+      <p class="empty-note" style="margin:0 0 10px;padding:0;">Pick-level totals from graded props ($10 flat stake per pick).</p>
+      <table class="tbl" aria-label="Sport breakdown totals">
         <thead>
           <tr>
             <th>Sport</th>
@@ -278,7 +279,7 @@
             <th>Net $</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="sport-breakdown-tbody">
           
           <tr>
             <td></td>
@@ -290,6 +291,36 @@
           
         </tbody>
       </table>
+
+      <h3 style="margin:18px 0 10px;font-size:1rem;">By Month</h3>
+      
+      <table class="tbl" aria-label="Sport breakdown by month">
+        <thead>
+          <tr>
+            <th>Sport</th>
+            <th>Month</th>
+            <th>Decided</th>
+            <th>Paid</th>
+            <th>Win%</th>
+            <th>Net $</th>
+          </tr>
+        </thead>
+        <tbody id="sport-monthly-breakdown-tbody">
+          
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="">$</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      
+      <div class="empty-note">No monthly sport data yet — grade slates to populate <code>graded_props_*.json</code>.</div>
+      
     </section>
   </main>
 
@@ -596,26 +627,48 @@
         }
       }
 
-      function renderSportBreakdown(rows) {
-        const body = document.querySelectorAll('.panel .tbl tbody')[1];
-        if (!body) return;
-        const safe = Array.isArray(rows) ? rows : [];
-        body.innerHTML = safe.map((r) => {
-          const decided = Number(r.decided || 0);
-          const paid = Number(r.paid || 0);
-          const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
-          const net = Number(r.net_dollars || 0);
-          const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
-          return `
-            <tr>
-              <td>${String(r.sport || '')}</td>
-              <td>${decided}</td>
-              <td>${paid}</td>
-              <td>${winText}</td>
-              <td class="${clsFor(net)}">${fmtMoney(net)}</td>
-            </tr>
-          `;
-        }).join('');
+      function renderSportBreakdown(payload) {
+        const body = document.getElementById('sport-breakdown-tbody');
+        const monthlyBody = document.getElementById('sport-monthly-breakdown-tbody');
+        const rows = payload && Array.isArray(payload.rows) ? payload.rows : [];
+        const monthlyRows = payload && Array.isArray(payload.monthly_rows) ? payload.monthly_rows : [];
+        if (body) {
+          body.innerHTML = rows.map((r) => {
+            const decided = Number(r.decided || 0);
+            const paid = Number(r.paid || 0);
+            const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+            const net = Number(r.net_dollars || 0);
+            const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+            return `
+              <tr>
+                <td>${String(r.sport || '')}</td>
+                <td>${decided}</td>
+                <td>${paid}</td>
+                <td>${winText}</td>
+                <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+        if (monthlyBody) {
+          monthlyBody.innerHTML = monthlyRows.map((r) => {
+            const decided = Number(r.decided || 0);
+            const paid = Number(r.paid || 0);
+            const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+            const net = Number(r.net_dollars || 0);
+            const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+            return `
+              <tr>
+                <td>${String(r.sport || '')}</td>
+                <td>${String(r.month || '')}</td>
+                <td>${decided}</td>
+                <td>${paid}</td>
+                <td>${winText}</td>
+                <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
       }
 
       fetch(HISTORY_URL, { cache: 'no-store' })
@@ -624,9 +677,9 @@
         .catch(() => render([]));
 
       fetch(SPORT_BREAKDOWN_URL, { cache: 'no-store' })
-        .then((r) => (r.ok ? r.json() : { rows: [] }))
-        .then((j) => renderSportBreakdown(j && j.rows))
-        .catch(() => renderSportBreakdown([]));
+        .then((r) => (r.ok ? r.json() : { rows: [], monthly_rows: [] }))
+        .then((j) => renderSportBreakdown(j))
+        .catch(() => renderSportBreakdown({ rows: [], monthly_rows: [] }));
     })();
   </script>
 
