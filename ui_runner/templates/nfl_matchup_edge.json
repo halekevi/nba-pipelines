@@ -2,7 +2,7 @@
   "sport": "nfl",
   "display_name": "NFL",
   "matchup_mode": "team",
-  "generated_at": "2026-06-21T14:02:39.843796+00:00",
+  "generated_at": "2026-06-22T10:52:24.224364+00:00",
   "slate_note": "No slate rows \u2014 run sport pipeline or publish slate_sport JSON.",
   "n_teams": 32,
   "elite_rank_cut": 4,
