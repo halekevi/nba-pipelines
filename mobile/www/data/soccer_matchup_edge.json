@@ -2,7 +2,7 @@
   "sport": "soccer",
   "display_name": "Soccer",
   "matchup_mode": "team",
-  "generated_at": "2026-06-22T13:58:10.387736+00:00",
+  "generated_at": "2026-06-23T10:49:01.686933+00:00",
   "slate_note": "",
   "n_teams": 422,
   "elite_rank_cut": 5,
@@ -119,62 +119,6 @@
     }
   ],
   "matchups": {
-    "UCV": {
-      "opponent_slate": "IND. DEL VALLE",
-      "opponent_name": "IND. DEL VALLE",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "IRAQ": {
-      "opponent_slate": "FRANCE",
-      "opponent_name": "France",
-      "opponent_def_rank": 16,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 16,
-      "team_def_tier": "Avg"
-    },
-    "LAN\u00daS": {
-      "opponent_slate": "ALWAYS READY",
-      "opponent_name": "ALWAYS READY",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 11,
-      "team_def_tier": "Above Avg"
-    },
-    "AUSTRIA": {
-      "opponent_slate": "ARGENTINA",
-      "opponent_name": "Argentina",
-      "opponent_def_rank": 16,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 16,
-      "team_def_tier": "Avg"
-    },
-    "CRISTAL": {
-      "opponent_slate": "PALMEIRAS",
-      "opponent_name": "Palmeiras",
-      "opponent_def_rank": 1,
-      "opponent_def_tier": "Elite",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "LIBERTAD": {
-      "opponent_slate": "ROSARIO",
-      "opponent_name": "Rosario Central",
-      "opponent_def_rank": 17,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": null,
-      "team_def_tier": ""
-    },
-    "BARCELONA": {
-      "opponent_slate": "BOCA",
-      "opponent_name": "BOCA",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": 17,
-      "team_def_tier": "Avg"
-    },
     "FRANCE": {
       "opponent_slate": "IRAQ",
       "opponent_name": "Iraq",
@@ -183,27 +127,19 @@
       "team_def_rank": 16,
       "team_def_tier": "Avg"
     },
-    "SENEGAL": {
-      "opponent_slate": "NORWAY",
-      "opponent_name": "Norway",
-      "opponent_def_rank": 16,
-      "opponent_def_tier": "Avg",
-      "team_def_rank": 16,
-      "team_def_tier": "Avg"
-    },
-    "BOCA": {
-      "opponent_slate": "BARCELONA",
-      "opponent_name": "Barcelona",
-      "opponent_def_rank": 17,
-      "opponent_def_tier": "Avg",
+    "UCV": {
+      "opponent_slate": "IND. DEL VALLE",
+      "opponent_name": "IND. DEL VALLE",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
-    "ALWAYS READY": {
-      "opponent_slate": "LAN\u00daS",
-      "opponent_name": "Lan\u00fas",
-      "opponent_def_rank": 11,
-      "opponent_def_tier": "Above Avg",
+    "IND. DEL VALLE": {
+      "opponent_slate": "UCV",
+      "opponent_name": "UCV",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
       "team_def_rank": null,
       "team_def_tier": ""
     },
@@ -215,13 +151,21 @@
       "team_def_rank": 16,
       "team_def_tier": "Avg"
     },
-    "ALGERIA": {
-      "opponent_slate": "JORDAN",
-      "opponent_name": "Jordan",
-      "opponent_def_rank": 16,
+    "LIBERTAD": {
+      "opponent_slate": "ROSARIO",
+      "opponent_name": "Rosario Central",
+      "opponent_def_rank": 17,
       "opponent_def_tier": "Avg",
-      "team_def_rank": 16,
-      "team_def_tier": "Avg"
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "CRISTAL": {
+      "opponent_slate": "PALMEIRAS",
+      "opponent_name": "Palmeiras",
+      "opponent_def_rank": 1,
+      "opponent_def_tier": "Elite",
+      "team_def_rank": null,
+      "team_def_tier": ""
     },
     "NORWAY": {
       "opponent_slate": "SENEGAL",
@@ -231,13 +175,13 @@
       "team_def_rank": 16,
       "team_def_tier": "Avg"
     },
-    "IND. DEL VALLE": {
-      "opponent_slate": "UCV",
-      "opponent_name": "UCV",
-      "opponent_def_rank": "",
-      "opponent_def_tier": "",
-      "team_def_rank": null,
-      "team_def_tier": ""
+    "AUSTRIA": {
+      "opponent_slate": "ARGENTINA",
+      "opponent_name": "Argentina",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
     },
     "ROSARIO": {
       "opponent_slate": "LIBERTAD",
@@ -246,6 +190,14 @@
       "opponent_def_tier": "",
       "team_def_rank": 17,
       "team_def_tier": "Avg"
+    },
+    "LAN\u00daS": {
+      "opponent_slate": "ALWAYS READY",
+      "opponent_name": "ALWAYS READY",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": 11,
+      "team_def_tier": "Above Avg"
     },
     "ARGENTINA": {
       "opponent_slate": "AUSTRIA",
@@ -262,14 +214,120 @@
       "opponent_def_tier": "",
       "team_def_rank": 1,
       "team_def_tier": "Elite"
+    },
+    "ALWAYS READY": {
+      "opponent_slate": "LAN\u00daS",
+      "opponent_name": "Lan\u00fas",
+      "opponent_def_rank": 11,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "BOCA": {
+      "opponent_slate": "BARCELONA",
+      "opponent_name": "Barcelona",
+      "opponent_def_rank": 17,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": null,
+      "team_def_tier": ""
+    },
+    "IRAQ": {
+      "opponent_slate": "FRANCE",
+      "opponent_name": "France",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
+    },
+    "BARCELONA": {
+      "opponent_slate": "BOCA",
+      "opponent_name": "BOCA",
+      "opponent_def_rank": "",
+      "opponent_def_tier": "",
+      "team_def_rank": 17,
+      "team_def_tier": "Avg"
+    },
+    "ALGERIA": {
+      "opponent_slate": "JORDAN",
+      "opponent_name": "Jordan",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
+    },
+    "SENEGAL": {
+      "opponent_slate": "NORWAY",
+      "opponent_name": "Norway",
+      "opponent_def_rank": 16,
+      "opponent_def_tier": "Avg",
+      "team_def_rank": 16,
+      "team_def_tier": "Avg"
     }
   },
   "players_by_team_cat": {
-    "SENEGAL|goals": {
-      "team_slate": "SENEGAL",
+    "ALWAYS READY|goals": {
+      "team_slate": "ALWAYS READY",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "LAN\u00daS",
+        "name": "Lan\u00fas",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Alain Baroja",
+          "player_norm": "alain baroja",
+          "pos": "GOA",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "AUSTRIA|goals": {
+      "team_slate": "AUSTRIA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ARGENTINA",
+        "name": "Argentina",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Alexander Schlager",
+          "player_norm": "alexander schlager",
+          "pos": "GOA",
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "pp_line": 9.5,
+          "pp_edge": -1.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -1.0 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "SENEGAL|shots": {
+      "team_slate": "SENEGAL",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
       "opponent": {
         "slate_abbr": "NORWAY",
         "name": "Norway",
@@ -278,17 +336,413 @@
       },
       "players": [
         {
-          "player": "\u00c9douard Mendy",
-          "player_norm": "edouard mendy",
+          "player": "Iliman Ndiaye",
+          "player_norm": "iliman ndiaye",
+          "pos": "ATT",
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "pp_line": 0.5,
+          "pp_edge": 1.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lamine Camara",
+          "player_norm": "lamine camara",
+          "pos": "MID",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 0.5,
+          "pp_edge": 1.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Idrissa Gueye",
+          "player_norm": "idrissa gueye",
+          "pos": "MID",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 0.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Isma\u00efla Sarr",
+          "player_norm": "ismaila sarr",
+          "pos": "ATT",
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "pp_line": 1.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nicolas Jackson",
+          "player_norm": "nicolas jackson",
+          "pos": "ATT",
+          "season_avg": 1.4,
+          "game_score": 1.4,
+          "pp_line": 0.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ibrahim Mbaye",
+          "player_norm": "ibrahim mbaye",
+          "pos": "ATT",
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "pp_line": 1.5,
+          "pp_edge": -0.7,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.7 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kr\u00e9pin Diatta",
+          "player_norm": "krepin diatta",
+          "pos": "MID",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.17,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Path\u00e9 Ciss",
+          "player_norm": "pathe ciss",
+          "pos": "MID",
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "El Hadji Malick Diouf",
+          "player_norm": "el hadji malick diouf",
+          "pos": "DEF",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 0.5,
+          "pp_edge": 0.1,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Habib Diarra",
+          "player_norm": "habib diarra",
+          "pos": "MID",
+          "season_avg": 1.2,
+          "game_score": 1.2,
+          "pp_line": 0.5,
+          "pp_edge": 0.3,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "NORWAY|shots": {
+      "team_slate": "NORWAY",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "SENEGAL",
+        "name": "Senegal",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Erling Haaland",
+          "player_norm": "erling haaland",
+          "pos": "ATT",
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "pp_line": 1.5,
+          "pp_edge": 1.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Antonio Nusa",
+          "player_norm": "antonio nusa",
+          "pos": "MID",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 1.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.3 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Alexander S\u00f8rloth",
+          "player_norm": "alexander s\u00f8rloth",
+          "pos": "ATT",
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "pp_line": 0.5,
+          "pp_edge": 1.1,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.1 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Thelo Aasgaard",
+          "player_norm": "thelo aasgaard",
+          "pos": "MID",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Jens Petter Hauge",
+          "player_norm": "jens petter hauge",
+          "pos": "MID",
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "pp_line": 1.5,
+          "pp_edge": 0.5,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "J\u00f8rgen Strand Larsen",
+          "player_norm": "j\u00f8rgen strand larsen",
+          "pos": "ATT",
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "pp_line": 2.5,
+          "pp_edge": -0.9,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.9 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Martin \u00d8degaard",
+          "player_norm": "martin \u00f8degaard",
+          "pos": "MID",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 1.5,
+          "pp_edge": -0.7,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.7 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Andreas Schjelderup",
+          "player_norm": "andreas schjelderup",
+          "pos": "ATT",
+          "season_avg": 1.0,
+          "game_score": 1.0,
+          "pp_line": 1.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Morten Thorsby",
+          "player_norm": "morten thorsby",
+          "pos": "MID",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 0.5,
+          "pp_edge": -0.5,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Fredrik Bj\u00f8rkan",
+          "player_norm": "fredrik bj\u00f8rkan",
+          "pos": "DEF",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.17,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.2 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "PALMEIRAS|goals": {
+      "team_slate": "PALMEIRAS",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "CRISTAL",
+        "name": "CRISTAL",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Carlos Miguel",
+          "player_norm": "carlos miguel",
           "pos": "GOA",
-          "season_avg": 9.5,
-          "game_score": 9.5,
-          "pp_line": 9.5,
-          "pp_edge": 0.0,
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 2.5,
+          "pp_edge": 0.3,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "JORDAN|goals": {
+      "team_slate": "JORDAN",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ALGERIA",
+        "name": "Algeria",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Yazeed Abulaila",
+          "player_norm": "yazeed abulaila",
+          "pos": "GOA",
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "pp_line": 9.0,
+          "pp_edge": -0.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "CRISTAL|goals": {
+      "team_slate": "CRISTAL",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "PALMEIRAS",
+        "name": "Palmeiras",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Diego Enr\u00edquez",
+          "player_norm": "diego enriquez",
+          "pos": "GOA",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -318,137 +772,6 @@
           "leader_slice": "top",
           "edge": "OK_EDGE",
           "notes": "PP edge +1.2 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "AUSTRIA|goals": {
-      "team_slate": "AUSTRIA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ARGENTINA",
-        "name": "Argentina",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Alexander Schlager",
-          "player_norm": "alexander schlager",
-          "pos": "GOA",
-          "season_avg": 8.5,
-          "game_score": 8.5,
-          "pp_line": 8.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "UCV|goals": {
-      "team_slate": "UCV",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "IND. DEL VALLE",
-        "name": "IND. DEL VALLE",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Giancarlo Schiavone",
-          "player_norm": "giancarlo schiavone",
-          "pos": "GOA",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 3.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "LAN\u00daS|goals": {
-      "team_slate": "LAN\u00daS",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ALWAYS READY",
-        "name": "ALWAYS READY",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Nahuel Losada",
-          "player_norm": "nahuel losada",
-          "pos": "GOA",
-          "season_avg": 2.57,
-          "game_score": 2.6,
-          "pp_line": 3.0,
-          "pp_edge": 0.2,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "IRAQ|goals": {
-      "team_slate": "IRAQ",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "FRANCE",
-        "name": "France",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Jalal Hassan",
-          "player_norm": "jalal hassan",
-          "pos": "GOA",
-          "season_avg": 5.0,
-          "game_score": 5.0,
-          "pp_line": 2.5,
-          "pp_edge": 2.5,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.5 on board tonight vs #16 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Fahad Talib",
-          "player_norm": "fahad talib",
-          "pos": "GOA",
-          "season_avg": 5.5,
-          "game_score": 5.5,
-          "pp_line": 4.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -623,447 +946,6 @@
         }
       ]
     },
-    "ALWAYS READY|goals": {
-      "team_slate": "ALWAYS READY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "LAN\u00daS",
-        "name": "Lan\u00fas",
-        "def_rank": 11,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Alain Baroja",
-          "player_norm": "alain baroja",
-          "pos": "GOA",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "FRANCE|assists": {
-      "team_slate": "FRANCE",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "IRAQ",
-        "name": "Iraq",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Michael Olise",
-          "player_norm": "michael olise",
-          "pos": "MID",
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "pp_line": 4.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ousmane Demb\u00e9l\u00e9",
-          "player_norm": "ousmane dembele",
-          "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kylian Mbapp\u00e9",
-          "player_norm": "kylian mbappe",
-          "pos": "ATT",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 2.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "PALMEIRAS|goals": {
-      "team_slate": "PALMEIRAS",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "CRISTAL",
-        "name": "CRISTAL",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Carlos Miguel",
-          "player_norm": "carlos miguel",
-          "pos": "GOA",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 2.5,
-          "pp_edge": 0.3,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BOCA|goals": {
-      "team_slate": "BOCA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BARCELONA",
-        "name": "Barcelona",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Leandro Brey",
-          "player_norm": "leandro brey",
-          "pos": "GOA",
-          "season_avg": 0.67,
-          "game_score": 0.7,
-          "pp_line": 2.5,
-          "pp_edge": 1.7,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +1.7 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "JORDAN|shots": {
-      "team_slate": "JORDAN",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "ALGERIA",
-        "name": "Algeria",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Nizar Al Rashdan",
-          "player_norm": "nizar al rashdan",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ali Azaizeh",
-          "player_norm": "ali azaizeh",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Odeh Fakhoury",
-          "player_norm": "odeh fakhoury",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mahmoud Al Mardi",
-          "player_norm": "mahmoud al mardi",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mohammad Al Daoud",
-          "player_norm": "mohammad al daoud",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mousa Al Tamari",
-          "player_norm": "mousa al tamari",
-          "pos": "ATT",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
-          "pp_edge": 0.0,
-          "bottom_rank_on_team": 1,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "NORWAY|assists": {
-      "team_slate": "NORWAY",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "SENEGAL",
-        "name": "Senegal",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
-          "pos": "ATT",
-          "season_avg": 0.7,
-          "game_score": 0.7,
-          "pp_line": 0.5,
-          "pp_edge": 0.5,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "Team leader; PP edge +0.5.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Martin \u00d8degaard",
-          "player_norm": "martin \u00f8degaard",
-          "pos": "MID",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "NORWAY|goals": {
-      "team_slate": "NORWAY",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "SENEGAL",
-        "name": "Senegal",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
-          "pos": "ATT",
-          "season_avg": 0.6,
-          "game_score": 0.6,
-          "pp_line": 0.5,
-          "pp_edge": 0.3,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "\u00d8rjan Nyland",
-          "player_norm": "\u00f8rjan nyland",
-          "pos": "GOA",
-          "season_avg": 8.5,
-          "game_score": 8.5,
-          "pp_line": 8.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "IND. DEL VALLE|goals": {
-      "team_slate": "IND. DEL VALLE",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "UCV",
-        "name": "UCV",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Aldair Quintana",
-          "player_norm": "aldair quintana",
-          "pos": "GOA",
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "pp_line": 3.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "BARCELONA|goals": {
-      "team_slate": "BARCELONA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "BOCA",
-        "name": "BOCA",
-        "def_rank": "",
-        "def_tier": ""
-      },
-      "players": [
-        {
-          "player": "Jos\u00e9 Contreras",
-          "player_norm": "jose contreras",
-          "pos": "GOA",
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "pp_line": 4.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ARGENTINA|assists": {
-      "team_slate": "ARGENTINA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "AUSTRIA",
-        "name": "Austria",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Thiago Almada",
-          "player_norm": "thiago almada",
-          "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Lionel Messi",
-          "player_norm": "lionel messi",
-          "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 2.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
     "AUSTRIA|shots": {
       "team_slate": "AUSTRIA",
       "category": "shots",
@@ -1233,11 +1115,129 @@
         }
       ]
     },
-    "NORWAY|shots": {
-      "team_slate": "NORWAY",
+    "IRAQ|shots": {
+      "team_slate": "IRAQ",
       "category": "shots",
       "category_label": "Shots",
       "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "FRANCE",
+        "name": "France",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Mohanad Ali",
+          "player_norm": "mohanad ali",
+          "pos": "ATT",
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "pp_line": 0.5,
+          "pp_edge": 2.25,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.2 on board tonight vs #16 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ali Yousif",
+          "player_norm": "ali yousif",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Marko Farji",
+          "player_norm": "marko farji",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Aymen Hussein",
+          "player_norm": "aymen hussein",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ali Al Hamadi",
+          "player_norm": "ali al hamadi",
+          "pos": "ATT",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ALGERIA|goals": {
+      "team_slate": "ALGERIA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "JORDAN",
+        "name": "Jordan",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Luca Zidane",
+          "player_norm": "luca zidane",
+          "pos": "GOA",
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "pp_line": 9.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "NORWAY|goals": {
+      "team_slate": "NORWAY",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
         "slate_abbr": "SENEGAL",
         "name": "Senegal",
@@ -1246,12 +1246,664 @@
       },
       "players": [
         {
-          "player": "Thelo Aasgaard",
-          "player_norm": "thelo aasgaard",
+          "player": "Erling Haaland",
+          "player_norm": "erling haaland",
+          "pos": "ATT",
+          "season_avg": 0.6,
+          "game_score": 0.6,
+          "pp_line": 0.5,
+          "pp_edge": 0.3,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "\u00d8rjan Nyland",
+          "player_norm": "\u00f8rjan nyland",
+          "pos": "GOA",
+          "season_avg": 8.5,
+          "game_score": 8.5,
+          "pp_line": 9.0,
+          "pp_edge": -0.5,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "FRANCE|goals": {
+      "team_slate": "FRANCE",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "IRAQ",
+        "name": "Iraq",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Mike Maignan",
+          "player_norm": "mike maignan",
+          "pos": "GOA",
+          "season_avg": 10.0,
+          "game_score": 10.0,
+          "pp_line": 10.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Kylian Mbapp\u00e9",
+          "player_norm": "kylian mbappe",
+          "pos": "ATT",
+          "season_avg": 0.4,
+          "game_score": 0.4,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ousmane Demb\u00e9l\u00e9",
+          "player_norm": "ousmane dembele",
+          "pos": "ATT",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ALGERIA|assists": {
+      "team_slate": "ALGERIA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "JORDAN",
+        "name": "Jordan",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Riyad Mahrez",
+          "player_norm": "riyad mahrez",
+          "pos": "ATT",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Amine Gouiri",
+          "player_norm": "amine gouiri",
+          "pos": "ATT",
+          "season_avg": 0.3,
+          "game_score": 0.3,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "FRANCE|assists": {
+      "team_slate": "FRANCE",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "IRAQ",
+        "name": "Iraq",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Kylian Mbapp\u00e9",
+          "player_norm": "kylian mbappe",
+          "pos": "ATT",
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "pp_line": 1.5,
+          "pp_edge": 0.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.5.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Michael Olise",
+          "player_norm": "michael olise",
           "pos": "MID",
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "pp_line": 4.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Ousmane Demb\u00e9l\u00e9",
+          "player_norm": "ousmane dembele",
+          "pos": "ATT",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "IRAQ|goals": {
+      "team_slate": "IRAQ",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "FRANCE",
+        "name": "France",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Jalal Hassan",
+          "player_norm": "jalal hassan",
+          "pos": "GOA",
+          "season_avg": 5.0,
+          "game_score": 5.0,
+          "pp_line": 2.5,
+          "pp_edge": 2.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.5 on board tonight vs #16 defense.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Fahad Talib",
+          "player_norm": "fahad talib",
+          "pos": "GOA",
+          "season_avg": 5.5,
+          "game_score": 5.5,
+          "pp_line": 4.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "AUSTRIA|assists": {
+      "team_slate": "AUSTRIA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "ARGENTINA",
+        "name": "Argentina",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Konrad Laimer",
+          "player_norm": "konrad laimer",
+          "pos": "MID",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "LAN\u00daS|goals": {
+      "team_slate": "LAN\u00daS",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "ALWAYS READY",
+        "name": "ALWAYS READY",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Nahuel Losada",
+          "player_norm": "nahuel losada",
+          "pos": "GOA",
+          "season_avg": 2.57,
+          "game_score": 2.6,
+          "pp_line": 3.0,
+          "pp_edge": 0.2,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ARGENTINA|goals": {
+      "team_slate": "ARGENTINA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "AUSTRIA",
+        "name": "Austria",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Lionel Messi",
+          "player_norm": "lionel messi",
+          "pos": "ATT",
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "pp_line": 0.5,
+          "pp_edge": 0.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "Team leader; PP edge +0.5.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Emiliano Mart\u00ednez",
+          "player_norm": "emiliano martinez",
+          "pos": "GOA",
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "pp_line": 10.5,
+          "pp_edge": -1.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "AVOID",
+          "notes": "PP edge -1.0 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ALGERIA|shots": {
+      "team_slate": "ALGERIA",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "JORDAN",
+        "name": "Jordan",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Ibrahim Maza",
+          "player_norm": "ibrahim maza",
+          "pos": "ATT",
+          "season_avg": 2.9,
+          "game_score": 2.9,
+          "pp_line": 1.5,
+          "pp_edge": 1.5,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Adil Boulbina",
+          "player_norm": "adil boulbina",
+          "pos": "ATT",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 2.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Nadhir Benbouali",
+          "player_norm": "nadhir benbouali",
+          "pos": "ATT",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 2.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 3,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Anis Hadj Moussa",
+          "player_norm": "anis hadj moussa",
+          "pos": "ATT",
           "season_avg": 2.5,
           "game_score": 2.5,
           "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 4,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Far\u00e8s Ghedjemis",
+          "player_norm": "fares ghedjemis",
+          "pos": "ATT",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 1.5,
+          "pp_edge": 1.0,
+          "rank_on_team": 5,
+          "leader_slice": "top",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Mohammed Amoura",
+          "player_norm": "mohammed amoura",
+          "pos": "ATT",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 2.5,
+          "pp_edge": -1.5,
+          "bottom_rank_on_team": 1,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.5 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Amine Gouiri",
+          "player_norm": "amine gouiri",
+          "pos": "ATT",
+          "season_avg": 1.3,
+          "game_score": 1.3,
+          "pp_line": 2.5,
+          "pp_edge": -1.1,
+          "bottom_rank_on_team": 2,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -1.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Achref Abada",
+          "player_norm": "achref abada",
+          "pos": "DEF",
+          "season_avg": 0.7,
+          "game_score": 0.7,
+          "pp_line": 0.5,
+          "pp_edge": -0.3,
+          "bottom_rank_on_team": 3,
+          "leader_slice": "bottom",
+          "bottom3_on_team": true,
+          "edge": "AVOID",
+          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Far\u00e8s Cha\u00efbi",
+          "player_norm": "fares chaibi",
+          "pos": "MID",
+          "season_avg": 1.7,
+          "game_score": 1.7,
+          "pp_line": 1.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 4,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Hicham Boudaoui",
+          "player_norm": "hicham boudaoui",
+          "pos": "MID",
+          "season_avg": 0.9,
+          "game_score": 0.9,
+          "pp_line": 0.5,
+          "pp_edge": -0.1,
+          "bottom_rank_on_team": 5,
+          "leader_slice": "bottom",
+          "bottom3_on_team": false,
+          "edge": "AVOID",
+          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BOCA|goals": {
+      "team_slate": "BOCA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BARCELONA",
+        "name": "Barcelona",
+        "def_rank": 17,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Leandro Brey",
+          "player_norm": "leandro brey",
+          "pos": "GOA",
+          "season_avg": 0.67,
+          "game_score": 0.7,
+          "pp_line": 2.5,
+          "pp_edge": 1.7,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +1.7 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "BARCELONA|goals": {
+      "team_slate": "BARCELONA",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "BOCA",
+        "name": "BOCA",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Jos\u00e9 Contreras",
+          "player_norm": "jose contreras",
+          "pos": "GOA",
+          "season_avg": 4.0,
+          "game_score": 4.0,
+          "pp_line": 4.0,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "ARGENTINA|assists": {
+      "team_slate": "ARGENTINA",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
+      "opponent": {
+        "slate_abbr": "AUSTRIA",
+        "name": "Austria",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Thiago Almada",
+          "player_norm": "thiago almada",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 1.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        },
+        {
+          "player": "Lionel Messi",
+          "player_norm": "lionel messi",
+          "pos": "ATT",
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 2,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "UCV|goals": {
+      "team_slate": "UCV",
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
+      "opponent": {
+        "slate_abbr": "IND. DEL VALLE",
+        "name": "IND. DEL VALLE",
+        "def_rank": "",
+        "def_tier": ""
+      },
+      "players": [
+        {
+          "player": "Giancarlo Schiavone",
+          "player_norm": "giancarlo schiavone",
+          "pos": "GOA",
+          "season_avg": 3.5,
+          "game_score": 3.5,
+          "pp_line": 3.5,
+          "pp_edge": 0.0,
+          "rank_on_team": 1,
+          "leader_slice": "top",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null
+        }
+      ]
+    },
+    "JORDAN|shots": {
+      "team_slate": "JORDAN",
+      "category": "shots",
+      "category_label": "Shots",
+      "threshold": 2.0,
+      "opponent": {
+        "slate_abbr": "ALGERIA",
+        "name": "Algeria",
+        "def_rank": 16,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Nizar Al Rashdan",
+          "player_norm": "nizar al rashdan",
+          "pos": "MID",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
           "pp_edge": 1.0,
           "rank_on_team": 1,
           "leader_slice": "top",
@@ -1261,171 +1913,94 @@
           "def_boost": null
         },
         {
-          "player": "Jens Petter Hauge",
-          "player_norm": "jens petter hauge",
-          "pos": "MID",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 1.5,
-          "pp_edge": 0.5,
+          "player": "Ali Azaizeh",
+          "player_norm": "ali azaizeh",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
           "rank_on_team": 2,
           "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Kristian Thorstvedt",
-          "player_norm": "kristian thorstvedt",
-          "pos": "MID",
-          "season_avg": 1.9,
-          "game_score": 1.9,
-          "pp_line": 1.5,
-          "pp_edge": 0.3,
+          "player": "Odeh Fakhoury",
+          "player_norm": "odeh fakhoury",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "pp_line": 0.5,
+          "pp_edge": 1.0,
           "rank_on_team": 3,
           "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Oscar Bobb",
-          "player_norm": "oscar bobb",
-          "pos": "MID",
-          "season_avg": 0.7,
-          "game_score": 0.7,
+          "player": "Mahmoud Al Mardi",
+          "player_norm": "mahmoud al mardi",
+          "pos": "ATT",
+          "season_avg": 1.5,
+          "game_score": 1.5,
           "pp_line": 0.5,
-          "pp_edge": 0.3,
+          "pp_edge": 1.0,
           "rank_on_team": 4,
           "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Patrick Berg",
-          "player_norm": "patrick berg",
+          "player": "Mohammad Al Daoud",
+          "player_norm": "mohammad al daoud",
           "pos": "MID",
-          "season_avg": 0.7,
-          "game_score": 0.7,
+          "season_avg": 1.5,
+          "game_score": 1.5,
           "pp_line": 0.5,
-          "pp_edge": 0.17,
+          "pp_edge": 1.0,
           "rank_on_team": 5,
           "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.0 on board tonight.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Martin \u00d8degaard",
-          "player_norm": "martin \u00f8degaard",
-          "pos": "MID",
-          "season_avg": 0.9,
-          "game_score": 0.9,
-          "pp_line": 1.5,
-          "pp_edge": -0.7,
+          "player": "Mousa Al Tamari",
+          "player_norm": "mousa al tamari",
+          "pos": "ATT",
+          "season_avg": 0.5,
+          "game_score": 0.5,
+          "pp_line": 0.5,
+          "pp_edge": 0.0,
           "bottom_rank_on_team": 1,
           "leader_slice": "bottom",
           "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.7 on board \u2014 skip OVER.",
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
           "def_boost": null
         },
         {
-          "player": "Andreas Schjelderup",
-          "player_norm": "andreas schjelderup",
+          "player": "Ali Olwan",
+          "player_norm": "ali olwan",
           "pos": "ATT",
-          "season_avg": 1.0,
-          "game_score": 1.0,
+          "season_avg": 1.5,
+          "game_score": 1.5,
           "pp_line": 1.5,
-          "pp_edge": -0.5,
+          "pp_edge": 0.0,
           "bottom_rank_on_team": 2,
           "leader_slice": "bottom",
           "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.5 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Alexander S\u00f8rloth",
-          "player_norm": "alexander s\u00f8rloth",
-          "pos": "ATT",
-          "season_avg": 1.7,
-          "game_score": 1.7,
-          "pp_line": 2.0,
-          "pp_edge": -0.4,
-          "bottom_rank_on_team": 3,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.4 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Erling Haaland",
-          "player_norm": "erling haaland",
-          "pos": "ATT",
-          "season_avg": 3.3,
-          "game_score": 3.3,
-          "pp_line": 3.0,
-          "pp_edge": 0.0,
-          "bottom_rank_on_team": 4,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "J\u00f8rgen Strand Larsen",
-          "player_norm": "j\u00f8rgen strand larsen",
-          "pos": "ATT",
-          "season_avg": 1.6,
-          "game_score": 1.6,
-          "pp_line": 1.5,
-          "pp_edge": 0.1,
-          "bottom_rank_on_team": 5,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "CRISTAL|goals": {
-      "team_slate": "CRISTAL",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "PALMEIRAS",
-        "name": "Palmeiras",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Diego Enr\u00edquez",
-          "player_norm": "diego enriquez",
-          "pos": "GOA",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 3.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "Elite opponent defense \u2014 no clear OVER edge on volume.",
           "overperform_vs_weak": false,
           "def_boost": null
         }
@@ -1600,24 +2175,24 @@
         }
       ]
     },
-    "ARGENTINA|goals": {
-      "team_slate": "ARGENTINA",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
+    "NORWAY|assists": {
+      "team_slate": "NORWAY",
+      "category": "assists",
+      "category_label": "Assists",
+      "threshold": 0.3,
       "opponent": {
-        "slate_abbr": "AUSTRIA",
-        "name": "Austria",
+        "slate_abbr": "SENEGAL",
+        "name": "Senegal",
         "def_rank": 16,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Lionel Messi",
-          "player_norm": "lionel messi",
+          "player": "Erling Haaland",
+          "player_norm": "erling haaland",
           "pos": "ATT",
-          "season_avg": 1.1,
-          "game_score": 1.1,
+          "season_avg": 0.7,
+          "game_score": 0.7,
           "pp_line": 0.5,
           "pp_edge": 0.5,
           "rank_on_team": 1,
@@ -1628,103 +2203,14 @@
           "def_boost": null
         },
         {
-          "player": "Emiliano Mart\u00ednez",
-          "player_norm": "emiliano martinez",
-          "pos": "GOA",
-          "season_avg": 9.5,
-          "game_score": 9.5,
-          "pp_line": 9.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "IRAQ|shots": {
-      "team_slate": "IRAQ",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "FRANCE",
-        "name": "France",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Mohanad Ali",
-          "player_norm": "mohanad ali",
-          "pos": "ATT",
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "pp_line": 0.5,
-          "pp_edge": 2.25,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +2.2 on board tonight vs #16 defense.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ali Yousif",
-          "player_norm": "ali yousif",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Marko Farji",
-          "player_norm": "marko farji",
+          "player": "Martin \u00d8degaard",
+          "player_norm": "martin \u00f8degaard",
           "pos": "MID",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Aymen Hussein",
-          "player_norm": "aymen hussein",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ali Al Hamadi",
-          "player_norm": "ali al hamadi",
-          "pos": "ATT",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "pp_line": 2.5,
           "pp_edge": 0.0,
-          "rank_on_team": 5,
+          "rank_on_team": 2,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
@@ -1733,25 +2219,25 @@
         }
       ]
     },
-    "ALGERIA|goals": {
-      "team_slate": "ALGERIA",
+    "LIBERTAD|goals": {
+      "team_slate": "LIBERTAD",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "JORDAN",
-        "name": "Jordan",
-        "def_rank": 16,
+        "slate_abbr": "ROSARIO",
+        "name": "Rosario Central",
+        "def_rank": 17,
         "def_tier": "Avg"
       },
       "players": [
         {
-          "player": "Luca Zidane",
-          "player_norm": "luca zidane",
+          "player": "Rodrigo Mor\u00ednigo",
+          "player_norm": "rodrigo morinigo",
           "pos": "GOA",
-          "season_avg": 9.5,
-          "game_score": 9.5,
-          "pp_line": 9.5,
+          "season_avg": 4.0,
+          "game_score": 4.0,
+          "pp_line": 4.0,
           "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
@@ -1791,311 +2277,11 @@
         }
       ]
     },
-    "LIBERTAD|goals": {
-      "team_slate": "LIBERTAD",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ROSARIO",
-        "name": "Rosario Central",
-        "def_rank": 17,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Rodrigo Mor\u00ednigo",
-          "player_norm": "rodrigo morinigo",
-          "pos": "GOA",
-          "season_avg": 4.0,
-          "game_score": 4.0,
-          "pp_line": 4.0,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "AUSTRIA|assists": {
-      "team_slate": "AUSTRIA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "ARGENTINA",
-        "name": "Argentina",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Konrad Laimer",
-          "player_norm": "konrad laimer",
-          "pos": "MID",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "JORDAN|goals": {
-      "team_slate": "JORDAN",
-      "category": "goals",
-      "category_label": "Goals",
-      "threshold": 0.4,
-      "opponent": {
-        "slate_abbr": "ALGERIA",
-        "name": "Algeria",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Yazeed Abulaila",
-          "player_norm": "yazeed abulaila",
-          "pos": "GOA",
-          "season_avg": 8.5,
-          "game_score": 8.5,
-          "pp_line": 8.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALGERIA|assists": {
-      "team_slate": "ALGERIA",
-      "category": "assists",
-      "category_label": "Assists",
-      "threshold": 0.3,
-      "opponent": {
-        "slate_abbr": "JORDAN",
-        "name": "Jordan",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Riyad Mahrez",
-          "player_norm": "riyad mahrez",
-          "pos": "ATT",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
-          "pp_edge": 0.0,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Amine Gouiri",
-          "player_norm": "amine gouiri",
-          "pos": "ATT",
-          "season_avg": 0.3,
-          "game_score": 0.3,
-          "pp_line": 0.5,
-          "pp_edge": -0.3,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "ALGERIA|shots": {
-      "team_slate": "ALGERIA",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
-      "opponent": {
-        "slate_abbr": "JORDAN",
-        "name": "Jordan",
-        "def_rank": 16,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Ibrahim Maza",
-          "player_norm": "ibrahim maza",
-          "pos": "ATT",
-          "season_avg": 2.9,
-          "game_score": 2.9,
-          "pp_line": 1.5,
-          "pp_edge": 1.5,
-          "rank_on_team": 1,
-          "leader_slice": "top",
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +1.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Adil Boulbina",
-          "player_norm": "adil boulbina",
-          "pos": "ATT",
-          "season_avg": 3.5,
-          "game_score": 3.5,
-          "pp_line": 2.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nadhir Benbouali",
-          "player_norm": "nadhir benbouali",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 0.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Anis Hadj Moussa",
-          "player_norm": "anis hadj moussa",
-          "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 1.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Far\u00e8s Ghedjemis",
-          "player_norm": "fares ghedjemis",
-          "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 1.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Amine Gouiri",
-          "player_norm": "amine gouiri",
-          "pos": "ATT",
-          "season_avg": 1.3,
-          "game_score": 1.3,
-          "pp_line": 2.5,
-          "pp_edge": -1.1,
-          "bottom_rank_on_team": 1,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -1.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Far\u00e8s Cha\u00efbi",
-          "player_norm": "fares chaibi",
-          "pos": "MID",
-          "season_avg": 1.7,
-          "game_score": 1.7,
-          "pp_line": 1.5,
-          "pp_edge": -0.1,
-          "bottom_rank_on_team": 2,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Hicham Boudaoui",
-          "player_norm": "hicham boudaoui",
-          "pos": "MID",
-          "season_avg": 0.9,
-          "game_score": 0.9,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "bottom_rank_on_team": 3,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Mohammed Amoura",
-          "player_norm": "mohammed amoura",
-          "pos": "ATT",
-          "season_avg": 0.2,
-          "game_score": 0.2,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "bottom_rank_on_team": 4,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Rayan A\u00eft-Nouri",
-          "player_norm": "rayan ait-nouri",
-          "pos": "DEF",
-          "season_avg": 0.6,
-          "game_score": 0.6,
-          "pp_line": 0.5,
-          "pp_edge": 0.1,
-          "bottom_rank_on_team": 5,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        }
-      ]
-    },
-    "SENEGAL|shots": {
+    "SENEGAL|goals": {
       "team_slate": "SENEGAL",
-      "category": "shots",
-      "category_label": "Shots",
-      "threshold": 2.0,
+      "category": "goals",
+      "category_label": "Goals",
+      "threshold": 0.4,
       "opponent": {
         "slate_abbr": "NORWAY",
         "name": "Norway",
@@ -2104,155 +2290,15 @@
       },
       "players": [
         {
-          "player": "Lamine Camara",
-          "player_norm": "lamine camara",
-          "pos": "MID",
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "pp_line": 0.5,
-          "pp_edge": 1.3,
+          "player": "\u00c9douard Mendy",
+          "player_norm": "edouard mendy",
+          "pos": "GOA",
+          "season_avg": 9.5,
+          "game_score": 9.5,
+          "pp_line": 9.5,
+          "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.3 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Isma\u00efla Sarr",
-          "player_norm": "ismaila sarr",
-          "pos": "ATT",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 1.5,
-          "pp_edge": 1.1,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.1 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Cherif Ndiaye",
-          "player_norm": "cherif ndiaye",
-          "pos": "ATT",
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "pp_line": 1.5,
-          "pp_edge": 1.0,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.0 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Assane Diao",
-          "player_norm": "assane diao",
-          "pos": "ATT",
-          "season_avg": 2.2,
-          "game_score": 2.2,
-          "pp_line": 1.5,
-          "pp_edge": 0.9,
-          "rank_on_team": 4,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Bamba Dieng",
-          "player_norm": "bamba dieng",
-          "pos": "ATT",
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "pp_line": 1.5,
-          "pp_edge": 0.7,
-          "rank_on_team": 5,
-          "leader_slice": "top",
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Nicolas Jackson",
-          "player_norm": "nicolas jackson",
-          "pos": "ATT",
-          "season_avg": 1.4,
-          "game_score": 1.4,
-          "pp_line": 2.0,
-          "pp_edge": -0.4,
-          "bottom_rank_on_team": 1,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.4 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Path\u00e9 Ciss",
-          "player_norm": "pathe ciss",
-          "pos": "MID",
-          "season_avg": 0.7,
-          "game_score": 0.7,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "bottom_rank_on_team": 2,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Sadio Man\u00e9",
-          "player_norm": "sadio mane",
-          "pos": "ATT",
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "pp_line": 1.5,
-          "pp_edge": 0.0,
-          "bottom_rank_on_team": 3,
-          "leader_slice": "bottom",
-          "bottom3_on_team": true,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "El Hadji Malick Diouf",
-          "player_norm": "el hadji malick diouf",
-          "pos": "DEF",
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "pp_line": 0.5,
-          "pp_edge": 0.1,
-          "bottom_rank_on_team": 4,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Habib Diarra",
-          "player_norm": "habib diarra",
-          "pos": "MID",
-          "season_avg": 1.2,
-          "game_score": 1.2,
-          "pp_line": 0.5,
-          "pp_edge": 0.3,
-          "bottom_rank_on_team": 5,
-          "leader_slice": "bottom",
-          "bottom3_on_team": false,
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
           "overperform_vs_weak": false,
@@ -2260,60 +2306,30 @@
         }
       ]
     },
-    "FRANCE|goals": {
-      "team_slate": "FRANCE",
+    "IND. DEL VALLE|goals": {
+      "team_slate": "IND. DEL VALLE",
       "category": "goals",
       "category_label": "Goals",
       "threshold": 0.4,
       "opponent": {
-        "slate_abbr": "IRAQ",
-        "name": "Iraq",
-        "def_rank": 16,
-        "def_tier": "Avg"
+        "slate_abbr": "UCV",
+        "name": "UCV",
+        "def_rank": "",
+        "def_tier": ""
       },
       "players": [
         {
-          "player": "Mike Maignan",
-          "player_norm": "mike maignan",
+          "player": "Aldair Quintana",
+          "player_norm": "aldair quintana",
           "pos": "GOA",
-          "season_avg": 10.0,
-          "game_score": 10.0,
-          "pp_line": 10.0,
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "pp_line": 3.0,
           "pp_edge": 0.0,
           "rank_on_team": 1,
           "leader_slice": "top",
           "edge": "NEUTRAL",
           "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Kylian Mbapp\u00e9",
-          "player_norm": "kylian mbappe",
-          "pos": "ATT",
-          "season_avg": 0.4,
-          "game_score": 0.4,
-          "pp_line": 0.5,
-          "pp_edge": -0.1,
-          "rank_on_team": 2,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.1 on board \u2014 skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null
-        },
-        {
-          "player": "Ousmane Demb\u00e9l\u00e9",
-          "player_norm": "ousmane dembele",
-          "pos": "ATT",
-          "season_avg": 0.5,
-          "game_score": 0.5,
-          "pp_line": 0.5,
-          "pp_edge": -0.3,
-          "rank_on_team": 3,
-          "leader_slice": "top",
-          "edge": "AVOID",
-          "notes": "PP edge -0.3 on board \u2014 skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null
         }

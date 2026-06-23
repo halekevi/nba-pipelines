@@ -2278,5 +2278,63 @@
       "count": 35,
       "wins": 0
     }
+  },
+  {
+    "date": "2026-06-22",
+    "track": "long_parlay",
+    "n_tickets": 68,
+    "wins": 0,
+    "guarantees": 0,
+    "losses": 68,
+    "void_loss_ct": 0,
+    "win_rate": 0.0,
+    "avg_ev_predicted": 1.4167,
+    "net_per_10": -10.0,
+    "roi_pct": -100.0,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 23,
+      "wins": 0
+    },
+    "marginal_tickets": {
+      "count": 7,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 38,
+      "wins": 0
+    }
+  },
+  {
+    "date": "2026-06-22",
+    "track": "graded_main",
+    "n_tickets": 313,
+    "wins": 17,
+    "guarantees": 0,
+    "losses": 296,
+    "void_loss_ct": 1,
+    "win_rate": 0.0543,
+    "avg_ev_predicted": 0.327,
+    "net_per_10": -7.99,
+    "roi_pct": -79.87,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 85,
+      "wins": 7
+    },
+    "marginal_tickets": {
+      "count": 22,
+      "wins": 2
+    },
+    "skip_tickets": {
+      "count": 206,
+      "wins": 8
+    }
   }
 ]

@@ -2,9 +2,9 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-22T13:58:23.062732+00:00",
-  "slate_note": "Tennis match day 2026-06-23 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-23.xlsx)",
-  "tennis_match_date": "2026-06-23",
+  "generated_at": "2026-06-23T10:49:11.967734+00:00",
+  "slate_note": "Tennis match day 2026-06-24 ET (rows after date filter; source=slate_sport_tennis.json)",
+  "tennis_match_date": "2026-06-24",
   "n_teams": 300,
   "elite_rank_cut": 25,
   "weak_rank_cut": 100,
@@ -57,6 +57,13 @@
       "name": "Alicia Dudeney",
       "def_rank": null,
       "def_tier": ""
+    },
+    {
+      "def_key": "anastasia zakharova",
+      "slate_abbr": "anastasia zakharova",
+      "name": "Anastasia Zakharova",
+      "def_rank": 91,
+      "def_tier": "Below Avg"
     },
     {
       "def_key": "ann li",
@@ -171,6 +178,13 @@
       "def_tier": ""
     },
     {
+      "def_key": "janice tjen",
+      "slate_abbr": "janice tjen",
+      "name": "Janice Tjen",
+      "def_rank": 41,
+      "def_tier": "Avg"
+    },
+    {
       "def_key": "jasmine paolini",
       "slate_abbr": "jasmine paolini",
       "name": "Jasmine Paolini",
@@ -204,6 +218,13 @@
       "name": "Laura Siegemund",
       "def_rank": 40,
       "def_tier": "Avg"
+    },
+    {
+      "def_key": "leylah fernandez",
+      "slate_abbr": "leylah fernandez",
+      "name": "Leylah Fernandez",
+      "def_rank": 23,
+      "def_tier": "Above Avg"
     },
     {
       "def_key": "linda noskova",
@@ -469,6 +490,14 @@
       "team_def_rank": null,
       "team_def_tier": ""
     },
+    "anastasia zakharova": {
+      "opponent_slate": "karolina muchova",
+      "opponent_name": "Karolina Muchova",
+      "opponent_def_rank": 11,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 91,
+      "team_def_tier": "Below Avg"
+    },
     "stefanos tsitsipas": {
       "opponent_slate": "ignacio buse",
       "opponent_name": "IGNACIO BUSE",
@@ -499,6 +528,14 @@
       "opponent_def_rank": 19,
       "opponent_def_tier": "Above Avg",
       "team_def_rank": 29,
+      "team_def_tier": "Avg"
+    },
+    "janice tjen": {
+      "opponent_slate": "emma navarro",
+      "opponent_name": "Emma Navarro",
+      "opponent_def_rank": 24,
+      "opponent_def_tier": "Above Avg",
+      "team_def_rank": 41,
       "team_def_tier": "Avg"
     },
     "luciano darderi": {
@@ -668,6 +705,14 @@
       "opponent_def_tier": "Elite",
       "team_def_rank": 105,
       "team_def_tier": "Weak"
+    },
+    "leylah fernandez": {
+      "opponent_slate": "alycia parks",
+      "opponent_name": "Alycia Parks",
+      "opponent_def_rank": 80,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 23,
+      "team_def_tier": "Above Avg"
     }
   },
   "players_by_team_cat": {
@@ -1601,10 +1646,10 @@
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "emma navarro",
+        "name": "Emma Navarro",
+        "def_rank": 24,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -1614,8 +1659,8 @@
           "rank_on_team": 1,
           "season_avg": 9.1,
           "game_score": 9.1,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.5 on board tonight.",
+          "edge": "NEUTRAL",
+          "notes": "PP edge +1.5 vs elite opponent (#24) \u2014 proceed with caution.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 6.5,
@@ -1760,34 +1805,6 @@
           "def_boost": null,
           "pp_line": 10.5,
           "pp_edge": -0.3
-        }
-      ]
-    },
-    "matteo arnaldi|games_won": {
-      "team_slate": "matteo arnaldi",
-      "category": "games_won",
-      "category_label": "Games won",
-      "threshold": 12.0,
-      "opponent": {
-        "slate_abbr": "giles hussey",
-        "name": "GILES HUSSEY",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Matteo Arnaldi",
-          "player_norm": "matteo arnaldi",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 17.2,
-          "game_score": 17.2,
-          "edge": "TOP_EDGE",
-          "notes": "PP edge +10.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 13.5,
-          "pp_edge": 10.5
         }
       ]
     },
@@ -2133,10 +2150,10 @@
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "karolina muchova",
+        "name": "Karolina Muchova",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -2146,8 +2163,8 @@
           "rank_on_team": 1,
           "season_avg": 9.5,
           "game_score": 9.5,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.5 on board tonight.",
+          "edge": "NEUTRAL",
+          "notes": "PP edge +1.5 vs elite opponent (#11) \u2014 proceed with caution.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 6.5,
@@ -2917,10 +2934,10 @@
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "emma navarro",
+        "name": "Emma Navarro",
+        "def_rank": 24,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -2930,8 +2947,8 @@
           "rank_on_team": 1,
           "season_avg": 2.9,
           "game_score": 2.9,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#24).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 3.5,
@@ -3673,10 +3690,10 @@
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "karolina muchova",
+        "name": "Karolina Muchova",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -3686,8 +3703,8 @@
           "rank_on_team": 1,
           "season_avg": 0.2,
           "game_score": 0.2,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#11).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 1.5,
@@ -3841,10 +3858,10 @@
       "category_label": "Double faults",
       "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "karolina muchova",
+        "name": "Karolina Muchova",
+        "def_rank": 11,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -3855,7 +3872,7 @@
           "season_avg": 3.2,
           "game_score": 3.2,
           "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "notes": "Elite opponent (#11) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 3.5,
@@ -4093,10 +4110,10 @@
       "category_label": "Double faults",
       "threshold": 3.0,
       "opponent": {
-        "slate_abbr": "",
-        "name": "",
-        "def_rank": null,
-        "def_tier": ""
+        "slate_abbr": "emma navarro",
+        "name": "Emma Navarro",
+        "def_rank": 24,
+        "def_tier": "Above Avg"
       },
       "players": [
         {
@@ -4107,7 +4124,7 @@
           "season_avg": 4.1,
           "game_score": 4.1,
           "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
+          "notes": "Elite opponent (#24) \u2014 no clear OVER edge.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 3.5,
