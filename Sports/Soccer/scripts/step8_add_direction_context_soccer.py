@@ -69,6 +69,28 @@ def _norm_pick_type(x: str) -> str:
     return "Standard"
 
 
+def _warn_step7_goblin_ml_saturation(step7_df: pd.DataFrame) -> None:
+    """Non-fatal guard: catch prop-calibrator saturation regressions on Goblin rows."""
+    pt = step7_df.get("pick_type", pd.Series("", index=step7_df.index)).astype(str).str.lower()
+    if not pt.str.contains("gob", na=False).any():
+        return
+    ml = pd.to_numeric(step7_df.get("ml_prob", pd.Series(dtype=float)), errors="coerce")
+    gob_ml = ml[pt.str.contains("gob", na=False)]
+    if gob_ml.notna().any() and float(gob_ml.mean()) > 0.85:
+        print(
+            "[WARN] Soccer step7 Goblin ml_prob mean > 0.85 — "
+            "calibrator saturation may have recurred, check fix"
+        )
+    missing_7b = not (
+        "edge_score" in step7_df.columns and "blended_score" in step7_df.columns
+    )
+    if missing_7b:
+        print(
+            "[WARN] Soccer step7 lacks edge_score/blended_score — "
+            "step7b may not have run; ml_prob may be stale prop-model output only"
+        )
+
+
 TIER_COLORS = {
     "A": ("1E8449", "FFFFFF"),
     "B": ("2874A6", "FFFFFF"),
@@ -343,6 +365,8 @@ def main() -> None:
     if df.empty:
         print("ERROR [PropOracle-Soccer-S8] Empty input from S7 — aborting.")
         sys.exit(1)
+
+    _warn_step7_goblin_ml_saturation(df)
 
     # ── Date filter: keep only target date's games ───────────────────────────
     import datetime, zoneinfo

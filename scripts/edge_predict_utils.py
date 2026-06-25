@@ -24,44 +24,41 @@ from edge_feature_engineering import (  # type: ignore
     fill_minutes_cv_median_by_sport,
 )
 
-# Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
+# Shared with step7b_edge_score. Recalibrated 2026-06 via scripts/recalibrate_ml_prob_scalars.py.
+# SOCCER OVER slices use observed hit-rate targets (not 50% policy).
 ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
-    # NBA scalars: recalibrate after usage_pct + pace + injury context retrain (step4b/c/d).
-    ("NBA", "standard", "OVER"): 0.7965,
-    ("NBA", "goblin", "OVER"): 0.8609,
-    # Demon+OVER excluded from calibration — unbookable (drop_demon_over_rows).
-    ("NBA", "standard", "UNDER"): 1.0255,
-    # NHL — provisional (thin samples; isotonic pass needed)
-    ("NHL", "standard", "OVER"): 1.6485,
-    ("NHL", "standard", "UNDER"): 0.7309,
+    ("NBA", "standard", "OVER"): 0.8187,
+    ("NBA", "goblin", "OVER"): 0.8805,
+    ("NBA", "standard", "UNDER"): 1.0012,
+    ("NHL", "standard", "OVER"): 1.3139,
+    ("NHL", "standard", "UNDER"): 0.7676,
     ("NHL", "goblin", "OVER"): 2.2124,
     ("NHL", "demon", "OVER"): 1.8855,
-    # MLB
-    ("MLB", "standard", "OVER"): 1.2015,
-    ("MLB", "goblin", "OVER"): 1.225,
+    ("MLB", "standard", "OVER"): 0.9553,
+    ("MLB", "goblin", "OVER"): 1.0244,
     ("MLB", "demon", "OVER"): 1.4152,
-    # Soccer — step7b sport key is SOCCER (not report label "Soccer")
-    ("SOCCER", "standard", "OVER"): 2.778,
-    ("SOCCER", "goblin", "OVER"): 0.6942,
+    ("MLB", "standard", "UNDER"): 1.0285,
+    ("SOCCER", "standard", "OVER"): 0.4675,
+    # step7b replaces ml_prob via the unified edge model (independent of step7 prop_model).
+    ("SOCCER", "goblin", "OVER"): 0.25,
     ("SOCCER", "demon", "OVER"): 2.121,
-    # WNBA — recalibrated from graded archive (scripts/recalibrate_ml_prob_scalars.py --sport WNBA)
-    ("WNBA", "standard", "OVER"): 1.0906,
-    ("WNBA", "standard", "UNDER"): 0.7745,
-    ("WNBA", "goblin", "OVER"): 1.2207,
+    ("SOCCER", "goblin", "UNDER"): 0.9423,
+    ("SOCCER", "standard", "UNDER"): 1.6788,
+    ("WNBA", "standard", "OVER"): 0.7211,
+    ("WNBA", "standard", "UNDER"): 1.2274,
+    ("WNBA", "goblin", "OVER"): 0.7989,
     ("WNBA", "demon", "OVER"): 2.2358,
-    ("MLB", "standard", "UNDER"): 0.9697,
-    ("SOCCER", "goblin", "UNDER"): 1.0811,
-    ("SOCCER", "standard", "UNDER"): 1.751,
     ("CBB", "goblin", "OVER"): 0.8054,
     ("CBB", "standard", "OVER"): 0.9911,
     ("CBB", "standard", "UNDER"): 0.8652,
-    ("NBA1Q", "goblin", "OVER"): 0.5677,
-    ("NBA1Q", "standard", "OVER"): 0.5943,
-    ("NBA1Q", "standard", "UNDER"): 0.6676,
-    ("NBA1H", "standard", "OVER"): 0.5539,
-    ("NBA1H", "standard", "UNDER"): 0.6046,
-    ("TENNIS", "goblin", "OVER"): 0.9648,
-    ("TENNIS", "standard", "OVER"): 0.9827,
+    ("NBA1Q", "goblin", "OVER"): 0.5878,
+    ("NBA1Q", "standard", "OVER"): 0.6161,
+    ("NBA1Q", "standard", "UNDER"): 0.679,
+    ("NBA1H", "standard", "OVER"): 0.5838,
+    ("NBA1H", "standard", "UNDER"): 0.6275,
+    ("TENNIS", "goblin", "OVER"): 0.8407,
+    ("TENNIS", "standard", "OVER"): 0.9062,
+    ("TENNIS", "standard", "UNDER"): 1.3042,
 }
 
 _SLICE_CAL_PATH: Path | None = None
@@ -215,6 +212,16 @@ def predict_unified_edge_scores(
     pt_l = df2.get("pick_type", pd.Series("", index=df2.index)).astype(str).str.strip().str.lower()
     p_adj = apply_ml_prob_post_calibration(p_platt, spu, pt_l, dirs_u, mdir)
     ml_prob = pd.Series(p_adj, index=df2.index, dtype=float)
+    if spu == "TENNIS":
+        try:
+            from utils.tennis_ml_prob_caps import apply_tennis_ml_prob_caps
+
+            cap_df = df2.copy()
+            cap_df["ml_prob"] = ml_prob
+            cap_df = apply_tennis_ml_prob_caps(cap_df, in_place=True)
+            ml_prob = pd.to_numeric(cap_df["ml_prob"], errors="coerce")
+        except Exception:
+            pass
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     implied_prob = 1.0 / (1.0 + np.exp(-edge_col.clip(-20, 20)))
     comp = pd.to_numeric(

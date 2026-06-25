@@ -852,6 +852,17 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, n_teams: int) 
         index=out.index,
     )
     X = pd.concat([X_base, prop_dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
+    is_goblin = pick.str.contains("gob", na=False)
+    # Empirical Goblin OVER hit rate ~17–20% on graded history; calibrator saturates tier=2 to ~1.0.
+    _GOBLIN_ML_FLOOR = 0.05
+    _GOBLIN_ML_CAP = 0.30
+    _GOBLIN_RAW_SCALE = 0.30
+
+    def _goblin_raw_ml(raw: pd.Series) -> pd.Series:
+        scaled = raw * _GOBLIN_RAW_SCALE
+        capped = scaled.clip(_GOBLIN_ML_FLOOR, _GOBLIN_ML_CAP)
+        return raw.where(~is_goblin, capped)
+
     try:
         raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
         if calibrator is not None:
@@ -860,11 +871,23 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, n_teams: int) 
                     cal_vals = calibrator.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1]
                 else:
                     cal_vals = calibrator.predict(raw_prob.values)
-                ml_prob = pd.Series(cal_vals, index=out.index, dtype=float).clip(0.001, 0.999)
+                cal_arr = np.asarray(cal_vals, dtype=float)
+                gob_mask = is_goblin.to_numpy()
+                if gob_mask.any():
+                    cal_arr = np.where(
+                        gob_mask,
+                        _goblin_raw_ml(raw_prob).to_numpy(),
+                        cal_arr,
+                    )
+                    print(
+                        f"  Soccer Goblin: bypassed prop calibrator for {int(gob_mask.sum())} rows "
+                        f"(raw×{_GOBLIN_RAW_SCALE:.2f} capped {_GOBLIN_ML_FLOOR:.2f}–{_GOBLIN_ML_CAP:.2f})"
+                    )
+                ml_prob = pd.Series(cal_arr, index=out.index, dtype=float).clip(0.001, 0.999)
             except Exception:
-                ml_prob = raw_prob
+                ml_prob = _goblin_raw_ml(raw_prob).clip(0.001, 0.999)
         else:
-            ml_prob = raw_prob
+            ml_prob = _goblin_raw_ml(raw_prob).clip(0.001, 0.999)
     except Exception as e:
         print(f"⚠️  Soccer ML inference failed: {e} — skipping ML blend")
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
