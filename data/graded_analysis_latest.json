@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-25T08:47:32.615082+00:00",
+  "generated_at": "2026-06-25T11:33:00.311640+00:00",
   "date_range": {
     "min": "2026-02-19",
     "max": "2026-06-24"
   },
-  "total_props": 637272,
-  "overall_hit_rate": 0.3568,
+  "total_props": 637554,
+  "overall_hit_rate": 0.3566,
   "top_slices": [
     {
       "sport": "SOCCER",
@@ -274,9 +274,9 @@
       "pick_type": "demon",
       "direction": "OVER",
       "tier": "D",
-      "hit_rate": 0.1349,
-      "n": 7314,
-      "mean_edge": -2.827,
+      "hit_rate": 0.1316,
+      "n": 7495,
+      "mean_edge": -2.853,
       "priority": 2
     },
     {
@@ -285,8 +285,8 @@
       "direction": "OVER",
       "tier": "D",
       "hit_rate": 0.1414,
-      "n": 22779,
-      "mean_edge": -0.885,
+      "n": 22898,
+      "mean_edge": -0.886,
       "priority": 3
     },
     {
@@ -334,9 +334,9 @@
       "pick_type": "demon",
       "direction": "OVER",
       "tier": "D",
-      "hit_rate": 0.1769,
-      "n": 30552,
-      "mean_edge": -0.87,
+      "hit_rate": 0.1771,
+      "n": 30410,
+      "mean_edge": -0.869,
       "priority": 8
     },
     {
@@ -495,18 +495,18 @@
       "mean_edge": -2.442
     },
     {
+      "prop_type": "Total Games Won",
+      "direction": "UNDER",
+      "hit_rate": 0.5669,
+      "n": 157,
+      "mean_edge": -4.903
+    },
+    {
       "prop_type": "tov",
       "direction": "OVER",
       "hit_rate": 0.5595,
       "n": 227,
       "mean_edge": 0.339
-    },
-    {
-      "prop_type": "Total Games Won",
-      "direction": "UNDER",
-      "hit_rate": 0.5592,
-      "n": 152,
-      "mean_edge": -5.019
     },
     {
       "prop_type": "—",
@@ -709,19 +709,19 @@
         "consistency": 0.663
       },
       {
-        "player": "Michael Imariagbe",
-        "sport": "CBB",
-        "hit_rate": 0.8636,
-        "n": 22,
-        "primary_prop_type": "—",
-        "consistency": 0.657
-      },
-      {
         "player": "Jonathan Kuminga",
         "sport": "NBA1Q",
         "hit_rate": 0.8636,
         "n": 22,
         "primary_prop_type": "Points",
+        "consistency": 0.657
+      },
+      {
+        "player": "Michael Imariagbe",
+        "sport": "CBB",
+        "hit_rate": 0.8636,
+        "n": 22,
+        "primary_prop_type": "—",
         "consistency": 0.657
       },
       {
@@ -813,19 +813,19 @@
         "consistency": 0.607
       },
       {
-        "player": "Isaac Celiscar",
-        "sport": "CBB",
-        "hit_rate": 0.8065,
-        "n": 31,
-        "primary_prop_type": "—",
-        "consistency": 0.605
-      },
-      {
         "player": "Leonard Miller",
         "sport": "NBA",
         "hit_rate": 0.8065,
         "n": 62,
         "primary_prop_type": "Points",
+        "consistency": 0.605
+      },
+      {
+        "player": "Isaac Celiscar",
+        "sport": "CBB",
+        "hit_rate": 0.8065,
+        "n": 31,
+        "primary_prop_type": "—",
         "consistency": 0.605
       },
       {
@@ -887,13 +887,6 @@
     ],
     "bottom_20": [
       {
-        "player": "Pablo Marín",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 28,
-        "primary_prop_type": "Shots"
-      },
-      {
         "player": "Abu Kamara",
         "sport": "SOCCER",
         "hit_rate": 0.0,
@@ -901,115 +894,45 @@
         "primary_prop_type": "Shots"
       },
       {
-        "player": "Xavi Espart",
+        "player": "Álex Sala",
         "sport": "SOCCER",
         "hit_rate": 0.0,
-        "n": 31,
+        "n": 25,
         "primary_prop_type": "Shots"
       },
       {
-        "player": "Pedro Amador",
+        "player": "Robinio Vaz",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 41,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Abdul Mumin",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 25,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Cayman Togashi",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 25,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Cedric Teuchert",
         "sport": "SOCCER",
         "hit_rate": 0.0,
         "n": 21,
         "primary_prop_type": "Shots"
       },
       {
-        "player": "Joel Waterman",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 24,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Jackson Yueill",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 30,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Joan Jordán",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 24,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Yangel Herrera",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 33,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Marcelino Núñez",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 22,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Mama Baldé",
+        "player": "Johan Vásquez",
         "sport": "SOCCER",
         "hit_rate": 0.0,
         "n": 21,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Emil Holm",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 21,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Chuba Akpom",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 20,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Sota Kawasaki",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 21,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Barry Bannan",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 23,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Sean Neave",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 21,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Edoardo Iannoni",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 21,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Jonathan Shore",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 34,
-        "primary_prop_type": "Shots"
-      },
-      {
-        "player": "Jonas Hofmann",
-        "sport": "SOCCER",
-        "hit_rate": 0.0,
-        "n": 26,
         "primary_prop_type": "Shots"
       },
       {
@@ -1020,10 +943,87 @@
         "primary_prop_type": "Shots"
       },
       {
-        "player": "Johan Vásquez",
+        "player": "Thiago Borbas",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 32,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Nelson Weiper",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 22,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Yangel Herrera",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 33,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Teun Koopmeiners",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 28,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Richard Ledezma",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 31,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Rayan Elloumi",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 23,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Edoardo Iannoni",
         "sport": "SOCCER",
         "hit_rate": 0.0,
         "n": 21,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Nico Cavallo",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 20,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Thomas Lemar",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 29,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Jesús Vázquez",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 23,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Joan Jordán",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 24,
+        "primary_prop_type": "Shots"
+      },
+      {
+        "player": "Joel Waterman",
+        "sport": "SOCCER",
+        "hit_rate": 0.0,
+        "n": 24,
         "primary_prop_type": "Shots"
       }
     ]
@@ -1036,20 +1036,20 @@
       "NBA1H": -0.06260353757825698,
       "NBA1Q": -0.07716192232544238,
       "NHL": 0.01765971954496329,
-      "SOCCER": -0.049611653647043265,
-      "TENNIS": 0.02990473771948045,
+      "SOCCER": -0.0496096539455352,
+      "TENNIS": 0.02755439756114762,
       "WNBA": -0.05250523001500269
     },
     "strongest_sport": "NBA",
     "strongest_r": 0.10370646201762278,
     "monotonic": false,
-    "avg_r": -0.02495238183299389,
+    "avg_r": -0.02521330855041886,
     "verdict": "NO"
   },
   "streak_signals": {
     "verdict": "YES",
-    "hot_hr": 0.6349740277252787,
-    "cold_hr": 0.2906835935439832,
+    "hot_hr": 0.636134541299785,
+    "cold_hr": 0.28949013642548277,
     "best_streak_signal": "TENNIS UNDER"
   }
 }
