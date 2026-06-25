@@ -175,6 +175,8 @@ def _tier_from_group(
             if dist >= 1.0:
                 return "C"
             return "D"
+        if str(sport or "").strip().lower() == "soccer":
+            return "C"
         return _tier_from_ml_scalar(ml_prob, *cuts)
 
     if pt == "demon":
@@ -258,8 +260,12 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
 
     tier_source:
       - ``distance``: Goblin/Demon with valid standard_line and line
-      - ``ml_prob_fallback``: Goblin/Demon missing usable distance inputs
+      - ``ml_prob_fallback``: Goblin/Demon missing usable distance inputs (non-Soccer)
+      - ``neutral_no_data``: Soccer Goblin with no distance inputs (alt-only; not Tier D)
       - ``ml_prob``: Standard and other pick types
+
+    Also sets ``tier_basis`` on ``out``:
+      - ``distance`` | ``ml_prob_fallback`` | ``neutral_no_data`` | ``ml_prob``
     """
     idx = out.index
     n = len(out)
@@ -315,11 +321,15 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     dist = np.abs(ln - sl)
     tier = np.full(n, "D", dtype=object)
     tier_src = np.full(n, "ml_prob", dtype=object)
+    tier_basis = np.full(n, "ml_prob", dtype=object)
+    sport_key = str(sport or "").strip().lower()
 
     std_over = is_non_gd & (dr != "UNDER")
     std_under = is_non_gd & (dr == "UNDER")
     tier[std_over] = t_std_over[std_over]
     tier[std_under] = t_std_under[std_under]
+    tier_basis[std_over] = "ml_prob"
+    tier_basis[std_under] = "ml_prob"
 
     has_gd_dist = is_gob & np.isfinite(sl) & np.isfinite(ln)
     t_gob_d = np.where(
@@ -329,10 +339,17 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     )
     tier[has_gd_dist] = t_gob_d[has_gd_dist]
     tier_src[has_gd_dist] = "distance"
+    tier_basis[has_gd_dist] = "distance"
 
     gob_fb = is_gob & ~has_gd_dist
-    tier[gob_fb] = t_gob_fb[gob_fb]
-    tier_src[gob_fb] = "ml_prob_fallback"
+    if sport_key == "soccer":
+        tier[gob_fb] = "C"
+        tier_src[gob_fb] = "neutral_no_data"
+        tier_basis[gob_fb] = "neutral_no_data"
+    else:
+        tier[gob_fb] = t_gob_fb[gob_fb]
+        tier_src[gob_fb] = "ml_prob_fallback"
+        tier_basis[gob_fb] = "ml_prob_fallback"
 
     has_dd_dist = is_dem & np.isfinite(sl) & np.isfinite(ln)
     t_dem_d = np.where(
@@ -342,10 +359,12 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     )
     tier[has_dd_dist] = t_dem_d[has_dd_dist]
     tier_src[has_dd_dist] = "distance"
+    tier_basis[has_dd_dist] = "distance"
 
     dem_fb = is_dem & ~has_dd_dist
     tier[dem_fb] = t_dem_fb[dem_fb]
     tier_src[dem_fb] = "ml_prob_fallback"
+    tier_basis[dem_fb] = "ml_prob_fallback"
 
     # Apply sport/prop targeted adjustments after baseline tier assignment.
     sport_rules = SPORT_PROP_TIER_ADJUSTMENTS.get(str(sport or "").strip().lower(), [])
@@ -367,6 +386,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
             )
 
     out["tier_source"] = pd.Series(tier_src, index=idx, dtype=str)
+    out["tier_basis"] = pd.Series(tier_basis, index=idx, dtype=str)
     return pd.Series(tier, index=idx, dtype=str)
 
 

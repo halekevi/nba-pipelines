@@ -518,18 +518,15 @@ def _projection_from_row(row: pd.Series) -> float:
     if np.isnan(line_val):
         return np.nan
 
-    pick_type = _norm_pick_type(str(row.get("pick_type", "")))
-    dev_level = _safe_float(row.get("deviation_level", np.nan))
-    dev = int(dev_level) if not np.isnan(dev_level) else 1
+    from utils.soccer_pick_line_offsets import estimate_standard_line_from_pick_type
 
-    if pick_type == "Standard":
-        return line_val
-    elif pick_type == "Goblin":
-        offset_map = {1: 1.0, 2: 1.5, 3: 2.0}
-        return line_val + offset_map.get(dev, 1.0)
-    elif pick_type == "Demon":
-        offset_map = {1: -1.0, 2: -2.0, 3: -3.0}
-        return line_val + offset_map.get(dev, -1.0)
+    est = estimate_standard_line_from_pick_type(
+        str(row.get("pick_type", "")),
+        line_val,
+        row.get("deviation_level", 1),
+    )
+    if est is not None and np.isfinite(est):
+        return float(est)
 
     return np.nan
 

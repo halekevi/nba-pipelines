@@ -34,9 +34,15 @@ from difflib import SequenceMatcher
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional, Tuple
 
+import numpy as np
 import pandas as pd
 import requests
 from pathlib import Path
+
+_REPO = Path(__file__).resolve().parents[3]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from utils.soccer_pick_line_offsets import estimate_goblin_standard_line
 
 COMBO_SEP = "|"
 MANUAL_PP_MAP_PATH = "outputs/pp_to_espn_id_map_soccer.csv"
@@ -985,6 +991,7 @@ def main() -> None:
     df["standard_line"] = df.apply(
         lambda r: std_lookup.get((r["player"], r["prop_norm"]), None), axis=1
     )
+    df["standard_line_source"] = np.where(df["standard_line"].notna(), "sibling_or_pp", "")
 
     df["deviation_level"] = 0
     gob_dem = df[df["pick_type"].isin(["Goblin", "Demon"])]
@@ -999,6 +1006,27 @@ def main() -> None:
         dev = gob_dem.groupby(["player", "prop_norm", "pick_type"], group_keys=False).apply(_rank_group)
         df.loc[dev.index, "deviation_level"] = dev.values
 
+    # Goblin-only: estimate standard_line when no same-slate Standard sibling exists.
+    gob_missing = df["pick_type"].eq("Goblin") & df["standard_line"].isna() & df["line_num"].notna()
+    if gob_missing.any():
+        est = df.loc[gob_missing].apply(
+            lambda r: estimate_goblin_standard_line(r["line_num"], r["deviation_level"]),
+            axis=1,
+        )
+        est_num = pd.to_numeric(est, errors="coerce")
+        filled = gob_missing & est_num.reindex(df.index).notna()
+        df.loc[filled, "standard_line"] = est_num.reindex(df.index).loc[filled]
+        df.loc[filled, "standard_line_source"] = "offset_estimate"
+
+    n_gob = int((df["pick_type"] == "Goblin").sum())
+    n_gob_std = int(df.loc[df["pick_type"] == "Goblin", "standard_line"].notna().sum())
+    if n_gob:
+        by_src = df.loc[df["pick_type"] == "Goblin", "standard_line_source"].value_counts().to_dict()
+        print(
+            f"  Goblin standard_line fill: {n_gob_std}/{n_gob} "
+            f"({100.0 * n_gob_std / n_gob:.0f}%) sources={by_src}"
+        )
+
     df.drop(columns=["line_num"], inplace=True)
 
     # ── output ──
@@ -1006,7 +1034,8 @@ def main() -> None:
                    "start_time", "pp_home_team", "pp_away_team"]
     front       = ["espn_player_id"]
     model       = ["player", "pos", "team", "opp_team", "league", "line", "prop_type",
-                   "prop_norm", "pick_type", "standard_line", "deviation_level"]
+                   "prop_norm", "pick_type", "standard_line", "standard_line_source",
+                   "deviation_level"]
     tail        = ["is_combo_player"]
     pp_block    = [c for c in pp_schema if c in df.columns]
     model_block = [c for c in model     if c in df.columns]
