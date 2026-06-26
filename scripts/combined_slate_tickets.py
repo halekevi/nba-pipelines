@@ -4579,6 +4579,8 @@ def build_win_rate_ticket_groups(
 
     candidates: list[dict] = []
     anchor = None
+    # opt3 shadow (goblin_tier_a_only) intentionally skips the NBA1Q/NBA HOT anchor —
+    # anchor legs include Goblin B and a fixed 3-leg template; shadow track is Tier-A-only.
     if not goblin_tier_a_only:
         anchor = build_win_rate_anchor_ticket(
             frames_by_sport,
@@ -5758,13 +5760,15 @@ def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
     """Pass pipeline read enrichment columns from source row onto ticket leg dict."""
     for rk in READ_SLATE_EXPORT_KEYS:
         val = gv(rk)
-        if val is None or val == "":
+        if val is None:
             continue
         try:
             if pd.isna(val):
                 continue
         except (TypeError, ValueError):
             pass
+        if val == "":
+            continue
         if rk in _READ_EXPORT_BOOL_KEYS:
             leg[rk] = bool(val)
         elif rk in _READ_EXPORT_STR_KEYS:
@@ -5772,9 +5776,17 @@ def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
         else:
             leg[rk] = _safe_float(val)
     gd = gv("game_date")
-    if gd is not None and str(gd).strip() not in ("", "nan", "None"):
-        leg["game_date"] = str(gd)[:10]
+    try:
+        if gd is not None and not pd.isna(gd) and str(gd).strip() not in ("", "nan", "None", "<NA>"):
+            leg["game_date"] = str(gd)[:10]
+    except (TypeError, ValueError):
+        pass
     miss_raw = gv("read_fields_missing")
+    try:
+        if miss_raw is not None and pd.isna(miss_raw):
+            miss_raw = None
+    except (TypeError, ValueError):
+        pass
     if miss_raw:
         try:
             leg["read_fields_missing"] = (
@@ -5783,8 +5795,11 @@ def _merge_read_export_fields_into_leg(leg: dict, gv) -> None:
         except json.JSONDecodeError:
             pass
     proj = gv("projection")
-    if proj is not None and str(proj).strip() not in ("", "nan", "None"):
-        leg["projection"] = _safe_float(proj)
+    try:
+        if proj is not None and not pd.isna(proj) and str(proj).strip() not in ("", "nan", "None", "<NA>"):
+            leg["projection"] = _safe_float(proj)
+    except (TypeError, ValueError):
+        pass
 
 
 def _l10_counts_look_like_rates(over: float | None, under: float | None) -> bool:
