@@ -81,6 +81,9 @@ SOCCER_SLATE_MAP = {
     "ml_edge":             "ml_edge",
     "line_hit_rate":       "hit_rate_raw",
     "pick_type":           "pick_type",
+    "Pick Type":           "pick_type",
+    "deviation_level":     "deviation_level",
+    "Deviation Level":     "deviation_level",
     "league":              "league",
     "position_group":      "position_group",
     "minutes_tier":        "minutes_tier",
@@ -116,6 +119,7 @@ SOCCER_SLATE_MAP = {
     "Hit Rate":            "hit_rate_raw",
     "Hit Rate (5g)":       "hit_rate_raw",
     "Pick Type":           "pick_type",
+    "Deviation Level":     "deviation_level",
     "League":              "league",
     "Position Group":      "position_group",
     "Position":            "position_group",
@@ -147,6 +151,7 @@ MLB_SLATE_MAP = {
     "L5 Over":          "over_L5_raw",
     "L5 Under":         "under_L5_raw",
     "Pick Type":        "pick_type",
+    "Deviation Level":  "deviation_level",
     "Min Tier":         "minutes_tier",
     "Projection":       "projection",
     "Pos":              "position_group",
@@ -586,8 +591,11 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         "goal":                 ["goals", "goal"],
         # Passes attempted
         "passesattempted":      ["passesattempted", "passes"],
-        "passes":               ["passesattempted", "passes"],
+        "passes":          ["passesattempted", "passes"],
+        "passesattempted": ["passesattempted", "passes"],
         "pa":                   ["passesattempted", "passes"],
+        # Offsides
+        "offsides":             ["offsides", "offside"],
         # Key passes
         "keypasses":            ["keypasses", "keypass"],
         "keypass":              ["keypasses", "keypass"],
@@ -611,8 +619,11 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         "totalbasescomb":       ["totalbases", "totalbasescomb", "totalbasescombo"],
         "totalbasescombo":      ["totalbases", "totalbasescomb", "totalbasescombo"],
         "pitchingouts":         ["pitchingouts"],
-        "fantasyscore":         ["fantasyscore", "fantasypoints"],
-        "fantasypoints":        ["fantasypoints", "fantasyscore"],
+        "fantasyscore":         ["fantasyscore", "fantasypoints", "hitterfantasyscore"],
+        "fantasypoints":        ["fantasypoints", "fantasyscore", "hitterfantasyscore"],
+        "hitterfantasyscore":   ["hitterfantasyscore", "fantasyscore", "fantasypoints"],
+        "earnedrunsallowed":    ["earnedruns", "earnedrunsallowed"],
+        "earnedruns":           ["earnedruns", "earnedrunsallowed"],
     }
 
     def _find_prop_match(candidates, sprop, sport):
@@ -974,12 +985,14 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
                'bet_direction','tier','def_tier','minutes_tier','position_group',
                'edge','hit_rate','projection','rank_score','ml_prob','ml_edge',
                'edge_score','blended_score',
+               'deviation_level',
                'actual','result','margin','void_reason_grade']
     cols = [c for c in desired if c in df.columns]
     widths_map = {'pp_projection_id':14,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
                   'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
                   'position_group':14,'edge':8,'hit_rate':10,'projection':12,'rank_score':12,
                   'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,
+                  'deviation_level':8,
                   'actual':9,'result':8,'margin':8,'void_reason_grade':22}
     for ci, col in enumerate(cols, 1):
         ws_raw.column_dimensions[get_column_letter(ci)].width = widths_map.get(col, 12)

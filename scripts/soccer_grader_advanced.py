@@ -143,10 +143,12 @@ def normalize_soccer_slate_columns(slate: pd.DataFrame) -> pd.DataFrame:
             "pos": "position_code",
             "direction": "final_bet_direction",
             "final bet direction": "final_bet_direction",
+            "pick type": "pick_type",
+            "deviation level": "deviation_level",
         }
         if low in mapping:
             rename[c] = mapping[low]
-        elif cs in ("Player", "League", "Tier", "Line", "Prop", "Opp", "Team", "Direction"):
+        elif cs in ("Player", "League", "Tier", "Line", "Prop", "Opp", "Team", "Direction", "Pick Type", "Deviation Level"):
             mapping2 = {
                 "Player": "player",
                 "League": "league",
@@ -156,6 +158,8 @@ def normalize_soccer_slate_columns(slate: pd.DataFrame) -> pd.DataFrame:
                 "Opp": "opponent",
                 "Team": "team",
                 "Direction": "final_bet_direction",
+                "Pick Type": "pick_type",
+                "Deviation Level": "deviation_level",
             }
             rename[c] = mapping2[cs]
     out = slate.rename(columns=rename)
@@ -704,6 +708,8 @@ def main() -> None:
             direction = "OVER"
         tier = slate_row.get("tier", "D")
         def_tier = slate_row.get("DEF_TIER", slate_row.get("def_tier", slate_row.get("Def Tier", "")))
+        pick_type = slate_row.get("pick_type", slate_row.get("Pick Type", ""))
+        deviation_level = slate_row.get("deviation_level", slate_row.get("Deviation Level", ""))
 
         actual = lookup_soccer_actual(actuals_lut, player, prop_type, team)
         minutes_played = lookup_soccer_minutes(minutes_lut, player, team)
@@ -752,6 +758,8 @@ def main() -> None:
             "actual": actual,
             "margin": margin,
             "direction": direction,
+            "pick_type": pick_type,
+            "deviation_level": deviation_level,
             "tier": tier,
             "def_tier": def_tier,
             "result": result,

@@ -305,6 +305,7 @@ def main() -> None:
                 "tier": _slate_field(r, "tier", "Tier"),
                 "edge": _slate_field(r, "edge", "Edge"),
                 "pick_type": _slate_field(r, "pick_type", "Pick Type"),
+                "deviation_level": _slate_field(r, "deviation_level", "Deviation Level"),
                 "team": _slate_field(r, "team", "Team"),
                 "blended_score": _slate_field(r, "blended_score", "Blended Score"),
             }

@@ -48,6 +48,7 @@ COL_MAP: list[tuple[str, str]] = [
     ("ML Edge", "ML Edge"),
     ("Edge Score", "Edge Score"),
     ("Blended Score", "Blended Score"),
+    ("Deviation Level", "Deviation Level"),
 ]
 
 

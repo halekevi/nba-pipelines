@@ -35,8 +35,13 @@ from pathlib import Path
 from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SCRIPTS_DIR = Path(__file__).resolve().parent.parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+from grading.leg_grade_utils import is_unplayable_for_grading  # noqa: E402
 
 import pandas as pd
 from utils.group_rank_tier import apply_prop_tier_adjustments, assign_tier_column
@@ -236,7 +241,15 @@ def _is_prop_level_row(r: dict) -> bool:
 
 
 def _filter_prop_level_rows(rows: list[dict]) -> list[dict]:
-    return [r for r in rows if _is_prop_level_row(r)]
+    out: list[dict] = []
+    for r in rows:
+        if not _is_prop_level_row(r):
+            continue
+        vr = r.get("void_reason") or r.get("Void Reason") or r.get("void_reason_grade")
+        if is_unplayable_for_grading(vr):
+            continue
+        out.append(r)
+    return out
 
 
 def load_graded(path: Path, sport: str = "") -> list[dict]:
@@ -301,6 +314,7 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
             if nk.lower() == "pick_type":           nk = "Pick Type"
             if nk.lower() == "tier":                nk = "Tier"
             if nk.lower() in ("ml_prob", "ml prob"): nk = "ML Prob"
+            if nk.lower() in ("deviation level", "dev level", "deviation_level"): nk = "deviation_level"
             nr[nk] = v
         normalized.append(nr)
     # Recompute display tiers for historical files:
@@ -456,6 +470,11 @@ def prop_row_for_api(
     shadow_id_map: dict[tuple[str, ...], str] | None = None,
 ) -> dict[str, str] | None:
     """One flat dict per prop row for the Prop Evaluation tab."""
+    if is_unplayable_for_grading(
+        row.get("void_reason") or row.get("Void Reason") or row.get("void_reason_grade")
+    ):
+        return None
+
     def _pick(*keys: str) -> str:
         for k in keys:
             v = _cell_str(row.get(k))
@@ -546,6 +565,15 @@ def prop_row_for_api(
     minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
     role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
     usage_vacuum = _pick_scalar("usage_vacuum", "Usage Vacuum")
+    deviation_level_raw = _pick_scalar("deviation_level", "Deviation Level", "Dev Level")
+    deviation_level_val: int | None = None
+    if deviation_level_raw:
+        try:
+            dv = int(float(deviation_level_raw))
+            if dv > 0:
+                deviation_level_val = dv
+        except (ValueError, TypeError):
+            pass
     team_star_out = _pick_scalar("team_star_out", "Team Star Out")
     key_facilitator_out = _pick_scalar("key_facilitator_out", "Key Facilitator Out")
     injury_boost_candidate = _pick_scalar("injury_boost_candidate", "Injury Boost Candidate", "Injury Boost")
@@ -668,6 +696,7 @@ def prop_row_for_api(
         "minutes_tier": minutes_tier or "",
         "role_tier": role_tier or "",
         "usage_vacuum": usage_vacuum,
+        "deviation_level": deviation_level_val,
         "team_star_out": team_star_out,
         "key_facilitator_out": key_facilitator_out,
         "injury_boost_candidate": injury_boost_candidate,
@@ -695,6 +724,12 @@ def export_graded_props_json(
     out_dir: Path,
     bundles: list[tuple[str, list[dict]]],
 ) -> Path:
+    """Write graded_props_{date}.json for the Grades UI.
+
+    Operational note: copying an old graded_props_*.json without re-running
+    build_grades_html (after slate_grader) can resurrect rows excluded by
+    is_unplayable_for_grading — always regenerate from graded workbooks.
+    """
     live_keys: set[tuple[str, ...]] = set()
     shadow_keys: set[tuple[str, ...]] = set()
     live_id_map: dict[tuple[str, ...], str] = {}
@@ -1872,6 +1907,79 @@ def find_graded_file(sport: str, date_str: str) -> Path | None:
     return None
 
 
+def _tennis_step8_search_paths(bundle_dir: Path, match_date: str, bundle_date: str) -> list[Path]:
+    """Mirror run_grader.ps1 Get-TennisStep8SearchPaths (path-based, not mtime)."""
+    tennis_dir = bundle_dir / "tennis"
+    paths: list[Path] = [
+        tennis_dir / "step8_tennis_direction_clean.xlsx",
+        tennis_dir / "step8_tennis_direction.csv",
+        bundle_dir / f"step8_tennis_direction_clean_{match_date}.xlsx",
+        bundle_dir / f"step8_tennis_direction_clean_{bundle_date}.xlsx",
+    ]
+    if tennis_dir.is_dir():
+        paths.extend(sorted(tennis_dir.glob("step8_*.csv")))
+        paths.extend(sorted(tennis_dir.glob("step8_*.xlsx")))
+    return paths
+
+
+def find_tennis_graded_file(date_str: str) -> Path | None:
+    """
+    Resolve graded_tennis workbook for a pipeline grade date.
+
+    When step8 lives in outputs/(grade_date - 1) (tomorrow-fetch), the grader
+    writes to outputs/(grade_date + 1)/graded_tennis_{match_day}.xlsx — same
+    rule as run_grader.ps1, keyed off step8 bundle location (not file mtimes).
+    """
+    date_str = str(date_str or "")[:10]
+    try:
+        grade_dt = datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return find_graded_file("tennis", date_str)
+
+    bundle_date = (grade_dt - timedelta(days=1)).strftime("%Y-%m-%d")
+    offset_bundle = ROOT_DIR / "outputs" / bundle_date
+    grade_bundle = ROOT_DIR / "outputs" / date_str
+    sports_out = ROOT_DIR / "Sports" / "Tennis" / "outputs"
+
+    def _first_existing(candidates: list[Path]) -> Path | None:
+        for p in candidates:
+            if p.exists():
+                return p
+        return None
+
+    offset_step8 = _first_existing(_tennis_step8_search_paths(offset_bundle, date_str, bundle_date))
+    if offset_step8 is not None:
+        match_day = (grade_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+        offset_graded = ROOT_DIR / "outputs" / match_day / f"graded_tennis_{match_day}.xlsx"
+        if offset_graded.exists():
+            return offset_graded
+        print(
+            f"  WARNING: Tennis step8 from bundle {bundle_date} (offset) but "
+            f"no graded workbook at {offset_graded.name} under outputs/{match_day}/"
+        )
+        return None
+
+    same_step8 = _first_existing(_tennis_step8_search_paths(grade_bundle, date_str, date_str))
+    if same_step8 is not None:
+        same_graded = grade_bundle / f"graded_tennis_{date_str}.xlsx"
+        if same_graded.exists():
+            return same_graded
+
+    for static in (
+        sports_out / "step8_tennis_direction_clean.xlsx",
+        sports_out / "step8_tennis_direction.csv",
+    ):
+        if static.exists():
+            break
+    else:
+        static = None
+
+    if static is not None:
+        return find_graded_file("tennis", date_str)
+
+    return find_graded_file("tennis", date_str)
+
+
 def load_merged_nba_graded_rows(date_str: str) -> list[dict]:
     """Merge NBA + NBA1Q + NBA1H rows (single list) for slate HTML that shows one NBA section."""
     rows: list[dict] = []
@@ -2664,7 +2772,7 @@ def main() -> None:
             print(f"  WARNING: Tennis file not found: {tennis_path}")
             tennis_path = None
     else:
-        tennis_path = find_graded_file("tennis", date_str)
+        tennis_path = find_tennis_graded_file(date_str)
         if tennis_path:
             print(f"  Auto-detected Tennis: {tennis_path}")
 

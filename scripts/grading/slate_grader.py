@@ -184,6 +184,18 @@ def _row_bet_direction(row) -> str:
     return "OVER"
 
 
+def _row_for_goblin_demon_grade(row: pd.Series) -> pd.Series:
+    """Goblin/Demon slips are always OVER-only at grade time."""
+    pt = str(row.get("pick_type", "") or "").strip().lower()
+    if pt not in ("goblin", "demon"):
+        return row
+    patched = row.copy()
+    for dk in ("bet_direction", "final_bet_direction", "direction", "Direction", "over_under"):
+        if dk in patched.index:
+            patched[dk] = "OVER"
+    return patched
+
+
 def grade(row, actual):
     """Return (result, void_reason_or_None, margin). Margin is NaN when ungraded."""
     from grading.leg_grade_utils import slate_grade_row
@@ -232,7 +244,9 @@ PROP_NORM_MAP={
     'offensive rebounds':'offensive rebounds','defensive rebounds':'defensive rebounds',
     'personal fouls':'personal fouls','fantasy score':'fantasy score',
     'quarters with 3+ points':'quarters with 3+ points',
+    'quarters with 4+ points':'quarters with 4+ points',
     'quarters with 5+ points':'quarters with 5+ points',
+    'points - 1st 3 minutes':'points - 1st 3 minutes',
     # Milestone yes/no (actuals from box: 1.0 / 0.0 vs typical 0.5 line)
     'double double':'double double','triple double':'triple double',
     'double-double':'double double','triple-double':'triple double',
@@ -498,6 +512,8 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     "Hit Rate (5g)": "hit_rate",
     "Hit Rate": "hit_rate",
     "last5_hit_rate": "hit_rate",
+    "Deviation Level": "deviation_level",
+    "deviation_level": "deviation_level",
 })
     # fallback compatibility
     if "prop_type_norm" not in df.columns:
@@ -1003,10 +1019,9 @@ def apply_actuals(df, actuals_path):
     if unmatched_props:
         print(f"  ⚠️  Prop types in slate with NO actuals matches: {sorted(unmatched_props)}")
 
-    # Upstream void_reason (NBA step7, etc.) marks eligibility / strategy filters
-    # (BLOCKED_STD_OVER_LOW_HR, FORCED_OVER_NEG_EDGE, DROPPED_NEG_EDGE_GOBDEM, NO_PROJECTION_OR_LINE, …).
-    # It must NOT force VOID when we have a real line + box-score actual — otherwise
-    # Prop Evaluation and archives show Actual filled but Result VOID and Margin empty.
+    # Upstream void_reason marks eligibility filters (BLOCKED_STD_OVER_LOW_HR,
+    # NO_PROJECTION_OR_LINE, …). FORCED_OVER_NEG_EDGE rows are unplayable Goblin/Demon
+    # slips and are dropped from grade output after apply_actuals (see leg_grade_utils).
 
     results, void_reasons, margins, actuals_out = [], [], [], []
     for _, row in df.iterrows():
@@ -1048,7 +1063,8 @@ def apply_actuals(df, actuals_path):
         void_r_str = str(void_r).strip() if pd.notna(void_r) else ""
         upstream = void_r_str if void_r_str not in ("", "nan") else ""
 
-        r, vr, m = grade(row, actual)
+        grade_row = _row_for_goblin_demon_grade(row)
+        r, vr, m = grade(grade_row, actual)
         decided = r in ("HIT", "MISS", "PUSH", "NEAR_LINE")
 
         if decided:
@@ -1083,6 +1099,18 @@ def apply_actuals(df, actuals_path):
     df["void_reason_grade"] = void_reasons
     df["margin"] = margins
     df["result_sign"] = df["result"].map({"HIT": 1, "MISS": -1, "VOID": 0, "PUSH": 0})
+
+    from grading.leg_grade_utils import is_unplayable_for_grading
+
+    if "void_reason" in df.columns:
+        unplayable = df["void_reason"].map(is_unplayable_for_grading)
+        n_drop = int(unplayable.sum())
+        if n_drop:
+            print(
+                f"  Excluded {n_drop} unplayable FORCED_OVER_NEG_EDGE prop(s) "
+                "from grades (not on slips)"
+            )
+            df = df[~unplayable].copy()
     return df
 
 def breakdown(df,group_col):
@@ -1459,6 +1487,7 @@ def write_raw(wb,df):
              'sport_signal_maturity','confidence_tier','confidence_score','confidence_note',
              'projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',
+             'deviation_level',
              'actual','result','margin','void_reason_grade']
     cols=[c for c in desired if c in df.columns]
     widths={'pp_projection_id':14,'ticket_id':28,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
@@ -1467,6 +1496,7 @@ def write_raw(wb,df):
             'last5_hit_rate':13,'last5_avg':10,'season_avg':12,
             'last5_over':9,'last5_under':10,'projection':12,'rank_score':12,
             'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,
+            'deviation_level':8,
             'actual':9,'result':8,'margin':8,'void_reason_grade':22}
     for ci,col in enumerate(cols,1):
         ws.column_dimensions[get_column_letter(ci)].width=widths.get(col,12)
