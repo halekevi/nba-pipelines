@@ -20,6 +20,20 @@ _log = logging.getLogger(__name__)
 NEAR_LINE_EPS = 0.05
 PUSH_EPS = 1e-9
 
+# Rank-time audit tags on unplayable Goblin/Demon (forced OVER, negative edge).
+# Excluded from ticket pools and from slate grade books — not actionable slips.
+# TODO: consider DROPPED_NEG_EDGE_GOBDEM / DROPPED_NEG_EDGE_GOBLIN if those rows
+# ever appear on graded step8 slates (CBB/CFB/NHL use different step7 tags).
+UNPLAYABLE_GRADE_VOID_TAGS = frozenset({"FORCED_OVER_NEG_EDGE"})
+
+
+def is_unplayable_for_grading(void_reason: Any) -> bool:
+    note = str(void_reason or "").strip()
+    if not note or note.lower() in ("nan", "none", "null"):
+        return False
+    parts = [p.strip().upper() for p in note.split(";") if p.strip()]
+    return any(p in UNPLAYABLE_GRADE_VOID_TAGS for p in parts)
+
 # prop_norm / canonical keys -> component stat labels in actuals CSV (PrizePicks / ESPN)
 NBA_COMBO_COMPONENTS: dict[str, tuple[str, ...]] = {
     "pts+rebs+asts": ("Points", "Rebounds", "Assists"),
