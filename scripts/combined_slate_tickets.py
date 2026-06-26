@@ -131,6 +131,7 @@ from utils.stack_70_eligible import (
     attach_stack_70_columns,
     filter_stack_70_only,
     is_invalid_market_side,
+    stack_70_eligible_row,
 )
 from utils.ticket_tier_defense_gates import (
     apply_tier_defense_ticket_pool_filter,
@@ -573,6 +574,45 @@ PAYOUT = {
 
 # Cross-pipeline showcase slips: PrizePicks caps at 6 legs.
 CROSS_PIPELINE_MAX_LEGS = 6
+
+# Probability ladder: Standard-first; Goblin when leg prob beats Standard by this margin.
+LADDER_GOBLIN_ADVANTAGE_PP: float = float(os.getenv("PROPORACLE_LADDER_GOBLIN_ADVANTAGE_PP", "0.03"))
+LADDER_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_LADDER_MIN_LEG_PROB", "0.55"))
+LADDER_MAX_CROSS_TICKETS: int = max(1, int(os.getenv("PROPORACLE_LADDER_MAX_CROSS", "8")))
+LADDER_MAX_SPORT_TICKETS: int = max(1, int(os.getenv("PROPORACLE_LADDER_MAX_SPORT", "5")))
+LADDER_MAX_PER_LEG_SIZE: int = max(1, int(os.getenv("PROPORACLE_LADDER_MAX_PER_N", "3")))
+LADDER_STACK_70_DEFAULT: bool = os.getenv("PROPORACLE_LADDER_STACK_70", "1").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+    "off",
+)
+LADDER_MIN_TICKET_PROB: float = float(os.getenv("PROPORACLE_LADDER_MIN_TICKET_PROB", "0"))
+# Ladder sweet spot: 3-leg payout vs 2-leg; avoid greedy 6-leg dilution.
+LADDER_MAX_LEGS_DEFAULT: int = max(2, int(os.getenv("PROPORACLE_LADDER_MAX_LEGS", "3")))
+# Web main payload: cross-pipeline ladder only (sport-specific stays in full Excel export).
+LADDER_CROSS_ONLY_DEFAULT: bool = os.getenv("PROPORACLE_LADDER_CROSS_ONLY", "1").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+    "off",
+)
+
+# Cross-sport combinatorial search: best 3–6 leg parlay (one leg per sport, top-N per sport).
+HIGH_PROB_PARLAY_MIN_LEGS: int = max(3, int(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_MIN_LEGS", "3")))
+HIGH_PROB_PARLAY_MAX_LEGS: int = min(6, int(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_MAX_LEGS", "6")))
+HIGH_PROB_PARLAY_DEPTH_PER_SPORT: int = max(2, int(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_DEPTH", "5")))
+HIGH_PROB_PARLAY_MIN_LEG_PROB: float = float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_MIN_LEG", "0.55"))
+HIGH_PROB_PARLAY_MIN_P_WIN: dict[int, float] = {
+    3: float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_PWIN_3", "0.15")),
+    4: float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_PWIN_4", "0.08")),
+    5: float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_PWIN_5", "0.05")),
+    6: float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_PWIN_6", "0.03")),
+}
+HIGH_PROB_PARLAY_RELAXED_RATIO: float = float(os.getenv("PROPORACLE_HIGH_PROB_PARLAY_RELAXED", "0.55"))
+HIGH_PROB_PARLAY_STACK_70_DEFAULT: bool = os.getenv(
+    "PROPORACLE_HIGH_PROB_PARLAY_STACK_70", "0"
+).strip().lower() in ("1", "true", "yes", "on")
 
 
 def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
@@ -2012,12 +2052,20 @@ SOCCER_EXCLUDED_PROPS = {
     "clearances",
 }
 
+# Graded history (Apr–Jun 2026): Standard UNDER ~60%, Standard OVER ~15%, Shots UNDER ~68%.
+SOCCER_UNDER_PREFERRED: bool = os.getenv("PROPORACLE_SOCCER_UNDER_PREFERRED", "1").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+    "off",
+)
+
 # Soccer tickets now allow UNDER legs in standard flow; OVER legs are additionally edge-gated.
-# Raise per-leg hit floors vs global defaults (still below NBA; soccer hit_rate is often a proxy).
+# Raise per-leg hit floors vs global defaults (aligned with graded UNDER slices).
 SOCCER_LEG_MIN_HIT_RATE = {
-    2: 0.52,
-    3: 0.54,
-    4: 0.56,
+    2: 0.58,
+    3: 0.60,
+    4: 0.62,
 }
 
 # When strict filter_eligible leaves fewer than this many legs, top-rank fallback runs.
@@ -2245,6 +2293,18 @@ def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, i
         m_over_non_gob = nhl & dir_u.eq("OVER") & ~pick.str.contains("goblin", na=False)
     m_all = m_sog | m_fc | m_leg | m_over_non_gob
     return m_all, int(m_sog.sum()), int(m_fc.sum()), int(m_leg.sum()), int(m_over_non_gob.sum())
+
+
+def _soccer_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int]:
+    """Drop all OVER legs on soccer when SOCCER_UNDER_PREFERRED (graded UNDER ~60% vs OVER ~15%)."""
+    if not SOCCER_UNDER_PREFERRED or not {"sport", "direction"}.issubset(df.columns):
+        z = pd.Series(False, index=df.index)
+        return z, 0
+    sp = df["sport"].astype(str).str.upper().str.strip()
+    soc = sp.eq("SOCCER") | sp.eq("SOC")
+    dir_u = df["direction"].astype(str).str.upper().str.strip()
+    m_over = soc & dir_u.eq("OVER")
+    return m_over, int(m_over.sum())
 
 
 def _is_attempt_prop_series(prop_s: pd.Series) -> pd.Series:
@@ -2996,9 +3056,8 @@ NHL_LEG_MIN_HIT_RATE = {
     3: 0.57,
     4: 0.60,
 }
-# Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
-# TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
-SOCCER_OVER_MIN_EDGE = 0.0  # Edge is leaky for Soccer; gate disabled until replacement signal exists
+# Soccer OVER legs have materially weaker realized performance; block when UNDER-preferred.
+SOCCER_OVER_MIN_EDGE = 999.0 if SOCCER_UNDER_PREFERRED else 0.0
 
 # ── Model-performance ticket gates (Track A + auto-gate from tracker) ─────────
 # REVERT NBA1H WHEN: model_gate_recommendations.json NBA1H block has
@@ -3280,6 +3339,36 @@ def tennis_allowed_leg(leg) -> bool:
     if pick_type == "standard" and direction == "UNDER":
         return leg_passes_tier_defense_gate(leg, sport="TENNIS")
     return False
+
+
+def _soccer_allowed_mask(df: pd.DataFrame) -> pd.Series:
+    """UNDER-only on soccer when SOCCER_UNDER_PREFERRED (graded UNDER ~60% vs OVER ~15%)."""
+    if df.empty or not SOCCER_UNDER_PREFERRED:
+        return pd.Series(True, index=df.index)
+    sp = df.get("sport", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    soc = sp.eq("SOCCER") | sp.eq("SOC")
+    if not soc.any():
+        return pd.Series(True, index=df.index)
+    direction = pd.Series("OVER", index=df.index)
+    for c in ("direction", "over_under"):
+        if c in df.columns:
+            direction = df[c].astype(str).str.upper().str.strip()
+            break
+    return (~soc | direction.eq("UNDER")).fillna(False)
+
+
+def soccer_allowed_leg(leg) -> bool:
+    if isinstance(leg, dict):
+        sport = str(leg.get("sport", "")).upper()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    else:
+        sport = str(leg.get("sport", "")).upper()
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+    if sport not in ("SOCCER", "SOC"):
+        return True
+    if not SOCCER_UNDER_PREFERRED:
+        return True
+    return direction == "UNDER"
 
 
 def _apply_tier_defense_pool_gate(df: pd.DataFrame, sport: str) -> pd.DataFrame:
@@ -3917,7 +4006,16 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     # Priority 1: calibrated ML probability (cap via LEG_PROB_CAPS["ml_prob"]).
     mlp = pd.to_numeric(row.get("ml_prob"), errors="coerce")
     if pd.notna(mlp) and 0.0 < float(mlp) < 1.0:
-        return _clip_prob(float(mlp), "ml_prob"), "ml_prob"
+        ml_val = float(mlp)
+        if sport == "TENNIS":
+            try:
+                from utils.tennis_ml_prob_caps import apply_tennis_ml_prob_caps
+
+                cap_df = apply_tennis_ml_prob_caps(pd.DataFrame([row.to_dict()]))
+                ml_val = float(pd.to_numeric(cap_df["ml_prob"], errors="coerce").iloc[0])
+            except Exception:
+                pass
+        return _clip_prob(ml_val, "ml_prob"), "ml_prob"
 
     # Priority 2: rank_score sigmoid (composite signal).
     rs = pd.to_numeric(row.get("rank_score"), errors="coerce")
@@ -6207,6 +6305,34 @@ def inject_strong_builder_tickets(full_payload: dict, main_payload: dict) -> dic
     return out
 
 
+def _ticket_has_soccer_over_leg(ticket: dict) -> bool:
+    """True when supplement slip includes a soccer OVER leg (blocked when UNDER-preferred)."""
+    if not SOCCER_UNDER_PREFERRED:
+        return False
+    for leg in ticket.get("legs") or []:
+        if not isinstance(leg, dict):
+            continue
+        sp = str(leg.get("sport") or "").strip().upper()
+        if sp not in ("SOCCER", "SOC"):
+            continue
+        direction = str(leg.get("direction") or leg.get("over_under") or "").upper()
+        if direction == "OVER":
+            return True
+    return False
+
+
+def _web_supplement_group_priority(group_name: str, sport_key: str) -> tuple[int, str]:
+    """Lower sort key = higher priority. MLB Goblin/Power Play before Standard."""
+    gn = str(group_name or "").lower()
+    if sport_key == "MLB":
+        if "power play" in gn or "goblin" in gn:
+            return (0, gn)
+        if "standard" in gn:
+            return (2, gn)
+        return (1, gn)
+    return (0, gn)
+
+
 def append_in_season_web_supplement_groups(
     main_payload: dict,
     full_payload: dict,
@@ -6242,6 +6368,7 @@ def append_in_season_web_supplement_groups(
     groups = list(out.get("groups") or [])
     existing_names = {str(g.get("group_name") or "") for g in groups if isinstance(g, dict)}
     added_by_sport: Counter[str] = Counter()
+    candidates_by_sport: dict[str, list[dict]] = {}
 
     for g in full_payload.get("groups") or []:
         if not isinstance(g, dict):
@@ -6252,6 +6379,8 @@ def append_in_season_web_supplement_groups(
         kept: list[dict] = []
         for t in g.get("tickets") or []:
             if not isinstance(t, dict):
+                continue
+            if _ticket_has_soccer_over_leg(t):
                 continue
             n = _slip_leg_count(t, g)
             if n < lo or n > hi:
@@ -6265,14 +6394,25 @@ def append_in_season_web_supplement_groups(
         sport_key = _group_sport(gn, kept)
         if sport_key not in wanted:
             continue
-        if added_by_sport[sport_key] >= int(max_groups_per_sport):
-            continue
         ng = dict(g)
         ng["tickets"] = kept
         ng["n_legs"] = int(g.get("n_legs") or _slip_leg_count(kept[0], g))
-        groups.append(ng)
-        existing_names.add(gn)
-        added_by_sport[sport_key] += 1
+        candidates_by_sport.setdefault(sport_key, []).append(ng)
+
+    for sport_key in sorted(candidates_by_sport.keys()):
+        cands = candidates_by_sport[sport_key]
+        cands.sort(
+            key=lambda item: _web_supplement_group_priority(str(item.get("group_name") or ""), sport_key)
+        )
+        for ng in cands:
+            if added_by_sport[sport_key] >= int(max_groups_per_sport):
+                break
+            gn = str(ng.get("group_name") or "")
+            if not gn or gn in existing_names:
+                continue
+            groups.append(ng)
+            existing_names.add(gn)
+            added_by_sport[sport_key] += 1
 
     if not added_by_sport:
         return main_payload
@@ -6391,6 +6531,12 @@ def ticket_groups_to_payload(
                 "using_flat_fallback": bool(t.get("using_flat_fallback")),
                 "has_data_warning": False,
                 "strong_builder": bool(t.get("strong_builder")),
+                "probability_ladder": bool(t.get("probability_ladder")),
+                "high_probability_parlay": bool(t.get("high_probability_parlay")),
+                "high_prob_parlay_relaxed": bool(t.get("high_prob_parlay_relaxed")),
+                "high_prob_parlay_rank": t.get("high_prob_parlay_rank"),
+                "stack_70_ladder": bool(t.get("stack_70_ladder")),
+                "ladder_rank": t.get("ladder_rank"),
                 "legs": [],
             }
 
@@ -8811,6 +8957,9 @@ def _load_step8_board_like(
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
+        "Standard Line":      "standard_line",
+        "Standard Line Source": "standard_line_source",
+        "Deviation Level":    "deviation_level",
         "Direction":        "direction",
         "Edge":             "edge",
         "Abs Edge":         "abs_edge",
@@ -9414,6 +9563,9 @@ def load_wcbb(path: str) -> pd.DataFrame:
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
+        "Standard Line":      "standard_line",
+        "Standard Line Source": "standard_line_source",
+        "Deviation Level":    "deviation_level",
         "Direction":        "direction",
         "Edge":             "edge",
         "Abs Edge":         "abs_edge",
@@ -9595,6 +9747,9 @@ def load_mlb(path: str) -> pd.DataFrame:
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
+        "Standard Line":      "standard_line",
+        "Standard Line Source": "standard_line_source",
+        "Deviation Level":    "deviation_level",
         "Direction":        "direction",
         "Edge":             "edge",
         "Abs Edge":         "abs_edge",
@@ -9840,6 +9995,9 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
+        "Standard Line":      "standard_line",
+        "Standard Line Source": "standard_line_source",
+        "Deviation Level":    "deviation_level",
         "Direction":        "direction",
         "Edge":             "edge",
         "Abs Edge":         "abs_edge",
@@ -10014,6 +10172,9 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
+        "Standard Line":      "standard_line",
+        "Standard Line Source": "standard_line_source",
+        "Deviation Level":    "deviation_level",
         "Direction":        "direction",
         "Edge":             "edge",
         "Abs Edge":         "abs_edge",
@@ -10922,17 +11083,26 @@ def build_single_structure_ticket(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        # Standard: allow both directions; directional edge ranking picks best side.
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            # Standard: allow both directions; directional edge ranking picks best side.
+            cand = pd.concat([over_df, under_df], ignore_index=True)
     elif flow == "power":
-        # Power: allow both directions; directional edge ranking picks best side.
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            # Power: allow both directions; directional edge ranking picks best side.
+            cand = pd.concat([over_df, under_df], ignore_index=True)
     else:
         # Flex: allow UNDER when directional L5 supports it.
-        if not under_df.empty:
-            l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
-            under_df = under_df[l5_u >= 4].copy()
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            if not under_df.empty:
+                l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
+                under_df = under_df[l5_u >= 4].copy()
+            cand = pd.concat([over_df, under_df], ignore_index=True)
 
     if cand.empty:
         return None
@@ -10942,6 +11112,9 @@ def build_single_structure_ticket(
 
     if sport_up == "NHL" and len(cand) > 0:
         cand = cand[cand.apply(nhl_allowed_leg, axis=1)].copy()
+
+    if sport_up in ("SOCCER", "SOC") and len(cand) > 0:
+        cand = cand[cand.apply(soccer_allowed_leg, axis=1)].copy()
 
     if len(cand) > 0:
         cand = _apply_tier_defense_pool_gate(cand, sport_up)
@@ -11123,14 +11296,23 @@ def build_structure_ticket_variants(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            cand = pd.concat([over_df, under_df], ignore_index=True)
     elif flow == "power":
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            cand = pd.concat([over_df, under_df], ignore_index=True)
     else:
-        if not under_df.empty:
-            l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
-            under_df = under_df[l5_u >= 4].copy()
-        cand = pd.concat([over_df, under_df], ignore_index=True)
+        if sport_up in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            cand = under_df.copy()
+        else:
+            if not under_df.empty:
+                l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
+                under_df = under_df[l5_u >= 4].copy()
+            cand = pd.concat([over_df, under_df], ignore_index=True)
 
     if cand.empty:
         return []
@@ -11140,6 +11322,9 @@ def build_structure_ticket_variants(
 
     if sport_up == "NHL" and len(cand) > 0:
         cand = cand[cand.apply(nhl_allowed_leg, axis=1)].copy()
+
+    if sport_up in ("SOCCER", "SOC") and len(cand) > 0:
+        cand = cand[cand.apply(soccer_allowed_leg, axis=1)].copy()
 
     if len(cand) > 0:
         cand = _apply_tier_defense_pool_gate(cand, sport_up)
@@ -11638,10 +11823,24 @@ def _rerank_tickets_live(tickets: list[dict], max_tickets: int) -> list[dict]:
 # ── STRONG-eligible Goblin + HOT builder ─────────────────────────────────────
 STRONG_BUILDER_MAX_TICKETS: int = max(5, int(os.getenv("PROPORACLE_STRONG_BUILDER_MAX", "25")))
 STRONG_BUILDER_TOP_K: int = max(10, int(os.getenv("PROPORACLE_STRONG_BUILDER_TOP_K", "50")))
-STRONG_BUILDER_SPORTS: frozenset[str] = frozenset({"NBA", "NBA1Q", "WNBA"})
+STRONG_BUILDER_SPORTS: frozenset[str] = frozenset({"NBA", "NBA1Q", "WNBA", "MLB"})
 STRONG_BUILDER_CORE_PROPS_NORM: frozenset[str] = frozenset(
     x.replace("+", "").replace(" ", "")
     for x in ("points", "rebounds", "pts+rebs", "pts+rebs+asts", "assists")
+)
+STRONG_BUILDER_MLB_PROPS_NORM: frozenset[str] = frozenset(
+    x.replace("+", "").replace(" ", "")
+    for x in (
+        "hits",
+        "total bases",
+        "totalbases",
+        "strikeouts",
+        "singles",
+        "pitches thrown",
+        "pitchesthrown",
+        "pitching outs",
+        "pitchingouts",
+    )
 )
 
 
@@ -11649,8 +11848,12 @@ def _strong_builder_prop_norm(v: object) -> str:
     return str(v or "").lower().replace("-", "").replace("+", "").replace(" ", "")
 
 
-def _strong_builder_prop_allowed(v: object) -> bool:
-    return _strong_builder_prop_norm(v) in STRONG_BUILDER_CORE_PROPS_NORM
+def _strong_builder_prop_allowed(v: object, sport: object = None) -> bool:
+    norm = _strong_builder_prop_norm(v)
+    sp = str(sport or "").upper().strip()
+    if sp == "MLB":
+        return norm in STRONG_BUILDER_MLB_PROPS_NORM
+    return norm in STRONG_BUILDER_CORE_PROPS_NORM
 
 
 def _prepare_strong_builder_pool(df: pd.DataFrame) -> pd.DataFrame:
@@ -11679,7 +11882,13 @@ def _strong_candidate_legs(df: pd.DataFrame) -> pd.DataFrame:
         prop_raw = df["prop"]
     else:
         prop_raw = pd.Series("", index=df.index)
-    prop_ok = prop_raw.map(_strong_builder_prop_allowed)
+    prop_ok = pd.Series(
+        [
+            _strong_builder_prop_allowed(prop_raw.iloc[i], sport.iloc[i])
+            for i in range(len(df))
+        ],
+        index=df.index,
+    )
     mask = (
         pick.str.contains("goblin", na=False)
         & tier.isin(["A", "B"])
@@ -12104,8 +12313,14 @@ def build_final_web_ticket_groups(
                 na=False,
             )
             mask &= ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw)
-        l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
-        l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
+        if "l5_over" in df.columns:
+            l5_o = pd.to_numeric(df["l5_over"], errors="coerce").fillna(0)
+        else:
+            l5_o = pd.Series(0.0, index=df.index)
+        if "l5_under" in df.columns:
+            l5_u = pd.to_numeric(df["l5_under"], errors="coerce").fillna(0)
+        else:
+            l5_u = pd.Series(0.0, index=df.index)
         mask &= (l5_o >= 4) | (l5_u >= 4)
         if min_edge > 0:
             mask &= _directional_edge_series(df).fillna(0) >= min_edge
@@ -12426,6 +12641,528 @@ def _finalize_cross_pipeline_ticket(rows: list[dict], ticket_type: str) -> dict 
         "correlation_multiplier": cmult,
         "correlation_audit": caudit,
     }
+
+
+def _ladder_leg_fingerprint(row: dict) -> tuple:
+    return (
+        str(row.get("sport", "")).upper(),
+        str(row.get("player", "")).strip().lower(),
+        _norm_prop_label(row.get("prop_type", "")),
+        str(row.get("direction") or row.get("over_under") or "").upper(),
+        str(row.get("line", "")),
+    )
+
+
+def _leg_prob_for_ladder(row: dict) -> float:
+    p, _ = _resolve_leg_prob(pd.Series(row))
+    try:
+        v = float(p)
+        if math.isfinite(v):
+            return float(np.clip(v, 0.0, 1.0))
+    except (TypeError, ValueError):
+        pass
+    return 0.0
+
+
+def _merge_ladder_slot_candidate(
+    existing: tuple[float, dict] | None,
+    new_row: dict,
+    new_p: float,
+    goblin_advantage_pp: float,
+) -> tuple[float, dict]:
+    """Prefer Standard unless Goblin leg prob exceeds Standard by goblin_advantage_pp."""
+    if existing is None:
+        return (new_p, new_row)
+    ex_p, ex_row = existing
+    ex_gob = "goblin" in str(ex_row.get("pick_type", "")).lower()
+    new_gob = "goblin" in str(new_row.get("pick_type", "")).lower()
+    if ex_gob and not new_gob:
+        if ex_p >= new_p + goblin_advantage_pp:
+            return existing
+        return (new_p, new_row)
+    if not ex_gob and new_gob:
+        if new_p >= ex_p + goblin_advantage_pp:
+            return (new_p, new_row)
+        return existing
+    if new_p > ex_p:
+        return (new_p, new_row)
+    return existing
+
+
+def _prepare_ladder_pool(pool_df: pd.DataFrame | None, *, stack_70_only: bool) -> pd.DataFrame:
+    """Attach stack_70 columns; optionally restrict to stack_70_eligible legs."""
+    if pool_df is None or pool_df.empty:
+        return pd.DataFrame()
+    out = attach_stack_70_columns(pool_df.copy())
+    if stack_70_only:
+        filtered = filter_stack_70_only(out)
+        if not filtered.empty:
+            return filtered
+    return out
+
+
+def _ladder_row_passes_stack_70(row: dict, stack_70_only: bool) -> bool:
+    if not stack_70_only:
+        return True
+    if "stack_70_eligible" in row:
+        return bool(row.get("stack_70_eligible"))
+    return bool(stack_70_eligible_row(row))
+
+
+def _ranked_ladder_candidates(
+    pool_df: pd.DataFrame | None,
+    sport_label: str,
+    *,
+    sort_mode: str = "rank",
+    min_leg_prob: float = LADDER_MIN_LEG_PROB,
+    goblin_advantage_pp: float = LADDER_GOBLIN_ADVANTAGE_PP,
+    stack_70_only: bool = LADDER_STACK_70_DEFAULT,
+) -> list[dict]:
+    """Rank eligible legs for ladder tickets; Standard-first with Goblin override when stronger."""
+    work_pool = _prepare_ladder_pool(pool_df, stack_70_only=stack_70_only)
+    if work_pool.empty:
+        return []
+    slots: dict[tuple, tuple[float, dict]] = {}
+    for mode in ("standard", "goblin"):
+        sub = _filter_pool_cross_pick_mode(work_pool, sport_label, mode)
+        if sub.empty:
+            continue
+        work = sub.copy()
+        if (sort_mode or "rank").strip().lower() in ("rank", "ml", "blend"):
+            work = _attach_ticket_pick_order(work, sort_mode)
+        for _, row in work.iterrows():
+            d = dict(row)
+            d["sport"] = str(sport_label).upper()
+            if not _ladder_row_passes_stack_70(d, stack_70_only):
+                continue
+            sk = (
+                str(d.get("player", "")).strip().lower(),
+                _norm_prop_label(d.get("prop_type", "")),
+                str(d.get("direction") or d.get("over_under") or "").upper(),
+                str(d.get("line", "")),
+            )
+            lp = _leg_prob_for_ladder(d)
+            if lp < float(min_leg_prob):
+                continue
+            slots[sk] = _merge_ladder_slot_candidate(slots.get(sk), d, lp, goblin_advantage_pp)
+    ranked = sorted(slots.values(), key=lambda x: -x[0])
+    return [d for _, d in ranked]
+
+
+def _finalize_ladder_ticket(
+    rows: list[dict],
+    ticket_type: str,
+    sport_label: str = "MIX",
+    *,
+    min_ticket_prob: float = LADDER_MIN_TICKET_PROB,
+    stack_70_only: bool = False,
+) -> dict | None:
+    tix = _finalize_cross_pipeline_ticket(rows, ticket_type)
+    if tix is None:
+        return None
+    ep = float(tix.get("est_win_prob") or 0.0)
+    if ep < float(min_ticket_prob):
+        return None
+    tix["probability_ladder"] = True
+    tix["stack_70_ladder"] = bool(stack_70_only)
+    tix["sport"] = sport_label
+    return tix
+
+
+def _next_unused_stack_row(
+    stack: list[dict],
+    start_idx: int,
+    used_fps: set[tuple],
+) -> tuple[int, dict] | None:
+    idx = int(start_idx)
+    while idx < len(stack):
+        row = stack[idx]
+        fp = _ladder_leg_fingerprint(row)
+        if fp not in used_fps:
+            return idx, row
+        idx += 1
+    return None
+
+
+def build_cross_pipeline_probability_ladder(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    *,
+    max_legs: int = CROSS_PIPELINE_MAX_LEGS,
+    max_tickets: int = LADDER_MAX_CROSS_TICKETS,
+    max_per_leg_size: int = LADDER_MAX_PER_LEG_SIZE,
+    min_leg_prob: float = LADDER_MIN_LEG_PROB,
+    goblin_advantage_pp: float = LADDER_GOBLIN_ADVANTAGE_PP,
+    ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
+    stack_70_only: bool = LADDER_STACK_70_DEFAULT,
+    min_ticket_prob: float = LADDER_MIN_TICKET_PROB,
+) -> list[dict]:
+    """
+    Cross-pipeline ladder: one leg per sport, largest slips first, then consume next-best legs.
+    Standard-first per sport; Goblin when materially higher prob.
+    """
+    stacks: dict[str, list[dict]] = {}
+    for sport_label, pool_df in sport_pools:
+        if pool_df is None or pool_df.empty:
+            continue
+        ranked = _ranked_ladder_candidates(
+            pool_df,
+            sport_label,
+            sort_mode=ticket_sort_mode,
+            min_leg_prob=min_leg_prob,
+            goblin_advantage_pp=goblin_advantage_pp,
+            stack_70_only=stack_70_only,
+        )
+        if ranked:
+            stacks[str(sport_label).upper()] = ranked
+    if not stacks:
+        return []
+
+    pointers = {s: 0 for s in stacks}
+    used_fps: set[tuple] = set()
+    tickets: list[dict] = []
+    active = list(stacks.keys())
+    max_n = min(int(max_legs), len(active))
+
+    for target_n in range(max_n, 1, -1):
+        built_at_n = 0
+        while built_at_n < int(max_per_leg_size) and len(tickets) < int(max_tickets):
+            picks: list[tuple[str, dict, float, int]] = []
+            for sport in active:
+                hit = _next_unused_stack_row(stacks[sport], pointers[sport], used_fps)
+                if hit is None:
+                    continue
+                idx, row = hit
+                picks.append((sport, row, _leg_prob_for_ladder(row), idx))
+            if len(picks) < target_n:
+                break
+            picks.sort(key=lambda x: -x[2])
+            if len(picks) > target_n:
+                picks = picks[:target_n]
+            rows: list[dict] = []
+            players: set[str] = set()
+            for _sport, row, _prob, _idx in picks:
+                pl = str(row.get("player", "")).strip().lower()
+                if pl and pl in players:
+                    continue
+                rows.append(row)
+                players.add(pl)
+            if len(rows) < target_n:
+                break
+            if not _ticket_cap_can_add(rows, player_ticket_counts):
+                for sport, _row, _prob, idx in picks:
+                    pointers[sport] = max(pointers[sport], idx + 1)
+                continue
+            tix = _finalize_ladder_ticket(
+                rows,
+                "Cross-Pipeline Ladder",
+                "MIX",
+                min_ticket_prob=min_ticket_prob,
+                stack_70_only=stack_70_only,
+            )
+            if tix is None:
+                break
+            _ticket_cap_register(rows, player_ticket_counts)
+            tickets.append(tix)
+            for sport, row, _prob, idx in picks:
+                if row in rows:
+                    pointers[sport] = idx + 1
+                    used_fps.add(_ladder_leg_fingerprint(row))
+            built_at_n += 1
+    tickets.sort(key=lambda t: (-int(t.get("n_legs") or 0), -float(t.get("est_win_prob") or 0.0)))
+    return tickets
+
+
+def build_sport_probability_ladder(
+    sport_label: str,
+    pool_df: pd.DataFrame | None,
+    *,
+    max_legs: int = CROSS_PIPELINE_MAX_LEGS,
+    max_tickets: int = LADDER_MAX_SPORT_TICKETS,
+    max_per_leg_size: int = LADDER_MAX_PER_LEG_SIZE,
+    min_leg_prob: float = LADDER_MIN_LEG_PROB,
+    goblin_advantage_pp: float = LADDER_GOBLIN_ADVANTAGE_PP,
+    ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
+    stack_70_only: bool = LADDER_STACK_70_DEFAULT,
+    min_ticket_prob: float = LADDER_MIN_TICKET_PROB,
+) -> list[dict]:
+    """Sport-specific ladder: unique players, high leg count first, Standard-first legs."""
+    ranked = _ranked_ladder_candidates(
+        pool_df,
+        sport_label,
+        sort_mode=ticket_sort_mode,
+        min_leg_prob=min_leg_prob,
+        goblin_advantage_pp=goblin_advantage_pp,
+        stack_70_only=stack_70_only,
+    )
+    if len(ranked) < 2:
+        return []
+
+    used_idx: set[int] = set()
+    used_fps: set[tuple] = set()
+    tickets: list[dict] = []
+    max_n = min(int(max_legs), len(ranked))
+
+    for target_n in range(max_n, 1, -1):
+        built_at_n = 0
+        while built_at_n < int(max_per_leg_size) and len(tickets) < int(max_tickets):
+            rows: list[dict] = []
+            players: set[str] = set()
+            picked_idx: list[int] = []
+            for i, row in enumerate(ranked):
+                if i in used_idx:
+                    continue
+                fp = _ladder_leg_fingerprint(row)
+                if fp in used_fps:
+                    continue
+                pl = str(row.get("player", "")).strip().lower()
+                if pl and pl in players:
+                    continue
+                rows.append(row)
+                players.add(pl)
+                picked_idx.append(i)
+                if len(rows) >= target_n:
+                    break
+            if len(rows) < target_n:
+                break
+            if not _ticket_cap_can_add(rows, player_ticket_counts):
+                for i in picked_idx:
+                    used_idx.add(i)
+                continue
+            tix = _finalize_ladder_ticket(
+                rows,
+                f"{sport_label} Ladder",
+                str(sport_label).upper(),
+                min_ticket_prob=min_ticket_prob,
+                stack_70_only=stack_70_only,
+            )
+            if tix is None:
+                break
+            _ticket_cap_register(rows, player_ticket_counts)
+            tickets.append(tix)
+            for i in picked_idx:
+                used_idx.add(i)
+                used_fps.add(_ladder_leg_fingerprint(ranked[i]))
+            built_at_n += 1
+    tickets.sort(key=lambda t: (-int(t.get("n_legs") or 0), -float(t.get("est_win_prob") or 0.0)))
+    return tickets
+
+
+def build_probability_ladder_ticket_groups(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    *,
+    max_legs: int = LADDER_MAX_LEGS_DEFAULT,
+    max_cross: int = LADDER_MAX_CROSS_TICKETS,
+    max_per_sport: int = LADDER_MAX_SPORT_TICKETS,
+    max_per_leg_size: int = LADDER_MAX_PER_LEG_SIZE,
+    min_leg_prob: float = LADDER_MIN_LEG_PROB,
+    goblin_advantage_pp: float = LADDER_GOBLIN_ADVANTAGE_PP,
+    ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
+    stack_70_only: bool = LADDER_STACK_70_DEFAULT,
+    min_ticket_prob: float = LADDER_MIN_TICKET_PROB,
+    cross_only: bool = False,
+) -> list[tuple[str, list[dict], None]]:
+    """Cross-pipeline + per-sport probability ladders for web/excel export."""
+    suffix = " · Stack70" if stack_70_only else ""
+    groups: list[tuple[str, list[dict], None]] = []
+    cross = build_cross_pipeline_probability_ladder(
+        sport_pools,
+        max_legs=max_legs,
+        max_tickets=max_cross,
+        max_per_leg_size=max_per_leg_size,
+        min_leg_prob=min_leg_prob,
+        goblin_advantage_pp=goblin_advantage_pp,
+        ticket_sort_mode=ticket_sort_mode,
+        player_ticket_counts=player_ticket_counts,
+        stack_70_only=stack_70_only,
+        min_ticket_prob=min_ticket_prob,
+    )
+    if cross:
+        for i, tix in enumerate(cross, start=1):
+            tix["ladder_rank"] = i
+        groups.append((f"Probability Ladder · Cross-Pipeline{suffix}", cross, None))
+
+    if cross_only:
+        return groups
+
+    for sport_label, pool_df in sport_pools:
+        if pool_df is None or pool_df.empty:
+            continue
+        sport_tix = build_sport_probability_ladder(
+            sport_label,
+            pool_df,
+            max_legs=max_legs,
+            max_tickets=max_per_sport,
+            max_per_leg_size=max_per_leg_size,
+            min_leg_prob=min_leg_prob,
+            goblin_advantage_pp=goblin_advantage_pp,
+            ticket_sort_mode=ticket_sort_mode,
+            player_ticket_counts=player_ticket_counts,
+            stack_70_only=stack_70_only,
+            min_ticket_prob=min_ticket_prob,
+        )
+        if not sport_tix:
+            continue
+        for i, tix in enumerate(sport_tix, start=1):
+            tix["ladder_rank"] = i
+        sp = str(sport_label).upper()
+        groups.append((f"Probability Ladder · {sp}{suffix}", sport_tix, None))
+    return groups
+
+
+def build_high_probability_parlay_tickets(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    *,
+    min_legs: int = HIGH_PROB_PARLAY_MIN_LEGS,
+    max_legs: int = HIGH_PROB_PARLAY_MAX_LEGS,
+    depth_per_sport: int = HIGH_PROB_PARLAY_DEPTH_PER_SPORT,
+    min_leg_prob: float = HIGH_PROB_PARLAY_MIN_LEG_PROB,
+    min_p_win_by_n: dict[int, float] | None = None,
+    goblin_advantage_pp: float = LADDER_GOBLIN_ADVANTAGE_PP,
+    ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
+    stack_70_only: bool = HIGH_PROB_PARLAY_STACK_70_DEFAULT,
+    relaxed_ratio: float = HIGH_PROB_PARLAY_RELAXED_RATIO,
+) -> list[dict]:
+    """
+    Best cross-sport parlay per leg count (default 3–6): one leg per sport, search top-N legs/sport.
+    With ~55–65%% per-leg modeled prob, 3-leg ~17%%, 4-leg ~9%%, 5-leg ~5%% at independence.
+    """
+    floors = dict(HIGH_PROB_PARLAY_MIN_P_WIN)
+    if min_p_win_by_n:
+        floors.update(min_p_win_by_n)
+    stacks: dict[str, list[dict]] = {}
+    for sport_label, pool_df in sport_pools:
+        if pool_df is None or pool_df.empty:
+            continue
+        ranked = _ranked_ladder_candidates(
+            pool_df,
+            sport_label,
+            sort_mode=ticket_sort_mode,
+            min_leg_prob=min_leg_prob,
+            goblin_advantage_pp=goblin_advantage_pp,
+            stack_70_only=stack_70_only,
+        )
+        if ranked:
+            stacks[str(sport_label).upper()] = ranked[: int(depth_per_sport)]
+    sports = sorted(stacks.keys())
+    if len(sports) < int(min_legs):
+        return []
+
+    tickets: list[dict] = []
+    used_keys: set[frozenset] = set()
+    scan_cap = 80_000
+
+    for n_legs in range(int(min_legs), int(max_legs) + 1):
+        if len(sports) < n_legs:
+            continue
+        min_p = float(floors.get(n_legs, 0.05))
+        best: dict | None = None
+        best_ep = -1.0
+        scanned = 0
+        for sport_combo in itertools.combinations(sports, n_legs):
+            leg_lists = [stacks[s] for s in sport_combo]
+            for legs_tuple in itertools.product(*leg_lists):
+                scanned += 1
+                if scanned > scan_cap:
+                    break
+                rows = list(legs_tuple)
+                players = [str(r.get("player", "")).strip().lower() for r in rows]
+                active_players = [p for p in players if p]
+                if len(set(active_players)) != len(active_players):
+                    continue
+                key = frozenset(_ladder_leg_fingerprint(r) for r in rows)
+                if key in used_keys:
+                    continue
+                if not _ticket_cap_can_add(rows, player_ticket_counts):
+                    continue
+                tix = _finalize_ladder_ticket(
+                    rows,
+                    f"High-Prob {n_legs}-Leg",
+                    "MIX",
+                    min_ticket_prob=0.0,
+                    stack_70_only=stack_70_only,
+                )
+                if tix is None:
+                    continue
+                ep = float(tix.get("est_win_prob") or 0.0)
+                if ep > best_ep:
+                    best_ep = ep
+                    best = tix
+            if scanned > scan_cap:
+                break
+        relaxed_p = min_p * float(relaxed_ratio)
+        if best is not None and best_ep >= min_p:
+            pass
+        elif best is not None and best_ep >= relaxed_p:
+            best["high_prob_parlay_relaxed"] = True
+        else:
+            best = None
+        if best is not None:
+            best["high_probability_parlay"] = True
+            best["high_prob_parlay_rank"] = len(tickets) + 1
+            tickets.append(best)
+            used_keys.add(frozenset(_ladder_leg_fingerprint(r) for r in best.get("rows") or []))
+            _ticket_cap_register(best.get("rows") or [], player_ticket_counts)
+
+    tickets.sort(
+        key=lambda t: (
+            int(t.get("n_legs") or 0),
+            -float(t.get("est_win_prob") or 0.0),
+        )
+    )
+    return tickets
+
+
+def build_high_probability_parlay_ticket_groups(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    **kwargs,
+) -> list[tuple[str, list[dict], None]]:
+    stack_70 = bool(kwargs.get("stack_70_only", LADDER_STACK_70_DEFAULT))
+    tickets = build_high_probability_parlay_tickets(sport_pools, **kwargs)
+    if not tickets:
+        return []
+    suffix = " · Stack70" if stack_70 else ""
+    return [(f"High-Prob Parlay · Cross-Sport{suffix}", tickets, None)]
+
+
+def _extract_probability_ladder_groups(payload: Mapping[str, Any]) -> list[dict]:
+    out: list[dict] = []
+    for g in payload.get("groups") or []:
+        if not isinstance(g, dict):
+            continue
+        gn = str(g.get("group_name") or "")
+        if "PROBABILITY LADDER" in gn.upper() or "HIGH-PROB PARLAY" in gn.upper():
+            out.append(g)
+    return out
+
+
+def inject_probability_ladder_groups(
+    full_payload: dict,
+    main_payload: dict,
+    *,
+    cross_only: bool = LADDER_CROSS_ONLY_DEFAULT,
+) -> dict:
+    """Prepend probability ladder groups from full export into curated main web payload."""
+    ladder_groups = _extract_probability_ladder_groups(full_payload)
+    if cross_only:
+        ladder_groups = [
+            g
+            for g in ladder_groups
+            if "CROSS-PIPELINE" in str(g.get("group_name") or "").upper()
+        ]
+    if not ladder_groups:
+        return main_payload
+    out = dict(main_payload)
+    groups = list(out.get("groups") or [])
+    for g in reversed(ladder_groups):
+        groups.insert(0, g)
+    out["groups"] = groups
+    out["probability_ladder_group_count"] = len(ladder_groups)
+    out["probability_ladder_slip_count"] = sum(len(g.get("tickets") or []) for g in ladder_groups)
+    return out
 
 
 def build_cross_pipeline_ticket_bundle(
@@ -13557,6 +14294,81 @@ def main():
         dest="max_ticket_legs",
         help="FINAL / long-slip builders: max leg count (2-6). In strict mode (default), capped at 4 unless already lower.",
     )
+    ap.add_argument(
+        "--probability-ladder",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Build probability ladder tickets: cross-pipeline (one leg per sport) and sport-specific, "
+            "largest leg count first, Standard-first with Goblin when leg prob is materially higher."
+        ),
+    )
+    ap.add_argument(
+        "--max-ladder-cross",
+        type=int,
+        default=LADDER_MAX_CROSS_TICKETS,
+        help="Max cross-pipeline probability ladder slips per slate.",
+    )
+    ap.add_argument(
+        "--max-ladder-sport",
+        type=int,
+        default=LADDER_MAX_SPORT_TICKETS,
+        help="Max sport-specific probability ladder slips per sport.",
+    )
+    ap.add_argument(
+        "--max-ladder-per-n",
+        type=int,
+        default=LADDER_MAX_PER_LEG_SIZE,
+        help="Max ladder slips emitted at each leg-count tier before stepping down.",
+    )
+    ap.add_argument(
+        "--ladder-min-leg-prob",
+        type=float,
+        default=LADDER_MIN_LEG_PROB,
+        help="Minimum modeled leg probability (0-1) for ladder pool eligibility.",
+    )
+    ap.add_argument(
+        "--ladder-goblin-advantage",
+        type=float,
+        default=LADDER_GOBLIN_ADVANTAGE_PP,
+        help="Goblin must beat Standard leg prob by at least this much to replace Standard on a ladder leg.",
+    )
+    ap.add_argument(
+        "--ladder-stack-70",
+        action=argparse.BooleanOptionalAction,
+        default=LADDER_STACK_70_DEFAULT,
+        help=(
+            "Probability ladder uses stack_70_eligible legs (HR>=70%%, L5>=4, matchup aligned, consistency S/A/B). "
+            "Also forced on when --stack-70-only is set."
+        ),
+    )
+    ap.add_argument(
+        "--ladder-min-ticket-prob",
+        type=float,
+        default=LADDER_MIN_TICKET_PROB,
+        help="Minimum modeled P(all legs hit) to emit a ladder slip (0 = no floor).",
+    )
+    ap.add_argument(
+        "--ladder-max-legs",
+        type=int,
+        default=LADDER_MAX_LEGS_DEFAULT,
+        help="Max legs per probability ladder slip (default 3; balance hit rate vs payout).",
+    )
+    ap.add_argument(
+        "--ladder-cross-only",
+        action=argparse.BooleanOptionalAction,
+        default=LADDER_CROSS_ONLY_DEFAULT,
+        help="Web main payload: inject cross-pipeline ladder only (sport ladders stay in full export).",
+    )
+    ap.add_argument(
+        "--high-prob-parlay",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Search cross-sport combinations for best 3–6 leg parlays "
+            "(one leg per sport; combinatorial top-N per sport)."
+        ),
+    )
     ap.add_argument("--min-hit-rate", type=float, default=0.65, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
     ap.add_argument(
@@ -14359,10 +15171,12 @@ def main():
         mlb_ex_n = 0
         rel_ex_n = 0
         nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = nhl_over_dir_ex_n = 0
+        soccer_over_ex_n = 0
         if {"sport", "prop_type"}.issubset(filtered_df.columns):
             m_mlb, mlb_ex_n = _mlb_ticket_pool_exclusion_mask(filtered_df)
             m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n, nhl_over_dir_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
-            filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
+            m_soccer, soccer_over_ex_n = _soccer_ticket_pool_exclusion_mask(filtered_df)
+            filtered_df = filtered_df[~(m_mlb | m_nhl | m_soccer)].copy()
             filtered_df, rel_ex_n = _apply_reliability_pool_filter(filtered_df, reliability_index)
         # Normalize pick types for assembly compatibility.
         # Some sheets provide blank/variant labels; treat unknowns as Standard so
@@ -14392,11 +15206,18 @@ def main():
         n_tennis_allowed = 0
         n_nhl_excluded = 0
         n_nhl_allowed = 0
+        n_soccer_excluded = 0
+        n_soccer_allowed = 0
         if sport == "TENNIS" and len(filtered_df) > 0:
             _tennis_mask = _tennis_allowed_mask(filtered_df)
             n_tennis_allowed = int(_tennis_mask.sum())
             n_tennis_excluded = int((~_tennis_mask).sum())
             filtered_df = filtered_df[_tennis_mask].copy()
+        elif sport in ("SOCCER", "SOC") and len(filtered_df) > 0:
+            _soccer_mask = _soccer_allowed_mask(filtered_df)
+            n_soccer_allowed = int(_soccer_mask.sum())
+            n_soccer_excluded = int((~_soccer_mask).sum())
+            filtered_df = filtered_df[_soccer_mask].copy()
         elif sport == "NHL" and len(filtered_df) > 0:
             _nhl_mask = filtered_df.apply(nhl_allowed_leg, axis=1)
             n_nhl_allowed = int(_nhl_mask.sum())
@@ -14419,6 +15240,12 @@ def main():
             print(
                 f"  [main-pool] tennis allowed: {n_tennis_allowed} legs "
                 f"(Goblin OVER totals + Standard UNDER only)"
+            )
+        if sport in ("SOCCER", "SOC") and SOCCER_UNDER_PREFERRED:
+            print(
+                f"  [main-pool] soccer: {soccer_over_ex_n} OVER legs blocked, "
+                f"{n_soccer_excluded} ineligible direction removed, "
+                f"{n_soccer_allowed} UNDER legs remaining"
             )
         if sport == "NHL" and NHL_UNDER_PREFERRED:
             print(
@@ -15534,6 +16361,87 @@ def main():
                 nl = int(st.get("n_legs") or len(st.get("rows") or []))
                 _group_counts_by_size[strong_display][nl] += 1
 
+    if getattr(args, "probability_ladder", True):
+        ladder_stack_70 = bool(getattr(args, "ladder_stack_70", LADDER_STACK_70_DEFAULT)) or bool(
+            args.stack_70_only
+        )
+        ladder_min_leg = float(getattr(args, "ladder_min_leg_prob", LADDER_MIN_LEG_PROB))
+        if ladder_stack_70:
+            ladder_min_leg = max(ladder_min_leg, 0.58)
+        ladder_max_legs = min(
+            int(getattr(args, "ladder_max_legs", LADDER_MAX_LEGS_DEFAULT)),
+            int(args.max_ticket_legs),
+            CROSS_PIPELINE_MAX_LEGS,
+        )
+        ladder_groups = build_probability_ladder_ticket_groups(
+            sport_pool_map,
+            max_legs=max(2, ladder_max_legs),
+            max_cross=int(getattr(args, "max_ladder_cross", LADDER_MAX_CROSS_TICKETS)),
+            max_per_sport=int(getattr(args, "max_ladder_sport", LADDER_MAX_SPORT_TICKETS)),
+            max_per_leg_size=int(getattr(args, "max_ladder_per_n", LADDER_MAX_PER_LEG_SIZE)),
+            min_leg_prob=ladder_min_leg,
+            goblin_advantage_pp=float(getattr(args, "ladder_goblin_advantage", LADDER_GOBLIN_ADVANTAGE_PP)),
+            ticket_sort_mode=str(args.ticket_candidate_sort),
+            player_ticket_counts=counters["player_ticket_counts"],
+            stack_70_only=ladder_stack_70,
+            min_ticket_prob=float(getattr(args, "ladder_min_ticket_prob", LADDER_MIN_TICKET_PROB)),
+        )
+        if ladder_groups:
+            n_ladder_slips = sum(len(tix) for _, tix, _ in ladder_groups)
+            stack_tag = " stack70" if ladder_stack_70 else ""
+            print(
+                f"  [probability-ladder] {len(ladder_groups)} groups, {n_ladder_slips} slips "
+                f"(Standard-first; Goblin when +{float(getattr(args, 'ladder_goblin_advantage', LADDER_GOBLIN_ADVANTAGE_PP)):.0%} prob; "
+                f"min_leg={ladder_min_leg:.2f}{stack_tag})"
+            )
+            for gname, tickets, _ in ladder_groups:
+                if not tickets:
+                    continue
+                sname = _excel_ticket_sheet_title_unique(gname[:31], wb.sheetnames)
+                write_ticket_sheet(wb, tickets, sname, C["hdr_mix"], label=gname)
+                for t in tickets:
+                    nl = int(t.get("n_legs") or len(t.get("rows") or []))
+                    _group_counts_by_size[gname][nl] += 1
+            for g in reversed(ladder_groups):
+                all_ticket_groups.insert(0, g)
+
+    if getattr(args, "high_prob_parlay", True):
+        hpp_stack_70 = bool(getattr(args, "high_prob_parlay_stack_70", HIGH_PROB_PARLAY_STACK_70_DEFAULT))
+        hpp_min_leg = float(getattr(args, "ladder_min_leg_prob", LADDER_MIN_LEG_PROB))
+        if hpp_stack_70:
+            hpp_min_leg = max(hpp_min_leg, 0.58)
+        hpp_groups = build_high_probability_parlay_ticket_groups(
+            sport_pool_map,
+            min_leg_prob=hpp_min_leg,
+            goblin_advantage_pp=float(getattr(args, "ladder_goblin_advantage", LADDER_GOBLIN_ADVANTAGE_PP)),
+            ticket_sort_mode=str(args.ticket_candidate_sort),
+            player_ticket_counts=counters["player_ticket_counts"],
+            stack_70_only=hpp_stack_70,
+        )
+        if hpp_groups:
+            n_hpp = sum(len(tix) for _, tix, _ in hpp_groups)
+            stack_tag = " stack70" if hpp_stack_70 else ""
+            print(
+                f"  [high-prob-parlay] {len(hpp_groups)} group(s), {n_hpp} slip(s) "
+                f"(3–6 leg cross-sport combinatorial; min_leg={hpp_min_leg:.2f}{stack_tag})"
+            )
+            for gname, tickets, _ in hpp_groups:
+                if not tickets:
+                    continue
+                for t in tickets:
+                    ep = float(t.get("est_win_prob") or 0.0)
+                    nl = int(t.get("n_legs") or 0)
+                    ev = float(t.get("ev_power") or 0.0)
+                    tag = " relaxed" if t.get("high_prob_parlay_relaxed") else ""
+                    print(f"    {nl}-leg est_win_prob={ep:.1%} ev_power={ev:.2f}x{tag}")
+                sname = _excel_ticket_sheet_title_unique(gname[:31], wb.sheetnames)
+                write_ticket_sheet(wb, tickets, sname, C["hdr_mix"], label=gname)
+                for t in tickets:
+                    nl = int(t.get("n_legs") or len(t.get("rows") or []))
+                    _group_counts_by_size[gname][nl] += 1
+            for g in reversed(hpp_groups):
+                all_ticket_groups.insert(0, g)
+
     for sport_label, sdf in sport_pool_map:
         if sdf is None or len(sdf) == 0:
             _zero_ticket_reasons[sport_label] = "empty eligible pool"
@@ -15874,6 +16782,11 @@ def main():
                 graded_analysis=_load_graded_analysis(),
             )
             payload = inject_strong_builder_tickets(full_payload, payload)
+            payload = inject_probability_ladder_groups(
+                full_payload,
+                payload,
+                cross_only=bool(getattr(args, "ladder_cross_only", LADDER_CROSS_ONLY_DEFAULT)),
+            )
             payload = append_in_season_web_supplement_groups(
                 payload, full_payload, str(args.date)
             )
@@ -15967,6 +16880,11 @@ def main():
                 graded_analysis=_load_graded_analysis(),
             )
             payload = inject_strong_builder_tickets(full_payload, payload)
+            payload = inject_probability_ladder_groups(
+                full_payload,
+                payload,
+                cross_only=bool(getattr(args, "ladder_cross_only", LADDER_CROSS_ONLY_DEFAULT)),
+            )
             payload = append_in_season_web_supplement_groups(
                 payload, full_payload, str(args.date)
             )
@@ -16375,6 +17293,9 @@ _TICKET_GROUP_SPORT_SORT_ORDER: dict[str, int] = {
 
 
 def _ticket_group_sort_rank(group_name: str) -> int:
+    name = (group_name or "").upper()
+    if "PROBABILITY LADDER" in name:
+        return -100
     sk = _group_sport(group_name)
     return _TICKET_GROUP_SPORT_SORT_ORDER.get(sk, 999)
 
@@ -16644,7 +17565,6 @@ def _tickets_filter_pills_html(attr_rows: list[dict], *, slate_date: str = "") -
             title_attr=' title="Highest payout × win probability (top 3 groups)"',
         )
     )
-    chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
     chunks.append(
         '<label class="ticket-filter-sort-wrap" for="ticket-sort-select">'
         '<span class="ticket-filter-sort-label">Sort</span>'
@@ -16661,7 +17581,7 @@ def _tickets_filter_pills_html(attr_rows: list[dict], *, slate_date: str = "") -
     )
     chunks.append(
         '<button type="button" class="ticket-filter-bar-action active" id="toggle-skip" '
-        'style="border-radius:999px;" aria-pressed="true">HIDE SKIP</button>'
+        'style="border-radius:999px;" aria-pressed="true">SHOW SKIP</button>'
     )
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all" style="border-radius:999px;">EXPAND ALL</button>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all" style="border-radius:999px;">COLLAPSE ALL</button>')
@@ -17773,7 +18693,7 @@ def render_tickets_body_html(
       hideSkip = !hideSkip;
       tSkip.classList.toggle('active', hideSkip);
       tSkip.setAttribute('aria-pressed', hideSkip ? 'true' : 'false');
-      tSkip.textContent = hideSkip ? 'HIDE SKIP' : 'SHOW SKIP';
+      tSkip.textContent = hideSkip ? 'SHOW SKIP' : 'HIDE SKIP';
       applyGroupView();
     });
   }

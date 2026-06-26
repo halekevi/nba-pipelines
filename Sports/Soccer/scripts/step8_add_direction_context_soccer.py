@@ -214,7 +214,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "h2h_avg", "h2h_over_pct", "h2h_games", "h2h_last",
         "game_total", "spread", "league", "game_time",
         "espn_player_id",
-        "prop_type", "pick_type", "line",
+        "prop_type", "pick_type", "line", "standard_line", "standard_line_source",
         "final_bet_direction",
         "edge", "abs_edge", "projection",
         "ml_prob",
@@ -275,6 +275,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in ["last5_over", "last5_under"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").astype("Int64")
+    if "standard_line" in clean.columns:
+        clean["standard_line"] = pd.to_numeric(clean["standard_line"], errors="coerce").round(2)
 
     tier_order = {"A": 0, "B": 1, "C": 2, "D": 3}
 
@@ -297,6 +299,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "spread": "Spread",
         "espn_player_id": "ESPN ID",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
+        "standard_line": "Standard Line", "standard_line_source": "Standard Line Source",
         "final_bet_direction": "Direction",
         "edge": "Edge", "abs_edge": "Abs Edge", "projection": "Projection",
         "ml_prob": "ML Prob",

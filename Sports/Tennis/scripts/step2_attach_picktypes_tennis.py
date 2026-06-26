@@ -12,9 +12,17 @@ from pathlib import Path
 import pandas as pd
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO = next(
+    (p for p in Path(__file__).resolve().parents if (p / "utils" / "pick_line_standard.py").is_file()),
+    Path(__file__).resolve().parents[3],
+)
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
+
 from tennis_shared import load_or_refresh_rankings, norm_tennis_prop, resolve_athlete_id
+from utils.pick_line_standard import attach_standard_line_and_deviation, log_goblin_standard_line_fill
 
 
 def norm_pick(s: str) -> str:
@@ -81,6 +89,17 @@ def main() -> None:
     df["tour"] = tours
 
     df["start_time"] = df.get("start_time", "")
+
+    df = attach_standard_line_and_deviation(
+        df,
+        sport="tennis",
+        player_col="player",
+        prop_norm_col="prop_norm",
+        line_col="line",
+        pick_type_col="pick_type",
+        normalize_pick_type=False,
+    )
+    log_goblin_standard_line_fill(df, "[Tennis step2]")
 
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8-sig")

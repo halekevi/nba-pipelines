@@ -81,6 +81,12 @@ def _attach_unified_ml_prob(out: pd.DataFrame, repo_root: Path) -> pd.DataFrame:
     except Exception as exc:
         print(f"[Tennis step8] WARN unified ml_prob failed: {exc}")
         warnings.warn(f"Tennis unified ml_prob skipped: {exc}", stacklevel=2)
+    try:
+        from utils.tennis_ml_prob_caps import apply_tennis_ml_prob_caps  # noqa: WPS433
+
+        out = apply_tennis_ml_prob_caps(out, in_place=True)
+    except Exception:
+        pass
     return out
 
 
@@ -272,7 +278,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "surface",
         "player", "pos", "position_group", "team", "opp_team", "league", "game_time",
         "espn_player_id",
-        "prop_type", "pick_type", "line",
+        "prop_type", "pick_type", "line", "standard_line", "deviation_level",
         "final_bet_direction",
         "edge", "abs_edge", "projection",
         "ml_prob",
@@ -323,6 +329,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in ["last5_over", "last5_under"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").astype("Int64")
+    if "standard_line" in clean.columns:
+        clean["standard_line"] = pd.to_numeric(clean["standard_line"], errors="coerce").round(2)
+    if "deviation_level" in clean.columns:
+        clean["deviation_level"] = pd.to_numeric(clean["deviation_level"], errors="coerce").fillna(0).astype(int)
     if "distribution_n" in clean.columns:
         clean["distribution_n"] = pd.to_numeric(clean["distribution_n"], errors="coerce").astype("Int64")
     if "distribution_std" in clean.columns:
@@ -340,6 +350,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "team": "Team", "opp_team": "Opp", "league": "League", "game_time": "Game Time",
         "espn_player_id": "ESPN ID",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
+        "standard_line": "Standard Line", "deviation_level": "Deviation Level",
         "final_bet_direction": "Direction",
         "edge": "Edge", "abs_edge": "Abs Edge", "projection": "Projection",
         "ml_prob": "ML Prob",
