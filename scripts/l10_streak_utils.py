@@ -63,10 +63,13 @@ def _scalarize_l10_count_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _direction_series(df: pd.DataFrame) -> pd.Series:
-    if "direction" in df.columns:
-        return df["direction"].astype(str).str.strip().str.upper()
-    if "dir" in df.columns:
-        return df["dir"].astype(str).str.strip().str.upper()
+    for col in ("direction", "bet_direction", "final_bet_direction", "dir"):
+        if col not in df.columns:
+            continue
+        s = df[col]
+        if isinstance(s, pd.DataFrame):
+            s = s.iloc[:, 0]
+        return s.astype(str).str.strip().str.upper()
     return pd.Series(["OVER"] * len(df), index=df.index)
 
 
@@ -244,3 +247,30 @@ def finalize_l10_ui_columns(df: pd.DataFrame, *, line_col: str = "line") -> pd.D
             )
         out.loc[ok, "l10_streak"] = streaks
     return out
+
+
+def enrich_graded_l10_columns(df: pd.DataFrame, *, line_col: str = "line") -> pd.DataFrame:
+    """Map common slate aliases and compute l10_streak for graded workbook exports."""
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+    for i in range(1, 11):
+        g, sg = f"G{i}", f"stat_g{i}"
+        if g in out.columns and sg not in out.columns:
+            out[sg] = out[g]
+    return finalize_l10_ui_columns(out, line_col=line_col)
+
+
+_L10_SLATE_RENAME = {
+    "L10 Over": "l10_over",
+    "L10 Under": "l10_under",
+    "L10 Streak": "l10_streak",
+    "l10_over": "l10_over",
+    "l10_under": "l10_under",
+    "l10_streak": "l10_streak",
+    "l10_games_played": "l10_games_played",
+    "line_hits_over_10": "l10_over",
+    "line_hits_under_10": "l10_under",
+    "over_L10": "l10_over",
+    "under_L10": "l10_under",
+}

@@ -31,6 +31,7 @@ from utils.slate_fields import (  # noqa: E402
     first_over_under_in_slate_row,
 )
 from utils.group_rank_tier import assign_tier_column  # noqa: E402
+from scripts.l10_streak_utils import enrich_graded_l10_columns  # noqa: E402
 
 
 def _def_rank_bucket(x):
@@ -503,6 +504,8 @@ def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     "last5_under": "l5_under",
     "L10 Over": "l10_over",
     "L10 Under": "l10_under",
+    "L10 Streak": "l10_streak",
+    "l10_streak": "l10_streak",
     "line_hits_over_10": "l10_over",
     "line_hits_under_10": "l10_under",
     "over_L10": "l10_over",
@@ -669,6 +672,12 @@ def load_cbb(path: str) -> pd.DataFrame:
         "edge_score":          "edge_score",
         "Blended Score":       "blended_score",
         "blended_score":       "blended_score",
+        "L10 Over":            "l10_over",
+        "L10 Under":           "l10_under",
+        "L10 Streak":          "l10_streak",
+        "l10_streak":          "l10_streak",
+        "line_hits_over_10":   "l10_over",
+        "line_hits_under_10":  "l10_under",
     })
     # Guard against duplicate column names after renames (e.g. bet_direction).
     if df.columns.duplicated().any():
@@ -1718,6 +1727,7 @@ def main():
         print('  No actuals — PENDING slate')
 
     df = _recompute_standard_tiers_from_directional_ml_prob(df, args.sport)
+    df = enrich_graded_l10_columns(df, line_col="line")
 
     if "pp_projection_id" not in df.columns and "projection_id" in df.columns:
         df["pp_projection_id"] = df["projection_id"]

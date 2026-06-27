@@ -29,6 +29,7 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.slate_fields import first_numeric_in_slate_row, first_over_under_in_slate_row
+from scripts.l10_streak_utils import enrich_graded_l10_columns, _L10_SLATE_RENAME
 
 # ── Column maps: step8 slate → canonical graded output ────────────────────────
 # These match what build_grade_report.py's normalize() function expects
@@ -419,6 +420,8 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 f"  [NHL grader] WARN: date filter for {want} = 0 rows — keeping full slate ({n0} rows)"
             )
 
+    df = df.rename(columns={k: v for k, v in _L10_SLATE_RENAME.items() if k in df.columns})
+    df = enrich_graded_l10_columns(df, line_col="line")
     return df
 
 def load_actuals(path: Path) -> pd.DataFrame:
@@ -754,7 +757,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
 
 def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
     """Save NBA-style multi-sheet graded Excel with full formatting and Demon exclusion."""
-    df = df.copy()
+    df = enrich_graded_l10_columns(df.copy(), line_col="line")
     if "pp_projection_id" not in df.columns and "projection_id" in df.columns:
         df["pp_projection_id"] = df["projection_id"]
 
@@ -985,13 +988,15 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
                'bet_direction','tier','def_tier','minutes_tier','position_group',
                'edge','hit_rate','projection','rank_score','ml_prob','ml_edge',
                'edge_score','blended_score',
+               'l10_over','l10_under','l10_games_played','l10_streak',
                'deviation_level',
                'actual','result','margin','void_reason_grade']
     cols = [c for c in desired if c in df.columns]
     widths_map = {'pp_projection_id':14,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
                   'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
                   'position_group':14,'edge':8,'hit_rate':10,'projection':12,'rank_score':12,
-                  'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,
+                  'ml_prob':10,'ml_edge':10,                  'edge_score':11,'blended_score':12,
+                  'l10_over':9,'l10_under':9,'l10_games_played':10,'l10_streak':10,
                   'deviation_level':8,
                   'actual':9,'result':8,'margin':8,'void_reason_grade':22}
     for ci, col in enumerate(cols, 1):

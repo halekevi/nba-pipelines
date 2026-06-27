@@ -20,7 +20,10 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _SCRIPT_DIR.parents[3]
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 from tennis_shared import iter_scoreboard_matches, norm_key, norm_tennis_prop
+from scripts.l10_streak_utils import enrich_graded_l10_columns
 
 VALID_TENNIS_PROPS = {"aces", "double_faults", "games_won", "sets_won", "match_total_games"}
 
@@ -306,12 +309,17 @@ def main() -> None:
                 "edge": _slate_field(r, "edge", "Edge"),
                 "pick_type": _slate_field(r, "pick_type", "Pick Type"),
                 "deviation_level": _slate_field(r, "deviation_level", "Deviation Level"),
+                "l10_over": _slate_field(r, "l10_over", "L10 Over", "line_hits_over_10"),
+                "l10_under": _slate_field(r, "l10_under", "L10 Under", "line_hits_under_10"),
+                "l10_streak": _slate_field(r, "l10_streak", "L10 Streak"),
                 "team": _slate_field(r, "team", "Team"),
                 "blended_score": _slate_field(r, "blended_score", "Blended Score"),
             }
         )
 
     df = pd.DataFrame(rows) if rows else _empty_graded()
+    if not df.empty:
+        df = enrich_graded_l10_columns(df, line_col="line")
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         df.to_excel(w, sheet_name="graded", index=False)
         if not df.empty:

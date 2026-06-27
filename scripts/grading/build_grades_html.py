@@ -315,6 +315,9 @@ def load_graded(path: Path, sport: str = "") -> list[dict]:
             if nk.lower() == "tier":                nk = "Tier"
             if nk.lower() in ("ml_prob", "ml prob"): nk = "ML Prob"
             if nk.lower() in ("deviation level", "dev level", "deviation_level"): nk = "deviation_level"
+            if nk.lower() in ("l10 streak", "l10_streak"): nk = "l10_streak"
+            if nk.lower() in ("l10 over",): nk = "l10_over"
+            if nk.lower() in ("l10 under",): nk = "l10_under"
             nr[nk] = v
         normalized.append(nr)
     # Recompute display tiers for historical files:
