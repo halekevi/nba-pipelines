@@ -1,17 +1,214 @@
 {
-  "updated_at": "2026-06-26T08:38:43.080675Z",
-  "days_tracked": 23,
+  "updated_at": "2026-06-27T08:44:13.455028Z",
+  "days_tracked": 24,
   "aggregate": {
-    "hit": 149,
-    "miss": 151,
+    "hit": 151,
+    "miss": 156,
     "void": 15,
     "push": 1,
     "pending": 0,
-    "no_match": 28,
-    "total": 344
+    "no_match": 29,
+    "total": 352
   },
-  "aggregate_hit_rate": 0.4967,
+  "aggregate_hit_rate": 0.4919,
   "recent": [
+    {
+      "slate_date": "2026-06-26",
+      "graded_at": "2026-06-27T08:44:13.438575Z",
+      "summary": {
+        "hit": 2,
+        "miss": 5,
+        "void": 0,
+        "push": 0,
+        "pending": 0,
+        "no_match": 1,
+        "total": 8
+      },
+      "hit_rate": 0.2857,
+      "decided": 7,
+      "results": [
+        {
+          "player": "Michaela Onyenwere",
+          "sport": "WNBA",
+          "tier": "medium",
+          "hit_rate": 0.7667,
+          "display_prop": {
+            "prop_type": "Points",
+            "direction": "OVER",
+            "hits": 21,
+            "total": 25,
+            "hit_rate": 0.84
+          },
+          "slate_line": 9.5,
+          "slate_pick_type": "Standard",
+          "team": "WAS",
+          "opp": "CON",
+          "result": "MISS",
+          "actual": 4.0,
+          "line": 7.5,
+          "margin": -3.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Megan Gustafson",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5736,
+          "display_prop": {
+            "prop_type": "Pts+Rebs",
+            "direction": "OVER",
+            "hits": 13,
+            "total": 18,
+            "hit_rate": 0.7222
+          },
+          "slate_line": 14.5,
+          "slate_pick_type": "Goblin",
+          "team": "PDX",
+          "opp": "CHI",
+          "result": "MISS",
+          "actual": 14.0,
+          "line": 14.5,
+          "margin": -0.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Azur\u00e1 Stevens",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5105,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 23,
+            "total": 30,
+            "hit_rate": 0.7667
+          },
+          "slate_line": 7.5,
+          "slate_pick_type": "Goblin",
+          "team": "CHI",
+          "opp": "PDX",
+          "result": "NO_MATCH",
+          "grade_source": null
+        },
+        {
+          "player": "Kayla Thornton",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.5102,
+          "display_prop": {
+            "prop_type": "3-PT Made",
+            "direction": "OVER",
+            "hits": 19,
+            "total": 29,
+            "hit_rate": 0.6552
+          },
+          "slate_line": 0.5,
+          "slate_pick_type": "Goblin",
+          "team": "GSV",
+          "opp": "ATL",
+          "result": "MISS",
+          "actual": 0.0,
+          "line": 0.5,
+          "margin": -0.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Angel Reese",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4846,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 24,
+            "total": 46,
+            "hit_rate": 0.5217
+          },
+          "slate_line": 1.5,
+          "slate_pick_type": "Goblin",
+          "team": "ATL",
+          "opp": "GSV",
+          "result": "MISS",
+          "actual": 0.0,
+          "line": 1.5,
+          "margin": -1.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Sarah Ashlee Barker",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4595,
+          "display_prop": {
+            "prop_type": "Assists",
+            "direction": "OVER",
+            "hits": 7,
+            "total": 8,
+            "hit_rate": 0.875
+          },
+          "slate_line": 2.5,
+          "slate_pick_type": "Standard",
+          "team": "PDX",
+          "opp": "CHI",
+          "result": "MISS",
+          "actual": 1.0,
+          "line": 1.5,
+          "margin": -0.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Emily Engstler",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4539,
+          "display_prop": {
+            "prop_type": "Rebounds",
+            "direction": "OVER",
+            "hits": 23,
+            "total": 34,
+            "hit_rate": 0.6765
+          },
+          "slate_line": 5.0,
+          "slate_pick_type": "Standard",
+          "team": "PDX",
+          "opp": "CHI",
+          "result": "HIT",
+          "actual": 5.0,
+          "line": 3.5,
+          "margin": 1.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        },
+        {
+          "player": "Shakira Austin",
+          "sport": "WNBA",
+          "tier": "high",
+          "hit_rate": 0.4488,
+          "display_prop": {
+            "prop_type": "Rebs+Asts",
+            "direction": "OVER",
+            "hits": 12,
+            "total": 21,
+            "hit_rate": 0.5714
+          },
+          "slate_line": 10.5,
+          "slate_pick_type": "Standard",
+          "team": "WAS",
+          "opp": "CON",
+          "result": "HIT",
+          "actual": 13.0,
+          "line": 11.5,
+          "margin": 1.5,
+          "void_reason": "",
+          "grade_source": "graded_props"
+        }
+      ]
+    },
     {
       "slate_date": "2026-06-25",
       "graded_at": "2026-06-26T08:38:43.064569Z",
@@ -8080,5 +8277,5 @@
       ]
     }
   ],
-  "latest_graded_date": "2026-06-25"
+  "latest_graded_date": "2026-06-26"
 }
