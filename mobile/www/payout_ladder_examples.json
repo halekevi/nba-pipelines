@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-26T22:17:39.906510+00:00",
+  "generated_at": "2026-06-28T09:52:11.153376+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -136,24 +136,50 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
         }
       ]
     },
@@ -162,34 +188,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -198,34 +224,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -234,34 +260,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -270,34 +296,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -306,34 +332,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -342,34 +368,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -378,30 +404,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         },
         {
-          "player": "Erica Wheeler",
-          "prop_type": "Assists",
-          "line": 3.5,
-          "standard_line": 5.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": 2.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -410,48 +436,120 @@
       ]
     },
     {
+      "composition": "1S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "2S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
       "composition": "3S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -460,44 +558,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -506,44 +604,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -552,44 +650,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -598,44 +696,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -644,44 +742,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
+          "direction": "OVER",
+          "hit_rate": 0.75
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -690,40 +788,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         },
         {
-          "player": "Erica Wheeler",
-          "prop_type": "Assists",
-          "line": 3.5,
-          "standard_line": 5.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": 2.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -732,58 +830,150 @@
       ]
     },
     {
+      "composition": "2S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "3S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
       "composition": "4S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -792,54 +982,54 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -848,54 +1038,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -904,54 +1094,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -960,54 +1150,54 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1016,54 +1206,54 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1072,54 +1262,166 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": 2.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "4S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 0.9
-        },
-        {
-          "player": "Erica Wheeler",
-          "prop_type": "Assists",
-          "line": 3.5,
-          "standard_line": 5.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.85
         }
       ]
     },
@@ -1128,64 +1430,64 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1194,64 +1496,64 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1260,64 +1562,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1326,64 +1628,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1392,64 +1694,64 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1458,64 +1760,64 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
+          "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jackie Young + Paige Bueckers",
-          "prop_type": "3-PT Made (Combo)",
-          "line": 3.5,
-          "standard_line": 3.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8500000000000001
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1524,64 +1826,196 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Ange-Yoan Bonny",
-          "prop_type": "Shots",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Paige Bueckers",
-          "prop_type": "3-PT Attempted",
-          "line": 4.5,
-          "standard_line": 4.5,
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 0.8
         },
         {
-          "player": "Nico Hoerner",
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 0.77085
         },
         {
-          "player": "Nick Woltemade",
-          "prop_type": "Shots",
-          "line": 2.0,
-          "standard_line": 2.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Maria Conde",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": 3.5,
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.9
+          "hit_rate": 1.0
         },
         {
-          "player": "Erica Wheeler",
-          "prop_type": "Assists",
-          "line": 3.5,
-          "standard_line": 5.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": 2.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.77085
+        },
+        {
+          "player": "Dayana Yastremska",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 19.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Dayne St. Clair",
+          "prop_type": "Goalie Saves",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jackie Young",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 17.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.75
+        },
+        {
+          "player": "Azurá Stevens + Jackie Young",
+          "prop_type": "Points (Combo)",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Nathaniel Lowe",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.77085
+        },
+        {
+          "player": "Sarah Ashlee Barker",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Joao Fonseca",
+          "prop_type": "Total Games",
+          "line": 29.5,
+          "standard_line": 36.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.85
         }
       ]
     }
