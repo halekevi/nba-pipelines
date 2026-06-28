@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-28T11:00:57.361643+00:00",
+  "generated_at": "2026-06-28T14:16:42.370717+00:00",
   "slate_note": "Tennis match day 2026-06-29 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-29.xlsx)",
   "tennis_match_date": "2026-06-29",
   "n_teams": 300,
@@ -1361,6 +1361,14 @@
       "team_def_rank": 16,
       "team_def_tier": "Above Avg"
     },
+    "aryna sabalenka": {
+      "opponent_slate": "teodora kostovic",
+      "opponent_name": "TEODORA KOSTOVIC",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 1,
+      "team_def_tier": "Elite"
+    },
     "adam walton": {
       "opponent_slate": "dino prizmic",
       "opponent_name": "DINO PRIZMIC",
@@ -1640,14 +1648,6 @@
       "opponent_def_tier": "Below Avg",
       "team_def_rank": 38,
       "team_def_tier": "Avg"
-    },
-    "aryna sabalenka": {
-      "opponent_slate": "teodora kostovic",
-      "opponent_name": "TEODORA KOSTOVIC",
-      "opponent_def_rank": 75,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 1,
-      "team_def_tier": "Elite"
     },
     "coco gauff": {
       "opponent_slate": "tamara korpatsch",
@@ -7223,6 +7223,90 @@
         }
       ]
     },
+    "novak djokovic|aces": {
+      "team_slate": "novak djokovic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "yibing wu",
+        "name": "YIBING WU",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Novak Djokovic",
+          "player_norm": "novak djokovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.5,
+          "game_score": 6.5,
+          "edge": "AVOID",
+          "notes": "PP edge -4.7 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 10.5,
+          "pp_edge": -4.7
+        }
+      ]
+    },
+    "aryna sabalenka|aces": {
+      "team_slate": "aryna sabalenka",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "teodora kostovic",
+        "name": "TEODORA KOSTOVIC",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Aryna Sabalenka",
+          "player_norm": "aryna sabalenka",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.9,
+          "game_score": 3.9,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#75).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.9
+        }
+      ]
+    },
+    "yibing wu|aces": {
+      "team_slate": "yibing wu",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "novak djokovic",
+        "name": "NOVAK DJOKOVIC",
+        "def_rank": 8,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Yibing Wu",
+          "player_norm": "yibing wu",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.8,
+          "game_score": 4.8,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#8).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -0.1
+        }
+      ]
+    },
     "qinwen zheng|aces": {
       "team_slate": "qinwen zheng",
       "category": "aces",
@@ -7360,6 +7444,34 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": 1.3
+        }
+      ]
+    },
+    "jack pinnington jones|aces": {
+      "team_slate": "jack pinnington jones",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "brandon nakashima",
+        "name": "BRANDON NAKASHIMA",
+        "def_rank": 31,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Jack Pinnington Jones",
+          "player_norm": "jack pinnington jones",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.0,
+          "game_score": 7.0,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#31).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": -1.1
         }
       ]
     },
@@ -7559,6 +7671,34 @@
         }
       ]
     },
+    "miomir kecmanovic|aces": {
+      "team_slate": "miomir kecmanovic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "jannik sinner",
+        "name": "JANNIK SINNER",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Miomir Kecmanovic",
+          "player_norm": "miomir kecmanovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#1).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.1
+        }
+      ]
+    },
     "dayana yastremska|aces": {
       "team_slate": "dayana yastremska",
       "category": "aces",
@@ -7671,34 +7811,6 @@
         }
       ]
     },
-    "novak djokovic|aces": {
-      "team_slate": "novak djokovic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "yibing wu",
-        "name": "YIBING WU",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Novak Djokovic",
-          "player_norm": "novak djokovic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.5,
-          "game_score": 6.5,
-          "edge": "AVOID",
-          "notes": "PP edge -4.7 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 10.5,
-          "pp_edge": -4.7
-        }
-      ]
-    },
     "claire liu|aces": {
       "team_slate": "claire liu",
       "category": "aces",
@@ -7783,6 +7895,34 @@
         }
       ]
     },
+    "sebastian ofner|aces": {
+      "team_slate": "sebastian ofner",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "hamad medjedovic",
+        "name": "HAMAD MEDJEDOVIC",
+        "def_rank": 64,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Sebastian Ofner",
+          "player_norm": "sebastian ofner",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.1,
+          "game_score": 8.1,
+          "edge": "AVOID",
+          "notes": "PP edge -11.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -11.1
+        }
+      ]
+    },
     "rafael jodar|aces": {
       "team_slate": "rafael jodar",
       "category": "aces",
@@ -7811,6 +7951,34 @@
         }
       ]
     },
+    "marco trungelliti|aces": {
+      "team_slate": "marco trungelliti",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "martin damm jr",
+        "name": "MARTIN DAMM JR",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Marco Trungelliti",
+          "player_norm": "marco trungelliti",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.8,
+          "game_score": 3.8,
+          "edge": "AVOID",
+          "notes": "PP edge -5.7 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 9.5,
+          "pp_edge": -5.7
+        }
+      ]
+    },
     "karolina muchova|aces": {
       "team_slate": "karolina muchova",
       "category": "aces",
@@ -7836,6 +8004,34 @@
           "def_boost": null,
           "pp_line": 4.5,
           "pp_edge": -1.7
+        }
+      ]
+    },
+    "aleksandar kovacevic|aces": {
+      "team_slate": "aleksandar kovacevic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "botic van de zandschulp",
+        "name": "BOTIC VAN DE ZANDSCHULP",
+        "def_rank": 52,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Aleksandar Kovacevic",
+          "player_norm": "aleksandar kovacevic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.8,
+          "game_score": 7.8,
+          "edge": "AVOID",
+          "notes": "PP edge -10.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": -10.1
         }
       ]
     },
@@ -7895,6 +8091,62 @@
         }
       ]
     },
+    "roberto bautista agut|aces": {
+      "team_slate": "roberto bautista agut",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "joao fonseca",
+        "name": "JOAO FONSECA",
+        "def_rank": 27,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Roberto Bautista Agut",
+          "player_norm": "roberto bautista agut",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.0,
+          "game_score": 2.0,
+          "edge": "AVOID",
+          "notes": "PP edge -5.9 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": -5.9
+        }
+      ]
+    },
+    "roman safiullin|aces": {
+      "team_slate": "roman safiullin",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "andrey rublev",
+        "name": "ANDREY RUBLEV",
+        "def_rank": 13,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Roman Safiullin",
+          "player_norm": "roman safiullin",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 8.1,
+          "game_score": 8.1,
+          "edge": "AVOID",
+          "notes": "PP edge -8.5 vs elite opponent (#13).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": -8.5
+        }
+      ]
+    },
     "ignacio buse|aces": {
       "team_slate": "ignacio buse",
       "category": "aces",
@@ -7948,6 +8200,34 @@
           "def_boost": null,
           "pp_line": 7.5,
           "pp_edge": -3.7
+        }
+      ]
+    },
+    "hubert hurkacz|aces": {
+      "team_slate": "hubert hurkacz",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "casper ruud",
+        "name": "CASPER RUUD",
+        "def_rank": 12,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Hubert Hurkacz",
+          "player_norm": "hubert hurkacz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 11.2,
+          "game_score": 11.2,
+          "edge": "AVOID",
+          "notes": "PP edge -13.3 vs elite opponent (#12).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 23.5,
+          "pp_edge": -13.3
         }
       ]
     },
@@ -8119,6 +8399,62 @@
         }
       ]
     },
+    "michael zheng|aces": {
+      "team_slate": "michael zheng",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "cameron norrie",
+        "name": "CAMERON NORRIE",
+        "def_rank": 29,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Michael Zheng",
+          "player_norm": "michael zheng",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.8,
+          "game_score": 2.8,
+          "edge": "AVOID",
+          "notes": "PP edge -12.8 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": -12.75
+        }
+      ]
+    },
+    "teodora kostovic|aces": {
+      "team_slate": "teodora kostovic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "aryna sabalenka",
+        "name": "ARYNA SABALENKA",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Teodora Kostovic",
+          "player_norm": "teodora kostovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#1) \u2014 no clear OVER edge.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 0.0
+        }
+      ]
+    },
     "adolfo daniel vallejo|aces": {
       "team_slate": "adolfo daniel vallejo",
       "category": "aces",
@@ -8175,6 +8511,34 @@
         }
       ]
     },
+    "daniil medvedev|aces": {
+      "team_slate": "daniil medvedev",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "marin cilic",
+        "name": "MARIN CILIC",
+        "def_rank": 60,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Daniil Medvedev",
+          "player_norm": "daniil medvedev",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.6,
+          "game_score": 3.6,
+          "edge": "AVOID",
+          "notes": "PP edge -13.9 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 17.5,
+          "pp_edge": -13.9
+        }
+      ]
+    },
     "sebastian baez|aces": {
       "team_slate": "sebastian baez",
       "category": "aces",
@@ -8200,6 +8564,34 @@
           "def_boost": null,
           "pp_line": 6.5,
           "pp_edge": -5.5
+        }
+      ]
+    },
+    "hamad medjedovic|aces": {
+      "team_slate": "hamad medjedovic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "sebastian ofner",
+        "name": "SEBASTIAN OFNER",
+        "def_rank": 111,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Hamad Medjedovic",
+          "player_norm": "hamad medjedovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.6,
+          "game_score": 5.6,
+          "edge": "AVOID",
+          "notes": "PP edge -11.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 15.5,
+          "pp_edge": -11.1
         }
       ]
     },
@@ -8287,31 +8679,31 @@
         }
       ]
     },
-    "botic van de zandschulp|aces": {
-      "team_slate": "botic van de zandschulp",
+    "luciano darderi|aces": {
+      "team_slate": "luciano darderi",
       "category": "aces",
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "aleksandar kovacevic",
-        "name": "ALEKSANDAR KOVACEVIC",
-        "def_rank": 70,
+        "slate_abbr": "ethan quinn",
+        "name": "ETHAN QUINN",
+        "def_rank": 63,
         "def_tier": "Below Avg"
       },
       "players": [
         {
-          "player": "Botic Van de Zandschulp",
-          "player_norm": "botic van de zandschulp",
+          "player": "Luciano Darderi",
+          "player_norm": "luciano darderi",
           "pos": "",
           "rank_on_team": 1,
           "season_avg": 3.9,
           "game_score": 3.9,
           "edge": "AVOID",
-          "notes": "PP edge -9.7 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -8.1 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 13.5,
-          "pp_edge": -9.7
+          "pp_line": 11.5,
+          "pp_edge": -8.1
         }
       ]
     },
@@ -8340,6 +8732,146 @@
           "def_boost": null,
           "pp_line": 13.5,
           "pp_edge": -8.9
+        }
+      ]
+    },
+    "ethan quinn|aces": {
+      "team_slate": "ethan quinn",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "luciano darderi",
+        "name": "LUCIANO DARDERI",
+        "def_rank": 16,
+        "def_tier": "Above Avg"
+      },
+      "players": [
+        {
+          "player": "Ethan Quinn",
+          "player_norm": "ethan quinn",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.4,
+          "game_score": 6.4,
+          "edge": "AVOID",
+          "notes": "PP edge -6.9 vs elite opponent (#16).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": -6.9
+        }
+      ]
+    },
+    "botic van de zandschulp|aces": {
+      "team_slate": "botic van de zandschulp",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "aleksandar kovacevic",
+        "name": "ALEKSANDAR KOVACEVIC",
+        "def_rank": 70,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Botic Van de Zandschulp",
+          "player_norm": "botic van de zandschulp",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.9,
+          "game_score": 3.9,
+          "edge": "AVOID",
+          "notes": "PP edge -9.7 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": -9.7
+        }
+      ]
+    },
+    "aleksandar vukic|aces": {
+      "team_slate": "aleksandar vukic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "jenson brooksby",
+        "name": "JENSON BROOKSBY",
+        "def_rank": 67,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Aleksandar Vukic",
+          "player_norm": "aleksandar vukic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.9,
+          "game_score": 4.9,
+          "edge": "AVOID",
+          "notes": "PP edge -9.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": -9.5
+        }
+      ]
+    },
+    "nuno borges|aces": {
+      "team_slate": "nuno borges",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "tristan boyer",
+        "name": "TRISTAN BOYER",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Nuno Borges",
+          "player_norm": "nuno borges",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.6,
+          "game_score": 4.6,
+          "edge": "AVOID",
+          "notes": "PP edge -8.3 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -8.3
+        }
+      ]
+    },
+    "dino prizmic|aces": {
+      "team_slate": "dino prizmic",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "adam walton",
+        "name": "ADAM WALTON",
+        "def_rank": 92,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Dino Prizmic",
+          "player_norm": "dino prizmic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "edge": "AVOID",
+          "notes": "PP edge -9.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -9.5
         }
       ]
     },
@@ -8511,62 +9043,6 @@
         }
       ]
     },
-    "aryna sabalenka|aces": {
-      "team_slate": "aryna sabalenka",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "teodora kostovic",
-        "name": "TEODORA KOSTOVIC",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.9,
-          "game_score": 3.9,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#75).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -0.1
-        }
-      ]
-    },
-    "jack pinnington jones|aces": {
-      "team_slate": "jack pinnington jones",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "brandon nakashima",
-        "name": "BRANDON NAKASHIMA",
-        "def_rank": 31,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Jack Pinnington Jones",
-          "player_norm": "jack pinnington jones",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 7.0,
-          "game_score": 7.0,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#31).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": -1.1
-        }
-      ]
-    },
     "belinda bencic|aces": {
       "team_slate": "belinda bencic",
       "category": "aces",
@@ -8648,34 +9124,6 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": 0.75
-        }
-      ]
-    },
-    "teodora kostovic|aces": {
-      "team_slate": "teodora kostovic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Teodora Kostovic",
-          "player_norm": "teodora kostovic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.5,
-          "game_score": 2.5,
-          "edge": "AVOID",
-          "notes": "PP edge -2.0 vs elite opponent (#1).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -2.0
         }
       ]
     },
@@ -9491,62 +9939,6 @@
         }
       ]
     },
-    "miomir kecmanovic|aces": {
-      "team_slate": "miomir kecmanovic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "jannik sinner",
-        "name": "JANNIK SINNER",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Miomir Kecmanovic",
-          "player_norm": "miomir kecmanovic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.3,
-          "game_score": 3.3,
-          "edge": "AVOID",
-          "notes": "PP edge -4.1 vs elite opponent (#1).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 5.5,
-          "pp_edge": -4.1
-        }
-      ]
-    },
-    "sebastian ofner|aces": {
-      "team_slate": "sebastian ofner",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "hamad medjedovic",
-        "name": "HAMAD MEDJEDOVIC",
-        "def_rank": 64,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Sebastian Ofner",
-          "player_norm": "sebastian ofner",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 8.1,
-          "game_score": 8.1,
-          "edge": "AVOID",
-          "notes": "PP edge -11.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 17.5,
-          "pp_edge": -11.1
-        }
-      ]
-    },
     "hugo gaston|aces": {
       "team_slate": "hugo gaston",
       "category": "aces",
@@ -9572,34 +9964,6 @@
           "def_boost": null,
           "pp_line": 6.5,
           "pp_edge": -3.1
-        }
-      ]
-    },
-    "marco trungelliti|aces": {
-      "team_slate": "marco trungelliti",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "martin damm jr",
-        "name": "MARTIN DAMM JR",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Marco Trungelliti",
-          "player_norm": "marco trungelliti",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.8,
-          "game_score": 3.8,
-          "edge": "AVOID",
-          "notes": "PP edge -5.7 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": -5.7
         }
       ]
     },
@@ -9715,34 +10079,6 @@
         }
       ]
     },
-    "aleksandar kovacevic|aces": {
-      "team_slate": "aleksandar kovacevic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "botic van de zandschulp",
-        "name": "BOTIC VAN DE ZANDSCHULP",
-        "def_rank": 52,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Aleksandar Kovacevic",
-          "player_norm": "aleksandar kovacevic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 7.8,
-          "game_score": 7.8,
-          "edge": "AVOID",
-          "notes": "PP edge -10.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 15.5,
-          "pp_edge": -10.1
-        }
-      ]
-    },
     "elisabetta cocciaretto|aces": {
       "team_slate": "elisabetta cocciaretto",
       "category": "aces",
@@ -9855,34 +10191,6 @@
         }
       ]
     },
-    "roberto bautista agut|aces": {
-      "team_slate": "roberto bautista agut",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "joao fonseca",
-        "name": "JOAO FONSECA",
-        "def_rank": 27,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Roberto Bautista Agut",
-          "player_norm": "roberto bautista agut",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.0,
-          "game_score": 2.0,
-          "edge": "AVOID",
-          "notes": "PP edge -5.9 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 6.5,
-          "pp_edge": -5.9
-        }
-      ]
-    },
     "harriet dart|aces": {
       "team_slate": "harriet dart",
       "category": "aces",
@@ -9908,90 +10216,6 @@
           "def_boost": null,
           "pp_line": 4.5,
           "pp_edge": -3.7
-        }
-      ]
-    },
-    "roman safiullin|aces": {
-      "team_slate": "roman safiullin",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "andrey rublev",
-        "name": "ANDREY RUBLEV",
-        "def_rank": 13,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Roman Safiullin",
-          "player_norm": "roman safiullin",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 8.1,
-          "game_score": 8.1,
-          "edge": "AVOID",
-          "notes": "PP edge -8.5 vs elite opponent (#13).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 14.5,
-          "pp_edge": -8.5
-        }
-      ]
-    },
-    "yibing wu|aces": {
-      "team_slate": "yibing wu",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "novak djokovic",
-        "name": "NOVAK DJOKOVIC",
-        "def_rank": 8,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Yibing Wu",
-          "player_norm": "yibing wu",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.8,
-          "game_score": 4.8,
-          "edge": "AVOID",
-          "notes": "PP edge -5.1 vs elite opponent (#8).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 9.5,
-          "pp_edge": -5.1
-        }
-      ]
-    },
-    "hubert hurkacz|aces": {
-      "team_slate": "hubert hurkacz",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "casper ruud",
-        "name": "CASPER RUUD",
-        "def_rank": 12,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Hubert Hurkacz",
-          "player_norm": "hubert hurkacz",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 11.2,
-          "game_score": 11.2,
-          "edge": "AVOID",
-          "notes": "PP edge -13.3 vs elite opponent (#12).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 23.5,
-          "pp_edge": -13.3
         }
       ]
     },
@@ -10076,34 +10300,6 @@
           "def_boost": null,
           "pp_line": 5.5,
           "pp_edge": -5.0
-        }
-      ]
-    },
-    "michael zheng|aces": {
-      "team_slate": "michael zheng",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "cameron norrie",
-        "name": "CAMERON NORRIE",
-        "def_rank": 29,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Michael Zheng",
-          "player_norm": "michael zheng",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.8,
-          "game_score": 2.8,
-          "edge": "AVOID",
-          "notes": "PP edge -12.8 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 15.5,
-          "pp_edge": -12.75
         }
       ]
     },
@@ -10247,62 +10443,6 @@
         }
       ]
     },
-    "daniil medvedev|aces": {
-      "team_slate": "daniil medvedev",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "marin cilic",
-        "name": "MARIN CILIC",
-        "def_rank": 60,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Daniil Medvedev",
-          "player_norm": "daniil medvedev",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.6,
-          "game_score": 3.6,
-          "edge": "AVOID",
-          "notes": "PP edge -13.9 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 17.5,
-          "pp_edge": -13.9
-        }
-      ]
-    },
-    "hamad medjedovic|aces": {
-      "team_slate": "hamad medjedovic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "sebastian ofner",
-        "name": "SEBASTIAN OFNER",
-        "def_rank": 111,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Hamad Medjedovic",
-          "player_norm": "hamad medjedovic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 5.6,
-          "game_score": 5.6,
-          "edge": "AVOID",
-          "notes": "PP edge -11.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 15.5,
-          "pp_edge": -11.1
-        }
-      ]
-    },
     "dalibor svrcina|aces": {
       "team_slate": "dalibor svrcina",
       "category": "aces",
@@ -10384,62 +10524,6 @@
           "def_boost": null,
           "pp_line": 8.5,
           "pp_edge": -4.7
-        }
-      ]
-    },
-    "ethan quinn|aces": {
-      "team_slate": "ethan quinn",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "luciano darderi",
-        "name": "LUCIANO DARDERI",
-        "def_rank": 16,
-        "def_tier": "Above Avg"
-      },
-      "players": [
-        {
-          "player": "Ethan Quinn",
-          "player_norm": "ethan quinn",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.4,
-          "game_score": 6.4,
-          "edge": "AVOID",
-          "notes": "PP edge -6.9 vs elite opponent (#16).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 13.5,
-          "pp_edge": -6.9
-        }
-      ]
-    },
-    "aleksandar vukic|aces": {
-      "team_slate": "aleksandar vukic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "jenson brooksby",
-        "name": "JENSON BROOKSBY",
-        "def_rank": 67,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Aleksandar Vukic",
-          "player_norm": "aleksandar vukic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.9,
-          "game_score": 4.9,
-          "edge": "AVOID",
-          "notes": "PP edge -9.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 14.5,
-          "pp_edge": -9.5
         }
       ]
     },
@@ -10527,62 +10611,6 @@
         }
       ]
     },
-    "luciano darderi|aces": {
-      "team_slate": "luciano darderi",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "ethan quinn",
-        "name": "ETHAN QUINN",
-        "def_rank": 63,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Luciano Darderi",
-          "player_norm": "luciano darderi",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.9,
-          "game_score": 3.9,
-          "edge": "AVOID",
-          "notes": "PP edge -8.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 11.5,
-          "pp_edge": -8.1
-        }
-      ]
-    },
-    "nuno borges|aces": {
-      "team_slate": "nuno borges",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "tristan boyer",
-        "name": "TRISTAN BOYER",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Nuno Borges",
-          "player_norm": "nuno borges",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.6,
-          "game_score": 4.6,
-          "edge": "AVOID",
-          "notes": "PP edge -8.3 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -8.3
-        }
-      ]
-    },
     "adam walton|aces": {
       "team_slate": "adam walton",
       "category": "aces",
@@ -10608,34 +10636,6 @@
           "def_boost": null,
           "pp_line": 12.5,
           "pp_edge": -8.3
-        }
-      ]
-    },
-    "dino prizmic|aces": {
-      "team_slate": "dino prizmic",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "adam walton",
-        "name": "ADAM WALTON",
-        "def_rank": 92,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Dino Prizmic",
-          "player_norm": "dino prizmic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "edge": "AVOID",
-          "notes": "PP edge -9.5 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -9.5
         }
       ]
     },
@@ -10720,6 +10720,34 @@
           "def_boost": null,
           "pp_line": 9.5,
           "pp_edge": -4.9
+        }
+      ]
+    },
+    "aryna sabalenka|double_faults": {
+      "team_slate": "aryna sabalenka",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "teodora kostovic",
+        "name": "TEODORA KOSTOVIC",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Aryna Sabalenka",
+          "player_norm": "aryna sabalenka",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.4,
+          "game_score": 2.4,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.5
         }
       ]
     },
@@ -11647,6 +11675,34 @@
         }
       ]
     },
+    "luca van assche|double_faults": {
+      "team_slate": "luca van assche",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "marton fucsovics",
+        "name": "MARTON FUCSOVICS",
+        "def_rank": 76,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Luca Van Assche",
+          "player_norm": "luca van assche",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "edge": "AVOID",
+          "notes": "PP edge -2.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 4.5,
+          "pp_edge": -2.1
+        }
+      ]
+    },
     "marco trungelliti|double_faults": {
       "team_slate": "marco trungelliti",
       "category": "double_faults",
@@ -12039,6 +12095,34 @@
         }
       ]
     },
+    "yibing wu|double_faults": {
+      "team_slate": "yibing wu",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "novak djokovic",
+        "name": "NOVAK DJOKOVIC",
+        "def_rank": 8,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Yibing Wu",
+          "player_norm": "yibing wu",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.5,
+          "game_score": 1.5,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#8).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -1.5
+        }
+      ]
+    },
     "dalibor svrcina|double_faults": {
       "team_slate": "dalibor svrcina",
       "category": "double_faults",
@@ -12263,6 +12347,34 @@
         }
       ]
     },
+    "teodora kostovic|double_faults": {
+      "team_slate": "teodora kostovic",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "aryna sabalenka",
+        "name": "ARYNA SABALENKA",
+        "def_rank": 1,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Teodora Kostovic",
+          "player_norm": "teodora kostovic",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 4.5,
+          "game_score": 4.5,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +2.0 but elite opponent (#1) \u2014 tough matchup.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": 2.0
+        }
+      ]
+    },
     "ethan quinn|double_faults": {
       "team_slate": "ethan quinn",
       "category": "double_faults",
@@ -12375,34 +12487,6 @@
         }
       ]
     },
-    "teodora kostovic|double_faults": {
-      "team_slate": "teodora kostovic",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "aryna sabalenka",
-        "name": "ARYNA SABALENKA",
-        "def_rank": 1,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Teodora Kostovic",
-          "player_norm": "teodora kostovic",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 4.5,
-          "game_score": 4.5,
-          "edge": "NEUTRAL",
-          "notes": "PP edge +1.0 vs elite opponent (#1) \u2014 proceed with caution.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": 1.0
-        }
-      ]
-    },
     "anastasia gasanova|double_faults": {
       "team_slate": "anastasia gasanova",
       "category": "double_faults",
@@ -12512,34 +12596,6 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": 0.5
-        }
-      ]
-    },
-    "aryna sabalenka|double_faults": {
-      "team_slate": "aryna sabalenka",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "teodora kostovic",
-        "name": "TEODORA KOSTOVIC",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Aryna Sabalenka",
-          "player_norm": "aryna sabalenka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.4,
-          "game_score": 2.4,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": 1.5
         }
       ]
     },
@@ -13523,34 +13579,6 @@
         }
       ]
     },
-    "luca van assche|double_faults": {
-      "team_slate": "luca van assche",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "marton fucsovics",
-        "name": "MARTON FUCSOVICS",
-        "def_rank": 76,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Luca Van Assche",
-          "player_norm": "luca van assche",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.7,
-          "game_score": 2.7,
-          "edge": "AVOID",
-          "notes": "PP edge -2.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -2.1
-        }
-      ]
-    },
     "mirra andreeva|double_faults": {
       "team_slate": "mirra andreeva",
       "category": "double_faults",
@@ -13772,34 +13800,6 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": -1.5
-        }
-      ]
-    },
-    "yibing wu|double_faults": {
-      "team_slate": "yibing wu",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "novak djokovic",
-        "name": "NOVAK DJOKOVIC",
-        "def_rank": 8,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Yibing Wu",
-          "player_norm": "yibing wu",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.5,
-          "game_score": 1.5,
-          "edge": "AVOID",
-          "notes": "PP edge -3.5 vs elite opponent (#8).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 4.5,
-          "pp_edge": -3.5
         }
       ]
     },

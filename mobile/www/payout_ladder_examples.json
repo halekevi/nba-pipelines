@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T09:52:11.153376+00:00",
+  "generated_at": "2026-06-28T12:37:19.536445+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -424,14 +424,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": 2.0,
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         }
       ]
     },
@@ -532,14 +532,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -578,14 +578,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -624,14 +624,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -670,14 +670,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -716,14 +716,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -762,14 +762,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -818,14 +818,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": 2.0,
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         }
       ]
     },
@@ -900,14 +900,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Joao Fonseca",
@@ -946,6 +946,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -954,16 +964,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1002,6 +1002,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1010,16 +1020,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1058,6 +1058,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1066,16 +1076,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1114,6 +1114,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1122,16 +1132,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1170,6 +1170,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1178,16 +1188,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1226,6 +1226,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1234,16 +1244,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1282,14 +1282,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -1302,14 +1302,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": 2.0,
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1338,14 +1338,14 @@
           "hit_rate": 0.75
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.7
+          "hit_rate": 0.8
         },
         {
           "player": "Dayana Yastremska",
@@ -1394,6 +1394,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1402,16 +1412,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Joao Fonseca",
@@ -1450,6 +1450,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1468,16 +1478,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1516,6 +1516,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1534,16 +1544,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1582,6 +1582,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1600,16 +1610,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1648,6 +1648,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1666,16 +1676,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1714,6 +1714,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1732,16 +1742,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1780,6 +1780,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1798,16 +1808,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Dayana Yastremska",
@@ -1846,6 +1846,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1854,16 +1864,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1876,14 +1876,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": 2.0,
+          "player": "Lauren Betts",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1912,6 +1912,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1920,16 +1930,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.77085
         },
         {
           "player": "Dayana Yastremska",
@@ -1978,6 +1978,16 @@
           "hit_rate": 0.75
         },
         {
+          "player": "Mathieu Choinière",
+          "prop_type": "Shots",
+          "line": 0.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Azurá Stevens + Jackie Young",
           "prop_type": "Points (Combo)",
           "line": 27.5,
@@ -1996,16 +2006,6 @@
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.77085
-        },
-        {
-          "player": "Sarah Ashlee Barker",
-          "prop_type": "3-PT Made",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Joao Fonseca",
