@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:49:21.246226+00:00",
+  "generated_at": "2026-06-29T12:28:20.202067+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -198,14 +198,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -234,14 +234,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -270,14 +270,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -306,14 +306,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -342,14 +342,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -378,14 +378,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -486,14 +486,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Kimberly Birrell",
@@ -522,14 +522,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -568,14 +568,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -614,14 +614,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -660,14 +660,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -706,14 +706,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -752,14 +752,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -798,14 +798,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -844,14 +844,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Marta Kostyuk",
@@ -890,14 +890,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -936,14 +936,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -956,14 +956,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -992,14 +992,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1012,14 +1012,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1048,14 +1048,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1068,14 +1068,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1104,14 +1104,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1124,14 +1124,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1160,14 +1160,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1180,14 +1180,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1216,14 +1216,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1236,14 +1236,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1272,14 +1272,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1328,14 +1328,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1384,14 +1384,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1404,14 +1404,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Kimberly Birrell",
@@ -1440,14 +1440,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1460,20 +1460,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1506,14 +1506,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1526,20 +1526,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1572,14 +1572,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1592,20 +1592,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1638,14 +1638,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1658,20 +1658,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1704,14 +1704,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1724,20 +1724,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1770,14 +1770,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1790,20 +1790,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
@@ -1836,14 +1836,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1856,14 +1856,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1902,14 +1902,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1922,14 +1922,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
+          "player": "Nico Hoerner",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
+          "hit_rate": 0.95415
         },
         {
           "player": "Marta Kostyuk",
@@ -1968,14 +1968,14 @@
           "hit_rate": 0.85
         },
         {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Shane Baz",
+          "prop_type": "Pitches Thrown",
+          "line": 95.5,
+          "standard_line": 95.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.8031
         },
         {
           "player": "Jamal Musiala + Kai Havertz",
@@ -1988,20 +1988,20 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Casey Mize",
-          "prop_type": "Earned Runs Allowed",
-          "line": 2.5,
-          "standard_line": 2.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.8985944444444445
-        },
-        {
-          "player": "Manny Machado",
+          "player": "Nico Hoerner",
           "prop_type": "Runs",
           "line": 0.5,
           "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.95415
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",

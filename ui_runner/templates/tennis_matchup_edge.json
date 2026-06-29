@@ -2,7 +2,7 @@
   "sport": "tennis",
   "display_name": "Tennis",
   "matchup_mode": "player",
-  "generated_at": "2026-06-29T11:09:56.202139+00:00",
+  "generated_at": "2026-06-29T14:07:42.779107+00:00",
   "slate_note": "Tennis match day 2026-06-30 ET (rows after date filter; source=step8_tennis_direction_clean_2026-06-30.xlsx)",
   "tennis_match_date": "2026-06-30",
   "n_teams": 300,
@@ -654,6 +654,13 @@
       "def_tier": "Weak"
     },
     {
+      "def_key": "pablo llamas ruiz",
+      "slate_abbr": "pablo llamas ruiz",
+      "name": "Pablo Llamas Ruiz",
+      "def_rank": 119,
+      "def_tier": "Weak"
+    },
+    {
       "def_key": "patrick kypson",
       "slate_abbr": "patrick kypson",
       "name": "Patrick Kypson",
@@ -1129,6 +1136,14 @@
       "team_def_rank": 10,
       "team_def_tier": "Elite"
     },
+    "zachary svajda": {
+      "opponent_slate": "pablo llamas ruiz",
+      "opponent_name": "PABLO LLAMAS RUIZ",
+      "opponent_def_rank": 119,
+      "opponent_def_tier": "Weak",
+      "team_def_rank": 66,
+      "team_def_tier": "Below Avg"
+    },
     "donna vekic": {
       "opponent_slate": "ashlyn krueger",
       "opponent_name": "ASHLYN KRUEGER",
@@ -1585,6 +1600,14 @@
       "team_def_rank": 101,
       "team_def_tier": "Weak"
     },
+    "elena rybakina": {
+      "opponent_slate": "lois boisson",
+      "opponent_name": "LOIS BOISSON",
+      "opponent_def_rank": 75,
+      "opponent_def_tier": "Below Avg",
+      "team_def_rank": 2,
+      "team_def_tier": "Elite"
+    },
     "mariam bolkvadze": {
       "opponent_slate": "ajla tomljanovic",
       "opponent_name": "AJLA TOMLJANOVIC",
@@ -1688,14 +1711,6 @@
       "opponent_def_tier": "Avg",
       "team_def_rank": 105,
       "team_def_tier": "Weak"
-    },
-    "elena rybakina": {
-      "opponent_slate": "lois boisson",
-      "opponent_name": "LOIS BOISSON",
-      "opponent_def_rank": 75,
-      "opponent_def_tier": "Below Avg",
-      "team_def_rank": 2,
-      "team_def_tier": "Elite"
     },
     "iryna shymanovich": {
       "opponent_slate": "viktorija golubic",
@@ -1921,13 +1936,13 @@
       "team_def_rank": 55,
       "team_def_tier": "Below Avg"
     },
-    "zachary svajda": {
-      "opponent_slate": "mattia bellucci",
-      "opponent_name": "MATTIA BELLUCCI",
-      "opponent_def_rank": 67,
+    "pablo llamas ruiz": {
+      "opponent_slate": "zachary svajda",
+      "opponent_name": "ZACHARY SVAJDA",
+      "opponent_def_rank": 66,
       "opponent_def_tier": "Below Avg",
-      "team_def_rank": 66,
-      "team_def_tier": "Below Avg"
+      "team_def_rank": 119,
+      "team_def_tier": "Weak"
     }
   },
   "players_by_team_cat": {
@@ -2348,6 +2363,34 @@
           "def_boost": null,
           "pp_line": 29.5,
           "pp_edge": 4.5
+        }
+      ]
+    },
+    "zachary svajda|match_total_games": {
+      "team_slate": "zachary svajda",
+      "category": "match_total_games",
+      "category_label": "Total games",
+      "threshold": 22.0,
+      "opponent": {
+        "slate_abbr": "pablo llamas ruiz",
+        "name": "PABLO LLAMAS RUIZ",
+        "def_rank": 119,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Zachary Svajda",
+          "player_norm": "zachary svajda",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 31.1,
+          "game_score": 31.1,
+          "edge": "TOP_EDGE",
+          "notes": "PP edge +2.3 vs weak opponent (#119).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 35.5,
+          "pp_edge": 2.3
         }
       ]
     },
@@ -6949,10 +6992,10 @@
       "category_label": "Games won",
       "threshold": 12.0,
       "opponent": {
-        "slate_abbr": "mattia bellucci",
-        "name": "MATTIA BELLUCCI",
-        "def_rank": 67,
-        "def_tier": "Below Avg"
+        "slate_abbr": "pablo llamas ruiz",
+        "name": "PABLO LLAMAS RUIZ",
+        "def_rank": 119,
+        "def_tier": "Weak"
       },
       "players": [
         {
@@ -6962,8 +7005,8 @@
           "rank_on_team": 1,
           "season_avg": 14.8,
           "game_score": 14.8,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#67).",
+          "edge": "TOP_EDGE",
+          "notes": "Strong avg vs weak opponent (#119).",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 19.5,
@@ -7167,6 +7210,62 @@
         }
       ]
     },
+    "otto virtanen|aces": {
+      "team_slate": "otto virtanen",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "ben shelton",
+        "name": "BEN SHELTON",
+        "def_rank": 5,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Otto Virtanen",
+          "player_norm": "otto virtanen",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.4,
+          "game_score": 5.4,
+          "edge": "AVOID",
+          "notes": "PP edge -9.5 vs elite opponent (#5).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": -9.5
+        }
+      ]
+    },
+    "taylor fritz|aces": {
+      "team_slate": "taylor fritz",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "jack draper",
+        "name": "JACK DRAPER",
+        "def_rank": 131,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Taylor Fritz",
+          "player_norm": "taylor fritz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 13.0,
+          "game_score": 13.0,
+          "edge": "AVOID",
+          "notes": "PP edge -10.7 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 20.5,
+          "pp_edge": -10.7
+        }
+      ]
+    },
     "elena rybakina|aces": {
       "team_slate": "elena rybakina",
       "category": "aces",
@@ -7307,6 +7406,34 @@
         }
       ]
     },
+    "alexander blockx|aces": {
+      "team_slate": "alexander blockx",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alexander zverev",
+        "name": "ALEXANDER ZVEREV",
+        "def_rank": 3,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Alexander Blockx",
+          "player_norm": "alexander blockx",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 7.3,
+          "game_score": 7.3,
+          "edge": "NEUTRAL",
+          "notes": "Elite opponent (#3) \u2014 no clear OVER edge.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 6.5,
+          "pp_edge": 0.1
+        }
+      ]
+    },
     "donna vekic|aces": {
       "team_slate": "donna vekic",
       "category": "aces",
@@ -7332,6 +7459,34 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": -0.1
+        }
+      ]
+    },
+    "stan wawrinka|aces": {
+      "team_slate": "stan wawrinka",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "matteo berrettini",
+        "name": "MATTEO BERRETTINI",
+        "def_rank": 51,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Stan Wawrinka",
+          "player_norm": "stan wawrinka",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 6.3,
+          "game_score": 6.3,
+          "edge": "AVOID",
+          "notes": "PP edge -2.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 8.5,
+          "pp_edge": -2.1
         }
       ]
     },
@@ -7416,34 +7571,6 @@
           "def_boost": null,
           "pp_line": 2.5,
           "pp_edge": 0.1
-        }
-      ]
-    },
-    "lois boisson|aces": {
-      "team_slate": "lois boisson",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "elena rybakina",
-        "name": "ELENA RYBAKINA",
-        "def_rank": 2,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Lois Boisson",
-          "player_norm": "lois boisson",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.3,
-          "game_score": 3.3,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#2).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 2.5,
-          "pp_edge": -0.5
         }
       ]
     },
@@ -7867,6 +7994,34 @@
         }
       ]
     },
+    "matteo berrettini|aces": {
+      "team_slate": "matteo berrettini",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "stan wawrinka",
+        "name": "STAN WAWRINKA",
+        "def_rank": 109,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Matteo Berrettini",
+          "player_norm": "matteo berrettini",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.1,
+          "game_score": 5.1,
+          "edge": "AVOID",
+          "notes": "PP edge -13.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 14.5,
+          "pp_edge": -13.1
+        }
+      ]
+    },
     "valentin royer|aces": {
       "team_slate": "valentin royer",
       "category": "aces",
@@ -8007,34 +8162,6 @@
         }
       ]
     },
-    "otto virtanen|aces": {
-      "team_slate": "otto virtanen",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "ben shelton",
-        "name": "BEN SHELTON",
-        "def_rank": 5,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Otto Virtanen",
-          "player_norm": "otto virtanen",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 5.4,
-          "game_score": 5.4,
-          "edge": "AVOID",
-          "notes": "PP edge -12.5 vs elite opponent (#5).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 17.5,
-          "pp_edge": -12.5
-        }
-      ]
-    },
     "jack draper|aces": {
       "team_slate": "jack draper",
       "category": "aces",
@@ -8055,11 +8182,11 @@
           "season_avg": 8.7,
           "game_score": 8.7,
           "edge": "AVOID",
-          "notes": "PP edge -7.5 vs elite opponent (#7).",
+          "notes": "PP edge -6.5 vs elite opponent (#7).",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 13.5,
-          "pp_edge": -7.5
+          "pp_line": 12.5,
+          "pp_edge": -6.5
         }
       ]
     },
@@ -8567,31 +8694,31 @@
         }
       ]
     },
-    "taylor fritz|aces": {
-      "team_slate": "taylor fritz",
+    "ben shelton|aces": {
+      "team_slate": "ben shelton",
       "category": "aces",
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "jack draper",
-        "name": "JACK DRAPER",
-        "def_rank": 131,
+        "slate_abbr": "otto virtanen",
+        "name": "OTTO VIRTANEN",
+        "def_rank": 140,
         "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Taylor Fritz",
-          "player_norm": "taylor fritz",
+          "player": "Ben Shelton",
+          "player_norm": "ben shelton",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 13.0,
-          "game_score": 13.0,
+          "season_avg": 7.5,
+          "game_score": 7.5,
           "edge": "AVOID",
-          "notes": "PP edge -15.7 on board \u2014 lean UNDER or skip OVER.",
+          "notes": "PP edge -7.3 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
-          "pp_line": 25.5,
-          "pp_edge": -15.7
+          "pp_line": 14.5,
+          "pp_edge": -7.3
         }
       ]
     },
@@ -8648,6 +8775,34 @@
           "def_boost": null,
           "pp_line": 2.5,
           "pp_edge": -2.1
+        }
+      ]
+    },
+    "alexander zverev|aces": {
+      "team_slate": "alexander zverev",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "alexander blockx",
+        "name": "ALEXANDER BLOCKX",
+        "def_rank": 36,
+        "def_tier": "Avg"
+      },
+      "players": [
+        {
+          "player": "Alexander Zverev",
+          "player_norm": "alexander zverev",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 5.0,
+          "game_score": 5.0,
+          "edge": "AVOID",
+          "notes": "PP edge -9.3 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 12.5,
+          "pp_edge": -9.3
         }
       ]
     },
@@ -9183,6 +9338,34 @@
         }
       ]
     },
+    "lois boisson|aces": {
+      "team_slate": "lois boisson",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "elena rybakina",
+        "name": "ELENA RYBAKINA",
+        "def_rank": 2,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Lois Boisson",
+          "player_norm": "lois boisson",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#2).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 2.5,
+          "pp_edge": -0.5
+        }
+      ]
+    },
     "sinja kraus|aces": {
       "team_slate": "sinja kraus",
       "category": "aces",
@@ -9631,31 +9814,31 @@
         }
       ]
     },
-    "alexander blockx|aces": {
-      "team_slate": "alexander blockx",
+    "zachary svajda|aces": {
+      "team_slate": "zachary svajda",
       "category": "aces",
       "category_label": "Aces",
       "threshold": 5.0,
       "opponent": {
-        "slate_abbr": "alexander zverev",
-        "name": "ALEXANDER ZVEREV",
-        "def_rank": 3,
-        "def_tier": "Elite"
+        "slate_abbr": "pablo llamas ruiz",
+        "name": "PABLO LLAMAS RUIZ",
+        "def_rank": 119,
+        "def_tier": "Weak"
       },
       "players": [
         {
-          "player": "Alexander Blockx",
-          "player_norm": "alexander blockx",
+          "player": "Zachary Svajda",
+          "player_norm": "zachary svajda",
           "pos": "",
           "rank_on_team": 1,
-          "season_avg": 7.3,
-          "game_score": 7.3,
+          "season_avg": 8.3,
+          "game_score": 8.3,
           "edge": "AVOID",
-          "notes": "PP edge -5.9 vs elite opponent (#3).",
+          "notes": "PP edge -7.3 on board \u2014 lean UNDER or skip OVER.",
           "overperform_vs_weak": false,
           "def_boost": null,
           "pp_line": 12.5,
-          "pp_edge": -5.9
+          "pp_edge": -7.3
         }
       ]
     },
@@ -9768,34 +9951,6 @@
           "def_boost": null,
           "pp_line": 7.5,
           "pp_edge": -6.1
-        }
-      ]
-    },
-    "matteo berrettini|aces": {
-      "team_slate": "matteo berrettini",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "stan wawrinka",
-        "name": "STAN WAWRINKA",
-        "def_rank": 109,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 5.1,
-          "game_score": 5.1,
-          "edge": "AVOID",
-          "notes": "PP edge -14.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 15.5,
-          "pp_edge": -14.1
         }
       ]
     },
@@ -10275,34 +10430,6 @@
         }
       ]
     },
-    "ben shelton|aces": {
-      "team_slate": "ben shelton",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "otto virtanen",
-        "name": "OTTO VIRTANEN",
-        "def_rank": 140,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Ben Shelton",
-          "player_norm": "ben shelton",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 7.5,
-          "game_score": 7.5,
-          "edge": "AVOID",
-          "notes": "PP edge -7.3 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 14.5,
-          "pp_edge": -7.3
-        }
-      ]
-    },
     "zizou bergs|aces": {
       "team_slate": "zizou bergs",
       "category": "aces",
@@ -10499,62 +10626,6 @@
         }
       ]
     },
-    "alexander zverev|aces": {
-      "team_slate": "alexander zverev",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "alexander blockx",
-        "name": "ALEXANDER BLOCKX",
-        "def_rank": 36,
-        "def_tier": "Avg"
-      },
-      "players": [
-        {
-          "player": "Alexander Zverev",
-          "player_norm": "alexander zverev",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 5.0,
-          "game_score": 5.0,
-          "edge": "AVOID",
-          "notes": "PP edge -9.3 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -9.3
-        }
-      ]
-    },
-    "stan wawrinka|aces": {
-      "team_slate": "stan wawrinka",
-      "category": "aces",
-      "category_label": "Aces",
-      "threshold": 5.0,
-      "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 51,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Stan Wawrinka",
-          "player_norm": "stan wawrinka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 6.3,
-          "game_score": 6.3,
-          "edge": "AVOID",
-          "notes": "PP edge -6.1 on board \u2014 lean UNDER or skip OVER.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 12.5,
-          "pp_edge": -6.1
-        }
-      ]
-    },
     "alexandra eala|aces": {
       "team_slate": "alexandra eala",
       "category": "aces",
@@ -10608,6 +10679,34 @@
           "def_boost": null,
           "pp_line": 2.5,
           "pp_edge": -1.5
+        }
+      ]
+    },
+    "pablo llamas ruiz|aces": {
+      "team_slate": "pablo llamas ruiz",
+      "category": "aces",
+      "category_label": "Aces",
+      "threshold": 5.0,
+      "opponent": {
+        "slate_abbr": "zachary svajda",
+        "name": "ZACHARY SVAJDA",
+        "def_rank": 66,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Pablo Llamas Ruiz",
+          "player_norm": "pablo llamas ruiz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.3,
+          "game_score": 2.3,
+          "edge": "AVOID",
+          "notes": "PP edge -10.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 13.5,
+          "pp_edge": -10.5
         }
       ]
     },
@@ -10860,34 +10959,6 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": 1.9
-        }
-      ]
-    },
-    "elena rybakina|double_faults": {
-      "team_slate": "elena rybakina",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "lois boisson",
-        "name": "LOIS BOISSON",
-        "def_rank": 75,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Elena Rybakina",
-          "player_norm": "elena rybakina",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 2.7,
-          "game_score": 2.7,
-          "edge": "OK_EDGE",
-          "notes": "PP edge +1.5 on board tonight.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": 1.5
         }
       ]
     },
@@ -11199,62 +11270,6 @@
         }
       ]
     },
-    "lois boisson|double_faults": {
-      "team_slate": "lois boisson",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "elena rybakina",
-        "name": "ELENA RYBAKINA",
-        "def_rank": 2,
-        "def_tier": "Elite"
-      },
-      "players": [
-        {
-          "player": "Lois Boisson",
-          "player_norm": "lois boisson",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.3,
-          "game_score": 3.3,
-          "edge": "AVOID",
-          "notes": "Negative PP edge vs elite opponent (#2).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -1.1
-        }
-      ]
-    },
-    "stan wawrinka|double_faults": {
-      "team_slate": "stan wawrinka",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "matteo berrettini",
-        "name": "MATTEO BERRETTINI",
-        "def_rank": 51,
-        "def_tier": "Below Avg"
-      },
-      "players": [
-        {
-          "player": "Stan Wawrinka",
-          "player_norm": "stan wawrinka",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 3.0,
-          "game_score": 3.0,
-          "edge": "OK_EDGE",
-          "notes": "Solid vs average opponent (#51).",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 3.5,
-          "pp_edge": -0.7
-        }
-      ]
-    },
     "amanda anisimova|double_faults": {
       "team_slate": "amanda anisimova",
       "category": "double_faults",
@@ -11532,34 +11547,6 @@
           "def_boost": null,
           "pp_line": 3.5,
           "pp_edge": -1.9
-        }
-      ]
-    },
-    "matteo berrettini|double_faults": {
-      "team_slate": "matteo berrettini",
-      "category": "double_faults",
-      "category_label": "Double faults",
-      "threshold": 3.0,
-      "opponent": {
-        "slate_abbr": "stan wawrinka",
-        "name": "STAN WAWRINKA",
-        "def_rank": 109,
-        "def_tier": "Weak"
-      },
-      "players": [
-        {
-          "player": "Matteo Berrettini",
-          "player_norm": "matteo berrettini",
-          "pos": "",
-          "rank_on_team": 1,
-          "season_avg": 1.1,
-          "game_score": 1.1,
-          "edge": "NEUTRAL",
-          "notes": "No strong matchup edge either way.",
-          "overperform_vs_weak": false,
-          "def_boost": null,
-          "pp_line": 1.5,
-          "pp_edge": -0.7
         }
       ]
     },
@@ -12459,6 +12446,34 @@
         }
       ]
     },
+    "elena rybakina|double_faults": {
+      "team_slate": "elena rybakina",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "lois boisson",
+        "name": "LOIS BOISSON",
+        "def_rank": 75,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Elena Rybakina",
+          "player_norm": "elena rybakina",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.7,
+          "game_score": 2.7,
+          "edge": "OK_EDGE",
+          "notes": "PP edge +1.5 on board tonight.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": 1.5
+        }
+      ]
+    },
     "sofia kenin|double_faults": {
       "team_slate": "sofia kenin",
       "category": "double_faults",
@@ -12848,6 +12863,34 @@
           "def_boost": null,
           "pp_line": 4.5,
           "pp_edge": -0.9
+        }
+      ]
+    },
+    "lois boisson|double_faults": {
+      "team_slate": "lois boisson",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "elena rybakina",
+        "name": "ELENA RYBAKINA",
+        "def_rank": 2,
+        "def_tier": "Elite"
+      },
+      "players": [
+        {
+          "player": "Lois Boisson",
+          "player_norm": "lois boisson",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.3,
+          "game_score": 3.3,
+          "edge": "AVOID",
+          "notes": "Negative PP edge vs elite opponent (#2).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -1.1
         }
       ]
     },
@@ -13327,6 +13370,34 @@
         }
       ]
     },
+    "matteo berrettini|double_faults": {
+      "team_slate": "matteo berrettini",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "stan wawrinka",
+        "name": "STAN WAWRINKA",
+        "def_rank": 109,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Matteo Berrettini",
+          "player_norm": "matteo berrettini",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.1,
+          "game_score": 1.1,
+          "edge": "NEUTRAL",
+          "notes": "No strong matchup edge either way.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 1.5,
+          "pp_edge": -0.7
+        }
+      ]
+    },
     "jasmine paolini|double_faults": {
       "team_slate": "jasmine paolini",
       "category": "double_faults",
@@ -13691,6 +13762,34 @@
         }
       ]
     },
+    "zachary svajda|double_faults": {
+      "team_slate": "zachary svajda",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "pablo llamas ruiz",
+        "name": "PABLO LLAMAS RUIZ",
+        "def_rank": 119,
+        "def_tier": "Weak"
+      },
+      "players": [
+        {
+          "player": "Zachary Svajda",
+          "player_norm": "zachary svajda",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 2.5,
+          "game_score": 2.5,
+          "edge": "AVOID",
+          "notes": "PP edge -3.5 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -3.5
+        }
+      ]
+    },
     "elise mertens|double_faults": {
       "team_slate": "elise mertens",
       "category": "double_faults",
@@ -14027,6 +14126,34 @@
         }
       ]
     },
+    "stan wawrinka|double_faults": {
+      "team_slate": "stan wawrinka",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "matteo berrettini",
+        "name": "MATTEO BERRETTINI",
+        "def_rank": 51,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Stan Wawrinka",
+          "player_norm": "stan wawrinka",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 3.0,
+          "game_score": 3.0,
+          "edge": "OK_EDGE",
+          "notes": "Solid vs average opponent (#51).",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 3.5,
+          "pp_edge": -0.7
+        }
+      ]
+    },
     "katie swan|double_faults": {
       "team_slate": "katie swan",
       "category": "double_faults",
@@ -14052,6 +14179,34 @@
           "def_boost": null,
           "pp_line": 5.5,
           "pp_edge": -0.5
+        }
+      ]
+    },
+    "pablo llamas ruiz|double_faults": {
+      "team_slate": "pablo llamas ruiz",
+      "category": "double_faults",
+      "category_label": "Double faults",
+      "threshold": 3.0,
+      "opponent": {
+        "slate_abbr": "zachary svajda",
+        "name": "ZACHARY SVAJDA",
+        "def_rank": 66,
+        "def_tier": "Below Avg"
+      },
+      "players": [
+        {
+          "player": "Pablo Llamas Ruiz",
+          "player_norm": "pablo llamas ruiz",
+          "pos": "",
+          "rank_on_team": 1,
+          "season_avg": 1.6,
+          "game_score": 1.6,
+          "edge": "AVOID",
+          "notes": "PP edge -3.1 on board \u2014 lean UNDER or skip OVER.",
+          "overperform_vs_weak": false,
+          "def_boost": null,
+          "pp_line": 5.5,
+          "pp_edge": -3.1
         }
       ]
     },
