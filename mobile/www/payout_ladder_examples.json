@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-06-28T12:37:19.536445+00:00",
+  "generated_at": "2026-06-29T09:49:21.246226+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -32,20 +32,20 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -58,20 +58,20 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -84,20 +84,20 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -110,20 +110,20 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -136,20 +136,20 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     },
@@ -188,30 +188,30 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -224,30 +224,30 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -260,30 +260,30 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -296,30 +296,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -332,30 +332,30 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -368,30 +368,30 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -404,30 +404,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Lauren Betts",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 4.5,
+          "player": "Ajla Tomljanovic",
+          "prop_type": "Total Games",
+          "line": 16.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Joao Fonseca",
-          "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
-          "pick_type": "Demon",
-          "delta": 7.0,
-          "direction": "OVER",
+          "direction": "UNDER",
           "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Kimberly Birrell",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 22.0,
+          "pick_type": "Demon",
+          "delta": 4.5,
+          "direction": "OVER",
+          "hit_rate": 0.95
         }
       ]
     },
@@ -512,40 +512,40 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -558,40 +558,40 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -604,40 +604,40 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -650,40 +650,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -696,40 +696,40 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -742,40 +742,40 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -788,40 +788,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Lauren Betts",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 4.5,
+          "player": "Ajla Tomljanovic",
+          "prop_type": "Total Games",
+          "line": 16.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Joao Fonseca",
-          "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
-          "pick_type": "Demon",
-          "delta": 7.0,
-          "direction": "OVER",
+          "direction": "UNDER",
           "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Kimberly Birrell",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 22.0,
+          "pick_type": "Demon",
+          "delta": 4.5,
+          "direction": "OVER",
+          "hit_rate": 0.95
         }
       ]
     },
@@ -926,50 +926,50 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -982,50 +982,50 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1038,50 +1038,50 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1094,50 +1094,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1150,50 +1150,50 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1206,50 +1206,50 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1262,50 +1262,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Lauren Betts",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 4.5,
+          "player": "Ajla Tomljanovic",
+          "prop_type": "Total Games",
+          "line": 16.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1374,54 +1374,54 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Joao Fonseca",
-          "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
-          "pick_type": "Demon",
-          "delta": 7.0,
-          "direction": "OVER",
+          "direction": "UNDER",
           "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Kimberly Birrell",
+          "prop_type": "Total Games",
+          "line": 17.5,
+          "standard_line": 22.0,
+          "pick_type": "Demon",
+          "delta": 4.5,
+          "direction": "OVER",
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1430,60 +1430,60 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1496,60 +1496,60 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1562,60 +1562,60 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1628,60 +1628,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1694,60 +1694,60 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1760,60 +1760,60 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Dayana Yastremska",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1826,60 +1826,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Lauren Betts",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 4.5,
+          "player": "Ajla Tomljanovic",
+          "prop_type": "Total Games",
+          "line": 16.5,
+          "standard_line": 19.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1892,64 +1892,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.85
+        },
+        {
+          "player": "Matt Shaw",
+          "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
-          "standard_line": null,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.90415
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
+          "direction": "UNDER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
         },
         {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Dayana Yastremska",
+          "player": "Marta Kostyuk",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 19.5,
+          "line": 14.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     },
@@ -1958,64 +1958,64 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Dayne St. Clair",
-          "prop_type": "Goalie Saves",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Florian Wirtz + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.85
         },
         {
-          "player": "Jackie Young",
-          "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 17.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.75
-        },
-        {
-          "player": "Mathieu Choinière",
-          "prop_type": "Shots",
-          "line": 0.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Azurá Stevens + Jackie Young",
-          "prop_type": "Points (Combo)",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.7
-        },
-        {
-          "player": "Nathaniel Lowe",
+          "player": "Matt Shaw",
           "prop_type": "Hits+Runs+RBIs",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.77085
+          "hit_rate": 0.90415
         },
         {
-          "player": "Joao Fonseca",
+          "player": "Jamal Musiala + Kai Havertz",
+          "prop_type": "Shots (Combo)",
+          "line": 5.5,
+          "standard_line": 5.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Casey Mize",
+          "prop_type": "Earned Runs Allowed",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.8985944444444445
+        },
+        {
+          "player": "Manny Machado",
+          "prop_type": "Runs",
+          "line": 0.5,
+          "standard_line": 0.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.90415
+        },
+        {
+          "player": "Kimberly Birrell",
           "prop_type": "Total Games",
-          "line": 29.5,
-          "standard_line": 36.5,
+          "line": 17.5,
+          "standard_line": 22.0,
           "pick_type": "Demon",
-          "delta": 7.0,
+          "delta": 4.5,
           "direction": "OVER",
-          "hit_rate": 0.85
+          "hit_rate": 0.95
         }
       ]
     }

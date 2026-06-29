@@ -2571,6 +2571,35 @@
   },
   {
     "date": "2026-06-27",
+    "track": "graded_main",
+    "n_tickets": 80,
+    "wins": 23,
+    "guarantees": 0,
+    "losses": 57,
+    "void_loss_ct": 0,
+    "win_rate": 0.2875,
+    "avg_ev_predicted": 0.9323,
+    "net_per_10": 6.57,
+    "roi_pct": 65.75,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 27,
+      "wins": 8
+    },
+    "marginal_tickets": {
+      "count": 15,
+      "wins": 6
+    },
+    "skip_tickets": {
+      "count": 38,
+      "wins": 9
+    }
+  },
+  {
+    "date": "2026-06-27",
     "track": "long_parlay",
     "n_tickets": 21,
     "wins": 1,
@@ -2599,32 +2628,61 @@
     }
   },
   {
-    "date": "2026-06-27",
+    "date": "2026-06-28",
     "track": "graded_main",
-    "n_tickets": 80,
-    "wins": 23,
+    "n_tickets": 135,
+    "wins": 18,
     "guarantees": 0,
-    "losses": 57,
+    "losses": 117,
     "void_loss_ct": 0,
-    "win_rate": 0.2875,
-    "avg_ev_predicted": 0.9323,
-    "net_per_10": 6.57,
-    "roi_pct": 65.75,
+    "win_rate": 0.1333,
+    "avg_ev_predicted": 0.5664,
+    "net_per_10": -3.93,
+    "roi_pct": -39.31,
     "strong_tickets": {
       "count": 0,
       "wins": 0
     },
     "ok_tickets": {
-      "count": 27,
-      "wins": 8
+      "count": 78,
+      "wins": 14
     },
     "marginal_tickets": {
-      "count": 15,
-      "wins": 6
+      "count": 12,
+      "wins": 1
     },
     "skip_tickets": {
-      "count": 38,
-      "wins": 9
+      "count": 45,
+      "wins": 3
+    }
+  },
+  {
+    "date": "2026-06-28",
+    "track": "long_parlay",
+    "n_tickets": 30,
+    "wins": 1,
+    "guarantees": 0,
+    "losses": 29,
+    "void_loss_ct": 0,
+    "win_rate": 0.0333,
+    "avg_ev_predicted": 1.4987,
+    "net_per_10": -3.33,
+    "roi_pct": -33.33,
+    "strong_tickets": {
+      "count": 0,
+      "wins": 0
+    },
+    "ok_tickets": {
+      "count": 24,
+      "wins": 1
+    },
+    "marginal_tickets": {
+      "count": 2,
+      "wins": 0
+    },
+    "skip_tickets": {
+      "count": 4,
+      "wins": 0
     }
   }
 ]
