@@ -217,10 +217,10 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="sum-item sum-item-pending-sport" title="15 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE<span class="sum-lab-badge">15 pending</span></div></div>
 <div class="sum-item sum-item-pending-sport" title="48 ticket slips still have UNGRADED legs (no graded row / actual yet—run grader after matches; tennis often uses next calendar day workbook merge)."><div class="sum-val pend">—</div><div class="sum-lab">TENNIS TKT WIN RATE<span class="sum-lab-badge">48 pending</span></div></div>
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
-<div class="sum-item"><div class="sum-val green">72</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">43</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val green">88</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">52</div><div class="sum-lab">MISSES</div></div>
 <div class="sum-item"><div class="sum-val void">6</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">321</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val pend">296</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
 <div class="sum-item"><div class="sum-val red">11</div><div class="sum-lab">NO PAYOUT</div></div>
@@ -230,7 +230,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-06-29</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-29/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (321 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-29/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-29/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-06-29/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (296 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-06-29/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-06-29/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-mlb">
 <summary><span>MLB</span><span class="ticket-bucket-meta">18 sections · 18 tickets</span></summary>
@@ -2551,19 +2551,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #2</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Adrian Mannarino</div>
+<div class="pl-hit">Adrian Mannarino</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">ADRIAN MANNARINO vs TITOUAN DROGUET</div></div>
 <div class="leg-extra">39.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">25</div>
 <div class="leg-extra">-18.9</div>
 </div>
 <div class="legrow leg-pend">
@@ -2614,7 +2614,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #3</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2629,14 +2629,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-16.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Kamil Majchrzak</div>
+<div class="pl-hit">Kamil Majchrzak</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">KAMIL MAJCHRZAK vs ALEJANDRO TABILO</div></div>
 <div class="leg-extra">39.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">33</div>
 <div class="leg-extra">-14.9</div>
 </div>
 <div class="legrow leg-pend">
@@ -2677,7 +2677,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #4</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -2702,14 +2702,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-13.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Adrian Mannarino</div>
+<div class="pl-hit">Adrian Mannarino</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ADRIAN MANNARINO vs TITOUAN DROGUET</div></div>
 <div class="leg-extra">20.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">18</div>
 <div class="leg-extra">-13.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -2866,19 +2866,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #7</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Kamil Majchrzak</div>
+<div class="pl-hit">Kamil Majchrzak</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">KAMIL MAJCHRZAK vs ALEJANDRO TABILO</div></div>
 <div class="leg-extra">20.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">20</div>
 <div class="leg-extra">-10.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -3055,19 +3055,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #10</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Alejandro Tabilo</div>
+<div class="pl-hit">Alejandro Tabilo</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ALEJANDRO TABILO vs KAMIL MAJCHRZAK</div></div>
 <div class="leg-extra">18.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">13</div>
 <div class="leg-extra">-5.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -3307,7 +3307,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #14</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3352,15 +3352,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-6.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Petra Marcinko</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
-<div class="leg-extra">21.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-1.5</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Petra Marcinko</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">23</div>
+<div class="leg-extra miss-leg-cell">-1.5</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -3370,19 +3370,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #15</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Titouan Droguet</div>
+<div class="pl-hit">Titouan Droguet</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">TITOUAN DROGUET vs ADRIAN MANNARINO</div></div>
 <div class="leg-extra">19.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">7</div>
 <div class="leg-extra">-6.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -3496,20 +3496,20 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #17</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Robin Montgomery</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ROBIN MONTGOMERY vs JASMINE PAOLINI</div></div>
-<div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-2.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Robin Montgomery</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games Won</div><div class="meta-muted">ROBIN MONTGOMERY vs JASMINE PAOLINI</div></div>
+<div class="leg-extra miss-leg-cell">12.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">-2.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3559,7 +3559,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #18</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3604,14 +3604,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Petra Marcinko</div>
+<div class="pl-hit">Petra Marcinko</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">10</div>
 <div class="leg-extra">-1.5</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -3622,7 +3622,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #19</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3667,15 +3667,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Marie Bouzkova</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
-<div class="leg-extra">21.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-5.9</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Marie Bouzkova</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">24</div>
+<div class="leg-extra miss-leg-cell">-5.9</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
@@ -3811,7 +3811,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #22</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -3826,15 +3826,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Marie Bouzkova</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
-<div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-4.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Marie Bouzkova</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games Won</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
+<div class="leg-extra miss-leg-cell">12.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">-4.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3937,19 +3937,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 5-Leg #24</span>
-<span class="tg">0✓ 0✗ / 5</span>
+<span class="tg">1✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Clara Tauson</div>
+<div class="pl-hit">Clara Tauson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">CLARA TAUSON vs MARIA SAKKARI</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">-2.9</div>
 </div>
 <div class="legrow leg-pend">
@@ -4063,7 +4063,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #1</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -4118,14 +4118,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-24.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Adrian Mannarino</div>
+<div class="pl-hit">Adrian Mannarino</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">ADRIAN MANNARINO vs TITOUAN DROGUET</div></div>
 <div class="leg-extra">39.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">25</div>
 <div class="leg-extra">-18.9</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -4136,7 +4136,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #2</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -4191,14 +4191,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-16.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Kamil Majchrzak</div>
+<div class="pl-hit">Kamil Majchrzak</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">KAMIL MAJCHRZAK vs ALEJANDRO TABILO</div></div>
 <div class="leg-extra">39.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">33</div>
 <div class="leg-extra">-14.9</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -4209,7 +4209,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #3</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -4264,14 +4264,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-13.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Adrian Mannarino</div>
+<div class="pl-hit">Adrian Mannarino</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ADRIAN MANNARINO vs TITOUAN DROGUET</div></div>
 <div class="leg-extra">20.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">18</div>
 <div class="leg-extra">-13.3</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -4428,19 +4428,19 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #6</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Kamil Majchrzak</div>
+<div class="pl-hit">Kamil Majchrzak</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">KAMIL MAJCHRZAK vs ALEJANDRO TABILO</div></div>
 <div class="leg-extra">20.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">20</div>
 <div class="leg-extra">-10.3</div>
 </div>
 <div class="legrow leg-pend">
@@ -4574,7 +4574,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #8</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -4609,14 +4609,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-6.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Alejandro Tabilo</div>
+<div class="pl-hit">Alejandro Tabilo</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ALEJANDRO TABILO vs KAMIL MAJCHRZAK</div></div>
 <div class="leg-extra">18.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">13</div>
 <div class="leg-extra">-5.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -4866,7 +4866,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #12</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -4901,24 +4901,24 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-6.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Petra Marcinko</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
-<div class="leg-extra">21.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-1.5</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Petra Marcinko</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">23</div>
+<div class="leg-extra miss-leg-cell">-1.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Titouan Droguet</div>
+<div class="pl-hit">Titouan Droguet</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">TITOUAN DROGUET vs ADRIAN MANNARINO</div></div>
 <div class="leg-extra">19.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">7</div>
 <div class="leg-extra">-6.7</div>
 </div>
 <div class="legrow leg-pend">
@@ -5012,7 +5012,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #14</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5037,15 +5037,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-5.7</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Robin Montgomery</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">ROBIN MONTGOMERY vs JASMINE PAOLINI</div></div>
-<div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-2.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Robin Montgomery</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games Won</div><div class="meta-muted">ROBIN MONTGOMERY vs JASMINE PAOLINI</div></div>
+<div class="leg-extra miss-leg-cell">12.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">-2.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5085,7 +5085,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #15</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5140,14 +5140,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Petra Marcinko</div>
+<div class="pl-hit">Petra Marcinko</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">10</div>
 <div class="leg-extra">-1.5</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -5158,7 +5158,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #16</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5203,15 +5203,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Marie Bouzkova</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
-<div class="leg-extra">21.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-5.9</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Marie Bouzkova</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
+<div class="leg-extra miss-leg-cell">21.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">24</div>
+<div class="leg-extra miss-leg-cell">-5.9</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5304,7 +5304,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #18</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5349,15 +5349,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-1.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Marie Bouzkova</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
-<div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-4.1</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Marie Bouzkova</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games Won</div><div class="meta-muted">MARIE BOUZKOVA vs TALIA GIBSON</div></div>
+<div class="leg-extra miss-leg-cell">12.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">-4.1</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5450,7 +5450,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Standard 6-Leg #20</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5465,14 +5465,14 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Clara Tauson</div>
+<div class="pl-hit">Clara Tauson</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">CLARA TAUSON vs MARIA SAKKARI</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">6</div>
 <div class="leg-extra">-2.9</div>
 </div>
 <div class="legrow leg-pend">
@@ -5659,7 +5659,7 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">TENNIS Goblin 6-Leg #1</span>
-<span class="tg">0✓ 0✗ / 6</span>
+<span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 4.74× · FLEX 2.96×</span>
 <span class="banner pend">UNGRADED</span>
 </div>
@@ -5674,15 +5674,15 @@ html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.1</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-default">TENNIS</span></div>
-<div class="pl-pend">Petra Marcinko</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Total Games Won</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
-<div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">-0.5</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Petra Marcinko</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Games Won</div><div class="meta-muted">PETRA MARCINKO vs SOFIA KENIN</div></div>
+<div class="leg-extra miss-leg-cell">11.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">10</div>
+<div class="leg-extra miss-leg-cell">-0.5</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
