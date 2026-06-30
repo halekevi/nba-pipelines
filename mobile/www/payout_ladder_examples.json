@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T12:28:20.202067+00:00",
+  "generated_at": "2026-06-30T14:14:32.948870+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -32,17 +32,17 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -58,17 +58,17 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -84,17 +84,17 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -110,17 +110,17 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -136,17 +136,17 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -188,27 +188,27 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -224,27 +224,27 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -260,27 +260,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -296,27 +296,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -332,27 +332,27 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -368,27 +368,27 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -404,17 +404,17 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -424,14 +424,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Ajla Tomljanovic",
-          "prop_type": "Total Games",
-          "line": 16.5,
-          "standard_line": 19.5,
+          "player": "Lanlana Tararudee",
+          "prop_type": "Total Games Won",
+          "line": 5.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -440,17 +440,17 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -460,14 +460,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -512,37 +512,37 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -558,37 +558,37 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -604,37 +604,37 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -650,37 +650,37 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -696,37 +696,37 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -742,37 +742,37 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -788,27 +788,27 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -818,14 +818,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Ajla Tomljanovic",
-          "prop_type": "Total Games",
-          "line": 16.5,
-          "standard_line": 19.5,
+          "player": "Lanlana Tararudee",
+          "prop_type": "Total Games Won",
+          "line": 5.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -834,27 +834,27 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.85
+          "hit_rate": 1.0
         },
         {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8031
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -864,14 +864,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
-          "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
-          "pick_type": "Demon",
-          "delta": 4.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Aryna Sabalenka",
+          "prop_type": "Total Games",
+          "line": 15.5,
+          "standard_line": 19.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -926,47 +926,47 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -982,47 +982,47 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1038,47 +1038,47 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1094,47 +1094,47 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1150,47 +1150,47 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1206,47 +1206,47 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1262,37 +1262,37 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1302,14 +1302,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Ajla Tomljanovic",
-          "prop_type": "Total Games",
-          "line": 16.5,
-          "standard_line": 19.5,
+          "player": "Lanlana Tararudee",
+          "prop_type": "Total Games Won",
+          "line": 5.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1318,37 +1318,37 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1358,14 +1358,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1374,54 +1374,54 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
-          "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
-          "pick_type": "Demon",
-          "delta": 4.5,
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Aryna Sabalenka",
+          "prop_type": "Total Games",
+          "line": 15.5,
+          "standard_line": 19.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1430,57 +1430,57 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1496,57 +1496,57 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1562,57 +1562,57 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1628,57 +1628,57 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1694,57 +1694,57 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1760,57 +1760,57 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1826,47 +1826,47 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1876,14 +1876,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Ajla Tomljanovic",
-          "prop_type": "Total Games",
-          "line": 16.5,
-          "standard_line": 19.5,
+          "player": "Lanlana Tararudee",
+          "prop_type": "Total Games Won",
+          "line": 5.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1892,47 +1892,47 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.7
+        },
+        {
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
-          "hit_rate": 0.95415
+          "hit_rate": 1.0
         },
         {
-          "player": "Marta Kostyuk",
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Naomi Osaka",
           "prop_type": "Total Games",
           "line": 14.5,
           "standard_line": 17.5,
@@ -1942,14 +1942,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Kimberly Birrell",
+          "player": "Aryna Sabalenka",
           "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
+          "line": 15.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 4.5,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1958,64 +1958,64 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Florian Wirtz + Kai Havertz",
+          "player": "Kylian Mbappé + Michael Olise + Ousmane Dembélé",
           "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.85
-        },
-        {
-          "player": "Shane Baz",
-          "prop_type": "Pitches Thrown",
-          "line": 95.5,
-          "standard_line": 95.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8031
-        },
-        {
-          "player": "Jamal Musiala + Kai Havertz",
-          "prop_type": "Shots (Combo)",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 1.0
         },
         {
-          "player": "Nico Hoerner",
-          "prop_type": "Runs",
-          "line": 0.5,
-          "standard_line": 0.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.95415
-        },
-        {
-          "player": "Matt Shaw",
-          "prop_type": "Hits+Runs+RBIs",
+          "player": "Leonie Fiebich",
+          "prop_type": "3-PT Made",
           "line": 1.5,
           "standard_line": 1.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.90415
+          "direction": "OVER",
+          "hit_rate": 0.7
         },
         {
-          "player": "Kimberly Birrell",
-          "prop_type": "Total Games",
-          "line": 17.5,
-          "standard_line": 22.0,
-          "pick_type": "Demon",
-          "delta": 4.5,
+          "player": "Ørjan Nyland",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 2.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonquel Jones",
+          "prop_type": "Assists",
+          "line": 1.5,
+          "standard_line": null,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.95
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Alexander Isak + Ousmane Dembélé",
+          "prop_type": "Shots (Combo)",
+          "line": 4.5,
+          "standard_line": 4.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Aryna Sabalenka",
+          "prop_type": "Total Games",
+          "line": 15.5,
+          "standard_line": 19.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     }
